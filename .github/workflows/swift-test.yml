@@ -1,0 +1,24 @@
+name: Swift tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test-core:
+    name: swift test (Linux)
+    runs-on: ubuntu-24.04
+    container:
+      image: swift:6.2.4-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test PashtoCore
+        working-directory: Packages/PashtoCore
+        run: swift test
