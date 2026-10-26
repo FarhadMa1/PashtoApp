@@ -1,0 +1,28 @@
+# Xcode user state. The generated PashtoApp.xcodeproj itself is committed.
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Build products
+build/
+DerivedData/
+.swiftpm/
+**/.build/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# macOS
+.DS_Store
+
+# XcodeGen cache, if a future local generate uses --use-cache
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+xcodegen-cache.json
