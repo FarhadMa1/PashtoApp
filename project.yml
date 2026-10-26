@@ -5,11 +5,11 @@
 # The committed project was generated with XcodeGen 2.46.0.
 # Do not hand-edit PashtoApp.xcodeproj.
 #
-# PLACEHOLDER bundle id: com.farhadma.pashtoapp
-# Change it before registering the app with Apple Developer or shipping.
+# Bundle id: com.mangallabs.pashto
+# Final. Chosen for Mangal Labs.
 name: PashtoApp
 options:
-  bundleIdPrefix: com.farhadma
+  bundleIdPrefix: com.mangallabs
   deploymentTarget:
     iOS: "17.0"
   developmentLanguage: en
@@ -48,8 +48,8 @@ targets:
       - package: PashtoCore
     settings:
       base:
-        # PLACEHOLDER — change before App Store / Apple Developer setup.
-        PRODUCT_BUNDLE_IDENTIFIER: com.farhadma.pashtoapp
+        # Final bundle id for Mangal Labs.
+        PRODUCT_BUNDLE_IDENTIFIER: com.mangallabs.pashto
         PRODUCT_NAME: PashtoApp
         CODE_SIGN_IDENTITY: "Apple Development"
         GENERATE_INFOPLIST_FILE: NO

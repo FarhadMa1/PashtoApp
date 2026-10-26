@@ -53,7 +53,7 @@ The cost is noisier diffs in `project.pbxproj`, and a discipline rule: any `proj
 
 - iOS 17 minimum, Swift 6 language mode (`SWIFT_VERSION` 6.0), Swift tools version 6.0 in the package.
 - iPhone only, portrait.
-- Bundle id `com.farhadma.pashtoapp` is a placeholder and must be changed before App Store registration.
+- Bundle id `com.mangallabs.pashto` is final. It was chosen to match the owner's future company, Mangal Labs.
 - No development team in the project. Signing team comes from Xcode Cloud or a local Xcode account.
 - `ITSAppUsesNonExemptEncryption` is false so export compliance is not re-asked on every upload. The app uses no custom encryption.
 - App category is education. The display name is Pashto.

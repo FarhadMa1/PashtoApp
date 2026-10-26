@@ -20,7 +20,7 @@ The app target depends on `PashtoCore`. The package is where future lesson and q
 
 ## Bundle identifier
 
-`com.farhadma.pashtoapp` is a **placeholder**. Change it in `project.yml` (setting `PRODUCT_BUNDLE_IDENTIFIER`) before registering the app with Apple Developer or uploading a build. Regenerate the Xcode project after that change.
+`com.mangallabs.pashto` is the final bundle id, chosen for Mangal Labs. It is set in `project.yml` (`PRODUCT_BUNDLE_IDENTIFIER` and `bundleIdPrefix`) and in the committed Xcode project.
 
 No development team is set in the project. Xcode Cloud, or Xcode on a Mac, supplies the team at signing time.
 
@@ -49,7 +49,7 @@ Create the workflow in App Store Connect (or Xcode) against this repository:
 1. Project: `PashtoApp.xcodeproj`
 2. Scheme: `PashtoApp` (shared)
 3. Xcode 16 or newer, so the Swift 6 language mode is available
-4. Set the Apple Developer team. Replace the placeholder bundle id with one the team owns before an archive is distributed.
+4. Set the Apple Developer team. Register `com.mangallabs.pashto` to that team before an archive is distributed.
 5. Use an archive action when a TestFlight build is actually wanted
 
 ### Regenerate the Xcode project

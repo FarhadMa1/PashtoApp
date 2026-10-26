@@ -12,7 +12,7 @@ PashtoCore (Swift package, no Apple-only frameworks)
 
 ### PashtoApp
 
-The iOS application target. Minimum deployment target is iOS 17. It uses the SwiftUI app lifecycle (`@main` `App`), an asset catalog, an `Info.plist`, a privacy manifest that declares no tracking and no collected data, and one string catalog.
+The iOS application target. Minimum deployment target is iOS 17. The bundle identifier is `com.mangallabs.pashto`. It uses the SwiftUI app lifecycle (`@main` `App`), an asset catalog, an `Info.plist`, a privacy manifest that declares no tracking and no collected data, and one string catalog.
 
 The root view is a placeholder. It does not navigate, load content, or play sound.
 
