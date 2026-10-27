@@ -9,13 +9,31 @@ struct LinuxGuardTests {
         #expect(matches(in: "import SwiftData\n") == ["import SwiftData"])
         #expect(matches(in: "import UIKit\n") == ["import UIKit"])
         #expect(matches(in: "let now = Date()\n") == ["Date()"])
+        #expect(matches(in: "let now = Date.now\n") == ["Date.now"])
+        #expect(matches(in: "Date(timeIntervalSinceNow: 0)\n") == ["timeIntervalSinceNow"])
         #expect(matches(in: "let formatter = DateFormatter()\n").isEmpty)
+        #expect(matches(in: "Date(timeIntervalSince1970: 0)\n").isEmpty)
         #expect(matches(in: "Calendar.current\n") == ["Calendar.current"])
+        #expect(matches(in: "Calendar.autoupdatingCurrent\n") == ["Calendar.autoupdatingCurrent"])
         #expect(matches(in: "Calendar(identifier: .gregorian)\n").isEmpty)
         #expect(matches(in: "TimeZone.current\n") == ["TimeZone.current"])
+        #expect(matches(in: "TimeZone.autoupdatingCurrent\n") == ["TimeZone.autoupdatingCurrent"])
         #expect(matches(in: "TimeZone(identifier: \"Asia/Kabul\")\n").isEmpty)
         #expect(matches(in: "Locale.current\n") == ["Locale.current"])
+        #expect(matches(in: "Locale.autoupdatingCurrent\n") == ["Locale.autoupdatingCurrent"])
         #expect(matches(in: "Locale(identifier: \"en_US_POSIX\")\n").isEmpty)
+        #expect(matches(in: "NSLocale.current\n") == ["NSLocale.current"])
+        #expect(matches(in: "NSLocale.currentLocale\n") == ["NSLocale.currentLocale"])
+        #expect(matches(in: "NSTimeZone.local\n") == ["NSTimeZone.local"])
+        #expect(matches(in: "NSTimeZone.system\n") == ["NSTimeZone.system"])
+        #expect(matches(in: "NSTimeZone.default\n") == ["NSTimeZone.default"])
+        #expect(matches(in: "NSTimeZone.current\n") == ["NSTimeZone.current"])
+        #expect(matches(in: "NSTimeZone.localTimeZone\n") == ["NSTimeZone.localTimeZone"])
+        #expect(matches(in: "NSTimeZone.systemTimeZone\n") == ["NSTimeZone.systemTimeZone"])
+        #expect(matches(in: "NSTimeZone.defaultTimeZone\n") == ["NSTimeZone.defaultTimeZone"])
+        #expect(matches(in: "NSCalendar.autoupdatingCurrent\n") == ["NSCalendar.autoupdatingCurrent"])
+        #expect(matches(in: "NSCalendar.currentCalendar\n") == ["NSCalendar.currentCalendar"])
+        #expect(matches(in: "NSDate()\n") == ["NSDate()"])
         #expect(matches(in: "text.lowercased(with: nil)\n").isEmpty)
     }
 
@@ -39,7 +57,8 @@ struct LinuxGuardTests {
     }
 
     private func matches(in source: String) -> [String] {
-        let pattern = /import\s+UIKit\b|import\s+SwiftUI\b|import\s+SwiftData\b|\bDate\(\)|\bCalendar\.current\b|\bTimeZone\.current\b|\bLocale\.current\b/
+        // Same calls as scripts/linux-guard.sh. Longer NSTimeZone names come first.
+        let pattern = /import\s+UIKit\b|import\s+SwiftUI\b|import\s+SwiftData\b|\bDate\(\)|\bDate\.now\b|\btimeIntervalSinceNow\b|\bNSDate(?:\(\)|\.date\b|\.now\b)|\b(?:Calendar|TimeZone|Locale|NSCalendar|NSTimeZone|NSLocale)\.(?:current|autoupdatingCurrent)\b|\bNSTimeZone\.(?:localTimeZone|systemTimeZone|defaultTimeZone|local|system|default)\b|\bNSLocale\.currentLocale\b|\bNSCalendar\.currentCalendar\b/
         return source.matches(of: pattern).map { String($0.output) }
     }
 

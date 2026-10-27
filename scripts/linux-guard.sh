@@ -19,7 +19,9 @@ if [[ "$file_count" -lt 1 ]]; then
 fi
 
 # GNU grep -E has no \s. [[:space:]] is the whitespace class.
-pattern='import[[:space:]]+UIKit\b|import[[:space:]]+SwiftUI\b|import[[:space:]]+SwiftData\b|\bDate\(\)|\bCalendar\.current\b|\bTimeZone\.current\b|\bLocale\.current\b'
+# Keep this in sync with LinuxGuardTests.matches. Longer NSTimeZone names
+# come before local/system/default so systemTimeZone is not cut at system.
+pattern='import[[:space:]]+UIKit\b|import[[:space:]]+SwiftUI\b|import[[:space:]]+SwiftData\b|\bDate\(\)|\bDate\.now\b|\btimeIntervalSinceNow\b|\bNSDate(\(\)|\.date\b|\.now\b)|\b(Calendar|TimeZone|Locale|NSCalendar|NSTimeZone|NSLocale)\.(current|autoupdatingCurrent)\b|\bNSTimeZone\.(localTimeZone|systemTimeZone|defaultTimeZone|local|system|default)\b|\bNSLocale\.currentLocale\b|\bNSCalendar\.currentCalendar\b'
 
 set +e
 matches="$(grep -R -n -E -I --exclude-dir=Tests --exclude-dir=.build --include='*.swift' -e "$pattern" "$sources")"

@@ -32,7 +32,7 @@ The package exposes:
 - `Normalization`, the only place that folds text for comparison.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
 
-The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not call `Date()`, `Calendar.current`, `TimeZone.current`, or `Locale.current`. CI and `swift test` run `scripts/linux-guard.sh`'s rules against the package sources.
+The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the process clock or the current locale (`Date()` / `Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
 
 ## Data, accounts, and audio
 

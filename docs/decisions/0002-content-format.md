@@ -72,7 +72,7 @@ Which fields are required for which `kind` is a validator rule. The decoder acce
 
 ### IDs
 
-Ids are ASCII slugs matching `^[a-z0-9-]+$`, with a prefix:
+Ids match `^[uled]-[a-z0-9]+(-[a-z0-9]+)*$`. Each type also requires its own prefix, so an item id is `^e-[a-z0-9]+(-[a-z0-9]+)*$` and the other types use `u-`, `l-`, or `d-` the same way:
 
 | Type | Prefix | Example |
 | --- | --- | --- |
@@ -81,7 +81,7 @@ Ids are ASCII slugs matching `^[a-z0-9-]+$`, with a prefix:
 | `ItemID` | `e-` | `e-assalamu-alaykum` |
 | `DialogID` | `d-` | `d-greetings-1` |
 
-The prefix plus at least one more character is required. `e-` alone is not an id. The id types reject anything else at decode time. There is one id pattern. Older sketch ids such as `u1-hilsen-03` are not valid.
+The body after the prefix is non-empty and has no leading, trailing, or doubled hyphen. `e-a` and `e-assalamu-alaykum` are ids. `e-`, `e--`, `e-x-`, and `e-a--b` are not. The id types reject anything else at decode time. There is one id pattern. Older sketch ids such as `u1-hilsen-03` are not valid.
 
 An id is chosen from the transliteration when the item is created. It never changes because a spelling is fixed. A changed meaning is a new id. The old id is retired in `content/id-registry.json`. `retired` is not a verification status and not a field on `ContentItem`.
 
@@ -130,7 +130,7 @@ SwiftData, SwiftUI, `Bundle`, and file access stay in `PashtoApp`. The core take
 
 ### Linux guard
 
-CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than tests, imports UIKit, SwiftUI, or SwiftData, or uses `Date()`, `Calendar.current`, `TimeZone.current`, or `Locale.current`.
+CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than tests, imports UIKit, SwiftUI, or SwiftData, or reads the process clock or the current locale. The scan catches `Date()` and `Date.now`, `timeIntervalSinceNow`, `.current` and `.autoupdatingCurrent` on `Calendar`, `TimeZone`, `Locale`, and the `NSCalendar`, `NSTimeZone`, and `NSLocale` forms, every current or local `NSTimeZone` name (`local`, `system`, `default`, `localTimeZone`, `systemTimeZone`, `defaultTimeZone`), plus `NSLocale.currentLocale` and `NSCalendar.currentCalendar`. A fixed instant such as `Date(timeIntervalSince1970:)` and an injected calendar stay allowed.
 
 ## Consequences
 

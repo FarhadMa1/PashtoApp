@@ -1,8 +1,16 @@
-/// ASCII slug rules for content ids. The pattern is `^[a-z0-9-]+$` plus a prefix.
+/// Ids match `^[uled]-[a-z0-9]+(-[a-z0-9]+)*$`. Each type also requires its own prefix.
 enum ContentIDRules {
+    /// Body after the prefix: `^[a-z0-9]+(-[a-z0-9]+)*$`. No empty segment and no trailing hyphen.
     static func parse(_ raw: String, prefix: String) -> String? {
-        guard raw.hasPrefix(prefix), raw.count > prefix.count else { return nil }
-        guard raw.unicodeScalars.allSatisfy(isSlugScalar) else { return nil }
+        guard raw.hasPrefix(prefix) else { return nil }
+        let body = raw[raw.index(raw.startIndex, offsetBy: prefix.count)...]
+        var index = body.startIndex
+        guard consumeSegment(body, &index) else { return nil }
+        while index < body.endIndex {
+            guard body[index] == "-" else { return nil }
+            index = body.index(after: index)
+            guard consumeSegment(body, &index) else { return nil }
+        }
         return raw
     }
 
@@ -12,7 +20,7 @@ enum ContentIDRules {
         guard let parsed = parse(raw, prefix: prefix) else {
             throw DecodingError.dataCorruptedError(
                 in: container,
-                debugDescription: "\(name) must match ^[a-z0-9-]+$ and start with \"\(prefix)\". Got \"\(raw)\"."
+                debugDescription: "\(name) must match ^\(prefix)[a-z0-9]+(-[a-z0-9]+)*$. Got \"\(raw)\"."
             )
         }
         return parsed
@@ -23,9 +31,20 @@ enum ContentIDRules {
         try container.encode(raw)
     }
 
-    private static func isSlugScalar(_ scalar: Unicode.Scalar) -> Bool {
+    private static func consumeSegment(_ body: Substring, _ index: inout Substring.Index) -> Bool {
+        let start = index
+        while index < body.endIndex, isSlugLetterOrDigit(body[index]) {
+            index = body.index(after: index)
+        }
+        return index != start
+    }
+
+    private static func isSlugLetterOrDigit(_ character: Character) -> Bool {
+        guard character.unicodeScalars.count == 1, let scalar = character.unicodeScalars.first else {
+            return false
+        }
         switch scalar {
-        case "a"..."z", "0"..."9", "-":
+        case "a"..."z", "0"..."9":
             return true
         default:
             return false

@@ -153,6 +153,31 @@ struct ContentDecodingTests {
             #"{"speaker":"A","item":"e-salam","line":1}"#,
             mentioning: "line"
         )
+        expectFailure(
+            Lesson.self,
+            #"{"id":"l-sounds-1","title":"New sounds","items":[],"letter":["e-alif"]}"#,
+            mentioning: "letter"
+        )
+        expectFailure(
+            CourseUnit.self,
+            #"{"id":"u-sounds","track":"main","title":"Sounds","lessons":[],"order":1}"#,
+            mentioning: "order"
+        )
+        expectFailure(
+            Dialog.self,
+            #"{"id":"d-greetings-1","turns":[],"title":"Hello"}"#,
+            mentioning: "title"
+        )
+        expectFailure(
+            Romanization.self,
+            #"{"table":[],"difficultCharacters":[],"unstressedWords":[],"notes":[]}"#,
+            mentioning: "notes"
+        )
+        expectFailure(
+            AudioRef.self,
+            #"{"normal":"a.m4a","slow":"a-slow.m4a","speaker":"kabul-1","fast":"no"}"#,
+            mentioning: "fast"
+        )
     }
 
     @Test func rejectsIncompleteAudio() {
@@ -194,17 +219,28 @@ struct ContentDecodingTests {
     }
 
     @Test func rejectsMalformedIDs() throws {
+        #expect(ItemID(rawValue: "e-a") != nil)
         #expect(ItemID(rawValue: "e-assalamu-alaykum") != nil)
         #expect(LessonID(rawValue: "l-sounds-1") != nil)
         #expect(UnitID(rawValue: "u-sounds") != nil)
         #expect(DialogID(rawValue: "d-greetings-1") != nil)
 
         #expect(ItemID(rawValue: "e-") == nil)
+        #expect(ItemID(rawValue: "e--") == nil)
+        #expect(ItemID(rawValue: "e-x-") == nil)
+        #expect(ItemID(rawValue: "e-a--b") == nil)
         #expect(ItemID(rawValue: "E-salam") == nil)
         #expect(ItemID(rawValue: "e-salam_1") == nil)
         #expect(ItemID(rawValue: "u-sounds") == nil)
+        #expect(LessonID(rawValue: "l-sounds-") == nil)
         #expect(LessonID(rawValue: "e-sounds") == nil)
+        #expect(UnitID(rawValue: "u--sounds") == nil)
+        #expect(DialogID(rawValue: "d-x-") == nil)
         #expect(DialogID(rawValue: "l-greetings-1") == nil)
+
+        expectFailure(ItemID.self, #""e--""#, mentioning: "e--")
+        expectFailure(ItemID.self, #""e-x-""#, mentioning: "e-x-")
+        expectFailure(ItemID.self, #""e-a--b""#, mentioning: "e-a--b")
 
         expectFailure(ItemID.self, #""e_bad""#, mentioning: "ItemID")
         expectFailure(ContentItem.self, minimalItem(id: "u1-hilsen-03"), mentioning: "ItemID")
