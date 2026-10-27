@@ -1,6 +1,6 @@
 # Architecture
 
-PashtoApp will teach Pashto from scratch. This document describes the skeleton that exists today and the boundaries later work has to respect. It is not a design for lessons, quizzes, or audio.
+PashtoApp will teach Pashto from scratch. This document describes the app shell, the content types in `PashtoCore`, and the boundaries later work has to respect. Quizzes, review scheduling, and audio playback are not in this revision.
 
 ## Pieces
 
@@ -22,11 +22,17 @@ Pashto content is not in the app yet. When it is added, each Pashto text block i
 
 ### PashtoCore
 
-A library package at `Packages/PashtoCore`. It imports nothing from SwiftUI, SwiftData, UIKit, AVFoundation, or any other Apple-only framework. Foundation is available on Linux if a future type needs it; the skeleton does not use it.
+A library package at `Packages/PashtoCore`. It imports nothing from SwiftUI, SwiftData, UIKit, or any other Apple-only framework. Foundation is used for JSON decoding and Unicode normalization, and that Foundation is the open-source one `swift test` uses on Linux.
 
-`swift test` for this package is the logic test gate, and it runs on Linux. The iOS target is a thin shell over this package. Future lesson, quiz, and scheduling code belongs here once it is approved, so it can be tested without a simulator.
+`swift test` for this package is the logic test gate, and it runs on Linux. The iOS target is a thin shell over this package. Quiz and scheduling code belongs here once it is added, so it can be tested without a simulator.
 
-The package currently exposes a module name constant so the app target's dependency is real. It has no domain types.
+The package exposes:
+
+- Content value types for the generated `content.json` bundle (`ContentBundle`, `ContentItem`, `CourseUnit`, `Lesson`, `LessonItemRef`, and the id types). The format, id rules, release filter, and the boundary with the app are in [decisions/0002-content-format.md](decisions/0002-content-format.md).
+- `Normalization`, the only place that folds text for comparison.
+- `PashtoCore.moduleName`, so the app target's dependency stays linked.
+
+The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not call `Date()`, `Calendar.current`, `TimeZone.current`, or `Locale.current`. CI and `swift test` run `scripts/linux-guard.sh`'s rules against the package sources.
 
 ## Data, accounts, and audio
 
@@ -47,7 +53,8 @@ These are constraints on later work, not code in this revision.
 
 ## Out of scope for this revision
 
-- Modules, curriculum, or Pashto text
+- Shipped curriculum or Pashto course files
+- The content validator and the tool that merges unit files into `content.json`
 - Quiz, spaced-repetition, or streak logic
 - Audio playback or a pronunciation button
 - Screens other than the placeholder

@@ -19,6 +19,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Linux guard
+        run: bash scripts/linux-guard.sh
+
       - name: Test PashtoCore
         working-directory: Packages/PashtoCore
         run: swift test
