@@ -52,7 +52,8 @@ public struct ContentItem: Codable, Hashable, Sendable {
     public let translit: String
     /// Simple pronunciation shown in the app. Stressed syllables are uppercase.
     public let pronunciation: String
-    public let en: String
+    /// English meaning. Null and a missing key are both nil so the validator can report a missing gloss.
+    public let en: String?
     public let enAlt: [String]?
     public let usage: String?
     public let pronunciationNote: String?
@@ -76,7 +77,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         pashto: String,
         translit: String,
         pronunciation: String,
-        en: String,
+        en: String?,
         verification: Verification,
         enAlt: [String]? = nil,
         usage: String? = nil,
@@ -115,7 +116,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         pashto = try StrictJSON.decode(String.self, forKey: CodingKeys.pashto, from: container)
         translit = try StrictJSON.decode(String.self, forKey: CodingKeys.translit, from: container)
         pronunciation = try StrictJSON.decode(String.self, forKey: CodingKeys.pronunciation, from: container)
-        en = try StrictJSON.decode(String.self, forKey: CodingKeys.en, from: container)
+        en = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.en, from: container)
         enAlt = try StrictJSON.decodeIfPresent([String].self, forKey: CodingKeys.enAlt, from: container)
         usage = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.usage, from: container)
         pronunciationNote = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.pronunciationNote, from: container)
@@ -136,7 +137,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         try container.encode(pashto, forKey: .pashto)
         try container.encode(translit, forKey: .translit)
         try container.encode(pronunciation, forKey: .pronunciation)
-        try container.encode(en, forKey: .en)
+        try container.encodeIfPresent(en, forKey: .en)
         try container.encodeIfPresent(enAlt, forKey: .enAlt)
         try container.encodeIfPresent(usage, forKey: .usage)
         try container.encodeIfPresent(pronunciationNote, forKey: .pronunciationNote)

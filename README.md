@@ -1,6 +1,6 @@
 # PashtoApp
 
-iOS app that will teach Pashto from scratch. The app target is a SwiftUI shell. `PashtoCore` decodes the lesson content bundle and folds text for comparison, and its tests run on Linux. Quizzes, review scheduling, streaks, pronunciation playback, and screens beyond the placeholder are not implemented.
+iOS app that will teach Pashto from scratch. The app target is a SwiftUI shell. `PashtoCore` decodes the lesson content bundle, folds text for comparison, and validates that bundle. Its tests run on Linux. Quizzes, review scheduling, streaks, pronunciation playback, and screens beyond the placeholder are not implemented.
 
 The UI language is English. Pashto text, when it is added later, will be right-to-left per text block.
 
@@ -76,7 +76,7 @@ The project checked in here was generated from that spec. Stock XcodeGen 2.46.0 
 ## What is intentionally absent
 
 - Shipped curriculum and Pashto copy (tests carry a small fixture only)
-- The content validator and the content-file tool
+- The content-file tool and the release gate (release units, lesson size)
 - Quizzes, spaced repetition, and streaks
 - Audio playback and a pronunciation control
 - Any screen besides the placeholder root

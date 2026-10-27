@@ -30,6 +30,7 @@ The package exposes:
 
 - Content value types for the generated `content.json` bundle (`ContentBundle`, `ContentItem`, `CourseUnit`, `Lesson`, `LessonItemRef`, and the id types). The format, id rules, release filter, and the boundary with the app are in [decisions/0002-content-format.md](decisions/0002-content-format.md).
 - `Normalization`, the only place that folds text for comparison.
+- `ContentValidator`, which checks a decoded bundle and returns every issue it finds. Release-unit membership and lesson size stay with the content tool.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
 
 The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the process clock or the current locale (`Date()` / `Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
@@ -54,7 +55,7 @@ These are constraints on later work, not code in this revision.
 ## Out of scope for this revision
 
 - Shipped curriculum or Pashto course files
-- The content validator and the tool that merges unit files into `content.json`
+- The tool that merges unit files into `content.json`, and the release gate (release units, lesson size)
 - Quiz, spaced-repetition, or streak logic
 - Audio playback or a pronunciation button
 - Screens other than the placeholder

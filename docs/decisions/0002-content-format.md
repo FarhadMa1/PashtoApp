@@ -9,7 +9,7 @@ PashtoApp will ship offline lessons: words and phrases, five text quiz types, an
 
 `PashtoCore` is the Swift package the app links. It has no Apple-only dependencies, and `swift test` runs on Linux. The app target is still a SwiftUI shell. Lesson text, quizzes, and scheduling are not in the app.
 
-Someone has to be able to write a unit, give every word a stable id, and have the app and the quizzes agree on that id later. The format, the id rules, what a release build is allowed to contain, and what stays out of `PashtoCore` are decided here. Checking those rules, merging source files, and generating quizzes are later changes. They implement this decision; they do not reopen it.
+Someone has to be able to write a unit, give every word a stable id, and have the app and the quizzes agree on that id later. The format, the id rules, what a release build is allowed to contain, and what stays out of `PashtoCore` are decided here. `ContentValidator` checks a decoded bundle against those rules. Merging source files, the release gate, and generating quizzes are later changes. They implement this decision; they do not reopen it.
 
 ## Decision
 
@@ -43,8 +43,8 @@ Each word or phrase is one `ContentItem` with one id, defined in the unit where 
 
 `LessonItemRef` is `item`, `role`, and an optional `sound`:
 
-- `introduce` is the lesson where the item is learned. That reference is what later creates a review card. An item is introduced in exactly one ordinary lesson.
-- `soundExample` is only for the sounds unit. The item is shown as an example of a sound (`sound` is the transliteration letter, such as `ṭ`). It does not create a review card. The card is created when a later lesson uses `introduce`.
+- `introduce` is the lesson where the item is learned. That reference is what later creates a review card. An item is introduced in exactly one ordinary lesson. A letter is introduced by appearing in that lesson's `letters` array.
+- `soundExample` is only in the first unit of the bundle. Once `course.json` order is applied, that unit is the sounds unit. The item is shown as an example of a sound (`sound` is the transliteration letter, such as `ṭ`, and it is required). It does not create a review card. It does not have to be introduced in a later lesson. The card is created only when a lesson uses `introduce`.
 
 `CourseUnit` is `id`, `track`, `title`, `lessons`. `track` is a string. The sample uses `main`.
 
@@ -56,10 +56,10 @@ Fields on every item:
 
 | Field | Meaning |
 | --- | --- |
-| `pashto`, `translit`, `pronunciation`, `en` | Pashto in Afghan orthography, scholarly transliteration, the simple pronunciation shown in the app, and the English meaning. |
+| `pashto`, `translit`, `pronunciation`, `en` | Pashto in Afghan orthography, scholarly transliteration, the simple pronunciation shown in the app, and the English meaning. `en` decodes as optional: null and a missing key are both nil. The validator requires a non-empty `en` for every kind. |
 | `enAlt` | Optional further accepted English answers. |
 | `usage` | Optional short English context shown in a quiz. |
-| `pronunciationNote` | Optional English note. Required later when `pashto` contains a difficult character. Empty or whitespace-only counts as missing; that check is the validator's. |
+| `pronunciationNote` | Optional English note. The validator requires it when `pashto` contains a character from `romanization.difficultCharacters`. Empty or whitespace-only counts as missing. |
 | `responseTo` | Optional item id of the line this one answers. |
 | `tokens`, `acceptedOrders` | Optional word-order data. `tokens` are explicit; the core does not split `pashto` on spaces. |
 | `name`, `forms`, `sound` | Letter data. `forms` is `isolated`, `initial`, `medial`, `final`. |
@@ -118,7 +118,7 @@ The public way to read a bundle is `JSONDecoder` decoding `ContentBundle`. No cu
 - `nfc` and `isNFC` use Unicode scalars. Swift treats canonically equivalent strings as equal, so `==` cannot tell NFC from NFD.
 - `comparisonKey` is NFC followed by locale-independent lowercase. It does not strip diacritics. English and `usage` use this. Pashto duplicate checks use `nfc` on `pashto`.
 - `transliterationKey` decomposes to NFD, deletes only U+0301 (combining acute), recomposes to NFC, then lowercases the same way. Precomposed vowels such as `á` lose their accent. `ǧ`, `ṭ`, `x̌`, macrons, and carons stay. Search can ignore stress marks without collapsing those letters.
-- `unicodeScalars` and `stressScalar` are the inputs for later vowel and stress checks. Those checks are not implemented here.
+- `unicodeScalars` and `stressScalar` are the inputs for vowel and stress checks. `PashtoStressRule` performs those checks. `ContentValidator.validate(_:mode:)` uses that rule. A caller can pass a different `StressRule`.
 
 Lowercasing uses `lowercased(with: nil)`. It does not use `Locale.current`.
 
@@ -134,9 +134,9 @@ CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than 
 
 ## Consequences
 
-- The app still does not load or display a course. Types and decoding are in the package; the course files and the tool are not.
+- The app still does not load or display a course. Types, decoding, and bundle validation are in the package. The course files, the merge tool, and the release gate (release units and lesson size) are not. `validate(_:mode:)` accepts a mode so that signature stays stable; both modes run the same bundle checks until the tool exists.
 - A content typo in a key fails at decode time, before a quiz can ignore the field.
-- Id typos fail at decode time. Registry and duplicate rules still need the validator, because a well-formed id can still be the wrong id.
+- Id typos fail at decode time. Duplicate ids, duplicate Pashto plus English and usage, and broken references are validator errors. Registry membership ("this id is missing", "this retired id came back") stays with the content tool, because the bundle does not carry the registry.
 - `hasAudio` cannot be true for a partial block, because a partial block never becomes a value.
 - Release safety depends on the tool and CI that this decision describes. They are not in the package yet. Until they exist, nothing stops a person from putting a draft bundle in an app build by hand.
 - The Linux guard is a text scan. It catches the calls named above. It does not prove the package is free of every Apple API.

@@ -5,7 +5,7 @@ import Foundation
 /// NFC checks compare `unicodeScalars`. Swift treats canonically equivalent
 /// strings as equal, so `==` cannot tell NFC from NFD.
 ///
-/// Vowel counts and stress checks belong with validation. They must use
+/// Vowel counts and stress checks live in `PashtoStressRule`. They use
 /// `unicodeScalars` and `stressScalar`, not `String` equality.
 public enum Normalization {
     /// Combining acute accent. The only mark removed from transliteration keys.
