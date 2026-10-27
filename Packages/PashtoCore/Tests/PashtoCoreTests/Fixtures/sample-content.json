@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "2026.11.0",
+  "variant": "af-kabul",
+  "romanization": {
+    "table": [
+      {
+        "letter": "ږ",
+        "translit": "ǧ",
+        "ascii": "gy",
+        "pronunciation": "g",
+        "description": "Kabul: close to \"g\" in \"go\""
+      },
+      {
+        "letter": "ښ",
+        "translit": "x̌",
+        "ascii": "x",
+        "pronunciation": "kh",
+        "description": "Kabul: close to \"kh\""
+      },
+      {
+        "letter": "ع",
+        "translit": "ʿ",
+        "ascii": "a",
+        "pronunciation": "a",
+        "description": "Not pronounced as a separate sound in Pashto."
+      }
+    ],
+    "difficultCharacters": ["ټ", "ډ", "ړ", "ڼ", "ښ", "ږ", "څ", "ځ", "خ", "غ", "ژ", "ق", "ع"],
+    "unstressedWords": ["ma", "še", "de", "da", "day", "ye", "yəm", "yāst", "na", "ho", "pə", "la", "də", "tsə", "zə", "tə"]
+  },
+  "items": [
+    {
+      "id": "e-assalamu-alaykum",
+      "kind": "phrase",
+      "pashto": "السلام علیکم",
+      "translit": "as-salā́m alaykúm",
+      "pronunciation": "as-sa-LAAM a-lay-KOOM",
+      "en": "peace be upon you",
+      "usage": "formal greeting",
+      "pronunciationNote": "ع is not pronounced as a separate sound in Pashto; just say as-salā́m alaykúm.",
+      "responseTo": null,
+      "tokens": ["السلام", "علیکم"],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": { "status": "draft", "checkedBy": null, "checkedOn": null, "comment": null }
+    },
+    {
+      "id": "e-walaykum-salam",
+      "kind": "phrase",
+      "pashto": "وعلیکم السلام",
+      "translit": "wa-alaykúm as-salā́m",
+      "pronunciation": "wa-a-lay-KOOM as-sa-LAAM",
+      "en": "and upon you peace",
+      "usage": "reply to the formal greeting",
+      "pronunciationNote": "ع is not pronounced as a separate sound in Pashto.",
+      "responseTo": "e-assalamu-alaykum",
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": { "status": "check", "checkedBy": null, "checkedOn": null, "comment": "needs a native speaker" }
+    },
+    {
+      "id": "e-tol",
+      "kind": "word",
+      "pashto": "ټول",
+      "translit": "ṭol",
+      "pronunciation": "tol",
+      "en": "all",
+      "pronunciationNote": "ټ: t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": { "status": "verified", "checkedBy": "farhad", "checkedOn": "2026-10-27", "comment": null }
+    },
+    {
+      "id": "e-stare-ma-she",
+      "kind": "phrase",
+      "pashto": "ستړی مه شې",
+      "translit": "stə́ṛay ma še",
+      "pronunciation": "STA-ray ma shey",
+      "en": "hello",
+      "enAlt": ["may you not be tired"],
+      "usage": "typical Pashto greeting",
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward.",
+      "responseTo": null,
+      "tokens": ["ستړی", "مه", "شې"],
+      "acceptedOrders": [[0, 2, 1]],
+      "audio": null,
+      "verification": { "status": "draft", "checkedBy": null, "checkedOn": null, "comment": null }
+    },
+    {
+      "id": "e-letter-te-retroflex",
+      "kind": "letter",
+      "pashto": "ټ",
+      "translit": "ṭe",
+      "pronunciation": "tey",
+      "en": "retroflex t",
+      "name": "ټې",
+      "forms": { "isolated": "ټ", "initial": "ټ", "medial": "ټ", "final": "ټ" },
+      "sound": "ṭ",
+      "pronunciationNote": "ټ: t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": { "status": "draft", "checkedBy": null, "checkedOn": null, "comment": null }
+    }
+  ],
+  "units": [
+    {
+      "id": "u-sounds",
+      "track": "main",
+      "title": "Welcome and sounds",
+      "lessons": [
+        {
+          "id": "l-sounds-1",
+          "title": "New sounds",
+          "items": [
+            { "item": "e-tol", "role": "soundExample", "sound": "ṭ" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u-greetings",
+      "track": "main",
+      "title": "Greetings",
+      "lessons": [
+        {
+          "id": "l-greetings-1",
+          "title": "Saying hello",
+          "letters": ["e-letter-te-retroflex"],
+          "items": [
+            { "item": "e-assalamu-alaykum", "role": "introduce" },
+            { "item": "e-walaykum-salam", "role": "introduce" },
+            { "item": "e-stare-ma-she", "role": "introduce" },
+            { "item": "e-letter-te-retroflex", "role": "introduce" }
+          ],
+          "dialogs": [
+            {
+              "id": "d-greetings-1",
+              "turns": [
+                { "speaker": "A", "item": "e-assalamu-alaykum" },
+                { "speaker": "B", "item": "e-walaykum-salam" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nonDistractorGroups": [
+    ["e-assalamu-alaykum", "e-stare-ma-she"]
+  ]
+}

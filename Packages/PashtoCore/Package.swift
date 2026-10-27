@@ -15,7 +15,8 @@ let package = Package(
         .target(name: "PashtoCore"),
         .testTarget(
             name: "PashtoCoreTests",
-            dependencies: ["PashtoCore"]
+            dependencies: ["PashtoCore"],
+            exclude: ["Fixtures"]
         ),
     ]
 )
