@@ -453,10 +453,16 @@
       "name": "جیم",
       "translit": "jim",
       "pronunciation": "jeem",
-      "en": null,
+      "en": "the letter jeem",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "ج",
+        "initial": "جـ",
+        "medial": "ـجـ",
+        "final": "ـج"
+      },
+      "sound": "j",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -471,10 +477,16 @@
       "name": "چې",
       "translit": "če",
       "pronunciation": "chey",
-      "en": null,
+      "en": "the letter chey",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "چ",
+        "initial": "چـ",
+        "medial": "ـچـ",
+        "final": "ـچ"
+      },
+      "sound": "č",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -489,10 +501,16 @@
       "name": "حې",
       "translit": "he",
       "pronunciation": "hey",
-      "en": null,
+      "en": "the letter hey",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "ح",
+        "initial": "حـ",
+        "medial": "ـحـ",
+        "final": "ـح"
+      },
+      "sound": "h",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -507,10 +525,16 @@
       "name": "خې",
       "translit": "xe",
       "pronunciation": "khey",
-      "en": null,
+      "en": "the letter khey",
       "usage": null,
       "pronunciationNote": "خ: kh, like ch in Scottish loch.",
-      "forms": null,
+      "forms": {
+        "isolated": "خ",
+        "initial": "خـ",
+        "medial": "ـخـ",
+        "final": "ـخ"
+      },
+      "sound": "x",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -525,10 +549,16 @@
       "name": "څې",
       "translit": "tse",
       "pronunciation": "tsey",
-      "en": null,
+      "en": "the letter tsey",
       "usage": null,
       "pronunciationNote": "څ: ts as in cats.",
-      "forms": null,
+      "forms": {
+        "isolated": "څ",
+        "initial": "څـ",
+        "medial": "ـڅـ",
+        "final": "ـڅ"
+      },
+      "sound": "ts",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -543,10 +573,16 @@
       "name": "ځې",
       "translit": "dze",
       "pronunciation": "dzey",
-      "en": null,
+      "en": "the letter dzey",
       "usage": null,
       "pronunciationNote": "ځ: dz as in kids.",
-      "forms": null,
+      "forms": {
+        "isolated": "ځ",
+        "initial": "ځـ",
+        "medial": "ـځـ",
+        "final": "ـځ"
+      },
+      "sound": "dz",
       "verification": {
         "status": "check",
         "checkedBy": null,

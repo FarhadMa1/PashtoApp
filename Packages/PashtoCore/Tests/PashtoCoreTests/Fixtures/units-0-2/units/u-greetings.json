@@ -252,6 +252,26 @@
       }
     },
     {
+      "id": "e-dera-xa",
+      "kind": "phrase",
+      "pashto": "ډېره ښه",
+      "translit": "ḍéra x̌a",
+      "pronunciation": "DEY-ra kha",
+      "en": "very good",
+      "usage": "praise, e.g. after a correct answer",
+      "pronunciationNote": "ḍ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
       "id": "e-ho",
       "kind": "word",
       "pashto": "هو",
@@ -378,10 +398,16 @@
       "name": "الف",
       "translit": "alif",
       "pronunciation": "alif",
-      "en": null,
+      "en": "the letter alif",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "ا",
+        "initial": "ا",
+        "medial": "ـا",
+        "final": "ـا"
+      },
+      "sound": "ā",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -396,10 +422,16 @@
       "name": "بې",
       "translit": "be",
       "pronunciation": "bey",
-      "en": null,
+      "en": "the letter bey",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "ب",
+        "initial": "بـ",
+        "medial": "ـبـ",
+        "final": "ـب"
+      },
+      "sound": "b",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -414,10 +446,16 @@
       "name": "پې",
       "translit": "pe",
       "pronunciation": "pey",
-      "en": null,
+      "en": "the letter pey",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "پ",
+        "initial": "پـ",
+        "medial": "ـپـ",
+        "final": "ـپ"
+      },
+      "sound": "p",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -432,10 +470,16 @@
       "name": "تې",
       "translit": "te",
       "pronunciation": "tey",
-      "en": null,
+      "en": "the letter tey",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "ت",
+        "initial": "تـ",
+        "medial": "ـتـ",
+        "final": "ـت"
+      },
+      "sound": "t",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -450,10 +494,16 @@
       "name": "ټې",
       "translit": "ṭe",
       "pronunciation": "tey",
-      "en": null,
+      "en": "the letter tey",
       "usage": null,
       "pronunciationNote": "ṭ: t with the tongue tip curled back.",
-      "forms": null,
+      "forms": {
+        "isolated": "ټ",
+        "initial": "ټـ",
+        "medial": "ـټـ",
+        "final": "ـټ"
+      },
+      "sound": "ṭ",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -468,10 +518,16 @@
       "name": "ثې",
       "translit": "se",
       "pronunciation": "sey",
-      "en": null,
+      "en": "the letter sey",
       "usage": null,
       "pronunciationNote": null,
-      "forms": null,
+      "forms": {
+        "isolated": "ث",
+        "initial": "ثـ",
+        "medial": "ـثـ",
+        "final": "ـث"
+      },
+      "sound": "s",
       "verification": {
         "status": "check",
         "checkedBy": null,
@@ -604,6 +660,10 @@
         "e-letter-se"
       ],
       "items": [
+        {
+          "item": "e-dera-xa",
+          "role": "introduce"
+        },
         {
           "item": "e-ho",
           "role": "introduce"

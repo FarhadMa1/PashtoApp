@@ -22,38 +22,12 @@ struct RealisticContentValidationTests {
         #expect(issues.contains { $0.message.contains("not a U+ value") })
     }
 
-    @Test func unitsZeroThroughTwoReportKnownContentGaps() throws {
+    @Test func unitsZeroThroughTwoAreClean() throws {
         let bundle = try loadUnitsBundle()
         let issues = validate(bundle)
         #expect(validate(bundle, mode: .release) == issues)
-
-        // Pashto Expert owns these fixture files. The list stays exact: twelve letters
-        // still lack en, forms, and sound, and nine sound examples are not introduced
-        // in a later unit. It becomes empty once those fields are filled and the
-        // sound-only examples are introduced.
-        let letterIDs = [
-            "e-letter-alif", "e-letter-be", "e-letter-pe", "e-letter-te", "e-letter-tte", "e-letter-se",
-            "e-letter-jim", "e-letter-che", "e-letter-he", "e-letter-xe", "e-letter-tse", "e-letter-dze",
-        ]
-        let soundOnlyIDs = [
-            "e-tol", "e-dodey", "e-saray", "e-kaanay", "e-gira",
-            "e-tsa", "e-dzaay", "e-xor", "e-ghwag",
-        ]
-        var expected: [ValidationIssue] = []
-        for id in letterIDs {
-            expected.append(ValidationIssue(id: id, field: "en", message: "en is required.", severity: .error))
-            expected.append(ValidationIssue(id: id, field: "forms", message: "forms is required on a letter.", severity: .error))
-            expected.append(ValidationIssue(id: id, field: "sound", message: "sound is required on a letter.", severity: .error))
-        }
-        for id in soundOnlyIDs {
-            expected.append(ValidationIssue(
-                id: id,
-                field: "role",
-                message: "\(id) is not introduced in a lesson.",
-                severity: .error
-            ))
-        }
-        #expect(issues == expected)
+        // Any new content problem fails this test. The fixture files stay as supplied.
+        #expect(issues.isEmpty)
     }
 }
 

@@ -2,235 +2,39 @@
   "id": "u-sounds",
   "track": "main",
   "title": "Welcome and sounds",
-  "items": [
-    {
-      "id": "e-tol",
-      "kind": "word",
-      "pashto": "ټول",
-      "translit": "ṭol",
-      "pronunciation": "tol",
-      "en": "all",
-      "usage": null,
-      "pronunciationNote": "ṭ: t with the tongue tip curled back.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-dodey",
-      "kind": "word",
-      "pashto": "ډوډۍ",
-      "translit": "ḍoḍə́y",
-      "pronunciation": "do-DAY",
-      "en": "bread, food",
-      "usage": null,
-      "pronunciationNote": "ḍ: d with the tongue tip curled back.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-saray",
-      "kind": "word",
-      "pashto": "سړی",
-      "translit": "saṛáy",
-      "pronunciation": "sa-RAY",
-      "en": "man",
-      "usage": null,
-      "pronunciationNote": "ṛ: tongue tip curled back and flicked forward, like a quick r.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-kaanay",
-      "kind": "word",
-      "pashto": "کاڼی",
-      "translit": "kā́ṇay",
-      "pronunciation": "KAA-nay",
-      "en": "stone",
-      "usage": null,
-      "pronunciationNote": "ṇ: n with the tongue tip curled back.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-gira",
-      "kind": "word",
-      "pashto": "ږیره",
-      "translit": "ǧíra",
-      "pronunciation": "GEE-ra",
-      "en": "beard",
-      "usage": null,
-      "pronunciationNote": "ږ: in Kabul close to g in go.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-tsa",
-      "kind": "word",
-      "pashto": "څه",
-      "translit": "tsə",
-      "pronunciation": "tsa",
-      "en": "what",
-      "usage": null,
-      "pronunciationNote": "څ: ts as in cats.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-dzaay",
-      "kind": "word",
-      "pashto": "ځای",
-      "translit": "dzāy",
-      "pronunciation": "dzaay",
-      "en": "place",
-      "usage": null,
-      "pronunciationNote": "ځ: dz as in kids.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-xor",
-      "kind": "word",
-      "pashto": "خور",
-      "translit": "xor",
-      "pronunciation": "khor",
-      "en": "sister",
-      "usage": null,
-      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    },
-    {
-      "id": "e-ghwag",
-      "kind": "word",
-      "pashto": "غوږ",
-      "translit": "ɣwaǧ",
-      "pronunciation": "ghwag",
-      "en": "ear",
-      "usage": null,
-      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ږ: in Kabul close to g in go.",
-      "responseTo": null,
-      "tokens": null,
-      "acceptedOrders": null,
-      "audio": null,
-      "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
-      }
-    }
-  ],
+  "items": [],
   "lessons": [
     {
       "id": "l-sounds-1",
       "title": "New sounds",
       "items": [
         {
-          "item": "e-tol",
-          "role": "soundExample",
-          "sound": "ṭ"
-        },
-        {
-          "item": "e-dodey",
+          "item": "e-dera-manana",
           "role": "soundExample",
           "sound": "ḍ"
         },
         {
-          "item": "e-saray",
+          "item": "e-stare-ma-she",
           "role": "soundExample",
           "sound": "ṛ"
         },
         {
-          "item": "e-kaanay",
-          "role": "soundExample",
-          "sound": "ṇ"
-        },
-        {
-          "item": "e-gira",
-          "role": "soundExample",
-          "sound": "ǧ"
-        },
-        {
-          "item": "e-tsa",
+          "item": "e-tsanga-ye",
           "role": "soundExample",
           "sound": "ts"
         },
         {
-          "item": "e-dzaay",
+          "item": "e-ta-da-kum-dzay-ye",
           "role": "soundExample",
           "sound": "dz"
         },
         {
-          "item": "e-xor",
+          "item": "e-xoday-paman",
           "role": "soundExample",
           "sound": "x"
         },
         {
-          "item": "e-ghwag",
+          "item": "e-hagha",
           "role": "soundExample",
           "sound": "ɣ"
         },
