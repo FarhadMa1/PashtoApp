@@ -26,26 +26,52 @@ enum PashtoScript {
     static let arabicQuestion: Unicode.Scalar = "\u{061F}"
     static let arabicComma: Unicode.Scalar = "\u{060C}"
 
-    static func issues(in text: String, id: String?, field: String) -> [ValidationIssue] {
+    /// `allowTatweel` is only for letter `forms`, where U+0640 is the joining mark (`ـځـ`, `ـا`).
+    static func issues(in text: String, id: String?, field: String, allowTatweel: Bool = false) -> [ValidationIssue] {
         var issues: [ValidationIssue] = []
         if !Normalization.isNFC(text) {
             issues.append(issue(id, field, "\(field) must be Unicode NFC."))
+        }
+        if field == "pashto", hasEdgeSpace(text) {
+            issues.append(issue(id, field, "pashto has leading or trailing space."))
         }
 
         var forbidden: Set<Unicode.Scalar> = []
         var invisible: Set<Unicode.Scalar> = []
         var digits: Set<Unicode.Scalar> = []
+        var foreign: Set<Unicode.Scalar> = []
         var previousWasSpace = false
         var reportedDoubleSpace = false
+        var word: [Unicode.Scalar] = []
+        func flushWord() {
+            defer { word.removeAll(keepingCapacity: true) }
+            guard word.contains(Self.arabicYeh) else { return }
+            let earlier = word.dropLast()
+            if word.last != Self.arabicYeh || earlier.contains(Self.arabicYeh) {
+                let shown = String(String.UnicodeScalarView(word))
+                issues.append(
+                    issue(id, field, "\(field) uses ي (U+064A) inside \"\(shown)\". It is only allowed at the end of a word.")
+                )
+            }
+        }
+
         for scalar in text.unicodeScalars {
+            if isWordBoundary(scalar) {
+                flushWord()
+            } else {
+                word.append(scalar)
+            }
             if isForbidden(scalar), forbidden.insert(scalar).inserted {
                 issues.append(issue(id, field, forbiddenMessage(scalar, field: field)))
             }
-            if isInvisible(scalar), invisible.insert(scalar).inserted {
+            if isInvisible(scalar, allowTatweel: allowTatweel), invisible.insert(scalar).inserted {
                 issues.append(issue(id, field, "\(field) contains \(name(scalar))."))
             }
             if isDigit(scalar), digits.insert(scalar).inserted {
                 issues.append(issue(id, field, "\(field) contains a digit (\(code(scalar)))."))
+            }
+            if isNonArabicLetter(scalar), foreign.insert(scalar).inserted {
+                issues.append(issue(id, field, "\(field) contains \"\(String(scalar))\" (\(code(scalar))), which is not Arabic script."))
             }
             if scalar == " " {
                 if previousWasSpace, !reportedDoubleSpace {
@@ -57,17 +83,7 @@ enum PashtoScript {
                 previousWasSpace = false
             }
         }
-
-        for word in text.split(whereSeparator: \.isWhitespace) {
-            let scalars = Array(String(word).unicodeScalars)
-            guard scalars.contains(Self.arabicYeh) else { continue }
-            let earlier = scalars.dropLast()
-            if scalars.last != Self.arabicYeh || earlier.contains(Self.arabicYeh) {
-                issues.append(
-                    issue(id, field, "\(field) uses ي (U+064A) inside \"\(word)\". It is only allowed at the end of a word.")
-                )
-            }
-        }
+        flushWord()
         return issues
     }
 
@@ -88,8 +104,44 @@ enum PashtoScript {
         scalar == arabicKaf || scalar == alefMaksura || scalar == persianGaf
     }
 
-    private static func isInvisible(_ scalar: Unicode.Scalar) -> Bool {
-        scalar == zwnj || scalar == zwj || scalar == lrm || scalar == rlm || scalar == nbsp || scalar == tatweel
+    private static func isInvisible(_ scalar: Unicode.Scalar, allowTatweel: Bool) -> Bool {
+        if allowTatweel, scalar == tatweel { return false }
+        return scalar == zwnj || scalar == zwj || scalar == lrm || scalar == rlm || scalar == nbsp || scalar == tatweel
+    }
+
+    private static func isNonArabicLetter(_ scalar: Unicode.Scalar) -> Bool {
+        switch scalar.properties.generalCategory {
+        case .uppercaseLetter, .lowercaseLetter, .titlecaseLetter, .modifierLetter, .otherLetter:
+            return !isArabicScript(scalar)
+        default:
+            return false
+        }
+    }
+
+    private static func isArabicScript(_ scalar: Unicode.Scalar) -> Bool {
+        switch scalar.value {
+        case 0x0600...0x06FF, 0x0750...0x077F, 0x08A0...0x08FF, 0xFB50...0xFDFF, 0xFE70...0xFEFF:
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Punctuation and whitespace end a word, so ي before ؟ or ، is word-final.
+    private static func isWordBoundary(_ scalar: Unicode.Scalar) -> Bool {
+        if Character(scalar).isWhitespace { return true }
+        switch scalar.properties.generalCategory {
+        case .connectorPunctuation, .dashPunctuation, .openPunctuation, .closePunctuation,
+             .initialPunctuation, .finalPunctuation, .otherPunctuation:
+            return true
+        default:
+            return false
+        }
+    }
+
+    private static func hasEdgeSpace(_ text: String) -> Bool {
+        guard let first = text.unicodeScalars.first, let last = text.unicodeScalars.last else { return false }
+        return Character(first).isWhitespace || Character(last).isWhitespace
     }
 
     private static func isDigit(_ scalar: Unicode.Scalar) -> Bool {

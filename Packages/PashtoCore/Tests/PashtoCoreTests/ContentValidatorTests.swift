@@ -27,6 +27,22 @@ struct ContentValidatorTests {
         #expect(validate(makeBundle(items: [end])).isEmpty)
     }
 
+    @Test func yehBeforePunctuationIsTheEndOfTheWord() {
+        let translit = "mehrab\u{0101}n\u{00ED}"
+        let pronunciation = "meh-ra-baa-NEE"
+        let word = "\u{0645}\u{0647}\u{0631}\u{0628}\u{0627}\u{0646}\u{064A}"
+        let samples = [
+            word + "\u{061F}",
+            word + "\u{060C}",
+            "\u{00AB}" + word + "\u{00BB}",
+            "\u{064A}\u{061F}\u{0633}\u{0644}\u{0627}\u{0645}",
+        ]
+        for pashto in samples {
+            let item = makeItem(pashto: pashto, translit: translit, pronunciation: pronunciation, en: "kindness")
+            #expect(validate(makeBundle(items: [item])).isEmpty, "expected \(pashto) to pass")
+        }
+    }
+
     @Test func arabicKafAlefMaksuraAndPersianGafFail() {
         #expect(validate(makeBundle(items: [makeItem(pashto: "\u{0643}")])).first?.message.contains("U+0643") == true)
         #expect(validate(makeBundle(items: [makeItem(pashto: "\u{0649}")])).first?.message.contains("U+0649") == true)
@@ -40,9 +56,14 @@ struct ContentValidatorTests {
         #expect(composed.count == 1)
         #expect(composed.first?.message.contains("NFC") == true)
 
-        for sample in ["\u{200C}", "\u{00A0}", "\u{0640}", "  ", "1", "\u{0660}", "\u{06F0}"] {
+        for sample in ["\u{200C}", "\u{00A0}", "\u{0640}", "  "] {
             let issues = validate(makeBundle(items: [makeItem(pashto: "سلام\(sample)")]))
             #expect(!issues.isEmpty, "expected an issue for \(sample)")
+        }
+        // Digits stay an error until a numbers unit is agreed.
+        for sample in ["1", "\u{0660}", "\u{06F0}"] {
+            let issues = validate(makeBundle(items: [makeItem(pashto: "سلام\(sample)")]))
+            #expect(issues.contains { $0.message.contains("digit") }, "expected a digit issue for \(sample)")
         }
     }
 
@@ -125,6 +146,13 @@ struct ContentValidatorTests {
         let count = validate(makeBundle(items: [makeItem(pronunciation: "sa-LAAM extra")]))
         #expect(count.count == 1)
         #expect(count.first?.message.contains("2 words") == true)
+    }
+
+    @Test func unhyphenatedMultiSyllablePronunciationFails() {
+        let spoken = validate(makeBundle(items: [makeItem(pronunciation: "salaam")]))
+        #expect(spoken.count == 1)
+        #expect(spoken.first?.field == "pronunciation")
+        #expect(spoken.first?.message == "\"salaam\" needs a hyphen and one uppercase syllable. The transliteration has 2 syllables.")
     }
 
     @Test func pronunciationNoteIsRequiredForDifficultCharacters() {
@@ -336,21 +364,48 @@ struct ContentValidatorTests {
         #expect(validate(twice).first?.message.contains("introduced in") == true)
 
         let example = makeItem("e-tol", pashto: "ټول", translit: "\u{1E6D}ol", pronunciation: "tol", pronunciationNote: "ټ")
+        let soundRef = LessonItemRef(item: example.id, role: .soundExample, sound: "ṭ")
         let sounds = CourseUnit(id: unitID("u-sounds"), track: "main", title: "Sounds", lessons: [
+            Lesson(id: lessonID("l-sounds-1"), title: "Sounds", items: [soundRef]),
+        ])
+        let soundOnly = validate(makeBundle(items: [example], units: [sounds], difficult: ["ټ"]))
+        #expect(soundOnly.count == 1)
+        #expect(soundOnly.first?.message == "e-tol is not introduced in a lesson.")
+
+        let introducedInSounds = CourseUnit(id: unitID("u-sounds"), track: "main", title: "Sounds", lessons: [
             Lesson(id: lessonID("l-sounds-1"), title: "Sounds", items: [
-                LessonItemRef(item: example.id, role: .soundExample, sound: "ṭ"),
+                soundRef,
+                LessonItemRef(item: example.id, role: .introduce),
             ]),
         ])
-        #expect(validate(makeBundle(items: [example], units: [sounds], difficult: ["ټ"])).isEmpty)
+        let soundsIntroduction = validate(makeBundle(items: [example], units: [introducedInSounds], difficult: ["ټ"]))
+        #expect(soundsIntroduction.count == 1)
+        #expect(soundsIntroduction.first?.message == "e-tol is not introduced in a lesson.")
+
+        let greetings = CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [
+            Lesson(id: lessonID("l-greetings-1"), title: "Later", items: [
+                LessonItemRef(item: example.id, role: .introduce),
+            ]),
+        ])
+        #expect(validate(makeBundle(items: [example], units: [sounds, greetings], difficult: ["ټ"])).isEmpty)
+
+        let alsoInSounds = CourseUnit(id: unitID("u-sounds"), track: "main", title: "Sounds", lessons: [
+            Lesson(id: lessonID("l-sounds-1"), title: "Sounds", items: [
+                soundRef,
+                LessonItemRef(item: example.id, role: .introduce),
+            ]),
+        ])
+        let twiceAcrossUnits = validate(makeBundle(items: [example], units: [alsoInSounds, greetings], difficult: ["ټ"]))
+        #expect(twiceAcrossUnits.count == 1)
+        #expect(twiceAcrossUnits.first?.message == "e-tol is introduced in l-sounds-1, l-greetings-1. An item is introduced once.")
 
         let later = CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [
-            Lesson(id: lessonID("l-greetings-1"), title: "Later", items: [
-                LessonItemRef(item: example.id, role: .soundExample, sound: "ṭ"),
-            ]),
+            Lesson(id: lessonID("l-greetings-1"), title: "Later", items: [soundRef]),
         ])
         let outside = validate(makeBundle(items: [example], units: [sounds, later], difficult: ["ټ"]))
-        #expect(outside.count == 1)
-        #expect(outside.first?.field == "role")
+        #expect(outside.map(\.field) == ["role", "role"])
+        #expect(outside[0].message.contains("first unit"))
+        #expect(outside[1].message == "e-tol is not introduced in a lesson.")
 
         let quiet = LessonItemRef(item: example.id, role: .soundExample, sound: " ")
         let missingSound = validate(makeBundle(
@@ -360,8 +415,8 @@ struct ContentValidatorTests {
             ])],
             difficult: ["ټ"]
         ))
-        #expect(missingSound.count == 1)
-        #expect(missingSound.first?.field == "sound")
+        #expect(missingSound.map(\.field) == ["sound", "role"])
+        #expect(missingSound[1].message == "e-tol is not introduced in a lesson.")
     }
 
     @Test func lettersAreIntroducedByTheLettersArray() {
@@ -387,6 +442,85 @@ struct ContentValidatorTests {
         #expect(wordInLetters.first?.field == "letters")
     }
 
+    @Test func pashtoIsArabicScriptWithoutEdgeSpace() {
+        let latin = validate(makeBundle(items: [makeItem(pashto: "سلامabc")]))
+        #expect(latin.map(\.message) == [
+            "pashto contains \"a\" (U+0061), which is not Arabic script.",
+            "pashto contains \"b\" (U+0062), which is not Arabic script.",
+            "pashto contains \"c\" (U+0063), which is not Arabic script.",
+        ])
+
+        let spaced = validate(makeBundle(items: [makeItem(pashto: " سلام ")]))
+        #expect(spaced.count == 1)
+        #expect(spaced.first?.message == "pashto has leading or trailing space.")
+    }
+
+    @Test func difficultCharactersMustBeOneCharacter() {
+        let issues = validate(makeBundle(items: [makeItem()], difficult: ["ab"]))
+        #expect(issues.count == 1)
+        #expect(issues.first?.field == "difficultCharacters")
+        #expect(issues.first?.message == "difficultCharacters entry \"ab\" must be one character.")
+    }
+
+    @Test func tatweelIsAllowedOnlyInLetterForms() {
+        let dze = makeItem(
+            "e-letter-dze",
+            kind: .letter,
+            pashto: "ځ",
+            translit: "dze",
+            pronunciation: "dze",
+            en: "dze",
+            pronunciationNote: "ځ",
+            name: "ځ",
+            forms: LetterForms(
+                isolated: "ځ",
+                initial: "ځ",
+                medial: "\u{0640}ځ\u{0640}",
+                final: "ځ"
+            ),
+            sound: "dz"
+        )
+        #expect(validate(makeBundle(items: [dze], difficult: ["ځ"])).isEmpty)
+
+        let alif = makeItem(
+            "e-letter-alif",
+            kind: .letter,
+            pashto: "ا",
+            translit: "alif",
+            pronunciation: "alif",
+            en: "alif",
+            name: "الف",
+            forms: LetterForms(isolated: "ا", initial: "\u{0640}ا", medial: "\u{0640}ا", final: "ا"),
+            sound: "a"
+        )
+        #expect(validate(makeBundle(items: [alif])).isEmpty)
+
+        let inPashto = validate(makeBundle(items: [makeItem(pashto: "س\u{0640}لام")]))
+        #expect(inPashto.contains { $0.field == "pashto" && $0.message.contains("tatweel (U+0640)") })
+
+        let named = makeItem(
+            "e-letter-alif",
+            kind: .letter,
+            pashto: "ا",
+            translit: "alif",
+            pronunciation: "alif",
+            en: "alif",
+            name: "ال\u{0640}ف",
+            forms: LetterForms(isolated: "ا", initial: "ا", medial: "ا", final: "ا"),
+            sound: "a"
+        )
+        #expect(validate(makeBundle(items: [named])).contains { $0.field == "name" && $0.message.contains("tatweel (U+0640)") })
+
+        let phrase = makeItem(
+            pashto: "سلام نه",
+            translit: "sal\u{0101}\u{0301}m na",
+            pronunciation: "sa-LAAM na",
+            tokens: ["س\u{0640}لام", "نه"],
+            acceptedOrders: [[1, 0]]
+        )
+        #expect(validate(makeBundle(items: [phrase])).contains { $0.field == "tokens" && $0.message.contains("tatweel (U+0640)") })
+    }
+
     @Test func aDifferentStressRuleReplacesThePashtoRule() {
         let bundle = makeBundle(items: [makeItem(translit: "w\u{0259}k\u{1E5B}\u{0259}y", pronunciation: "wa-KRAY")])
         let issues = ContentValidator.validate(bundle, mode: .authoring, stress: StubStressRule())
@@ -394,12 +528,38 @@ struct ContentValidatorTests {
         #expect(issues.first?.severity == .review)
         #expect(issues.first?.message == "stub")
     }
+
+    @Test func injectedStressRuleOwnsSyllablesAndTheUnstressedList() {
+        let bundle = makeBundle(
+            items: [makeItem(pronunciation: "salaam")],
+            unstressed: ["sal\u{0101}m"]
+        )
+        let swapped = ContentValidator.validate(bundle, mode: .authoring, stress: PermissiveStressRule())
+        #expect(swapped.isEmpty)
+
+        let pashto = validate(bundle)
+        #expect(pashto.map(\.field) == ["unstressedWords", "pronunciation"])
+        #expect(pashto[0].message.contains("one syllable"))
+        #expect(pashto[1].message.contains("salaam"))
+    }
 }
 
 private struct StubStressRule: StressRule {
     func issues(in translit: String, unstressedWords: [String], id: String?) -> [ValidationIssue] {
         [ValidationIssue(id: id, field: "translit", message: "stub", severity: .review)]
     }
+
+    func syllableCount(in word: String) -> Int { 1 }
+
+    func unstressedListIssues(_ words: [String], tableTransliterations: [String]) -> [ValidationIssue] { [] }
+}
+
+private struct PermissiveStressRule: StressRule {
+    func issues(in translit: String, unstressedWords: [String], id: String?) -> [ValidationIssue] { [] }
+
+    func syllableCount(in word: String) -> Int { 1 }
+
+    func unstressedListIssues(_ words: [String], tableTransliterations: [String]) -> [ValidationIssue] { [] }
 }
 
 private func itemJSON(extra: String) -> String {

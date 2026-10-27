@@ -36,6 +36,12 @@ public enum ValidationMode: String, Hashable, Sendable {
 }
 
 /// Stress check used by `ContentValidator`. Replace it by passing another rule to `validate`.
+///
+/// Syllable counts and the `unstressedWords` list use this same rule, so a replacement
+/// owns those checks instead of `PashtoStressRule`.
 public protocol StressRule: Sendable {
     func issues(in translit: String, unstressedWords: [String], id: String?) -> [ValidationIssue]
+    /// Vowel nuclei in one transliteration word. Hyphens stay inside the word.
+    func syllableCount(in word: String) -> Int
+    func unstressedListIssues(_ words: [String], tableTransliterations: [String]) -> [ValidationIssue]
 }

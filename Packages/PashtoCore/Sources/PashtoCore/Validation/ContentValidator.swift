@@ -5,8 +5,10 @@ import Foundation
 /// Every problem is returned. The check does not stop at the first one.
 /// `validate(_:mode:)` uses `PashtoStressRule`. Pass `stress` to run a different rule.
 ///
-/// Release-unit membership and lesson size are not checked. The content tool owns those gates.
-/// `soundExample` items do not have to be introduced. Letters are introduced through `letters`.
+/// Release-unit membership, lesson size, and a warning for audio in v1.0 are not checked.
+/// The content tool owns those gates.
+/// A `soundExample` must point at an item introduced in exactly one later unit.
+/// Letters are introduced through `letters`. U+0640 is allowed only in letter `forms`.
 public enum ContentValidator {
     public static func validate(_ bundle: ContentBundle, mode: ValidationMode) -> [ValidationIssue] {
         validate(bundle, mode: mode, stress: PashtoStressRule())
@@ -28,7 +30,7 @@ public enum ContentValidator {
             report.add(.error, id: nil, field: "variant", "variant must be \(ContentBundle.kabulVariant).")
         }
         report.add(contentsOf: difficultCharacterIssues(bundle.romanization.difficultCharacters))
-        report.add(contentsOf: PashtoStressRule().unstressedListIssues(
+        report.add(contentsOf: stress.unstressedListIssues(
             bundle.romanization.unstressedWords,
             tableTransliterations: bundle.romanization.table.map(\.translit)
         ))
@@ -52,6 +54,7 @@ public enum ContentValidator {
         }
 
         var introductions: [String: [String]] = [:]
+        var regularIntroductions: [String: [String]] = [:]
         var soundExamples: [String: [String]] = [:]
         var seenUnits: Set<String> = []
         var seenLessons: Set<String> = []
@@ -77,6 +80,9 @@ public enum ContentValidator {
                     switch ref.role {
                     case .introduce:
                         introductions[itemID, default: []].append(lessonID)
+                        if unitIndex > 0 {
+                            regularIntroductions[itemID, default: []].append(lessonID)
+                        }
                     case .soundExample:
                         soundExamples[itemID, default: []].append(lessonID)
                         if unitIndex != 0 {
@@ -102,6 +108,9 @@ public enum ContentValidator {
                         report.add(.error, id: itemID, field: "letters", "\(itemID) is listed in letters but its kind is \(itemsByID[itemID]?.kind.rawValue ?? "unknown").")
                     }
                     introductions[itemID, default: []].append(lessonID)
+                    if unitIndex > 0 {
+                        regularIntroductions[itemID, default: []].append(lessonID)
+                    }
                 }
                 for dialog in lesson.dialogs {
                     let dialogID = dialog.id.rawValue
@@ -128,15 +137,37 @@ public enum ContentValidator {
         for item in bundle.items {
             let id = item.id.rawValue
             let intros = introductions[id] ?? []
-            let sounds = soundExamples[id] ?? []
-            if intros.count > 1 {
+            let regular = regularIntroductions[id] ?? []
+            let isSoundExample = !(soundExamples[id] ?? []).isEmpty
+            if isSoundExample {
+                // Unit 0 is the sounds unit. A regular lesson is a later unit.
+                if regular.count != 1 {
+                    if regular.isEmpty {
+                        report.add(.error, id: id, field: "role", "\(id) is not introduced in a lesson.")
+                    } else {
+                        report.add(
+                            .error,
+                            id: id,
+                            field: "role",
+                            "\(id) is introduced in \(regular.joined(separator: ", ")). An item is introduced once."
+                        )
+                    }
+                } else if intros.count != regular.count {
+                    report.add(
+                        .error,
+                        id: id,
+                        field: "role",
+                        "\(id) is introduced in \(intros.joined(separator: ", ")). An item is introduced once."
+                    )
+                }
+            } else if intros.count > 1 {
                 report.add(
                     .error,
                     id: id,
                     field: "role",
                     "\(id) is introduced in \(intros.joined(separator: ", ")). An item is introduced once."
                 )
-            } else if intros.isEmpty, sounds.isEmpty {
+            } else if intros.isEmpty {
                 report.add(.error, id: id, field: "role", "\(id) is not introduced in a lesson.")
             }
         }
@@ -185,7 +216,9 @@ public enum ContentValidator {
             report.add(contentsOf: PronunciationRules.issues(
                 translit: item.translit,
                 pronunciation: item.pronunciation,
-                id: id
+                id: id,
+                syllableCount: { stress.syllableCount(in: $0) },
+                requireHyphenWhenMultiSyllable: item.kind != .letter
             ))
         }
         if Text.isBlank(item.en) {
@@ -247,7 +280,7 @@ public enum ContentValidator {
                 if Text.isBlank(value) {
                     report.add(.error, id: id, field: field, "\(field) is required on a letter.")
                 } else {
-                    report.add(contentsOf: PashtoScript.issues(in: value, id: id, field: field))
+                    report.add(contentsOf: PashtoScript.issues(in: value, id: id, field: field, allowTatweel: true))
                 }
             }
         } else {
@@ -365,6 +398,16 @@ public enum ContentValidator {
                     id: nil,
                     field: "difficultCharacters",
                     message: "difficultCharacters contains an empty entry.",
+                    severity: .error
+                ))
+                continue
+            }
+            let scalars = Normalization.unicodeScalars(Normalization.nfc(character))
+            if scalars.count != 1 {
+                issues.append(ValidationIssue(
+                    id: nil,
+                    field: "difficultCharacters",
+                    message: "difficultCharacters entry \"\(character)\" must be one character.",
                     severity: .error
                 ))
                 continue

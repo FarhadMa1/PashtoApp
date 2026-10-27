@@ -50,6 +50,10 @@ public struct PashtoStressRule: StressRule, Sendable {
         return issues
     }
 
+    public func syllableCount(in word: String) -> Int {
+        Self.counts(in: word).nuclei
+    }
+
     /// Each `unstressedWords` entry is one syllable and uses only characters that appear in the table transliterations.
     public func unstressedListIssues(
         _ words: [String],

@@ -44,7 +44,7 @@ Each word or phrase is one `ContentItem` with one id, defined in the unit where 
 `LessonItemRef` is `item`, `role`, and an optional `sound`:
 
 - `introduce` is the lesson where the item is learned. That reference is what later creates a review card. An item is introduced in exactly one ordinary lesson. A letter is introduced by appearing in that lesson's `letters` array.
-- `soundExample` is only in the first unit of the bundle. Once `course.json` order is applied, that unit is the sounds unit. The item is shown as an example of a sound (`sound` is the transliteration letter, such as `ṭ`, and it is required). It does not create a review card. It does not have to be introduced in a later lesson. The card is created only when a lesson uses `introduce`.
+- `soundExample` is only in the first unit of the bundle. Once `course.json` order is applied, that unit is the sounds unit. The item is shown as an example of a sound (`sound` is the transliteration letter, such as `ṭ`, and it is required). It does not create a review card. The same item must be introduced in exactly one regular lesson in a later unit. That `introduce` is what creates the card. An `introduce` in the sounds unit does not count.
 
 `CourseUnit` is `id`, `track`, `title`, `lessons`. `track` is a string. The sample uses `main`.
 
@@ -138,5 +138,6 @@ CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than 
 - A content typo in a key fails at decode time, before a quiz can ignore the field.
 - Id typos fail at decode time. Duplicate ids, duplicate Pashto plus English and usage, and broken references are validator errors. Registry membership ("this id is missing", "this retired id came back") stays with the content tool, because the bundle does not carry the registry.
 - `hasAudio` cannot be true for a partial block, because a partial block never becomes a value.
-- Release safety depends on the tool and CI that this decision describes. They are not in the package yet. Until they exist, nothing stops a person from putting a draft bundle in an app build by hand.
+- Release safety depends on the tool and CI that this decision describes. They are not in the package yet. Until they exist, nothing stops a person from putting a draft bundle in an app build by hand. A warning when v1.0 content includes audio belongs with that release gate.
+- Letter `forms` may use tatweel (U+0640) as the joining mark, as in `ـځـ` and `ـا`. The same character is an error in `pashto` and in every other text field. Digits in Pashto text stay an error until a numbers unit is agreed.
 - The Linux guard is a text scan. It catches the calls named above. It does not prove the package is free of every Apple API.

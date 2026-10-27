@@ -5,8 +5,18 @@ import Foundation
 /// Letters, hyphen, space, and punctuation are allowed. A hyphenated word needs
 /// exactly one all-uppercase syllable. A word without a hyphen is lowercase.
 /// An all-uppercase word whose next word starts with `kr` is a review (`ZDA kram`).
+///
+/// When `requireHyphenWhenMultiSyllable` is set, a transliteration word with more
+/// than one syllable (from the active `StressRule`) must be spelled with a hyphen.
+/// Letter items leave that flag off: names such as `alif` are labels.
 enum PronunciationRules {
-    static func issues(translit: String, pronunciation: String, id: String?) -> [ValidationIssue] {
+    static func issues(
+        translit: String,
+        pronunciation: String,
+        id: String?,
+        syllableCount: (String) -> Int,
+        requireHyphenWhenMultiSyllable: Bool
+    ) -> [ValidationIssue] {
         var issues: [ValidationIssue] = []
         var reported: Set<Unicode.Scalar> = []
         for scalar in pronunciation.unicodeScalars where !isAllowed(scalar) {
@@ -22,6 +32,20 @@ enum PronunciationRules {
                 id,
                 "pronunciation has \(pronunciationWords.count) words and translit has \(translitWords.count)."
             ))
+        }
+
+        if requireHyphenWhenMultiSyllable {
+            let paired = min(translitWords.count, pronunciationWords.count)
+            for index in 0..<paired {
+                let spoken = pronunciationWords[index]
+                let nuclei = syllableCount(translitWords[index])
+                if nuclei > 1, !spoken.contains("-") {
+                    issues.append(error(
+                        id,
+                        "\"\(spoken)\" needs a hyphen and one uppercase syllable. The transliteration has \(nuclei) syllables."
+                    ))
+                }
+            }
         }
 
         for index in pronunciationWords.indices {
