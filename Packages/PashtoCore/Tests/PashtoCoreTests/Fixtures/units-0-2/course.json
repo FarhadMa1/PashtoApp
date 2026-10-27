@@ -1,0 +1,34 @@
+{
+  "units": [
+    "u-sounds",
+    "u-greetings",
+    "u-introductions"
+  ],
+  "nonDistractorGroups": [
+    [
+      "e-salam",
+      "e-assalamu-alaykum",
+      "e-stare-ma-she"
+    ],
+    [
+      "e-manana",
+      "e-dera-manana"
+    ],
+    [
+      "e-xoday-paman",
+      "e-pa-maxa-de-xa"
+    ],
+    [
+      "e-xa",
+      "e-za-xa-yam"
+    ],
+    [
+      "e-letter-te",
+      "e-letter-tte"
+    ],
+    [
+      "e-letter-xe",
+      "e-xor"
+    ]
+  ]
+}

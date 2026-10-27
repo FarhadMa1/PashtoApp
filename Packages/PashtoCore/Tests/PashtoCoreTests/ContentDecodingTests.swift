@@ -85,6 +85,25 @@ struct ContentDecodingTests {
         #expect(again == decoded)
     }
 
+    @Test func nullEnglishDecodesAsMissing() throws {
+        let json = """
+        {
+          "id": "e-letter-alif",
+          "kind": "letter",
+          "pashto": "ا",
+          "translit": "alif",
+          "pronunciation": "alif",
+          "en": null,
+          "verification": {"status": "draft"}
+        }
+        """
+        let item = try JSONDecoder().decode(ContentItem.self, from: Data(json.utf8))
+        #expect(item.en == nil)
+        let encoded = try JSONEncoder().encode(item)
+        let again = try JSONDecoder().decode(ContentItem.self, from: encoded)
+        #expect(again.en == nil)
+    }
+
     @Test func decodesEveryKind() throws {
         for kind in ["word", "phrase", "dialogLine", "letter"] {
             let item = try JSONDecoder().decode(ContentItem.self, from: Data(minimalItem(kind: kind).utf8))
