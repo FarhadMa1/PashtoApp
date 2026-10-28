@@ -5,8 +5,9 @@ import PashtoCore
 ///
 /// The gate reports problems. It does not remove items. Lesson size and
 /// unverified items are errors in `release` and warnings in `dev`. A difficult
-/// character with no `soundExample` in the first unit is an error in `release`
-/// and a warning in `dev`. Audio in v1.0 is a warning in both modes.
+/// character with no `soundExample` in the first unit is a warning in `dev`.
+/// It is an error in `release` only when that first unit is listed in
+/// `release-units.json`. Audio in v1.0 is a warning in both modes.
 public enum ReleaseGate {
     public static func issues(
         in bundle: ContentBundle,
@@ -93,7 +94,13 @@ public enum ReleaseGate {
             ))
         }
 
-        issues.append(contentsOf: soundExampleIssues(in: bundle, specialSounds: specialSounds, severity: releaseSeverity))
+        // Dev always warns, so a missing example stays visible.
+        // Release errors only when the first unit, the sounds unit, is on the release list.
+        if mode == .dev {
+            issues.append(contentsOf: soundExampleIssues(in: bundle, specialSounds: specialSounds, severity: .warning))
+        } else if let soundsUnit = bundle.units.first, releaseUnits.contains(soundsUnit.id.rawValue) {
+            issues.append(contentsOf: soundExampleIssues(in: bundle, specialSounds: specialSounds, severity: .error))
+        }
         return issues
     }
 

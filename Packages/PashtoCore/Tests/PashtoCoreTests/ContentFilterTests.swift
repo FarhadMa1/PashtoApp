@@ -42,4 +42,35 @@ struct ContentFilterTests {
         #expect(filtered.nonDistractorGroups.isEmpty)
         #expect(bundle.items.count == 3)
     }
+
+    @Test func devBuildDropsResponseToWhenTheTargetIsHidden() {
+        let signed = Verification(status: .verified, checkedBy: "farhad", checkedOn: "2026-10-27")
+        let prompt = makeItem("e-salam", verification: signed)
+        let draft = makeItem("e-draft", pashto: "نه", translit: "na", pronunciation: "na", en: "no")
+        let toDraft = makeItem(
+            "e-reply",
+            pashto: "هو",
+            translit: "ho",
+            pronunciation: "ho",
+            en: "yes",
+            responseTo: "e-draft",
+            verification: signed
+        )
+        let toPrompt = makeItem(
+            "e-other",
+            pashto: "زه",
+            translit: "zə",
+            pronunciation: "za",
+            en: "I",
+            responseTo: "e-salam",
+            verification: signed
+        )
+        let bundle = makeBundle(items: [prompt, draft, toDraft, toPrompt])
+        let filtered = ContentFilter.devBuild(bundle)
+        let byID = Dictionary(uniqueKeysWithValues: filtered.items.map { ($0.id.rawValue, $0) })
+
+        #expect(byID["e-reply"]?.responseTo == nil)
+        #expect(byID["e-other"]?.responseTo?.rawValue == "e-salam")
+        #expect(bundle.items.first { $0.id.rawValue == "e-reply" }?.responseTo?.rawValue == "e-draft")
+    }
 }

@@ -17,10 +17,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -37,10 +37,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -57,10 +57,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -77,10 +77,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -97,10 +97,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -128,7 +128,7 @@
       "kind": "phrase",
       "pashto": "څنګه یې؟",
       "translit": "tsə́nga ye?",
-      "pronunciation": "TSAN-ga yey?",
+      "pronunciation": "TSAN-ga ye?",
       "en": "how are you?",
       "usage": "informal, to one person",
       "pronunciationNote": "څ: ts as in cats.",
@@ -137,10 +137,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -161,10 +161,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -185,10 +185,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -205,10 +205,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -225,10 +225,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -236,7 +236,7 @@
       "kind": "phrase",
       "pashto": "ډېره مننه",
       "translit": "ḍéra manə́na",
-      "pronunciation": "DEY-ra ma-NA-na",
+      "pronunciation": "DE-ra ma-NA-na",
       "en": "thank you very much",
       "usage": null,
       "pronunciationNote": "ḍ: d with the tongue tip curled back.",
@@ -245,10 +245,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -256,7 +256,7 @@
       "kind": "phrase",
       "pashto": "ډېره ښه",
       "translit": "ḍéra x̌a",
-      "pronunciation": "DEY-ra kha",
+      "pronunciation": "DE-ra kha",
       "en": "very good",
       "usage": "praise, e.g. after a correct answer",
       "pronunciationNote": "ḍ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
@@ -265,10 +265,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -279,16 +279,16 @@
       "pronunciation": "ho",
       "en": "yes",
       "usage": null,
-      "pronunciationNote": "Kabul: ho, not ao.",
+      "pronunciationNote": "Kabul: ho, not ao. In everyday speech people also say یې (ye) for yes.",
       "responseTo": null,
       "tokens": null,
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -305,10 +305,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -325,10 +325,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -365,10 +365,10 @@
       "acceptedOrders": null,
       "audio": null,
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -409,10 +409,10 @@
       },
       "sound": "ā",
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -420,9 +420,9 @@
       "kind": "letter",
       "pashto": "ب",
       "name": "بې",
-      "translit": "be",
-      "pronunciation": "bey",
-      "en": "the letter bey",
+      "translit": "ba",
+      "pronunciation": "ba",
+      "en": "the letter ba",
       "usage": null,
       "pronunciationNote": null,
       "forms": {
@@ -433,10 +433,10 @@
       },
       "sound": "b",
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -444,9 +444,9 @@
       "kind": "letter",
       "pashto": "پ",
       "name": "پې",
-      "translit": "pe",
-      "pronunciation": "pey",
-      "en": "the letter pey",
+      "translit": "pa",
+      "pronunciation": "pa",
+      "en": "the letter pa",
       "usage": null,
       "pronunciationNote": null,
       "forms": {
@@ -457,10 +457,10 @@
       },
       "sound": "p",
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -468,9 +468,9 @@
       "kind": "letter",
       "pashto": "ت",
       "name": "تې",
-      "translit": "te",
-      "pronunciation": "tey",
-      "en": "the letter tey",
+      "translit": "ta",
+      "pronunciation": "ta",
+      "en": "the letter ta",
       "usage": null,
       "pronunciationNote": null,
       "forms": {
@@ -481,10 +481,10 @@
       },
       "sound": "t",
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -492,9 +492,9 @@
       "kind": "letter",
       "pashto": "ټ",
       "name": "ټې",
-      "translit": "ṭe",
-      "pronunciation": "tey",
-      "en": "the letter tey with a ring (curled-back t)",
+      "translit": "ṭa",
+      "pronunciation": "ta",
+      "en": "the letter ta with a ring (curled-back t)",
       "usage": null,
       "pronunciationNote": "ṭ: t with the tongue tip curled back.",
       "forms": {
@@ -505,10 +505,10 @@
       },
       "sound": "ṭ",
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     },
     {
@@ -516,9 +516,9 @@
       "kind": "letter",
       "pashto": "ث",
       "name": "ثې",
-      "translit": "se",
-      "pronunciation": "sey",
-      "en": "the letter sey",
+      "translit": "sa",
+      "pronunciation": "sa",
+      "en": "the letter sa",
       "usage": null,
       "pronunciationNote": null,
       "forms": {
@@ -529,10 +529,10 @@
       },
       "sound": "s",
       "verification": {
-        "status": "check",
-        "checkedBy": null,
-        "checkedOn": null,
-        "comment": null
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
       }
     }
   ],

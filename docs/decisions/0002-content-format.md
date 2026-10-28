@@ -134,13 +134,13 @@ CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than 
 
 ## Consequences
 
-- The app still does not load or display a course. Types, decoding, and bundle validation are in the package. `Tools/PashtoContentTool` merges the source files into `content/content.json` and runs the release gate. `ContentValidator.validate(_:mode:)` still runs the same bundle checks in both modes. The tool adds release-unit membership, lesson size, the v1.0 audio warning, and the missing-sound-example check.
+- The app still does not load or display a course. Types, decoding, and bundle validation are in the package. `Tools/PashtoContentTool` merges the source files into `content/content.json` and runs the release gate. `ContentValidator.validate(_:mode:)` still runs the same bundle checks in both modes. The tool adds release-unit membership, lesson size, the v1.0 audio warning, and the missing-sound-example check. That sound check warns in dev. It errors in release only when the first unit is listed in `release-units.json`.
 - A content typo in a key fails at decode time, before a quiz can ignore the field.
 - Id typos fail at decode time. Duplicate ids, duplicate Pashto plus English and usage, and broken references are validator errors. Registry membership ("this id is missing", "this retired id came back") stays with the content tool, because the bundle does not carry the registry.
 - `hasAudio` cannot be true for a partial block, because a partial block never becomes a value.
 - `content/id-registry.json` starts empty. Nothing has shipped, so no id is registered and no id is retired. CI fails when a registered id is missing without `retired`, or when a retired id is used again.
-- `content/release-units.json` starts empty. Forty-five of the fifty-one items are not verified, so no unit is in the release list yet. The release command still runs against that list.
-- `ContentFilter.devBuild` hides `draft` and `check` items. Debug and dev builds are the only callers. A release build keeps every item and fails the gate instead.
+- `content/release-units.json` starts empty. No unit is listed yet, so the release command reports no release errors for the current course. Dev mode still warns when a difficult character has no `soundExample`.
+- `ContentFilter.devBuild` hides `draft` and `check` items and clears a `responseTo` that pointed at one of them. A reference to an id that was never in the bundle stays, and validation reports it. An empty lesson is an error. Debug and dev builds are the only callers. A release build keeps every item and fails the gate instead.
 - A warning when v1.0 content includes audio is part of the release gate. The app target does not embed `content.json` yet, so a macOS check of the Release app bundle is still waiting on that.
 - Letter `forms` may use tatweel (U+0640) as the joining mark, as in `ـځـ` and `ـا`. The same character is an error in `pashto` and in every other text field. Digits in Pashto text stay an error until a numbers unit is agreed.
 - The Linux guard is a text scan. It catches the calls named above. It does not prove the package is free of every Apple API.

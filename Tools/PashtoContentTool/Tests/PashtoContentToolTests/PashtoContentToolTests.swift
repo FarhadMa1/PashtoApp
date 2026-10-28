@@ -51,7 +51,10 @@ struct ReleaseGateTests {
     @Test func missingSoundExampleIsAnErrorInReleaseAndAWarningInDev() {
         let bundle = sampleBundle(itemCount: 6)
         let sound = SpecialSound(character: "ټ", translit: "ṭ")
-        let release = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .release)
+        let unlisted = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .release)
+        #expect(!unlisted.contains { $0.field == "soundExample" })
+
+        let release = ReleaseGate.issues(in: bundle, releaseUnitIDs: ["u-greetings"], itemUnits: [:], specialSounds: [sound], mode: .release)
         #expect(release.contains { $0.severity == .error && $0.field == "soundExample" && $0.message.contains("ټ") })
 
         let dev = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .dev)
@@ -60,7 +63,7 @@ struct ReleaseGateTests {
         let covered = bundleWithSoundExample()
         let quiet = ReleaseGate.issues(
             in: covered.bundle,
-            releaseUnitIDs: [],
+            releaseUnitIDs: ["u-sounds"],
             itemUnits: covered.itemUnits,
             specialSounds: [sound],
             mode: .release
@@ -181,7 +184,11 @@ struct MergeTests {
         let smallIssues = ContentCheck.issues(root: small, mode: .release)
         #expect(smallIssues.contains { $0.severity == .error && $0.message.contains("has 3 items") })
 
-        let sounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: [], registry: [])
+        let unlisted = try writeCourse(itemCount: 6, difficult: true, releaseUnits: [], registry: [])
+        let unlistedRelease = ContentCheck.issues(root: unlisted, mode: .release)
+        #expect(!unlistedRelease.contains { $0.field == "soundExample" })
+
+        let sounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: ["u-greetings"], registry: [])
         let soundIssues = ContentCheck.issues(root: sounds, mode: .release)
         #expect(soundIssues.contains { $0.severity == .error && $0.field == "soundExample" })
         let devSounds = ContentCheck.issues(root: sounds, mode: .dev)
@@ -189,21 +196,43 @@ struct MergeTests {
         #expect(!devSounds.contains { $0.severity == .error && $0.field == "soundExample" })
     }
 
-    @Test func currentCourseReleaseGateReportsOnlyMissingSoundExamples() throws {
+    @Test func emptyReleaseListWithCurrentContentHasNoReleaseErrors() throws {
         let root = try repositoryRoot()
         #expect(ContentMerger.checkCommittedBundle(root: root).isEmpty)
-        let dev = ContentCheck.issues(root: root, mode: .dev)
         let release = ContentCheck.issues(root: root, mode: .release)
+        #expect(!release.contains { $0.severity == .error })
+    }
+
+    @Test func releaseListContainingSoundsUnitReportsTheSixMissingSounds() throws {
+        let merged = try #require(ContentMerger.merge(root: try repositoryRoot()).merged)
+        let issues = ReleaseGate.issues(
+            in: merged.bundle,
+            releaseUnitIDs: ["u-sounds"],
+            itemUnits: merged.itemUnits,
+            specialSounds: merged.specialSounds,
+            mode: .release
+        )
         let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
-        #expect(dev.count == sounds.count)
-        #expect(release.count == sounds.count)
+        let errors = issues.filter { $0.severity == .error }
+        #expect(errors.count == sounds.count)
         for (index, sound) in sounds.enumerated() {
-            #expect(dev[index].severity == .warning)
-            #expect(release[index].severity == .error)
-            #expect(dev[index].id == "u-sounds")
-            #expect(release[index].field == "soundExample")
-            #expect(release[index].message.contains(sound))
-            #expect(dev[index].message == release[index].message)
+            #expect(errors[index].id == "u-sounds")
+            #expect(errors[index].field == "soundExample")
+            #expect(errors[index].message.contains(sound))
+        }
+    }
+
+    @Test func devModeWarnsAboutTheSixMissingSounds() throws {
+        let root = try repositoryRoot()
+        let dev = ContentCheck.issues(root: root, mode: .dev)
+        let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
+        let warnings = dev.filter { $0.field == "soundExample" }
+        #expect(warnings.count == sounds.count)
+        #expect(!dev.contains { $0.severity == .error })
+        for (index, sound) in sounds.enumerated() {
+            #expect(warnings[index].severity == .warning)
+            #expect(warnings[index].id == "u-sounds")
+            #expect(warnings[index].message.contains(sound))
         }
     }
 }

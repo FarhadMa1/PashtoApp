@@ -36,5 +36,17 @@ jobs:
       - name: Validate content for dev
         run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode dev
 
+  # Runs on every pull request. A failure does not fail this workflow, so the
+  # release gate is not required for merge.
+  validate-release:
+    name: validate release
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+    container:
+      image: swift:6.2.4-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Validate content for release
         run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release

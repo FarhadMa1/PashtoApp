@@ -52,7 +52,7 @@ swift run --package-path Tools/PashtoContentTool pashto-content validate --mode 
 swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release
 ```
 
-`content/id-registry.json` is empty because no id has shipped. `content/release-units.json` is empty because 45 of the 51 items are not verified. The release command still runs against that list.
+`content/id-registry.json` is empty because no id has shipped. `content/release-units.json` lists no unit yet. `validate --mode release` runs against that list. `validate --mode dev` warns when a difficult character has no `soundExample`.
 
 ## iOS builds
 

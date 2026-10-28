@@ -344,6 +344,52 @@ struct ContentValidatorTests {
         #expect(validate(script).isEmpty)
     }
 
+    @Test func aMissingIDIsAnErrorInEveryMode() {
+        let reply = makeItem("e-reply", pashto: "نه", translit: "na", pronunciation: "na", en: "no", responseTo: "e-missing")
+        let lesson = Lesson(
+            id: lessonID("l-greetings-1"),
+            title: "Hello",
+            items: [
+                LessonItemRef(item: reply.id, role: .introduce),
+                LessonItemRef(item: itemID("e-gone"), role: .introduce),
+            ]
+        )
+        let bundle = makeBundle(
+            items: [reply],
+            units: [CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [lesson])]
+        )
+        for mode in [ValidationMode.authoring, ValidationMode.release] {
+            let issues = validate(bundle, mode: mode)
+            let missing = issues.filter { $0.severity == .error && $0.message.contains("does not exist") }
+            #expect(missing.contains { $0.field == "responseTo" && $0.message.contains("e-missing") })
+            #expect(missing.contains { $0.field == "items" && $0.message.contains("e-gone") })
+        }
+    }
+
+    @Test func anEmptyLessonIsAnErrorInEveryMode() {
+        let lesson = Lesson(id: lessonID("l-greetings-1"), title: "Empty", items: [])
+        let bundle = makeBundle(
+            items: [],
+            units: [CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [lesson])]
+        )
+        for mode in [ValidationMode.authoring, ValidationMode.release] {
+            let issues = validate(bundle, mode: mode)
+            #expect(issues.contains { $0.severity == .error && $0.id == "l-greetings-1" && $0.message.contains("is empty") })
+        }
+
+        let draft = makeItem("e-draft", pashto: "نه", translit: "na", pronunciation: "na", en: "no")
+        let onlyDraft = makeBundle(
+            items: [draft],
+            units: [CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [
+                Lesson(id: lessonID("l-greetings-2"), title: "Drafts", items: [LessonItemRef(item: draft.id, role: .introduce)]),
+            ])]
+        )
+        let filtered = ContentFilter.devBuild(onlyDraft)
+        let afterFilter = validate(filtered)
+        #expect(filtered.units[0].lessons[0].items.isEmpty)
+        #expect(afterFilter.contains { $0.severity == .error && $0.message.contains("l-greetings-2") && $0.message.contains("is empty") })
+    }
+
     @Test func introductionAndSoundExampleRules() {
         let orphan = validate(makeBundle(
             items: [makeItem()],
@@ -351,8 +397,9 @@ struct ContentValidatorTests {
                 Lesson(id: lessonID("l-greetings-1"), title: "Empty", items: []),
             ])]
         ))
-        #expect(orphan.count == 1)
-        #expect(orphan.first?.message.contains("not introduced") == true)
+        #expect(orphan.count == 2)
+        #expect(orphan.contains { $0.message.contains("is empty") })
+        #expect(orphan.contains { $0.message.contains("not introduced") })
 
         let twice = makeBundle(
             items: [makeItem()],
