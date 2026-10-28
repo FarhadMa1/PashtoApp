@@ -1,0 +1,736 @@
+{
+  "id": "u-introductions",
+  "track": "main",
+  "title": "Introducing yourself",
+  "items": [
+    {
+      "id": "e-za",
+      "kind": "word",
+      "pashto": "زه",
+      "translit": "zə",
+      "pronunciation": "za",
+      "en": "I",
+      "usage": null,
+      "pronunciationNote": "The vowel in za is short and weak, like the a in about.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-ta",
+      "kind": "word",
+      "pashto": "ته",
+      "translit": "tə",
+      "pronunciation": "ta",
+      "en": "you",
+      "usage": "informal, to one person",
+      "pronunciationNote": "Short, weak vowel, like the a in about.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-taso",
+      "kind": "word",
+      "pashto": "تاسو",
+      "translit": "tā́so",
+      "pronunciation": "TAA-so",
+      "en": "you",
+      "usage": "polite or plural; use with elders and strangers",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-hagha",
+      "kind": "word",
+      "pashto": "هغه",
+      "translit": "haɣá",
+      "pronunciation": "ha-GHA",
+      "en": "he, she, that",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-num",
+      "kind": "word",
+      "pashto": "نوم",
+      "translit": "num",
+      "pronunciation": "noom",
+      "en": "name",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-zma-num-ahmad-day",
+      "kind": "phrase",
+      "pashto": "زما نوم احمد دی",
+      "translit": "zmā num áhmad day",
+      "pronunciation": "zmaa noom AH-mad day",
+      "en": "my name is Ahmad",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "زما",
+        "نوم",
+        "احمد",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-sta-num-tsa-day",
+      "kind": "phrase",
+      "pashto": "ستا نوم څه دی؟",
+      "translit": "stā num tsə day?",
+      "pronunciation": "staa noom tsa day?",
+      "en": "what's your name?",
+      "usage": "informal",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "ستا",
+        "نوم",
+        "څه",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-staso-num-tsa-day",
+      "kind": "phrase",
+      "pashto": "ستاسو نوم څه دی؟",
+      "translit": "stā́so num tsə day?",
+      "pronunciation": "STAA-so noom tsa day?",
+      "en": "what's your name?",
+      "usage": "polite",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "ستاسو",
+        "نوم",
+        "څه",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-ta-da-kum-dzay-ye",
+      "kind": "phrase",
+      "pashto": "ته د کوم ځای یې؟",
+      "translit": "tə də kum dzāy ye?",
+      "pronunciation": "ta da koom dzaay yey?",
+      "en": "where are you from?",
+      "usage": "informal",
+      "pronunciationNote": "ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": [
+        "ته",
+        "د",
+        "کوم",
+        "ځای",
+        "یې"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-27",
+        "comment": "Bekreftet av Farhad i gruppechatten."
+      }
+    },
+    {
+      "id": "e-za-la-narwe-tsaxa-yam",
+      "kind": "phrase",
+      "pashto": "زه له ناروې څخه یم",
+      "translit": "zə la nārwé tsə́xa yəm",
+      "pronunciation": "za la naar-WEY TSA-kha yam",
+      "en": "I'm from Norway",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "له",
+        "ناروې",
+        "څخه",
+        "یم"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-27",
+        "comment": "Bekreftet av Farhad i gruppechatten."
+      }
+    },
+    {
+      "id": "e-za-afghan-yam",
+      "kind": "phrase",
+      "pashto": "زه افغان یم",
+      "translit": "zə afɣā́n yəm",
+      "pronunciation": "za af-GHAAN yam",
+      "en": "I'm Afghan",
+      "usage": "said by a man",
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "افغان",
+        "یم"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-za-afghana-yam",
+      "kind": "phrase",
+      "pashto": "زه افغانه یم",
+      "translit": "zə afɣā́na yəm",
+      "pronunciation": "za af-GHAA-na yam",
+      "en": "I'm Afghan",
+      "usage": "said by a woman",
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "افغانه",
+        "یم"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-za-xowunkay-yam",
+      "kind": "phrase",
+      "pashto": "زه ښوونکی یم",
+      "translit": "zə x̌owúnkay yəm",
+      "pronunciation": "za kho-WOON-kay yam",
+      "en": "I'm a teacher",
+      "usage": "said by a man",
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "ښوونکی",
+        "یم"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-za-pashto-zda-kawam",
+      "kind": "phrase",
+      "pashto": "زه پښتو زده کوم",
+      "translit": "zə pəx̌tó zda kawə́m",
+      "pronunciation": "za pakh-TO zda ka-WAM",
+      "en": "I'm learning Pashto",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "پښتو",
+        "زده کوم"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-staso-pa-lido-xoshala-shwam",
+      "kind": "phrase",
+      "pashto": "ستاسو په لیدو خوشحاله شوم",
+      "translit": "stā́so pə lidó xošā́la šwəm",
+      "pronunciation": "STAA-so pa lee-DO kho-SHAA-la shwam",
+      "en": "nice to meet you",
+      "usage": "fixed expression",
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-27",
+        "comment": "Bekreftet av Farhad i gruppechatten."
+      }
+    },
+    {
+      "id": "e-yam",
+      "kind": "word",
+      "pashto": "یم",
+      "translit": "yəm",
+      "pronunciation": "yam",
+      "en": "am",
+      "usage": "with zə: I am",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-ye",
+      "kind": "word",
+      "pashto": "یې",
+      "translit": "ye",
+      "pronunciation": "yey",
+      "en": "are",
+      "usage": "with tə: you are (informal)",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-day",
+      "kind": "word",
+      "pashto": "دی",
+      "translit": "day",
+      "pronunciation": "day",
+      "en": "is",
+      "usage": "with a man or masculine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-da",
+      "kind": "word",
+      "pashto": "ده",
+      "translit": "da",
+      "pronunciation": "da",
+      "en": "is",
+      "usage": "with a woman or feminine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-yast",
+      "kind": "word",
+      "pashto": "یاست",
+      "translit": "yāst",
+      "pronunciation": "yaast",
+      "en": "are",
+      "usage": "with tāso: you are (polite or plural)",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-letter-jim",
+      "kind": "letter",
+      "pashto": "ج",
+      "name": "جیم",
+      "translit": "jim",
+      "pronunciation": "jeem",
+      "en": "the letter jeem",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ج",
+        "initial": "جـ",
+        "medial": "ـجـ",
+        "final": "ـج"
+      },
+      "sound": "j",
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-letter-che",
+      "kind": "letter",
+      "pashto": "چ",
+      "name": "چې",
+      "translit": "če",
+      "pronunciation": "chey",
+      "en": "the letter chey",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "چ",
+        "initial": "چـ",
+        "medial": "ـچـ",
+        "final": "ـچ"
+      },
+      "sound": "č",
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-letter-he",
+      "kind": "letter",
+      "pashto": "ح",
+      "name": "حې",
+      "translit": "he",
+      "pronunciation": "hey",
+      "en": "the letter hey",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ح",
+        "initial": "حـ",
+        "medial": "ـحـ",
+        "final": "ـح"
+      },
+      "sound": "h",
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-letter-xe",
+      "kind": "letter",
+      "pashto": "خ",
+      "name": "خې",
+      "translit": "xe",
+      "pronunciation": "khey",
+      "en": "the letter khey",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "forms": {
+        "isolated": "خ",
+        "initial": "خـ",
+        "medial": "ـخـ",
+        "final": "ـخ"
+      },
+      "sound": "x",
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-letter-tse",
+      "kind": "letter",
+      "pashto": "څ",
+      "name": "څې",
+      "translit": "tse",
+      "pronunciation": "tsey",
+      "en": "the letter tsey",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "forms": {
+        "isolated": "څ",
+        "initial": "څـ",
+        "medial": "ـڅـ",
+        "final": "ـڅ"
+      },
+      "sound": "ts",
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    },
+    {
+      "id": "e-letter-dze",
+      "kind": "letter",
+      "pashto": "ځ",
+      "name": "ځې",
+      "translit": "dze",
+      "pronunciation": "dzey",
+      "en": "the letter dzey",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids.",
+      "forms": {
+        "isolated": "ځ",
+        "initial": "ځـ",
+        "medial": "ـځـ",
+        "final": "ـځ"
+      },
+      "sound": "dz",
+      "verification": {
+        "status": "check",
+        "checkedBy": null,
+        "checkedOn": null,
+        "comment": null
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-introductions-1",
+      "title": "I, you and names",
+      "letters": [
+        "e-letter-jim",
+        "e-letter-che"
+      ],
+      "items": [
+        {
+          "item": "e-za",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-taso",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-num",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zma-num-ahmad-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sta-num-tsa-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-staso-num-tsa-day",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-introductions-1",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-staso-num-tsa-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-zma-num-ahmad-day"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-introductions-2",
+      "title": "Where are you from?",
+      "letters": [
+        "e-letter-he",
+        "e-letter-xe"
+      ],
+      "items": [
+        {
+          "item": "e-ta-da-kum-dzay-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-la-narwe-tsaxa-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-afghan-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-afghana-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-xowunkay-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-pashto-zda-kawam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-staso-pa-lido-xoshala-shwam",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-introductions-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-ta-da-kum-dzay-ye"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-la-narwe-tsaxa-yam"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-introductions-3",
+      "title": "To be",
+      "letters": [
+        "e-letter-tse",
+        "e-letter-dze"
+      ],
+      "items": [
+        {
+          "item": "e-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-yast",
+          "role": "introduce"
+        }
+      ]
+    }
+  ]
+}

@@ -25,3 +25,16 @@ jobs:
       - name: Test PashtoCore
         working-directory: Packages/PashtoCore
         run: swift test
+
+      - name: Test PashtoContentTool
+        working-directory: Tools/PashtoContentTool
+        run: swift test
+
+      - name: Check generated content.json
+        run: swift run --package-path Tools/PashtoContentTool pashto-content merge --check
+
+      - name: Validate content for dev
+        run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode dev
+
+      - name: Validate content for release
+        run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release

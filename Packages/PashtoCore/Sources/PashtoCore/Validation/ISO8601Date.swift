@@ -3,8 +3,8 @@
 /// Accepts `YYYY-MM-DD` and `YYYY-MM-DDTHH:MM:SS` with an optional fraction and
 /// a `Z` or numeric offset. The check is arithmetic on the text. It does not
 /// read the clock.
-enum ISO8601Date {
-    static func isValid(_ text: String) -> Bool {
+public enum ISO8601Date {
+    public static func isValid(_ text: String) -> Bool {
         var parser = Parser(text)
         guard let year = parser.digits(4),
               parser.eat("-"),
