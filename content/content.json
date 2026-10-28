@@ -10,10 +10,7 @@
       "translit" : "salā́m",
       "usage" : "common greeting",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -26,10 +23,7 @@
       "translit" : "as-salā́m alaykúm",
       "usage" : "formal greeting",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -43,10 +37,7 @@
       "translit" : "wa-alaykúm as-salā́m",
       "usage" : "reply to as-salām alaykum",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -59,10 +50,7 @@
       "translit" : "stə́ṛay ma še",
       "usage" : "lit. may you not be tired",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -76,10 +64,7 @@
       "translit" : "xwār ma še",
       "usage" : "lit. may you not be poor",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -103,15 +88,12 @@
       "id" : "e-tsanga-ye",
       "kind" : "phrase",
       "pashto" : "څنګه یې؟",
-      "pronunciation" : "TSAN-ga ye?",
+      "pronunciation" : "TSAN-ga yey?",
       "pronunciationNote" : "څ: ts as in cats.",
       "translit" : "tsə́nga ye?",
       "usage" : "informal, to one person",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -129,10 +111,7 @@
       "translit" : "tā́so tsə́nga yāst?",
       "usage" : "polite or plural",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -149,10 +128,7 @@
       ],
       "translit" : "zə x̌a yəm",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -164,10 +140,7 @@
       "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "x̌a",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -178,10 +151,7 @@
       "pronunciation" : "ma-NA-na",
       "translit" : "manə́na",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -189,14 +159,11 @@
       "id" : "e-dera-manana",
       "kind" : "phrase",
       "pashto" : "ډېره مننه",
-      "pronunciation" : "DE-ra ma-NA-na",
+      "pronunciation" : "DEY-ra ma-NA-na",
       "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
       "translit" : "ḍéra manə́na",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -204,15 +171,12 @@
       "id" : "e-dera-xa",
       "kind" : "phrase",
       "pashto" : "ډېره ښه",
-      "pronunciation" : "DE-ra kha",
+      "pronunciation" : "DEY-ra kha",
       "pronunciationNote" : "ḍ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "ḍéra x̌a",
       "usage" : "praise, e.g. after a correct answer",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -221,13 +185,10 @@
       "kind" : "word",
       "pashto" : "هو",
       "pronunciation" : "ho",
-      "pronunciationNote" : "Kabul: ho, not ao. In everyday speech people also say یې (ye) for yes.",
+      "pronunciationNote" : "Kabul: ho, not ao.",
       "translit" : "ho",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -239,10 +200,7 @@
       "pronunciationNote" : "A short, clear a, like in cut.",
       "translit" : "na",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -254,10 +212,7 @@
       "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ṛ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "bax̌ə́na ɣwā́ṛəm",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -285,10 +240,7 @@
       "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "translit" : "xodā́y pāmā́n",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -323,14 +275,11 @@
       "sound" : "ā",
       "translit" : "alif",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter ba",
+      "en" : "the letter bey",
       "forms" : {
         "final" : "ـب",
         "initial" : "بـ",
@@ -341,18 +290,15 @@
       "kind" : "letter",
       "name" : "بې",
       "pashto" : "ب",
-      "pronunciation" : "ba",
+      "pronunciation" : "bey",
       "sound" : "b",
-      "translit" : "ba",
+      "translit" : "be",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter pa",
+      "en" : "the letter pey",
       "forms" : {
         "final" : "ـپ",
         "initial" : "پـ",
@@ -363,18 +309,15 @@
       "kind" : "letter",
       "name" : "پې",
       "pashto" : "پ",
-      "pronunciation" : "pa",
+      "pronunciation" : "pey",
       "sound" : "p",
-      "translit" : "pa",
+      "translit" : "pe",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter ta",
+      "en" : "the letter tey",
       "forms" : {
         "final" : "ـت",
         "initial" : "تـ",
@@ -385,18 +328,15 @@
       "kind" : "letter",
       "name" : "تې",
       "pashto" : "ت",
-      "pronunciation" : "ta",
+      "pronunciation" : "tey",
       "sound" : "t",
-      "translit" : "ta",
+      "translit" : "te",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter ta with a ring (curled-back t)",
+      "en" : "the letter tey with a ring (curled-back t)",
       "forms" : {
         "final" : "ـټ",
         "initial" : "ټـ",
@@ -407,19 +347,16 @@
       "kind" : "letter",
       "name" : "ټې",
       "pashto" : "ټ",
-      "pronunciation" : "ta",
+      "pronunciation" : "tey",
       "pronunciationNote" : "ṭ: t with the tongue tip curled back.",
       "sound" : "ṭ",
-      "translit" : "ṭa",
+      "translit" : "ṭe",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter sa",
+      "en" : "the letter sey",
       "forms" : {
         "final" : "ـث",
         "initial" : "ثـ",
@@ -430,14 +367,11 @@
       "kind" : "letter",
       "name" : "ثې",
       "pashto" : "ث",
-      "pronunciation" : "sa",
+      "pronunciation" : "sey",
       "sound" : "s",
-      "translit" : "sa",
+      "translit" : "se",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -449,10 +383,7 @@
       "pronunciationNote" : "The vowel in za is short and weak, like the a in about.",
       "translit" : "zə",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -461,14 +392,11 @@
       "kind" : "word",
       "pashto" : "ته",
       "pronunciation" : "ta",
-      "pronunciationNote" : "The t is soft and dental: the tongue touches the back of the upper front teeth. It is not the English th. Short, weak vowel, like the a in about.",
+      "pronunciationNote" : "Short, weak vowel, like the a in about.",
       "translit" : "tə",
       "usage" : "informal, to one person",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -480,10 +408,7 @@
       "translit" : "tā́so",
       "usage" : "polite or plural; use with elders and strangers",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -495,10 +420,7 @@
       "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
       "translit" : "haɣá",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -509,10 +431,7 @@
       "pronunciation" : "noom",
       "translit" : "num",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -529,10 +448,7 @@
       ],
       "translit" : "zmā num áhmad day",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -551,10 +467,7 @@
       "translit" : "stā num tsə day?",
       "usage" : "informal",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -573,10 +486,7 @@
       "translit" : "stā́so num tsə day?",
       "usage" : "polite",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -584,7 +494,7 @@
       "id" : "e-ta-da-kum-dzay-ye",
       "kind" : "phrase",
       "pashto" : "ته د کوم ځای یې؟",
-      "pronunciation" : "ta da koom dzaay ye?",
+      "pronunciation" : "ta da koom dzaay yey?",
       "pronunciationNote" : "ځ: dz as in kids.",
       "tokens" : [
         "ته",
@@ -639,10 +549,7 @@
       "translit" : "zə afɣā́n yəm",
       "usage" : "said by a man",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -660,10 +567,7 @@
       "translit" : "zə afɣā́na yəm",
       "usage" : "said by a woman",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -681,10 +585,7 @@
       "translit" : "zə x̌owúnkay yəm",
       "usage" : "said by a man",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -701,10 +602,7 @@
       ],
       "translit" : "zə pəx̌tó zda kawə́m",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -732,10 +630,7 @@
       "translit" : "yəm",
       "usage" : "with zə: I am",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -743,14 +638,11 @@
       "id" : "e-ye",
       "kind" : "word",
       "pashto" : "یې",
-      "pronunciation" : "ye",
+      "pronunciation" : "yey",
       "translit" : "ye",
       "usage" : "with tə: you are (informal)",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -762,10 +654,7 @@
       "translit" : "day",
       "usage" : "with a man or masculine word",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -777,10 +666,7 @@
       "translit" : "da",
       "usage" : "with a woman or feminine word",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -792,10 +678,7 @@
       "translit" : "yāst",
       "usage" : "with tāso: you are (polite or plural)",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
@@ -814,14 +697,11 @@
       "sound" : "j",
       "translit" : "jim",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter cha",
+      "en" : "the letter chey",
       "forms" : {
         "final" : "ـچ",
         "initial" : "چـ",
@@ -832,18 +712,15 @@
       "kind" : "letter",
       "name" : "چې",
       "pashto" : "چ",
-      "pronunciation" : "cha",
+      "pronunciation" : "chey",
       "sound" : "č",
-      "translit" : "ča",
+      "translit" : "če",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter ha",
+      "en" : "the letter hey",
       "forms" : {
         "final" : "ـح",
         "initial" : "حـ",
@@ -854,18 +731,15 @@
       "kind" : "letter",
       "name" : "حې",
       "pashto" : "ح",
-      "pronunciation" : "ha",
+      "pronunciation" : "hey",
       "sound" : "h",
-      "translit" : "ha",
+      "translit" : "he",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter kha",
+      "en" : "the letter khey",
       "forms" : {
         "final" : "ـخ",
         "initial" : "خـ",
@@ -876,19 +750,16 @@
       "kind" : "letter",
       "name" : "خې",
       "pashto" : "خ",
-      "pronunciation" : "kha",
+      "pronunciation" : "khey",
       "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "sound" : "x",
-      "translit" : "xa",
+      "translit" : "xe",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter tsa",
+      "en" : "the letter tsey",
       "forms" : {
         "final" : "ـڅ",
         "initial" : "څـ",
@@ -899,19 +770,16 @@
       "kind" : "letter",
       "name" : "څې",
       "pashto" : "څ",
-      "pronunciation" : "tsa",
+      "pronunciation" : "tsey",
       "pronunciationNote" : "څ: ts as in cats.",
       "sound" : "ts",
-      "translit" : "tsa",
+      "translit" : "tse",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     },
     {
-      "en" : "the letter dza",
+      "en" : "the letter dzey",
       "forms" : {
         "final" : "ـځ",
         "initial" : "ځـ",
@@ -922,15 +790,12 @@
       "kind" : "letter",
       "name" : "ځې",
       "pashto" : "ځ",
-      "pronunciation" : "dza",
+      "pronunciation" : "dzey",
       "pronunciationNote" : "ځ: dz as in kids.",
       "sound" : "dz",
-      "translit" : "dza",
+      "translit" : "dze",
       "verification" : {
-        "checkedBy" : "Farhad",
-        "checkedOn" : "2026-10-28",
-        "comment" : "Bekreftet av Farhad via ordlisten.",
-        "status" : "verified"
+        "status" : "check"
       }
     }
   ],
@@ -979,104 +844,7 @@
       "ع"
     ],
     "table" : [
-      {
-        "ascii" : "ṭ",
-        "description" : "Difficult character.",
-        "letter" : "ټ",
-        "pronunciation" : "ṭ",
-        "translit" : "ṭ"
-      },
-      {
-        "ascii" : "ḍ",
-        "description" : "Difficult character.",
-        "letter" : "ډ",
-        "pronunciation" : "ḍ",
-        "translit" : "ḍ"
-      },
-      {
-        "ascii" : "ṛ",
-        "description" : "Difficult character.",
-        "letter" : "ړ",
-        "pronunciation" : "ṛ",
-        "translit" : "ṛ"
-      },
-      {
-        "ascii" : "ṇ",
-        "description" : "Difficult character.",
-        "letter" : "ڼ",
-        "pronunciation" : "ṇ",
-        "translit" : "ṇ"
-      },
-      {
-        "ascii" : "x̌",
-        "description" : "Difficult character.",
-        "letter" : "ښ",
-        "pronunciation" : "x̌",
-        "translit" : "x̌"
-      },
-      {
-        "ascii" : "ǧ",
-        "description" : "Difficult character.",
-        "letter" : "ږ",
-        "pronunciation" : "ǧ",
-        "translit" : "ǧ"
-      },
-      {
-        "ascii" : "ts",
-        "description" : "Difficult character.",
-        "letter" : "څ",
-        "pronunciation" : "ts",
-        "translit" : "ts"
-      },
-      {
-        "ascii" : "dz",
-        "description" : "Difficult character.",
-        "letter" : "ځ",
-        "pronunciation" : "dz",
-        "translit" : "dz"
-      },
-      {
-        "ascii" : "x",
-        "description" : "Difficult character.",
-        "letter" : "خ",
-        "pronunciation" : "x",
-        "translit" : "x"
-      },
-      {
-        "ascii" : "ɣ",
-        "description" : "Difficult character.",
-        "letter" : "غ",
-        "pronunciation" : "ɣ",
-        "translit" : "ɣ"
-      },
-      {
-        "ascii" : "ž",
-        "description" : "Difficult character.",
-        "letter" : "ژ",
-        "pronunciation" : "ž",
-        "translit" : "ž"
-      },
-      {
-        "ascii" : "q",
-        "description" : "Difficult character.",
-        "letter" : "ق",
-        "pronunciation" : "q",
-        "translit" : "q"
-      },
-      {
-        "ascii" : "ʿ",
-        "description" : "Difficult character.",
-        "letter" : "ع",
-        "pronunciation" : "ʿ",
-        "translit" : "ʿ"
-      },
-      {
-        "ascii" : "a",
-        "description" : "Character coverage for unstressedWords.",
-        "letter" : "a",
-        "pronunciation" : "a",
-        "translit" : "mašededadayyeyəmyāstnahopəladətsəzətə"
-      }
+
     ],
     "unstressedWords" : [
       "ma",

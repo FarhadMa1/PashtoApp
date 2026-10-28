@@ -376,18 +376,6 @@ struct ContentValidatorTests {
             let issues = validate(bundle, mode: mode)
             #expect(issues.contains { $0.severity == .error && $0.id == "l-greetings-1" && $0.message.contains("is empty") })
         }
-
-        let draft = makeItem("e-draft", pashto: "نه", translit: "na", pronunciation: "na", en: "no")
-        let onlyDraft = makeBundle(
-            items: [draft],
-            units: [CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [
-                Lesson(id: lessonID("l-greetings-2"), title: "Drafts", items: [LessonItemRef(item: draft.id, role: .introduce)]),
-            ])]
-        )
-        let filtered = ContentFilter.devBuild(onlyDraft)
-        let afterFilter = validate(filtered)
-        #expect(filtered.units[0].lessons[0].items.isEmpty)
-        #expect(afterFilter.contains { $0.severity == .error && $0.message.contains("l-greetings-2") && $0.message.contains("is empty") })
     }
 
     @Test func introductionAndSoundExampleRules() {

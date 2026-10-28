@@ -6,7 +6,8 @@ import Foundation
 /// and leaves them in the bundle. Nothing here runs unless a dev build asks.
 /// A `responseTo` that points at a hidden item is cleared. A `responseTo`
 /// that names an id the bundle never had is left in place so validation
-/// can report it.
+/// can report it. A lesson that has no items, letters, or dialog turns
+/// after that is dropped.
 public enum ContentFilter {
     public static func devBuild(_ bundle: ContentBundle) -> ContentBundle {
         let hidden = Set(bundle.items.filter { $0.verification.status != .verified }.map(\.id))
@@ -15,11 +16,19 @@ public enum ContentFilter {
             return item.clearingResponseToHidden(in: hidden)
         }
         let units = bundle.units.map { unit in
-            CourseUnit(
+            let lessons = unit.lessons.compactMap { lesson -> Lesson? in
+                let filtered = filter(lesson, hiding: hidden)
+                let hasTurns = filtered.dialogs.contains { !$0.turns.isEmpty }
+                if filtered.items.isEmpty, filtered.letters.isEmpty, !hasTurns {
+                    return nil
+                }
+                return filtered
+            }
+            return CourseUnit(
                 id: unit.id,
                 track: unit.track,
                 title: unit.title,
-                lessons: unit.lessons.map { filter($0, hiding: hidden) }
+                lessons: lessons
             )
         }
         let groups = bundle.nonDistractorGroups.compactMap { group -> [ItemID]? in

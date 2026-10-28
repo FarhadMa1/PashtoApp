@@ -72,5 +72,40 @@ struct ContentFilterTests {
         #expect(byID["e-reply"]?.responseTo == nil)
         #expect(byID["e-other"]?.responseTo?.rawValue == "e-salam")
         #expect(bundle.items.first { $0.id.rawValue == "e-reply" }?.responseTo?.rawValue == "e-draft")
+
+        let dangling = makeItem(
+            "e-dangling",
+            pashto: "دا",
+            translit: "da",
+            pronunciation: "da",
+            en: "this",
+            responseTo: "e-missing",
+            verification: signed
+        )
+        let keptLink = ContentFilter.devBuild(makeBundle(items: [prompt, dangling]))
+        #expect(keptLink.items.first { $0.id.rawValue == "e-dangling" }?.responseTo?.rawValue == "e-missing")
+    }
+
+    @Test func devBuildDropsLessonsThatBecomeEmpty() {
+        let signed = Verification(status: .verified, checkedBy: "farhad", checkedOn: "2026-10-27")
+        let kept = makeItem("e-salam", verification: signed)
+        let draft = makeItem("e-draft", pashto: "نه", translit: "na", pronunciation: "na", en: "no")
+        let keptLesson = Lesson(
+            id: lessonID("l-greetings-1"),
+            title: "Kept",
+            items: [LessonItemRef(item: kept.id, role: .introduce)]
+        )
+        let draftLesson = Lesson(
+            id: lessonID("l-greetings-2"),
+            title: "Drafts",
+            items: [LessonItemRef(item: draft.id, role: .introduce)]
+        )
+        let bundle = makeBundle(
+            items: [kept, draft],
+            units: [CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [keptLesson, draftLesson])]
+        )
+        let filtered = ContentFilter.devBuild(bundle)
+        #expect(filtered.units[0].lessons.map(\.id.rawValue) == ["l-greetings-1"])
+        #expect(bundle.units[0].lessons.count == 2)
     }
 }

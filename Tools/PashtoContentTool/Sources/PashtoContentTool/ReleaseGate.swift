@@ -3,11 +3,14 @@ import PashtoCore
 
 /// Release checks that sit on top of `ContentValidator`.
 ///
-/// The gate reports problems. It does not remove items. Lesson size and
+/// The gate reports problems. It does not remove items. Lesson size counts
+/// items that create cards. `soundExample` refs do not count. Lesson size and
 /// unverified items are errors in `release` and warnings in `dev`. A difficult
 /// character with no `soundExample` in the first unit is a warning in `dev`.
-/// It is an error in `release` only when that first unit is listed in
-/// `release-units.json`. Audio in v1.0 is a warning in both modes.
+/// It is an error in `release` only when `u-sounds` is listed in
+/// `release-units.json`. A non-empty release list that omits `u-sounds` is an
+/// error. An empty list is allowed. A missing romanization table is a warning
+/// in `dev` and an error in `release`. Audio in v1.0 is a warning in both modes.
 public enum ReleaseGate {
     public static func issues(
         in bundle: ContentBundle,
@@ -36,6 +39,22 @@ public enum ReleaseGate {
         }
 
         let releaseUnits = Set(releaseUnitIDs)
+        if mode == .release, !releaseUnits.isEmpty, !releaseUnits.contains(Self.soundsUnitID) {
+            issues.append(IssueText.make(
+                .error,
+                id: Self.soundsUnitID,
+                field: "release-units.json",
+                "release-units.json lists units and does not include \(Self.soundsUnitID)."
+            ))
+        }
+        if bundle.romanization.table.isEmpty {
+            issues.append(IssueText.make(
+                releaseSeverity,
+                id: nil,
+                field: "romanization.table",
+                "romanization.table is missing. Pashto Expert has not supplied it."
+            ))
+        }
         var reportedItems: Set<String> = []
         for unit in bundle.units where releaseUnits.contains(unit.id.rawValue) {
             for itemID in itemIDs(in: unit) {
@@ -66,7 +85,7 @@ public enum ReleaseGate {
 
         for unit in bundle.units {
             for lesson in unit.lessons {
-                let count = lesson.items.count + lesson.letters.count
+                let count = cardCount(in: lesson)
                 if count < 4 {
                     issues.append(IssueText.make(
                         releaseSeverity,
@@ -95,13 +114,20 @@ public enum ReleaseGate {
         }
 
         // Dev always warns, so a missing example stays visible.
-        // Release errors only when the first unit, the sounds unit, is on the release list.
+        // Release runs the check when u-sounds is on the list.
         if mode == .dev {
             issues.append(contentsOf: soundExampleIssues(in: bundle, specialSounds: specialSounds, severity: .warning))
-        } else if let soundsUnit = bundle.units.first, releaseUnits.contains(soundsUnit.id.rawValue) {
+        } else if releaseUnits.contains(Self.soundsUnitID) {
             issues.append(contentsOf: soundExampleIssues(in: bundle, specialSounds: specialSounds, severity: .error))
         }
         return issues
+    }
+
+    private static let soundsUnitID = "u-sounds"
+
+    /// Items that create cards: `introduce` refs and letters. A `soundExample` does not.
+    private static func cardCount(in lesson: Lesson) -> Int {
+        lesson.items.filter { $0.role == .introduce }.count + lesson.letters.count
     }
 
     private static func itemIDs(in unit: CourseUnit) -> [String] {

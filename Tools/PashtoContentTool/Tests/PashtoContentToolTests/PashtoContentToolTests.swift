@@ -48,27 +48,73 @@ struct ReleaseGateTests {
         #expect(!devThree.contains { $0.severity == .error })
     }
 
-    @Test func missingSoundExampleIsAnErrorInReleaseAndAWarningInDev() {
+    @Test func lessonSizeIgnoresSoundExamples() {
+        let three = ReleaseGate.issues(
+            in: lessonBundle(introduces: 3, soundExamples: 6),
+            releaseUnitIDs: [],
+            itemUnits: [:],
+            specialSounds: [],
+            mode: .release
+        )
+        #expect(three.contains { $0.severity == .error && $0.message.contains("has 3 items") })
+        #expect(!three.contains { $0.message.contains("has 9 items") })
+
+        let four = ReleaseGate.issues(
+            in: lessonBundle(introduces: 4, soundExamples: 5, letters: 0),
+            releaseUnitIDs: [],
+            itemUnits: [:],
+            specialSounds: [],
+            mode: .release
+        )
+        #expect(four.contains { $0.severity == .warning && $0.message.contains("has 4 items") })
+        #expect(!four.contains { $0.severity == .error && $0.field == "items" })
+
+        let withLetters = ReleaseGate.issues(
+            in: lessonBundle(introduces: 3, soundExamples: 4, letters: 2),
+            releaseUnitIDs: [],
+            itemUnits: [:],
+            specialSounds: [],
+            mode: .release
+        )
+        #expect(withLetters.contains { $0.severity == .warning && $0.message.contains("has 5 items") })
+
+        let soundsOnly = ReleaseGate.issues(
+            in: lessonBundle(introduces: 0, soundExamples: 9),
+            releaseUnitIDs: [],
+            itemUnits: [:],
+            specialSounds: [],
+            mode: .release
+        )
+        #expect(soundsOnly.contains { $0.severity == .error && $0.message.contains("has 0 items") })
+    }
+
+    @Test func releaseListRequiresTheSoundsUnitAndThenChecksSpecialSounds() {
         let bundle = sampleBundle(itemCount: 6)
         let sound = SpecialSound(character: "ټ", translit: "ṭ")
-        let unlisted = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .release)
-        #expect(!unlisted.contains { $0.field == "soundExample" })
 
-        let release = ReleaseGate.issues(in: bundle, releaseUnitIDs: ["u-greetings"], itemUnits: [:], specialSounds: [sound], mode: .release)
-        #expect(release.contains { $0.severity == .error && $0.field == "soundExample" && $0.message.contains("ټ") })
+        let empty = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .release)
+        #expect(!empty.contains { $0.field == "release-units.json" && $0.message.contains("u-sounds") })
+        #expect(!empty.contains { $0.field == "soundExample" })
+        #expect(!empty.contains { $0.severity == .error })
 
-        let dev = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .dev)
-        #expect(dev.contains { $0.severity == .warning && $0.field == "soundExample" && $0.message.contains("ټ") })
+        let greetings = ReleaseGate.issues(in: bundle, releaseUnitIDs: ["u-greetings"], itemUnits: [:], specialSounds: [sound], mode: .release)
+        #expect(greetings.contains { $0.severity == .error && $0.field == "release-units.json" && $0.message.contains("does not include u-sounds") })
+        #expect(!greetings.contains { $0.field == "soundExample" })
 
         let covered = bundleWithSoundExample()
-        let quiet = ReleaseGate.issues(
+        let listed = ReleaseGate.issues(
             in: covered.bundle,
             releaseUnitIDs: ["u-sounds"],
             itemUnits: covered.itemUnits,
-            specialSounds: [sound],
+            specialSounds: [sound, SpecialSound(character: "ڼ", translit: "ṇ")],
             mode: .release
         )
-        #expect(!quiet.contains { $0.field == "soundExample" })
+        #expect(listed.contains { $0.severity == .error && $0.field == "soundExample" && $0.message.contains("ڼ") })
+        #expect(!listed.contains { $0.field == "soundExample" && $0.message.contains("ټ") })
+        #expect(!listed.contains { $0.message.contains("does not include u-sounds") })
+
+        let dev = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [sound], mode: .dev)
+        #expect(dev.contains { $0.severity == .warning && $0.field == "soundExample" && $0.message.contains("ټ") })
     }
 
     @Test func audioInV1IsAWarning() {
@@ -187,8 +233,14 @@ struct MergeTests {
         let unlisted = try writeCourse(itemCount: 6, difficult: true, releaseUnits: [], registry: [])
         let unlistedRelease = ContentCheck.issues(root: unlisted, mode: .release)
         #expect(!unlistedRelease.contains { $0.field == "soundExample" })
+        #expect(!unlistedRelease.contains { $0.message.contains("does not include u-sounds") })
 
-        let sounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: ["u-greetings"], registry: [])
+        let withoutSounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: ["u-greetings"], registry: [])
+        let withoutSoundIssues = ContentCheck.issues(root: withoutSounds, mode: .release)
+        #expect(withoutSoundIssues.contains { $0.severity == .error && $0.message.contains("does not include u-sounds") })
+        #expect(!withoutSoundIssues.contains { $0.field == "soundExample" })
+
+        let sounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: ["u-sounds"], registry: [], unitID: "u-sounds")
         let soundIssues = ContentCheck.issues(root: sounds, mode: .release)
         #expect(soundIssues.contains { $0.severity == .error && $0.field == "soundExample" })
         let devSounds = ContentCheck.issues(root: sounds, mode: .dev)
@@ -196,11 +248,28 @@ struct MergeTests {
         #expect(!devSounds.contains { $0.severity == .error && $0.field == "soundExample" })
     }
 
-    @Test func emptyReleaseListWithCurrentContentHasNoReleaseErrors() throws {
+    @Test func missingRomanizationTableWarnsInDevAndErrorsInRelease() throws {
+        let root = try repositoryRoot()
+        let merged = try #require(ContentMerger.merge(root: root).merged)
+        #expect(merged.bundle.romanization.table.isEmpty)
+        let validator = ContentValidator.validate(merged.bundle, mode: .authoring)
+        #expect(validator.contains { $0.field == "unstressedWords" && $0.message.contains("not in romanization.table") })
+
+        let dev = ContentCheck.issues(root: root, mode: .dev)
+        #expect(dev.contains { $0.severity == .warning && $0.field == "romanization.table" })
+        #expect(!dev.contains { $0.message.contains("not in romanization.table") })
+
+        let release = ContentCheck.issues(root: root, mode: .release)
+        #expect(release.contains { $0.severity == .error && $0.field == "romanization.table" })
+        #expect(!release.contains { $0.message.contains("not in romanization.table") })
+    }
+
+    @Test func emptyReleaseListDoesNotRequireTheSoundsUnit() throws {
         let root = try repositoryRoot()
         #expect(ContentMerger.checkCommittedBundle(root: root).isEmpty)
         let release = ContentCheck.issues(root: root, mode: .release)
-        #expect(!release.contains { $0.severity == .error })
+        #expect(!release.contains { $0.message.contains("does not include u-sounds") })
+        #expect(!release.contains { $0.field == "soundExample" })
     }
 
     @Test func releaseListContainingSoundsUnitReportsTheSixMissingSounds() throws {
@@ -213,12 +282,11 @@ struct MergeTests {
             mode: .release
         )
         let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
-        let errors = issues.filter { $0.severity == .error }
-        #expect(errors.count == sounds.count)
+        let soundErrors = issues.filter { $0.field == "soundExample" && $0.severity == .error }
+        #expect(soundErrors.count == sounds.count)
         for (index, sound) in sounds.enumerated() {
-            #expect(errors[index].id == "u-sounds")
-            #expect(errors[index].field == "soundExample")
-            #expect(errors[index].message.contains(sound))
+            #expect(soundErrors[index].id == "u-sounds")
+            #expect(soundErrors[index].message.contains(sound))
         }
     }
 
@@ -366,7 +434,28 @@ private func word(
     )
 }
 
-private func writeCourse(itemCount: Int, difficult: Bool, releaseUnits: [String], registry: [RegistryEntry]) throws -> URL {
+private func lessonBundle(introduces: Int, soundExamples: Int, letters: Int = 0) -> ContentBundle {
+    let rows = sampleWords(6)
+    let items = rows.map { word($0.id, pashto: $0.pashto, translit: $0.translit, pronunciation: $0.pronunciation, en: $0.en, status: .draft) }
+    var refs: [LessonItemRef] = []
+    for index in 0..<introduces {
+        refs.append(LessonItemRef(item: items[index % items.count].id, role: .introduce))
+    }
+    for _ in 0..<soundExamples {
+        refs.append(LessonItemRef(item: items[0].id, role: .soundExample, sound: "a"))
+    }
+    let letterIDs = (0..<letters).map { items[$0 % items.count].id }
+    let lesson = Lesson(id: LessonID(rawValue: "l-greetings-1")!, title: "Hello", items: refs, letters: letterIDs)
+    return bundle(items: items, lessons: [lesson])
+}
+
+private func writeCourse(
+    itemCount: Int,
+    difficult: Bool,
+    releaseUnits: [String],
+    registry: [RegistryEntry],
+    unitID: String = "u-greetings"
+) throws -> URL {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
     let content = root.appendingPathComponent("content", isDirectory: true)
     let units = content.appendingPathComponent("units", isDirectory: true)
@@ -375,11 +464,11 @@ private func writeCourse(itemCount: Int, difficult: Bool, releaseUnits: [String]
     let items = rows.map { itemJSON($0.id, pashto: $0.pashto, translit: $0.translit, pronunciation: $0.pronunciation, en: $0.en) }.joined(separator: ",")
     let lesson = lessonJSON("l-greetings-1", itemIDs: rows.map(\.id))
     let unit = """
-    {"id":"u-greetings","track":"main","title":"Greetings","items":[\(items)],"lessons":[\(lesson)]}
+    {"id":"\(unitID)","track":"main","title":"Greetings","items":[\(items)],"lessons":[\(lesson)]}
     """
-    try unit.write(to: units.appendingPathComponent("u-greetings.json"), atomically: true, encoding: .utf8)
+    try unit.write(to: units.appendingPathComponent("\(unitID).json"), atomically: true, encoding: .utf8)
     try """
-    {"units":["u-greetings"],"nonDistractorGroups":[]}
+    {"units":["\(unitID)"],"nonDistractorGroups":[]}
     """.write(to: content.appendingPathComponent("course.json"), atomically: true, encoding: .utf8)
     let letters = difficult ? #"[{"char":"ټ","codepoint":"U+067C","translit":"ṭ"}]"# : "[]"
     try """

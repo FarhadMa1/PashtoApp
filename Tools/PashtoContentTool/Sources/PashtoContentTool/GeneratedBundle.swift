@@ -4,10 +4,10 @@ import PashtoCore
 /// Values the merger writes into `content.json`.
 ///
 /// The unit files do not carry the romanization table or `unstressedWords`.
-/// The difficult-character list supplies those letters. The unstressed list is
-/// the v1.0 list from the content decision, and one table row covers its characters
-/// so the validator can check that list. `contentVersion` stays fixed until
-/// `course.json` has a version field.
+/// `unstressedWords` is the v1.0 list from the content decision. The table is
+/// left empty until Pashto Expert supplies it. A joined placeholder row would
+/// make the unstressed-character check pass without looking at a real table.
+/// `contentVersion` stays fixed until `course.json` has a version field.
 enum GeneratedBundle {
     static let contentVersion = "2026.11.0"
     static let unstressedWords = [
@@ -15,26 +15,8 @@ enum GeneratedBundle {
     ]
 
     static func romanization(from list: DifficultCharacterList) -> Romanization {
-        var table = list.letters.map { entry in
-            Romanization.Entry(
-                letter: entry.char,
-                translit: entry.translit,
-                ascii: entry.translit,
-                pronunciation: entry.translit,
-                description: "Difficult character."
-            )
-        }
-        table.append(
-            Romanization.Entry(
-                letter: "a",
-                translit: unstressedWords.joined(),
-                ascii: "a",
-                pronunciation: "a",
-                description: "Character coverage for unstressedWords."
-            )
-        )
-        return Romanization(
-            table: table,
+        Romanization(
+            table: [],
             difficultCharacters: list.letters.map(\.char),
             unstressedWords: unstressedWords
         )

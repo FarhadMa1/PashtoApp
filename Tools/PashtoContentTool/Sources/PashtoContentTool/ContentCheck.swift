@@ -13,7 +13,13 @@ public enum ContentCheck {
         let releaseUnits = loadReleaseUnits(paths, issues: &issues)
         let registry = loadRegistry(paths, issues: &issues)
         guard let merged = outcome.merged else { return issues }
-        issues.append(contentsOf: ContentValidator.validate(merged.bundle, mode: mode.validationMode))
+        var validated = ContentValidator.validate(merged.bundle, mode: mode.validationMode)
+        if merged.bundle.romanization.table.isEmpty {
+            // An empty table makes every unstressed word fail the character check.
+            // Report the missing table once, at the severity for this mode.
+            validated.removeAll { $0.field == "unstressedWords" && $0.message.contains("not in romanization.table") }
+        }
+        issues.append(contentsOf: validated)
         issues.append(contentsOf: IDRegistryCheck.issues(entries: registry, bundle: merged.bundle))
         issues.append(contentsOf: ReleaseGate.issues(
             in: merged.bundle,

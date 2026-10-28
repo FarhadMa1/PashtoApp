@@ -52,7 +52,7 @@ swift run --package-path Tools/PashtoContentTool pashto-content validate --mode 
 swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release
 ```
 
-`content/id-registry.json` is empty because no id has shipped. `content/release-units.json` lists no unit yet. `validate --mode release` runs against that list. `validate --mode dev` warns when a difficult character has no `soundExample`.
+`content/id-registry.json` is empty because no id has shipped. `content/release-units.json` lists no unit yet. An empty list is allowed. A non-empty list must include `u-sounds`. `validate --mode dev` warns when a difficult character has no `soundExample`, and when `romanization.table` is still empty.
 
 ## iOS builds
 
