@@ -43,11 +43,11 @@ struct ContentFilterTests {
         #expect(bundle.items.count == 3)
     }
 
-    @Test func devBuildDropsResponseToWhenTheTargetIsHidden() {
+    @Test func devBuildLeavesBrokenResponseToAndEmptyLessonsForValidation() {
         let signed = Verification(status: .verified, checkedBy: "farhad", checkedOn: "2026-10-27")
         let prompt = makeItem("e-salam", verification: signed)
         let draft = makeItem("e-draft", pashto: "نه", translit: "na", pronunciation: "na", en: "no")
-        let toDraft = makeItem(
+        let reply = makeItem(
             "e-reply",
             pashto: "هو",
             translit: "ho",
@@ -56,44 +56,10 @@ struct ContentFilterTests {
             responseTo: "e-draft",
             verification: signed
         )
-        let toPrompt = makeItem(
-            "e-other",
-            pashto: "زه",
-            translit: "zə",
-            pronunciation: "za",
-            en: "I",
-            responseTo: "e-salam",
-            verification: signed
-        )
-        let bundle = makeBundle(items: [prompt, draft, toDraft, toPrompt])
-        let filtered = ContentFilter.devBuild(bundle)
-        let byID = Dictionary(uniqueKeysWithValues: filtered.items.map { ($0.id.rawValue, $0) })
-
-        #expect(byID["e-reply"]?.responseTo == nil)
-        #expect(byID["e-other"]?.responseTo?.rawValue == "e-salam")
-        #expect(bundle.items.first { $0.id.rawValue == "e-reply" }?.responseTo?.rawValue == "e-draft")
-
-        let dangling = makeItem(
-            "e-dangling",
-            pashto: "دا",
-            translit: "da",
-            pronunciation: "da",
-            en: "this",
-            responseTo: "e-missing",
-            verification: signed
-        )
-        let keptLink = ContentFilter.devBuild(makeBundle(items: [prompt, dangling]))
-        #expect(keptLink.items.first { $0.id.rawValue == "e-dangling" }?.responseTo?.rawValue == "e-missing")
-    }
-
-    @Test func devBuildDropsLessonsThatBecomeEmpty() {
-        let signed = Verification(status: .verified, checkedBy: "farhad", checkedOn: "2026-10-27")
-        let kept = makeItem("e-salam", verification: signed)
-        let draft = makeItem("e-draft", pashto: "نه", translit: "na", pronunciation: "na", en: "no")
         let keptLesson = Lesson(
             id: lessonID("l-greetings-1"),
             title: "Kept",
-            items: [LessonItemRef(item: kept.id, role: .introduce)]
+            items: [prompt, reply].map { LessonItemRef(item: $0.id, role: .introduce) }
         )
         let draftLesson = Lesson(
             id: lessonID("l-greetings-2"),
@@ -101,11 +67,22 @@ struct ContentFilterTests {
             items: [LessonItemRef(item: draft.id, role: .introduce)]
         )
         let bundle = makeBundle(
-            items: [kept, draft],
+            items: [prompt, draft, reply],
             units: [CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [keptLesson, draftLesson])]
         )
         let filtered = ContentFilter.devBuild(bundle)
-        #expect(filtered.units[0].lessons.map(\.id.rawValue) == ["l-greetings-1"])
-        #expect(bundle.units[0].lessons.count == 2)
+        let replyAfter = filtered.items.first { $0.id.rawValue == "e-reply" }
+
+        #expect(replyAfter?.responseTo?.rawValue == "e-draft")
+        #expect(filtered.units[0].lessons.map(\.id.rawValue) == ["l-greetings-1", "l-greetings-2"])
+        #expect(filtered.units[0].lessons[1].items.isEmpty)
+        #expect(bundle.items.first { $0.id.rawValue == "e-reply" }?.responseTo?.rawValue == "e-draft")
+
+        for mode in [ValidationMode.authoring, ValidationMode.release] {
+            let issues = validate(filtered, mode: mode)
+            let errors = issues.filter { $0.severity == .error }
+            #expect(errors.contains { $0.field == "responseTo" && $0.message.contains("e-draft") && $0.message.contains("does not exist") })
+            #expect(errors.contains { $0.id == "l-greetings-2" && $0.message.contains("is empty") })
+        }
     }
 }

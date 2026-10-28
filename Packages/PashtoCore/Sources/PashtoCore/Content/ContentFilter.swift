@@ -4,31 +4,19 @@ import Foundation
 ///
 /// A release build must not use this. The release gate reports those items
 /// and leaves them in the bundle. Nothing here runs unless a dev build asks.
-/// A `responseTo` that points at a hidden item is cleared. A `responseTo`
-/// that names an id the bundle never had is left in place so validation
-/// can report it. A lesson that has no items, letters, or dialog turns
-/// after that is dropped.
+/// This skips the `verified` requirement and nothing else. A `responseTo`
+/// that pointed at a hidden item stays, and a lesson that loses every item
+/// stays. Validation then reports those as errors in every mode.
 public enum ContentFilter {
     public static func devBuild(_ bundle: ContentBundle) -> ContentBundle {
         let hidden = Set(bundle.items.filter { $0.verification.status != .verified }.map(\.id))
-        let items = bundle.items.compactMap { item -> ContentItem? in
-            guard !hidden.contains(item.id) else { return nil }
-            return item.clearingResponseToHidden(in: hidden)
-        }
+        let items = bundle.items.filter { !hidden.contains($0.id) }
         let units = bundle.units.map { unit in
-            let lessons = unit.lessons.compactMap { lesson -> Lesson? in
-                let filtered = filter(lesson, hiding: hidden)
-                let hasTurns = filtered.dialogs.contains { !$0.turns.isEmpty }
-                if filtered.items.isEmpty, filtered.letters.isEmpty, !hasTurns {
-                    return nil
-                }
-                return filtered
-            }
-            return CourseUnit(
+            CourseUnit(
                 id: unit.id,
                 track: unit.track,
                 title: unit.title,
-                lessons: lessons
+                lessons: unit.lessons.map { filter($0, hiding: hidden) }
             )
         }
         let groups = bundle.nonDistractorGroups.compactMap { group -> [ItemID]? in
@@ -57,31 +45,6 @@ public enum ContentFilter {
             items: lesson.items.filter { !hidden.contains($0.item) },
             letters: lesson.letters.filter { !hidden.contains($0) },
             dialogs: dialogs
-        )
-    }
-}
-
-private extension ContentItem {
-    func clearingResponseToHidden(in hidden: Set<ItemID>) -> ContentItem {
-        guard let responseTo, hidden.contains(responseTo) else { return self }
-        return ContentItem(
-            id: id,
-            kind: kind,
-            pashto: pashto,
-            translit: translit,
-            pronunciation: pronunciation,
-            en: en,
-            verification: verification,
-            enAlt: enAlt,
-            usage: usage,
-            pronunciationNote: pronunciationNote,
-            responseTo: nil,
-            tokens: tokens,
-            acceptedOrders: acceptedOrders,
-            audio: audio,
-            name: name,
-            forms: forms,
-            sound: sound
         )
     }
 }

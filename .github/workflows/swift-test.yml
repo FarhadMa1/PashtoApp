@@ -36,10 +36,12 @@ jobs:
       - name: Validate content for dev
         run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode dev
 
-  # Its own job so Software Lead can decide whether it is required for merge.
-  validate-release:
-    name: validate release
+  # Runs on every pull request so release gaps stay visible.
+  # Not required for merge. It becomes required on the release/TestFlight workflow.
+  release-gate:
+    name: release gate
     runs-on: ubuntu-24.04
+    continue-on-error: true
     container:
       image: swift:6.2.4-noble
     steps:

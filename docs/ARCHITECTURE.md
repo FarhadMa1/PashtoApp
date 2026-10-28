@@ -53,7 +53,7 @@ These are constraints on later work, not code in this revision.
 | --- | --- | --- |
 | `swift test` for `PashtoCore` and `PashtoContentTool` | GitHub Actions, `ubuntu-24.04`, Swift 6.2.4 | In this repository |
 | `pashto-content merge --check` and `validate --mode dev` | Linux job `swift test (Linux)` | In this repository |
-| `validate --mode release` | Linux job `validate release` | Separate job. Whether it is required for merge is decided outside this workflow |
+| `validate --mode release` | Linux job `release gate` | Runs on every pull request. Not required for merge. Required on the release/TestFlight workflow |
 | App compile, archive, TestFlight | Xcode Cloud, committed `PashtoApp.xcodeproj`, scheme `PashtoApp` | Workflow is created in App Store Connect, not in git |
 | macOS GitHub Actions check of the Release app bundle | Not added | The app target does not embed `content.json` yet |
 

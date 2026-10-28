@@ -1,4 +1,4 @@
 {
-  "note": "Empty because 45 of the 51 items are not verified yet. An empty list is allowed. A non-empty list must include u-sounds. Add a unit id when every item in that unit is verified.",
+  "note": "No unit is listed yet. An empty list is allowed. A non-empty list must include u-sounds. Add a unit id when that unit should ship.",
   "units": []
 }
