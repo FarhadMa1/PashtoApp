@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "letters": [
+    {
+      "char": "ټ",
+      "codepoint": "U+067C",
+      "translit": "ṭ"
+    },
+    {
+      "char": "ډ",
+      "codepoint": "U+0689",
+      "translit": "ḍ"
+    },
+    {
+      "char": "ړ",
+      "codepoint": "U+0693",
+      "translit": "ṛ"
+    },
+    {
+      "char": "ڼ",
+      "codepoint": "U+06BC",
+      "translit": "ṇ"
+    },
+    {
+      "char": "ښ",
+      "codepoint": "U+069A",
+      "translit": "x̌"
+    },
+    {
+      "char": "ږ",
+      "codepoint": "U+0696",
+      "translit": "ǧ"
+    },
+    {
+      "char": "څ",
+      "codepoint": "U+0685",
+      "translit": "ts"
+    },
+    {
+      "char": "ځ",
+      "codepoint": "U+0681",
+      "translit": "dz"
+    },
+    {
+      "char": "خ",
+      "codepoint": "U+062E",
+      "translit": "x"
+    },
+    {
+      "char": "غ",
+      "codepoint": "U+063A",
+      "translit": "ɣ"
+    },
+    {
+      "char": "ژ",
+      "codepoint": "U+0698",
+      "translit": "ž"
+    },
+    {
+      "char": "ق",
+      "codepoint": "U+0642",
+      "translit": "q"
+    },
+    {
+      "char": "ع",
+      "codepoint": "U+0639",
+      "translit": "ʿ"
+    }
+  ]
+}

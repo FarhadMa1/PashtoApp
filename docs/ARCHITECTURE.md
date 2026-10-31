@@ -8,6 +8,10 @@ PashtoApp will teach Pashto from scratch. This document describes the app shell,
 PashtoApp (iOS, SwiftUI)
     depends on
 PashtoCore (Swift package, no Apple-only frameworks)
+
+Tools/PashtoContentTool
+    depends on PashtoCore
+    is not linked by the app
 ```
 
 ### PashtoApp
@@ -30,7 +34,8 @@ The package exposes:
 
 - Content value types for the generated `content.json` bundle (`ContentBundle`, `ContentItem`, `CourseUnit`, `Lesson`, `LessonItemRef`, and the id types). The format, id rules, release filter, and the boundary with the app are in [decisions/0002-content-format.md](decisions/0002-content-format.md).
 - `Normalization`, the only place that folds text for comparison.
-- `ContentValidator`, which checks a decoded bundle and returns every issue it finds. Release-unit membership and lesson size stay with the content tool.
+- `ContentValidator`, which checks a decoded bundle and returns every issue it finds. Both modes run the same checks.
+- `ContentFilter.devBuild`, which hides `draft` and `check` items for a Debug or dev build. A release build does not call it.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
 
 The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the process clock or the current locale (`Date()` / `Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
@@ -46,16 +51,17 @@ These are constraints on later work, not code in this revision.
 
 | What | Where it runs | Status |
 | --- | --- | --- |
-| `swift test` for `PashtoCore` | GitHub Actions, `ubuntu-24.04`, Swift 6.2.4 | In this repository |
+| `swift test` for `PashtoCore` and `PashtoContentTool` | GitHub Actions, `ubuntu-24.04`, Swift 6.2.4 | In this repository |
+| `pashto-content merge --check` and `validate --mode dev` | Linux job `swift test (Linux)` | In this repository |
+| `validate --mode release` | Linux job `release gate` | Runs on every pull request. Not required for merge. Required on the release/TestFlight workflow |
 | App compile, archive, TestFlight | Xcode Cloud, committed `PashtoApp.xcodeproj`, scheme `PashtoApp` | Workflow is created in App Store Connect, not in git |
-| macOS GitHub Actions `xcodebuild` | Not added | Fallback only, needs owner approval |
+| macOS GitHub Actions check of the Release app bundle | Not added | The app target does not embed `content.json` yet |
 
 `project.yml` is the file to edit. `PashtoApp.xcodeproj` is generated with XcodeGen 2.46.0 and committed so Xcode Cloud can see the project and the shared scheme without installing a generator. Details and the reason are in [decisions/0001-project-structure.md](decisions/0001-project-structure.md).
 
 ## Out of scope for this revision
 
-- Shipped curriculum or Pashto course files
-- The tool that merges unit files into `content.json`, and the release gate (release units, lesson size)
+- Loading the course inside the app, and a macOS check that the Release bundle contains only `release-units.json`
 - Quiz, spaced-repetition, or streak logic
 - Audio playback or a pronunciation button
 - Screens other than the placeholder

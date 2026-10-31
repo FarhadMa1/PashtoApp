@@ -1,0 +1,50 @@
+import Foundation
+
+/// Hides `draft` and `check` items for a Debug or dev build.
+///
+/// A release build must not use this. The release gate reports those items
+/// and leaves them in the bundle. Nothing here runs unless a dev build asks.
+/// This skips the `verified` requirement and nothing else. A `responseTo`
+/// that pointed at a hidden item stays, and a lesson that loses every item
+/// stays. Validation then reports those as errors in every mode.
+public enum ContentFilter {
+    public static func devBuild(_ bundle: ContentBundle) -> ContentBundle {
+        let hidden = Set(bundle.items.filter { $0.verification.status != .verified }.map(\.id))
+        let items = bundle.items.filter { !hidden.contains($0.id) }
+        let units = bundle.units.map { unit in
+            CourseUnit(
+                id: unit.id,
+                track: unit.track,
+                title: unit.title,
+                lessons: unit.lessons.map { filter($0, hiding: hidden) }
+            )
+        }
+        let groups = bundle.nonDistractorGroups.compactMap { group -> [ItemID]? in
+            let kept = group.filter { !hidden.contains($0) }
+            return kept.count >= 2 ? kept : nil
+        }
+        return ContentBundle(
+            contentVersion: bundle.contentVersion,
+            variant: bundle.variant,
+            romanization: bundle.romanization,
+            items: items,
+            units: units,
+            nonDistractorGroups: groups
+        )
+    }
+
+    private static func filter(_ lesson: Lesson, hiding hidden: Set<ItemID>) -> Lesson {
+        let dialogs = lesson.dialogs.compactMap { dialog -> Dialog? in
+            let turns = dialog.turns.filter { !hidden.contains($0.item) }
+            guard !turns.isEmpty else { return nil }
+            return Dialog(id: dialog.id, turns: turns)
+        }
+        return Lesson(
+            id: lesson.id,
+            title: lesson.title,
+            items: lesson.items.filter { !hidden.contains($0.item) },
+            letters: lesson.letters.filter { !hidden.contains($0) },
+            dialogs: dialogs
+        )
+    }
+}

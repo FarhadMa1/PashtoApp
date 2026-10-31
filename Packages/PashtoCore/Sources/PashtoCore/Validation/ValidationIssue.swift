@@ -27,9 +27,9 @@ public struct ValidationIssue: Hashable, Sendable {
 
 /// Which bundle checks to run.
 ///
-/// Release-unit membership and lesson size are not part of either mode.
-/// The content tool owns those gates. Both modes run the same bundle checks
-/// until that tool exists, so the call shape can stay `validate(_:mode:)`.
+/// Release-unit membership, lesson size, audio in v1.0, and a missing
+/// sound example are not part of either mode. `PashtoContentTool` adds those
+/// on top of this result. Both modes here run the same bundle checks.
 public enum ValidationMode: String, Hashable, Sendable {
     case authoring
     case release

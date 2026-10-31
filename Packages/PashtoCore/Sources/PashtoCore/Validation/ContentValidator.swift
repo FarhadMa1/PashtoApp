@@ -70,6 +70,10 @@ public enum ContentValidator {
                 if !seenLessons.insert(lessonID).inserted {
                     report.add(.error, id: lessonID, field: "id", "Lesson \(lessonID) is duplicated.")
                 }
+                let hasTurns = lesson.dialogs.contains { !$0.turns.isEmpty }
+                if lesson.items.isEmpty, lesson.letters.isEmpty, !hasTurns {
+                    report.add(.error, id: lessonID, field: "items", "Lesson \(lessonID) is empty.")
+                }
                 var lessonItems: [String] = []
                 for ref in lesson.items {
                     let itemID = ref.item.rawValue
