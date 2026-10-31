@@ -1,0 +1,694 @@
+{
+  "id": "u-greetings",
+  "track": "main",
+  "title": "Greetings and politeness",
+  "items": [
+    {
+      "id": "e-salam",
+      "kind": "phrase",
+      "pashto": "سلام",
+      "translit": "salā́m",
+      "pronunciation": "sa-LAAM",
+      "en": "hello",
+      "usage": "common greeting",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-assalamu-alaykum",
+      "kind": "phrase",
+      "pashto": "السلام علیکم",
+      "translit": "as-salā́m alaykúm",
+      "pronunciation": "as-sa-LAAM a-lay-KOOM",
+      "en": "peace be upon you",
+      "usage": "formal greeting",
+      "pronunciationNote": "ع is not pronounced as a separate sound in Pashto; just say as-salā́m alaykúm.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-walaykum-salam",
+      "kind": "phrase",
+      "pashto": "وعلیکم السلام",
+      "translit": "wa-alaykúm as-salā́m",
+      "pronunciation": "wa-a-lay-KOOM as-sa-LAAM",
+      "en": "and peace be upon you",
+      "usage": "reply to as-salām alaykum",
+      "pronunciationNote": "ع is not pronounced as a separate sound in Pashto.",
+      "responseTo": "e-assalamu-alaykum",
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-stare-ma-she",
+      "kind": "phrase",
+      "pashto": "ستړی مه شې",
+      "translit": "stə́ṛay ma še",
+      "pronunciation": "STA-ray ma shey",
+      "en": "hello",
+      "usage": "lit. may you not be tired",
+      "pronunciationNote": "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-xwar-ma-she",
+      "kind": "phrase",
+      "pashto": "خوار مه شې",
+      "translit": "xwār ma še",
+      "pronunciation": "khwaar ma shey",
+      "en": "reply to stəṛay ma še",
+      "usage": "lit. may you not be poor",
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": "e-stare-ma-she",
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-xa-raghlast",
+      "kind": "phrase",
+      "pashto": "ښه راغلاست",
+      "translit": "x̌a rāɣlā́st",
+      "pronunciation": "kha raagh-LAAST",
+      "en": "welcome",
+      "usage": "to one person",
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-27",
+        "comment": "Bekreftet av Farhad i gruppechatten."
+      }
+    },
+    {
+      "id": "e-tsanga-ye",
+      "kind": "phrase",
+      "pashto": "څنګه یې؟",
+      "translit": "tsə́nga ye?",
+      "pronunciation": "TSAN-ga ye?",
+      "en": "how are you?",
+      "usage": "informal, to one person",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-taso-tsanga-yast",
+      "kind": "phrase",
+      "pashto": "تاسو څنګه یاست؟",
+      "translit": "tā́so tsə́nga yāst?",
+      "pronunciation": "TAA-so TSAN-ga yaast?",
+      "en": "how are you?",
+      "usage": "polite or plural",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "تاسو",
+        "څنګه",
+        "یاست"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-xa-yam",
+      "kind": "phrase",
+      "pashto": "زه ښه یم",
+      "translit": "zə x̌a yəm",
+      "pronunciation": "za kha yam",
+      "en": "I'm fine",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "ښه",
+        "یم"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-xa",
+      "kind": "word",
+      "pashto": "ښه",
+      "translit": "x̌a",
+      "pronunciation": "kha",
+      "en": "good, fine",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-manana",
+      "kind": "word",
+      "pashto": "مننه",
+      "translit": "manə́na",
+      "pronunciation": "ma-NA-na",
+      "en": "thank you",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-dera-manana",
+      "kind": "phrase",
+      "pashto": "ډېره مننه",
+      "translit": "ḍéra manə́na",
+      "pronunciation": "DE-ra ma-NA-na",
+      "en": "thank you very much",
+      "usage": null,
+      "pronunciationNote": "ḍ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-dera-xa",
+      "kind": "phrase",
+      "pashto": "ډېره ښه",
+      "translit": "ḍéra x̌a",
+      "pronunciation": "DE-ra kha",
+      "en": "very good",
+      "usage": "praise, e.g. after a correct answer",
+      "pronunciationNote": "ḍ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ho",
+      "kind": "word",
+      "pashto": "هو",
+      "translit": "ho",
+      "pronunciation": "ho",
+      "en": "yes",
+      "usage": null,
+      "pronunciationNote": "Kabul: ho, not ao. In everyday speech people also say یې (ye) for yes.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-na",
+      "kind": "word",
+      "pashto": "نه",
+      "translit": "na",
+      "pronunciation": "na",
+      "en": "no",
+      "usage": null,
+      "pronunciationNote": "A short, clear a, like in cut.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-baxana-ghwaram",
+      "kind": "phrase",
+      "pashto": "بښنه غواړم",
+      "translit": "bax̌ə́na ɣwā́ṛəm",
+      "pronunciation": "ba-KHA-na GHWAA-ram",
+      "en": "sorry, excuse me",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-mehrabani-wakray",
+      "kind": "phrase",
+      "pashto": "مهرباني وکړئ",
+      "translit": "mehrabāní wə́kṛəy",
+      "pronunciation": "meh-ra-baa-NEE WA-kray",
+      "en": "please",
+      "usage": "polite",
+      "pronunciationNote": "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-27",
+        "comment": "Bekreftet av Farhad i gruppechatten."
+      }
+    },
+    {
+      "id": "e-xoday-paman",
+      "kind": "phrase",
+      "pashto": "خدای پامان",
+      "translit": "xodā́y pāmā́n",
+      "pronunciation": "kho-DAAY paa-MAAN",
+      "en": "goodbye",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-pa-maxa-de-xa",
+      "kind": "phrase",
+      "pashto": "په مخه دې ښه",
+      "translit": "pə mə́xa de x̌a",
+      "pronunciation": "pa MA-kha dey kha",
+      "en": "have a good trip",
+      "usage": "said to someone leaving",
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-27",
+        "comment": "Bekreftet av Farhad i gruppechatten."
+      }
+    },
+    {
+      "id": "e-letter-alif",
+      "kind": "letter",
+      "pashto": "ا",
+      "name": "الف",
+      "translit": "alif",
+      "pronunciation": "alif",
+      "en": "the letter alif",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ا",
+        "initial": "ا",
+        "medial": "ـا",
+        "final": "ـا"
+      },
+      "sound": "ā",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-be",
+      "kind": "letter",
+      "pashto": "ب",
+      "name": "بې",
+      "translit": "ba",
+      "pronunciation": "ba",
+      "en": "the letter ba",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ب",
+        "initial": "بـ",
+        "medial": "ـبـ",
+        "final": "ـب"
+      },
+      "sound": "b",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-pe",
+      "kind": "letter",
+      "pashto": "پ",
+      "name": "پې",
+      "translit": "pa",
+      "pronunciation": "pa",
+      "en": "the letter pa",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "پ",
+        "initial": "پـ",
+        "medial": "ـپـ",
+        "final": "ـپ"
+      },
+      "sound": "p",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-te",
+      "kind": "letter",
+      "pashto": "ت",
+      "name": "تې",
+      "translit": "ta",
+      "pronunciation": "ta",
+      "en": "the letter ta",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ت",
+        "initial": "تـ",
+        "medial": "ـتـ",
+        "final": "ـت"
+      },
+      "sound": "t",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-tte",
+      "kind": "letter",
+      "pashto": "ټ",
+      "name": "ټې",
+      "translit": "ṭa",
+      "pronunciation": "ta",
+      "en": "the letter ta with a ring (curled-back t)",
+      "usage": null,
+      "pronunciationNote": "ṭ: t with the tongue tip curled back.",
+      "forms": {
+        "isolated": "ټ",
+        "initial": "ټـ",
+        "medial": "ـټـ",
+        "final": "ـټ"
+      },
+      "sound": "ṭ",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-se",
+      "kind": "letter",
+      "pashto": "ث",
+      "name": "ثې",
+      "translit": "sa",
+      "pronunciation": "sa",
+      "en": "the letter sa",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ث",
+        "initial": "ثـ",
+        "medial": "ـثـ",
+        "final": "ـث"
+      },
+      "sound": "s",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-10-28",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-greetings-1",
+      "title": "Saying hello",
+      "letters": [
+        "e-letter-alif",
+        "e-letter-be"
+      ],
+      "items": [
+        {
+          "item": "e-salam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-assalamu-alaykum",
+          "role": "introduce"
+        },
+        {
+          "item": "e-walaykum-salam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-stare-ma-she",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xwar-ma-she",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xa-raghlast",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-greetings-1",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-assalamu-alaykum"
+            },
+            {
+              "speaker": "B",
+              "item": "e-walaykum-salam"
+            }
+          ]
+        },
+        {
+          "id": "d-greetings-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-stare-ma-she"
+            },
+            {
+              "speaker": "B",
+              "item": "e-xwar-ma-she"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-greetings-2",
+      "title": "How are you?",
+      "letters": [
+        "e-letter-pe",
+        "e-letter-te"
+      ],
+      "items": [
+        {
+          "item": "e-tsanga-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-taso-tsanga-yast",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-xa-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-manana",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dera-manana",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-greetings-3",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-tsanga-ye"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-xa-yam"
+            },
+            {
+              "speaker": "B",
+              "item": "e-manana"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-greetings-3",
+      "title": "Polite words and goodbye",
+      "letters": [
+        "e-letter-tte",
+        "e-letter-se"
+      ],
+      "items": [
+        {
+          "item": "e-dera-xa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ho",
+          "role": "introduce"
+        },
+        {
+          "item": "e-na",
+          "role": "introduce"
+        },
+        {
+          "item": "e-baxana-ghwaram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mehrabani-wakray",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xoday-paman",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pa-maxa-de-xa",
+          "role": "introduce"
+        }
+      ]
+    }
+  ]
+}

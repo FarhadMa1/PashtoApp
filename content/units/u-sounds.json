@@ -1,0 +1,59 @@
+{
+  "id": "u-sounds",
+  "track": "main",
+  "title": "Welcome and sounds",
+  "items": [],
+  "lessons": [
+    {
+      "id": "l-sounds-1",
+      "title": "New sounds",
+      "items": [
+        {
+          "item": "e-dera-manana",
+          "role": "soundExample",
+          "sound": "ḍ"
+        },
+        {
+          "item": "e-stare-ma-she",
+          "role": "soundExample",
+          "sound": "ṛ"
+        },
+        {
+          "item": "e-tsanga-ye",
+          "role": "soundExample",
+          "sound": "ts"
+        },
+        {
+          "item": "e-ta-da-kum-dzay-ye",
+          "role": "soundExample",
+          "sound": "dz"
+        },
+        {
+          "item": "e-xoday-paman",
+          "role": "soundExample",
+          "sound": "x"
+        },
+        {
+          "item": "e-hagha",
+          "role": "soundExample",
+          "sound": "ɣ"
+        },
+        {
+          "item": "e-xa",
+          "role": "soundExample",
+          "sound": "x̌"
+        },
+        {
+          "item": "e-za",
+          "role": "soundExample",
+          "sound": "ə"
+        },
+        {
+          "item": "e-na",
+          "role": "soundExample",
+          "sound": "a"
+        }
+      ]
+    }
+  ]
+}
