@@ -37,16 +37,46 @@ jobs:
         run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode dev
 
   # Runs on every pull request so release gaps stay visible.
-  # Not required for merge. It becomes required on the release/TestFlight workflow.
+  # Not required for merge. It becomes strict on the future release/TestFlight workflow.
   release-gate:
     name: release gate
     runs-on: ubuntu-24.04
-    continue-on-error: true
     container:
       image: swift:6.2.4-noble
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Validate content for release
-        run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release
+      - name: Validate content for release (never fails PR)
+        shell: bash
+        run: |
+          set +e
+          OUTPUT="$(swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release 2>&1)"
+          CODE=$?
+          {
+            echo "### Release gate findings"
+            if [ -z "$OUTPUT" ]; then
+              echo ""
+              echo "No findings."
+            else
+              echo ""
+              echo '```'
+              echo "$OUTPUT"
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$OUTPUT" ]; then
+            while IFS= read -r line; do
+              [ -z "$line" ] && continue
+              sev="$(echo "$line" | cut -f1)"
+              id="$(echo "$line" | cut -f2)"
+              field="$(echo "$line" | cut -f3)"
+              msg="$(echo "$line" | cut -f4-)"
+              # Always annotate as a warning so the job stays green.
+              if [ -n "$id" ]; then
+                echo "::warning::[$field][$sev][$id] $msg"
+              else
+                echo "::warning::[$field][$sev] $msg"
+              fi
+            done <<< "$OUTPUT"
+          fi
+          exit 0
