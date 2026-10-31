@@ -26,9 +26,15 @@ struct ContentRoot {
     }
 }
 
+struct CourseRomanization: Decodable {
+    let table: [Romanization.Entry]
+    let unstressedWords: [String]
+}
+
 struct CourseFile: Decodable {
     let units: [String]
     let nonDistractorGroups: [[String]]
+    let romanization: CourseRomanization?
     let note: String?
 }
 

@@ -249,19 +249,51 @@ struct MergeTests {
     }
 
     @Test func missingRomanizationTableWarnsInDevAndErrorsInRelease() throws {
-        let root = try repositoryRoot()
+        let root = try writeCourse(itemCount: 6, difficult: false, releaseUnits: [], registry: [])
         let merged = try #require(ContentMerger.merge(root: root).merged)
         #expect(merged.bundle.romanization.table.isEmpty)
-        let validator = ContentValidator.validate(merged.bundle, mode: .authoring)
-        #expect(validator.contains { $0.field == "unstressedWords" && $0.message.contains("not in romanization.table") })
+        #expect(merged.bundle.romanization.unstressedWords.isEmpty)
 
         let dev = ContentCheck.issues(root: root, mode: .dev)
         #expect(dev.contains { $0.severity == .warning && $0.field == "romanization.table" })
-        #expect(!dev.contains { $0.message.contains("not in romanization.table") })
 
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(release.contains { $0.severity == .error && $0.field == "romanization.table" })
-        #expect(!release.contains { $0.message.contains("not in romanization.table") })
+    }
+
+    @Test func unstressedWordsAreCheckedAgainstTheCourseTable() throws {
+        let root = try writeCourse(
+            itemCount: 6,
+            difficult: false,
+            releaseUnits: [],
+            registry: [],
+            romanization: #"{"table":[],"unstressedWords":["qa","salām"]}"#
+        )
+        let merged = try #require(ContentMerger.merge(root: root).merged)
+        #expect(merged.bundle.romanization.table.isEmpty)
+        #expect(merged.bundle.romanization.unstressedWords == ["qa", "salām"])
+
+        let validator = ContentValidator.validate(merged.bundle, mode: .authoring)
+        let unstressed = validator.filter { $0.field == "unstressedWords" }
+        #expect(unstressed.contains { $0.message.contains("\"qa\"") && $0.message.contains("not in romanization.table") })
+        #expect(unstressed.contains { $0.message.contains("\"salām\"") && $0.message.contains("syllables") })
+
+        let dev = ContentCheck.issues(root: root, mode: .dev)
+        #expect(dev.contains { $0.field == "unstressedWords" && $0.message.contains("not in romanization.table") })
+        #expect(dev.contains { $0.field == "unstressedWords" && $0.message.contains("syllables") })
+    }
+
+    @Test func courseTableIsCopiedAndUnstressedChecksPass() throws {
+        let root = try repositoryRoot()
+        let merged = try #require(ContentMerger.merge(root: root).merged)
+        let course = try JSONDecoder().decode(CourseFile.self, from: Data(contentsOf: ContentRoot(url: root).courseFile))
+        let source = try #require(course.romanization)
+        #expect(source.table.count == 53)
+        #expect(merged.bundle.romanization.table == source.table)
+        #expect(merged.bundle.romanization.unstressedWords == source.unstressedWords)
+        let validator = ContentValidator.validate(merged.bundle, mode: .authoring)
+        #expect(validator.filter { $0.field == "unstressedWords" }.isEmpty)
+        #expect(!validator.contains { $0.severity == .error })
     }
 
     @Test func emptyReleaseListDoesNotRequireTheSoundsUnit() throws {
@@ -383,11 +415,15 @@ private func lesson(itemIDs: [String]) -> Lesson {
     )
 }
 
+private let testUnstressedWords = [
+    "ma", "še", "de", "da", "day", "ye", "yəm", "yāst", "na", "ho", "pə", "la", "də", "tsə", "zə", "tə",
+]
+
 private func romanization(difficult: [String]) -> Romanization {
     Romanization(
-        table: [Romanization.Entry(letter: "a", translit: GeneratedBundle.unstressedWords.joined(), ascii: "a", pronunciation: "a", description: "Coverage.")],
+        table: [Romanization.Entry(letter: "a", translit: testUnstressedWords.joined(), ascii: "a", pronunciation: "a", description: "Coverage.")],
         difficultCharacters: difficult,
-        unstressedWords: GeneratedBundle.unstressedWords
+        unstressedWords: testUnstressedWords
     )
 }
 
@@ -454,7 +490,8 @@ private func writeCourse(
     difficult: Bool,
     releaseUnits: [String],
     registry: [RegistryEntry],
-    unitID: String = "u-greetings"
+    unitID: String = "u-greetings",
+    romanization: String? = nil
 ) throws -> URL {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
     let content = root.appendingPathComponent("content", isDirectory: true)
@@ -467,8 +504,9 @@ private func writeCourse(
     {"id":"\(unitID)","track":"main","title":"Greetings","items":[\(items)],"lessons":[\(lesson)]}
     """
     try unit.write(to: units.appendingPathComponent("\(unitID).json"), atomically: true, encoding: .utf8)
+    let romanizationField = romanization.map { #","romanization":\#($0)"# } ?? ""
     try """
-    {"units":["\(unitID)"],"nonDistractorGroups":[]}
+    {"units":["\(unitID)"],"nonDistractorGroups":[]\(romanizationField)}
     """.write(to: content.appendingPathComponent("course.json"), atomically: true, encoding: .utf8)
     let letters = difficult ? #"[{"char":"ټ","codepoint":"U+067C","translit":"ṭ"}]"# : "[]"
     try """

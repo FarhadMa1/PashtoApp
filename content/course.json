@@ -31,5 +31,398 @@
       "e-letter-xe",
       "e-letter-tse"
     ]
-  ]
+  ],
+  "romanization": {
+    "table": [
+      {
+        "letter": "ا",
+        "translit": "ā",
+        "ascii": "aa",
+        "pronunciation": "aa",
+        "description": "Long a, as in father. At the start of a word it can also carry a short vowel."
+      },
+      {
+        "letter": "ب",
+        "translit": "b",
+        "ascii": "b",
+        "pronunciation": "b",
+        "description": "As English b."
+      },
+      {
+        "letter": "پ",
+        "translit": "p",
+        "ascii": "p",
+        "pronunciation": "p",
+        "description": "As English p."
+      },
+      {
+        "letter": "ت",
+        "translit": "t",
+        "ascii": "t",
+        "pronunciation": "t",
+        "description": "Soft dental t: the tongue touches the back of the upper front teeth. Not English th."
+      },
+      {
+        "letter": "ټ",
+        "translit": "ṭ",
+        "ascii": "t",
+        "pronunciation": "t",
+        "description": "Retroflex t: the tongue tip curls back to the roof of the mouth."
+      },
+      {
+        "letter": "ث",
+        "translit": "s",
+        "ascii": "s",
+        "pronunciation": "s",
+        "description": "As s. Only in Arabic loanwords."
+      },
+      {
+        "letter": "ج",
+        "translit": "j",
+        "ascii": "j",
+        "pronunciation": "j",
+        "description": "As English j in jam."
+      },
+      {
+        "letter": "چ",
+        "translit": "č",
+        "ascii": "ch",
+        "pronunciation": "ch",
+        "description": "As English ch in church."
+      },
+      {
+        "letter": "ح",
+        "translit": "h",
+        "ascii": "h",
+        "pronunciation": "h",
+        "description": "As h. Only in Arabic loanwords."
+      },
+      {
+        "letter": "خ",
+        "translit": "x",
+        "ascii": "kh",
+        "pronunciation": "kh",
+        "description": "As ch in Scottish loch."
+      },
+      {
+        "letter": "څ",
+        "translit": "ts",
+        "ascii": "ts",
+        "pronunciation": "ts",
+        "description": "As ts in cats."
+      },
+      {
+        "letter": "ځ",
+        "translit": "dz",
+        "ascii": "dz",
+        "pronunciation": "dz",
+        "description": "As ds in kids."
+      },
+      {
+        "letter": "د",
+        "translit": "d",
+        "ascii": "d",
+        "pronunciation": "d",
+        "description": "Soft dental d."
+      },
+      {
+        "letter": "ډ",
+        "translit": "ḍ",
+        "ascii": "d",
+        "pronunciation": "d",
+        "description": "Retroflex d: the tongue tip curls back."
+      },
+      {
+        "letter": "ذ",
+        "translit": "z",
+        "ascii": "z",
+        "pronunciation": "z",
+        "description": "As z. Only in Arabic loanwords."
+      },
+      {
+        "letter": "ر",
+        "translit": "r",
+        "ascii": "r",
+        "pronunciation": "r",
+        "description": "Tapped r, as in Spanish pero."
+      },
+      {
+        "letter": "ړ",
+        "translit": "ṛ",
+        "ascii": "r",
+        "pronunciation": "r",
+        "description": "Retroflex flap: the tongue tip curls back and flicks forward. Between r and d."
+      },
+      {
+        "letter": "ز",
+        "translit": "z",
+        "ascii": "z",
+        "pronunciation": "z",
+        "description": "As English z."
+      },
+      {
+        "letter": "ژ",
+        "translit": "ž",
+        "ascii": "zh",
+        "pronunciation": "zh",
+        "description": "As s in measure."
+      },
+      {
+        "letter": "ږ",
+        "translit": "ǧ",
+        "ascii": "g",
+        "pronunciation": "g",
+        "description": "Kabul: close to g in go. In other dialects zh or a soft g."
+      },
+      {
+        "letter": "س",
+        "translit": "s",
+        "ascii": "s",
+        "pronunciation": "s",
+        "description": "As English s."
+      },
+      {
+        "letter": "ش",
+        "translit": "š",
+        "ascii": "sh",
+        "pronunciation": "sh",
+        "description": "As English sh."
+      },
+      {
+        "letter": "ښ",
+        "translit": "x̌",
+        "ascii": "kh",
+        "pronunciation": "kh",
+        "description": "Kabul: close to kh, as ch in loch. In other dialects sh or a soft kh."
+      },
+      {
+        "letter": "ص",
+        "translit": "s",
+        "ascii": "s",
+        "pronunciation": "s",
+        "description": "As s. Only in Arabic loanwords."
+      },
+      {
+        "letter": "ض",
+        "translit": "z",
+        "ascii": "z",
+        "pronunciation": "z",
+        "description": "As z. Only in Arabic loanwords."
+      },
+      {
+        "letter": "ط",
+        "translit": "t",
+        "ascii": "t",
+        "pronunciation": "t",
+        "description": "As t. Only in Arabic loanwords."
+      },
+      {
+        "letter": "ظ",
+        "translit": "z",
+        "ascii": "z",
+        "pronunciation": "z",
+        "description": "As z. Only in Arabic loanwords."
+      },
+      {
+        "letter": "ع",
+        "translit": "ʿ",
+        "ascii": "'",
+        "pronunciation": "'",
+        "description": "Usually silent or a short catch in the voice. Only in Arabic loanwords."
+      },
+      {
+        "letter": "غ",
+        "translit": "ɣ",
+        "ascii": "gh",
+        "pronunciation": "gh",
+        "description": "Voiced kh, like a French r at the back of the throat."
+      },
+      {
+        "letter": "ف",
+        "translit": "f",
+        "ascii": "f",
+        "pronunciation": "f",
+        "description": "As English f."
+      },
+      {
+        "letter": "ق",
+        "translit": "q",
+        "ascii": "q",
+        "pronunciation": "q",
+        "description": "A k made deep in the throat. In Kabul it is often said as k."
+      },
+      {
+        "letter": "ک",
+        "translit": "k",
+        "ascii": "k",
+        "pronunciation": "k",
+        "description": "As English k."
+      },
+      {
+        "letter": "ګ",
+        "translit": "g",
+        "ascii": "g",
+        "pronunciation": "g",
+        "description": "As g in go."
+      },
+      {
+        "letter": "ل",
+        "translit": "l",
+        "ascii": "l",
+        "pronunciation": "l",
+        "description": "As English l."
+      },
+      {
+        "letter": "م",
+        "translit": "m",
+        "ascii": "m",
+        "pronunciation": "m",
+        "description": "As English m."
+      },
+      {
+        "letter": "ن",
+        "translit": "n",
+        "ascii": "n",
+        "pronunciation": "n",
+        "description": "As English n."
+      },
+      {
+        "letter": "ڼ",
+        "translit": "ṇ",
+        "ascii": "n",
+        "pronunciation": "n",
+        "description": "Retroflex n: the tongue tip curls back."
+      },
+      {
+        "letter": "و",
+        "translit": "w",
+        "ascii": "w",
+        "pronunciation": "w",
+        "description": "As English w, when it is a consonant."
+      },
+      {
+        "letter": "و",
+        "translit": "o",
+        "ascii": "o",
+        "pronunciation": "o",
+        "description": "Vowel o, as in go but shorter."
+      },
+      {
+        "letter": "و",
+        "translit": "u",
+        "ascii": "u",
+        "pronunciation": "oo",
+        "description": "Vowel u, as in food."
+      },
+      {
+        "letter": "ه",
+        "translit": "h",
+        "ascii": "h",
+        "pronunciation": "h",
+        "description": "As English h."
+      },
+      {
+        "letter": "ه",
+        "translit": "a",
+        "ascii": "a",
+        "pronunciation": "a",
+        "description": "At the end of a word after a consonant: a."
+      },
+      {
+        "letter": "ی",
+        "translit": "y",
+        "ascii": "y",
+        "pronunciation": "y",
+        "description": "As English y, when it is a consonant."
+      },
+      {
+        "letter": "ی",
+        "translit": "i",
+        "ascii": "i",
+        "pronunciation": "ee",
+        "description": "Vowel i inside a word, as in see."
+      },
+      {
+        "letter": "ی",
+        "translit": "ay",
+        "ascii": "ay",
+        "pronunciation": "ay",
+        "description": "At the end of many masculine words: ay, as in day."
+      },
+      {
+        "letter": "ي",
+        "translit": "i",
+        "ascii": "i",
+        "pronunciation": "ee",
+        "description": "Final ي: i, as in see."
+      },
+      {
+        "letter": "ې",
+        "translit": "e",
+        "ascii": "e",
+        "pronunciation": "e",
+        "description": "Vowel e, as in bed but longer."
+      },
+      {
+        "letter": "ۍ",
+        "translit": "əy",
+        "ascii": "ay",
+        "pronunciation": "ay",
+        "description": "Final ۍ in feminine words: əy."
+      },
+      {
+        "letter": "ئ",
+        "translit": "əy",
+        "ascii": "ay",
+        "pronunciation": "ay",
+        "description": "Final ئ in verbs and plurals: əy."
+      },
+      {
+        "letter": "َ",
+        "translit": "a",
+        "ascii": "a",
+        "pronunciation": "a",
+        "description": "Short a (zwar), as u in cut."
+      },
+      {
+        "letter": "ِ",
+        "translit": "i",
+        "ascii": "i",
+        "pronunciation": "i",
+        "description": "Short i (zer), as in sit."
+      },
+      {
+        "letter": "ُ",
+        "translit": "u",
+        "ascii": "u",
+        "pronunciation": "u",
+        "description": "Short u (pesh), as in put."
+      },
+      {
+        "letter": "ٗ",
+        "translit": "ə",
+        "ascii": "a",
+        "pronunciation": "a",
+        "description": "Weak vowel ə (zwarakay), as a in about. Usually not written."
+      }
+    ],
+    "unstressedWords": [
+      "ma",
+      "še",
+      "de",
+      "da",
+      "day",
+      "ye",
+      "yəm",
+      "yāst",
+      "na",
+      "ho",
+      "pə",
+      "la",
+      "də",
+      "tsə",
+      "zə",
+      "tə"
+    ]
+  }
 }

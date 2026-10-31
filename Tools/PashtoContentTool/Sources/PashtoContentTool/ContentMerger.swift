@@ -26,7 +26,12 @@ public enum ContentMerger {
         guard let courseData = optionalData(paths.courseFile, issues: &issues, label: "content/course.json") else {
             return MergeOutcome(merged: nil, bytes: nil, issues: issues)
         }
-        issues.append(contentsOf: unknownKeyIssues(courseData, allowed: ["units", "nonDistractorGroups", "note"], file: "content/course.json"))
+        issues.append(contentsOf: unknownKeyIssues(
+            courseData,
+            allowed: ["units", "nonDistractorGroups", "romanization", "note"],
+            file: "content/course.json"
+        ))
+        issues.append(contentsOf: romanizationKeyIssues(courseData))
         guard let course = decode(CourseFile.self, courseData, file: "content/course.json", issues: &issues) else {
             return MergeOutcome(merged: nil, bytes: nil, issues: issues)
         }
@@ -95,10 +100,15 @@ public enum ContentMerger {
             groups.append(ids)
         }
 
+        let sourceRomanization = course.romanization
         let bundle = ContentBundle(
             contentVersion: GeneratedBundle.contentVersion,
             variant: ContentBundle.kabulVariant,
-            romanization: GeneratedBundle.romanization(from: difficult),
+            romanization: Romanization(
+                table: sourceRomanization?.table ?? [],
+                difficultCharacters: difficult.letters.map(\.char),
+                unstressedWords: sourceRomanization?.unstressedWords ?? []
+            ),
             items: items,
             units: units,
             nonDistractorGroups: groups
@@ -182,6 +192,22 @@ public enum ContentMerger {
             issues.append(Self.error("\(file) could not be decoded: \(error)"))
             return nil
         }
+    }
+
+    /// `romanization.table` and `unstressedWords` are copied from `course.json`.
+    /// `difficultCharacters` stays in `difficult-characters.json`.
+    private static func romanizationKeyIssues(_ data: Data) -> [ValidationIssue] {
+        guard let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let romanization = object["romanization"] else {
+            return []
+        }
+        guard let dictionary = romanization as? [String: Any] else {
+            return [error("content/course.json romanization is not an object.")]
+        }
+        let allowed: Set<String> = ["table", "unstressedWords"]
+        let unknown = dictionary.keys.filter { !allowed.contains($0) }.sorted()
+        if unknown.isEmpty { return [] }
+        return [error("content/course.json romanization has unknown key(s): \(unknown.joined(separator: ", ")).")]
     }
 
     private static func unknownKeyIssues(_ data: Data, allowed: Set<String>, file: String) -> [ValidationIssue] {
