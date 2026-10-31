@@ -335,6 +335,69 @@ struct MergeTests {
             #expect(warnings[index].message.contains(sound))
         }
     }
+
+    @Test func soundsUnitOnlySoundExamplesBypassesSizeRule() {
+        // Build a bundle where u-sounds has one lesson with only soundExample refs.
+        let items = [
+            word("e-a", pashto: "ا", translit: "a", pronunciation: "a", en: "a", status: .draft),
+            word("e-b", pashto: "ب", translit: "b", pronunciation: "b", en: "b", status: .draft),
+        ]
+        let soundsLesson = Lesson(
+            id: LessonID(rawValue: "l-sounds-1")!,
+            title: "Sounds",
+            items: [
+                LessonItemRef(item: items[0].id, role: .soundExample, sound: "a"),
+                LessonItemRef(item: items[1].id, role: .soundExample, sound: "b"),
+            ]
+        )
+        let bundle = ContentBundle(
+            contentVersion: "test",
+            variant: ContentBundle.kabulVariant,
+            romanization: romanization(difficult: []),
+            items: items,
+            units: [CourseUnit(id: UnitID(rawValue: "u-sounds")!, track: "main", title: "Sounds", lessons: [soundsLesson])],
+            nonDistractorGroups: []
+        )
+        let issues = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [], mode: .release)
+        // No lesson-size findings for l-sounds-1
+        #expect(!issues.contains { $0.field == "items" && $0.id == "l-sounds-1" && $0.message.contains("items") })
+    }
+
+    @Test func soundsUnitLessonWithoutASoundExampleIsErrorInDevAndRelease() {
+        // Build a bundle where u-sounds has a lesson with no soundExample refs.
+        let items = sampleWords(4).map {
+            word($0.id, pashto: $0.pashto, translit: $0.translit, pronunciation: $0.pronunciation, en: $0.en, status: .draft)
+        }
+        let lesson = Lesson(
+            id: LessonID(rawValue: "l-sounds-1")!,
+            title: "Sounds",
+            items: items.map { LessonItemRef(item: ItemID(rawValue: $0.id.rawValue)!, role: .introduce) }
+        )
+        let bundle = ContentBundle(
+            contentVersion: "test",
+            variant: ContentBundle.kabulVariant,
+            romanization: romanization(difficult: []),
+            items: items,
+            units: [CourseUnit(id: UnitID(rawValue: "u-sounds")!, track: "main", title: "Sounds", lessons: [lesson])],
+            nonDistractorGroups: []
+        )
+        let dev = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [], mode: .dev)
+        #expect(dev.contains { $0.severity == .error && $0.field == "items" && $0.id == "l-sounds-1" && $0.message.contains("soundExample") })
+        let rel = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [], mode: .release)
+        #expect(rel.contains { $0.severity == .error && $0.field == "items" && $0.id == "l-sounds-1" && $0.message.contains("soundExample") })
+    }
+
+    @Test func repositorySoundsLessonHasNoSizeFinding() throws {
+        let merged = try #require(ContentMerger.merge(root: try repositoryRoot()).merged)
+        let issues = ReleaseGate.issues(
+            in: merged.bundle,
+            releaseUnitIDs: [],
+            itemUnits: merged.itemUnits,
+            specialSounds: merged.specialSounds,
+            mode: .release
+        )
+        #expect(!issues.contains { $0.field == "items" && $0.id == "l-sounds-1" })
+    }
 }
 
 private struct Covered {

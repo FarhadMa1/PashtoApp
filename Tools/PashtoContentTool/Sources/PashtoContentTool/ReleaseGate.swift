@@ -85,21 +85,35 @@ public enum ReleaseGate {
 
         for unit in bundle.units {
             for lesson in unit.lessons {
-                let count = cardCount(in: lesson)
-                if count < 4 {
-                    issues.append(IssueText.make(
-                        releaseSeverity,
-                        id: lesson.id.rawValue,
-                        field: "items",
-                        "\(lesson.id.rawValue) has \(count) items. A lesson needs at least 4."
-                    ))
-                } else if count < 6 {
-                    issues.append(IssueText.make(
-                        .warning,
-                        id: lesson.id.rawValue,
-                        field: "items",
-                        "\(lesson.id.rawValue) has \(count) items. The target is 6 to 8."
-                    ))
+                // Lessons in the sounds unit are exempt from the size rule.
+                // Instead, every lesson in u-sounds must contain at least one soundExample.
+                if unit.id.rawValue == Self.soundsUnitID {
+                    let hasSoundExample = lesson.items.contains { $0.role == .soundExample }
+                    if !hasSoundExample {
+                        issues.append(IssueText.make(
+                            .error,
+                            id: lesson.id.rawValue,
+                            field: "items",
+                            "\(lesson.id.rawValue) in \(Self.soundsUnitID) must contain at least one soundExample."
+                        ))
+                    }
+                } else {
+                    let count = cardCount(in: lesson)
+                    if count < 4 {
+                        issues.append(IssueText.make(
+                            releaseSeverity,
+                            id: lesson.id.rawValue,
+                            field: "items",
+                            "\(lesson.id.rawValue) has \(count) items. A lesson needs at least 4."
+                        ))
+                    } else if count < 6 {
+                        issues.append(IssueText.make(
+                            .warning,
+                            id: lesson.id.rawValue,
+                            field: "items",
+                            "\(lesson.id.rawValue) has \(count) items. The target is 6 to 8."
+                        ))
+                    }
                 }
             }
         }
