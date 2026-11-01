@@ -120,18 +120,26 @@ private struct ItemTasks {
 ///
 /// The same generator and the same seed produce the same session.
 ///
-/// `maxQuestions` limits the first pass. Nil, the default, keeps every
-/// question. A set value keeps at most that many, chosen with `rng`, and
-/// still gives each introduced item one question when the cap allows it.
-/// A missed question is asked once more after that pass, so repeats are not
-/// part of the cap.
+/// `maxQuestions` caps a lesson session. The default is 20. Nil keeps every
+/// question. Review sessions do not use this cap; a review day is limited
+/// to 50 cards on its own.
+///
+/// Every item this lesson introduces keeps one question. The cap does not
+/// remove that question, even when the session then runs past the cap. Further
+/// questions repeat an item the session already covers, and those
+/// repetitions are dropped first when the session is cut. A question asked
+/// again after a wrong answer is added after the cut, so the cap leaves it
+/// in place.
 public enum LessonSessionBuilder {
+    /// Questions a lesson session aims for before a wrong answer is asked again.
+    public static let defaultMaxQuestions = 20
+
     public static func build(
         for lessonID: LessonID,
         in bundle: ContentBundle,
         seenLessonIDs: [LessonID],
         retiredItemIDs: [ItemID] = [],
-        maxQuestions: Int? = nil,
+        maxQuestions: Int? = defaultMaxQuestions,
         using rng: inout some RandomNumberGenerator
     ) -> LessonSession {
         var seen = seenLessonIDs
@@ -177,19 +185,17 @@ public enum LessonSessionBuilder {
             shared.append(SessionTask(payload: .matchPairs(match)))
         }
         let tasks = groups.flatMap(\.tasks) + shared
-        let limit = maxQuestions.map { max($0, 0) }
-        if let limit, limit == 0 {
-            return LessonSession(lessonID: lessonID, tasks: [])
-        }
-        if let limit, limit < tasks.count {
-            let selected = select(groups: groups, shared: shared, cap: limit, using: &rng)
+        let cap = maxQuestions.map { max($0, 0) }
+        if let cap, cap < tasks.count {
+            let selected = select(groups: groups, shared: shared, cap: cap, using: &rng)
             return LessonSession(lessonID: lessonID, tasks: shuffled(selected, using: &rng))
         }
         return LessonSession(lessonID: lessonID, tasks: shuffled(tasks, using: &rng))
     }
 
-    /// One task for as many introduced items as the cap allows, then further
-    /// tasks from what remains. Item order follows the lesson. The draw uses
+    /// One question for every introduced item, then repetitions until `cap`.
+    /// A repetition is another question for an item that already has one,
+    /// including a shared match. Item order follows the lesson. The draw uses
     /// Fisher-Yates, so the same seed picks the same questions.
     private static func select(
         groups: [ItemTasks],
@@ -197,26 +203,19 @@ public enum LessonSessionBuilder {
         cap: Int,
         using rng: inout some RandomNumberGenerator
     ) -> [SessionTask] {
-        guard cap > 0 else { return [] }
-        let coverCount = min(cap, groups.count)
-        let chosen = Array(shuffled(Array(groups.indices), using: &rng).prefix(coverCount))
         var selected: [SessionTask] = []
-        var rest: [SessionTask] = []
-        for (index, group) in groups.enumerated() {
-            if chosen.contains(index) {
-                let ordered = shuffled(group.tasks, using: &rng)
-                if let first = ordered.first {
-                    selected.append(first)
-                    rest.append(contentsOf: ordered.dropFirst())
-                }
-            } else {
-                rest.append(contentsOf: group.tasks)
+        var repetitions: [SessionTask] = []
+        for group in groups {
+            let ordered = shuffled(group.tasks, using: &rng)
+            if let first = ordered.first {
+                selected.append(first)
+                repetitions.append(contentsOf: ordered.dropFirst())
             }
         }
-        rest.append(contentsOf: shared)
-        let fill = cap - selected.count
-        if fill > 0, !rest.isEmpty {
-            selected.append(contentsOf: shuffled(rest, using: &rng).prefix(fill))
+        repetitions.append(contentsOf: shared)
+        let room = cap - selected.count
+        if room > 0, !repetitions.isEmpty {
+            selected.append(contentsOf: shuffled(repetitions, using: &rng).prefix(room))
         }
         return selected
     }
