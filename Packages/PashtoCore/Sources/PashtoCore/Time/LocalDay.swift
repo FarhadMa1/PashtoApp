@@ -1,14 +1,21 @@
 import Foundation
 
-/// A Gregorian calendar day with no time of day and no time zone.
+/// A calendar day with no time of day and no time zone.
 ///
 /// The value is the civil date: year, month, and day. Two instants on the
 /// same local date are the same `LocalDay`, including when daylight saving
 /// makes that date 23 or 25 hours long.
 ///
-/// A day built from a `Date` always uses the Gregorian calendar in the time
-/// zone of the calendar that was passed in. A Persian or other identifier
-/// on that calendar does not change the year, month, or day.
+/// The useful range is the modern Gregorian era. Foundation's Gregorian
+/// calendar follows the Julian calendar before 1582-10-15, and this type
+/// accepts whatever that calendar accepts through year 9999. Dates before
+/// the cutover are not used by the app.
+///
+/// A day built from a `Date` always uses that calendar in the time zone of
+/// the calendar that was passed in. A Persian or other identifier on that
+/// calendar does not change the year, month, or day. Arithmetic then counts
+/// civil dates, including a date a zone skipped. Pacific/Apia jumped from
+/// 2011-12-29 to 2011-12-31, and those two dates are still two days apart.
 ///
 /// The stable text form is `YYYY-MM-DD`, for example `2026-11-01`.
 /// `Codable` and `description` both use it.
@@ -17,11 +24,14 @@ public struct LocalDay: Hashable, Comparable, Codable, Sendable, CustomStringCon
     public let month: Int
     public let day: Int
 
-    /// `year`, `month`, and `day` must be a real Gregorian date from year 1 through 9999.
+    /// Year, month, and day must be a date Foundation's Gregorian calendar accepts, through year 9999.
+    ///
+    /// Before 1582-10-15 that calendar is Julian, so days it skips in the
+    /// cutover are rejected. The app only uses the modern Gregorian era.
     public init(year: Int, month: Int, day: Int) {
         precondition(
             GregorianCalendar.isValid(year: year, month: month, day: day),
-            "\(year)-\(month)-\(day) is not a Gregorian date in 0001...9999"
+            "\(year)-\(month)-\(day) is not a date the Gregorian calendar accepts through 9999"
         )
         self.year = year
         self.month = month
@@ -54,9 +64,11 @@ public struct LocalDay: Hashable, Comparable, Codable, Sendable, CustomStringCon
 
     /// Signed number of civil days from `other` to this day.
     ///
-    /// One means this day is the next Gregorian date after `other`. The count
+    /// One means this day is the next calendar date after `other`. The count
     /// is whole dates, not elapsed seconds, so a 23-hour or 25-hour
-    /// daylight-saving day still counts as one day. The result is negative
+    /// daylight-saving day still counts as one day. A date a time zone never
+    /// observed still counts too: 2011-12-31 is two days after 2011-12-29,
+    /// even though Pacific/Apia skipped 2011-12-30. The result is negative
     /// when this day is earlier than `other`.
     public func days(from other: LocalDay) -> Int {
         GregorianCalendar.days(from: other, to: self)
