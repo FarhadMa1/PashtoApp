@@ -65,6 +65,38 @@ struct LocalDayTests {
         #expect(beforeSpring.adding(days: 2) == springEndDay)
     }
 
+    @Test func apiaSkipsALocalDateButCivilDistanceStillCountsIt() throws {
+        let apia = try timeZone("Pacific/Apia")
+        let calendar = gregorian(apia)
+
+        // At the end of 2011-12-29 the zone moved from UTC-10 to UTC+14 and
+        // the local clock went straight to 2011-12-31. 2011-12-30 never occurred.
+        let lastOf29 = try date(
+            year: 2011, month: 12, day: 29,
+            hour: 23, minute: 59, second: 59,
+            timeZone: apia
+        )
+        let firstOf31 = lastOf29.addingTimeInterval(1)
+        #expect(apia.secondsFromGMT(for: lastOf29) == -10 * 60 * 60)
+        #expect(apia.secondsFromGMT(for: firstOf31) == 14 * 60 * 60)
+        #expect(firstOf31.timeIntervalSince(lastOf29) == 1)
+        #expect(LocalDay(date: lastOf29, calendar: calendar) == ymd(2011, 12, 29))
+        #expect(LocalDay(date: firstOf31, calendar: calendar) == ymd(2011, 12, 31))
+
+        let askedForSkippedDay = try date(year: 2011, month: 12, day: 30, timeZone: apia)
+        let resolved = calendar.dateComponents([.year, .month, .day], from: askedForSkippedDay)
+        #expect(resolved.year == 2011)
+        #expect(resolved.month == 12)
+        #expect(resolved.day == 31)
+        #expect(LocalDay(date: askedForSkippedDay, timeZone: apia) == ymd(2011, 12, 31))
+
+        let december29 = ymd(2011, 12, 29)
+        let december31 = ymd(2011, 12, 31)
+        #expect(december31.days(from: december29) == 2)
+        #expect(december29.adding(days: 1) == ymd(2011, 12, 30))
+        #expect(december29.adding(days: 2) == december31)
+    }
+
     @Test func persianCalendarStillYieldsGregorianDay() throws {
         let kabul = try timeZone("Asia/Kabul")
         let instant = try date(year: 2026, month: 11, day: 1, hour: 12, timeZone: kabul)
