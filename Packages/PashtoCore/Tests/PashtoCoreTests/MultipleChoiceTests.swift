@@ -341,6 +341,9 @@ struct MultipleChoiceTests {
             "l-introductions-1",
             "l-introductions-2",
             "l-introductions-3",
+            "l-family-1",
+            "l-family-2",
+            "l-family-3",
         ])
 
         var seen: [LessonID] = []

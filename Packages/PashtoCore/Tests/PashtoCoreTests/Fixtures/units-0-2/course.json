@@ -2,7 +2,8 @@
   "units": [
     "u-sounds",
     "u-greetings",
-    "u-introductions"
+    "u-introductions",
+    "u-family"
   ],
   "nonDistractorGroups": [
     [
@@ -56,6 +57,98 @@
     [
       "e-letter-xe",
       "e-letter-tse"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-daa-zma-wror-day"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-plar"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-wror"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-zoy"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-daa-zma-xor-da"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-mor"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-xor"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-lur"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-wror-day"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-ho"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-na"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-plar-day"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-mor-da"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-xor-da"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-xa"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-dera-xa"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-manana"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-xa"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-dera-xa"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-manana"
+    ],
+    [
+      "e-letter-dal",
+      "e-letter-ddal"
+    ],
+    [
+      "e-letter-re",
+      "e-letter-rre"
+    ],
+    [
+      "e-letter-zal",
+      "e-letter-ze"
     ]
   ],
   "romanization": {

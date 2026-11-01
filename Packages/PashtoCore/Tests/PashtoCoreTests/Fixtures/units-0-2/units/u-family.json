@@ -1,0 +1,905 @@
+{
+  "id": "u-family",
+  "track": "main",
+  "title": "Family",
+  "items": [
+    {
+      "id": "e-mor",
+      "kind": "word",
+      "pashto": "مور",
+      "translit": "mor",
+      "pronunciation": "mor",
+      "en": "mother",
+      "usage": "feminine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-plar",
+      "kind": "word",
+      "pashto": "پلار",
+      "translit": "plār",
+      "pronunciation": "plaar",
+      "en": "father",
+      "usage": "masculine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-wror",
+      "kind": "word",
+      "pashto": "ورور",
+      "translit": "wror",
+      "pronunciation": "wror",
+      "en": "brother",
+      "usage": "masculine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-xor",
+      "kind": "word",
+      "pashto": "خور",
+      "translit": "xor",
+      "pronunciation": "khor",
+      "en": "sister",
+      "usage": "feminine word",
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-zoy",
+      "kind": "word",
+      "pashto": "زوی",
+      "translit": "zoy",
+      "pronunciation": "zoy",
+      "en": "son",
+      "usage": "masculine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-lur",
+      "kind": "word",
+      "pashto": "لور",
+      "translit": "lur",
+      "pronunciation": "loor",
+      "en": "daughter",
+      "usage": "feminine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-tsok-day",
+      "kind": "phrase",
+      "pashto": "دا څوک دی؟",
+      "translit": "dā tsok day?",
+      "pronunciation": "daa tsok day?",
+      "en": "who is this?",
+      "usage": "asking about a man or boy",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "دا",
+        "څوک",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-tsok-da",
+      "kind": "phrase",
+      "pashto": "دا څوک ده؟",
+      "translit": "dā tsok da?",
+      "pronunciation": "daa tsok da?",
+      "en": "who is this?",
+      "usage": "asking about a woman or girl",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "دا",
+        "څوک",
+        "ده"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-zma-plar-day",
+      "kind": "phrase",
+      "pashto": "دا زما پلار دی",
+      "translit": "dā zmā plār day",
+      "pronunciation": "daa zmaa plaar day",
+      "en": "this is my father",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": "e-daa-tsok-day",
+      "tokens": [
+        "دا",
+        "زما",
+        "پلار",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-zma-mor-da",
+      "kind": "phrase",
+      "pashto": "دا زما مور ده",
+      "translit": "dā zmā mor da",
+      "pronunciation": "daa zmaa mor da",
+      "en": "this is my mother",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": "e-daa-tsok-da",
+      "tokens": [
+        "دا",
+        "زما",
+        "مور",
+        "ده"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-koraney",
+      "kind": "word",
+      "pashto": "کورنۍ",
+      "translit": "koranə́y",
+      "pronunciation": "ko-ra-NAY",
+      "en": "family",
+      "usage": "feminine word",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa",
+      "kind": "word",
+      "pashto": "دا",
+      "translit": "dā",
+      "pronunciation": "daa",
+      "en": "this",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-zma",
+      "kind": "word",
+      "pashto": "زما",
+      "translit": "zmā",
+      "pronunciation": "zmaa",
+      "en": "my",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-zma-wror-day",
+      "kind": "phrase",
+      "pashto": "دا زما ورور دی",
+      "translit": "dā zmā wror day",
+      "pronunciation": "daa zmaa wror day",
+      "en": "this is my brother",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "دا",
+        "زما",
+        "ورور",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-zma-xor-da",
+      "kind": "phrase",
+      "pashto": "دا زما خور ده",
+      "translit": "dā zmā xor da",
+      "pronunciation": "daa zmaa khor da",
+      "en": "this is my sister",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "دا",
+        "زما",
+        "خور",
+        "ده"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-sta",
+      "kind": "word",
+      "pashto": "ستا",
+      "translit": "stā",
+      "pronunciation": "staa",
+      "en": "your",
+      "usage": "informal, to one person",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-sta-wror-day",
+      "kind": "phrase",
+      "pashto": "دا ستا ورور دی؟",
+      "translit": "dā stā wror day?",
+      "pronunciation": "daa staa wror day?",
+      "en": "is this your brother?",
+      "usage": "informal",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "دا",
+        "ستا",
+        "ورور",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ho-zma-wror-day",
+      "kind": "phrase",
+      "pashto": "هو، زما ورور دی",
+      "translit": "ho, zmā wror day",
+      "pronunciation": "ho, zmaa wror day",
+      "en": "yes, he's my brother",
+      "usage": "answering yes",
+      "pronunciationNote": "In everyday speech people also say یې (ye) for yes.",
+      "responseTo": "e-daa-sta-wror-day",
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-na-zma-zoy-day",
+      "kind": "phrase",
+      "pashto": "نه، زما زوی دی",
+      "translit": "na, zmā zoy day",
+      "pronunciation": "na, zmaa zoy day",
+      "en": "no, he's my son",
+      "usage": "answering no",
+      "pronunciationNote": null,
+      "responseTo": "e-daa-sta-wror-day",
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-mor-de-tsanga-da",
+      "kind": "phrase",
+      "pashto": "مور دې څنګه ده؟",
+      "translit": "mor de tsə́nga da?",
+      "pronunciation": "mor dey TSAN-ga da?",
+      "en": "how is your mother?",
+      "usage": "informal; دې (de) means your and comes after the noun",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "مور",
+        "دې",
+        "څنګه",
+        "ده"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-hagha-xa-da",
+      "kind": "phrase",
+      "pashto": "هغه ښه ده",
+      "translit": "haɣá x̌a da",
+      "pronunciation": "ha-GHA kha da",
+      "en": "she is fine",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": "e-mor-de-tsanga-da",
+      "tokens": [
+        "هغه",
+        "ښه",
+        "ده"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-plar-de-tsanga-day",
+      "kind": "phrase",
+      "pashto": "پلار دې څنګه دی؟",
+      "translit": "plār de tsə́nga day?",
+      "pronunciation": "plaar dey TSAN-ga day?",
+      "en": "how is your father?",
+      "usage": "informal; دې (de) means your and comes after the noun",
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": [
+        "پلار",
+        "دې",
+        "څنګه",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-hagha-xa-day",
+      "kind": "phrase",
+      "pashto": "هغه ښه دی",
+      "translit": "haɣá x̌a day",
+      "pronunciation": "ha-GHA kha day",
+      "en": "he is fine",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": "e-plar-de-tsanga-day",
+      "tokens": [
+        "هغه",
+        "ښه",
+        "دی"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-dal",
+      "kind": "letter",
+      "pashto": "د",
+      "name": "دال",
+      "translit": "da",
+      "pronunciation": "da",
+      "en": "the letter da",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "د",
+        "initial": "د",
+        "medial": "ـد",
+        "final": "ـد"
+      },
+      "sound": "d",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-ddal",
+      "kind": "letter",
+      "pashto": "ډ",
+      "name": "ډال",
+      "translit": "ḍa",
+      "pronunciation": "da",
+      "en": "the letter da with a ring (curled-back d)",
+      "usage": null,
+      "pronunciationNote": "ḍ: d with the tongue tip curled back.",
+      "forms": {
+        "isolated": "ډ",
+        "initial": "ډ",
+        "medial": "ـډ",
+        "final": "ـډ"
+      },
+      "sound": "ḍ",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-zal",
+      "kind": "letter",
+      "pashto": "ذ",
+      "name": "ذال",
+      "translit": "za",
+      "pronunciation": "za",
+      "en": "the letter za with a dot over the da shape (loanwords)",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ذ",
+        "initial": "ذ",
+        "medial": "ـذ",
+        "final": "ـذ"
+      },
+      "sound": "z",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-re",
+      "kind": "letter",
+      "pashto": "ر",
+      "name": "رې",
+      "translit": "ra",
+      "pronunciation": "ra",
+      "en": "the letter ra",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ر",
+        "initial": "ر",
+        "medial": "ـر",
+        "final": "ـر"
+      },
+      "sound": "r",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-rre",
+      "kind": "letter",
+      "pashto": "ړ",
+      "name": "ړې",
+      "translit": "ṛa",
+      "pronunciation": "ra",
+      "en": "the letter ra with a ring (curled-back r)",
+      "usage": null,
+      "pronunciationNote": "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "forms": {
+        "isolated": "ړ",
+        "initial": "ړ",
+        "medial": "ـړ",
+        "final": "ـړ"
+      },
+      "sound": "ṛ",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-ze",
+      "kind": "letter",
+      "pashto": "ز",
+      "name": "زې",
+      "translit": "za",
+      "pronunciation": "za",
+      "en": "the letter za with a dot over the ra shape",
+      "usage": null,
+      "pronunciationNote": null,
+      "forms": {
+        "isolated": "ز",
+        "initial": "ز",
+        "medial": "ـز",
+        "final": "ـز"
+      },
+      "sound": "z",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-zhe",
+      "kind": "letter",
+      "pashto": "ژ",
+      "name": "ژې",
+      "translit": "ža",
+      "pronunciation": "zha",
+      "en": "the letter zha",
+      "usage": null,
+      "pronunciationNote": "ژ: zh, like s in measure.",
+      "forms": {
+        "isolated": "ژ",
+        "initial": "ژ",
+        "medial": "ـژ",
+        "final": "ـژ"
+      },
+      "sound": "ž",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-letter-gye",
+      "kind": "letter",
+      "pashto": "ږ",
+      "name": "ږې",
+      "translit": "ǧa",
+      "pronunciation": "ga",
+      "en": "the letter ga with two dots (Kabul g)",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "forms": {
+        "isolated": "ږ",
+        "initial": "ږ",
+        "medial": "ـږ",
+        "final": "ـږ"
+      },
+      "sound": "ǧ",
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-01",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-family-1",
+      "title": "Family members",
+      "letters": [
+        "e-letter-dal",
+        "e-letter-ddal",
+        "e-letter-zal"
+      ],
+      "items": [
+        {
+          "item": "e-mor",
+          "role": "introduce"
+        },
+        {
+          "item": "e-plar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wror",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xor",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zoy",
+          "role": "introduce"
+        },
+        {
+          "item": "e-lur",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-tsok-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-tsok-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zma-plar-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zma-mor-da",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-family-1",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-daa-tsok-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-daa-zma-plar-day"
+            }
+          ]
+        },
+        {
+          "id": "d-family-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-daa-tsok-da"
+            },
+            {
+              "speaker": "B",
+              "item": "e-daa-zma-mor-da"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-family-2",
+      "title": "This is my …",
+      "letters": [
+        "e-letter-re",
+        "e-letter-rre",
+        "e-letter-ze"
+      ],
+      "items": [
+        {
+          "item": "e-koraney",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zma",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zma-wror-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zma-xor-da",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-family-3",
+      "title": "Is this your …?",
+      "letters": [
+        "e-letter-zhe",
+        "e-letter-gye"
+      ],
+      "items": [
+        {
+          "item": "e-sta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-sta-wror-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ho-zma-wror-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-na-zma-zoy-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mor-de-tsanga-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagha-xa-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-plar-de-tsanga-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagha-xa-day",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-family-3",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-daa-sta-wror-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-ho-zma-wror-day"
+            }
+          ]
+        },
+        {
+          "id": "d-family-4",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-mor-de-tsanga-da"
+            },
+            {
+              "speaker": "B",
+              "item": "e-hagha-xa-da"
+            }
+          ]
+        },
+        {
+          "id": "d-family-5",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-plar-de-tsanga-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-hagha-xa-day"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

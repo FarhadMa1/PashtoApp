@@ -143,7 +143,7 @@ struct OrderWordsTests {
             }
         }
 
-        #expect(tasks.count == 11)
+        #expect(tasks.count == 22)
         for task in tasks {
             let item = try #require(bundle.items.first { $0.id == task.targetID })
             #expect(item.acceptedOrders == nil)
@@ -520,6 +520,9 @@ struct LessonSessionTests {
             "l-introductions-1",
             "l-introductions-2",
             "l-introductions-3",
+            "l-family-1",
+            "l-family-2",
+            "l-family-3",
         ])
 
         var seen: [LessonID] = []
@@ -613,11 +616,11 @@ struct LessonSessionTests {
                 }
             }
         }
-        #expect(orderCount == 11)
-        // Three replies now point at their prompts, so each yields a dialog
-        // question and those lessons can build a response match.
-        #expect(dialogCount == 3)
-        #expect(responseMatchCount == 3)
+        #expect(orderCount == 22)
+        // Nine replies point at their prompts, so each yields a dialog
+        // question. Five lessons can build a response match.
+        #expect(dialogCount == 9)
+        #expect(responseMatchCount == 5)
     }
 
     @Test func oneHundredRunsWithAFixedSeedMatch() throws {
