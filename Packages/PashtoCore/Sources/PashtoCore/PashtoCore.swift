@@ -1,4 +1,4 @@
-/// Pure-Swift module boundary for lesson content and, later, quiz logic.
+/// Pure-Swift module boundary for lesson content and quiz generation.
 ///
 /// This package must stay free of Apple-only frameworks so `swift test`
 /// can run on Linux. Content types decode `Data`. They do not read files,
