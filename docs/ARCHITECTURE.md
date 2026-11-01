@@ -1,6 +1,6 @@
 # Architecture
 
-PashtoApp will teach Pashto from scratch. This document describes the app shell, the content types in `PashtoCore`, and the boundaries later work has to respect. Quizzes, review scheduling, and audio playback are not in this revision.
+PashtoApp will teach Pashto from scratch. This document describes the app shell, the content types in `PashtoCore`, and the boundaries later work has to respect. The daily review queue, streak, and audio playback are not in this revision.
 
 ## Pieces
 
@@ -28,7 +28,7 @@ Pashto content is not in the app yet. When it is added, each Pashto text block i
 
 A library package at `Packages/PashtoCore`. It imports nothing from SwiftUI, SwiftData, UIKit, or any other Apple-only framework. Foundation is used for JSON decoding and Unicode normalization, and that Foundation is the open-source one `swift test` uses on Linux.
 
-`swift test` for this package is the logic test gate, and it runs on Linux. The iOS target is a thin shell over this package. Quiz and scheduling code belongs here once it is added, so it can be tested without a simulator.
+`swift test` for this package is the logic test gate, and it runs on Linux. The iOS target is a thin shell over this package. Quiz and scheduling code lives here so it can be tested without a simulator.
 
 The package exposes:
 
@@ -38,6 +38,7 @@ The package exposes:
 - `ContentFilter.devBuild`, which hides `draft` and `check` items for a Debug or dev build. A release build does not call it.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
 - `LocalDay`, a Gregorian civil day with no time zone, plus `DateProvider`, `FixedDateProvider`, `SystemDateProvider`, and `DayClock`. Scheduling passes a clock and a time zone in. `SystemDateProvider` is the only type that reads the process clock.
+- `ReviewCard` and `review(_:quality:on:)`, an SM-2 review step. The day is a `LocalDay`. The scheduled interval is capped at 36_500 days so `dueDay` cannot run past the last year `LocalDay` represents. A `soundExample` does not create a card. The daily queue, path state, streak, placement scheduler, and stored progress are not in this revision.
 
 The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the current locale (`Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). `Date()` is allowed only in `SystemDateProvider`. CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
 
@@ -63,7 +64,7 @@ These are constraints on later work, not code in this revision.
 ## Out of scope for this revision
 
 - Loading the course inside the app, and a macOS check that the Release bundle contains only `release-units.json`
-- Quiz, spaced-repetition, or streak logic
+- Daily review queue, path state, streak, placement scheduling, and progress storage
 - Audio playback or a pronunciation button
 - Screens other than the placeholder
 - Accounts, sync, or a service
