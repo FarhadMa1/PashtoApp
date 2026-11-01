@@ -368,8 +368,10 @@ struct MultipleChoiceTests {
                 let targets = Set(tasks.map(\.targetID.rawValue))
                 #expect(targets.isSuperset(of: [
                     "e-salam", "e-assalamu-alaykum", "e-walaykum-salam",
-                    "e-stare-ma-she", "e-xwar-ma-she", "e-xa-raghlast",
+                    "e-xwar-ma-she", "e-xa-raghlast",
                 ]))
+                // Grouped with the other greetings, so fewer than two distractors remain.
+                #expect(!targets.contains("e-stare-ma-she"))
                 #expect(!targets.contains("e-letter-alif"))
                 #expect(!targets.contains("e-letter-be"))
             }
