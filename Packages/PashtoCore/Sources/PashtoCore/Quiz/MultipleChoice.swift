@@ -2,7 +2,7 @@
 ///
 /// Meaning and pronunciation questions are multiple choice. Match pairs and
 /// word order use their own task values. A dialog reply is multiple choice too.
-public enum TaskKind: String, Hashable, Sendable {
+public enum TaskKind: String, Hashable, Sendable, CaseIterable {
     /// See the Pashto and choose the English meaning.
     case meaningPashtoToEnglish
     /// See the English meaning and choose the Pashto.
