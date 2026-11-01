@@ -124,13 +124,13 @@ Lowercasing uses `lowercased(with: nil)`. It does not use `Locale.current`.
 
 ### Boundary with the app
 
-SwiftData, SwiftUI, `Bundle`, and file access stay in `PashtoApp`. The core takes `Data` it is given. Later scheduling will take an injected date provider and an injected `Calendar`. The core does not read the clock or the user's locale.
+SwiftData, SwiftUI, `Bundle`, and file access stay in `PashtoApp`. The core takes `Data` it is given. Scheduling takes an injected `DateProvider` and a time zone. `SystemDateProvider` is the only type that reads the process clock. The core does not read the user's locale.
 
 `PashtoCore` does not import UIKit, SwiftUI, or SwiftData.
 
 ### Linux guard
 
-CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than tests, imports UIKit, SwiftUI, or SwiftData, or reads the process clock or the current locale. The scan catches `Date()` and `Date.now`, `timeIntervalSinceNow`, `.current` and `.autoupdatingCurrent` on `Calendar`, `TimeZone`, `Locale`, and the `NSCalendar`, `NSTimeZone`, and `NSLocale` forms, every current or local `NSTimeZone` name (`local`, `system`, `default`, `localTimeZone`, `systemTimeZone`, `defaultTimeZone`), plus `NSLocale.currentLocale` and `NSCalendar.currentCalendar`. A fixed instant such as `Date(timeIntervalSince1970:)` and an injected calendar stay allowed.
+CI and `swift test` fail if any Swift file in `Packages/PashtoCore`, other than tests, imports UIKit, SwiftUI, or SwiftData, or reads the process clock or the current locale. The scan catches `Date()` and `Date.now`, `timeIntervalSinceNow`, `.current` and `.autoupdatingCurrent` on `Calendar`, `TimeZone`, `Locale`, and the `NSCalendar`, `NSTimeZone`, and `NSLocale` forms, every current or local `NSTimeZone` name (`local`, `system`, `default`, `localTimeZone`, `systemTimeZone`, `defaultTimeZone`), plus `NSLocale.currentLocale` and `NSCalendar.currentCalendar`. `Date()` is allowed only in `SystemDateProvider.swift`. `Date.now` is not allowed there either. A fixed instant such as `Date(timeIntervalSince1970:)` and an injected calendar stay allowed.
 
 ## Consequences
 

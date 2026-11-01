@@ -37,8 +37,9 @@ The package exposes:
 - `ContentValidator`, which checks a decoded bundle and returns every issue it finds. Both modes run the same checks.
 - `ContentFilter.devBuild`, which hides `draft` and `check` items for a Debug or dev build. A release build does not call it.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
+- `LocalDay`, a Gregorian civil day with no time zone, plus `DateProvider`, `FixedDateProvider`, `SystemDateProvider`, and `DayClock`. Scheduling passes a clock and a time zone in. `SystemDateProvider` is the only type that reads the process clock.
 
-The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the process clock or the current locale (`Date()` / `Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
+The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the current locale (`Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). `Date()` is allowed only in `SystemDateProvider`. CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
 
 ## Data, accounts, and audio
 

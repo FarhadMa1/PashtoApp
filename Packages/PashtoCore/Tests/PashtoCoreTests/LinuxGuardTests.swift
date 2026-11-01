@@ -2,6 +2,7 @@ import Foundation
 import Testing
 
 /// Same rules as `scripts/linux-guard.sh`. Keep the two patterns together.
+/// `Date()` is allowed only in `SystemDateProvider.swift`.
 struct LinuxGuardTests {
     @Test func patternsMatchTheBannedCallsOnly() {
         #expect(matches(in: "import Foundation\n").isEmpty)
@@ -43,17 +44,27 @@ struct LinuxGuardTests {
         #expect(!files.isEmpty)
 
         var violations: [String] = []
+        var clockCalls: [String] = []
         for url in files {
             let source = try String(contentsOf: url, encoding: .utf8)
             let relative = url.path.replacingOccurrences(of: root.path + "/", with: "")
             for (index, line) in source.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
                 let hits = matches(in: String(line))
                 for hit in hits {
-                    violations.append("\(relative):\(index + 1): \(hit)")
+                    let site = "\(relative):\(index + 1): \(hit)"
+                    if hit == "Date()", url.lastPathComponent == "SystemDateProvider.swift" {
+                        clockCalls.append(site)
+                        continue
+                    }
+                    violations.append(site)
                 }
             }
         }
         #expect(violations.isEmpty, "Linux guard failed:\n\(violations.joined(separator: "\n"))")
+        #expect(
+            clockCalls.count == 1,
+            "Date() must appear once, in SystemDateProvider.swift. Found:\n\(clockCalls.joined(separator: "\n"))"
+        )
     }
 
     private func matches(in source: String) -> [String] {

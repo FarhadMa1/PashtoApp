@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Fail if PashtoCore sources import an Apple-only UI framework or read the
-# process-global clock or locale. The same rules are tested in
+# process-global clock or locale. Date() is allowed only in
+# SystemDateProvider.swift. The same rules are tested in
 # Packages/PashtoCore/Tests/PashtoCoreTests/LinuxGuardTests.swift.
 set -euo pipefail
 
@@ -28,14 +29,35 @@ matches="$(grep -R -n -E -I --exclude-dir=Tests --exclude-dir=.build --include='
 status=$?
 set -e
 
-if [[ "$status" -eq 0 ]]; then
-  printf '%s\n' "$matches" >&2
-  echo "linux guard: PashtoCore uses an Apple-only import or a process-global clock or locale." >&2
-  exit 1
-fi
-if [[ "$status" -ne 1 ]]; then
+if [[ "$status" -ne 0 && "$status" -ne 1 ]]; then
   echo "linux guard: search failed (exit $status)" >&2
   exit "$status"
+fi
+
+violations=""
+if [[ "$status" -eq 0 ]]; then
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    file="${line%%:*}"
+    rest="${line#*:}"
+    content="${rest#*:}"
+    if [[ "$(basename "$file")" == "SystemDateProvider.swift" ]]; then
+      # Strip only the allowed Date() call. NSDate() must still fail.
+      stripped="$(printf '%s' "$content" | sed -E 's/\bDate\(\)//g')"
+      if printf '%s\n' "$stripped" | grep -q -E "$pattern"; then
+        violations+="$line"$'\n'
+      fi
+    else
+      violations+="$line"$'\n'
+    fi
+  done <<< "$matches"
+fi
+
+if [[ -n "$violations" ]]; then
+  printf '%s' "$violations" >&2
+  echo "linux guard: PashtoCore uses an Apple-only import or a process-global clock or locale." >&2
+  echo "linux guard: Date() is allowed only in SystemDateProvider.swift." >&2
+  exit 1
 fi
 
 echo "linux guard: ok"
