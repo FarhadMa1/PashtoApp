@@ -409,7 +409,7 @@ struct MultipleChoiceTests {
     }
 }
 
-private struct SplitMix64: RandomNumberGenerator {
+struct SplitMix64: RandomNumberGenerator {
     var state: UInt64
 
     init(seed: UInt64) {
@@ -506,6 +506,8 @@ private func task(
         return EnglishToPashtoChoice().makeTask(for: items[0], in: context, using: &rng)
     case .transliterationChoice:
         return TransliterationChoice().makeTask(for: items[0], in: context, using: &rng)
+    case .matchPairs, .orderWords, .dialogResponse:
+        return nil
     }
 }
 
@@ -513,7 +515,7 @@ private func numberWord(_ index: Int) -> String {
     ["one", "two", "three", "four", "five", "six"][index - 1]
 }
 
-private func loadRepositoryContent() throws -> ContentBundle {
+func loadRepositoryContent() throws -> ContentBundle {
     var url = URL(fileURLWithPath: #filePath)
     for _ in 0..<5 {
         url.deleteLastPathComponent()
