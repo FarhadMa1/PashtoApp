@@ -142,6 +142,7 @@
       "pashto" : "زه ښه یم",
       "pronunciation" : "za kha yam",
       "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo" : "e-tsanga-ye",
       "tokens" : [
         "زه",
         "ښه",
@@ -521,6 +522,7 @@
       "kind" : "phrase",
       "pashto" : "زما نوم احمد دی",
       "pronunciation" : "zmaa noom AH-mad day",
+      "responseTo" : "e-staso-num-tsa-day",
       "tokens" : [
         "زما",
         "نوم",
@@ -609,6 +611,7 @@
       "pashto" : "زه له ناروې څخه یم",
       "pronunciation" : "za la naar-WEY TSA-kha yam",
       "pronunciationNote" : "څ: ts as in cats. خ: kh, like ch in Scottish loch.",
+      "responseTo" : "e-ta-da-kum-dzay-ye",
       "tokens" : [
         "زه",
         "له",

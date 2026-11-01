@@ -614,8 +614,10 @@ struct LessonSessionTests {
             }
         }
         #expect(orderCount == 11)
-        #expect(dialogCount == 0)
-        #expect(responseMatchCount == 0)
+        // Three replies now point at their prompts, so each yields a dialog
+        // question and those lessons can build a response match.
+        #expect(dialogCount == 3)
+        #expect(responseMatchCount == 3)
     }
 
     @Test func oneHundredRunsWithAFixedSeedMatch() throws {
