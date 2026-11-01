@@ -8,6 +8,10 @@ import PashtoCore
 /// not introduce an item. Retired ids are left out. Those are the seen-content
 /// rules the session builder uses.
 ///
+/// Release counts the units `ReleaseGate.releasedUnits` returns, and treats
+/// only those lessons as seen. Dev counts every lesson in the course. Both
+/// walks follow course order.
+///
 /// The count uses `maxQuestions: nil`. The lesson cap is 20 and keeps a
 /// shuffled subset, so one seed can drop a type that another seed keeps.
 /// With the cap off, every question the generators return is counted. The
@@ -16,11 +20,18 @@ import PashtoCore
 enum QuizTypeCoverage {
     static func issues(
         in bundle: ContentBundle,
+        releaseUnitIDs: [String],
         retiredItemIDs: [ItemID],
         mode: ToolMode
     ) -> [ValidationIssue] {
         let severity: ValidationSeverity = mode == .release ? .error : .warning
-        let counts = questionCounts(in: bundle, retiredItemIDs: retiredItemIDs, seed: coverageSeed)
+        let listed: [String]? = mode == .release ? releaseUnitIDs : nil
+        let counts = questionCounts(
+            in: bundle,
+            releaseUnitIDs: listed,
+            retiredItemIDs: retiredItemIDs,
+            seed: coverageSeed
+        )
         return TaskKind.allCases.compactMap { kind in
             guard counts[kind, default: 0] == 0 else { return nil }
             return IssueText.make(
@@ -32,28 +43,35 @@ enum QuizTypeCoverage {
         }
     }
 
+    /// `releaseUnitIDs == nil` walks the whole course. A list walks only the
+    /// released units, and only those lessons count as seen.
     static func questionCounts(
         in bundle: ContentBundle,
+        releaseUnitIDs: [String]?,
         retiredItemIDs: [ItemID],
         seed: UInt64 = coverageSeed
     ) -> [TaskKind: Int] {
+        let lessons: [Lesson]
+        if let releaseUnitIDs {
+            lessons = ReleaseGate.releasedUnits(in: bundle, releaseUnitIDs: releaseUnitIDs).flatMap(\.lessons)
+        } else {
+            lessons = bundle.units.flatMap(\.lessons)
+        }
         var counts = Dictionary(uniqueKeysWithValues: TaskKind.allCases.map { ($0, 0) })
         var seen: [LessonID] = []
         var rng = SplitMix64(seed: seed)
-        for unit in bundle.units {
-            for lesson in unit.lessons {
-                seen.append(lesson.id)
-                let session = LessonSessionBuilder.build(
-                    for: lesson.id,
-                    in: bundle,
-                    seenLessonIDs: seen,
-                    retiredItemIDs: retiredItemIDs,
-                    maxQuestions: nil,
-                    using: &rng
-                )
-                for task in session.tasks {
-                    counts[task.kind, default: 0] += 1
-                }
+        for lesson in lessons {
+            seen.append(lesson.id)
+            let session = LessonSessionBuilder.build(
+                for: lesson.id,
+                in: bundle,
+                seenLessonIDs: seen,
+                retiredItemIDs: retiredItemIDs,
+                maxQuestions: nil,
+                using: &rng
+            )
+            for task in session.tasks {
+                counts[task.kind, default: 0] += 1
             }
         }
         return counts
