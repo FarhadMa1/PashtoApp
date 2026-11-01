@@ -563,7 +563,9 @@ struct LessonSessionTests {
         let sessions = try courseSessions(bundle, seed: 1)
         let greetings = try #require(sessions.first { $0.lessonID.rawValue == "l-greetings-1" })
         #expect(greetings.tasks.filter { $0.kind == .orderWords }.isEmpty)
-        #expect(greetings.tasks.filter { $0.kind == .dialogResponse }.count == 2)
+        // Both replies share a nonDistractorGroup with the other seen phrases,
+        // so fewer than two distractors remain and the questions are skipped.
+        #expect(greetings.tasks.filter { $0.kind == .dialogResponse }.isEmpty)
         #expect(greetings.tasks.contains { task in
             guard case .matchPairs(let match) = task.payload else { return false }
             return match.mode == .pashtoEnglish
@@ -612,7 +614,7 @@ struct LessonSessionTests {
             }
         }
         #expect(orderCount == 11)
-        #expect(dialogCount == 2)
+        #expect(dialogCount == 0)
         #expect(responseMatchCount == 0)
     }
 
