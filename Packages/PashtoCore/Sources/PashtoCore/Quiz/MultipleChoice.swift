@@ -1,7 +1,7 @@
-/// Multiple-choice kinds this package can build.
+/// Quiz kinds this package can build.
 ///
-/// Match pairs, word order, and dialog answers are separate kinds and are not
-/// part of this generator.
+/// Meaning and pronunciation questions are multiple choice. Match pairs and
+/// word order use their own task values. A dialog reply is multiple choice too.
 public enum TaskKind: String, Hashable, Sendable {
     /// See the Pashto and choose the English meaning.
     case meaningPashtoToEnglish
@@ -9,6 +9,12 @@ public enum TaskKind: String, Hashable, Sendable {
     case meaningEnglishToPashto
     /// See the Pashto and choose the pronunciation. Letter items use this too.
     case transliterationChoice
+    /// Match 3 or 4 Pashto/English pairs, or greeting/reply pairs.
+    case matchPairs
+    /// Put word tiles in logical order. The sentence is read right to left.
+    case orderWords
+    /// Read one line and choose the reply.
+    case dialogResponse
 }
 
 public protocol TaskGenerator: Sendable {
@@ -56,6 +62,10 @@ public struct QuizTask: Hashable, Sendable {
 
 public enum QuizAnswer: Hashable, Sendable {
     case choice(ItemID)
+    /// One link per left-hand card. The array order does not matter.
+    case matches([MatchLink])
+    /// Original token indexes in logical order. Index 0 is the rightmost tile.
+    case tokenOrder([Int])
 }
 
 public enum GradeResult: Hashable, Sendable {
@@ -67,6 +77,8 @@ public func grade(_ task: QuizTask, _ answer: QuizAnswer) -> GradeResult {
     switch answer {
     case .choice(let itemID):
         return itemID == task.targetID ? .correct : .incorrect
+    case .matches, .tokenOrder:
+        return .incorrect
     }
 }
 
@@ -215,6 +227,8 @@ private func prompt(for kind: TaskKind, item: ContentItem) -> String? {
         return blankToNil(item.pashto)
     case .meaningEnglishToPashto:
         return blankToNil(item.en)
+    case .matchPairs, .orderWords, .dialogResponse:
+        return nil
     }
 }
 
@@ -226,6 +240,8 @@ private func answer(for kind: TaskKind, item: ContentItem) -> String? {
         return blankToNil(item.pashto)
     case .transliterationChoice:
         return blankToNil(item.pronunciation)
+    case .matchPairs, .orderWords, .dialogResponse:
+        return nil
     }
 }
 
@@ -235,10 +251,12 @@ private func answerKey(for kind: TaskKind, text: String) -> String {
         return Normalization.comparisonKey(text)
     case .meaningEnglishToPashto:
         return Normalization.nfc(text)
+    case .matchPairs, .orderWords, .dialogResponse:
+        return Normalization.comparisonKey(text)
     }
 }
 
-private func blankToNil(_ text: String?) -> String? {
+func blankToNil(_ text: String?) -> String? {
     guard let text, !Text.isBlank(text) else { return nil }
     return text
 }
@@ -249,19 +267,4 @@ private func itemsByID(_ bundle: ContentBundle) -> [ItemID: ContentItem] {
         map[item.id] = item
     }
     return map
-}
-
-private func shuffled<T>(
-    _ values: [T],
-    using rng: inout some RandomNumberGenerator
-) -> [T] {
-    var copy = values
-    guard copy.count > 1 else { return copy }
-    var index = copy.count - 1
-    while index > 0 {
-        let choice = Int(rng.next() % UInt64(index + 1))
-        copy.swapAt(index, choice)
-        index -= 1
-    }
-    return copy
 }

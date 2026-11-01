@@ -49,7 +49,7 @@ public enum Distractors {
             guard introduction.itemID != target.id else { continue }
             guard seenLessons.contains(introduction.lessonID) else { continue }
             guard !retired.contains(introduction.itemID) else { continue }
-            guard let source = source(of: introduction, target: targetIntro) else { continue }
+            guard let source = distractorSource(of: introduction, target: targetIntro) else { continue }
             guard let item = course.itemsByID[introduction.itemID] else { continue }
             guard sameQuizPool(item.kind, stored.kind) else { continue }
             guard !excluded(item, target: stored, groups: context.bundle.nonDistractorGroups) else { continue }
@@ -73,7 +73,7 @@ public enum Distractors {
     }
 }
 
-private struct Introduction {
+struct Introduction {
     var itemID: ItemID
     var unitIndex: Int
     var lessonIndex: Int
@@ -82,7 +82,7 @@ private struct Introduction {
 }
 
 /// Introductions in course order. The first introduction of an id wins.
-private struct CourseOrder {
+struct CourseOrder {
     var introductions: [Introduction]
     var itemsByID: [ItemID: ContentItem]
 
@@ -130,7 +130,7 @@ private struct CourseOrder {
     }
 }
 
-private func source(of introduction: Introduction, target: Introduction) -> DistractorSource? {
+func distractorSource(of introduction: Introduction, target: Introduction) -> DistractorSource? {
     if introduction.lessonID == target.lessonID {
         return .sameLesson
     }
@@ -182,7 +182,7 @@ private func tier(of introduction: Introduction, target: Introduction) -> Int {
 }
 
 /// Letters stand alone. Every other kind shares the word and phrase pool.
-private func sameQuizPool(_ candidate: ContentKind, _ target: ContentKind) -> Bool {
+func sameQuizPool(_ candidate: ContentKind, _ target: ContentKind) -> Bool {
     (candidate == .letter) == (target == .letter)
 }
 
@@ -205,6 +205,13 @@ private func excluded(_ candidate: ContentItem, target: ContentItem, groups: [[I
     return false
 }
 
+func isQuizSeen(_ itemID: ItemID, in context: QuizContext, course: CourseOrder) -> Bool {
+    guard let introduction = course.introduction(of: itemID) else { return false }
+    if !context.seenLessonIDs.contains(introduction.lessonID) { return false }
+    if context.retiredItemIDs.contains(itemID) { return false }
+    return true
+}
+
 private func sharesGroup(_ lhs: ItemID, _ rhs: ItemID, _ groups: [[ItemID]]) -> Bool {
     for group in groups where group.contains(lhs) && group.contains(rhs) {
         return true
@@ -213,7 +220,7 @@ private func sharesGroup(_ lhs: ItemID, _ rhs: ItemID, _ groups: [[ItemID]]) -> 
 }
 
 /// `en` and every `enAlt`, folded with `Normalization.comparisonKey`.
-private func meaningsOverlap(_ lhs: ContentItem, _ rhs: ContentItem) -> Bool {
+func meaningsOverlap(_ lhs: ContentItem, _ rhs: ContentItem) -> Bool {
     let left = meaningKeys(lhs)
     let right = meaningKeys(rhs)
     for key in left where right.contains(key) {

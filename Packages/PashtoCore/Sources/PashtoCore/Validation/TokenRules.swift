@@ -27,7 +27,7 @@ enum TokenRules {
         }
 
         let joined = tokens.joined(separator: " ")
-        let expected = stripTrailingPunctuation(Normalization.nfc(item.pashto))
+        let expected = pashtoWithoutFixedEnding(item.pashto)
         if !sameScalars(joined, expected) {
             issues.append(error(
                 id,
@@ -61,16 +61,33 @@ enum TokenRules {
         return issues
     }
 
-    private static func stripTrailingPunctuation(_ text: String) -> String {
-        var scalars = Array(Normalization.unicodeScalars(text))
+    /// `pashto` with trailing spaces, `؟`, and `،` removed. Word tiles join to this.
+    static func pashtoWithoutFixedEnding(_ pashto: String) -> String {
+        splitFixedEnding(pashto).body
+    }
+
+    /// Trailing `؟` and `،` in the order they appear. Spaces between them are dropped.
+    ///
+    /// These marks are drawn after the tiles. They are never tiles themselves.
+    static func fixedEnding(of pashto: String) -> String {
+        splitFixedEnding(pashto).ending
+    }
+
+    private static func splitFixedEnding(_ pashto: String) -> (body: String, ending: String) {
+        var scalars = Array(Normalization.unicodeScalars(Normalization.nfc(pashto)))
+        var ending: [Unicode.Scalar] = []
         while let last = scalars.last {
             if last == " " || last == PashtoScript.arabicQuestion || last == PashtoScript.arabicComma {
                 scalars.removeLast()
+                if last != " " {
+                    ending.append(last)
+                }
                 continue
             }
             break
         }
-        return String(String.UnicodeScalarView(scalars))
+        ending.reverse()
+        return (String(String.UnicodeScalarView(scalars)), String(String.UnicodeScalarView(ending)))
     }
 
     private static func sameScalars(_ left: String, _ right: String) -> Bool {
