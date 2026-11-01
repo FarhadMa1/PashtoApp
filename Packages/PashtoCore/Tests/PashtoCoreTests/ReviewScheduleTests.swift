@@ -168,6 +168,48 @@ struct ReviewScheduleTests {
         #expect(zero.lapses == expected.count + 1)
     }
 
+    @Test func largeIntervalAndEaseStopAtTheCap() {
+        let capped = review(scheduledCard(interval: 30_000, ease: 10), quality: .firstAttempt, on: today)
+
+        #expect(ReviewCard.maximumIntervalDays == 36_500)
+        #expect(capped.intervalDays == 36_500)
+        #expect(capped.dueDay == today.adding(days: 36_500))
+        #expect(capped.repetitions == 3)
+        #expect(capped.lapses == 0)
+        #expect(easeThousandths(capped.easeFactor) == 10_000)
+
+        let stillUnder = review(scheduledCard(interval: 10_000, ease: 2.5), quality: .firstAttempt, on: today)
+        #expect(stillUnder.intervalDays == 25_000)
+    }
+
+    @Test func corruptIntervalOrEaseDoesNotOverflow() {
+        let maximum = review(scheduledCard(interval: Int.max, ease: 2.5), quality: .firstAttempt, on: today)
+        #expect(maximum.intervalDays == ReviewCard.maximumIntervalDays)
+        #expect(maximum.dueDay == today.adding(days: ReviewCard.maximumIntervalDays))
+        #expect(maximum.repetitions == 3)
+
+        let nearMaximum = review(
+            scheduledCard(interval: Int.max - 1, ease: 2.5),
+            quality: .firstAttempt,
+            on: today
+        )
+        #expect(nearMaximum.intervalDays == 36_500)
+        #expect(nearMaximum.dueDay == today.adding(days: 36_500))
+
+        let hugeEase = review(
+            scheduledCard(interval: 30_000, ease: Double.greatestFiniteMagnitude),
+            quality: .firstAttempt,
+            on: today
+        )
+        #expect(hugeEase.intervalDays == 36_500)
+
+        let lapsed = review(scheduledCard(interval: Int.max, ease: 2.5), quality: .incorrect, on: today)
+        #expect(lapsed.intervalDays == 1)
+        #expect(lapsed.repetitions == 0)
+        #expect(lapsed.lapses == 1)
+        #expect(lapsed.dueDay == today.adding(days: 1))
+    }
+
     @Test func aLateReviewDoesNotStretchTheInterval() {
         let introduced = ReviewCard.introduced(itemID: itemID("e-salam"), on: today)
         let reviewed = review(introduced, quality: .firstAttempt, on: today)
@@ -377,6 +419,20 @@ struct ReviewScheduleTests {
         """
         let fromNull = try JSONDecoder().decode(ReviewCard.self, from: Data(withNull.utf8))
         #expect(fromNull == fresh)
+    }
+
+    private func scheduledCard(interval: Int, ease: Double) -> ReviewCard {
+        ReviewCard(
+            itemID: itemID("e-salam"),
+            easeFactor: ease,
+            intervalDays: interval,
+            repetitions: 2,
+            lapses: 0,
+            dueDay: today,
+            lastReviewedDay: today,
+            state: .active,
+            source: .lesson
+        )
     }
 
     private func reviewedInterval(days: Int, ease: Double) -> Int {

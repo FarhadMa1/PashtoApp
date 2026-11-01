@@ -26,6 +26,13 @@ public struct ReviewCard: Hashable, Codable, Sendable {
     public static let initialEaseFactor = 2.5
     /// SM-2 never stores an ease below this.
     public static let minimumEaseFactor = 1.3
+    /// Longest interval `review` will schedule, in days. The same ceiling Anki uses.
+    ///
+    /// `LocalDay` traps on a date after year 9999. The stored interval times the
+    /// ease factor can otherwise land `dueDay` past that year. Every new
+    /// interval is kept at or below this value, including when the stored
+    /// interval or ease is already too large.
+    public static let maximumIntervalDays = 36_500
 
     public let itemID: ItemID
     public let easeFactor: Double

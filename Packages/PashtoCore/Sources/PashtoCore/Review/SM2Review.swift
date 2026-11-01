@@ -48,6 +48,12 @@ public func reviewQuality(for answer: SessionAnswer) -> ReviewQuality {
 /// sets the interval to 1 day, and adds one lapse. Ease moves by the SM-2
 /// step and is then kept at 1.3 or above.
 ///
+/// The new interval is never longer than `ReviewCard.maximumIntervalDays`.
+/// The product of the stored interval and the ease is computed so it cannot
+/// overflow, and the cap is applied to that result. A stored interval or ease
+/// that is already too large still schedules at most 36_500 days. `LocalDay`
+/// traps after year 9999, and an uncapped product can land past that year.
+///
 /// The next interval does not use how many days passed. A `lastReviewedDay`
 /// later than `day` (the clock was set back) does not zero the card and does
 /// not produce a negative interval. `dueDay` is `day` plus the new interval,
@@ -55,7 +61,7 @@ public func reviewQuality(for answer: SessionAnswer) -> ReviewQuality {
 public func review(_ card: ReviewCard, quality: ReviewQuality, on day: LocalDay) -> ReviewCard {
     let ease = easeThousandths(of: card.easeFactor)
     let scheduled = nextSchedule(card, quality: quality.value, ease: ease)
-    let interval = max(1, scheduled.intervalDays)
+    let interval = min(ReviewCard.maximumIntervalDays, max(1, scheduled.intervalDays))
     return ReviewCard(
         itemID: card.itemID,
         easeFactor: Double(scheduled.ease) / 1000,
@@ -77,22 +83,60 @@ private struct ScheduledCard {
 }
 
 /// Ease is kept in thousandths so each SM-2 step (0.02, 0.10, 0.14, …) is exact.
+///
+/// A non-finite ease, or one that does not fit in an `Int` after scaling,
+/// saturates. The interval cap then keeps the due day inside `LocalDay`.
 private func easeThousandths(of ease: Double) -> Int {
-    Int((ease * 1000).rounded(.toNearestOrAwayFromZero))
+    guard ease.isFinite else { return ease < 0 ? Int.min : Int.max }
+    let scaled = ease * 1_000
+    guard scaled.isFinite else { return ease < 0 ? Int.min : Int.max }
+    if scaled >= Double(Int.max) { return Int.max }
+    if scaled <= Double(Int.min) { return Int.min }
+    return Int(scaled.rounded(.toNearestOrAwayFromZero))
 }
 
 /// `100 - (5-q) * (80 + (5-q) * 20)` is the SM-2 ease step in thousandths.
 private func nextEaseThousandths(current: Int, quality: Int) -> Int {
     let drop = 5 - quality
     let delta = 100 - drop * (80 + drop * 20)
-    return max(1_300, current + delta)
+    let (sum, overflow) = current.addingReportingOverflow(delta)
+    if overflow {
+        return delta < 0 ? 1_300 : Int.max
+    }
+    return max(1_300, sum)
 }
 
-/// Nearest day. A positive half (12.5) rounds away from zero, to 13.
-private func roundedIntervalDays(previous: Int, easeThousandths: Int) -> Int {
-    let product = previous * easeThousandths
-    let rounded = product >= 0 ? (product + 500) / 1000 : (product - 500) / 1000
-    return rounded
+/// Nearest day, capped, without overflowing `previous * easeThousandths`.
+///
+/// A positive half (12.5) rounds away from zero, to 13. A product that does
+/// not fit in `Int`, or that rounds above the cap, becomes the cap. A negative
+/// product becomes 0, and `review` then schedules at least one day.
+private func roundedIntervalDays(previous: Int, easeThousandths ease: Int) -> Int {
+    if previous == 0 || ease == 0 || (previous < 0) != (ease < 0) {
+        return 0
+    }
+    let previousMagnitude = previous < 0 ? saturatingMagnitude(previous) : previous
+    let easeMagnitude = ease < 0 ? saturatingMagnitude(ease) : ease
+    return cappedProductDays(previous: previousMagnitude, easeThousandths: easeMagnitude)
+}
+
+private func saturatingMagnitude(_ value: Int) -> Int {
+    value == Int.min ? Int.max : abs(value)
+}
+
+private func cappedProductDays(previous: Int, easeThousandths ease: Int) -> Int {
+    let cap = ReviewCard.maximumIntervalDays
+    if ease >= 1_000, previous >= cap {
+        return cap
+    }
+    if previous > Int.max / ease {
+        return cap
+    }
+    let product = previous * ease
+    if product > Int.max - 500 {
+        return cap
+    }
+    return min(cap, (product + 500) / 1_000)
 }
 
 private func nextSchedule(_ card: ReviewCard, quality: Int, ease: Int) -> ScheduledCard {

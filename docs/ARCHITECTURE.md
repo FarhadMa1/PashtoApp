@@ -38,7 +38,7 @@ The package exposes:
 - `ContentFilter.devBuild`, which hides `draft` and `check` items for a Debug or dev build. A release build does not call it.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
 - `LocalDay`, a Gregorian civil day with no time zone, plus `DateProvider`, `FixedDateProvider`, `SystemDateProvider`, and `DayClock`. Scheduling passes a clock and a time zone in. `SystemDateProvider` is the only type that reads the process clock.
-- `ReviewCard` and `review(_:quality:on:)`, an SM-2 review step. The day is a `LocalDay`. A `soundExample` does not create a card. The daily queue, path state, streak, placement scheduler, and stored progress are not in this revision.
+- `ReviewCard` and `review(_:quality:on:)`, an SM-2 review step. The day is a `LocalDay`. The scheduled interval is capped at 36_500 days so `dueDay` cannot run past the last year `LocalDay` represents. A `soundExample` does not create a card. The daily queue, path state, streak, placement scheduler, and stored progress are not in this revision.
 
 The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the current locale (`Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). `Date()` is allowed only in `SystemDateProvider`. CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
 
