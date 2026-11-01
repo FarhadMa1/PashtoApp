@@ -37,7 +37,8 @@ jobs:
         run: swift run --package-path Tools/PashtoContentTool pashto-content validate --mode dev
 
   # Runs on every pull request so release gaps stay visible.
-  # Not required for merge. It becomes strict on the future release/TestFlight workflow.
+  # Findings warn and the job stays green: exit 0 (warnings or review text, or no findings) and exit 1 (error findings).
+  # Any other exit code fails the step. Not required for merge. Strict on the future release/TestFlight workflow.
   release-gate:
     name: release gate
     runs-on: ubuntu-24.04
@@ -48,11 +49,24 @@ jobs:
         uses: actions/checkout@v4
       - name: Build PashtoContentTool
         run: swift build --package-path Tools/PashtoContentTool
-      - name: Validate content for release (never fails PR)
+      - name: Validate content for release (findings warn, errors fail)
         shell: bash
         run: |
           set +e
-          OUTPUT="$(swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release)"
+          OUTPUT="$(swift run --skip-build --package-path Tools/PashtoContentTool pashto-content validate --mode release)"
+          code=$?
+          # 0: no error findings (stdout may still list warning/review). 1: error findings.
+          # Anything else (usage is 2, crash/signal is 128+n) fails the step.
+          case "$code" in
+            0|1) ;;
+            *)
+              echo "pashto-content validate --mode release failed with exit code ${code}"
+              if [ -n "$OUTPUT" ]; then
+                printf '%s\n' "$OUTPUT"
+              fi
+              exit "$code"
+              ;;
+          esac
           {
             echo "### Release gate findings"
             if [ -z "$OUTPUT" ]; then
@@ -72,7 +86,7 @@ jobs:
               id="$(echo "$line" | cut -f2)"
               field="$(echo "$line" | cut -f3)"
               msg="$(echo "$line" | cut -f4-)"
-              # Always annotate as a warning so the job stays green.
+              # Findings only warn, so error lines (exit 1) and warning lines (exit 0) keep the job green.
               if [ -n "$id" ]; then
                 echo "::warning::[$field][$sev][$id] $msg"
               else
