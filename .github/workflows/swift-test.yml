@@ -46,12 +46,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Build PashtoContentTool
+        run: swift build --package-path Tools/PashtoContentTool
       - name: Validate content for release (never fails PR)
         shell: bash
         run: |
           set +e
-          OUTPUT="$(swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release 2>&1)"
-          CODE=$?
+          OUTPUT="$(swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release)"
           {
             echo "### Release gate findings"
             if [ -z "$OUTPUT" ]; then
