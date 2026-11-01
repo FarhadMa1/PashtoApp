@@ -156,6 +156,20 @@ public enum MatchPairs {
         }
         return assemble(.response, pairs: pairs, using: &rng)
     }
+
+    /// Shuffles both columns again. The right column stays unmatched.
+    /// The same task comes back only when two identical pairs have no other layout.
+    static func reshuffled(
+        _ task: MatchPairsTask,
+        using rng: inout some RandomNumberGenerator
+    ) -> MatchPairsTask {
+        guard pairsCanChange(task) else { return task }
+        var next = assemble(task.mode, pairs: task.pairs, using: &rng)
+        while next == task {
+            next = assemble(task.mode, pairs: task.pairs, using: &rng)
+        }
+        return next
+    }
 }
 
 public func grade(_ task: MatchPairsTask, _ answer: QuizAnswer) -> GradeResult {
@@ -278,10 +292,17 @@ private func assemble(
 }
 
 private func misaligned(count: Int, using rng: inout some RandomNumberGenerator) -> [Int] {
-    guard count > 1 else { return Array(0..<count) }
-    var order = shuffled(Array(0..<count), using: &rng)
-    if order == Array(0..<count) {
-        order.swapAt(0, 1)
+    let identity = Array(0..<count)
+    guard count > 1 else { return identity }
+    return shuffledUntil(identity, using: &rng) { $0 != identity } ?? identity
+}
+
+private func pairsCanChange(_ task: MatchPairsTask) -> Bool {
+    let count = task.pairs.count
+    guard count > 1 else { return false }
+    if count > 2 { return true }
+    for pair in task.pairs.dropFirst() where pair != task.pairs[0] {
+        return true
     }
-    return order
+    return false
 }

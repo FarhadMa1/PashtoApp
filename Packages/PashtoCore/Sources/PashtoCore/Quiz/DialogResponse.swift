@@ -5,8 +5,10 @@
 /// two replies to the same line stay distinct.
 ///
 /// Distractors use the same seen-content and same-kind rules as the other
-/// choice questions. Another reply to this same line is not offered, so the
-/// question has one correct option. Nil when two seen replies to the line
+/// choice questions. The prompt line, anything in the same nonDistractorGroup
+/// as the prompt or the correct answer, and any other item whose `responseTo`
+/// points at that prompt are never wrong options. Further replies come only
+/// from those groups in the content. Nil when two seen replies to the line
 /// share a usage, or when fewer than two distractors exist.
 public struct DialogResponse: TaskGenerator {
     public var kind: TaskKind { .dialogResponse }
@@ -40,14 +42,18 @@ public struct DialogResponse: TaskGenerator {
         guard sameUsage.count == 1, sameUsage[0].id == reply.id else { return nil }
 
         let ranked = Distractors.candidates(for: reply, in: context)
+        let groups = context.bundle.nonDistractorGroups
         var distractors: [QuizOption] = []
         var seenKeys = [Normalization.nfc(replyText)]
         let levels: [DistractorSource] = [.sameLesson, .earlierLessonInUnit, .earlierUnit]
         for level in levels where distractors.count < 3 {
             var pool: [(item: ContentItem, text: String)] = []
             for candidate in ranked where candidate.source == level {
-                guard !siblings.contains(where: { $0.id == candidate.itemID }) else { continue }
+                guard candidate.itemID != prompt.id, candidate.itemID != reply.id else { continue }
                 guard let item = course.itemsByID[candidate.itemID] else { continue }
+                guard item.responseTo != prompt.id else { continue }
+                guard !sharesGroup(item.id, prompt.id, groups) else { continue }
+                guard !sharesGroup(item.id, reply.id, groups) else { continue }
                 guard let text = blankToNil(item.pashto) else { continue }
                 let key = Normalization.nfc(text)
                 guard !seenKeys.contains(key) else { continue }

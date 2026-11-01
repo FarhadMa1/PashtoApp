@@ -384,38 +384,83 @@ struct DialogResponseTests {
         let withPlacement = quizContext(content, seen: ["l-sounds", "l-skip", "l-now"])
         let task = DialogResponse().makeTask(for: reply, in: withPlacement, using: &shown)
         let ids = (task?.options ?? []).map { $0.itemID.rawValue }.sorted()
-        #expect(ids == ["e-extra", "e-placed", "e-prompt", "e-reply"])
+        #expect(ids == ["e-extra", "e-placed", "e-reply"])
+        #expect(task?.options.contains { $0.itemID == prompt.id } == false)
         #expect(task?.options.filter { $0.itemID == reply.id }.count == 1)
+    }
+
+    @Test func promptLineGroupAndOtherRepliesAreNeverDistractors() {
+        let prompt = quizItem("e-prompt", en: "prompt")
+        let reply = quizItem("e-reply", en: "reply", usage: "formal", responseTo: "e-prompt")
+        let otherReply = quizItem("e-other-reply", en: "other reply", usage: "informal", responseTo: "e-prompt")
+        let promptGroup = quizItem("e-prompt-group", en: "prompt group")
+        let replyGroup = quizItem("e-reply-group", en: "reply group")
+        let fillerA = quizItem("e-fill-a", en: "filler a")
+        let fillerB = quizItem("e-fill-b", en: "filler b")
+        let items = [prompt, reply, otherReply, promptGroup, replyGroup, fillerA, fillerB]
+        let current = quizLesson("l-one", introduce: items)
+        let content = quizBundle(
+            [current],
+            items: items,
+            groups: [["e-prompt", "e-prompt-group"], ["e-reply", "e-reply-group"]]
+        )
+        let context = quizContext(content, seen: ["l-one"])
+        for seed in UInt64(1)...24 {
+            var rng = SplitMix64(seed: seed)
+            let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
+            let ids = (task?.options ?? []).map(\.itemID.rawValue).sorted()
+            #expect(ids == ["e-fill-a", "e-fill-b", "e-reply"])
+        }
+    }
+
+    @Test func aReplyToAnotherLineCanStillBeADistractor() {
+        let prompt = quizItem("e-prompt", en: "prompt")
+        let reply = quizItem("e-reply", en: "reply", usage: "the reply", responseTo: "e-prompt")
+        let otherPrompt = quizItem("e-other-prompt", en: "other prompt")
+        let otherReply = quizItem("e-other-reply", en: "other reply", usage: "other", responseTo: "e-other-prompt")
+        let filler = quizItem("e-fill", en: "filler")
+        let items = [prompt, reply, otherPrompt, otherReply, filler]
+        let current = quizLesson("l-one", introduce: items)
+        let content = quizBundle([current], items: items)
+        var rng = SplitMix64(seed: 1)
+        let task = DialogResponse().makeTask(for: reply, in: quizContext(content, seen: ["l-one"]), using: &rng)
+        let ids = (task?.options ?? []).map(\.itemID.rawValue).sorted()
+        #expect(ids == ["e-fill", "e-other-prompt", "e-other-reply", "e-reply"])
+        #expect(task?.options.contains { $0.itemID == prompt.id } == false)
     }
 }
 
 struct LessonSessionTests {
-    @Test func wrongAnswerComesBackOnceAtTheEndAndAnswersAreStored() {
+    @Test func wrongAnswerComesBackOnceAtTheEndAndAnswersAreStored() throws {
         let first = choiceTask("e-a", "e-b", "e-c")
         let second = choiceTask("e-b", "e-a", "e-c")
         var session = LessonSession(lessonID: lessonID("l-one"), tasks: [
             SessionTask(payload: .choice(first)),
             SessionTask(payload: .choice(second)),
         ])
+        var rng = SplitMix64(seed: 1)
 
-        #expect(session.submit(.choice(itemID("e-b"))) == .incorrect)
+        #expect(session.submit(.choice(itemID("e-b")), using: &rng) == .incorrect)
         #expect(session.answers.count == 1)
         #expect(session.answers[0].result == .incorrect)
         #expect(session.answers[0].task.isRepeat == false)
         #expect(session.tasks.map(\.isRepeat) == [false, true])
-        #expect(session.tasks.last?.payload == .choice(first))
+        let repeated = try #require(session.tasks.last)
+        #expect(repeated.isRepeat)
+        #expect(sameQuestion(repeated, SessionTask(payload: .choice(first))))
+        #expect(presented(repeated) != presented(SessionTask(payload: .choice(first))))
 
-        #expect(session.submit(.choice(itemID("e-b"))) == .correct)
+        #expect(session.submit(.choice(itemID("e-b")), using: &rng) == .correct)
         #expect(session.answers.count == 2)
         #expect(session.tasks.count == 1)
         #expect(session.tasks[0].isRepeat == true)
 
-        #expect(session.submit(.choice(itemID("e-b"))) == .incorrect)
+        #expect(session.submit(.choice(itemID("e-b")), using: &rng) == .incorrect)
         #expect(session.tasks.isEmpty)
         #expect(session.answers.count == 3)
         #expect(session.answers[2].task.isRepeat == true)
         #expect(session.answers[2].result == .incorrect)
-        #expect(session.submit(.choice(itemID("e-a"))) == nil)
+        #expect(session.submit(.choice(itemID("e-a")), using: &rng) == nil)
     }
 
     @Test func correctAnswerIsStoredAndNotRepeated() {
@@ -424,12 +469,13 @@ struct LessonSessionTests {
             lessonID: lessonID("l-one"),
             tasks: [SessionTask(payload: .choice(task))]
         )
-        #expect(session.submit(.choice(itemID("e-a"))) == .correct)
+        var rng = SplitMix64(seed: 1)
+        #expect(session.submit(.choice(itemID("e-a")), using: &rng) == .correct)
         #expect(session.tasks.isEmpty)
         #expect(session.answers.map(\.result) == [.correct])
     }
 
-    @Test func builderRepeatsTheMissedTaskOnce() {
+    @Test func builderRepeatsTheMissedTaskOnce() throws {
         let items = (1...4).map { quizItem("e-\($0)", en: "word \($0)") }
         let current = quizLesson("l-one", introduce: items)
         let content = quizBundle([current], items: items)
@@ -442,17 +488,20 @@ struct LessonSessionTests {
         )
         #expect(!session.tasks.isEmpty)
         let missed = session.tasks[0]
-        #expect(session.submit(wrongAnswer(for: missed)) == .incorrect)
-        #expect(session.tasks.last?.isRepeat == true)
-        #expect(session.tasks.last?.payload == missed.payload)
+        var answerRNG = SplitMix64(seed: 8)
+        #expect(session.submit(wrongAnswer(for: missed), using: &answerRNG) == .incorrect)
+        let repeated = try #require(session.tasks.last)
+        #expect(repeated.isRepeat)
+        #expect(sameQuestion(repeated, missed))
+        #expect(presented(repeated) != presented(missed))
 
         var repeats = 0
         while let current = session.current {
             if current.isRepeat {
                 repeats += 1
-                #expect(session.submit(wrongAnswer(for: current)) == .incorrect)
+                #expect(session.submit(wrongAnswer(for: current), using: &answerRNG) == .incorrect)
             } else {
-                #expect(session.submit(correctAnswer(for: current)) == .correct)
+                #expect(session.submit(correctAnswer(for: current), using: &answerRNG) == .correct)
             }
         }
         #expect(repeats == 1)
@@ -538,10 +587,22 @@ struct LessonSessionTests {
                     let prompt = try #require(bundle.items.first { $0.id == reply.responseTo })
                     #expect(quiz.prompt == prompt.pashto)
                     #expect(quiz.options.filter { $0.itemID == reply.id }.count == 1)
+                    #expect(quiz.options.contains { $0.itemID == prompt.id } == false)
                     let replies = quiz.options.compactMap { option in
                         bundle.items.first { $0.id == option.itemID && $0.responseTo == prompt.id }
                     }
                     #expect(replies.count == 1)
+                    let blocked = bundle.nonDistractorGroups.filter { group in
+                        group.contains(prompt.id) || group.contains(reply.id)
+                    }
+                    for option in quiz.options where option.itemID != reply.id {
+                        #expect(option.itemID != prompt.id)
+                        let item = try #require(bundle.items.first { $0.id == option.itemID })
+                        #expect(item.responseTo != prompt.id)
+                        for group in blocked {
+                            #expect(!group.contains(option.itemID))
+                        }
+                    }
                     #expect(grade(quiz, .choice(reply.id)) == .correct)
                 case .matchPairs(let match) where match.mode == .response:
                     responseMatchCount += 1
@@ -565,6 +626,209 @@ struct LessonSessionTests {
         }
     }
 
+    @Test func repeatedQuestionIsReshuffledUnlessNoOtherOrderExists() {
+        let choice = choiceTask("e-a", "e-b", "e-c")
+        for seed in UInt64(1)...30 {
+            var session = LessonSession(
+                lessonID: lessonID("l-one"),
+                tasks: [SessionTask(payload: .choice(choice))]
+            )
+            var rng = SplitMix64(seed: seed)
+            #expect(session.submit(.choice(itemID("e-b")), using: &rng) == .incorrect)
+            let repeated = session.tasks[0]
+            #expect(repeated.isRepeat)
+            #expect(sameQuestion(repeated, SessionTask(payload: .choice(choice))))
+            #expect(presented(repeated) != presented(SessionTask(payload: .choice(choice))))
+        }
+
+        let pairs = (1...3).map { index in
+            MatchPair(
+                left: MatchSide(itemID: itemID("e-\(index)"), text: "left-\(index)"),
+                right: MatchSide(itemID: itemID("e-\(index)"), text: "right-\(index)")
+            )
+        }
+        let match = MatchPairsTask(mode: .pashtoEnglish, pairs: pairs, rightOrder: [1, 2, 0])
+        var matchSession = LessonSession(
+            lessonID: lessonID("l-one"),
+            tasks: [SessionTask(payload: .matchPairs(match))]
+        )
+        var matchRNG = SplitMix64(seed: 3)
+        #expect(matchSession.submit(.matches([]), using: &matchRNG) == .incorrect)
+        guard case .matchPairs(let reshuffledMatch) = matchSession.tasks[0].payload else {
+            Issue.record("Missing reshuffled match")
+            return
+        }
+        #expect(reshuffledMatch != match)
+        #expect(sameQuestion(
+            SessionTask(payload: .matchPairs(reshuffledMatch)),
+            SessionTask(payload: .matchPairs(match))
+        ))
+        #expect(reshuffledMatch.rightOrder != Array(0..<reshuffledMatch.pairs.count))
+
+        let three = OrderWordsTask(
+            targetID: itemID("e-three"),
+            tiles: [
+                WordTile(index: 1, text: "bb"),
+                WordTile(index: 0, text: "aa"),
+                WordTile(index: 2, text: "cc"),
+            ],
+            fixedEnding: "",
+            tokens: ["aa", "bb", "cc"],
+            acceptedOrders: nil
+        )
+        var orderSession = LessonSession(
+            lessonID: lessonID("l-one"),
+            tasks: [SessionTask(payload: .orderWords(three))]
+        )
+        var orderRNG = SplitMix64(seed: 4)
+        #expect(orderSession.submit(.tokenOrder(three.tiles.map(\.index)), using: &orderRNG) == .incorrect)
+        guard case .orderWords(let reshuffledOrder) = orderSession.tasks[0].payload else {
+            Issue.record("Missing reshuffled order")
+            return
+        }
+        #expect(reshuffledOrder.tiles.map(\.index) != three.tiles.map(\.index))
+        #expect(grade(reshuffledOrder, .tokenOrder(reshuffledOrder.tiles.map(\.index))) == .incorrect)
+        #expect(grade(reshuffledOrder, .tokenOrder([0, 1, 2])) == .correct)
+
+        let pair = OrderWordsTask(
+            targetID: itemID("e-pair"),
+            tiles: [WordTile(index: 1, text: "bb"), WordTile(index: 0, text: "aa")],
+            fixedEnding: "",
+            tokens: ["aa", "bb"],
+            acceptedOrders: nil
+        )
+        var pairSession = LessonSession(
+            lessonID: lessonID("l-one"),
+            tasks: [SessionTask(payload: .orderWords(pair))]
+        )
+        var pairRNG = SplitMix64(seed: 5)
+        #expect(pairSession.submit(.tokenOrder([1, 0]), using: &pairRNG) == .incorrect)
+        #expect(pairSession.tasks[0].payload == .orderWords(pair))
+    }
+
+    @Test func maxQuestionsCapsTheFirstPassAndStaysDeterministic() {
+        let items = (1...4).map { quizItem("e-\($0)", en: "word \($0)") }
+        let current = quizLesson("l-one", introduce: items)
+        let content = quizBundle([current], items: items)
+        let lesson = lessonID("l-one")
+
+        var openRNG = SplitMix64(seed: 11)
+        let open = LessonSessionBuilder.build(for: lesson, in: content, seenLessonIDs: [lesson], using: &openRNG)
+        var wideRNG = SplitMix64(seed: 11)
+        let wide = LessonSessionBuilder.build(
+            for: lesson,
+            in: content,
+            seenLessonIDs: [lesson],
+            maxQuestions: 100,
+            using: &wideRNG
+        )
+        #expect(open.tasks.count == 13)
+        #expect(wide == open)
+
+        var cappedRNG = SplitMix64(seed: 11)
+        let capped = LessonSessionBuilder.build(
+            for: lesson,
+            in: content,
+            seenLessonIDs: [lesson],
+            maxQuestions: 4,
+            using: &cappedRNG
+        )
+        var againRNG = SplitMix64(seed: 11)
+        let again = LessonSessionBuilder.build(
+            for: lesson,
+            in: content,
+            seenLessonIDs: [lesson],
+            maxQuestions: 4,
+            using: &againRNG
+        )
+        #expect(capped.tasks.count == 4)
+        #expect(again == capped)
+        #expect(Set(capped.tasks.compactMap(anchorID).map(\.rawValue)) == ["e-1", "e-2", "e-3", "e-4"])
+
+        var midRNG = SplitMix64(seed: 11)
+        let mid = LessonSessionBuilder.build(
+            for: lesson,
+            in: content,
+            seenLessonIDs: [lesson],
+            maxQuestions: 6,
+            using: &midRNG
+        )
+        #expect(mid.tasks.count == 6)
+        #expect(Set(mid.tasks.compactMap(anchorID).map(\.rawValue)) == ["e-1", "e-2", "e-3", "e-4"])
+
+        for seed in UInt64(1)...15 {
+            var rng = SplitMix64(seed: seed)
+            let session = LessonSessionBuilder.build(
+                for: lesson,
+                in: content,
+                seenLessonIDs: [lesson],
+                maxQuestions: 4,
+                using: &rng
+            )
+            #expect(session.tasks.count == 4)
+            #expect(Set(session.tasks.compactMap(anchorID).map(\.rawValue)) == ["e-1", "e-2", "e-3", "e-4"])
+
+            var tight = SplitMix64(seed: seed)
+            let two = LessonSessionBuilder.build(
+                for: lesson,
+                in: content,
+                seenLessonIDs: [lesson],
+                maxQuestions: 2,
+                using: &tight
+            )
+            #expect(two.tasks.count == 2)
+            let anchors = two.tasks.compactMap(anchorID).map(\.rawValue)
+            #expect(anchors.count == 2)
+            #expect(anchors[0] != anchors[1])
+        }
+
+        var zeroRNG = SplitMix64(seed: 11)
+        let empty = LessonSessionBuilder.build(
+            for: lesson,
+            in: content,
+            seenLessonIDs: [lesson],
+            maxQuestions: 0,
+            using: &zeroRNG
+        )
+        #expect(empty.tasks.isEmpty)
+
+        var differed = false
+        for seed in UInt64(12)...30 {
+            var rng = SplitMix64(seed: seed)
+            let other = LessonSessionBuilder.build(
+                for: lesson,
+                in: content,
+                seenLessonIDs: [lesson],
+                maxQuestions: 4,
+                using: &rng
+            )
+            if other != capped {
+                differed = true
+            }
+        }
+        #expect(differed)
+
+        var sessionRNG = SplitMix64(seed: 11)
+        var session = LessonSessionBuilder.build(
+            for: lesson,
+            in: content,
+            seenLessonIDs: [lesson],
+            maxQuestions: 2,
+            using: &sessionRNG
+        )
+        var answerRNG = SplitMix64(seed: 1)
+        let missed = session.tasks[0]
+        #expect(session.submit(wrongAnswer(for: missed), using: &answerRNG) == .incorrect)
+        #expect(session.tasks.count == 2)
+        #expect(session.tasks.filter(\.isRepeat).count == 1)
+        #expect(presented(session.tasks[1]) != presented(missed))
+        while let current = session.current {
+            #expect(session.submit(wrongAnswer(for: current), using: &answerRNG) == .incorrect)
+        }
+        #expect(session.answers.filter { !$0.task.isRepeat }.count == 2)
+        #expect(session.answers.filter(\.task.isRepeat).count == 2)
+    }
+
     @Test func sessionsVaryAcrossSeeds() throws {
         let bundle = try loadRepositoryContent()
         let first = try courseSessions(bundle, seed: 1)
@@ -576,6 +840,99 @@ struct LessonSessionTests {
             }
         }
         #expect(differed)
+    }
+}
+
+struct ShuffleTests {
+    @Test func fisherYatesPositionIsRoughlyUniform() {
+        let values = [0, 1, 2, 3]
+        var counts = Array(repeating: Array(repeating: 0, count: 4), count: 4)
+        for seed in 1...1000 {
+            var rng = SplitMix64(seed: UInt64(seed))
+            let order = shuffled(values, using: &rng)
+            for (position, value) in order.enumerated() {
+                counts[position][value] += 1
+            }
+        }
+        for position in 0..<4 {
+            for value in 0..<4 {
+                let count = counts[position][value]
+                #expect(count > 180 && count < 320)
+            }
+        }
+    }
+
+    @Test func rejectedShuffleDoesNotPreferOneFixedOrder() {
+        let identity = [0, 1, 2]
+        let allowed = [
+            [0, 2, 1],
+            [1, 0, 2],
+            [1, 2, 0],
+            [2, 0, 1],
+            [2, 1, 0],
+        ]
+        var counts = Array(repeating: 0, count: allowed.count)
+        for seed in 1...1000 {
+            var rng = SplitMix64(seed: UInt64(seed))
+            let order = shuffledUntil(identity, using: &rng) { $0 != identity }
+            guard let order, let index = allowed.firstIndex(of: order) else {
+                Issue.record("Missing allowed order")
+                continue
+            }
+            counts[index] += 1
+        }
+        for count in counts {
+            #expect(count > 140 && count < 270)
+        }
+    }
+
+    @Test func matchRightColumnIsRoughlyUniform() {
+        let allowed = [
+            [0, 2, 1],
+            [1, 0, 2],
+            [1, 2, 0],
+            [2, 0, 1],
+            [2, 1, 0],
+        ]
+        var counts = Array(repeating: 0, count: allowed.count)
+        for seed in 1...1000 {
+            let task = englishMatch(count: 3, seed: UInt64(seed))
+            guard let order = task?.rightOrder, let index = allowed.firstIndex(of: order) else {
+                Issue.record("Right column was aligned or missing")
+                continue
+            }
+            counts[index] += 1
+        }
+        for count in counts {
+            #expect(count > 140 && count < 270)
+        }
+    }
+
+    @Test func incorrectWordOrderIsRoughlyUniform() {
+        let item = orderItem("e-fine", tokens: ["aa", "bb", "cc"], pashto: "aa bb cc")
+        let current = quizLesson("l-one", introduce: [item])
+        let content = quizBundle([current], items: [item])
+        let context = quizContext(content, seen: ["l-one"])
+        let allowed = [
+            [0, 2, 1],
+            [1, 0, 2],
+            [1, 2, 0],
+            [2, 0, 1],
+            [2, 1, 0],
+        ]
+        var counts = Array(repeating: 0, count: allowed.count)
+        for seed in 1...1000 {
+            var rng = SplitMix64(seed: UInt64(seed))
+            let task = OrderWords.makeTask(for: item, in: context, using: &rng)
+            guard let indexes = task?.tiles.map(\.index), let found = allowed.firstIndex(of: indexes) else {
+                Issue.record("Tile order was correct or missing")
+                continue
+            }
+            counts[found] += 1
+        }
+        for count in counts {
+            #expect(count > 140 && count < 270)
+        }
     }
 }
 
@@ -712,10 +1069,11 @@ private func quizUnit(_ id: String, lessons: [Lesson]) -> CourseUnit {
 private func quizBundle(
     _ lessons: [Lesson],
     units: [CourseUnit]? = nil,
-    items: [ContentItem]
+    items: [ContentItem],
+    groups: [[String]] = []
 ) -> ContentBundle {
     let resolved = units ?? [quizUnit("u-one", lessons: lessons)]
-    return makeBundle(items: items, units: resolved)
+    return makeBundle(items: items, units: resolved, groups: groups.map { $0.map(itemID) })
 }
 
 private func quizContext(_ bundle: ContentBundle, seen: [String], retired: [String] = []) -> QuizContext {
@@ -740,6 +1098,45 @@ private func courseSessions(_ bundle: ContentBundle, seed: UInt64) throws -> [Le
         ))
     }
     return sessions
+}
+
+private func anchorID(_ task: SessionTask) -> ItemID? {
+    switch task.payload {
+    case .choice(let quiz):
+        return quiz.targetID
+    case .orderWords(let order):
+        return order.targetID
+    case .matchPairs:
+        return nil
+    }
+}
+
+private func sameQuestion(_ lhs: SessionTask, _ rhs: SessionTask) -> Bool {
+    switch (lhs.payload, rhs.payload) {
+    case (.choice(let left), .choice(let right)):
+        return left.kind == right.kind
+            && left.targetID == right.targetID
+            && left.prompt == right.prompt
+            && left.options.map(\.itemID.rawValue).sorted() == right.options.map(\.itemID.rawValue).sorted()
+    case (.matchPairs(let left), .matchPairs(let right)):
+        return left.mode == right.mode
+            && left.pairs.map(\.left.itemID.rawValue).sorted() == right.pairs.map(\.left.itemID.rawValue).sorted()
+    case (.orderWords(let left), .orderWords(let right)):
+        return left.targetID == right.targetID && left.tokens == right.tokens
+    default:
+        return false
+    }
+}
+
+private func presented(_ task: SessionTask) -> [String] {
+    switch task.payload {
+    case .choice(let quiz):
+        return quiz.options.map(\.itemID.rawValue)
+    case .matchPairs(let match):
+        return match.pairs.map(\.left.itemID.rawValue) + ["|"] + match.rightColumn.map(\.itemID.rawValue)
+    case .orderWords(let order):
+        return order.tiles.map { "\($0.index)" }
+    }
 }
 
 private func itemIDs(in task: SessionTask) -> [ItemID] {

@@ -212,7 +212,7 @@ func isQuizSeen(_ itemID: ItemID, in context: QuizContext, course: CourseOrder) 
     return true
 }
 
-private func sharesGroup(_ lhs: ItemID, _ rhs: ItemID, _ groups: [[ItemID]]) -> Bool {
+func sharesGroup(_ lhs: ItemID, _ rhs: ItemID, _ groups: [[ItemID]]) -> Bool {
     for group in groups where group.contains(lhs) && group.contains(rhs) {
         return true
     }

@@ -72,6 +72,30 @@ public enum OrderWords {
             acceptedOrders: accepted
         )
     }
+
+    /// A new incorrect tile order. The same task comes back when that order
+    /// is the only one that is not itself a correct answer.
+    static func reshuffled(
+        _ task: OrderWordsTask,
+        using rng: inout some RandomNumberGenerator
+    ) -> OrderWordsTask {
+        guard let order = incorrectOrder(
+            count: task.tokens.count,
+            tokens: task.tokens,
+            acceptedOrders: task.acceptedOrders,
+            differentFrom: task.tiles.map(\.index),
+            using: &rng
+        ) else {
+            return task
+        }
+        return OrderWordsTask(
+            targetID: task.targetID,
+            tiles: order.map { WordTile(index: $0, text: task.tokens[$0]) },
+            fixedEnding: task.fixedEnding,
+            tokens: task.tokens,
+            acceptedOrders: task.acceptedOrders
+        )
+    }
 }
 
 public func grade(_ task: OrderWordsTask, _ answer: QuizAnswer) -> GradeResult {
@@ -98,35 +122,16 @@ private func incorrectOrder(
     count: Int,
     tokens: [String],
     acceptedOrders: [[Int]]?,
+    differentFrom current: [Int]? = nil,
     using rng: inout some RandomNumberGenerator
 ) -> [Int]? {
     guard count >= 2 else { return nil }
-    let shuffledOrder = shuffled(Array(0..<count), using: &rng)
-    if !isAcceptedOrder(shuffledOrder, tokens: tokens, acceptedOrders: acceptedOrders) {
-        return shuffledOrder
-    }
-    guard count <= 8 else { return nil }
-    var order = Array(0..<count)
-    return firstIncorrect(0, &order, tokens: tokens, acceptedOrders: acceptedOrders)
-}
-
-private func firstIncorrect(
-    _ start: Int,
-    _ order: inout [Int],
-    tokens: [String],
-    acceptedOrders: [[Int]]?
-) -> [Int]? {
-    if start == order.count {
-        return isAcceptedOrder(order, tokens: tokens, acceptedOrders: acceptedOrders) ? nil : order
-    }
-    for index in start..<order.count {
-        order.swapAt(start, index)
-        if let found = firstIncorrect(start + 1, &order, tokens: tokens, acceptedOrders: acceptedOrders) {
-            return found
+    return shuffledUntil(Array(0..<count), using: &rng) { order in
+        if let current, order == current {
+            return false
         }
-        order.swapAt(start, index)
+        return !isAcceptedOrder(order, tokens: tokens, acceptedOrders: acceptedOrders)
     }
-    return nil
 }
 
 private func isAcceptedOrder(_ order: [Int], tokens: [String], acceptedOrders: [[Int]]?) -> Bool {
