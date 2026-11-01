@@ -1,10 +1,12 @@
 import Foundation
 import PashtoCore
 
-/// `ContentValidator` plus the registry and the release gate.
+/// `ContentValidator` plus the registry, the release gate, and quiz-type coverage.
 ///
 /// `ContentValidator` rules are unchanged. A verified item that lacks `checkedBy`
-/// or `checkedOn` is still that validator's error, in both modes.
+/// or `checkedOn` is still that validator's error, in both modes. Quiz-type
+/// coverage is a warning in dev, over the whole course, and an error in
+/// release, over the units `ReleaseGate` selects from `release-units.json`.
 public enum ContentCheck {
     public static func issues(root: URL, mode: ToolMode) -> [ValidationIssue] {
         let outcome = ContentMerger.merge(root: root)
@@ -23,6 +25,16 @@ public enum ContentCheck {
             releaseUnitIDs: releaseUnits,
             itemUnits: merged.itemUnits,
             specialSounds: merged.specialSounds,
+            mode: mode
+        ))
+        let retiredItemIDs = registry.compactMap { entry -> ItemID? in
+            guard entry.retired else { return nil }
+            return ItemID(rawValue: entry.id)
+        }
+        issues.append(contentsOf: QuizTypeCoverage.issues(
+            in: merged.bundle,
+            releaseUnitIDs: releaseUnits,
+            retiredItemIDs: retiredItemIDs,
             mode: mode
         ))
         return issues

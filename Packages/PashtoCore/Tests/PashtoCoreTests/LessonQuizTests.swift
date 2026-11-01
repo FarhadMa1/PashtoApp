@@ -996,7 +996,7 @@ struct LessonSessionTests {
         #expect(longSession.answers.filter(\.task.isRepeat).count == 21)
     }
 
-    @Test func reviewSessionsAreNotGovernedByMaxQuestions() {
+    @Test func lessonBuilderDoesNotApplyTheReviewDaySize() {
         // The lesson default is 20 questions. A review day may offer 50 cards,
         // and that limit is not applied by this builder. Raising maxQuestions
         // to 50 only lengthens the lesson; it does not add review cards.

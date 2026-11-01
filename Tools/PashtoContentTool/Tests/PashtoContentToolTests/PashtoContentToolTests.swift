@@ -148,6 +148,91 @@ struct ReleaseGateTests {
     }
 }
 
+struct QuizTypeCoverageTests {
+    @Test func aFixtureWithEveryQuizTypePasses() {
+        let bundle = coverageBundle(includeDialog: true)
+        let release = QuizTypeCoverage.issues(in: bundle, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], mode: .release)
+        let dev = QuizTypeCoverage.issues(in: bundle, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], mode: .dev)
+        #expect(release.isEmpty)
+        #expect(dev.isEmpty)
+        #expect(!IssueList.hasError(release))
+        #expect(!IssueList.hasError(dev))
+    }
+
+    @Test func kindCountsDoNotDependOnTheSeed() throws {
+        let merged = try #require(ContentMerger.merge(root: try repositoryRoot()).merged)
+        let wholeCourse = [
+            coverageBundle(includeDialog: true),
+            coverageBundle(includeDialog: false),
+            merged.bundle,
+        ]
+        for bundle in wholeCourse {
+            let base = QuizTypeCoverage.questionCounts(in: bundle, releaseUnitIDs: nil, retiredItemIDs: [], seed: 1)
+            for seed in UInt64(2)...6 {
+                let counts = QuizTypeCoverage.questionCounts(in: bundle, releaseUnitIDs: nil, retiredItemIDs: [], seed: seed)
+                #expect(counts == base)
+            }
+        }
+        let partial = courseWithDialogOnlyInLaterUnit()
+        let released = QuizTypeCoverage.questionCounts(in: partial, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], seed: 1)
+        for seed in UInt64(2)...6 {
+            let counts = QuizTypeCoverage.questionCounts(in: partial, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], seed: seed)
+            #expect(counts == released)
+        }
+    }
+
+    @Test func aFixtureMissingOneQuizTypeFailsReleaseAndPassesDev() {
+        let bundle = coverageBundle(includeDialog: false)
+        let release = QuizTypeCoverage.issues(in: bundle, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], mode: .release)
+        #expect(release.count == 1)
+        #expect(release[0].severity == .error)
+        #expect(release[0].id == "dialogResponse")
+        #expect(release[0].field == "quizType")
+        #expect(release[0].message == "quiz type dialogResponse produces 0 questions in released content")
+        #expect(IssueList.hasError(release))
+
+        let dev = QuizTypeCoverage.issues(in: bundle, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], mode: .dev)
+        #expect(dev.count == 1)
+        #expect(dev[0].severity == .warning)
+        #expect(dev[0].message == release[0].message)
+        #expect(!IssueList.hasError(dev))
+    }
+
+    @Test func aFullCoursePassesDevWhenTheReleasedSubsetLacksOneType() {
+        let bundle = courseWithDialogOnlyInLaterUnit()
+        let release = QuizTypeCoverage.issues(in: bundle, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], mode: .release)
+        #expect(release.map(\.id) == ["dialogResponse"])
+        #expect(release.allSatisfy { $0.severity == .error })
+
+        let dev = QuizTypeCoverage.issues(in: bundle, releaseUnitIDs: ["u-coverage"], retiredItemIDs: [], mode: .dev)
+        #expect(dev.isEmpty)
+    }
+
+    @Test func releaseFileListingOnlySoundsFailsQuizTypeCoverage() throws {
+        let source = try repositoryRoot().appendingPathComponent("content")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.copyItem(at: source, to: root.appendingPathComponent("content"))
+        try """
+        {"units":["u-sounds"]}
+        """.write(to: root.appendingPathComponent("content/release-units.json"), atomically: true, encoding: .utf8)
+
+        let release = ContentCheck.issues(root: root, mode: .release)
+        let quiz = release.filter { $0.field == "quizType" }
+        #expect(quiz.map(\.severity) == Array(repeating: ValidationSeverity.error, count: quiz.count))
+        #expect(!quiz.isEmpty)
+        let missing = Set(quiz.compactMap(\.id))
+        let selected = Set(ReleaseGate.releasedUnits(
+            in: try #require(ContentMerger.merge(root: root).merged).bundle,
+            releaseUnitIDs: ["u-sounds"]
+        ).map(\.id.rawValue))
+        #expect(selected == ["u-sounds"])
+        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)))
+
+        let dev = ContentCheck.issues(root: root, mode: .dev).filter { $0.field == "quizType" }
+        #expect(dev.isEmpty)
+    }
+}
+
 struct RegistryTests {
     @Test func emptyRegistryPassesAndMissingOrRetiredIDsFail() {
         let bundle = sampleBundle(itemCount: 6)
@@ -519,17 +604,105 @@ private func word(
     status: VerificationStatus,
     checkedBy: String? = nil,
     checkedOn: String? = nil,
-    note: String? = nil
+    note: String? = nil,
+    kind: ContentKind = .word,
+    responseTo: String? = nil,
+    tokens: [String]? = nil
 ) -> ContentItem {
     ContentItem(
         id: ItemID(rawValue: id)!,
-        kind: .word,
+        kind: kind,
         pashto: pashto,
         translit: translit,
         pronunciation: pronunciation,
         en: en,
         verification: Verification(status: status, checkedBy: checkedBy, checkedOn: checkedOn),
-        pronunciationNote: note
+        pronunciationNote: note,
+        responseTo: responseTo.flatMap { ItemID(rawValue: $0) },
+        tokens: tokens
+    )
+}
+
+/// Words for the choice and match questions, one phrase with tokens, and a
+/// greeting/reply pair. `includeDialog` is the only switch for dialog response.
+private func coverageBundle(includeDialog: Bool) -> ContentBundle {
+    let items = [
+        word("e-na", pashto: "نه", translit: "na", pronunciation: "na-sound", en: "no", status: .draft),
+        word("e-ho", pashto: "هو", translit: "ho", pronunciation: "ho-sound", en: "yes", status: .draft),
+        word("e-za", pashto: "زه", translit: "za", pronunciation: "za-sound", en: "I", status: .draft),
+        word("e-ta", pashto: "ته", translit: "ta", pronunciation: "ta-sound", en: "you", status: .draft),
+        word(
+            "e-fine",
+            pashto: "زه ښه",
+            translit: "za kha",
+            pronunciation: "za-kha",
+            en: "I am well",
+            status: .draft,
+            kind: .phrase,
+            tokens: ["زه", "ښه"]
+        ),
+        word(
+            "e-salam",
+            pashto: "سلام",
+            translit: "salam",
+            pronunciation: "sa-lam",
+            en: "hello",
+            status: .draft,
+            kind: .phrase
+        ),
+        word(
+            "e-reply",
+            pashto: "وعلیکم",
+            translit: "walaykum",
+            pronunciation: "wa-lay-kum",
+            en: "hello reply",
+            status: .draft,
+            kind: .phrase,
+            responseTo: includeDialog ? "e-salam" : nil
+        ),
+    ]
+    let lesson = Lesson(
+        id: LessonID(rawValue: "l-coverage-1")!,
+        title: "Coverage",
+        items: items.map { LessonItemRef(item: $0.id, role: .introduce) }
+    )
+    return ContentBundle(
+        contentVersion: "test",
+        variant: ContentBundle.kabulVariant,
+        romanization: romanization(difficult: []),
+        items: items,
+        units: [CourseUnit(id: UnitID(rawValue: "u-coverage")!, track: "main", title: "Coverage", lessons: [lesson])],
+        nonDistractorGroups: []
+    )
+}
+
+/// The first unit can build every type except dialog response. The reply that
+/// produces that type is introduced in a later unit.
+private func courseWithDialogOnlyInLaterUnit() -> ContentBundle {
+    let earlier = coverageBundle(includeDialog: false)
+    let reply = word(
+        "e-later-reply",
+        pashto: "ښه",
+        translit: "kha",
+        pronunciation: "kha-sound",
+        en: "well reply",
+        status: .draft,
+        kind: .phrase,
+        responseTo: "e-salam"
+    )
+    let lesson = Lesson(
+        id: LessonID(rawValue: "l-dialog-1")!,
+        title: "Dialog",
+        items: [LessonItemRef(item: reply.id, role: .introduce)]
+    )
+    let later = CourseUnit(id: UnitID(rawValue: "u-dialog")!, track: "main", title: "Dialog", lessons: [lesson])
+    return ContentBundle(
+        contentVersion: earlier.contentVersion,
+        variant: earlier.variant,
+        romanization: earlier.romanization,
+        items: earlier.items + [reply],
+        units: earlier.units + [later],
+        nonDistractorGroups: earlier.nonDistractorGroups
     )
 }
 

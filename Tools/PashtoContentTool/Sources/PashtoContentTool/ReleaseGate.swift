@@ -39,6 +39,8 @@ public enum ReleaseGate {
         }
 
         let releaseUnits = Set(releaseUnitIDs)
+        let released = releasedUnits(in: bundle, releaseUnitIDs: releaseUnitIDs)
+        let releasedIDs = Set(released.map(\.id.rawValue))
         if mode == .release, !releaseUnits.isEmpty, !releaseUnits.contains(Self.soundsUnitID) {
             issues.append(IssueText.make(
                 .error,
@@ -56,7 +58,7 @@ public enum ReleaseGate {
             ))
         }
         var reportedItems: Set<String> = []
-        for unit in bundle.units where releaseUnits.contains(unit.id.rawValue) {
+        for unit in released {
             for itemID in itemIDs(in: unit) {
                 guard reportedItems.insert(itemID).inserted else { continue }
                 guard let item = bundle.items.first(where: { $0.id.rawValue == itemID }) else { continue }
@@ -70,7 +72,7 @@ public enum ReleaseGate {
                 }
             }
         }
-        for (itemID, unitID) in itemUnits.sorted(by: { $0.key < $1.key }) where releaseUnits.contains(unitID) {
+        for (itemID, unitID) in itemUnits.sorted(by: { $0.key < $1.key }) where releasedIDs.contains(unitID) {
             guard reportedItems.insert(itemID).inserted else { continue }
             guard let item = bundle.items.first(where: { $0.id.rawValue == itemID }) else { continue }
             if item.verification.status != .verified {
@@ -135,6 +137,15 @@ public enum ReleaseGate {
             issues.append(contentsOf: soundExampleIssues(in: bundle, specialSounds: specialSounds, severity: .error))
         }
         return issues
+    }
+
+    /// Units named in `release-units.json` that exist in the course, in course order.
+    ///
+    /// Unknown ids are left out. A repeated id is returned once. The caller
+    /// reports those as their own findings. Quiz coverage uses this same list.
+    static func releasedUnits(in bundle: ContentBundle, releaseUnitIDs: [String]) -> [CourseUnit] {
+        let listed = Set(releaseUnitIDs)
+        return bundle.units.filter { listed.contains($0.id.rawValue) }
     }
 
     private static let soundsUnitID = "u-sounds"
