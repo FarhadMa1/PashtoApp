@@ -154,8 +154,11 @@ public enum MultipleChoiceQuiz {
 }
 
 /// At least three options, at most four. The correct item is one of them.
-/// Selection walks `Distractors.candidates` and keeps the nearest items.
-/// The random generator only shuffles those options.
+///
+/// Each source level is drawn at random with `rng`. The same lesson is used
+/// first. Earlier lessons in the unit are used only when that level runs out,
+/// and earlier units only after that. The same generator then shuffles the
+/// options, so the correct answer is not stuck in one slot.
 enum ChoiceBuilder {
     static func make(
         _ kind: TaskKind,
@@ -168,23 +171,29 @@ enum ChoiceBuilder {
         guard let prompt = prompt(for: kind, item: target) else { return nil }
         guard let correctText = answer(for: kind, item: target) else { return nil }
 
+        let ranked = Distractors.candidates(for: target, in: context)
         var distractors: [QuizOption] = []
         var seenKeys = [answerKey(for: kind, text: correctText)]
-        var seenIDs = [target.id]
-        for candidate in Distractors.candidates(for: target, in: context) {
-            guard !seenIDs.contains(candidate.itemID) else { continue }
-            guard let item = courseItems[candidate.itemID] else { continue }
-            guard let text = answer(for: kind, item: item) else { continue }
-            let key = answerKey(for: kind, text: text)
-            guard !seenKeys.contains(key) else { continue }
-            seenKeys.append(key)
-            seenIDs.append(candidate.itemID)
-            distractors.append(QuizOption(itemID: item.id, text: text))
-            if distractors.count == 3 {
-                break
+        let levels: [DistractorSource] = [.sameLesson, .earlierLessonInUnit, .earlierUnit]
+        for level in levels where distractors.count < 3 {
+            var pool: [(item: ContentItem, text: String)] = []
+            for candidate in ranked where candidate.source == level {
+                guard let item = courseItems[candidate.itemID] else { continue }
+                guard let text = answer(for: kind, item: item) else { continue }
+                let key = answerKey(for: kind, text: text)
+                guard !seenKeys.contains(key) else { continue }
+                pool.append((item, text))
+            }
+            while distractors.count < 3, !pool.isEmpty {
+                let index = Int(rng.next() % UInt64(pool.count))
+                let picked = pool.remove(at: index)
+                let key = answerKey(for: kind, text: picked.text)
+                guard !seenKeys.contains(key) else { continue }
+                seenKeys.append(key)
+                distractors.append(QuizOption(itemID: picked.item.id, text: picked.text))
             }
         }
-        // 0, 1, or 2 eligible items: the correct item plus fewer than two distractors.
+        // 0, 1, or 2 eligible items of this pool: fewer than two distractors.
         guard distractors.count >= 2 else { return nil }
 
         var options = [QuizOption(itemID: target.id, text: correctText)]

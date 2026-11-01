@@ -36,19 +36,21 @@ struct MultipleChoiceTests {
         let candidates = Distractors.candidates(for: target, in: context)
 
         #expect(candidates.map(\.itemID.rawValue) == [
-            "e-same-a", "e-same-b", "e-letter",
+            "e-same-a", "e-same-b",
             "e-near",
             "e-far",
             "e-early-a", "e-early-b",
         ])
         #expect(candidates.map(\.source) == [
-            .sameLesson, .sameLesson, .sameLesson,
+            .sameLesson, .sameLesson,
             .earlierLessonInUnit,
             .earlierLessonInUnit,
             .earlierUnit, .earlierUnit,
         ])
+        #expect(!candidates.map(\.itemID.rawValue).contains("e-letter"))
         #expect(!candidates.map(\.itemID.rawValue).contains("e-future"))
         #expect(!candidates.map(\.itemID.rawValue).contains("e-example"))
+        #expect(Distractors.candidates(for: letter, in: context).isEmpty)
     }
 
     @Test func synonymsSharedMeaningsAndSameFormsAreExcluded() {
@@ -112,8 +114,10 @@ struct MultipleChoiceTests {
         #expect(four?.options.count == 4)
 
         let five = task(itemCount: 5)
-        let fiveIDs = five?.options.map(\.itemID.rawValue).sorted()
-        #expect(fiveIDs == ["e-1", "e-2", "e-3", "e-4"])
+        #expect(five?.options.count == 4)
+        #expect(five?.options.contains { $0.itemID.rawValue == "e-1" } == true)
+        let fiveIDs = Set(five?.options.map(\.itemID.rawValue) ?? [])
+        #expect(fiveIDs.isSubset(of: ["e-1", "e-2", "e-3", "e-4", "e-5"]))
 
         for count in 3...4 {
             for kind in [TaskKind.meaningPashtoToEnglish, .meaningEnglishToPashto, .transliterationChoice] {
@@ -198,6 +202,121 @@ struct MultipleChoiceTests {
         }
     }
 
+    @Test func distractorsStayInTheSameKindAndTooFewReturnsNil() {
+        let words = (1...4).map { word("e-w\($0)", "w\($0)", "word \($0)") }
+        let phrase = word("e-phrase", "ph", "a phrase", kind: .phrase)
+        let letters = (1...2).map { word("e-l\($0)", "l\($0)", "letter \($0)", kind: .letter) }
+        let current = lesson("l-mix", introduce: words + [phrase], letters: letters)
+        let content = bundle(
+            units: [unit("u-mix", lessons: [current])],
+            items: words + [phrase] + letters
+        )
+        let context = QuizContext(bundle: content, seenLessonIDs: [current.id])
+        var rng = SplitMix64(seed: 1)
+
+        let wordQuestion = PashtoToEnglishChoice().makeTask(for: words[0], in: context, using: &rng)
+        let wordIDs = wordQuestion?.options.map(\.itemID.rawValue) ?? []
+        #expect(wordQuestion != nil)
+        #expect(wordIDs.contains("e-w1"))
+        #expect(wordIDs.allSatisfy { $0 == "e-phrase" || $0.hasPrefix("e-w") })
+
+        var phraseRNG = SplitMix64(seed: 4)
+        let phraseQuestion = EnglishToPashtoChoice().makeTask(for: phrase, in: context, using: &phraseRNG)
+        let phraseIDs = phraseQuestion?.options.map(\.itemID.rawValue) ?? []
+        #expect(phraseQuestion != nil)
+        #expect(phraseIDs.contains("e-phrase"))
+        #expect(phraseIDs.allSatisfy { $0 == "e-phrase" || $0.hasPrefix("e-w") })
+
+        #expect(PashtoToEnglishChoice().makeTask(for: letters[0], in: context, using: &rng) == nil)
+        #expect(TransliterationChoice().makeTask(for: letters[0], in: context, using: &rng) == nil)
+
+        let third = word("e-l3", "l3", "letter 3", kind: .letter)
+        let letterLesson = lesson("l-letters", introduce: [words[0]], letters: letters + [third])
+        let letterBundle = bundle(
+            units: [unit("u-letters", lessons: [letterLesson])],
+            items: [words[0]] + letters + [third]
+        )
+        let letterContext = QuizContext(bundle: letterBundle, seenLessonIDs: [letterLesson.id])
+        var letterRNG = SplitMix64(seed: 2)
+        #expect(PashtoToEnglishChoice().makeTask(for: words[0], in: letterContext, using: &letterRNG) == nil)
+
+        for generator in [meaningGenerator(), transliterationGenerator()] {
+            var one = SplitMix64(seed: 3)
+            let question = generator(letters[0], letterContext, &one)
+            let ids = question?.options.map(\.itemID.rawValue) ?? []
+            #expect(question != nil)
+            #expect(ids.contains("e-l1"))
+            #expect(ids.allSatisfy { $0.hasPrefix("e-l") })
+            #expect(!ids.contains("e-w1"))
+        }
+    }
+
+    @Test func nearerLevelIsFilledBeforeTheNextAndPicksVary() {
+        let target = word("e-target", "t", "target")
+        let sameA = word("e-same-a", "a", "same a")
+        let sameB = word("e-same-b", "b", "same b")
+        let earlier = (1...4).map { word("e-earlier-\($0)", "e\($0)", "earlier \($0)") }
+        let older = (1...3).map { word("e-older-\($0)", "o\($0)", "older \($0)") }
+        let olderLesson = lesson("l-older", introduce: older)
+        let earlierLesson = lesson("l-earlier", introduce: earlier)
+        let current = lesson("l-current", introduce: [target, sameA, sameB])
+        let content = bundle(units: [
+            unit("u-old", lessons: [olderLesson]),
+            unit("u-mid", lessons: [earlierLesson, current]),
+        ], items: [target, sameA, sameB] + earlier + older)
+        let context = QuizContext(
+            bundle: content,
+            seenLessonIDs: [olderLesson.id, earlierLesson.id, current.id]
+        )
+
+        var thirds: [String] = []
+        for seed in UInt64(1)...40 {
+            var rng = SplitMix64(seed: seed)
+            let question = PashtoToEnglishChoice().makeTask(for: target, in: context, using: &rng)
+            let ids = Set(question?.options.map(\.itemID.rawValue) ?? [])
+            #expect(ids.contains("e-target"))
+            #expect(ids.contains("e-same-a"))
+            #expect(ids.contains("e-same-b"))
+            #expect(ids.count == 4)
+            #expect(ids.isDisjoint(with: ["e-older-1", "e-older-2", "e-older-3"]))
+            let third = ids.subtracting(["e-target", "e-same-a", "e-same-b"])
+            #expect(third.count == 1)
+            let picked = third.first ?? ""
+            #expect(picked.hasPrefix("e-earlier-"))
+            thirds.append(picked)
+        }
+        #expect(Set(thirds).count > 1)
+    }
+
+    @Test func distractorSetVariesAcrossSeeds() {
+        var sets: [Set<String>] = []
+        for seed in UInt64(1)...30 {
+            let question = task(itemCount: 6, seed: seed)
+            let ids = Set(question?.options.map(\.itemID.rawValue) ?? [])
+            #expect(ids.contains("e-1"))
+            #expect(ids.count == 4)
+            #expect(ids.isSubset(of: ["e-1", "e-2", "e-3", "e-4", "e-5", "e-6"]))
+            sets.append(ids)
+        }
+        #expect(Set(sets).count > 1)
+    }
+
+    @Test func correctAnswerPositionIsSpreadAcrossSlots() throws {
+        let trials = 240
+        var counts = [0, 0, 0, 0]
+        for seed in 1...trials {
+            let question = try #require(task(itemCount: 6, seed: UInt64(seed)))
+            let index = try #require(question.options.firstIndex { $0.itemID == question.targetID })
+            counts[index] += 1
+        }
+        let low = trials / 8
+        let high = trials / 2
+        for count in counts {
+            #expect(count >= low)
+            #expect(count <= high)
+        }
+    }
+
     @Test func optionOrderUsesTheSeedAndTheSetDoesNot() {
         var orders: [[String]] = []
         var sets: [Set<String>] = []
@@ -234,7 +353,7 @@ struct MultipleChoiceTests {
                 seenLessonIDs: seen,
                 using: &rng
             )
-            let introduced = Set(Distractors.introducedItems(in: lesson.id, bundle: bundle).map(\.id))
+            let introduced = Distractors.introducedItems(in: lesson.id, bundle: bundle)
             let allowed = introducedIDs(in: seen, bundle: bundle)
             // l-sounds-1 only references sound examples. Those items are not seen,
             // and the lesson introduces nothing, so it has no multiple-choice questions.
@@ -242,9 +361,24 @@ struct MultipleChoiceTests {
                 #expect(tasks.isEmpty)
             } else {
                 #expect(!tasks.isEmpty)
-                #expect(Set(tasks.map(\.targetID)) == introduced)
             }
             expectWellFormed(tasks, allowed: allowed)
+            expectSameKind(tasks, items: bundle.items)
+            if lesson.id.rawValue == "l-greetings-1" {
+                let targets = Set(tasks.map(\.targetID.rawValue))
+                #expect(targets.isSuperset(of: [
+                    "e-salam", "e-assalamu-alaykum", "e-walaykum-salam",
+                    "e-stare-ma-she", "e-xwar-ma-she", "e-xa-raghlast",
+                ]))
+                #expect(!targets.contains("e-letter-alif"))
+                #expect(!targets.contains("e-letter-be"))
+            }
+            if lesson.id.rawValue == "l-greetings-2" {
+                let letterKinds = Set(tasks.filter { $0.targetID.rawValue == "e-letter-pe" }.map(\.kind))
+                #expect(letterKinds == [
+                    .meaningPashtoToEnglish, .meaningEnglishToPashto, .transliterationChoice,
+                ])
+            }
         }
 
         var greetingsRNG = SplitMix64(seed: 1)
@@ -412,6 +546,38 @@ private func generate(_ bundle: ContentBundle, lessons: [Lesson], seed: UInt64) 
         ))
     }
     return tasks
+}
+
+private func meaningGenerator() -> (ContentItem, QuizContext, inout SplitMix64) -> QuizTask? {
+    { item, context, rng in
+        PashtoToEnglishChoice().makeTask(for: item, in: context, using: &rng)
+    }
+}
+
+private func transliterationGenerator() -> (ContentItem, QuizContext, inout SplitMix64) -> QuizTask? {
+    { item, context, rng in
+        TransliterationChoice().makeTask(for: item, in: context, using: &rng)
+    }
+}
+
+private func expectSameKind(_ tasks: [QuizTask], items: [ContentItem]) {
+    var byID: [ItemID: ContentItem] = [:]
+    for item in items where byID[item.id] == nil {
+        byID[item.id] = item
+    }
+    for task in tasks {
+        guard let target = byID[task.targetID] else {
+            Issue.record("Missing target \(task.targetID)")
+            continue
+        }
+        for option in task.options {
+            guard let item = byID[option.itemID] else {
+                Issue.record("Missing option \(option.itemID)")
+                continue
+            }
+            #expect((item.kind == .letter) == (target.kind == .letter))
+        }
+    }
 }
 
 private func expectWellFormed(_ tasks: [QuizTask], allowed: Set<ItemID>) {

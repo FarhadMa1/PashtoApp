@@ -28,6 +28,11 @@ public struct DistractorCandidate: Hashable, Sendable {
 /// meaning (`en` or `enAlt`), Pashto spelling, transliteration, or
 /// pronunciation are left out.
 ///
+/// A letter is only a candidate for another letter. Words, phrases, and dialog
+/// lines share one pool, so a phrase can be a distractor for a word and the
+/// reverse. Dialog lines are in that pool because they use the same fields and
+/// are not letters.
+///
 /// Membership tests use `Set.contains`. The course order itself is the
 /// `units` array, so this type never walks a `Set` or `Dictionary`.
 public enum Distractors {
@@ -46,6 +51,7 @@ public enum Distractors {
             guard !retired.contains(introduction.itemID) else { continue }
             guard let source = source(of: introduction, target: targetIntro) else { continue }
             guard let item = course.itemsByID[introduction.itemID] else { continue }
+            guard sameQuizPool(item.kind, stored.kind) else { continue }
             guard !excluded(item, target: stored, groups: context.bundle.nonDistractorGroups) else { continue }
             rows.append((introduction, source))
         }
@@ -173,6 +179,11 @@ private func tier(of introduction: Introduction, target: Introduction) -> Int {
         return 1
     }
     return 2
+}
+
+/// Letters stand alone. Every other kind shares the word and phrase pool.
+private func sameQuizPool(_ candidate: ContentKind, _ target: ContentKind) -> Bool {
+    (candidate == .letter) == (target == .letter)
 }
 
 private func excluded(_ candidate: ContentItem, target: ContentItem, groups: [[ItemID]]) -> Bool {
