@@ -37,7 +37,7 @@ swift test --package-path Packages/PashtoCore
 
 That does not build the iOS app. The app target needs Xcode on macOS.
 
-The same package must stay free of Apple-only frameworks and of the process-global clock and locale. From the repository root:
+The same package must stay free of Apple-only frameworks, and of the process-global clock and locale except for `SystemDateProvider`, the only `Date()` call. From the repository root:
 
 ```bash
 ./scripts/linux-guard.sh

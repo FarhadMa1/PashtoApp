@@ -1,8 +1,8 @@
-/// Pure-Swift module boundary for lesson content and quiz generation.
+/// Pure-Swift module boundary for lesson content, quizzes, and civil dates.
 ///
 /// This package must stay free of Apple-only frameworks so `swift test`
-/// can run on Linux. Content types decode `Data`. They do not read files,
-/// the clock, or the current locale.
+/// can run on Linux. Content types decode `Data`. They do not read files
+/// or the current locale. Only `SystemDateProvider` reads the process clock.
 public enum PashtoCore {
     /// Stable name the app target references so the package dependency stays linked.
     public static let moduleName = "PashtoCore"
