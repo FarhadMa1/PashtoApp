@@ -7,7 +7,7 @@ on:
   pull_request:
     paths:
       - "Packages/PashtoPersistence/**"
-      - "Packages/PashtoCore/Sources/PashtoCore/Progress/**"
+      - "Packages/PashtoCore/Sources/**"
       - "Packages/PashtoCore/Sources/PashtoCoreTesting/**"
       - ".github/workflows/persistence-tests.yml"
   push:
@@ -15,7 +15,7 @@ on:
       - main
     paths:
       - "Packages/PashtoPersistence/**"
-      - "Packages/PashtoCore/Sources/PashtoCore/Progress/**"
+      - "Packages/PashtoCore/Sources/**"
       - "Packages/PashtoCore/Sources/PashtoCoreTesting/**"
       - ".github/workflows/persistence-tests.yml"
 
