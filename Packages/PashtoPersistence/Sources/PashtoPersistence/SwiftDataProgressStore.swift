@@ -276,6 +276,13 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
         }
     }
 
+    /// SwiftData does not keep a NaN or infinite `Double`. Those values are
+    /// stored as `-1`. `validated` already turns a negative ease into the
+    /// initial ease, so `load` still uses the core rule and does not clamp here.
+    private func storedEase(_ ease: Double) -> Double {
+        ease.isFinite ? ease : -1
+    }
+
     private func upsert(_ card: ReviewCard) throws {
         let itemID = card.itemID.rawValue
         let matches = try cardRows().filter { $0.itemID == itemID }
@@ -283,7 +290,7 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
             throw ProgressPersistenceError.duplicateStoredValue(field: "itemID", value: itemID)
         }
         if let record = matches.first {
-            record.easeFactor = card.easeFactor
+            record.easeFactor = storedEase(card.easeFactor)
             record.intervalDays = card.intervalDays
             record.repetitions = card.repetitions
             record.lapses = card.lapses
@@ -297,7 +304,7 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
         modelContext.insert(
             ReviewCardRecord(
                 itemID: itemID,
-                easeFactor: card.easeFactor,
+                easeFactor: storedEase(card.easeFactor),
                 intervalDays: card.intervalDays,
                 repetitions: card.repetitions,
                 lapses: card.lapses,

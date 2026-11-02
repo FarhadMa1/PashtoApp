@@ -49,6 +49,9 @@ public enum ProgressContainer {
                 cloudKitDatabase: .none
             )
         }
+        if let url, FileManager.default.fileExists(atPath: url.path) {
+            try StoredSchema.refuseIfNewer(at: url)
+        }
         do {
             return try ModelContainer(
                 for: schema,
