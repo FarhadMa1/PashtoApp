@@ -20,12 +20,12 @@ struct UpdateNeededScreen: View {
                         .frame(width: 52, height: 52)
                 }
                 .padding(.top, 24)
-                Text("Update needed")
+                Text("updateNeeded.title")
                     .font(.title2.weight(.heavy))
                     .foregroundStyle(Lapis.text)
                     .padding(.top, 22)
                     .accessibilityAddTraits(.isHeader)
-                Text("Your progress was saved by a newer version of the app. Update to keep learning. Nothing has been lost.")
+                Text("updateNeeded.body")
                     .font(.body)
                     .foregroundStyle(Lapis.secondaryText)
                     .lineSpacing(4)
@@ -39,7 +39,7 @@ struct UpdateNeededScreen: View {
         } footer: {
             if showsAppStoreButton {
                 Button(action: openAppStore) {
-                    Text("Open App Store")
+                    Text("updateNeeded.openAppStore.button")
                 }
                 .buttonStyle(SaffronButtonStyle())
             }

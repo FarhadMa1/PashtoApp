@@ -12,12 +12,12 @@ struct WelcomeBackScreen: View {
             VStack(spacing: 0) {
                 WelcomeHero()
                     .padding(.top, 8)
-                Text("Welcome back")
+                Text("welcomeBack.title")
                     .font(.title.weight(.heavy))
                     .foregroundStyle(Lapis.text)
                     .padding(.top, 30)
                     .accessibilityAddTraits(.isHeader)
-                Text("Good to see you again. Let's warm up with a short review.")
+                Text("welcomeBack.body")
                     .font(.body)
                     .foregroundStyle(Lapis.secondaryText)
                     .lineSpacing(4)
@@ -30,7 +30,7 @@ struct WelcomeBackScreen: View {
             .padding(.top, 12)
         } footer: {
             Button(action: startReview) {
-                Text("Start review")
+                Text("welcomeBack.startReview.button")
             }
             .buttonStyle(SaffronButtonStyle())
         }

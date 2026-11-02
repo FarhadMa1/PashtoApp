@@ -16,12 +16,12 @@ struct StorageErrorScreen: View {
                     ExclamationMark()
                 }
                 .padding(.top, 24)
-                Text("We couldn't open your progress")
+                Text("storageError.title")
                     .font(.title2.weight(.heavy))
                     .foregroundStyle(Lapis.text)
                     .padding(.top, 22)
                     .accessibilityAddTraits(.isHeader)
-                Text("Something went wrong while loading. Try again first.")
+                Text("storageError.body")
                     .font(.body)
                     .foregroundStyle(Lapis.secondaryText)
                     .lineSpacing(4)
@@ -35,10 +35,10 @@ struct StorageErrorScreen: View {
         } footer: {
             VStack(spacing: 8) {
                 Button(action: tryAgain) {
-                    Text("Try again")
+                    Text("storageError.tryAgain.button")
                 }
                 .buttonStyle(SaffronButtonStyle())
-                Button("Start over", role: .destructive, action: { confirmingStartOver = true })
+                Button("storageError.startOver.button", role: .destructive, action: { confirmingStartOver = true })
                     .buttonStyle(.plain)
                     .font(.body.weight(.bold))
                     .foregroundStyle(Lapis.destructive)
@@ -46,11 +46,11 @@ struct StorageErrorScreen: View {
                     .padding(.vertical, 14)
             }
         }
-        .alert("Start over?", isPresented: $confirmingStartOver) {
-            Button("Start over", role: .destructive, action: startOver)
-            Button("Cancel", role: .cancel) {}
+        .alert("storageError.startOver.confirmTitle", isPresented: $confirmingStartOver) {
+            Button("storageError.startOver.button", role: .destructive, action: startOver)
+            Button("storageError.startOver.cancel", role: .cancel) {}
         } message: {
-            Text("Your lessons, words and streak start from the beginning. Your settings stay the same.")
+            Text("storageError.startOver.confirmMessage")
         }
     }
 }
