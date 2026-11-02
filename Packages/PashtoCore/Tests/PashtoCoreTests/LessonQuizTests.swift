@@ -638,6 +638,64 @@ struct DialogResponseTests {
             }
         }
     }
+
+    /// مننه is already grouped with these prompts. ډېره مننه (Pashto ډ, U+0689)
+    /// is in the same groups, so it is not a wrong option for those replies.
+    @Test func deraMananaIsBlockedWhereMananaIsBlocked() throws {
+        let bundle = try loadRepositoryContent()
+        let thanks = try #require(bundle.items.first { $0.id.rawValue == "e-dera-manana" })
+        let scalars = Array(thanks.pashto.unicodeScalars)
+        #expect(scalars.contains { $0.value == 0x0689 })
+        #expect(!scalars.contains { $0.value == 0x0688 })
+        #expect(thanks.pashto == "ډېره مننه")
+
+        let prompts = [
+            "e-tsanga-ye",
+            "e-stare-ma-she",
+            "e-mor-de-tsanga-da",
+            "e-plar-de-tsanga-day",
+        ]
+        var seen: [LessonID] = []
+        var replies: [ContentItem] = []
+        for lesson in bundle.units.flatMap(\.lessons) {
+            seen.append(lesson.id)
+            let context = quizContext(bundle, seen: seen.map(\.rawValue))
+            for item in Distractors.introducedItems(in: lesson.id, bundle: bundle) {
+                guard let prompt = item.responseTo, prompts.contains(prompt.rawValue) else { continue }
+                replies.append(item)
+                let pool = DialogResponse.eligibleDistractors(for: item, in: context)
+                #expect(!pool.contains { $0.id == thanks.id })
+                switch item.id.rawValue {
+                case "e-za-xa-yam":
+                    #expect(pool.count == 6)
+                case "e-hagha-xa-da", "e-hagha-xa-day":
+                    #expect(pool.count == 25)
+                case "e-xwar-ma-she":
+                    #expect(pool.count < DialogResponse.minimumDistractors)
+                default:
+                    Issue.record("Unexpected reply \(item.id.rawValue) to \(prompt.rawValue)")
+                }
+                for seed in UInt64(1)...20 {
+                    var rng = SplitMix64(seed: seed)
+                    let task = DialogResponse().makeTask(for: item, in: context, using: &rng)
+                    if item.id.rawValue == "e-xwar-ma-she" {
+                        #expect(task == nil)
+                        continue
+                    }
+                    let quiz = try #require(task)
+                    let wrong = quiz.options.filter { $0.itemID != item.id }
+                    #expect(wrong.count >= 3)
+                    #expect(!quiz.options.contains { $0.itemID == thanks.id })
+                }
+            }
+        }
+        #expect(replies.map(\.id.rawValue).sorted() == [
+            "e-hagha-xa-da",
+            "e-hagha-xa-day",
+            "e-xwar-ma-she",
+            "e-za-xa-yam",
+        ])
+    }
 }
 
 struct LessonSessionTests {
