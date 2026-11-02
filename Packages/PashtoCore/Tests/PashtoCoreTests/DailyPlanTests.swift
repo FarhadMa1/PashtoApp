@@ -306,7 +306,12 @@ struct DailyPlanTests {
         #expect(lessonReviewQuality(for: itemID("e-missed"), answers: answers) == .incorrect)
         #expect(lessonReviewQuality(for: itemID("e-other"), answers: answers) == nil)
 
-        let reviewed = applyLessonReviews(introduced, answers: answers, on: today)
+        let reviewed = applyLessonReviews(
+            introduced,
+            introducedIn: lesson("l-one", introducing: ["e-first", "e-retry", "e-missed"]),
+            answers: answers,
+            on: today
+        )
         #expect(introduced.allSatisfy { $0.lastReviewedDay == nil })
         #expect(reviewed.map(\.itemID) == introduced.map(\.itemID))
 
@@ -352,27 +357,240 @@ struct DailyPlanTests {
             choice("e-many", result: .correct, isRepeat: true),
             order("e-many", result: .incorrect),
         ]
-        let reviewed = applyLessonReviews([many], answers: answers, on: today)
+        let manyLesson = lesson("l-many", introducing: ["e-many"])
+        let reviewed = applyLessonReviews([many], introducedIn: manyLesson, answers: answers, on: today)
         #expect(reviewed.count == 1)
         #expect(reviewed[0].repetitions == 1)
         #expect(reviewed[0].lapses == 0)
         #expect(easeThousandths(reviewed[0].easeFactor) == 2_500)
-        #expect(applyLessonReviews(reviewed, answers: answers, on: today) == reviewed)
+        #expect(applyLessonReviews(reviewed, introducedIn: manyLesson, answers: answers, on: today) == reviewed)
 
         let matched = ReviewCard.introduced(itemID: itemID("e-pair"), on: today)
         let onlyMatch = [match(including: "e-pair")]
         #expect(lessonReviewQuality(for: matched.itemID, answers: onlyMatch) == nil)
-        #expect(applyLessonReviews([matched], answers: onlyMatch, on: today) == [matched])
+        let held = applyLessonReviews(
+            [matched],
+            introducedIn: lesson("l-match", introducing: ["e-pair"]),
+            answers: onlyMatch,
+            on: today
+        )
+        #expect(held[0].dueDay == today.adding(days: 1))
+        #expect(held[0].lastReviewedDay == nil)
+        #expect(held[0].repetitions == 0)
+        #expect(held[0].intervalDays == 0)
+        #expect(held[0].lapses == 0)
+        #expect(held[0].easeFactor == matched.easeFactor)
+        #expect(held[0].state == .active)
+        #expect(held[0].source == .lesson)
+        let heldToday = plan(goal: .regular, cards: held)
+        #expect(heldToday.reviews.isEmpty)
+        #expect(heldToday.dueCount == 0)
+        let heldTomorrow = plan(goal: .regular, cards: held, on: today.adding(days: 1))
+        #expect(heldTomorrow.reviews.map(\.itemID) == [matched.itemID])
 
         let ordered = ReviewCard.introduced(itemID: itemID("e-order"), on: today)
         let fromOrder = applyLessonReviews(
             [ordered],
+            introducedIn: lesson("l-order", introducing: ["e-order"]),
             answers: [order("e-order", result: .correct)],
             on: today
         )
         #expect(fromOrder[0].repetitions == 1)
         #expect(fromOrder[0].lastReviewedDay == today)
         #expect(fromOrder[0].dueDay == today.adding(days: 1))
+    }
+
+    @Test func aCardWithNoGradeWaitsUntilTomorrowWithoutAReview() {
+        let fresh = ReviewCard.introduced(itemID: itemID("e-pair"), on: today)
+        let placement = ReviewCard.introduced(itemID: itemID("e-pair"), on: today, source: .placement)
+        let otherLesson = ReviewCard.introduced(itemID: itemID("e-other"), on: today)
+        let alreadyLater = ReviewCard(
+            itemID: itemID("e-later"),
+            easeFactor: 2.2,
+            intervalDays: 6,
+            repetitions: 2,
+            lapses: 1,
+            dueDay: today.adding(days: 4),
+            lastReviewedDay: nil,
+            state: .active,
+            source: .lesson
+        )
+        let reviewedToday = ReviewCard(
+            itemID: itemID("e-done"),
+            easeFactor: 2.5,
+            intervalDays: 1,
+            repetitions: 1,
+            lapses: 0,
+            dueDay: today,
+            lastReviewedDay: today,
+            state: .active,
+            source: .lesson
+        )
+        let stored = [fresh, placement, otherLesson, alreadyLater, reviewedToday]
+        let updated = applyLessonReviews(
+            stored,
+            introducedIn: lesson("l-match", introducing: ["e-pair", "e-later", "e-done"]),
+            answers: [
+                match(including: "e-pair"),
+                choice("e-other", result: .correct, isRepeat: false),
+                choice("e-place", result: .correct, isRepeat: false),
+            ],
+            on: today
+        )
+
+        #expect(updated[0].dueDay == today.adding(days: 1))
+        #expect(updated[0].lastReviewedDay == nil)
+        #expect(updated[0].repetitions == fresh.repetitions)
+        #expect(updated[0].intervalDays == fresh.intervalDays)
+        #expect(updated[0].lapses == fresh.lapses)
+        #expect(updated[0].easeFactor == fresh.easeFactor)
+        #expect(updated[1] == placement)
+        #expect(updated[2] == otherLesson)
+        #expect(updated[3] == alreadyLater)
+        #expect(updated[4] == reviewedToday)
+
+        let todayPlan = plan(goal: .regular, cards: updated, known: Set(stored.map(\.itemID)))
+        #expect(todayPlan.reviews.map(\.itemID.rawValue) == ["e-other", "e-pair"])
+        #expect(!todayPlan.reviews.contains { $0.source == .lesson && $0.itemID.rawValue == "e-pair" })
+    }
+
+    /// Real lessons, built the way the app builds them. Every introduced item
+    /// that can take a single-item question has one in the session, and that
+    /// question is a first-answer grade. A match does not count.
+    ///
+    /// Three items in `l-greetings-1` cannot take one: the lesson introduces
+    /// only two letters, and ستړی مه شې has fewer than two legal distractors.
+    /// Those cards use the due-day safety net instead of a review.
+    @Test func everyIntroducedItemHasASingleItemQuestion() throws {
+        let bundle = try loadRepositoryContent()
+        let lessons = bundle.units.flatMap(\.lessons)
+        #expect(!lessons.isEmpty)
+        let withoutALegalQuestion = ["e-letter-alif", "e-letter-be", "e-stare-ma-she"]
+
+        for seed in UInt64(1)...8 {
+            var seen: [LessonID] = []
+            var uncovered: [String] = []
+            var rng = SplitMix64(seed: seed)
+            for lesson in lessons {
+                seen.append(lesson.id)
+                let session = LessonSessionBuilder.build(
+                    for: lesson.id,
+                    in: bundle,
+                    seenLessonIDs: seen,
+                    using: &rng
+                )
+                let introduced = Distractors.introducedItems(in: lesson.id, bundle: bundle)
+                var graded: Set<ItemID> = []
+                for task in session.tasks {
+                    guard let target = singleItemTarget(task), !task.isRepeat else { continue }
+                    graded.insert(target)
+                    let answer = SessionAnswer(
+                        task: task,
+                        answer: .choice(target),
+                        result: .correct
+                    )
+                    #expect(lessonReviewQuality(for: target, answers: [answer]) == .firstAttempt)
+                }
+                let context = QuizContext(bundle: bundle, seenLessonIDs: seen)
+                for item in introduced where !graded.contains(item.id) {
+                    var probe = SplitMix64(seed: seed)
+                    #expect(
+                        !canMakeSingleItemQuestion(for: item, in: context, using: &probe),
+                        "\(lesson.id.rawValue) dropped a single-item question for \(item.id.rawValue)"
+                    )
+                    uncovered.append(item.id.rawValue)
+                }
+            }
+            #expect(uncovered.sorted() == withoutALegalQuestion)
+        }
+    }
+
+    @Test func greetingsItemsWithoutAQuestionAreDueTomorrowAndOtherCardsStay() throws {
+        let bundle = try loadRepositoryContent()
+        let course = bundle.units.flatMap(\.lessons)
+        let greetings = try #require(course.first { $0.id.rawValue == "l-greetings-1" })
+        var seen: [LessonID] = []
+        var rng = SplitMix64(seed: 1)
+        for lesson in course {
+            seen.append(lesson.id)
+            if lesson.id == greetings.id { break }
+        }
+        let session = LessonSessionBuilder.build(
+            for: greetings.id,
+            in: bundle,
+            seenLessonIDs: seen,
+            using: &rng
+        )
+        let day = LocalDay(year: 2026, month: 11, day: 1)
+        let introduced = reviewCards(introducedIn: greetings, on: day)
+        let outsider = ReviewCard.introduced(itemID: itemID("e-manana"), on: day)
+        let placement = ReviewCard.introduced(itemID: itemID("e-salam"), on: day, source: .placement)
+        let answers = session.tasks.map(correctAnswer)
+        let updated = applyLessonReviews(
+            introduced + [outsider, placement],
+            introducedIn: greetings,
+            answers: answers,
+            on: day
+        )
+
+        let untouched = ["e-letter-alif", "e-letter-be", "e-stare-ma-she"]
+        for card in updated where card.source == .lesson && card.itemID != outsider.itemID {
+            #expect(card.dueDay >= day.adding(days: 1))
+            if untouched.contains(card.itemID.rawValue) {
+                #expect(card.lastReviewedDay == nil)
+                #expect(card.repetitions == 0)
+                #expect(card.intervalDays == 0)
+                #expect(card.lapses == 0)
+                #expect(card.easeFactor == ReviewCard.initialEaseFactor)
+            } else {
+                #expect(card.lastReviewedDay == day)
+                #expect(card.repetitions == 1)
+            }
+        }
+        #expect(updated.first { $0.itemID == outsider.itemID && $0.source == .lesson } == outsider)
+        #expect(updated.first { $0.source == .placement } == placement)
+
+        var lessonCards: [ReviewCard] = []
+        for original in introduced {
+            lessonCards.append(
+                try #require(updated.first { $0.itemID == original.itemID && $0.source == .lesson })
+            )
+        }
+        let todayPlan = dailyPlan(
+            cards: lessonCards,
+            knownItemIDs: Set(lessonCards.map(\.itemID)),
+            goal: .regular,
+            newItemsShownToday: 0,
+            on: day
+        )
+        #expect(todayPlan.reviews.isEmpty)
+        #expect(todayPlan.dueCount == 0)
+    }
+
+    private func correctAnswer(_ task: SessionTask) -> SessionAnswer {
+        let answer: QuizAnswer
+        switch task.payload {
+        case .choice(let quiz):
+            answer = .choice(quiz.targetID)
+        case .orderWords(let order):
+            answer = .tokenOrder(Array(order.tokens.indices))
+        case .matchPairs(let match):
+            answer = .matches(match.pairs.map { MatchLink(left: $0.left.itemID, right: $0.right.itemID) })
+        }
+        return SessionAnswer(task: task, answer: answer, result: .correct)
+    }
+
+    private func canMakeSingleItemQuestion(
+        for item: ContentItem,
+        in context: QuizContext,
+        using rng: inout SplitMix64
+    ) -> Bool {
+        if PashtoToEnglishChoice().makeTask(for: item, in: context, using: &rng) != nil { return true }
+        if EnglishToPashtoChoice().makeTask(for: item, in: context, using: &rng) != nil { return true }
+        if TransliterationChoice().makeTask(for: item, in: context, using: &rng) != nil { return true }
+        if OrderWords.makeTask(for: item, in: context, using: &rng) != nil { return true }
+        if DialogResponse().makeTask(for: item, in: context, using: &rng) != nil { return true }
+        return false
     }
 
     private func plan(
@@ -420,6 +638,25 @@ struct DailyPlanTests {
             state: state,
             source: source
         )
+    }
+
+    private func lesson(_ id: String, introducing ids: [String]) -> Lesson {
+        Lesson(
+            id: lessonID(id),
+            title: id,
+            items: ids.map { LessonItemRef(item: itemID($0), role: .introduce) }
+        )
+    }
+
+    private func singleItemTarget(_ task: SessionTask) -> ItemID? {
+        switch task.payload {
+        case .choice(let quiz):
+            return quiz.targetID
+        case .orderWords(let order):
+            return order.targetID
+        case .matchPairs:
+            return nil
+        }
     }
 
     private func choice(_ id: String, result: GradeResult, isRepeat: Bool) -> SessionAnswer {

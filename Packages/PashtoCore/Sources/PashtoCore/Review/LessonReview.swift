@@ -26,26 +26,50 @@ public func lessonReviewQuality(for itemID: ItemID, answers: [SessionAnswer]) ->
     return .incorrect
 }
 
-/// Applies the lesson quiz as the first review of each new card.
+/// Applies the lesson quiz as the first review of each new card from `lesson`.
 ///
-/// A new card has no `lastReviewedDay`. Each such card whose item has a
-/// `lessonReviewQuality` is passed to `review` on `day`. The new interval is
-/// at least one day, so the card is due on the day after `day` at the
-/// earliest, and `dailyPlan` leaves it out of `day`. A card that was already
-/// reviewed is returned unchanged, and so is a card with no single-item
-/// answer. Cards stay in their original order. This function does not read
-/// a clock.
+/// A new card has no `lastReviewedDay` and `source` `lesson`. Its item is one
+/// this lesson introduces. `soundExample` references introduce nothing. Each
+/// new card whose item has a `lessonReviewQuality` is passed to `review` on
+/// `day`. The new interval is at least one day, so the card is due on the day
+/// after `day` at the earliest, and `dailyPlan` leaves it out of `day`.
+///
+/// A new card from this lesson with no single-item grade is not reviewed.
+/// Match pairs are the case that produces no grade. Its `dueDay` moves to
+/// the day after `day` when it would have been earlier, and no other field
+/// changes: repetitions, ease, interval, lapses, and `lastReviewedDay` stay
+/// as they were. It still does not enter today's queue. A due day that is
+/// already the next day or later stays where it is.
+///
+/// A card that was already reviewed is returned unchanged. So is a placement
+/// card, and so is a card this lesson does not introduce. Cards stay in their
+/// original order. This function does not read a clock.
 public func applyLessonReviews(
     _ cards: [ReviewCard],
+    introducedIn lesson: Lesson,
     answers: [SessionAnswer],
     on day: LocalDay
 ) -> [ReviewCard] {
-    cards.map { card in
+    let introduced = Set(reviewCards(introducedIn: lesson, on: day).map(\.itemID))
+    let earliest = day.adding(days: 1)
+    return cards.map { card in
+        guard card.source == .lesson, introduced.contains(card.itemID) else { return card }
         guard card.lastReviewedDay == nil else { return card }
-        guard let quality = lessonReviewQuality(for: card.itemID, answers: answers) else {
-            return card
+        if let quality = lessonReviewQuality(for: card.itemID, answers: answers) {
+            return review(card, quality: quality, on: day)
         }
-        return review(card, quality: quality, on: day)
+        guard card.dueDay < earliest else { return card }
+        return ReviewCard(
+            itemID: card.itemID,
+            easeFactor: card.easeFactor,
+            intervalDays: card.intervalDays,
+            repetitions: card.repetitions,
+            lapses: card.lapses,
+            dueDay: earliest,
+            lastReviewedDay: card.lastReviewedDay,
+            state: card.state,
+            source: card.source
+        )
     }
 }
 
