@@ -30,11 +30,11 @@ public enum PathState: Sendable, Equatable {
 
 /// Learner state for one call to `pathState`.
 ///
-/// Stored progress, with a schema version and a streak, is a later step.
-/// This value is only what the path needs, and it is not saved. `dailyPlan`
-/// counts the due cards and the new items. The lesson ids are the lessons
-/// already finished or skipped by the placement test. The path does not
-/// store a position in the course.
+/// `pathProgress(_:on:)` builds this from a `ProgressSnapshot` for one civil
+/// day. This value is not saved on its own. `dailyPlan` counts the due cards
+/// and the new items. The lesson ids are the lessons already finished or
+/// skipped by the placement test. The path does not store a position in the
+/// course.
 public struct PathProgress: Hashable, Sendable {
     /// Review cards, including placement cards. Paused cards may be included.
     ///
@@ -54,8 +54,9 @@ public struct PathProgress: Hashable, Sendable {
     ///
     /// The same count `dailyPlan` subtracts from the goal. Changing the goal
     /// does not change this number, and a negative value counts as zero.
-    /// Reviews also store that day on old cards, so the cards alone cannot
-    /// say which items were new. A new civil day is a new count.
+    /// `pathProgress(_:on:)` counts lesson cards whose `createdDay` is that
+    /// day and skips placement cards. A review does not change `createdDay`,
+    /// so a new civil day is a new count.
     public let newItemsShownToday: Int
 
     public init(cards: [ReviewCard], finishedLessonIDs: Set<LessonID>, newItemsShownToday: Int) {

@@ -1,11 +1,11 @@
-public enum MatchMode: String, Hashable, Sendable {
+public enum MatchMode: String, Hashable, Codable, Sendable {
     /// Pashto on the left, English on the right. Both sides are one item.
     case pashtoEnglish
     /// The line on the left, the item whose `responseTo` points at it on the right.
     case response
 }
 
-public struct MatchSide: Hashable, Sendable {
+public struct MatchSide: Hashable, Codable, Sendable {
     public let itemID: ItemID
     public let text: String
 
@@ -15,7 +15,7 @@ public struct MatchSide: Hashable, Sendable {
     }
 }
 
-public struct MatchPair: Hashable, Sendable {
+public struct MatchPair: Hashable, Codable, Sendable {
     public let left: MatchSide
     public let right: MatchSide
 
@@ -26,7 +26,7 @@ public struct MatchPair: Hashable, Sendable {
 }
 
 /// One link from a left-hand card to the right-hand card the learner chose.
-public struct MatchLink: Hashable, Sendable {
+public struct MatchLink: Hashable, Codable, Sendable {
     public let left: ItemID
     public let right: ItemID
 
@@ -40,7 +40,7 @@ public struct MatchLink: Hashable, Sendable {
 ///
 /// `rightOrder` indexes `pairs` and is the right column. With two or more pairs
 /// it is not `0, 1, 2, ...`, so the columns are not already matched.
-public struct MatchPairsTask: Hashable, Sendable {
+public struct MatchPairsTask: Hashable, Codable, Sendable {
     public let mode: MatchMode
     public let pairs: [MatchPair]
     public let rightOrder: [Int]

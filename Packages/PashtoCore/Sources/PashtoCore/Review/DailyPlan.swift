@@ -3,7 +3,7 @@
 /// Light is 5, regular is 10, and serious is 15. Regular is the usual goal.
 /// The review queue has its own cap, `DailyPlan.maximumReviews`, and does not
 /// use this value.
-public enum DailyGoal: Int, CaseIterable, Hashable, Sendable {
+public enum DailyGoal: Int, CaseIterable, Codable, Hashable, Sendable {
     case light = 5
     case regular = 10
     case serious = 15
@@ -88,8 +88,9 @@ public struct DailyPlan: Hashable, Sendable {
 /// new items were already introduced on `today`. The allowance is the goal
 /// minus that number, and it is never negative, so a goal changed during the
 /// day does not take shown items back. A negative shown count is treated as
-/// zero. The shown count is an argument: a review also stores `today` on an
-/// old card, so the cards alone cannot say which items were new.
+/// zero. The shown count is an argument. `newItemsShown(on:in:)` counts
+/// lesson cards whose `createdDay` is `today`. A review stores `today` on an
+/// old card as `lastReviewedDay` and does not change `createdDay`.
 ///
 /// `today` is a `LocalDay`. This function does not read a clock.
 /// `pathState` reads this plan when it decides what the lesson path shows.
