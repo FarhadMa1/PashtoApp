@@ -24,8 +24,12 @@ private let progressLog = Logger(subsystem: "com.mangallabs.pashto", category: "
 /// An active session this build cannot read — an older payload version, or
 /// JSON that does not decode — is deleted on `load`, logged, and the rest
 /// of the file loads. A newer session payload is not deleted.
-@ModelActor
-public actor SwiftDataProgressStore: ProgressStore {
+///
+/// `ModelActor` is implemented here instead of `@ModelActor`. That macro
+/// also emits `init(modelContainer:)`, which cannot set `installedContentVersion`.
+public actor SwiftDataProgressStore: ModelActor, ProgressStore {
+    nonisolated public let modelExecutor: any ModelExecutor
+    nonisolated public let modelContainer: ModelContainer
     private let installedContentVersion: String
 
     /// `contentVersion` is the bundle version used until the file has its own.
