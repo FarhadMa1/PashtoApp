@@ -793,18 +793,7 @@ enum StoreFileEdit {
     }
 
     private static func plistAddingEntity(named name: String, to data: Data) throws -> Data {
-        let classes: [AnyClass] = [
-            NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSString.self, NSNumber.self, NSData.self, NSDate.self,
-        ]
-        let object: Any?
-        if let decoded = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data) {
-            object = decoded
-        } else {
-            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
-            unarchiver.requiresSecureCoding = false
-            object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
-        }
-        guard let metadata = (object as? NSDictionary)?.mutableCopy() as? NSMutableDictionary else {
+        guard let metadata = mutableMetadata(from: data) else {
             throw ProgressPersistenceError.failedToOpen("The metadata plist could not be edited.")
         }
         let hashes = (metadata[NSStoreModelVersionHashesKey] as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
@@ -812,6 +801,34 @@ enum StoreFileEdit {
         hashes[name] = Data(repeating: 7, count: 32)
         metadata[NSStoreModelVersionHashesKey] = hashes
         return try NSKeyedArchiver.archivedData(withRootObject: metadata, requiringSecureCoding: true)
+    }
+
+    /// The store's `Z_PLIST` is a classic keyed archive. `init(forReadingFrom:)`
+    /// rejects it. `requiresSecureCoding` is false only while editing that blob.
+    private static func mutableMetadata(from data: Data) -> NSMutableDictionary? {
+        let classes: [AnyClass] = [
+            NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSString.self, NSNumber.self, NSData.self, NSDate.self,
+        ]
+        let object: Any?
+        if let decoded = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data) {
+            object = decoded
+        } else if looksLikeKeyedArchive(data) {
+            let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+            unarchiver.requiresSecureCoding = false
+            object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
+            unarchiver.finishDecoding()
+        } else {
+            object = nil
+        }
+        return (object as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
+    }
+
+    private static func looksLikeKeyedArchive(_ data: Data) -> Bool {
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil),
+              let dictionary = plist as? NSDictionary,
+              let archiver = dictionary["$archiver"] as? String
+        else { return false }
+        return archiver == "NSKeyedArchiver"
     }
 
     private static var currentSchemaMarker: String {

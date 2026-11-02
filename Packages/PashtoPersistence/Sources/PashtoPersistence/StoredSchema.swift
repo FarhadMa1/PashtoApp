@@ -109,40 +109,84 @@ enum StoredSchema {
     }
 
     private static func metadataDictionary(from data: Data) throws -> [String: Any] {
-        let classes: [AnyClass] = [
-            NSDictionary.self, NSArray.self, NSString.self, NSNumber.self, NSData.self, NSDate.self, NSSet.self,
-        ]
-        if let object = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data),
-           let metadata = object as? [String: Any] {
+        if let metadata = decodedMetadata(from: data) {
             return metadata
         }
-        // Some SwiftData archives are not secure-coded. This fallback runs only
-        // on the private copy, after the secure decode has failed. A blob that
-        // decodes as neither is an open failure, not a newer schema.
-        let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
-        unarchiver.requiresSecureCoding = false
-        guard let metadata = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [String: Any] else {
-            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
+        throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
+    }
+
+    /// A secure archive is preferred. SwiftData's `Z_PLIST` is a classic keyed
+    /// archive, and `init(forReadingFrom:)` rejects that with archive version -1.
+    /// The classic reader runs only after the secure decode fails, and only for
+    /// a blob that is a keyed archive, so a garbage blob stays an open failure.
+    private static func decodedMetadata(from data: Data) -> [String: Any]? {
+        let classes: [AnyClass] = [
+            NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSMutableArray.self,
+            NSString.self, NSMutableString.self, NSNumber.self, NSData.self, NSMutableData.self,
+            NSDate.self, NSSet.self, NSMutableSet.self,
+        ]
+        if let object = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data),
+           let metadata = dictionary(from: object) {
+            return metadata
         }
-        return metadata
+        guard looksLikeKeyedArchive(data) else { return nil }
+        return classicMetadata(from: data)
+    }
+
+    /// `requiresSecureCoding` stays false because this private-copy blob was not
+    /// written with secure coding. A current store must still decode, or the
+    /// check would report it as a newer schema.
+    private static func classicMetadata(from data: Data) -> [String: Any]? {
+        let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+        unarchiver.requiresSecureCoding = false
+        let object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
+        unarchiver.finishDecoding()
+        return dictionary(from: object)
+    }
+
+    private static func looksLikeKeyedArchive(_ data: Data) -> Bool {
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil),
+              let dictionary = plist as? NSDictionary,
+              let archiver = dictionary["$archiver"] as? String
+        else { return false }
+        return archiver == "NSKeyedArchiver"
+    }
+
+    private static func dictionary(from object: Any?) -> [String: Any]? {
+        if let metadata = object as? [String: Any] { return metadata }
+        guard let dictionary = object as? NSDictionary else { return nil }
+        var metadata: [String: Any] = [:]
+        for (key, value) in dictionary {
+            guard let key = key as? String else { continue }
+            metadata[key] = value
+        }
+        return metadata.isEmpty ? nil : metadata
     }
 
     private static func versionIdentifiers(in metadata: [String: Any]) -> [String] {
-        if let values = metadata[NSStoreModelVersionIdentifiersKey] as? [String] {
+        let values = metadata[NSStoreModelVersionIdentifiersKey]
+        if let values = values as? [String] {
             return values
         }
-        if let values = metadata[NSStoreModelVersionIdentifiersKey] as? [Any] {
+        if let values = values as? [Any] {
+            return values.compactMap { $0 as? String }
+        }
+        if let values = values as? NSArray {
             return values.compactMap { $0 as? String }
         }
         return []
     }
 
     private static func entityNames(in metadata: [String: Any]) throws -> [String] {
-        if let hashes = metadata[NSStoreModelVersionHashesKey] as? [String: Any] {
+        let hashes = metadata[NSStoreModelVersionHashesKey]
+        if let hashes = hashes as? [String: Any] {
             return Array(hashes.keys)
         }
-        if let hashes = metadata[NSStoreModelVersionHashesKey] as? [AnyHashable: Any] {
+        if let hashes = hashes as? [AnyHashable: Any] {
             return hashes.keys.compactMap { $0 as? String }
+        }
+        if let hashes = hashes as? NSDictionary {
+            return hashes.allKeys.compactMap { $0 as? String }
         }
         throw ProgressPersistenceError.newerSchema("The store has no model hashes.")
     }
