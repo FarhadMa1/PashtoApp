@@ -1,4 +1,5 @@
 import Foundation
+import PashtoCore
 import SwiftData
 import SQLite3
 
@@ -7,6 +8,11 @@ import SQLite3
 /// On the macOS 15 / Xcode 16 toolchain, opening a store from a schema this
 /// plan does not contain does not throw. It replaces the file. This check
 /// runs first, read-only, and leaves the file alone.
+///
+/// One unknown entity is enough to refuse the file. A SwiftData version
+/// marker other than `SchemaV1` does the same. `StoreMetaRecord.snapshotVersion`
+/// is compared with `ProgressSnapshot.currentVersion` even when that marker
+/// is missing, and a newer value is refused before the container opens.
 enum StoredSchema {
     private static let knownEntities: Set<String> = [
         "ReviewCardRecord",
@@ -20,17 +26,22 @@ enum StoredSchema {
 
     static func refuseIfNewer(at url: URL) throws {
         let snapshot = try read(at: url)
-        let current = SchemaV1.versionIdentifier
-        if let newer = snapshot.versions.first(where: { $0 > current }) {
-            throw ProgressPersistenceError.newerSchema(
-                "Stored schema version \(newer) is newer than \(current)."
-            )
+        let currentSchema = SchemaV1.versionIdentifier
+        for identifier in snapshot.versionIdentifiers where !identifier.isEmpty {
+            guard let version = schemaVersion(identifier), version == currentSchema else {
+                throw ProgressPersistenceError.newerSchema(
+                    "Stored schema marker \(identifier) is not \(currentSchema)."
+                )
+            }
         }
         let unknown = snapshot.entities.filter { !isKnownEntity($0) }
-        if !snapshot.entities.isEmpty, snapshot.entities.allSatisfy({ !isKnownEntity($0) }) {
+        if !unknown.isEmpty {
             throw ProgressPersistenceError.newerSchema(
-                "Stored entities \(unknown.sorted().joined(separator: ", ")) are not in schema \(current)."
+                "Stored entity \(unknown.sorted().joined(separator: ", ")) is not in schema \(currentSchema)."
             )
+        }
+        if let stored = snapshot.snapshotVersion, stored > ProgressSnapshot.currentVersion {
+            throw ProgressPersistenceError.newerSnapshot(stored)
         }
     }
 
@@ -39,7 +50,7 @@ enum StoredSchema {
         return knownEntities.contains { name.hasSuffix(".\($0)") }
     }
 
-    private static func read(at url: URL) throws -> (versions: [Schema.Version], entities: [String]) {
+    private static func read(at url: URL) throws -> (versionIdentifiers: [String], entities: [String], snapshotVersion: Int?) {
         let scratch = FileManager.default.temporaryDirectory
             .appendingPathComponent("pashto-schema-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
@@ -59,9 +70,11 @@ enum StoredSchema {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be read.")
         }
         defer { sqlite3_close(database) }
-        let versions = versionIdentifiers(in: database).compactMap(schemaVersion)
-        let entities = column("SELECT Z_NAME FROM Z_PRIMARYKEY", in: database)
-        return (versions, entities)
+        return (
+            versionIdentifiers(in: database),
+            column("SELECT Z_NAME FROM Z_PRIMARYKEY", in: database),
+            snapshotVersion(in: database)
+        )
     }
 
     private static func versionIdentifiers(in database: OpaquePointer) -> [String] {
@@ -76,6 +89,35 @@ enum StoredSchema {
             identifiers.append(contentsOf: stored)
         }
         return identifiers
+    }
+
+    /// The integer on `StoreMetaRecord`. Nil when the file has no such row.
+    private static func snapshotVersion(in database: OpaquePointer) -> Int? {
+        let tables = column("SELECT name FROM sqlite_master WHERE type = 'table'", in: database)
+        guard let table = tables.first(where: { $0.range(of: "STOREMETARECORD", options: .caseInsensitive) != nil }),
+              isSafeIdentifier(table)
+        else { return nil }
+        let names = column("SELECT name FROM pragma_table_info('\(table)')", in: database)
+        guard let columnName = names.first(where: { $0.range(of: "SNAPSHOTVERSION", options: .caseInsensitive) != nil }),
+              isSafeIdentifier(columnName)
+        else { return nil }
+        var statement: OpaquePointer?
+        let sql = "SELECT \(columnName) FROM \(table)"
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
+            return nil
+        }
+        defer { sqlite3_finalize(statement) }
+        var newest: Int?
+        while sqlite3_step(statement) == SQLITE_ROW {
+            if sqlite3_column_type(statement, 0) == SQLITE_NULL { continue }
+            let value = Int(sqlite3_column_int64(statement, 0))
+            newest = max(newest ?? value, value)
+        }
+        return newest
+    }
+
+    private static func isSafeIdentifier(_ name: String) -> Bool {
+        !name.isEmpty && name.allSatisfy { $0.isLetter || $0.isNumber || $0 == "_" }
     }
 
     private static func schemaVersion(_ identifier: String) -> Schema.Version? {

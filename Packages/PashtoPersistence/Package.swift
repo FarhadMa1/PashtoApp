@@ -32,6 +32,9 @@ let package = Package(
                 "PashtoPersistence",
                 .product(name: "PashtoCore", package: "PashtoCore"),
                 .product(name: "PashtoCoreTesting", package: "PashtoCore"),
+            ],
+            linkerSettings: [
+                .linkedLibrary("sqlite3"),
             ]
         ),
     ]

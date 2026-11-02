@@ -1,6 +1,7 @@
 import Foundation
 import PashtoCore
 import PashtoCoreTesting
+import SQLite3
 import SwiftData
 import Testing
 
@@ -192,6 +193,26 @@ struct SwiftDataProgressStoreTests {
         #expect(try FutureStore.read(at: url) == "keep-me")
     }
 
+    @Test func storeWithOneExtraEntityIsLeftUntouched() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try StoreFileEdit.apply(to: url) { database in
+            try StoreFileEdit.insertEntity(named: "ExtraRecord", in: database)
+            try StoreFileEdit.clearVersionIdentifiers(in: database)
+        }
+        try expectOpenLeavesFileUntouched(at: url)
+    }
+
+    @Test func newerStoreMetaVersionIsLeftUntouched() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try StoreFileEdit.apply(to: url) { database in
+            try StoreFileEdit.setSnapshotVersion(ProgressSnapshot.currentVersion + 1, in: database)
+            try StoreFileEdit.clearVersionIdentifiers(in: database)
+        }
+        try expectOpenLeavesFileUntouched(at: url)
+    }
+
     @Test func fileStoreSurvivesReopenAndResetKeepsSettings() async throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("pashto-progress-\(UUID().uuidString)", isDirectory: true)
@@ -286,6 +307,28 @@ private func writeStore(
     let container = try ProgressContainer.make(at: url)
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: contentVersion)
     try await body(store)
+}
+
+private func makeV1File() async throws -> URL {
+    let directory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("pashto-guard-\(UUID().uuidString)", isDirectory: true)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    let url = directory.appendingPathComponent("Progress.store")
+    try await writeStore(at: url, contentVersion: "2026.11.0") { store in
+        try await store.updateSettings(.initial)
+    }
+    return url
+}
+
+private func expectOpenLeavesFileUntouched(at url: URL) throws {
+    let before = try storedBytes(around: url)
+    do {
+        _ = try ProgressContainer.make(at: url)
+        Issue.record("a store this schema does not own should not open")
+    } catch {
+        #expect(error is ProgressPersistenceError)
+    }
+    #expect(try storedBytes(around: url) == before)
 }
 
 private func readStore(at url: URL, contentVersion: String) async throws -> ProgressSnapshot {
@@ -387,6 +430,137 @@ enum FutureSchema: VersionedSchema {
         init(text: String) {
             self.text = text
         }
+    }
+}
+
+/// Rewrites a closed SwiftData file so a test can hide the model version
+/// or add an entity the guard must notice. The checkpoint keeps the edit in
+/// the main database instead of a later write-ahead log.
+private enum StoreFileEdit {
+    static func apply(to url: URL, _ body: (OpaquePointer) throws -> Void) throws {
+        var database: OpaquePointer?
+        guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
+            throw ProgressPersistenceError.failedToOpen("The progress store could not be edited.")
+        }
+        defer { sqlite3_close(database) }
+        try exec("PRAGMA wal_checkpoint(TRUNCATE)", in: database)
+        try body(database)
+        try exec("PRAGMA wal_checkpoint(TRUNCATE)", in: database)
+    }
+
+    static func insertEntity(named name: String, in database: OpaquePointer) throws {
+        try exec(
+            """
+            INSERT INTO Z_PRIMARYKEY (Z_ENT, Z_NAME, Z_SUPER, Z_MAX)
+            SELECT COALESCE(MAX(Z_ENT), 0) + 1, '\(name)', 0, 0 FROM Z_PRIMARYKEY
+            """,
+            in: database
+        )
+        guard sqlite3_changes(database) == 1 else {
+            throw ProgressPersistenceError.failedToOpen("The extra entity was not stored.")
+        }
+    }
+
+    static func setSnapshotVersion(_ version: Int, in database: OpaquePointer) throws {
+        let tables = try strings("SELECT name FROM sqlite_master WHERE type = 'table'", in: database)
+        guard let table = tables.first(where: { $0.range(of: "STOREMETARECORD", options: .caseInsensitive) != nil }),
+              isSafeIdentifier(table)
+        else {
+            throw ProgressPersistenceError.failedToOpen("StoreMetaRecord is not in the file.")
+        }
+        let names = try strings("SELECT name FROM pragma_table_info('\(table)')", in: database)
+        guard let column = names.first(where: { $0.range(of: "SNAPSHOTVERSION", options: .caseInsensitive) != nil }),
+              isSafeIdentifier(column)
+        else {
+            throw ProgressPersistenceError.failedToOpen("snapshotVersion is not in StoreMetaRecord.")
+        }
+        try exec("UPDATE \(table) SET \(column) = \(version)", in: database)
+        guard sqlite3_changes(database) >= 1 else {
+            throw ProgressPersistenceError.failedToOpen("StoreMetaRecord was not updated.")
+        }
+    }
+
+    static func clearVersionIdentifiers(in database: OpaquePointer) throws {
+        let rows = try blobs("SELECT rowid, Z_PLIST FROM Z_METADATA", in: database)
+        guard !rows.isEmpty else {
+            throw ProgressPersistenceError.failedToOpen("The store has no metadata row.")
+        }
+        for (rowid, data) in rows {
+            let object = try PropertyListSerialization.propertyList(from: data, format: nil)
+            guard var plist = object as? [String: Any] else {
+                throw ProgressPersistenceError.failedToOpen("The store metadata is not a dictionary.")
+            }
+            plist["NSStoreModelVersionIdentifiers"] = [String]()
+            let rewritten = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
+            try bindBlob(rewritten, rowid: rowid, in: database)
+        }
+    }
+
+    private static func bindBlob(_ data: Data, rowid: Int64, in database: OpaquePointer) throws {
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, "UPDATE Z_METADATA SET Z_PLIST = ? WHERE rowid = ?", -1, &statement, nil) == SQLITE_OK,
+              let statement
+        else {
+            throw ProgressPersistenceError.failedToOpen("The metadata update could not be prepared.")
+        }
+        defer { sqlite3_finalize(statement) }
+        let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+        let bound = data.withUnsafeBytes { raw in
+            sqlite3_bind_blob(statement, 1, raw.baseAddress, Int32(data.count), transient)
+        }
+        guard bound == SQLITE_OK else {
+            throw ProgressPersistenceError.failedToOpen("The metadata blob could not be stored.")
+        }
+        guard sqlite3_bind_int64(statement, 2, rowid) == SQLITE_OK else {
+            throw ProgressPersistenceError.failedToOpen("The metadata row could not be selected.")
+        }
+        guard sqlite3_step(statement) == SQLITE_DONE else {
+            throw ProgressPersistenceError.failedToOpen("The metadata row was not updated.")
+        }
+    }
+
+    private static func exec(_ sql: String, in database: OpaquePointer) throws {
+        var error: UnsafeMutablePointer<CChar>?
+        let code = sqlite3_exec(database, sql, nil, nil, &error)
+        guard code == SQLITE_OK else {
+            let message = error.map { String(cString: $0) } ?? "sqlite \(code)"
+            sqlite3_free(error)
+            throw ProgressPersistenceError.failedToOpen(message)
+        }
+    }
+
+    private static func strings(_ sql: String, in database: OpaquePointer) throws -> [String] {
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
+            throw ProgressPersistenceError.failedToOpen("The store query could not be prepared.")
+        }
+        defer { sqlite3_finalize(statement) }
+        var values: [String] = []
+        while sqlite3_step(statement) == SQLITE_ROW {
+            guard let cString = sqlite3_column_text(statement, 0) else { continue }
+            values.append(String(cString: cString))
+        }
+        return values
+    }
+
+    private static func blobs(_ sql: String, in database: OpaquePointer) throws -> [(Int64, Data)] {
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
+            throw ProgressPersistenceError.failedToOpen("The store query could not be prepared.")
+        }
+        defer { sqlite3_finalize(statement) }
+        var values: [(Int64, Data)] = []
+        while sqlite3_step(statement) == SQLITE_ROW {
+            let rowid = sqlite3_column_int64(statement, 0)
+            guard let blob = sqlite3_column_blob(statement, 1) else { continue }
+            let count = Int(sqlite3_column_bytes(statement, 1))
+            values.append((rowid, Data(bytes: blob, count: count)))
+        }
+        return values
+    }
+
+    private static func isSafeIdentifier(_ name: String) -> Bool {
+        !name.isEmpty && name.allSatisfy { $0.isLetter || $0.isNumber || $0 == "_" }
     }
 }
 
