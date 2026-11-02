@@ -363,17 +363,18 @@ struct DialogResponseTests {
         let reply = quizItem("e-reply", en: "reply", pronunciation: "reply-sound", usage: "the reply", responseTo: "e-prompt")
         let placed = quizItem("e-placed", en: "placed")
         let extra = quizItem("e-extra", en: "extra")
+        let near = quizItem("e-near", en: "near")
         let onlyExample = quizItem("e-only", en: "only")
         let future = quizItem("e-future", en: "future")
         let letter = quizItem("e-letter", en: "letter", kind: .letter)
         let sounds = quizLesson("l-sounds", examples: [onlyExample])
-        let skipped = quizLesson("l-skip", introduce: [placed, extra])
+        let skipped = quizLesson("l-skip", introduce: [placed, extra, near])
         let current = quizLesson("l-now", introduce: [prompt, reply], letters: [letter])
         let later = quizLesson("l-future", introduce: [onlyExample, future])
         let content = quizBundle(
             [sounds, skipped, current, later],
             units: [quizUnit("u-one", lessons: [sounds, skipped, current, later])],
-            items: [prompt, reply, placed, extra, onlyExample, future, letter]
+            items: [prompt, reply, placed, extra, near, onlyExample, future, letter]
         )
 
         var hidden = SplitMix64(seed: 1)
@@ -384,7 +385,7 @@ struct DialogResponseTests {
         let withPlacement = quizContext(content, seen: ["l-sounds", "l-skip", "l-now"])
         let task = DialogResponse().makeTask(for: reply, in: withPlacement, using: &shown)
         let ids = (task?.options ?? []).map { $0.itemID.rawValue }.sorted()
-        #expect(ids == ["e-extra", "e-placed", "e-reply"])
+        #expect(ids == ["e-extra", "e-near", "e-placed", "e-reply"])
         #expect(task?.options.contains { $0.itemID == prompt.id } == false)
         #expect(task?.options.filter { $0.itemID == reply.id }.count == 1)
     }
@@ -397,7 +398,8 @@ struct DialogResponseTests {
         let replyGroup = quizItem("e-reply-group", en: "reply group")
         let fillerA = quizItem("e-fill-a", en: "filler a")
         let fillerB = quizItem("e-fill-b", en: "filler b")
-        let items = [prompt, reply, otherReply, promptGroup, replyGroup, fillerA, fillerB]
+        let fillerC = quizItem("e-fill-c", en: "filler c")
+        let items = [prompt, reply, otherReply, promptGroup, replyGroup, fillerA, fillerB, fillerC]
         let current = quizLesson("l-one", introduce: items)
         let content = quizBundle(
             [current],
@@ -409,7 +411,7 @@ struct DialogResponseTests {
             var rng = SplitMix64(seed: seed)
             let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
             let ids = (task?.options ?? []).map(\.itemID.rawValue).sorted()
-            #expect(ids == ["e-fill-a", "e-fill-b", "e-reply"])
+            #expect(ids == ["e-fill-a", "e-fill-b", "e-fill-c", "e-reply"])
         }
     }
 
@@ -427,6 +429,272 @@ struct DialogResponseTests {
         let ids = (task?.options ?? []).map(\.itemID.rawValue).sorted()
         #expect(ids == ["e-fill", "e-other-prompt", "e-other-reply", "e-reply"])
         #expect(task?.options.contains { $0.itemID == prompt.id } == false)
+    }
+
+    @Test func replyShapeUsesKindThenWhitespace() {
+        let greeting = quizItem("e-salam", pashto: "سلام", en: "hello", kind: .phrase)
+        let thanks = quizItem("e-manana", pashto: "مننه", en: "thanks")
+        let sentence = quizItem("e-fine", pashto: "زه ښه یم", en: "I am well")
+        let comma = quizItem("e-yes", pashto: "هو، زما ورور دی", en: "yes he is", kind: .phrase)
+        let joined = quizItem("e-joined", pashto: "من\u{200C}نه", en: "joined")
+        #expect(DialogResponse.replyShape(of: greeting) == .phrase)
+        #expect(DialogResponse.replyShape(of: thanks) == .word)
+        #expect(DialogResponse.replyShape(of: sentence) == .phrase)
+        #expect(DialogResponse.replyShape(of: comma) == .phrase)
+        #expect(pashtoWordCountForTest(comma.pashto) == 4)
+        #expect(DialogResponse.replyShape(of: joined) == .word)
+    }
+
+    @Test func aWordReplyUsesOnlyWordsAndNeedsThree() {
+        let prompt = quizItem("e-prompt", pashto: "څنګه یې؟", en: "how are you", kind: .phrase)
+        let reply = quizItem("e-reply", pashto: "مننه", en: "thanks", responseTo: "e-prompt")
+        let phrases = [
+            quizItem("e-phrase-1", pashto: "زه ښه یم", en: "I am well", kind: .phrase),
+            quizItem("e-phrase-2", pashto: "ښه راغلاست", en: "welcome", kind: .phrase),
+            quizItem("e-phrase-3", pashto: "خدای پامان", en: "goodbye", kind: .phrase),
+        ]
+        let twoWords = [
+            quizItem("e-word-1", pashto: "هو", en: "yes"),
+            quizItem("e-word-2", pashto: "نه", en: "no"),
+        ]
+        let shortItems = [prompt, reply] + phrases + twoWords
+        let short = quizBundle([quizLesson("l-one", introduce: shortItems)], items: shortItems)
+        let shortContext = quizContext(short, seen: ["l-one"])
+        #expect(DialogResponse.replyShape(of: reply) == .word)
+        #expect(DialogResponse.eligibleDistractors(for: reply, in: shortContext).count == 2)
+        var shortRNG = SplitMix64(seed: 1)
+        #expect(DialogResponse().makeTask(for: reply, in: shortContext, using: &shortRNG) == nil)
+
+        let third = quizItem("e-word-3", pashto: "زه", en: "I")
+        let items = shortItems + [third]
+        let content = quizBundle([quizLesson("l-one", introduce: items)], items: items)
+        let context = quizContext(content, seen: ["l-one"])
+        #expect(DialogResponse.eligibleDistractors(for: reply, in: context).map(\.id.rawValue).sorted() == [
+            "e-word-1", "e-word-2", "e-word-3",
+        ])
+        var rng = SplitMix64(seed: 1)
+        let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
+        #expect((task?.options ?? []).map(\.itemID.rawValue).sorted() == [
+            "e-reply", "e-word-1", "e-word-2", "e-word-3",
+        ])
+    }
+
+    @Test func aPhraseReplySkipsWordsAndUsesTheNextLevel() {
+        let early = (1...3).map {
+            quizItem("e-early-\($0)", pashto: "phrase \($0) text", en: "early \($0)", kind: .phrase)
+        }
+        let earlier = quizLesson("l-early", introduce: early)
+        let prompt = quizItem("e-prompt", pashto: "prompt", en: "prompt")
+        let reply = quizItem("e-reply", pashto: "right answer", en: "the reply", kind: .phrase, responseTo: "e-prompt")
+        let words = (1...4).map { quizItem("e-word-\($0)", pashto: "word\($0)", en: "word \($0)") }
+        let current = quizLesson("l-now", introduce: [prompt, reply] + words)
+        let content = quizBundle([earlier, current], items: early + [prompt, reply] + words)
+        let context = quizContext(content, seen: ["l-early", "l-now"])
+        #expect(DialogResponse.eligibleDistractors(for: reply, in: context).map(\.id.rawValue) == [
+            "e-early-1", "e-early-2", "e-early-3",
+        ])
+        var rng = SplitMix64(seed: 4)
+        let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
+        let wrong = (task?.options ?? []).filter { $0.itemID != reply.id }.map(\.itemID.rawValue).sorted()
+        #expect(wrong == ["e-early-1", "e-early-2", "e-early-3"])
+    }
+
+    @Test func oneWordPhraseKindCountsAsAPhrase() {
+        let prompt = quizItem("e-prompt", pashto: "prompt line", en: "prompt")
+        let reply = quizItem("e-reply", pashto: "سلام", en: "hello", kind: .phrase, responseTo: "e-prompt")
+        let word = quizItem("e-ho", pashto: "هو", en: "yes")
+        let oneWordPhrase = quizItem("e-bye", pashto: "پامان", en: "goodbye word", kind: .phrase)
+        let multiWord = quizItem("e-fine", pashto: "زه ښه یم", en: "I am well")
+        let another = quizItem("e-welcome", pashto: "ښه راغلاست", en: "welcome", kind: .phrase)
+        let items = [prompt, reply, word, oneWordPhrase, multiWord, another]
+        let content = quizBundle([quizLesson("l-one", introduce: items)], items: items)
+        let context = quizContext(content, seen: ["l-one"])
+        #expect(DialogResponse.replyShape(of: reply) == .phrase)
+        #expect(DialogResponse.replyShape(of: oneWordPhrase) == .phrase)
+        #expect(DialogResponse.replyShape(of: multiWord) == .phrase)
+        #expect(DialogResponse.eligibleDistractors(for: reply, in: context).map(\.id.rawValue).sorted() == [
+            "e-bye", "e-fine", "e-welcome",
+        ])
+        var rng = SplitMix64(seed: 1)
+        let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
+        #expect(task?.options.contains { $0.itemID == word.id } == false)
+        #expect(task?.options.contains { $0.itemID == oneWordPhrase.id } == true)
+    }
+
+    @Test func arabicQuestionMarkIsNeverAWrongOption() {
+        let prompt = quizItem("e-prompt", pashto: "prompt", en: "prompt")
+        let reply = quizItem("e-reply", pashto: "right answer", en: "the reply", kind: .phrase, responseTo: "e-prompt")
+        let question = quizItem("e-ask", pashto: "دا څوک ده؟", en: "who is this", kind: .phrase)
+        let spacedQuestion = quizItem("e-spaced", pashto: "څوک دی؟ ", en: "who is he", kind: .phrase)
+        let latin = quizItem("e-latin", pashto: "really?", en: "latin mark", kind: .phrase)
+        let fillers = [
+            quizItem("e-fill-1", pashto: "one two", en: "fill one", kind: .phrase),
+            quizItem("e-fill-2", pashto: "three four", en: "fill two", kind: .phrase),
+        ]
+        let items = [prompt, reply, question, spacedQuestion, latin] + fillers
+        let content = quizBundle([quizLesson("l-one", introduce: items)], items: items)
+        let context = quizContext(content, seen: ["l-one"])
+        let pool = DialogResponse.eligibleDistractors(for: reply, in: context).map(\.id.rawValue).sorted()
+        #expect(pool == ["e-fill-1", "e-fill-2", "e-latin"])
+        for seed in UInt64(1)...12 {
+            var rng = SplitMix64(seed: seed)
+            let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
+            let texts = (task?.options ?? []).map(\.text)
+            #expect(texts.contains { isArabicQuestionText($0) } == false)
+            #expect(task?.options.contains { $0.itemID == question.id } == false)
+            #expect(task?.options.contains { $0.itemID == latin.id } == true)
+        }
+
+        let shortItems = [prompt, reply, question, fillers[0]]
+        let short = quizBundle([quizLesson("l-short", introduce: shortItems)], items: shortItems)
+        var shortRNG = SplitMix64(seed: 1)
+        #expect(DialogResponse().makeTask(for: reply, in: quizContext(short, seen: ["l-short"]), using: &shortRNG) == nil)
+    }
+
+    /// The two greeting replies stay skipped. The other nine answer tasks in
+    /// units 1–3 each keep three wrong options.
+    @Test func nineRemainingAnswerTasksHaveAtLeastThreeWrongOptions() throws {
+        let bundle = try loadRepositoryContent()
+        let keptOut: Set<String> = ["e-walaykum-salam", "e-xwar-ma-she"]
+        let expected = bundle.items.compactMap { item -> String? in
+            guard item.responseTo != nil else { return nil }
+            guard !keptOut.contains(item.id.rawValue) else { return nil }
+            return item.id.rawValue
+        }
+        let sessions = try courseSessions(bundle, seed: 1)
+        var counts: [String: Int] = [:]
+        var seenTargets: [String] = []
+        for session in sessions {
+            let dialogs = session.tasks.compactMap { task -> QuizTask? in
+                guard case .choice(let quiz) = task.payload, quiz.kind == .dialogResponse else { return nil }
+                return quiz
+            }
+            if session.lessonID.rawValue == "l-greetings-1" {
+                #expect(dialogs.isEmpty)
+            }
+            counts[session.lessonID.rawValue] = dialogs.count
+            for quiz in dialogs {
+                seenTargets.append(quiz.targetID.rawValue)
+                let wrong = quiz.options.filter { $0.itemID != quiz.targetID }
+                #expect(wrong.count >= 3)
+                #expect(quiz.options.filter { $0.itemID == quiz.targetID }.count == 1)
+            }
+        }
+        #expect(expected.count == 9)
+        #expect(seenTargets.sorted() == expected.sorted())
+        #expect(counts["l-greetings-1"] == 0)
+        #expect(counts["l-greetings-2"] == 1)
+        #expect(counts["l-introductions-1"] == 1)
+        #expect(counts["l-introductions-2"] == 1)
+        #expect(counts["l-family-1"] == 2)
+        #expect(counts["l-family-3"] == 4)
+    }
+
+    @Test func dialogWrongOptionsMatchTheAnswerAndAreNotQuestions() throws {
+        let bundle = try loadRepositoryContent()
+        let exceptions: Set<String> = ["e-walaykum-salam", "e-xwar-ma-she"]
+        var seen: [LessonID] = []
+        var asked = 0
+        for lesson in bundle.units.flatMap(\.lessons) {
+            seen.append(lesson.id)
+            let context = quizContext(bundle, seen: seen.map(\.rawValue))
+            for item in Distractors.introducedItems(in: lesson.id, bundle: bundle) where item.responseTo != nil {
+                let pool = DialogResponse.eligibleDistractors(for: item, in: context)
+                let shape = DialogResponse.replyShape(of: item)
+                for candidate in pool {
+                    #expect(DialogResponse.replyShape(of: candidate) == shape)
+                    #expect(!isArabicQuestionText(candidate.pashto))
+                }
+                if exceptions.contains(item.id.rawValue) {
+                    #expect(pool.count < DialogResponse.minimumDistractors)
+                    continue
+                }
+                asked += 1
+                #expect(pool.count >= DialogResponse.minimumDistractors)
+                if lesson.id.rawValue == "l-introductions-1" {
+                    #expect(shape == .phrase)
+                    #expect(pool.allSatisfy { DialogResponse.replyShape(of: $0) == .phrase })
+                }
+            }
+        }
+        #expect(asked == 9)
+
+        for seed in UInt64(1)...20 {
+            let sessions = try courseSessions(bundle, seed: seed)
+            for session in sessions {
+                for task in session.tasks {
+                    guard case .choice(let quiz) = task.payload, quiz.kind == .dialogResponse else { continue }
+                    let reply = try #require(bundle.items.first { $0.id == quiz.targetID })
+                    let shape = DialogResponse.replyShape(of: reply)
+                    if session.lessonID.rawValue == "l-introductions-1" {
+                        #expect(shape == .phrase)
+                    }
+                    for option in quiz.options where option.itemID != reply.id {
+                        #expect(!isArabicQuestionText(option.text))
+                        let item = try #require(bundle.items.first { $0.id == option.itemID })
+                        #expect(DialogResponse.replyShape(of: item) == shape)
+                    }
+                }
+            }
+        }
+    }
+
+    /// مننه is already grouped with these prompts. ډېره مننه (Pashto ډ, U+0689)
+    /// is in the same groups, so it is not a wrong option for those replies.
+    @Test func deraMananaIsBlockedWhereMananaIsBlocked() throws {
+        let bundle = try loadRepositoryContent()
+        let thanks = try #require(bundle.items.first { $0.id.rawValue == "e-dera-manana" })
+        let scalars = Array(thanks.pashto.unicodeScalars)
+        #expect(scalars.contains { $0.value == 0x0689 })
+        #expect(!scalars.contains { $0.value == 0x0688 })
+        #expect(thanks.pashto == "ډېره مننه")
+
+        let prompts = [
+            "e-tsanga-ye",
+            "e-stare-ma-she",
+            "e-mor-de-tsanga-da",
+            "e-plar-de-tsanga-day",
+        ]
+        var seen: [LessonID] = []
+        var replies: [ContentItem] = []
+        for lesson in bundle.units.flatMap(\.lessons) {
+            seen.append(lesson.id)
+            let context = quizContext(bundle, seen: seen.map(\.rawValue))
+            for item in Distractors.introducedItems(in: lesson.id, bundle: bundle) {
+                guard let prompt = item.responseTo, prompts.contains(prompt.rawValue) else { continue }
+                replies.append(item)
+                let pool = DialogResponse.eligibleDistractors(for: item, in: context)
+                #expect(!pool.contains { $0.id == thanks.id })
+                switch item.id.rawValue {
+                case "e-za-xa-yam":
+                    #expect(pool.count == 6)
+                case "e-hagha-xa-da", "e-hagha-xa-day":
+                    #expect(pool.count == 25)
+                case "e-xwar-ma-she":
+                    #expect(pool.count < DialogResponse.minimumDistractors)
+                default:
+                    Issue.record("Unexpected reply \(item.id.rawValue) to \(prompt.rawValue)")
+                }
+                for seed in UInt64(1)...20 {
+                    var rng = SplitMix64(seed: seed)
+                    let task = DialogResponse().makeTask(for: item, in: context, using: &rng)
+                    if item.id.rawValue == "e-xwar-ma-she" {
+                        #expect(task == nil)
+                        continue
+                    }
+                    let quiz = try #require(task)
+                    let wrong = quiz.options.filter { $0.itemID != item.id }
+                    #expect(wrong.count >= 3)
+                    #expect(!quiz.options.contains { $0.itemID == thanks.id })
+                }
+            }
+        }
+        #expect(replies.map(\.id.rawValue).sorted() == [
+            "e-hagha-xa-da",
+            "e-hagha-xa-day",
+            "e-xwar-ma-she",
+            "e-za-xa-yam",
+        ])
     }
 }
 
@@ -566,8 +834,8 @@ struct LessonSessionTests {
         let sessions = try courseSessions(bundle, seed: 1)
         let greetings = try #require(sessions.first { $0.lessonID.rawValue == "l-greetings-1" })
         #expect(greetings.tasks.filter { $0.kind == .orderWords }.isEmpty)
-        // Both replies share a nonDistractorGroup with the other seen phrases,
-        // so fewer than two distractors remain and the questions are skipped.
+        // Both replies in l-greetings-1 have fewer than three same-type wrong
+        // options, so the questions are skipped.
         #expect(greetings.tasks.filter { $0.kind == .dialogResponse }.isEmpty)
         #expect(greetings.tasks.contains { task in
             guard case .matchPairs(let match) = task.payload else { return false }
@@ -1291,6 +1559,14 @@ private func quizContext(_ bundle: ContentBundle, seen: [String], retired: [Stri
         seenLessonIDs: seen.map(lessonID),
         retiredItemIDs: retired.map(itemID)
     )
+}
+
+private func pashtoWordCountForTest(_ text: String) -> Int {
+    text.split(whereSeparator: \.isWhitespace).count
+}
+
+private func isArabicQuestionText(_ text: String) -> Bool {
+    text.trimmingCharacters(in: .whitespacesAndNewlines).hasSuffix("\u{061F}")
 }
 
 private func courseSessions(_ bundle: ContentBundle, seed: UInt64) throws -> [LessonSession] {

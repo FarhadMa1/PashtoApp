@@ -62,7 +62,8 @@ public enum Distractors {
         return rows.map { DistractorCandidate(itemID: $0.introduction.itemID, source: $0.source) }
     }
 
-    static func introducedItems(in lessonID: LessonID, bundle: ContentBundle) -> [ContentItem] {
+    /// Items this lesson introduces, in lesson order. A `soundExample` does not count.
+    public static func introducedItems(in lessonID: LessonID, bundle: ContentBundle) -> [ContentItem] {
         let course = CourseOrder(bundle)
         var items: [ContentItem] = []
         for introduction in course.introductions where introduction.lessonID == lessonID {

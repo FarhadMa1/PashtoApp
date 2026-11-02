@@ -1,12 +1,16 @@
 import Foundation
 import PashtoCore
 
-/// `ContentValidator` plus the registry, the release gate, and quiz-type coverage.
+/// `ContentValidator` plus the registry, the release gate, quiz-type coverage,
+/// and the dialog-reply distractor count.
 ///
 /// `ContentValidator` rules are unchanged. A verified item that lacks `checkedBy`
 /// or `checkedOn` is still that validator's error, in both modes. Quiz-type
 /// coverage is a warning in dev, over the whole course, and an error in
 /// release, over the units `ReleaseGate` selects from `release-units.json`.
+/// A dialog reply with fewer than three same-type wrong options is a warning
+/// in dev and an error in release, except the replies `DialogReplyCoverage`
+/// lists.
 public enum ContentCheck {
     public static func issues(root: URL, mode: ToolMode) -> [ValidationIssue] {
         let outcome = ContentMerger.merge(root: root)
@@ -34,6 +38,11 @@ public enum ContentCheck {
         issues.append(contentsOf: QuizTypeCoverage.issues(
             in: merged.bundle,
             releaseUnitIDs: releaseUnits,
+            retiredItemIDs: retiredItemIDs,
+            mode: mode
+        ))
+        issues.append(contentsOf: DialogReplyCoverage.issues(
+            in: merged.bundle,
             retiredItemIDs: retiredItemIDs,
             mode: mode
         ))
