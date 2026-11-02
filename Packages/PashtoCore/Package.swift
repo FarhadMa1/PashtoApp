@@ -10,12 +10,14 @@ let package = Package(
     ],
     products: [
         .library(name: "PashtoCore", targets: ["PashtoCore"]),
+        .library(name: "PashtoCoreTesting", targets: ["PashtoCoreTesting"]),
     ],
     targets: [
         .target(name: "PashtoCore"),
+        .target(name: "PashtoCoreTesting", dependencies: ["PashtoCore"]),
         .testTarget(
             name: "PashtoCoreTests",
-            dependencies: ["PashtoCore"],
+            dependencies: ["PashtoCore", "PashtoCoreTesting"],
             exclude: ["Fixtures"]
         ),
     ]

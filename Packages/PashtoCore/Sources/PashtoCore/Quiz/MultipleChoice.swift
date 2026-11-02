@@ -2,7 +2,7 @@
 ///
 /// Meaning and pronunciation questions are multiple choice. Match pairs and
 /// word order use their own task values. A dialog reply is multiple choice too.
-public enum TaskKind: String, Hashable, Sendable, CaseIterable {
+public enum TaskKind: String, Hashable, Codable, Sendable, CaseIterable {
     /// See the Pashto and choose the English meaning.
     case meaningPashtoToEnglish
     /// See the English meaning and choose the Pashto.
@@ -26,7 +26,7 @@ public protocol TaskGenerator: Sendable {
     ) -> QuizTask?
 }
 
-public struct QuizOption: Hashable, Sendable {
+public struct QuizOption: Hashable, Codable, Sendable {
     public let itemID: ItemID
     public let text: String
 
@@ -37,7 +37,7 @@ public struct QuizOption: Hashable, Sendable {
 }
 
 /// One multiple-choice question. `options` contains the correct item exactly once.
-public struct QuizTask: Hashable, Sendable {
+public struct QuizTask: Hashable, Codable, Sendable {
     public let kind: TaskKind
     public let targetID: ItemID
     public let prompt: String
@@ -60,7 +60,7 @@ public struct QuizTask: Hashable, Sendable {
     }
 }
 
-public enum QuizAnswer: Hashable, Sendable {
+public enum QuizAnswer: Hashable, Codable, Sendable {
     case choice(ItemID)
     /// One link per left-hand card. The array order does not matter.
     case matches([MatchLink])
@@ -68,7 +68,7 @@ public enum QuizAnswer: Hashable, Sendable {
     case tokenOrder([Int])
 }
 
-public enum GradeResult: Hashable, Sendable {
+public enum GradeResult: Hashable, Codable, Sendable {
     case correct
     case incorrect
 }

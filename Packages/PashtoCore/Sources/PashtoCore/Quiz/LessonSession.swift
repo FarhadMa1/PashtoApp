@@ -1,6 +1,6 @@
 /// One question in a lesson, plus whether it was queued again after a miss.
-public struct SessionTask: Hashable, Sendable {
-    public enum Payload: Hashable, Sendable {
+public struct SessionTask: Hashable, Codable, Sendable {
+    public enum Payload: Hashable, Codable, Sendable {
         case choice(QuizTask)
         case matchPairs(MatchPairsTask)
         case orderWords(OrderWordsTask)
@@ -27,7 +27,7 @@ public struct SessionTask: Hashable, Sendable {
     }
 }
 
-public struct SessionAnswer: Hashable, Sendable {
+public struct SessionAnswer: Hashable, Codable, Sendable {
     public let task: SessionTask
     public let answer: QuizAnswer
     public let result: GradeResult
@@ -45,7 +45,7 @@ public struct SessionAnswer: Hashable, Sendable {
 /// the queue once, and its options, tiles, or pairs are shuffled again with
 /// `rng`. The new order differs from the first unless no other order exists.
 /// That repeat is not appended again if it is also wrong.
-public struct LessonSession: Hashable, Sendable {
+public struct LessonSession: Hashable, Codable, Sendable {
     public let lessonID: LessonID
     public private(set) var tasks: [SessionTask]
     public private(set) var answers: [SessionAnswer]

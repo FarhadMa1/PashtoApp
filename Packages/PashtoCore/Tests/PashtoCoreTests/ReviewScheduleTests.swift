@@ -100,6 +100,7 @@ struct ReviewScheduleTests {
             lapses: 0,
             dueDay: today,
             lastReviewedDay: today,
+            createdDay: today,
             state: .active,
             source: .lesson
         )
@@ -231,6 +232,7 @@ struct ReviewScheduleTests {
             lapses: 1,
             dueDay: future.adding(days: 6),
             lastReviewedDay: future,
+            createdDay: future,
             state: .active,
             source: .placement
         )
@@ -302,6 +304,7 @@ struct ReviewScheduleTests {
             lapses: 0,
             dueDay: today,
             lastReviewedDay: nil,
+            createdDay: today,
             state: .paused,
             source: .lesson
         )
@@ -380,6 +383,7 @@ struct ReviewScheduleTests {
             quality: .afterRetry,
             on: today.adding(days: 1)
         )
+        #expect(reviewed.createdDay == today)
         let paused = ReviewCard(
             itemID: reviewed.itemID,
             easeFactor: reviewed.easeFactor,
@@ -388,6 +392,7 @@ struct ReviewScheduleTests {
             lapses: reviewed.lapses,
             dueDay: reviewed.dueDay,
             lastReviewedDay: reviewed.lastReviewedDay,
+            createdDay: reviewed.createdDay,
             state: .paused,
             source: .placement
         )
@@ -402,6 +407,7 @@ struct ReviewScheduleTests {
         #expect(json["lapses"] as? Int == paused.lapses)
         #expect(json["dueDay"] as? String == paused.dueDay.isoDay)
         #expect(json["lastReviewedDay"] as? String == "2026-11-02")
+        #expect(json["createdDay"] as? String == "2026-11-01")
         #expect(json["state"] as? String == "paused")
         #expect(json["source"] as? String == "placement")
         #expect(easeThousandths(json["easeFactor"] as? Double ?? 0) == easeThousandths(paused.easeFactor))
@@ -410,12 +416,13 @@ struct ReviewScheduleTests {
         let freshJSON = try #require(JSONSerialization.jsonObject(with: encodedFresh) as? [String: Any])
         #expect(freshJSON["lastReviewedDay"] == nil)
         #expect(freshJSON["dueDay"] as? String == "2026-11-01")
+        #expect(freshJSON["createdDay"] as? String == "2026-11-01")
         #expect(freshJSON["easeFactor"] as? Double == 2.5)
         #expect(freshJSON["state"] as? String == "active")
         #expect(freshJSON["source"] as? String == "lesson")
 
         let withNull = """
-        {"itemID":"e-salam","easeFactor":2.5,"intervalDays":0,"repetitions":0,"lapses":0,"dueDay":"2026-11-01","lastReviewedDay":null,"state":"active","source":"lesson"}
+        {"itemID":"e-salam","easeFactor":2.5,"intervalDays":0,"repetitions":0,"lapses":0,"dueDay":"2026-11-01","lastReviewedDay":null,"createdDay":"2026-11-01","state":"active","source":"lesson"}
         """
         let fromNull = try JSONDecoder().decode(ReviewCard.self, from: Data(withNull.utf8))
         #expect(fromNull == fresh)
@@ -430,6 +437,7 @@ struct ReviewScheduleTests {
             lapses: 0,
             dueDay: today,
             lastReviewedDay: today,
+            createdDay: today,
             state: .active,
             source: .lesson
         )
@@ -444,6 +452,7 @@ struct ReviewScheduleTests {
             lapses: 0,
             dueDay: today,
             lastReviewedDay: today,
+            createdDay: today,
             state: .active,
             source: .lesson
         )

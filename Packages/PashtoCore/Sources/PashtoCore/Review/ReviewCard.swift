@@ -41,6 +41,12 @@ public struct ReviewCard: Hashable, Codable, Sendable {
     public let lapses: Int
     public let dueDay: LocalDay
     public let lastReviewedDay: LocalDay?
+    /// The civil day the card was created. A review does not change it.
+    ///
+    /// Lesson cards whose `createdDay` is today are the new items for that
+    /// day. A placement card is never a new item, on the day it was created
+    /// or later.
+    public let createdDay: LocalDay
     public let state: ReviewCardState
     public let source: ReviewCardSource
 
@@ -52,6 +58,7 @@ public struct ReviewCard: Hashable, Codable, Sendable {
         lapses: Int,
         dueDay: LocalDay,
         lastReviewedDay: LocalDay?,
+        createdDay: LocalDay,
         state: ReviewCardState,
         source: ReviewCardSource
     ) {
@@ -62,14 +69,15 @@ public struct ReviewCard: Hashable, Codable, Sendable {
         self.lapses = lapses
         self.dueDay = dueDay
         self.lastReviewedDay = lastReviewedDay
+        self.createdDay = createdDay
         self.state = state
         self.source = source
     }
 
     /// A card for an item that was just introduced or skipped in placement.
     ///
-    /// The card is due on `day` and has not been reviewed. The first successful
-    /// review schedules the one-day interval.
+    /// The card is due on `day` and has not been reviewed. `createdDay` is
+    /// `day`. The first successful review schedules the one-day interval.
     public static func introduced(
         itemID: ItemID,
         on day: LocalDay,
@@ -83,6 +91,7 @@ public struct ReviewCard: Hashable, Codable, Sendable {
             lapses: 0,
             dueDay: day,
             lastReviewedDay: nil,
+            createdDay: day,
             state: .active,
             source: source
         )

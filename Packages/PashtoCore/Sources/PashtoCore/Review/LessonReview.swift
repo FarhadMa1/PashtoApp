@@ -37,9 +37,9 @@ public func lessonReviewQuality(for itemID: ItemID, answers: [SessionAnswer]) ->
 /// A new card from this lesson with no single-item grade is not reviewed.
 /// Match pairs are the case that produces no grade. Its `dueDay` moves to
 /// the day after `day` when it would have been earlier, and no other field
-/// changes: repetitions, ease, interval, lapses, and `lastReviewedDay` stay
-/// as they were. It still does not enter today's queue. A due day that is
-/// already the next day or later stays where it is.
+/// changes: repetitions, ease, interval, lapses, `lastReviewedDay`, and
+/// `createdDay` stay as they were. It still does not enter today's queue.
+/// A due day that is already the next day or later stays where it is.
 ///
 /// A card that was already reviewed is returned unchanged. So is a placement
 /// card, and so is a card this lesson does not introduce. Cards stay in their
@@ -67,6 +67,7 @@ public func applyLessonReviews(
             lapses: card.lapses,
             dueDay: earliest,
             lastReviewedDay: card.lastReviewedDay,
+            createdDay: card.createdDay,
             state: card.state,
             source: card.source
         )

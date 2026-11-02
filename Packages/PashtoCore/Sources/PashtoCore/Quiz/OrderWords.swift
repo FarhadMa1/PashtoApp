@@ -2,7 +2,7 @@
 ///
 /// `index` is the tile's place in `OrderWordsTask.tokens`. Logical order is
 /// right to left, so index 0 is the rightmost tile.
-public struct WordTile: Hashable, Sendable {
+public struct WordTile: Hashable, Codable, Sendable {
     public let index: Int
     public let text: String
 
@@ -20,7 +20,7 @@ public struct WordTile: Hashable, Sendable {
 /// Grading compares token text position by position, so two identical tokens
 /// may swap. The presented `tiles` are never themselves a correct order when
 /// the task exists.
-public struct OrderWordsTask: Hashable, Sendable {
+public struct OrderWordsTask: Hashable, Codable, Sendable {
     public let targetID: ItemID
     public let tiles: [WordTile]
     public let fixedEnding: String

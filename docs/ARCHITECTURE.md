@@ -38,10 +38,11 @@ The package exposes:
 - `ContentFilter.devBuild`, which hides `draft` and `check` items for a Debug or dev build. A release build does not call it.
 - `PashtoCore.moduleName`, so the app target's dependency stays linked.
 - `LocalDay`, a Gregorian civil day with no time zone, plus `DateProvider`, `FixedDateProvider`, `SystemDateProvider`, and `DayClock`. Scheduling passes a clock and a time zone in. `SystemDateProvider` is the only type that reads the process clock.
-- `ReviewCard` and `review(_:quality:on:)`, an SM-2 review step. The day is a `LocalDay`. The scheduled interval is capped at 36_500 days so `dueDay` cannot run past the last year `LocalDay` represents. A `soundExample` does not create a card.
+- `ReviewCard` and `review(_:quality:on:)`, an SM-2 review step. The day is a `LocalDay`. The scheduled interval is capped at 36_500 days so `dueDay` cannot run past the last year `LocalDay` represents. A `soundExample` does not create a card. `createdDay` is the civil day the card was created. Lesson cards created today are the new items. Placement cards are not.
 - `DailyPlan` and `dailyPlan(cards:knownItemIDs:goal:newItemsShownToday:on:)`. At most 50 due cards, oldest `dueDay` then `itemID`. New items follow `DailyGoal` (5, 10, or 15) unless more than 50 cards are due. `applyLessonReviews` runs the lesson quiz as the first review, so those cards are due the next day at the earliest. A new lesson card with no single-item grade is not reviewed; its due day moves to the next day when it would have been today. Placement cards and cards from other lessons stay as they are. A card reviewed today, a paused card, an item id missing from the content, or a `lastReviewedDay` still in the future stays out of the queue and is not deleted.
-- `PathState` and `pathState(progress:content:goal:today:)`. The path is review, the next lesson, done for today with Learn more, or the end of the course. The due count and the new-item cap come from `dailyPlan`. The day is a `LocalDay`. The placement scheduler and stored progress are not in this revision.
-- `StreakState` and `streak(_:after:on:)`. A completed session counts once per civil day. Seven counted days earn one freeze, and two is the maximum. One freeze covers one missed day and is spent only when the next session is completed. The day is a `LocalDay`. Nothing is stored.
+- `PathState` and `pathState(progress:content:goal:today:)`. The path is review, the next lesson, done for today with Learn more, or the end of the course. The due count and the new-item cap come from `dailyPlan`. The day is a `LocalDay`. `pathProgress(_:on:)` builds the `PathProgress` for that day from a stored snapshot.
+- `StreakState` and `streak(_:after:on:)`. A completed session counts once per civil day. Seven counted days earn one freeze, and two is the maximum. One freeze covers one missed day and is spent only when the next session is completed. The day is a `LocalDay`.
+- `ProgressSnapshot`, `ProgressStore`, and `InMemoryProgressStore`. The snapshot has `snapshotVersion` and `contentVersion`. The store keeps review cards, lesson progress, the streak, settings, one active lesson, and completed sessions. An answer is saved on the active lesson before the lesson is finished. Cards from that lesson are written when it is committed, on the day of the last answer. `load` clamps freezes to 0...2 and ease to at least 1.3, and it replaces a non-finite or negative ease and a negative interval. `resetAll` clears learner progress. The same contract tests live in `PashtoCoreTesting`. The placement scheduler and SwiftData are not in this revision.
 
 The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the current locale (`Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). `Date()` is allowed only in `SystemDateProvider`. CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
 
@@ -67,7 +68,7 @@ These are constraints on later work, not code in this revision.
 ## Out of scope for this revision
 
 - Loading the course inside the app, and a macOS check that the Release bundle contains only `release-units.json`
-- Placement scheduling and progress storage
+- Placement scheduling, SwiftData, and screens that read stored progress
 - Audio playback or a pronunciation button
 - Screens other than the placeholder
 - Accounts, sync, or a service

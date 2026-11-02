@@ -57,7 +57,8 @@ public func reviewQuality(for answer: SessionAnswer) -> ReviewQuality {
 /// The next interval does not use how many days passed. A `lastReviewedDay`
 /// later than `day` (the clock was set back) does not zero the card and does
 /// not produce a negative interval. `dueDay` is `day` plus the new interval,
-/// so it is never earlier than the day after `day`.
+/// so it is never earlier than the day after `day`. `createdDay` stays the
+/// day the card was created.
 public func review(_ card: ReviewCard, quality: ReviewQuality, on day: LocalDay) -> ReviewCard {
     let ease = easeThousandths(of: card.easeFactor)
     let scheduled = nextSchedule(card, quality: quality.value, ease: ease)
@@ -70,6 +71,7 @@ public func review(_ card: ReviewCard, quality: ReviewQuality, on day: LocalDay)
         lapses: scheduled.lapses,
         dueDay: day.adding(days: interval),
         lastReviewedDay: day,
+        createdDay: card.createdDay,
         state: card.state,
         source: card.source
     )

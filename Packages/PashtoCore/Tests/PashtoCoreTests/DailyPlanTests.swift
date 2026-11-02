@@ -412,6 +412,7 @@ struct DailyPlanTests {
             lapses: 1,
             dueDay: today.adding(days: 4),
             lastReviewedDay: nil,
+            createdDay: today,
             state: .active,
             source: .lesson
         )
@@ -423,6 +424,7 @@ struct DailyPlanTests {
             lapses: 0,
             dueDay: today,
             lastReviewedDay: today,
+            createdDay: today,
             state: .active,
             source: .lesson
         )
@@ -635,6 +637,7 @@ struct DailyPlanTests {
             lapses: 0,
             dueDay: due,
             lastReviewedDay: lastReviewed ?? due.adding(days: -1),
+            createdDay: due,
             state: state,
             source: source
         )
