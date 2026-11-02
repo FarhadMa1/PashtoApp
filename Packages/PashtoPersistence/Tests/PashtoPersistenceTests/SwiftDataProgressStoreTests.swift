@@ -175,6 +175,13 @@ struct SwiftDataProgressStoreTests {
     }
 
     @Test func newerSchemaFileIsLeftUntouched() throws {
+        // Three passes inside this job. The workflow stays a single `swift test`.
+        for _ in 1...3 {
+            try oneNewerSchemaFileIsLeftUntouched()
+        }
+    }
+
+    private func oneNewerSchemaFileIsLeftUntouched() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("pashto-newer-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -230,19 +237,37 @@ struct SwiftDataProgressStoreTests {
     }
 
     /// The newer entity hash is committed in the wal and not checkpointed into
-    /// the main file. The check has to see that wal. `immutable=1` would not.
+    /// the main file. The `-shm` index is removed first, so the check has to
+    /// read that wal without one. `immutable=1` would not see it. The original
+    /// main file, `-wal`, and `-shm` stay byte-identical, and no sidecar appears.
     @Test func newerSchemaOnlyInTheWalIsRefused() async throws {
+        for _ in 1...3 {
+            try await oneNewerSchemaOnlyInTheWalIsRefused()
+        }
+    }
+
+    private func oneNewerSchemaOnlyInTheWalIsRefused() async throws {
         let url = try await makeV1File()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
         try StoreFileEdit.leaveNewerEntityInTheWal(named: "WalOnlyRecord", at: url)
+        let shm = URL(fileURLWithPath: url.path + "-shm")
+        if FileManager.default.fileExists(atPath: shm.path) {
+            try FileManager.default.removeItem(at: shm)
+        }
+        let before = try storedBytes(around: url)
+        #expect(before[url.lastPathComponent] != nil)
+        #expect(before[url.lastPathComponent + "-wal"] != nil)
+        #expect(before[url.lastPathComponent + "-shm"] == nil)
         let mainOnly = try metadataPlist(at: url, includeSidecars: false, immutable: true)
         let withWal = try metadataPlist(at: url, includeSidecars: true, immutable: false)
         #expect(mainOnly != withWal)
+        #expect(try storedBytes(around: url) == before)
 
         try expectOpenThrows(
             .newerSchema("Stored entity WalOnlyRecord is not in schema \(SchemaV1.versionIdentifier)."),
             at: url
         )
+        #expect(try storedBytes(around: url) == before)
     }
 
     @Test func storeWithOneExtraEntityIsLeftUntouched() async throws {
@@ -607,6 +632,14 @@ private func expectKeptCard(in container: ModelContainer, loaded: ProgressSnapsh
 /// Bytes of the store, its write-ahead log, and its shared-memory file.
 /// A sidecar that is absent is not a key. One that appears later makes the
 /// dictionaries differ.
+/// The Swift overlay types `sqlite3_db_config` as `Any...`, so `nil` does not compile.
+func disableCheckpointOnClose(_ database: OpaquePointer) {
+    var out: Int32 = 0
+    withUnsafeMutablePointer(to: &out) {
+        _ = sqlite3_db_config(database, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, Int32(1), $0)
+    }
+}
+
 func storedBytes(around url: URL) throws -> [String: Data] {
     var files: [String: Data] = [:]
     for suffix in ["", "-wal", "-shm"] {
@@ -756,7 +789,7 @@ enum StoreFileEdit {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be edited.")
         }
         defer { sqlite3_close(database) }
-        sqlite3_db_config(database, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, 1, nil)
+        disableCheckpointOnClose(database)
         try exec("PRAGMA journal_mode = WAL", in: database)
         try exec("PRAGMA wal_autocheckpoint = 0", in: database)
         var statement: OpaquePointer?
@@ -803,8 +836,9 @@ enum StoreFileEdit {
         return try NSKeyedArchiver.archivedData(withRootObject: metadata, requiringSecureCoding: true)
     }
 
-    /// The store's `Z_PLIST` is a classic keyed archive. `init(forReadingFrom:)`
-    /// rejects it. `requiresSecureCoding` is false only while editing that blob.
+    /// `requiresSecureCoding` is false only while editing this private blob.
+    /// `init(forReadingFrom:)` throws on a classic Core Data archive, and that
+    /// throw is caught here. The plist reader covers that archive.
     private static func mutableMetadata(from data: Data) -> NSMutableDictionary? {
         let classes: [AnyClass] = [
             NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSString.self, NSNumber.self, NSData.self, NSDate.self,
@@ -812,23 +846,14 @@ enum StoreFileEdit {
         let object: Any?
         if let decoded = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data) {
             object = decoded
-        } else if looksLikeKeyedArchive(data) {
-            let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+        } else if let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: data) {
             unarchiver.requiresSecureCoding = false
             object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
             unarchiver.finishDecoding()
         } else {
-            object = nil
+            object = KeyedArchive.dictionary(from: data)
         }
         return (object as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
-    }
-
-    private static func looksLikeKeyedArchive(_ data: Data) -> Bool {
-        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil),
-              let dictionary = plist as? NSDictionary,
-              let archiver = dictionary["$archiver"] as? String
-        else { return false }
-        return archiver == "NSKeyedArchiver"
     }
 
     private static var currentSchemaMarker: String {
@@ -910,31 +935,51 @@ enum FutureStore {
             context.insert(FutureSchema.Note(text: text))
             try context.save()
         }
-        // Release the container, then checkpoint on this thread. Waiting on
-        // the main queue from a background test can deadlock the runner when
-        // the main thread is already waiting for that test.
+        // Release the container, then checkpoint on this thread. This does not
+        // hop to the main queue: a background test that syncs there deadlocks
+        // when main is already waiting for that test. A lock that is still
+        // held fails the test once the deadline passes.
         try settle(at: url)
     }
 
     private static func settle(at url: URL) throws {
-        try checkpoint(at: url)
-        try checkpoint(at: url)
+        let deadline = Date().addingTimeInterval(2)
+        while true {
+            if try checkpoint(at: url) == 0 {
+                _ = try checkpoint(at: url)
+                return
+            }
+            if Date() >= deadline {
+                throw ProgressPersistenceError.failedToOpen("The progress store was still busy.")
+            }
+            Thread.sleep(forTimeInterval: 0.05)
+        }
     }
 
-    private static func checkpoint(at url: URL) throws {
+    /// The busy column of `wal_checkpoint`. Zero means the log was truncated.
+    /// `SQLITE_BUSY` is returned as busy so the caller can wait out a close
+    /// without blocking past the deadline.
+    private static func checkpoint(at url: URL) throws -> Int32 {
         var database: OpaquePointer?
         guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be settled.")
         }
         defer { sqlite3_close(database) }
-        sqlite3_busy_timeout(database, 2_000)
-        var error: UnsafeMutablePointer<CChar>?
-        let code = sqlite3_exec(database, "PRAGMA wal_checkpoint(TRUNCATE);", nil, nil, &error)
-        guard code == SQLITE_OK else {
-            let message = error.map { String(cString: $0) } ?? "sqlite \(code)"
-            sqlite3_free(error)
-            throw ProgressPersistenceError.failedToOpen(message)
+        sqlite3_busy_timeout(database, 200)
+        disableCheckpointOnClose(database)
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, "PRAGMA wal_checkpoint(TRUNCATE)", -1, &statement, nil) == SQLITE_OK,
+              let statement
+        else {
+            throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
         }
+        defer { sqlite3_finalize(statement) }
+        let step = sqlite3_step(statement)
+        if step == SQLITE_BUSY || step == SQLITE_LOCKED { return 1 }
+        guard step == SQLITE_ROW else {
+            throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
+        }
+        return sqlite3_column_int(statement, 0)
     }
 
     static func read(at url: URL) throws -> String? {

@@ -43,6 +43,17 @@ final class AppModel {
         startedReview != nil
     }
 
+    /// `ProgressScreen` is the choice in PashtoCore. `Phase` also has loading,
+    /// which that choice does not.
+    private func phase(for screen: ProgressScreen) -> Phase {
+        switch screen {
+        case .updateNeeded: .updateNeeded
+        case .storageError: .storageError
+        case .welcomeBack: .welcomeBack
+        case .ready: .ready
+        }
+    }
+
     init(storeURL: URL?, appStoreID: String, phase: Phase) {
         self.storeURL = storeURL
         self.appStoreID = appStoreID
@@ -79,12 +90,12 @@ final class AppModel {
             self.container = container
             self.progressStore = store
             self.snapshot = snapshot
-            phase = progressScreen(streak: snapshot.streak, on: clock.today)
+            phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
             progressStore = nil
             snapshot = nil
-            phase = progressScreen(for: progressOpenFailure(for: error))
+            phase = phase(for: progressScreen(for: progressOpenFailure(for: error)))
         }
     }
 
@@ -125,7 +136,7 @@ final class AppModel {
             self.container = restarted.container
             self.progressStore = store
             self.snapshot = snapshot
-            phase = progressScreen(streak: snapshot.streak, on: clock.today)
+            phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
             progressStore = nil

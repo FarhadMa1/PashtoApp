@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import ObjectiveC
 import PashtoCore
 import SwiftData
 import SQLite3
@@ -115,10 +116,10 @@ enum StoredSchema {
         throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
     }
 
-    /// A secure archive is preferred. SwiftData's `Z_PLIST` is a classic keyed
-    /// archive, and `init(forReadingFrom:)` rejects that with archive version -1.
-    /// The classic reader runs only after the secure decode fails, and only for
-    /// a blob that is a keyed archive, so a garbage blob stays an open failure.
+    /// A secure archive is preferred. `init(forReadingFrom:)` is the throwing
+    /// reader for anything the secure call refuses. A classic Core Data
+    /// `Z_PLIST` makes that initializer throw archive version -1, so the plist
+    /// is read directly. A blob that is neither is an open failure.
     private static func decodedMetadata(from data: Data) -> [String: Any]? {
         let classes: [AnyClass] = [
             NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSMutableArray.self,
@@ -129,27 +130,23 @@ enum StoredSchema {
            let metadata = dictionary(from: object) {
             return metadata
         }
-        guard looksLikeKeyedArchive(data) else { return nil }
-        return classicMetadata(from: data)
+        if let metadata = try? metadata(readingFrom: data) {
+            return metadata
+        }
+        guard let record = KeyedArchive.dictionary(from: data) else { return nil }
+        return dictionary(from: record)
     }
 
     /// `requiresSecureCoding` stays false because this private-copy blob was not
     /// written with secure coding. A current store must still decode, or the
-    /// check would report it as a newer schema.
-    private static func classicMetadata(from data: Data) -> [String: Any]? {
-        let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+    /// check would report it as a newer schema. The throw stays inside this
+    /// function: an archive this initializer rejects is not an uncaught error.
+    private static func metadata(readingFrom data: Data) throws -> [String: Any]? {
+        let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
         unarchiver.requiresSecureCoding = false
         let object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
         unarchiver.finishDecoding()
         return dictionary(from: object)
-    }
-
-    private static func looksLikeKeyedArchive(_ data: Data) -> Bool {
-        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil),
-              let dictionary = plist as? NSDictionary,
-              let archiver = dictionary["$archiver"] as? String
-        else { return false }
-        return archiver == "NSKeyedArchiver"
     }
 
     private static func dictionary(from object: Any?) -> [String: Any]? {
@@ -192,6 +189,10 @@ enum StoredSchema {
     }
 
     /// `mode=ro` on a copy that includes `-wal`. Not `immutable=1`.
+    ///
+    /// A missing `-shm` is recovered beside this copy. `mode=ro` can create
+    /// that file while it reads the wal index. The caller's path is a
+    /// different directory, so the original does not gain a sidecar.
     private static func openReadOnly(_ url: URL) throws -> OpaquePointer {
         var database: OpaquePointer?
         let path = url.path
@@ -265,5 +266,81 @@ enum StoredSchema {
             values.append(String(cString: cString))
         }
         return values
+    }
+}
+
+/// A classic `NSKeyedArchiver` plist. `init(forReadingFrom:)` throws archive
+/// version -1 on the blob Core Data writes, so the dictionary is rebuilt from
+/// `$objects`. Only the classes that appear in store metadata are decoded.
+enum KeyedArchive {
+    static func dictionary(from data: Data) -> NSDictionary? {
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil) as? NSDictionary,
+              let archiver = plist["$archiver"] as? String, archiver == "NSKeyedArchiver",
+              let objects = plist["$objects"] as? NSArray,
+              let top = plist["$top"] as? NSDictionary,
+              let root = top["root"]
+        else { return nil }
+        return decode(root, objects: objects, depth: 0) as? NSDictionary
+    }
+
+    private static func decode(_ object: Any, objects: NSArray, depth: Int) -> Any? {
+        if depth > 64 { return nil }
+        if let index = uid(object) {
+            guard index < objects.count else { return nil }
+            return decode(objects[index], objects: objects, depth: depth + 1)
+        }
+        if let text = object as? String {
+            return text == "$null" ? nil : text as NSString
+        }
+        if object is NSData || object is NSNumber || object is Date { return object }
+        guard let record = object as? NSDictionary else { return object }
+        let name = className(of: record, objects: objects)
+        if name.contains("Dictionary") || (name.isEmpty && record["NS.keys"] != nil) {
+            let keys = record["NS.keys"] as? NSArray ?? []
+            let values = record["NS.objects"] as? NSArray ?? []
+            let result = NSMutableDictionary()
+            for index in 0..<min(keys.count, values.count) {
+                guard let key = decode(keys[index], objects: objects, depth: depth + 1) as? NSCopying else { continue }
+                result[key] = decode(values[index], objects: objects, depth: depth + 1) ?? NSNull()
+            }
+            return result
+        }
+        if name.contains("Array") || name.contains("Set") {
+            let values = record["NS.objects"] as? NSArray ?? []
+            let result = NSMutableArray()
+            for index in 0..<values.count {
+                if let value = decode(values[index], objects: objects, depth: depth + 1) {
+                    result.add(value)
+                }
+            }
+            return result
+        }
+        if name.contains("Data") { return record["NS.data"] }
+        if name.contains("String") { return record["NS.string"] }
+        if name.contains("Number") || name.contains("Boolean") {
+            return record["NS.intval"] ?? record["NS.value"]
+        }
+        if name.contains("Date") { return record["NS.time"] }
+        return nil
+    }
+
+    private static func className(of record: NSDictionary, objects: NSArray) -> String {
+        guard let classRef = record["$class"] else { return "" }
+        let resolved: Any
+        if let index = uid(classRef), index < objects.count {
+            resolved = objects[index]
+        } else {
+            resolved = classRef
+        }
+        guard let classRecord = resolved as? NSDictionary else { return "" }
+        return classRecord["$classname"] as? String ?? ""
+    }
+
+    /// `CF$UID` is the keyed-archive object index. Asking another object for
+    /// that key throws, so the class name has to mention UID first.
+    private static func uid(_ object: Any) -> Int? {
+        guard let object = object as? NSObject else { return nil }
+        guard String(cString: object_getClassName(object)).contains("UID") else { return nil }
+        return (object.value(forKey: "CF$UID") as? NSNumber)?.intValue
     }
 }
