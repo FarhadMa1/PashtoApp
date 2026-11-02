@@ -734,15 +734,56 @@ enum FutureStore {
             allowsSave: true,
             cloudKitDatabase: .none
         )
-        let container = try ModelContainer(
-            for: schema,
-            migrationPlan: FuturePlan.self,
-            configurations: [configuration]
-        )
-        let context = ModelContext(container)
-        context.autosaveEnabled = false
-        context.insert(FutureSchema.Note(text: text))
-        try context.save()
+        try autoreleasepool {
+            let container = try ModelContainer(
+                for: schema,
+                migrationPlan: FuturePlan.self,
+                configurations: [configuration]
+            )
+            let context = ModelContext(container)
+            context.autosaveEnabled = false
+            context.insert(FutureSchema.Note(text: text))
+            try context.save()
+        }
+        // The container's close can checkpoint on the main queue after this
+        // function would otherwise return. Finish that before the caller
+        // samples bytes, so the sample is not racing the wal.
+        try settle(at: url)
+    }
+
+    /// Checkpoints twice, with a turn of the main queue between them, so a
+    /// store close that was still queued cannot rewrite the file afterwards.
+    private static func settle(at url: URL) throws {
+        drainMain()
+        try checkpoint(at: url)
+        drainMain()
+        try checkpoint(at: url)
+    }
+
+    private static func drainMain() {
+        let until = Date().addingTimeInterval(0.05)
+        if Thread.isMainThread {
+            RunLoop.main.run(until: until)
+        } else {
+            DispatchQueue.main.sync {
+                RunLoop.main.run(until: until)
+            }
+        }
+    }
+
+    private static func checkpoint(at url: URL) throws {
+        var database: OpaquePointer?
+        guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
+            throw ProgressPersistenceError.failedToOpen("The progress store could not be settled.")
+        }
+        defer { sqlite3_close(database) }
+        var error: UnsafeMutablePointer<CChar>?
+        let code = sqlite3_exec(database, "PRAGMA wal_checkpoint(TRUNCATE);", nil, nil, &error)
+        guard code == SQLITE_OK else {
+            let message = error.map { String(cString: $0) } ?? "sqlite \(code)"
+            sqlite3_free(error)
+            throw ProgressPersistenceError.failedToOpen(message)
+        }
     }
 
     static func read(at url: URL) throws -> String? {

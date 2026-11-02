@@ -10,10 +10,12 @@ import SQLite3
 /// plan does not contain does not throw. It replaces the file. This check
 /// runs first and leaves the original file alone.
 ///
-/// Entity names come from `NSStoreModelVersionHashes` in the store metadata
-/// (`NSPersistentStoreCoordinator.metadataForPersistentStore`). That dictionary
-/// lists the model entities only, not Core Data's persistent-history tables.
-/// A key that is not one of `SchemaV1`'s entities is a newer store.
+/// Entity names come from `NSStoreModelVersionHashes` in the store metadata.
+/// That dictionary is the `Z_PLIST` blob in `Z_METADATA`, read with SQLite in
+/// query-only mode from a private copy. `metadataForPersistentStore` is not
+/// used: on this toolchain it rewrites the `-shm` sidecar of the file it
+/// opens. The copy keeps that write, if any, off the caller's file. A key
+/// that is not one of `SchemaV1`'s entities is a newer store.
 ///
 /// `StoreMetaRecord.snapshotVersion` is a row, not store metadata. It is read
 /// from a copy of the file and compared with `ProgressSnapshot.currentVersion`.
@@ -51,17 +53,23 @@ enum StoredSchema {
         let copy = try copiedStore(at: url)
         defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
         diag("phase=after-copy original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+        let database: OpaquePointer
+        do {
+            database = try openReadOnly(copy)
+            diag("phase=after-sqlite-open original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+        } catch {
+            diag("phase=sqlite-open-threw original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+            throw error
+        }
+        defer { sqlite3_close(database) }
         let metadata: [String: Any]
         do {
-            metadata = try storeMetadata(at: copy)
+            metadata = try storeMetadata(in: database)
             diag("phase=after-metadata original=\(fileStamp(url)) copy=\(fileStamp(copy))")
         } catch {
             diag("phase=metadata-threw original=\(fileStamp(url)) copy=\(fileStamp(copy))")
             throw error
         }
-        let database = try openReadOnly(copy)
-        diag("phase=after-sqlite-open original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-        defer { sqlite3_close(database) }
         let snapshot = (
             versionIdentifiers(in: metadata),
             try entityNames(in: metadata),
@@ -114,16 +122,47 @@ enum StoredSchema {
         return scratch.appendingPathComponent(url.lastPathComponent)
     }
 
-    private static func storeMetadata(at url: URL) throws -> [String: Any] {
-        do {
-            return try NSPersistentStoreCoordinator.metadataForPersistentStore(
-                ofType: NSSQLiteStoreType,
-                at: url,
-                options: nil
-            )
-        } catch {
-            throw ProgressPersistenceError.failedToOpen("\(error)")
+    /// `Z_METADATA.Z_PLIST` is the keyed archive Core Data stores beside the rows.
+    /// The connection is already query-only, so this select cannot checkpoint
+    /// or replace a sidecar.
+    private static func storeMetadata(in database: OpaquePointer) throws -> [String: Any] {
+        let tables = column("SELECT name FROM sqlite_master WHERE type = 'table'", in: database)
+        guard let table = tables.first(where: { $0.caseInsensitiveCompare("Z_METADATA") == .orderedSame }),
+              isSafeIdentifier(table)
+        else {
+            throw ProgressPersistenceError.failedToOpen("The progress store has no metadata table.")
         }
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, "SELECT Z_PLIST FROM \(table) LIMIT 1", -1, &statement, nil) == SQLITE_OK,
+              let statement
+        else {
+            throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
+        }
+        defer { sqlite3_finalize(statement) }
+        guard sqlite3_step(statement) == SQLITE_ROW else {
+            throw ProgressPersistenceError.failedToOpen("The progress store has no metadata row.")
+        }
+        guard sqlite3_column_type(statement, 0) != SQLITE_NULL, let blob = sqlite3_column_blob(statement, 0) else {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata is empty.")
+        }
+        let data = Data(bytes: blob, count: Int(sqlite3_column_bytes(statement, 0)))
+        return try metadataDictionary(from: data)
+    }
+
+    private static func metadataDictionary(from data: Data) throws -> [String: Any] {
+        let classes: [AnyClass] = [
+            NSDictionary.self, NSArray.self, NSString.self, NSNumber.self, NSData.self, NSDate.self, NSSet.self,
+        ]
+        if let object = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data),
+           let metadata = object as? [String: Any] {
+            return metadata
+        }
+        let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
+        unarchiver.requiresSecureCoding = false
+        guard let metadata = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [String: Any] else {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
+        }
+        return metadata
     }
 
     private static func versionIdentifiers(in metadata: [String: Any]) -> [String] {
@@ -150,6 +189,13 @@ enum StoredSchema {
         var database: OpaquePointer?
         guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READONLY, nil) == SQLITE_OK, let database else {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be read.")
+        }
+        // query_only rejects a write, including a checkpoint, on this connection.
+        // A file that is not a database fails here and is closed before return.
+        guard sqlite3_exec(database, "PRAGMA query_only = ON", nil, nil, nil) == SQLITE_OK else {
+            let message = String(cString: sqlite3_errmsg(database))
+            sqlite3_close(database)
+            throw ProgressPersistenceError.failedToOpen(message)
         }
         return database
     }
