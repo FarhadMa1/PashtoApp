@@ -65,7 +65,7 @@ These are constraints on later work, not code in this revision.
 | `pashto-content merge --check` and `validate --mode dev` | Linux job `swift test (Linux)` | In this repository |
 | `validate --mode release` | Linux job `release gate` | Runs on every pull request. Not required for merge. Required on the release/TestFlight workflow |
 | App compile, archive, TestFlight | Xcode Cloud, committed `PashtoApp.xcodeproj`, scheme `PashtoApp` | Workflow is created in App Store Connect, not in git |
-| `swift test` for `PashtoPersistence` | GitHub Actions, `macos-15`, Xcode 16 | When the persistence package, PashtoCore progress sources, the shared store contract, or that workflow changes |
+| `swift test` for `PashtoPersistence` | GitHub Actions, `macos-15`, latest stable Xcode | When the persistence package, PashtoCore progress sources, the shared store contract, or that workflow changes |
 | macOS GitHub Actions check of the Release app bundle | Not added | The app target does not embed `content.json` yet |
 
 `project.yml` is the file to edit. `PashtoApp.xcodeproj` is generated with XcodeGen 2.46.0 and committed so Xcode Cloud can see the project and the shared scheme without installing a generator. Details and the reason are in [decisions/0001-project-structure.md](decisions/0001-project-structure.md).
