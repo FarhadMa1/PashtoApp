@@ -106,15 +106,19 @@ public struct StreakState: Hashable, Codable, Sendable {
 ///
 /// Missed days are the civil dates strictly between `lastActiveDay` and
 /// `day`. One freeze covers one of them. Two freezes cover two missed days.
-/// A two-day gap with one freeze resets the streak, and the freeze is kept.
-/// Three or more missed days always reset it, even when two freezes are
-/// available. Freezes are spent only when they cover the whole gap.
+/// Freezes are spent only when they cover the whole gap.
+///
+/// A gap that is not covered resets the streak and keeps every freeze still
+/// held. A two-day gap with one freeze resets `current` and leaves that
+/// freeze in place. Three or more missed days always reset the streak and
+/// keep all held freezes, whether that is 0, 1, or 2. Nothing is spent, so
+/// `freezeUsedDays` gains no day.
 ///
 /// A covered day does not increase `current` and does not count toward the
 /// next freeze. The completed day does both, including the day that spends
-/// the freeze. After a reset the old count toward a freeze is discarded.
-/// The completed day is then day one of the new run, unless two freezes are
-/// still held, in which case the count stays 0.
+/// a freeze. After a reset the old count toward a freeze is discarded and
+/// the completed day is day one of the new run. `daysTowardNextFreeze` is
+/// then 1, or 0 when two freezes are still held.
 ///
 /// `longest` becomes `current` when `current` is greater.
 public func streak(_ state: StreakState, after activity: StreakActivity, on day: LocalDay) -> StreakState {
@@ -169,9 +173,11 @@ private func counted(
     )
 }
 
-/// Clears the freeze count, then counts `day` as the first day of a new run.
+/// Counts `day` as day one of a new run.
 ///
-/// Freezes that could not cover the gap are kept. No covered day is recorded.
+/// Every freeze still held is kept. A freeze that cannot cover the gap is
+/// not spent, and no covered day is recorded. The count toward the next
+/// freeze starts over: 1 after this day, or 0 when two freezes are held.
 private func restarted(_ state: StreakState, on day: LocalDay) -> StreakState {
     let earned = nextFreeze(held: usableFreezes(state.freezes), daysTowardNextFreeze: 0)
     let current = 1

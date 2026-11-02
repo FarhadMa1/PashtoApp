@@ -235,44 +235,62 @@ struct StreakTests {
     }
 
     @Test func twoDayGapWithOneFreezeResetsAndKeepsTheFreeze() throws {
-        let before = running(days: 10, from: start)
-        #expect(before.freezes == 1)
-        #expect(before.current == 10)
-        #expect(before.daysTowardNextFreeze == 3)
-        #expect(before.longest == 10)
+        let covered = start.adding(days: 7)
+        let afterCover = streak(running(days: 7, from: start), after: .completedSession, on: start.adding(days: 8))
+        #expect(afterCover.freezes == 0)
+        #expect(afterCover.freezeUsedDays == [covered])
+
+        var before = afterCover
+        for offset in 1...6 {
+            before = streak(before, after: .completedSession, on: start.adding(days: 8 + offset))
+        }
         let last = try #require(before.lastActiveDay)
-        let returnDay = start.adding(days: 12)
-        #expect(last == ymd(2026, 3, 10))
-        #expect(returnDay == ymd(2026, 3, 13))
+        let returnDay = last.adding(days: 3)
+        #expect(last == ymd(2026, 3, 15))
+        #expect(returnDay == ymd(2026, 3, 18))
         #expect(returnDay.days(from: last) - 1 == 2)
+        #expect(before.current == 14)
+        #expect(before.longest == 14)
+        #expect(before.freezes == 1)
+        #expect(before.daysTowardNextFreeze == 0)
+        #expect(before.freezeUsedDays == [covered])
 
         let reset = streak(before, after: .completedSession, on: returnDay)
 
         #expect(reset.current == 1)
-        #expect(reset.longest == 10)
         #expect(reset.freezes == 1)
         #expect(reset.daysTowardNextFreeze == 1)
+        #expect(reset.longest == 14)
+        #expect(reset.freezeUsedDays == before.freezeUsedDays)
         #expect(reset.lastActiveDay == returnDay)
-        #expect(reset.freezeUsedDays.isEmpty)
     }
 
     @Test func threeDayGapResetsEvenWithTwoFreezes() throws {
-        let before = running(days: 14, from: start)
-        #expect(before.freezes == 2)
+        let covered = start.adding(days: 7)
+        var before = streak(running(days: 7, from: start), after: .completedSession, on: start.adding(days: 8))
+        #expect(before.freezeUsedDays == [covered])
+        for offset in 1...13 {
+            before = streak(before, after: .completedSession, on: start.adding(days: 8 + offset))
+        }
         let last = try #require(before.lastActiveDay)
-        let returnDay = start.adding(days: 17)
-        #expect(last == ymd(2026, 3, 14))
-        #expect(returnDay == ymd(2026, 3, 18))
+        let returnDay = last.adding(days: 4)
+        #expect(last == ymd(2026, 3, 22))
+        #expect(returnDay == ymd(2026, 3, 26))
         #expect(returnDay.days(from: last) - 1 == 3)
+        #expect(before.current == 21)
+        #expect(before.longest == 21)
+        #expect(before.freezes == 2)
+        #expect(before.daysTowardNextFreeze == 0)
+        #expect(before.freezeUsedDays == [covered])
 
         let reset = streak(before, after: .completedSession, on: returnDay)
 
         #expect(reset.current == 1)
-        #expect(reset.longest == 14)
         #expect(reset.freezes == 2)
         #expect(reset.daysTowardNextFreeze == 0)
+        #expect(reset.longest == 21)
+        #expect(reset.freezeUsedDays == before.freezeUsedDays)
         #expect(reset.lastActiveDay == returnDay)
-        #expect(reset.freezeUsedDays.isEmpty)
 
         var held = reset
         for offset in 1...7 {
@@ -281,6 +299,30 @@ struct StreakTests {
             #expect(held.daysTowardNextFreeze == 0)
         }
         #expect(held.current == 8)
+    }
+
+    @Test func aResetKeepsZeroOrOneFreezeAsWell() {
+        let history = [ymd(2026, 4, 2)]
+        let last = ymd(2026, 4, 10)
+        let returnDay = ymd(2026, 4, 14)
+        #expect(returnDay.days(from: last) - 1 == 3)
+
+        for held in [0, 1] {
+            let before = StreakState(
+                current: 9,
+                longest: 12,
+                lastActiveDay: last,
+                freezes: held,
+                daysTowardNextFreeze: 4,
+                freezeUsedDays: history
+            )
+            let reset = streak(before, after: .completedSession, on: returnDay)
+            #expect(reset.current == 1)
+            #expect(reset.freezes == held)
+            #expect(reset.daysTowardNextFreeze == 1)
+            #expect(reset.longest == 12)
+            #expect(reset.freezeUsedDays == history)
+        }
     }
 
     @Test func openingTheAppSpendsNothing() {
