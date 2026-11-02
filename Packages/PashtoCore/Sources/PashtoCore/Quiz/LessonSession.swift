@@ -112,6 +112,16 @@ private struct ItemTasks {
     var tasks: [SessionTask]
 }
 
+/// One question list per introduced item, then the shared match tasks.
+///
+/// The generator order is Pashto to English, English to Pashto, pronunciation,
+/// word order, and dialog reply. Match pairs come after those. The placement
+/// test draws from this same draft and the same `rng`.
+struct LessonTaskDraft {
+    var perItem: [[SessionTask]]
+    var shared: [SessionTask]
+}
+
 /// Mixes the quiz kinds for one lesson, using only content the learner has seen.
 ///
 /// The lesson being built counts as seen. An item is seen only when a seen
@@ -152,7 +162,23 @@ public enum LessonSessionBuilder {
             retiredItemIDs: retiredItemIDs
         )
         let targets = Distractors.introducedItems(in: lessonID, bundle: bundle)
-        var groups: [ItemTasks] = []
+        let draft = Self.draft(for: targets, in: context, using: &rng)
+        let groups = draft.perItem.map { ItemTasks(tasks: $0) }
+        let tasks = groups.flatMap(\.tasks) + draft.shared
+        let cap = maxQuestions.map { max($0, 0) }
+        if let cap, cap < tasks.count {
+            let selected = select(groups: groups, shared: draft.shared, cap: cap, using: &rng)
+            return LessonSession(lessonID: lessonID, tasks: shuffled(selected, using: &rng))
+        }
+        return LessonSession(lessonID: lessonID, tasks: shuffled(tasks, using: &rng))
+    }
+
+    static func draft(
+        for targets: [ContentItem],
+        in context: QuizContext,
+        using rng: inout some RandomNumberGenerator
+    ) -> LessonTaskDraft {
+        var perItem: [[SessionTask]] = []
         for target in targets {
             var itemTasks: [SessionTask] = []
             if let task = PashtoToEnglishChoice().makeTask(for: target, in: context, using: &rng) {
@@ -171,7 +197,7 @@ public enum LessonSessionBuilder {
                 itemTasks.append(SessionTask(payload: .choice(task)))
             }
             if !itemTasks.isEmpty {
-                groups.append(ItemTasks(tasks: itemTasks))
+                perItem.append(itemTasks)
             }
         }
         var shared: [SessionTask] = []
@@ -184,13 +210,7 @@ public enum LessonSessionBuilder {
         if let match = firstResponse(in: targets.filter { $0.responseTo != nil }, context: context, using: &rng) {
             shared.append(SessionTask(payload: .matchPairs(match)))
         }
-        let tasks = groups.flatMap(\.tasks) + shared
-        let cap = maxQuestions.map { max($0, 0) }
-        if let cap, cap < tasks.count {
-            let selected = select(groups: groups, shared: shared, cap: cap, using: &rng)
-            return LessonSession(lessonID: lessonID, tasks: shuffled(selected, using: &rng))
-        }
-        return LessonSession(lessonID: lessonID, tasks: shuffled(tasks, using: &rng))
+        return LessonTaskDraft(perItem: perItem, shared: shared)
     }
 
     /// One question for every introduced item, then repetitions until `cap`.

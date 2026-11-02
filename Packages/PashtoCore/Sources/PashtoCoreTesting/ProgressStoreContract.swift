@@ -39,6 +39,7 @@ public enum ProgressStoreContract {
         try await fresh(makeStore, "load clamps", loadClampsOutOfRangeValues)
         try await fresh(makeStore, "mismatched id", mismatchedSessionIDDoesNotWrite)
         try await fresh(makeStore, "review commit", reviewCommitWritesNoLessonRow)
+        try await fresh(makeStore, "placement", placementWritesLessonsCardsAndDay)
         try await fresh(makeStore, "reset", resetClearsLearnerProgress)
     }
 
@@ -108,6 +109,10 @@ public actor CommitRejectingProgressStore: ProgressStore {
         _ changes: [ReviewCard],
         reconciledContentVersion: String?
     ) async throws {}
+
+    public func applyPlacement(_ commit: PlacementCommit) async throws {
+        throw ProgressStoreContractError.writeFailed
+    }
 
     public func updateSettings(_ settings: UserSettings) async throws {}
 
@@ -397,6 +402,51 @@ private func reviewCommitWritesNoLessonRow(_ store: any ProgressStore) async thr
     try expect(loaded.cards.count == 1, name, "the reviewed card is stored")
     try expect(loaded.completedSessions.first?.kind == .review, name, "the completed row is a review")
     try expect(loaded.streak.lastActiveDay == Sample.day, name, "the streak is stored")
+}
+
+private func placementWritesLessonsCardsAndDay(_ store: any ProgressStore) async throws {
+    let name = "placement"
+    let kept = Sample.session("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFF1")
+    let active = Sample.active(id: Sample.session("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFF2"), answers: 1)
+    try await store.updateSettings(UserSettings(
+        dailyGoal: .light,
+        showTransliteration: false,
+        placementTakenDay: nil
+    ))
+    try await store.saveActiveSession(active)
+    try await store.commit(Sample.commit(
+        id: kept,
+        cards: [Sample.card("e-keep")],
+        lesson: Sample.progress("l-old"),
+        streak: Sample.streak(on: Sample.day)
+    ))
+    let day = Sample.next
+    try await store.applyPlacement(PlacementCommit(
+        lessonProgress: [
+            LessonProgress(
+                lessonID: Sample.lesson("l-greetings-1"),
+                source: .placement,
+                firstCompletedDay: day,
+                bestScorePercent: 80
+            ),
+        ],
+        cards: [Sample.card("e-place", created: day, source: .placement)],
+        placementTakenDay: day
+    ))
+    let loaded = try await store.load()
+    try expect(loaded.lessonProgress.count == 2, name, "the placement lesson is stored with the old one")
+    try expect(
+        loaded.lessonProgress.contains { $0.lessonID.rawValue == "l-greetings-1" && $0.source == .placement },
+        name,
+        "the new lesson is a placement row"
+    )
+    try expect(loaded.cards.count == 2, name, "the placement card is stored with the old one")
+    try expect(try card("e-place", in: loaded).source == .placement, name, "the new card is a placement card")
+    try expect(loaded.settings.placementTakenDay == day, name, "placementTakenDay is stored")
+    try expect(loaded.settings.dailyGoal == .light, name, "the daily goal stays")
+    try expect(loaded.settings.showTransliteration == false, name, "transliteration stays")
+    try expect(loaded.streak.lastActiveDay == Sample.day, name, "the streak stays")
+    try expect(loaded.activeSession == active, name, "the active session stays")
 }
 
 private func commitThatThrowsKeepsTheActiveSession(_ store: any ProgressStore) async throws {

@@ -31,6 +31,16 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
     nonisolated public let modelExecutor: any ModelExecutor
     nonisolated public let modelContainer: ModelContainer
     private let installedContentVersion: String
+    /// Set by tests. The next save throws after the rows are staged, and the
+    /// context rolls back, so a placement write does not keep a partial result.
+    private var failNextSave = false
+
+    /// The next `save()` throws and the staged rows roll back.
+    func prepareFailedSave() {
+        failNextSave = true
+    }
+    /// Successful `save()` calls. A placement write adds one.
+    private(set) var successfulSaveCount = 0
 
     /// `contentVersion` is the bundle version used until the file has its own.
     /// After the first successful write, `load` returns the version stored
@@ -104,6 +114,31 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
         }
     }
 
+    public func applyPlacement(_ commit: PlacementCommit) async throws {
+        let goal: Int
+        let showTransliteration: Bool
+        if let record = try settingsRow() {
+            goal = record.dailyGoal
+            showTransliteration = record.showTransliteration
+        } else {
+            goal = UserSettings.initial.dailyGoal.rawValue
+            showTransliteration = UserSettings.initial.showTransliteration
+        }
+        let settings = UserSettings(
+            dailyGoal: validatedDailyGoal(goal),
+            showTransliteration: showTransliteration,
+            placementTakenDay: commit.placementTakenDay
+        )
+        try write {
+            try self.upsert(commit.cards)
+            for lesson in commit.lessonProgress {
+                try self.upsert(lesson)
+            }
+            try self.upsert(settings)
+            try self.insertMetaIfNeeded()
+        }
+    }
+
     public func updateSettings(_ settings: UserSettings) async throws {
         try write {
             try self.upsert(settings)
@@ -137,8 +172,13 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
         do {
             try refuseIfNewer()
             try body()
+            if failNextSave {
+                failNextSave = false
+                throw ProgressWriteError.saveFailed
+            }
             if modelContext.hasChanges {
                 try modelContext.save()
+                successfulSaveCount += 1
             }
         } catch {
             if modelContext.hasChanges {
@@ -600,6 +640,11 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
             modelContext.delete(row)
         }
     }
+}
+
+/// A staged save was rejected before it reached the file.
+enum ProgressWriteError: Error, Equatable {
+    case saveFailed
 }
 
 /// JSON for one active lesson. The column `payloadVersion` is checked before this runs.

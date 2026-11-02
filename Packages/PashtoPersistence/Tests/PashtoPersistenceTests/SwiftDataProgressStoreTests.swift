@@ -302,6 +302,70 @@ struct SwiftDataProgressStoreTests {
         #expect(cleared.lastReconciledContentVersion == nil)
         #expect(cleared.latestObservedDay == nil)
     }
+
+    @Test func placementWriteIsOneSaveAndAFailureKeepsThePreviousRows() async throws {
+        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "test")
+        let day = LocalDay(year: 2026, month: 11, day: 2)
+        let bundle = placementBundle()
+        _ = try await ProgressReconciler.run(store: store, content: bundle, on: day)
+        let savesAfterReconcile = await store.successfulSaveCount
+
+        let commit = placementCommit(
+            scores: [
+                PlacementUnitScore(
+                    unitID: mustID("u-greetings"),
+                    correct: 4,
+                    questions: 5,
+                    skipped: true
+                ),
+            ],
+            in: bundle,
+            takenOn: day
+        )
+        try await store.applyPlacement(commit)
+        #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
+        let stored = try await store.load()
+        #expect(stored.settings.placementTakenDay == day)
+        #expect(stored.lessonProgress.map(\.lessonID.rawValue) == ["l-greetings-1"])
+        #expect(stored.lessonProgress.first?.source == .placement)
+        #expect(stored.cards.map(\.itemID.rawValue) == ["e-one", "e-two"])
+        #expect(stored.cards.allSatisfy { $0.source == .placement })
+        #expect(!stored.lessonProgress.contains { $0.lessonID.rawValue == "l-sounds" })
+
+        let again = try await ProgressReconciler.run(store: store, content: bundle, on: day)
+        #expect(again == stored)
+        #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
+
+        let beforeFailure = try await store.load()
+        await store.prepareFailedSave()
+        do {
+            try await store.applyPlacement(
+                PlacementCommit(
+                    lessonProgress: [
+                        LessonProgress(
+                            lessonID: mustLesson("l-extra"),
+                            source: .placement,
+                            firstCompletedDay: day,
+                            bestScorePercent: 100
+                        ),
+                    ],
+                    cards: [ReviewCard.introduced(itemID: mustItem("e-extra"), on: day, source: .placement)],
+                    placementTakenDay: day.adding(days: 4)
+                )
+            )
+            Issue.record("a failed placement save should throw")
+        } catch let error as ProgressWriteError {
+            #expect(error == .saveFailed)
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
+        let afterFailure = try await store.load()
+        #expect(afterFailure == beforeFailure)
+        let reconciled = try await ProgressReconciler.run(store: store, content: bundle, on: day)
+        #expect(reconciled == beforeFailure)
+        #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
+    }
 }
 
 private func memoryStore(_ version: String = "2026.11.0") throws -> SwiftDataProgressStore {
@@ -695,4 +759,62 @@ private enum Fixture {
             )
         )
     }
+}
+
+private func mustItem(_ raw: String) -> ItemID {
+    guard let id = ItemID(rawValue: raw) else { preconditionFailure("bad item \(raw)") }
+    return id
+}
+
+private func mustLesson(_ raw: String) -> LessonID {
+    guard let id = LessonID(rawValue: raw) else { preconditionFailure("bad lesson \(raw)") }
+    return id
+}
+
+private func mustID(_ raw: String) -> UnitID {
+    guard let id = UnitID(rawValue: raw) else { preconditionFailure("bad unit \(raw)") }
+    return id
+}
+
+private func placementItem(_ id: String, pashto: String, en: String) -> ContentItem {
+    ContentItem(
+        id: mustItem(id),
+        kind: .word,
+        pashto: pashto,
+        translit: en,
+        pronunciation: en,
+        en: en,
+        verification: Verification(status: .verified, checkedBy: "test", checkedOn: "2026-11-01")
+    )
+}
+
+private func placementBundle() -> ContentBundle {
+    let sound = placementItem("e-sound", pashto: "sound", en: "sound")
+    let one = placementItem("e-one", pashto: "one", en: "one")
+    let two = placementItem("e-two", pashto: "two", en: "two")
+    let sounds = Lesson(
+        id: mustLesson("l-sounds"),
+        title: "Sounds",
+        items: [LessonItemRef(item: sound.id, role: .soundExample, sound: "a")]
+    )
+    let greetings = Lesson(
+        id: mustLesson("l-greetings-1"),
+        title: "Hello",
+        items: [
+            LessonItemRef(item: one.id, role: .introduce),
+            LessonItemRef(item: two.id, role: .introduce),
+            LessonItemRef(item: sound.id, role: .soundExample, sound: "a"),
+        ]
+    )
+    return ContentBundle(
+        contentVersion: "test",
+        variant: ContentBundle.kabulVariant,
+        romanization: Romanization(table: [], difficultCharacters: [], unstressedWords: []),
+        items: [sound, one, two],
+        units: [
+            CourseUnit(id: mustID("u-sounds"), track: "main", title: "Sounds", lessons: [sounds]),
+            CourseUnit(id: mustID("u-greetings"), track: "main", title: "Greetings", lessons: [greetings]),
+        ],
+        nonDistractorGroups: []
+    )
 }
