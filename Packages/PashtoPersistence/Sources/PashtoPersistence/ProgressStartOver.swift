@@ -61,21 +61,15 @@ public enum ProgressStartOver {
             backupDirectory: preserved.backupDirectory,
             movedFiles: preserved.movedFiles
         )
-        // Held outside the do block so a failure can release the container
-        // before the new files are removed.
-        var created: ModelContainer?
         do {
             let container = try make(url)
-            created = container
             if let beforeWrite {
                 try beforeWrite()
             }
             try await write(container, carried)
             return RestartedStore(container: container, carried: carried)
         } catch {
-            if created != nil {
-                created = nil
-            }
+            // `container` is released with this block, before the new files are removed.
             ProgressStoreRestart.undoReplacement(storeAt: url, preserved: preserved)
             throw error
         }

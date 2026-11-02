@@ -40,6 +40,11 @@ jobs:
       - name: Generate the Xcode project
         run: |
           brew install xcodegen
+          version="$(xcodegen --version)"
+          if [ "$version" != "Version: 2.46.0" ]; then
+            echo "::error::Expected XcodeGen 2.46.0, found ${version}. The committed project was generated with that version."
+            exit 1
+          fi
           xcodegen generate
           git diff --exit-code -- PashtoApp.xcodeproj
 

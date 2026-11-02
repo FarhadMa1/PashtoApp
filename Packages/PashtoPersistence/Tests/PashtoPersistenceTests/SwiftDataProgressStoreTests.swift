@@ -444,7 +444,7 @@ private func memoryStore(_ version: String = "2026.11.0") throws -> SwiftDataPro
 func writeStore(
     at url: URL,
     contentVersion: String,
-    _ body: (SwiftDataProgressStore) async throws -> Void
+    _ body: @Sendable (SwiftDataProgressStore) async throws -> Void
 ) async throws {
     let container = try ProgressContainer.make(at: url)
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: contentVersion)

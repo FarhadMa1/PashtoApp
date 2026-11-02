@@ -1,6 +1,9 @@
 import Foundation
+import os
 import PashtoCore
 import SQLite3
+
+private let restartLog = Logger(subsystem: "com.mangallabs.pashto", category: "progress")
 
 /// A store that was moved aside, and the settings read from it first.
 ///
@@ -102,13 +105,21 @@ public enum ProgressStoreRestart {
             guard fileManager.fileExists(atPath: created.path), !fileManager.isDirectory(created) else {
                 continue
             }
-            try? fileManager.removeItem(at: created)
+            do {
+                try fileManager.removeItem(at: created)
+            } catch {
+                restartLog.error("Start over could not remove the new store file. The backup was left in place.")
+            }
         }
         let parent = url.deletingLastPathComponent()
         for backedUp in preserved.movedFiles {
             let destination = parent.appendingPathComponent(backedUp.lastPathComponent)
             if fileManager.fileExists(atPath: destination.path) { continue }
-            try? fileManager.moveItem(at: backedUp, to: destination)
+            do {
+                try fileManager.moveItem(at: backedUp, to: destination)
+            } catch {
+                restartLog.error("Start over could not move the backup back. The original bytes remain in the backup folder.")
+            }
         }
     }
 
