@@ -45,16 +45,56 @@ enum StoredSchema {
     }
 
     private static func read(at url: URL) throws -> (versionIdentifiers: [String], entityNames: [String], snapshotVersion: Int?) {
+        // Temporary trace for the newer-schema byte check. Removed once the
+        // open path is fixed. Reading these bytes does not open SQLite.
+        diag("phase=before-open original=\(fileStamp(url))")
         let copy = try copiedStore(at: url)
         defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
-        let metadata = try storeMetadata(at: copy)
+        diag("phase=after-copy original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+        let metadata: [String: Any]
+        do {
+            metadata = try storeMetadata(at: copy)
+            diag("phase=after-metadata original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+        } catch {
+            diag("phase=metadata-threw original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+            throw error
+        }
         let database = try openReadOnly(copy)
+        diag("phase=after-sqlite-open original=\(fileStamp(url)) copy=\(fileStamp(copy))")
         defer { sqlite3_close(database) }
-        return (
+        let snapshot = (
             versionIdentifiers(in: metadata),
             try entityNames(in: metadata),
             snapshotVersion(in: database)
         )
+        diag("phase=after-check original=\(fileStamp(url)) copy=\(fileStamp(copy))")
+        return snapshot
+    }
+
+    private static func diag(_ message: String) {
+        FileHandle.standardError.write(Data("SCHEMA-DIAG \(message)\n".utf8))
+    }
+
+    /// Size and checksum of the main file and both sidecars. `absent` means
+    /// that path does not exist.
+    private static func fileStamp(_ url: URL) -> String {
+        ["", "-wal", "-shm"].map { suffix in
+            let label = suffix.isEmpty ? "main" : String(suffix.dropFirst())
+            let path = url.path + suffix
+            guard FileManager.default.fileExists(atPath: path),
+                  let data = try? Data(contentsOf: URL(fileURLWithPath: path))
+            else { return "\(label)=absent" }
+            return "\(label)=\(data.count):\(fnv(data))"
+        }.joined(separator: ",")
+    }
+
+    private static func fnv(_ data: Data) -> String {
+        var hash: UInt64 = 14_695_981_039_346_656_037
+        for byte in data {
+            hash ^= UInt64(byte)
+            hash &*= 1_099_511_628_211
+        }
+        return String(hash, radix: 16)
     }
 
     /// A copy so the metadata read and the snapshot query cannot touch the file

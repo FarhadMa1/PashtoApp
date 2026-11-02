@@ -182,6 +182,7 @@ struct SwiftDataProgressStoreTests {
         let url = directory.appendingPathComponent("Progress.store")
         try FutureStore.write(at: url, text: "keep-me")
         let before = try storedBytes(around: url)
+        schemaDiag("phase=test-before disk=\(schemaDiskStamp(url)) compared=\(schemaStamp(before))")
 
         do {
             _ = try ProgressContainer.make(at: url)
@@ -190,7 +191,9 @@ struct SwiftDataProgressStoreTests {
             #expect(error is ProgressPersistenceError)
         }
 
-        #expect(try storedBytes(around: url) == before)
+        let after = try storedBytes(around: url)
+        schemaDiag("phase=test-after disk=\(schemaDiskStamp(url)) compared=\(schemaStamp(after)) same=\(before == after)")
+        #expect(after == before)
         #expect(try FutureStore.read(at: url) == "keep-me")
     }
 
@@ -551,6 +554,40 @@ private func expectKeptCard(in container: ModelContainer, loaded: ProgressSnapsh
     #expect(cards.count == 1)
     #expect(cards.first?.itemID == "e-keep")
     #expect(cards.first?.easeFactor == 2.5)
+}
+
+/// Temporary trace for the newer-schema byte check.
+func schemaDiag(_ message: String) {
+    FileHandle.standardError.write(Data("SCHEMA-DIAG \(message)\n".utf8))
+}
+
+func schemaDiskStamp(_ url: URL) -> String {
+    ["", "-wal", "-shm"].map { suffix in
+        let label = suffix.isEmpty ? "main" : String(suffix.dropFirst())
+        let path = url.path + suffix
+        guard FileManager.default.fileExists(atPath: path),
+              let data = try? Data(contentsOf: URL(fileURLWithPath: path))
+        else { return "\(label)=absent" }
+        var hash: UInt64 = 14_695_981_039_346_656_037
+        for byte in data {
+            hash ^= UInt64(byte)
+            hash &*= 1_099_511_628_211
+        }
+        return "\(label)=\(data.count):\(String(hash, radix: 16))"
+    }.joined(separator: ",")
+}
+
+func schemaStamp(_ files: [String: Data]) -> String {
+    let names = Set(files.keys).union(["Progress.store", "Progress.store-wal", "Progress.store-shm"])
+    return names.sorted().map { name in
+        guard let data = files[name] else { return "\(name)=absent" }
+        var hash: UInt64 = 14_695_981_039_346_656_037
+        for byte in data {
+            hash ^= UInt64(byte)
+            hash &*= 1_099_511_628_211
+        }
+        return "\(name)=\(data.count):\(String(hash, radix: 16))"
+    }.joined(separator: ",")
 }
 
 /// Bytes of the store and its write-ahead log. Shared-memory files are not compared.
