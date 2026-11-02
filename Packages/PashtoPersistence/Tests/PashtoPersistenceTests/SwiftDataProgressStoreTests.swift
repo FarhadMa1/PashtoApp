@@ -849,15 +849,12 @@ enum StoreFileEdit {
     }
 
     /// Commits one extra model-hash key into the wal and does not checkpoint.
-    /// The main file still has the previous plist.
+    /// The blob is the plist `setMetadata` wrote on a private copy. A
+    /// secure-coding archive is not a Core Data metadata plist, so the reader
+    /// would report it as unreadable instead of a newer schema. The main file
+    /// still has the previous plist.
     static func leaveNewerEntityInTheWal(named name: String, at url: URL) throws {
-        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(type: .sqlite, at: url)
-        let record = NSMutableDictionary(dictionary: metadata)
-        let hashes = (record[NSStoreModelVersionHashesKey] as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
-            ?? NSMutableDictionary()
-        hashes[name] = Data(repeating: 7, count: 32)
-        record[NSStoreModelVersionHashesKey] = hashes
-        let updated = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
+        let updated = try metadataBlob(addingEntity: name, beside: url)
         var database: OpaquePointer?
         guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be edited.")
@@ -884,6 +881,26 @@ enum StoreFileEdit {
         else {
             throw ProgressPersistenceError.failedToOpen("The wal metadata update did not apply.")
         }
+    }
+
+    /// `setMetadata` on a copy, then the resulting `Z_PLIST`. The original
+    /// store is not opened.
+    private static func metadataBlob(addingEntity name: String, beside url: URL) throws -> Data {
+        let scratch = FileManager.default.temporaryDirectory
+            .appendingPathComponent("pashto-wal-blob-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: scratch) }
+        for suffix in ["", "-wal", "-shm"] {
+            let source = URL(fileURLWithPath: url.path + suffix)
+            guard FileManager.default.fileExists(atPath: source.path) else { continue }
+            try FileManager.default.copyItem(
+                at: source,
+                to: scratch.appendingPathComponent(url.lastPathComponent + suffix)
+            )
+        }
+        let copy = scratch.appendingPathComponent(url.lastPathComponent)
+        try addModelHash(named: name, at: copy)
+        return try metadataPlist(at: copy, includeSidecars: true, immutable: false)
     }
 
     private static var currentSchemaMarker: String {
