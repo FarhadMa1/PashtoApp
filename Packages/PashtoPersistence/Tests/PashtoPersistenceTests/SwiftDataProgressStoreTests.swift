@@ -302,6 +302,138 @@ struct SwiftDataProgressStoreTests {
         #expect(cleared.lastReconciledContentVersion == nil)
         #expect(cleared.latestObservedDay == nil)
     }
+
+    @Test func placementWriteIsOneSaveAndAFailureKeepsThePreviousRows() async throws {
+        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "test")
+        let day = LocalDay(year: 2026, month: 11, day: 2)
+        let bundle = placementBundle()
+        _ = try await ProgressReconciler.run(store: store, content: bundle, on: day)
+        let savesAfterReconcile = await store.successfulSaveCount
+
+        let commit = placementCommit(
+            scores: [
+                PlacementUnitScore(
+                    unitID: mustID("u-greetings"),
+                    correct: 4,
+                    questions: 5,
+                    skipped: true
+                ),
+            ],
+            in: bundle,
+            takenOn: day
+        )
+        try await store.applyPlacement(commit)
+        #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
+        let stored = try await store.load()
+        #expect(stored.settings.placementTakenDay == day)
+        #expect(stored.lessonProgress.map(\.lessonID.rawValue) == ["l-greetings-1"])
+        #expect(stored.lessonProgress.first?.source == .placement)
+        #expect(stored.cards.map(\.itemID.rawValue) == ["e-one", "e-two"])
+        #expect(stored.cards.allSatisfy { $0.source == .placement })
+        #expect(!stored.lessonProgress.contains { $0.lessonID.rawValue == "l-sounds" })
+
+        let again = try await ProgressReconciler.run(store: store, content: bundle, on: day)
+        #expect(again == stored)
+        #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
+
+        let beforeFailure = try await store.load()
+        await store.prepareFailedSave()
+        do {
+            try await store.applyPlacement(
+                PlacementCommit(
+                    lessonProgress: [
+                        LessonProgress(
+                            lessonID: mustLesson("l-extra"),
+                            source: .placement,
+                            firstCompletedDay: day,
+                            bestScorePercent: 100
+                        ),
+                    ],
+                    cards: [ReviewCard.introduced(itemID: mustItem("e-extra"), on: day, source: .placement)],
+                    placementTakenDay: day.adding(days: 4)
+                )
+            )
+            Issue.record("a failed placement save should throw")
+        } catch let error as ProgressWriteError {
+            #expect(error == .saveFailed)
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
+        let afterFailure = try await store.load()
+        #expect(afterFailure == beforeFailure)
+        let reconciled = try await ProgressReconciler.run(store: store, content: bundle, on: day)
+        #expect(reconciled == beforeFailure)
+        #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
+    }
+
+    @Test func placementDoesNotOverwriteACardWithHistoryOrLowerAScore() async throws {
+        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "test")
+        let day = LocalDay(year: 2026, month: 11, day: 2)
+        let kept = ReviewCard(
+            itemID: mustItem("e-kept"),
+            easeFactor: 1.7,
+            intervalDays: 6,
+            repetitions: 3,
+            lapses: 1,
+            dueDay: day.adding(days: -4),
+            lastReviewedDay: day.adding(days: -10),
+            createdDay: day.adding(days: -30),
+            state: .active,
+            source: .lesson
+        )
+        let finished = LessonProgress(
+            lessonID: mustLesson("l-done"),
+            source: .completed,
+            firstCompletedDay: day.adding(days: -30),
+            bestScorePercent: 100
+        )
+        let session = UUID(uuidString: "CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCC2")!
+        try await store.commit(SessionCommit(
+            sessionID: session,
+            cards: [kept],
+            lessonProgress: finished,
+            streak: .initial,
+            completed: CompletedSession(
+                sessionID: session,
+                kind: .lesson,
+                lessonID: finished.lessonID,
+                completedDay: finished.firstCompletedDay,
+                questionCount: 5,
+                firstTryCorrect: 5
+            )
+        ))
+        let savesBefore = await store.successfulSaveCount
+        try await store.applyPlacement(PlacementCommit(
+            lessonProgress: [
+                LessonProgress(
+                    lessonID: finished.lessonID,
+                    source: .placement,
+                    firstCompletedDay: day,
+                    bestScorePercent: 80
+                ),
+                LessonProgress(
+                    lessonID: mustLesson("l-greetings-1"),
+                    source: .placement,
+                    firstCompletedDay: day,
+                    bestScorePercent: 80
+                ),
+            ],
+            cards: [
+                ReviewCard.introduced(itemID: kept.itemID, on: day.adding(days: 1), source: .placement),
+                ReviewCard.introduced(itemID: mustItem("e-place"), on: day.adding(days: 1), source: .placement),
+            ],
+            placementTakenDay: day
+        ))
+        #expect(await store.successfulSaveCount == savesBefore + 1)
+        let stored = try await store.load()
+        #expect(stored.cards.first { $0.itemID == kept.itemID } == kept)
+        #expect(stored.lessonProgress.contains(finished))
+        #expect(stored.lessonProgress.contains { $0.lessonID.rawValue == "l-greetings-1" && $0.bestScorePercent == 80 })
+        #expect(stored.cards.contains { $0.itemID.rawValue == "e-place" && $0.source == .placement })
+        #expect(stored.settings.placementTakenDay == day)
+    }
 }
 
 private func memoryStore(_ version: String = "2026.11.0") throws -> SwiftDataProgressStore {
@@ -695,4 +827,62 @@ private enum Fixture {
             )
         )
     }
+}
+
+private func mustItem(_ raw: String) -> ItemID {
+    guard let id = ItemID(rawValue: raw) else { preconditionFailure("bad item \(raw)") }
+    return id
+}
+
+private func mustLesson(_ raw: String) -> LessonID {
+    guard let id = LessonID(rawValue: raw) else { preconditionFailure("bad lesson \(raw)") }
+    return id
+}
+
+private func mustID(_ raw: String) -> UnitID {
+    guard let id = UnitID(rawValue: raw) else { preconditionFailure("bad unit \(raw)") }
+    return id
+}
+
+private func placementItem(_ id: String, pashto: String, en: String) -> ContentItem {
+    ContentItem(
+        id: mustItem(id),
+        kind: .word,
+        pashto: pashto,
+        translit: en,
+        pronunciation: en,
+        en: en,
+        verification: Verification(status: .verified, checkedBy: "test", checkedOn: "2026-11-01")
+    )
+}
+
+private func placementBundle() -> ContentBundle {
+    let sound = placementItem("e-sound", pashto: "sound", en: "sound")
+    let one = placementItem("e-one", pashto: "one", en: "one")
+    let two = placementItem("e-two", pashto: "two", en: "two")
+    let sounds = Lesson(
+        id: mustLesson("l-sounds"),
+        title: "Sounds",
+        items: [LessonItemRef(item: sound.id, role: .soundExample, sound: "a")]
+    )
+    let greetings = Lesson(
+        id: mustLesson("l-greetings-1"),
+        title: "Hello",
+        items: [
+            LessonItemRef(item: one.id, role: .introduce),
+            LessonItemRef(item: two.id, role: .introduce),
+            LessonItemRef(item: sound.id, role: .soundExample, sound: "a"),
+        ]
+    )
+    return ContentBundle(
+        contentVersion: "test",
+        variant: ContentBundle.kabulVariant,
+        romanization: Romanization(table: [], difficultCharacters: [], unstressedWords: []),
+        items: [sound, one, two],
+        units: [
+            CourseUnit(id: mustID("u-sounds"), track: "main", title: "Sounds", lessons: [sounds]),
+            CourseUnit(id: mustID("u-greetings"), track: "main", title: "Greetings", lessons: [greetings]),
+        ],
+        nonDistractorGroups: []
+    )
 }

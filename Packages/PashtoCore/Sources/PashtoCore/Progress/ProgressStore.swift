@@ -24,6 +24,14 @@ public protocol ProgressStore: Sendable {
         _ changes: [ReviewCard],
         reconciledContentVersion: String?
     ) async throws
+    /// Writes placement lesson rows, placement cards, and `placementTakenDay`.
+    ///
+    /// One save. A failure leaves the stored lessons, cards, and settings as
+    /// they were. The daily goal, transliteration, streak, and sessions stay.
+    /// A card that is already stored is left as it is, including its review
+    /// history. A lesson that is already stored is left as it is, so placement
+    /// does not lower its score and does not replace the row.
+    func applyPlacement(_ commit: PlacementCommit) async throws
     func updateSettings(_ settings: UserSettings) async throws
     /// Clears cards, lesson progress, the streak, sessions, and `placementTakenDay`.
     ///

@@ -9,7 +9,9 @@ import PashtoCore
 /// character with no `soundExample` in the first unit is a warning in `dev`.
 /// It is an error in `release` only when `u-sounds` is listed in
 /// `release-units.json`. A non-empty release list that omits `u-sounds` is an
-/// error. An empty list is allowed. A missing romanization table is a warning
+/// error. An empty list is allowed. A released unit in the placement window
+/// that cannot produce five placement questions is an error in `release` and
+/// a warning in `dev`. The alphabet is not a placement unit. A missing romanization table is a warning
 /// in `dev` and an error in `release`. Audio in v1.0 is a warning in both modes.
 public enum ReleaseGate {
     public static func issues(
@@ -126,6 +128,20 @@ public enum ReleaseGate {
                 id: item.id.rawValue,
                 field: "audio",
                 "\(item.id.rawValue) has audio. v1.0 does not ship audio."
+            ))
+        }
+
+        let placementIDs = releaseUnitIDs.compactMap(UnitID.init(rawValue:))
+        let shortUnits = PlacementTestBuilder.releasedUnitsThatCannotFillQuestions(
+            in: bundle,
+            releasedUnitIDs: placementIDs
+        )
+        for unitID in shortUnits {
+            issues.append(IssueText.make(
+                releaseSeverity,
+                id: unitID.rawValue,
+                field: "placement",
+                "\(unitID.rawValue) cannot produce \(PlacementPolicy.standard.questionsPerUnit) placement questions."
             ))
         }
 

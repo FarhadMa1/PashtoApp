@@ -6,6 +6,10 @@
 /// `itemID`: the last card with an id in one commit is the one that is kept,
 /// and a later commit replaces that card instead of adding another.
 ///
+/// `applyPlacement` builds the next snapshot and then replaces the stored one,
+/// so the lesson rows, the cards, and `placementTakenDay` land together.
+/// A card or lesson that is already stored is left out of that replacement.
+///
 /// `load` sorts cards and lessons by id and then clamps out-of-range values.
 /// The stored copy is left as it was written. This store does not fail a
 /// write. A store that can fail is what the write-failure contract uses.
@@ -72,6 +76,31 @@ public actor InMemoryProgressStore: ProgressStore {
             activeSession: snapshot.activeSession,
             lastReconciledContentVersion: reconciledContentVersion,
             updatesLastReconciledContentVersion: versionChanged
+        )
+    }
+
+    public func applyPlacement(_ commit: PlacementCommit) async throws {
+        let knownItems = Set(snapshot.cards.map(\.itemID))
+        var cards = snapshot.cards
+        for card in commit.cards where !knownItems.contains(card.itemID) {
+            upsert(card, into: &cards)
+        }
+        let knownLessons = Set(snapshot.lessonProgress.map(\.lessonID))
+        var lessons = snapshot.lessonProgress
+        for lesson in commit.lessonProgress where !knownLessons.contains(lesson.lessonID) {
+            upsert(lesson, into: &lessons)
+        }
+        let settings = UserSettings(
+            dailyGoal: snapshot.settings.dailyGoal,
+            showTransliteration: snapshot.settings.showTransliteration,
+            placementTakenDay: commit.placementTakenDay
+        )
+        store(
+            snapshot,
+            cards: sortedCards(cards),
+            lessonProgress: sortedLessons(lessons),
+            settings: settings,
+            activeSession: snapshot.activeSession
         )
     }
 
