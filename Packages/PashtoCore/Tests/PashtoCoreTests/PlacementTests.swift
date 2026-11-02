@@ -209,6 +209,37 @@ struct PlacementTests {
         #expect(test.units.allSatisfy { $0.tasks.count == 5 })
     }
 
+    @Test func theReleaseGateFillDoesNotDependOnTheSeed() {
+        let released = [
+            unitID("u-sounds"),
+            unitID("u-greetings"),
+            unitID("u-introductions"),
+            unitID("u-family"),
+        ]
+        let passingBundle = fourUnitBundle()
+        let passing = fillAcrossSeeds(in: passingBundle, released: released)
+        #expect(passing.allSatisfy { $0 == passing[0] })
+        #expect(passing[0].passes)
+        #expect(passing[0].units.map(\.unitID.rawValue) == ["u-greetings", "u-introductions", "u-family"])
+        #expect(passing[0].units.map(\.producibleQuestions) == [6, 6, 6])
+        #expect(PlacementTestBuilder.releasedUnitsThatCannotFillQuestions(
+            in: passingBundle,
+            releasedUnitIDs: released
+        ).isEmpty)
+
+        let failingBundle = shortMiddleUnitBundle()
+        let failing = fillAcrossSeeds(in: failingBundle, released: released)
+        #expect(failing.allSatisfy { $0 == failing[0] })
+        #expect(!failing[0].passes)
+        #expect(failing[0].units.map(\.unitID.rawValue) == ["u-greetings", "u-introductions", "u-family"])
+        #expect(failing[0].units.map(\.producibleQuestions) == [6, 0, 6])
+        #expect(failing[0].failingUnitIDs.map(\.rawValue) == ["u-introductions"])
+        #expect(PlacementTestBuilder.releasedUnitsThatCannotFillQuestions(
+            in: failingBundle,
+            releasedUnitIDs: released
+        ) == failing[0].failingUnitIDs)
+    }
+
     @Test func theSameSeedBuildsTheSameTest() {
         let bundle = fourUnitBundle()
         let released = [unitID("u-greetings"), unitID("u-introductions")]
@@ -422,6 +453,36 @@ private func itemIDs(_ count: Int) -> [ItemID] {
 
 private func words(_ range: ClosedRange<Int>) -> [ContentItem] {
     range.map(placedWord)
+}
+
+/// Twenty-four draws of the release gate's placement fill.
+private func fillAcrossSeeds(in bundle: ContentBundle, released: [UnitID]) -> [PlacementFillResult] {
+    let seeds: [UInt64] = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        10, 11, 42, 99, 256, 1_024, 4_096, 65_535,
+        1 << 20, 1 << 32, 1 << 40,
+        UInt64.max, UInt64.max - 1, 0x9E37_79B9_7F4A_7C15,
+    ]
+    return seeds.map { seed in
+        var rng = SplitMix64(seed: seed)
+        return PlacementTestBuilder.placementFill(
+            in: bundle,
+            releasedUnitIDs: released,
+            using: &rng
+        )
+    }
+}
+
+/// Unit 2 introduces one word, so it cannot fill five placement questions.
+private func shortMiddleUnitBundle() -> ContentBundle {
+    let sounds = placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])])
+    let greetings = placedUnit("u-greetings", lessons: [placedLesson("l-greetings-1", items: words(1...6))])
+    let introductions = placedUnit("u-introductions", lessons: [placedLesson("l-introductions-1", items: [placedWord(11)])])
+    let family = placedUnit("u-family", lessons: [placedLesson("l-family-1", items: words(21...26))])
+    return makeBundle(
+        items: [placedWord(90), placedWord(11)] + words(1...6) + words(21...26),
+        units: [sounds, greetings, introductions, family]
+    )
 }
 
 private func fourUnitBundle() -> ContentBundle {
