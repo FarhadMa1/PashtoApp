@@ -78,8 +78,8 @@ public struct DailyPlan: Hashable, Sendable {
 ///
 /// An item id that is not in `knownItemIDs` is left out of the queue and out
 /// of `dueCount`. It is not removed from `cards`. The caller keeps it.
-/// Pausing or deleting it belongs to progress reconciliation, which is a
-/// later change. An empty `cards` list is an empty queue. The new-item
+/// `ProgressReconciler` pauses a card whose item is missing and does not
+/// delete it. An empty `cards` list is an empty queue. The new-item
 /// allowance is still the goal, because nothing is due. This function does
 /// not know whether the course has another lesson.
 ///

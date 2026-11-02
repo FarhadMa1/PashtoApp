@@ -86,11 +86,21 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
         }
     }
 
-    public func applyReconciliation(_ changes: [ReviewCard]) async throws {
-        guard !changes.isEmpty else { return }
+    public func applyReconciliation(
+        _ changes: [ReviewCard],
+        reconciledContentVersion: String?
+    ) async throws {
+        let storedVersion = try metaRow()?.lastReconciledContentVersion
+        let versionChanged = reconciledContentVersion != nil && reconciledContentVersion != storedVersion
+        guard !changes.isEmpty || versionChanged else { return }
         try write {
-            try self.upsert(changes)
-            try self.insertMetaIfNeeded()
+            if !changes.isEmpty {
+                try self.upsert(changes)
+            }
+            let meta = try self.metaRow() ?? self.insertMeta()
+            if let version = reconciledContentVersion, version != storedVersion {
+                meta.lastReconciledContentVersion = version
+            }
         }
     }
 
@@ -249,15 +259,19 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
 
     private func insertMetaIfNeeded() throws {
         if try metaRow() != nil { return }
-        modelContext.insert(
-            StoreMetaRecord(
-                key: RecordKey.meta,
-                contentVersion: installedContentVersion,
-                snapshotVersion: ProgressSnapshot.currentVersion,
-                lastReconciledContentVersion: nil,
-                latestObservedDay: nil
-            )
+        insertMeta()
+    }
+
+    private func insertMeta() -> StoreMetaRecord {
+        let meta = StoreMetaRecord(
+            key: RecordKey.meta,
+            contentVersion: installedContentVersion,
+            snapshotVersion: ProgressSnapshot.currentVersion,
+            lastReconciledContentVersion: nil,
+            latestObservedDay: nil
         )
+        modelContext.insert(meta)
+        return meta
     }
 
     private func upsert(_ cards: [ReviewCard]) throws {

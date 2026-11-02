@@ -8,9 +8,9 @@ struct SessionCommitTests {
     @Test func finishedLessonUsesTheLastAnswerDay() async throws {
         let dayAfter = dayN.adding(days: 1)
         let active = finishedSession(started: dayN, lastAnswer: dayN, answers: [correct("e-salam")])
-        #expect(canResume(active, on: dayAfter, contentVersion: "2026.11.0"))
-        #expect(canResume(active, on: dayN, contentVersion: "2026.11.0"))
-        #expect(!canResume(active, on: dayAfter.adding(days: 1), contentVersion: "2026.11.0"))
+        #expect(mustCommit(active))
+        #expect(!canResume(active, on: dayAfter, contentVersion: "2026.11.0"))
+        #expect(!canResume(active, on: dayN, contentVersion: "2026.11.0"))
 
         let commit = try #require(sessionCommit(
             for: active,
@@ -149,8 +149,19 @@ struct SessionCommitTests {
         #expect(restored.answers == direct.answers)
     }
 
+    @Test func anUnfinishedLessonResumesTodayOrTomorrow() {
+        let active = unfinishedSession(started: dayN)
+        let dayAfter = dayN.adding(days: 1)
+        #expect(!mustCommit(active))
+        #expect(canResume(active, on: dayAfter, contentVersion: "2026.11.0"))
+        #expect(canResume(active, on: dayN, contentVersion: "2026.11.0"))
+        #expect(!canResume(active, on: dayAfter.adding(days: 1), contentVersion: "2026.11.0"))
+        #expect(!canResume(active, on: dayN.adding(days: -1), contentVersion: "2026.11.0"))
+    }
+
     @Test func resumeRejectsTheWrongVersionOrContent() {
-        let active = finishedSession(started: dayN, lastAnswer: dayN, answers: [])
+        let active = unfinishedSession(started: dayN)
+        #expect(canResume(active, on: dayN, contentVersion: "2026.11.0"))
         #expect(!canResume(active, on: dayN, contentVersion: "2026.12.0"))
         let stale = ActiveSessionSnapshot(
             sessionID: active.sessionID,
@@ -163,6 +174,7 @@ struct SessionCommitTests {
             lesson: active.lesson
         )
         #expect(!canResume(stale, on: dayN, contentVersion: "2026.11.0"))
+        #expect(!mustCommit(stale))
         let review = ActiveSessionSnapshot(
             sessionID: active.sessionID,
             kind: .review,
@@ -173,6 +185,10 @@ struct SessionCommitTests {
             lesson: nil
         )
         #expect(!canResume(review, on: dayN, contentVersion: "2026.11.0"))
+        #expect(!mustCommit(review))
+        let finished = finishedSession(started: dayN, lastAnswer: dayN, answers: [])
+        #expect(mustCommit(finished))
+        #expect(!canResume(finished, on: dayN, contentVersion: "2026.11.0"))
     }
 
     private var greetings: Lesson {
@@ -183,6 +199,18 @@ struct SessionCommitTests {
                 LessonItemRef(item: item("e-salam"), role: .introduce),
                 LessonItemRef(item: item("e-sound"), role: .soundExample, sound: "s"),
             ]
+        )
+    }
+
+    private func unfinishedSession(started: LocalDay) -> ActiveSessionSnapshot {
+        ActiveSessionSnapshot(
+            sessionID: UUID(uuidString: "44444444-4444-4444-4444-444444444444")!,
+            kind: .lesson,
+            lessonID: lesson("l-greetings-1"),
+            startedDay: started,
+            lastAnswerDay: started,
+            contentVersion: "2026.11.0",
+            lesson: LessonSession(lessonID: lesson("l-greetings-1"), tasks: [choice("e-salam")])
         )
     }
 

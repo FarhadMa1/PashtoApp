@@ -28,6 +28,58 @@ public struct SessionCommit: Hashable, Sendable {
     }
 }
 
+/// The commit for a finished lesson in `content`.
+///
+/// Returns nil unless `mustCommit(active)` is true. The lesson is the one
+/// with `active.lessonID` in `content`. When that lesson has been removed,
+/// the commit still records the streak, the lesson row, and the completed
+/// session, and it creates no cards. The day is `lastAnswerDay`, or
+/// `startedDay` when no answer was stored. The function does not take the
+/// day the commit runs, so a lesson finished on day N and committed on day
+/// N+1 still counts on day N.
+public func sessionCommit(
+    for active: ActiveSessionSnapshot,
+    in content: ContentBundle,
+    cards existingCards: [ReviewCard],
+    lessonProgress rows: [LessonProgress],
+    streak state: StreakState
+) -> SessionCommit? {
+    guard mustCommit(active), let lessonID = active.lessonID, let session = active.lesson else {
+        return nil
+    }
+    let existing = rows.first { $0.lessonID == lessonID }
+    if let lesson = lesson(lessonID, in: content) {
+        return sessionCommit(
+            for: active,
+            lesson: lesson,
+            cards: existingCards,
+            lessonProgress: existing,
+            streak: state
+        )
+    }
+    let day = active.lastAnswerDay ?? active.startedDay
+    let scored = firstTryScore(session)
+    return SessionCommit(
+        sessionID: active.sessionID,
+        cards: [],
+        lessonProgress: mergedProgress(
+            lessonID: lessonID,
+            day: day,
+            percent: scored.percent,
+            existing: existing
+        ),
+        streak: streak(state, after: .completedSession, on: day),
+        completed: CompletedSession(
+            sessionID: active.sessionID,
+            kind: .lesson,
+            lessonID: lessonID,
+            completedDay: day,
+            questionCount: scored.questions,
+            firstTryCorrect: scored.correct
+        )
+    )
+}
+
 /// The commit for a finished lesson.
 ///
 /// Returns nil unless `active` is a complete lesson for `lesson`. The day is
@@ -65,14 +117,11 @@ public func sessionCommit(
         on: day
     )
 
-    let firstTries = session.answers.filter { !$0.task.isRepeat }
-    let correct = firstTries.filter { $0.result == .correct }.count
-    let questions = firstTries.count
-    let percent = questions == 0 ? 0 : (correct * 100) / questions
+    let scored = firstTryScore(session)
     let progress = mergedProgress(
         lessonID: lesson.id,
         day: day,
-        percent: percent,
+        percent: scored.percent,
         existing: existingProgress
     )
     let completed = CompletedSession(
@@ -80,8 +129,8 @@ public func sessionCommit(
         kind: .lesson,
         lessonID: lesson.id,
         completedDay: day,
-        questionCount: questions,
-        firstTryCorrect: correct
+        questionCount: scored.questions,
+        firstTryCorrect: scored.correct
     )
     return SessionCommit(
         sessionID: active.sessionID,
@@ -90,6 +139,30 @@ public func sessionCommit(
         streak: streak(state, after: .completedSession, on: day),
         completed: completed
     )
+}
+
+private struct FirstTryScore {
+    var questions: Int
+    var correct: Int
+    var percent: Int
+}
+
+/// First-try answers only. A question asked again after a miss is not counted.
+private func firstTryScore(_ session: LessonSession) -> FirstTryScore {
+    let firstTries = session.answers.filter { !$0.task.isRepeat }
+    let correct = firstTries.filter { $0.result == .correct }.count
+    let questions = firstTries.count
+    let percent = questions == 0 ? 0 : (correct * 100) / questions
+    return FirstTryScore(questions: questions, correct: correct, percent: percent)
+}
+
+private func lesson(_ id: LessonID, in content: ContentBundle) -> Lesson? {
+    for unit in content.units {
+        if let lesson = unit.lessons.first(where: { $0.id == id }) {
+            return lesson
+        }
+    }
+    return nil
 }
 
 private func mergedProgress(

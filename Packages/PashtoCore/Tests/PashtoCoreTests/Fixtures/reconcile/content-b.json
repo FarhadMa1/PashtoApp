@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "2026.11.0-b",
+  "variant": "af-kabul",
+  "romanization": {
+    "table": [
+      {
+        "letter": "a",
+        "translit": "a",
+        "ascii": "a",
+        "pronunciation": "a",
+        "description": "test"
+      }
+    ],
+    "difficultCharacters": [],
+    "unstressedWords": []
+  },
+  "items": [
+    {
+      "id": "e-kept",
+      "kind": "word",
+      "pashto": "kept",
+      "translit": "kept fixed",
+      "pronunciation": "KEPT",
+      "en": "kept",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-new",
+      "kind": "word",
+      "pashto": "new",
+      "translit": "new",
+      "pronunciation": "new",
+      "en": "new",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-future",
+      "kind": "word",
+      "pashto": "future",
+      "translit": "future",
+      "pronunciation": "future",
+      "en": "future",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-extra",
+      "kind": "word",
+      "pashto": "extra",
+      "translit": "extra",
+      "pronunciation": "extra",
+      "en": "extra",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-sound",
+      "kind": "word",
+      "pashto": "sound",
+      "translit": "sound",
+      "pronunciation": "sound",
+      "en": "sound",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    }
+  ],
+  "units": [
+    {
+      "id": "u-course",
+      "track": "main",
+      "title": "Course",
+      "lessons": [
+        {
+          "id": "l-done",
+          "title": "Done",
+          "items": [
+            { "item": "e-kept", "role": "introduce" },
+            { "item": "e-new", "role": "introduce" },
+            { "item": "e-sound", "role": "soundExample", "sound": "s" }
+          ]
+        },
+        {
+          "id": "l-future",
+          "title": "Future",
+          "items": [
+            { "item": "e-future", "role": "introduce" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u-extra",
+      "track": "main",
+      "title": "Extra",
+      "lessons": [
+        {
+          "id": "l-extra",
+          "title": "Extra",
+          "items": [
+            { "item": "e-extra", "role": "introduce" }
+          ]
+        }
+      ]
+    }
+  ],
+  "nonDistractorGroups": []
+}

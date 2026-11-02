@@ -104,7 +104,10 @@ public actor CommitRejectingProgressStore: ProgressStore {
         throw ProgressStoreContractError.writeFailed
     }
 
-    public func applyReconciliation(_ changes: [ReviewCard]) async throws {}
+    public func applyReconciliation(
+        _ changes: [ReviewCard],
+        reconciledContentVersion: String?
+    ) async throws {}
 
     public func updateSettings(_ settings: UserSettings) async throws {}
 
@@ -155,6 +158,7 @@ private func resetAll(_ store: any ProgressStore) async throws {
         lesson: Sample.progress("l-greetings-1"),
         streak: Sample.streak(on: Sample.day)
     ))
+    try await store.applyReconciliation([], reconciledContentVersion: "2026.12.0")
     try await store.resetAll()
     let cleared = try await store.load()
     let expected = ProgressSnapshot(
@@ -285,6 +289,17 @@ private func reconciliationUpsertsCards(_ store: any ProgressStore) async throws
     try await store.applyReconciliation([])
     loaded = try await store.load()
     try expect(loaded.cards.count == 2, name, "an empty reconciliation changes nothing")
+    try expect(loaded.lastReconciledContentVersion == nil, name, "an empty reconciliation leaves the marker")
+
+    try await store.applyReconciliation([], reconciledContentVersion: "2026.12.0")
+    loaded = try await store.load()
+    try expect(loaded.cards.count == 2, name, "the marker adds no card")
+    try expect(loaded.lastReconciledContentVersion == "2026.12.0", name, "the marker is stored")
+    try expect(loaded.activeSession?.sessionID == id, name, "the marker leaves the active session")
+    try await store.applyReconciliation([Sample.card("e-one", state: .active)], reconciledContentVersion: "2026.12.0")
+    loaded = try await store.load()
+    try expect(try card("e-one", in: loaded).state == .active, name, "a card can be restored")
+    try expect(loaded.lastReconciledContentVersion == "2026.12.0", name, "the same marker stays")
 }
 
 private func settingsRoundTrip(_ store: any ProgressStore) async throws {

@@ -16,7 +16,14 @@ public protocol ProgressStore: Sendable {
     /// whose id was already completed changes nothing.
     func commit(_ commit: SessionCommit) async throws
     /// Upserts cards by `itemID`. Does not remove a card that is absent here.
-    func applyReconciliation(_ changes: [ReviewCard]) async throws
+    ///
+    /// When `reconciledContentVersion` is non-nil, that debug marker is stored
+    /// too, including when `changes` is empty. Nil leaves the stored marker
+    /// as it was. Nothing in the rules reads the marker.
+    func applyReconciliation(
+        _ changes: [ReviewCard],
+        reconciledContentVersion: String?
+    ) async throws
     func updateSettings(_ settings: UserSettings) async throws
     /// Clears cards, lesson progress, the streak, sessions, and `placementTakenDay`.
     ///
@@ -24,6 +31,13 @@ public protocol ProgressStore: Sendable {
     /// so the placement test can be offered again. `contentVersion` stays
     /// because it describes the installed content, not the learner's progress.
     func resetAll() async throws
+}
+
+extension ProgressStore {
+    /// Upserts cards and does not change the reconciliation marker.
+    public func applyReconciliation(_ changes: [ReviewCard]) async throws {
+        try await applyReconciliation(changes, reconciledContentVersion: nil)
+    }
 }
 
 public enum ProgressStoreError: Error, Equatable, Sendable {
