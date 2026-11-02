@@ -133,7 +133,7 @@ struct StoreRestartTests {
         #expect(backedUp.streak.current == 4)
     }
 
-    @Test @MainActor func startOverCarriesSettingsAndContentVersionAndClearsPlacement() async throws {
+    @Test func startOverCarriesSettingsAndContentVersionAndClearsPlacement() async throws {
         let directory = try makeDirectory("pashto-carry")
         defer { try? FileManager.default.removeItem(at: directory) }
         let storeURL = directory.appendingPathComponent("Progress.store")
@@ -215,7 +215,7 @@ struct StoreRestartTests {
         #expect(try Data(contentsOf: backup) == before)
     }
 
-    @Test @MainActor func aFailedStartOverRemovesTheNewStoreAndRestoresTheOriginal() async throws {
+    @Test func aFailedStartOverRemovesTheNewStoreAndRestoresTheOriginal() async throws {
         let directory = try makeDirectory("pashto-undo")
         defer { try? FileManager.default.removeItem(at: directory) }
         let storeURL = directory.appendingPathComponent("Progress.store")

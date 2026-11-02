@@ -73,7 +73,9 @@ public enum ProgressStartOver {
             try await write(container, carried)
             return RestartedStore(container: container, carried: carried)
         } catch {
-            created = nil
+            if created != nil {
+                created = nil
+            }
             ProgressStoreRestart.undoReplacement(storeAt: url, preserved: preserved)
             throw error
         }
