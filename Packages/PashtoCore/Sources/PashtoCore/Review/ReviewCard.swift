@@ -10,7 +10,7 @@ public enum ReviewCardState: String, Codable, Hashable, Sendable {
 ///
 /// `lesson` is an item the learner was introduced to. `placement` is an item
 /// in a unit the placement test skipped. Those cards are spread from the day
-/// the test was taken, at most 10 on one day.
+/// after the test was taken, at most 10 on one day.
 public enum ReviewCardSource: String, Codable, Hashable, Sendable {
     case lesson
     case placement

@@ -117,6 +117,78 @@ struct ReleaseGateTests {
         #expect(dev.contains { $0.severity == .warning && $0.field == "soundExample" && $0.message.contains("ټ") })
     }
 
+    @Test func aReleasedUnitThatCannotFillPlacementQuestionsFailsTheGate() {
+        let sound = word("e-sound", pashto: "ا", translit: "a", pronunciation: "a", en: "alef", status: .draft)
+        let thin = word("e-thin", pashto: "ب", translit: "b", pronunciation: "b", en: "be", status: .draft)
+        let fat = (1...6).map { index in
+            word(
+                "e-fat-\(index)",
+                pashto: "ف\(index)",
+                translit: "fat\(index)",
+                pronunciation: "fat\(index)",
+                en: "fat \(index)",
+                status: .draft
+            )
+        }
+        let hidden = word("e-hidden", pashto: "پ", translit: "p", pronunciation: "p", en: "pe", status: .draft)
+        let outside = word("e-outside", pashto: "ت", translit: "t", pronunciation: "t", en: "te", status: .draft)
+        let soundsLesson = Lesson(
+            id: LessonID(rawValue: "l-sounds")!,
+            title: "Sounds",
+            items: [LessonItemRef(item: sound.id, role: .soundExample, sound: "a")]
+        )
+        let thinLesson = Lesson(
+            id: LessonID(rawValue: "l-thin")!,
+            title: "Thin",
+            items: [LessonItemRef(item: thin.id, role: .introduce)]
+        )
+        let fatLesson = Lesson(
+            id: LessonID(rawValue: "l-fat")!,
+            title: "Fat",
+            items: fat.map { LessonItemRef(item: $0.id, role: .introduce) }
+        )
+        let hiddenLesson = Lesson(
+            id: LessonID(rawValue: "l-hidden")!,
+            title: "Hidden",
+            items: [LessonItemRef(item: hidden.id, role: .introduce)]
+        )
+        let outsideLesson = Lesson(
+            id: LessonID(rawValue: "l-outside")!,
+            title: "Outside",
+            items: [LessonItemRef(item: outside.id, role: .introduce)]
+        )
+        func unit(_ id: String, _ lesson: Lesson) -> CourseUnit {
+            CourseUnit(id: UnitID(rawValue: id)!, track: "main", title: id, lessons: [lesson])
+        }
+        let bundle = ContentBundle(
+            contentVersion: "test",
+            variant: ContentBundle.kabulVariant,
+            romanization: romanization(difficult: []),
+            items: [sound, thin, hidden, outside] + fat,
+            units: [
+                unit("u-sounds", soundsLesson),
+                unit("u-greetings", thinLesson),
+                unit("u-introductions", fatLesson),
+                unit("u-family", hiddenLesson),
+                unit("u-extra", outsideLesson),
+            ],
+            nonDistractorGroups: []
+        )
+        let released = ["u-sounds", "u-greetings", "u-introductions", "u-extra"]
+        let issues = ReleaseGate.issues(in: bundle, releaseUnitIDs: released, itemUnits: [:], specialSounds: [], mode: .release)
+        let placement = issues.filter { $0.field == "placement" }
+        #expect(placement.map(\.id) == ["u-greetings"])
+        #expect(placement.allSatisfy { $0.severity == .error && $0.message.contains("cannot produce 5 placement questions") })
+
+        let dev = ReleaseGate.issues(in: bundle, releaseUnitIDs: released, itemUnits: [:], specialSounds: [], mode: .dev)
+        let devPlacement = dev.filter { $0.field == "placement" }
+        #expect(devPlacement.map(\.id) == ["u-greetings"])
+        #expect(devPlacement.allSatisfy { $0.severity == .warning })
+
+        let empty = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [], mode: .release)
+        #expect(!empty.contains { $0.field == "placement" })
+    }
+
     @Test func audioInV1IsAWarning() {
         let bundle = sampleBundle(itemCount: 6, audioOnFirst: true)
         let issues = ReleaseGate.issues(in: bundle, releaseUnitIDs: [], itemUnits: [:], specialSounds: [], mode: .release)

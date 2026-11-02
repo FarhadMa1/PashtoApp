@@ -40,6 +40,7 @@ public enum ProgressStoreContract {
         try await fresh(makeStore, "mismatched id", mismatchedSessionIDDoesNotWrite)
         try await fresh(makeStore, "review commit", reviewCommitWritesNoLessonRow)
         try await fresh(makeStore, "placement", placementWritesLessonsCardsAndDay)
+        try await fresh(makeStore, "placement keeps progress", placementKeepsAnExistingCardAndDoesNotLowerAScore)
         try await fresh(makeStore, "reset", resetClearsLearnerProgress)
     }
 
@@ -447,6 +448,76 @@ private func placementWritesLessonsCardsAndDay(_ store: any ProgressStore) async
     try expect(loaded.settings.showTransliteration == false, name, "transliteration stays")
     try expect(loaded.streak.lastActiveDay == Sample.day, name, "the streak stays")
     try expect(loaded.activeSession == active, name, "the active session stays")
+}
+
+private func placementKeepsAnExistingCardAndDoesNotLowerAScore(_ store: any ProgressStore) async throws {
+    let name = "placement keeps progress"
+    let kept = ReviewCard(
+        itemID: Sample.item("e-kept"),
+        easeFactor: 1.7,
+        intervalDays: 6,
+        repetitions: 3,
+        lapses: 1,
+        dueDay: Sample.day.adding(days: -4),
+        lastReviewedDay: Sample.day.adding(days: -10),
+        createdDay: Sample.day.adding(days: -30),
+        state: .active,
+        source: .lesson
+    )
+    let finished = LessonProgress(
+        lessonID: Sample.lesson("l-done"),
+        source: .completed,
+        firstCompletedDay: Sample.day.adding(days: -30),
+        bestScorePercent: 100
+    )
+    let streak = Sample.streak(on: Sample.day, current: 4)
+    try await store.commit(Sample.commit(
+        id: Sample.session("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFF3"),
+        cards: [kept],
+        lesson: finished,
+        streak: streak
+    ))
+    try await store.applyPlacement(PlacementCommit(
+        lessonProgress: [
+            LessonProgress(
+                lessonID: finished.lessonID,
+                source: .placement,
+                firstCompletedDay: Sample.next,
+                bestScorePercent: 80
+            ),
+            LessonProgress(
+                lessonID: Sample.lesson("l-greetings-1"),
+                source: .placement,
+                firstCompletedDay: Sample.next,
+                bestScorePercent: 80
+            ),
+        ],
+        cards: [
+            ReviewCard.introduced(itemID: kept.itemID, on: Sample.next, source: .placement),
+            Sample.card("e-place", created: Sample.next, source: .placement),
+        ],
+        placementTakenDay: Sample.next
+    ))
+    let loaded = try await store.load()
+    try expect(try card("e-kept", in: loaded) == kept, name, "the card with history stays")
+    try expect(
+        loaded.lessonProgress.contains { $0 == finished },
+        name,
+        "the finished lesson keeps its score"
+    )
+    try expect(
+        loaded.lessonProgress.contains { lesson in
+            lesson.lessonID.rawValue == "l-greetings-1"
+                && lesson.source == .placement
+                && lesson.bestScorePercent == 80
+        },
+        name,
+        "a new lesson stores the unit score"
+    )
+    try expect(try card("e-place", in: loaded).source == .placement, name, "a new card is stored")
+    try expect(loaded.cards.count == 2, name, "the existing card is not duplicated")
+    try expect(loaded.settings.placementTakenDay == Sample.next, name, "placementTakenDay is stored")
+    try expect(loaded.streak == streak, name, "the streak stays")
 }
 
 private func commitThatThrowsKeepsTheActiveSession(_ store: any ProgressStore) async throws {

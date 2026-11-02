@@ -8,6 +8,7 @@
 ///
 /// `applyPlacement` builds the next snapshot and then replaces the stored one,
 /// so the lesson rows, the cards, and `placementTakenDay` land together.
+/// A card or lesson that is already stored is left out of that replacement.
 ///
 /// `load` sorts cards and lessons by id and then clamps out-of-range values.
 /// The stored copy is left as it was written. This store does not fail a
@@ -79,12 +80,14 @@ public actor InMemoryProgressStore: ProgressStore {
     }
 
     public func applyPlacement(_ commit: PlacementCommit) async throws {
+        let knownItems = Set(snapshot.cards.map(\.itemID))
         var cards = snapshot.cards
-        for card in commit.cards {
+        for card in commit.cards where !knownItems.contains(card.itemID) {
             upsert(card, into: &cards)
         }
+        let knownLessons = Set(snapshot.lessonProgress.map(\.lessonID))
         var lessons = snapshot.lessonProgress
-        for lesson in commit.lessonProgress {
+        for lesson in commit.lessonProgress where !knownLessons.contains(lesson.lessonID) {
             upsert(lesson, into: &lessons)
         }
         let settings = UserSettings(

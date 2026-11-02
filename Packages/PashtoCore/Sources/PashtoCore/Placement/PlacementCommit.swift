@@ -27,7 +27,8 @@ public struct PlacementCommit: Hashable, Sendable {
 /// dropped even if a score names it.
 ///
 /// A lesson row that is already stored stays out, and so does an item that
-/// already has a card. The first completion and the existing card remain.
+/// already has a card. The first completion, its score, and the existing card
+/// remain. The store keeps that promise even when a commit still names them.
 public func placementCommit(
     scores: [PlacementUnitScore],
     in bundle: ContentBundle,

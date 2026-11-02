@@ -49,8 +49,8 @@ struct PlacementTests {
         #expect(feed(&stop, correct: 1, of: 3) == .stopped(unit))
     }
 
-    @Test func theAlphabetIsNeverAPlacementUnit() throws {
-        let bundle = try loadRepositoryContent()
+    @Test func theAlphabetIsNeverAPlacementUnit() {
+        let bundle = fourUnitBundle()
         let released = [
             unitID("u-sounds"),
             unitID("u-greetings"),
@@ -66,44 +66,50 @@ struct PlacementTests {
             PlacementUnitScore(unitID: $0, correct: 5, questions: 5, skipped: true)
         } + [PlacementUnitScore(unitID: unitID("u-sounds"), correct: 5, questions: 5, skipped: true)]
         let commit = placementCommit(scores: scores, in: bundle, takenOn: day)
-        #expect(!commit.lessonProgress.contains { $0.lessonID.rawValue == "l-sounds-1" })
-        let introducedInSounds = Set(
-            CourseOrder(bundle).introductions.filter { $0.unitIndex == 0 }.map(\.itemID)
-        )
+        #expect(!commit.lessonProgress.contains { $0.lessonID.rawValue == "l-sounds" })
+        let introducedInSounds = Set(itemIDs(in: unitID("u-sounds"), bundle: bundle))
         #expect(commit.cards.allSatisfy { !introducedInSounds.contains($0.itemID) })
     }
 
-    @Test func anUnreleasedUnitIsLeftOut() throws {
-        let bundle = try loadRepositoryContent()
-        #expect(bundle.units.map(\.id.rawValue).contains("u-family"))
-        let shipped = try loadReleaseUnitIDs()
-        #expect(!shipped.contains(unitID("u-family")))
-        var shippedRNG = SplitMix64(seed: 3)
-        let fromFile = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: shipped, using: &shippedRNG)
-        #expect(!fromFile.unitIDs.contains(unitID("u-family")))
-        #expect(!fromFile.unitIDs.contains(unitID("u-sounds")))
-
-        let withoutFamily = [unitID("u-sounds"), unitID("u-greetings"), unitID("u-introductions")]
+    @Test func anUnreleasedUnitIsLeftOut() {
+        let bundle = fourUnitBundle()
+        let released = [unitID("u-sounds"), unitID("u-greetings"), unitID("u-introductions")]
         var rng = SplitMix64(seed: 5)
-        let test = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: withoutFamily, using: &rng)
+        let test = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: released, using: &rng)
         #expect(test.unitIDs.map(\.rawValue) == ["u-greetings", "u-introductions"])
-        let asked = Set(referencedItemIDs(in: test))
         let familyItems = Set(itemIDs(in: unitID("u-family"), bundle: bundle))
-        #expect(asked.isDisjoint(with: familyItems))
+        #expect(Set(referencedItemIDs(in: test)).isDisjoint(with: familyItems))
 
         var passed = PlacementEvaluator(unitIDs: test.unitIDs)
         #expect(feed(&passed, correct: 4, of: 5) == .skipped(unitID("u-greetings"), next: unitID("u-introductions")))
         #expect(feed(&passed, correct: 4, of: 5) == .skipped(unitID("u-introductions"), next: nil))
         let commit = placementCommit(scores: passed.results, in: bundle, takenOn: day)
         #expect(commit.placementTakenDay == day)
-        #expect(!commit.lessonProgress.contains { $0.lessonID.rawValue.hasPrefix("l-family") })
-        #expect(commit.cards.allSatisfy { !familyItems.contains($0.itemID) })
-        #expect(commit.lessonProgress.allSatisfy { $0.source == .placement })
-        #expect(commit.cards.allSatisfy { $0.source == .placement })
+        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-greetings-1", "l-introductions-1"])
+        #expect(commit.lessonProgress.allSatisfy { $0.bestScorePercent == 80 && $0.source == .placement })
+        #expect(commit.cards.allSatisfy { !familyItems.contains($0.itemID) && $0.source == .placement })
     }
 
-    @Test func unitsOneThroughThreeAreAskedOnceTheyAreReleased() throws {
-        let bundle = try loadRepositoryContent()
+    @Test func anUnreleasedUnitStopsTheTestBeforeALaterReleasedUnit() {
+        let bundle = fourUnitBundle()
+        let released = [unitID("u-greetings"), unitID("u-family")]
+        var rng = SplitMix64(seed: 6)
+        let test = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: released, using: &rng)
+        #expect(test.unitIDs.map(\.rawValue) == ["u-greetings"])
+
+        var evaluator = PlacementEvaluator(unitIDs: test.unitIDs)
+        #expect(feed(&evaluator, correct: 4, of: 5) == .skipped(unitID("u-greetings"), next: nil))
+        let commit = placementCommit(scores: evaluator.results, in: bundle, takenOn: day)
+        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-greetings-1"])
+        #expect(commit.lessonProgress.allSatisfy { $0.bestScorePercent == 80 })
+        let later = Set(itemIDs(in: unitID("u-introductions"), bundle: bundle))
+            .union(itemIDs(in: unitID("u-family"), bundle: bundle))
+        #expect(commit.cards.allSatisfy { !later.contains($0.itemID) })
+        #expect(commit.cards.allSatisfy { $0.dueDay >= day.adding(days: 1) })
+    }
+
+    @Test func unitsOneThroughThreeAreAskedOnceTheyAreReleased() {
+        let bundle = fourUnitBundle()
         let released = [
             unitID("u-sounds"),
             unitID("u-greetings"),
@@ -116,29 +122,76 @@ struct PlacementTests {
         #expect(test.units.allSatisfy { $0.tasks.count == 5 })
     }
 
-    @Test func anUnreleasedUnitInTheMiddleIsLeftOutAndTheNextReleasedUnitIsAsked() {
-        let units = [
-            placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])]),
-            placedUnit("u-greetings", lessons: [placedLesson("l-greetings-1", items: words(1...6))]),
-            placedUnit("u-introductions", lessons: [placedLesson("l-introductions-1", items: words(11...16))]),
-            placedUnit("u-family", lessons: [placedLesson("l-family-1", items: words(21...26))]),
-        ]
+    @Test func aUnitThatCannotFillFiveQuestionsStopsTheTestAndIsNotSkipped() {
+        let sounds = placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])])
+        let greetings = placedUnit("u-greetings", lessons: [placedLesson("l-greetings-1", items: words(1...6))])
+        let introductions = placedUnit("u-introductions", lessons: [placedLesson("l-introductions-1", items: [placedWord(11)])])
+        let family = placedUnit("u-family", lessons: [placedLesson("l-family-1", items: words(21...26))])
         let bundle = makeBundle(
-            items: [placedWord(90)] + words(1...6) + words(11...16) + words(21...26),
-            units: units
+            items: [placedWord(90), placedWord(11)] + words(1...6) + words(21...26),
+            units: [sounds, greetings, introductions, family]
         )
-        let released = [unitID("u-greetings"), unitID("u-family")]
-        var rng = SplitMix64(seed: 6)
+        let released = [unitID("u-sounds"), unitID("u-greetings"), unitID("u-introductions"), unitID("u-family")]
+        var rng = SplitMix64(seed: 9)
         let test = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: released, using: &rng)
-        #expect(test.unitIDs.map(\.rawValue) == ["u-greetings", "u-family"])
+        #expect(test.unitIDs.map(\.rawValue) == ["u-greetings"])
 
         var evaluator = PlacementEvaluator(unitIDs: test.unitIDs)
-        feed(&evaluator, correct: 4, of: 5)
-        feed(&evaluator, correct: 4, of: 5)
+        #expect(feed(&evaluator, correct: 4, of: 5) == .skipped(unitID("u-greetings"), next: nil))
+        #expect(evaluator.skippedUnitIDs == [unitID("u-greetings")])
         let commit = placementCommit(scores: evaluator.results, in: bundle, takenOn: day)
-        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-greetings-1", "l-family-1"])
-        let introductions = Set(itemIDs(in: unitID("u-introductions"), bundle: bundle))
-        #expect(commit.cards.allSatisfy { !introductions.contains($0.itemID) })
+        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-greetings-1"])
+        #expect(commit.lessonProgress[0].bestScorePercent == 80)
+        let blocked = Set(itemIDs(in: unitID("u-introductions"), bundle: bundle))
+            .union(itemIDs(in: unitID("u-family"), bundle: bundle))
+        #expect(commit.cards.allSatisfy { !blocked.contains($0.itemID) })
+
+        var finished = Set(commit.lessonProgress.map(\.lessonID))
+        finished.insert(lessonID("l-sounds"))
+        let progress = PathProgress(cards: commit.cards, finishedLessonIDs: finished, newItemsShownToday: 0)
+        #expect(pathState(progress: progress, content: bundle, goal: .regular, today: day) == .lesson(lessonID("l-introductions-1")))
+        #expect(!finished.contains(lessonID("l-introductions-1")))
+        #expect(!finished.contains(lessonID("l-family-1")))
+    }
+
+    @Test func distractorsStayInTheTestedUnitAndKeepTheSameType() {
+        let sounds = placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])])
+        let earlyItems = words(1...6)
+        let hereWords = words(11...13)
+        let hereLetters = (1...3).map(placedLetter)
+        let laterItems = words(21...26)
+        let early = placedUnit("u-early", lessons: [placedLesson("l-early", items: earlyItems)])
+        let here = placedUnit("u-here", lessons: [placedLesson("l-here", items: hereWords + hereLetters)])
+        let later = placedUnit("u-later", lessons: [placedLesson("l-later", items: laterItems)])
+        let bundle = makeBundle(
+            items: [placedWord(90)] + earlyItems + hereWords + hereLetters + laterItems,
+            units: [sounds, early, here, later]
+        )
+        let released = [unitID("u-sounds"), unitID("u-early"), unitID("u-here"), unitID("u-later")]
+        var rng = SplitMix64(seed: 12)
+        let test = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: released, using: &rng)
+        #expect(test.unitIDs.map(\.rawValue) == ["u-early", "u-here", "u-later"])
+        let kindByID = Dictionary(bundle.items.map { ($0.id, $0.kind) }, uniquingKeysWith: { first, _ in first })
+        for questions in test.units {
+            let own = itemIDs(in: questions.unitID, bundle: bundle)
+            let ownSet = Set(own)
+            for task in questions.tasks {
+                let ids = itemIDs(in: task)
+                #expect(ids.allSatisfy { ownSet.contains($0) })
+                switch task.payload {
+                case .choice(let quiz):
+                    let kind = kindByID[quiz.targetID]
+                    #expect(quiz.options.allSatisfy { kindByID[$0.itemID] == kind })
+                    let pool = own.filter { kindByID[$0] == kind }
+                    #expect(quiz.options.count <= pool.count)
+                case .matchPairs(let match):
+                    let kinds = Set(match.pairs.flatMap { [kindByID[$0.left.itemID], kindByID[$0.right.itemID]] }.compactMap { $0 })
+                    #expect(kinds.count == 1)
+                case .orderWords:
+                    break
+                }
+            }
+        }
     }
 
     @Test func aMissingUnitEndsTheTestWithoutAnEmptySession() {
@@ -156,8 +209,8 @@ struct PlacementTests {
         #expect(test.units.allSatisfy { $0.tasks.count == 5 })
     }
 
-    @Test func theSameSeedBuildsTheSameTest() throws {
-        let bundle = try loadRepositoryContent()
+    @Test func theSameSeedBuildsTheSameTest() {
+        let bundle = fourUnitBundle()
         let released = [unitID("u-greetings"), unitID("u-introductions")]
         var first = SplitMix64(seed: 42)
         var second = SplitMix64(seed: 42)
@@ -170,16 +223,18 @@ struct PlacementTests {
     @Test func fortyFiveCardsSpreadAcrossFiveDaysAndEightyContinuePastTheFirstWeek() {
         let start = day
         let fortyFive = PlacementScheduler.cards(for: itemIDs(45), takenOn: start)
-        #expect(dueCounts(fortyFive, from: start) == [10, 10, 10, 10, 5])
+        let firstDue = start.adding(days: 1)
+        #expect(fortyFive.first?.dueDay == firstDue)
+        #expect(dueCounts(fortyFive, from: firstDue) == [10, 10, 10, 10, 5])
         #expect(fortyFive.map(\.itemID.rawValue) == itemIDs(45).map(\.rawValue))
         #expect(fortyFive.allSatisfy { $0.source == .placement && $0.createdDay == start && $0.state == .active })
 
         let eighty = PlacementScheduler.cards(for: itemIDs(80), takenOn: start)
-        let counts = dueCounts(eighty, from: start)
+        let counts = dueCounts(eighty, from: firstDue)
         #expect(counts == Array(repeating: 10, count: 8))
         #expect(counts[7] == 10)
-        #expect(eighty[70].dueDay == start.adding(days: 7))
-        #expect(eighty[79].dueDay == start.adding(days: 7))
+        #expect(eighty[70].dueDay == start.adding(days: 8))
+        #expect(eighty[79].dueDay == start.adding(days: 8))
     }
 
     @Test func skippedLessonsAreUnlockedAndTheAlphabetComesFirst() async throws {
@@ -191,7 +246,8 @@ struct PlacementTests {
         #expect(commit.lessonProgress[0].bestScorePercent == 80)
         #expect(commit.lessonProgress[0].firstCompletedDay == day)
         #expect(commit.cards.map(\.itemID.rawValue) == (1...12).map { "e-\($0)" })
-        #expect(dueCounts(commit.cards, from: day) == [10, 2])
+        #expect(commit.cards.first?.dueDay == day.adding(days: 1))
+        #expect(dueCounts(commit.cards, from: day.adding(days: 1)) == [10, 2])
         #expect(!commit.cards.contains { $0.itemID.rawValue == "e-sound" })
 
         let store = InMemoryProgressStore(contentVersion: "test")
@@ -204,12 +260,97 @@ struct PlacementTests {
         let progress = pathProgress(stored, on: day)
         #expect(progress.finishedLessonIDs == [lessonID("l-greetings-1")])
         #expect(progress.newItemsShownToday == 0)
-        #expect(pathState(progress: progress, content: bundle, goal: .regular, today: day) == .review(dueCount: 10))
-        let before = pathProgress(stored, on: day.adding(days: -1))
-        #expect(
-            pathState(progress: before, content: bundle, goal: .regular, today: day.adding(days: -1))
-                == .lesson(lessonID("l-sounds"))
+        #expect(pathState(progress: progress, content: bundle, goal: .regular, today: day) == .lesson(lessonID("l-sounds")))
+        let nextDay = day.adding(days: 1)
+        let due = pathProgress(stored, on: nextDay)
+        #expect(pathState(progress: due, content: bundle, goal: .regular, today: nextDay) == .review(dueCount: 10))
+    }
+
+    @Test func placementLeavesTheStreakUnchanged() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let streak = StreakState(
+            current: 4,
+            longest: 9,
+            lastActiveDay: day.adding(days: -3),
+            freezes: 1,
+            daysTowardNextFreeze: 2,
+            freezeUsedDays: []
         )
+        let session = UUID(uuidString: "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA9")!
+        try await store.commit(SessionCommit(
+            sessionID: session,
+            cards: [],
+            lessonProgress: nil,
+            streak: streak,
+            completed: CompletedSession(
+                sessionID: session,
+                kind: .review,
+                lessonID: nil,
+                completedDay: day.adding(days: -3),
+                questionCount: 1,
+                firstTryCorrect: 1
+            )
+        ))
+        try await store.applyPlacement(PlacementCommit(lessonProgress: [], cards: [], placementTakenDay: day))
+        let loaded = try await store.load()
+        #expect(loaded.streak == streak)
+        #expect(loaded.settings.placementTakenDay == day)
+    }
+
+    @Test func applyPlacementKeepsAnExistingCardAndDoesNotLowerAScore() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let kept = ReviewCard(
+            itemID: itemID("e-1"),
+            easeFactor: 1.7,
+            intervalDays: 6,
+            repetitions: 3,
+            lapses: 1,
+            dueDay: day.adding(days: -4),
+            lastReviewedDay: day.adding(days: -10),
+            createdDay: day.adding(days: -30),
+            state: .active,
+            source: .lesson
+        )
+        let finished = LessonProgress(
+            lessonID: lessonID("l-greetings-1"),
+            source: .completed,
+            firstCompletedDay: day.adding(days: -30),
+            bestScorePercent: 100
+        )
+        let session = UUID(uuidString: "BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBB1")!
+        try await store.commit(SessionCommit(
+            sessionID: session,
+            cards: [kept],
+            lessonProgress: finished,
+            streak: .initial,
+            completed: CompletedSession(
+                sessionID: session,
+                kind: .lesson,
+                lessonID: finished.lessonID,
+                completedDay: finished.firstCompletedDay,
+                questionCount: 5,
+                firstTryCorrect: 5
+            )
+        ))
+        try await store.applyPlacement(PlacementCommit(
+            lessonProgress: [
+                LessonProgress(
+                    lessonID: finished.lessonID,
+                    source: .placement,
+                    firstCompletedDay: day,
+                    bestScorePercent: 80
+                ),
+            ],
+            cards: [
+                ReviewCard.introduced(itemID: kept.itemID, on: day.adding(days: 1), source: .placement),
+                ReviewCard.introduced(itemID: itemID("e-new"), on: day.adding(days: 1), source: .placement),
+            ],
+            placementTakenDay: day
+        ))
+        let loaded = try await store.load()
+        #expect(loaded.cards.first { $0.itemID == kept.itemID } == kept)
+        #expect(loaded.lessonProgress == [finished])
+        #expect(loaded.cards.contains { $0.itemID.rawValue == "e-new" && $0.source == .placement })
     }
 
     @Test func stoppingStillStoresTheDay() async throws {
@@ -230,10 +371,10 @@ struct PlacementTests {
             lessonID: lessonID("l-greetings-1"),
             source: .completed,
             firstCompletedDay: day.adding(days: -2),
-            bestScorePercent: 50
+            bestScorePercent: 100
         )
         let existingCard = ReviewCard.introduced(itemID: itemID("e-1"), on: day.adding(days: -2))
-        let score = PlacementUnitScore(unitID: unitID("u-greetings"), correct: 5, questions: 5, skipped: true)
+        let score = PlacementUnitScore(unitID: unitID("u-greetings"), correct: 4, questions: 5, skipped: true)
         let commit = placementCommit(
             scores: [score],
             in: bundle,
@@ -281,6 +422,31 @@ private func itemIDs(_ count: Int) -> [ItemID] {
 
 private func words(_ range: ClosedRange<Int>) -> [ContentItem] {
     range.map(placedWord)
+}
+
+private func fourUnitBundle() -> ContentBundle {
+    let sounds = placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])])
+    let greetings = placedUnit("u-greetings", lessons: [placedLesson("l-greetings-1", items: words(1...6))])
+    let introductions = placedUnit("u-introductions", lessons: [placedLesson("l-introductions-1", items: words(11...16))])
+    let family = placedUnit("u-family", lessons: [placedLesson("l-family-1", items: words(21...26))])
+    return makeBundle(
+        items: [placedWord(90)] + words(1...6) + words(11...16) + words(21...26),
+        units: [sounds, greetings, introductions, family]
+    )
+}
+
+private func placedLetter(_ number: Int) -> ContentItem {
+    let glyphs = ["ا", "ب", "پ", "ت", "ث", "ج"]
+    let glyph = glyphs[number - 1]
+    return makeItem(
+        "e-letter-\(number)",
+        kind: .letter,
+        pashto: glyph,
+        translit: "letter\(number)",
+        pronunciation: "letter\(number)",
+        en: "letter \(number)",
+        name: "letter \(number)"
+    )
 }
 
 private func placedWord(_ number: Int) -> ContentItem {
@@ -342,17 +508,3 @@ private func itemIDs(in task: SessionTask) -> [ItemID] {
     }
 }
 
-private struct ReleaseUnitsFile: Decodable {
-    let units: [String]
-}
-
-private func loadReleaseUnitIDs() throws -> [UnitID] {
-    var url = URL(fileURLWithPath: #filePath)
-    for _ in 0..<5 {
-        url.deleteLastPathComponent()
-    }
-    url.appendPathComponent("content")
-    url.appendPathComponent("release-units.json")
-    let file = try JSONDecoder().decode(ReleaseUnitsFile.self, from: Data(contentsOf: url))
-    return file.units.compactMap(UnitID.init(rawValue:))
-}

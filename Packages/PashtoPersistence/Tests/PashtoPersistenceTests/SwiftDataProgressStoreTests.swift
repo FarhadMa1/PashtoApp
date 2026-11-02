@@ -366,6 +366,74 @@ struct SwiftDataProgressStoreTests {
         #expect(reconciled == beforeFailure)
         #expect(await store.successfulSaveCount == savesAfterReconcile + 1)
     }
+
+    @Test func placementDoesNotOverwriteACardWithHistoryOrLowerAScore() async throws {
+        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "test")
+        let day = LocalDay(year: 2026, month: 11, day: 2)
+        let kept = ReviewCard(
+            itemID: mustItem("e-kept"),
+            easeFactor: 1.7,
+            intervalDays: 6,
+            repetitions: 3,
+            lapses: 1,
+            dueDay: day.adding(days: -4),
+            lastReviewedDay: day.adding(days: -10),
+            createdDay: day.adding(days: -30),
+            state: .active,
+            source: .lesson
+        )
+        let finished = LessonProgress(
+            lessonID: mustLesson("l-done"),
+            source: .completed,
+            firstCompletedDay: day.adding(days: -30),
+            bestScorePercent: 100
+        )
+        let session = UUID(uuidString: "CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCC2")!
+        try await store.commit(SessionCommit(
+            sessionID: session,
+            cards: [kept],
+            lessonProgress: finished,
+            streak: .initial,
+            completed: CompletedSession(
+                sessionID: session,
+                kind: .lesson,
+                lessonID: finished.lessonID,
+                completedDay: finished.firstCompletedDay,
+                questionCount: 5,
+                firstTryCorrect: 5
+            )
+        ))
+        let savesBefore = await store.successfulSaveCount
+        try await store.applyPlacement(PlacementCommit(
+            lessonProgress: [
+                LessonProgress(
+                    lessonID: finished.lessonID,
+                    source: .placement,
+                    firstCompletedDay: day,
+                    bestScorePercent: 80
+                ),
+                LessonProgress(
+                    lessonID: mustLesson("l-greetings-1"),
+                    source: .placement,
+                    firstCompletedDay: day,
+                    bestScorePercent: 80
+                ),
+            ],
+            cards: [
+                ReviewCard.introduced(itemID: kept.itemID, on: day.adding(days: 1), source: .placement),
+                ReviewCard.introduced(itemID: mustItem("e-place"), on: day.adding(days: 1), source: .placement),
+            ],
+            placementTakenDay: day
+        ))
+        #expect(await store.successfulSaveCount == savesBefore + 1)
+        let stored = try await store.load()
+        #expect(stored.cards.first { $0.itemID == kept.itemID } == kept)
+        #expect(stored.lessonProgress.contains(finished))
+        #expect(stored.lessonProgress.contains { $0.lessonID.rawValue == "l-greetings-1" && $0.bestScorePercent == 80 })
+        #expect(stored.cards.contains { $0.itemID.rawValue == "e-place" && $0.source == .placement })
+        #expect(stored.settings.placementTakenDay == day)
+    }
 }
 
 private func memoryStore(_ version: String = "2026.11.0") throws -> SwiftDataProgressStore {

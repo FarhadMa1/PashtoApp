@@ -115,23 +115,26 @@ public actor SwiftDataProgressStore: ModelActor, ProgressStore {
     }
 
     public func applyPlacement(_ commit: PlacementCommit) async throws {
-        let goal: Int
-        let showTransliteration: Bool
-        if let record = try settingsRow() {
-            goal = record.dailyGoal
-            showTransliteration = record.showTransliteration
-        } else {
-            goal = UserSettings.initial.dailyGoal.rawValue
-            showTransliteration = UserSettings.initial.showTransliteration
-        }
-        let settings = UserSettings(
-            dailyGoal: validatedDailyGoal(goal),
-            showTransliteration: showTransliteration,
-            placementTakenDay: commit.placementTakenDay
-        )
         try write {
-            try self.upsert(commit.cards)
-            for lesson in commit.lessonProgress {
+            let goal: Int
+            let showTransliteration: Bool
+            if let record = try self.settingsRow() {
+                goal = record.dailyGoal
+                showTransliteration = record.showTransliteration
+            } else {
+                goal = UserSettings.initial.dailyGoal.rawValue
+                showTransliteration = UserSettings.initial.showTransliteration
+            }
+            let settings = UserSettings(
+                dailyGoal: validatedDailyGoal(goal),
+                showTransliteration: showTransliteration,
+                placementTakenDay: commit.placementTakenDay
+            )
+            let storedCards = Set(try self.cardRows().map(\.itemID))
+            let cards = commit.cards.filter { !storedCards.contains($0.itemID.rawValue) }
+            try self.upsert(cards)
+            let storedLessons = Set(try self.lessonRows().map(\.lessonID))
+            for lesson in commit.lessonProgress where !storedLessons.contains(lesson.lessonID.rawValue) {
                 try self.upsert(lesson)
             }
             try self.upsert(settings)
