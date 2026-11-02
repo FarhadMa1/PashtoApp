@@ -20,7 +20,7 @@ Two ways to feed that project to Xcode Cloud were considered:
 
 `Packages/PashtoCore` is a Swift package with no Apple-only framework dependencies. The app target links it. Logic tests are `swift test` on that package. GitHub Actions runs them on `ubuntu-24.04` inside the official `swift:6.2.4-noble` image.
 
-Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard GitHub-hosted macOS runner. For this public repository those runners are free. The job runs `swift test` for `Packages/PashtoPersistence` only, and only when that package, `Packages/PashtoCore/Sources/PashtoCore/Progress`, the shared contract in `PashtoCoreTesting`, or the workflow file changes. Linux does not build that package. A macOS `xcodebuild` of the iOS app is still not a GitHub Actions job. Xcode Cloud remains the archive path.
+Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard GitHub-hosted `macos-15` runner and selects `/Applications/Xcode_16.app`. For this public repository those runners are free. The job runs `swift test` for `Packages/PashtoPersistence` only, and only when that package, `Packages/PashtoCore/Sources/PashtoCore/Progress`, the shared contract in `PashtoCoreTesting`, or the workflow file changes. Linux does not build that package. A macOS `xcodebuild` of the iOS app is still not a GitHub Actions job. Xcode Cloud remains the archive path.
 
 ### Progress file
 

@@ -59,7 +59,7 @@ swift run --package-path Tools/PashtoContentTool pashto-content validate --mode 
 
 Primary path: **Xcode Cloud**, using the committed `PashtoApp.xcodeproj` and the shared `PashtoApp` scheme. No `ci_scripts` hook is required, because the project is already in git. See [docs/decisions/0001-project-structure.md](docs/decisions/0001-project-structure.md) for why the generated project is committed instead of being created in `ci_post_clone.sh`.
 
-`Packages/PashtoPersistence` is tested on a standard GitHub-hosted macOS runner (`swift test --package-path Packages/PashtoPersistence`). Farhad approved that runner on 2026-11-02. The job runs only when the persistence package, the core progress sources, the shared store contract, or its workflow changes. Linux CI does not build that package. A macOS `xcodebuild` of the app is still not a GitHub Actions job.
+`Packages/PashtoPersistence` is tested on a GitHub-hosted `macos-15` runner with Xcode 16 (`swift test --package-path Packages/PashtoPersistence`). Farhad approved that runner on 2026-11-02. The job runs only when the persistence package, the core progress sources, the shared store contract, or its workflow changes. Linux CI does not build that package. A macOS `xcodebuild` of the app is still not a GitHub Actions job.
 
 This skeleton was not compiled with Xcode. Linux CI runs `swift test` for `PashtoCore` and `PashtoContentTool`.
 

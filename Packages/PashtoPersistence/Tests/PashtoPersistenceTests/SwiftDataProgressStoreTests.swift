@@ -103,50 +103,43 @@ struct SwiftDataProgressStoreTests {
         #expect(metas.first?.contentVersion == "2026.11.0")
     }
 
-    @Test @MainActor func loadDropsAnUnreadableActiveSession() async throws {
-        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
-        let writer = container.mainContext
-        writer.autosaveEnabled = false
-        let day = DayNumber.encode(LocalDay(year: 2026, month: 11, day: 1))
-        writer.insert(
-            ReviewCardRecord(
-                itemID: "e-keep",
-                easeFactor: 2.5,
-                intervalDays: 1,
-                repetitions: 0,
-                lapses: 0,
-                dueDay: day,
-                lastReviewedDay: nil,
-                createdDay: day,
-                state: ReviewCardState.active.rawValue,
-                source: ReviewCardSource.lesson.rawValue
-            )
+    @Test @MainActor func loadDropsAnOlderActiveSession() async throws {
+        let seeded = try seededActiveSession(
+            payloadVersion: 0,
+            payload: Data(#"{"payloadVersion":0}"#.utf8),
+            sessionID: "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA1"
         )
-        writer.insert(
-            ActiveSessionRecord(
-                key: RecordKey.active,
-                sessionID: Fixture.id("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA1"),
-                kind: SessionKind.lesson.rawValue,
-                lessonID: nil,
-                startedDay: day,
-                contentVersion: "2026.11.0",
-                payloadVersion: 0,
-                payload: Data("not-json".utf8),
-                updatedAt: Date(timeIntervalSince1970: 0)
-            )
-        )
-        try writer.save()
-
-        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "2026.11.0")
-        let loaded = try await store.load()
+        let loaded = try await seeded.store.load()
         #expect(loaded.activeSession == nil)
-        #expect(loaded.cards.map(\.itemID.rawValue) == ["e-keep"])
-        #expect(loaded.cards.first?.easeFactor == 2.5)
+        try expectKeptCard(in: seeded.container, loaded: loaded)
+    }
 
-        let reader = ModelContext(container)
+    @Test @MainActor func loadDropsACorruptActiveSession() async throws {
+        let seeded = try seededActiveSession(
+            payloadVersion: ActiveSessionSnapshot.currentPayloadVersion,
+            payload: Data("not-json".utf8),
+            sessionID: "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA2"
+        )
+        let loaded = try await seeded.store.load()
+        #expect(loaded.activeSession == nil)
+        try expectKeptCard(in: seeded.container, loaded: loaded)
+    }
+
+    @Test @MainActor func loadRefusesANewerActiveSession() async throws {
+        let newer = ActiveSessionSnapshot.currentPayloadVersion + 1
+        let seeded = try seededActiveSession(
+            payloadVersion: newer,
+            payload: Data("newer".utf8),
+            sessionID: "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA3"
+        )
+        await #expect(throws: ProgressPersistenceError.newerPayload(newer)) {
+            try await seeded.store.load()
+        }
+        let reader = ModelContext(seeded.container)
         let sessions = try reader.fetch(FetchDescriptor<ActiveSessionRecord>())
         let cards = try reader.fetch(FetchDescriptor<ReviewCardRecord>())
-        #expect(sessions.isEmpty)
+        #expect(sessions.count == 1)
+        #expect(sessions.first?.payloadVersion == newer)
         #expect(cards.count == 1)
         #expect(cards.first?.itemID == "e-keep")
         #expect(cards.first?.easeFactor == 2.5)
@@ -299,6 +292,61 @@ private func readStore(at url: URL, contentVersion: String) async throws -> Prog
     let container = try ProgressContainer.make(at: url)
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: contentVersion)
     return try await store.load()
+}
+
+@MainActor
+private func seededActiveSession(
+    payloadVersion: Int,
+    payload: Data,
+    sessionID: String
+) throws -> (container: ModelContainer, store: SwiftDataProgressStore) {
+    let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+    let writer = container.mainContext
+    writer.autosaveEnabled = false
+    let day = DayNumber.encode(LocalDay(year: 2026, month: 11, day: 1))
+    writer.insert(
+        ReviewCardRecord(
+            itemID: "e-keep",
+            easeFactor: 2.5,
+            intervalDays: 1,
+            repetitions: 0,
+            lapses: 0,
+            dueDay: day,
+            lastReviewedDay: nil,
+            createdDay: day,
+            state: ReviewCardState.active.rawValue,
+            source: ReviewCardSource.lesson.rawValue
+        )
+    )
+    writer.insert(
+        ActiveSessionRecord(
+            key: RecordKey.active,
+            sessionID: Fixture.id(sessionID),
+            kind: SessionKind.lesson.rawValue,
+            lessonID: nil,
+            startedDay: day,
+            contentVersion: "2026.11.0",
+            payloadVersion: payloadVersion,
+            payload: payload,
+            updatedAt: Date(timeIntervalSince1970: 0)
+        )
+    )
+    try writer.save()
+    let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "2026.11.0")
+    return (container, store)
+}
+
+@MainActor
+private func expectKeptCard(in container: ModelContainer, loaded: ProgressSnapshot) throws {
+    #expect(loaded.cards.map(\.itemID.rawValue) == ["e-keep"])
+    #expect(loaded.cards.first?.easeFactor == 2.5)
+    let reader = ModelContext(container)
+    let sessions = try reader.fetch(FetchDescriptor<ActiveSessionRecord>())
+    let cards = try reader.fetch(FetchDescriptor<ReviewCardRecord>())
+    #expect(sessions.isEmpty)
+    #expect(cards.count == 1)
+    #expect(cards.first?.itemID == "e-keep")
+    #expect(cards.first?.easeFactor == 2.5)
 }
 
 /// Bytes of the store and its write-ahead log. Shared-memory files are not compared.
