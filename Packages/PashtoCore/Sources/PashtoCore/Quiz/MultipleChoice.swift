@@ -7,8 +7,17 @@ public enum TaskKind: String, Hashable, Codable, Sendable, CaseIterable {
     case meaningPashtoToEnglish
     /// See the English meaning and choose the Pashto.
     case meaningEnglishToPashto
-    /// See the Pashto and choose the pronunciation. Letter items use this too.
+    /// See the Pashto and choose the pronunciation.
+    ///
+    /// Built only when pronunciation is hidden. A visible pronunciation would
+    /// be the answer. Letter items do not use this when pronunciation is shown.
     case transliterationChoice
+    /// See a letter's name or sound and choose its glyph.
+    case findLetter
+    /// See one shape hint and choose which of two same-sound letters it is.
+    case letterContrast
+    /// See a word and choose its first letter. Words that start with آ are skipped.
+    case firstLetter
     /// Match 3 or 4 Pashto/English pairs, or greeting/reply pairs.
     case matchPairs
     /// Put word tiles in logical order. The sentence is read right to left.
@@ -44,19 +53,25 @@ public struct QuizTask: Hashable, Codable, Sendable {
     /// Target `usage` when it is non-blank, so the app can show it with the prompt.
     public let usage: String?
     public let options: [QuizOption]
+    /// The item whose Pashto is the prompt, when that item is not `targetID`.
+    ///
+    /// A first-letter question's target is the letter. This is the word.
+    public let promptItemID: ItemID?
 
     public init(
         kind: TaskKind,
         targetID: ItemID,
         prompt: String,
         usage: String?,
-        options: [QuizOption]
+        options: [QuizOption],
+        promptItemID: ItemID? = nil
     ) {
         self.kind = kind
         self.targetID = targetID
         self.prompt = prompt
         self.usage = usage
         self.options = options
+        self.promptItemID = promptItemID
     }
 }
 
@@ -127,16 +142,21 @@ public struct TransliterationChoice: TaskGenerator {
 /// Multiple-choice questions for one lesson.
 ///
 /// The lesson's own introduced items are treated as seen, together with
-/// `seenLessonIDs`. Questions are returned in lesson order, and for each item
-/// in the order Pashto to English, English to Pashto, then pronunciation.
-/// A kind that cannot reach three options is skipped. The generator returns
-/// nothing when the lesson introduces no items.
+/// `seenLessonIDs`. Questions are returned in lesson order. For each item the
+/// order is Pashto to English, then English to Pashto. The pronunciation
+/// question is added only when `showsPronunciation` is false. When
+/// pronunciation is shown, a letter does not get those choice questions: the
+/// pronunciation under the letter would be the answer. Letter tasks B1–B3 are
+/// built by `LessonSessionBuilder`. A kind that cannot reach three options is
+/// skipped. The generator returns nothing when the lesson introduces no items.
 public enum MultipleChoiceQuiz {
     public static func questions(
         for lessonID: LessonID,
         in bundle: ContentBundle,
         seenLessonIDs: [LessonID],
         retiredItemIDs: [ItemID] = [],
+        showsPronunciation: Bool = true,
+        voiceOver: Bool = false,
         using rng: inout some RandomNumberGenerator
     ) -> [QuizTask] {
         var seen = seenLessonIDs
@@ -148,18 +168,50 @@ public enum MultipleChoiceQuiz {
             seenLessonIDs: seen,
             retiredItemIDs: retiredItemIDs
         )
+        let policy = QuizPolicy(showsPronunciation: showsPronunciation, voiceOver: voiceOver)
         let targets = Distractors.introducedItems(in: lessonID, bundle: bundle)
         var tasks: [QuizTask] = []
         for target in targets {
-            if let task = PashtoToEnglishChoice().makeTask(for: target, in: context, using: &rng) {
-                tasks.append(task)
-            }
-            if let task = EnglishToPashtoChoice().makeTask(for: target, in: context, using: &rng) {
-                tasks.append(task)
-            }
-            if let task = TransliterationChoice().makeTask(for: target, in: context, using: &rng) {
-                tasks.append(task)
-            }
+            tasks.append(contentsOf: QuizSchedule.choices(for: target, in: context, policy: policy, using: &rng))
+        }
+        return tasks
+    }
+}
+
+/// Whether this session shows pronunciation, and whether VoiceOver was on when it was built.
+struct QuizPolicy: Hashable, Sendable {
+    var showsPronunciation: Bool
+    var voiceOver: Bool
+
+    static let initial = QuizPolicy(showsPronunciation: true, voiceOver: false)
+}
+
+/// The choice questions one item contributes.
+///
+/// Meaning questions are always available, except for a letter while
+/// pronunciation is on screen and VoiceOver is off: those old letter
+/// questions are replaced by B1 and B2. The pronunciation question is built
+/// only when pronunciation is hidden. VoiceOver keeps the meaning questions
+/// for a letter and does not use the letter tasks.
+enum QuizSchedule {
+    static func choices(
+        for target: ContentItem,
+        in context: QuizContext,
+        policy: QuizPolicy,
+        using rng: inout some RandomNumberGenerator
+    ) -> [QuizTask] {
+        if target.kind == .letter, policy.showsPronunciation, !policy.voiceOver {
+            return []
+        }
+        var tasks: [QuizTask] = []
+        if let task = PashtoToEnglishChoice().makeTask(for: target, in: context, using: &rng) {
+            tasks.append(task)
+        }
+        if let task = EnglishToPashtoChoice().makeTask(for: target, in: context, using: &rng) {
+            tasks.append(task)
+        }
+        if !policy.showsPronunciation, let task = TransliterationChoice().makeTask(for: target, in: context, using: &rng) {
+            tasks.append(task)
         }
         return tasks
     }
@@ -227,7 +279,7 @@ private func prompt(for kind: TaskKind, item: ContentItem) -> String? {
         return blankToNil(item.pashto)
     case .meaningEnglishToPashto:
         return blankToNil(item.en)
-    case .matchPairs, .orderWords, .dialogResponse:
+    case .findLetter, .letterContrast, .firstLetter, .matchPairs, .orderWords, .dialogResponse:
         return nil
     }
 }
@@ -240,7 +292,7 @@ private func answer(for kind: TaskKind, item: ContentItem) -> String? {
         return blankToNil(item.pashto)
     case .transliterationChoice:
         return blankToNil(item.pronunciation)
-    case .matchPairs, .orderWords, .dialogResponse:
+    case .findLetter, .letterContrast, .firstLetter, .matchPairs, .orderWords, .dialogResponse:
         return nil
     }
 }
@@ -251,7 +303,7 @@ private func answerKey(for kind: TaskKind, text: String) -> String {
         return Normalization.comparisonKey(text)
     case .meaningEnglishToPashto:
         return Normalization.nfc(text)
-    case .matchPairs, .orderWords, .dialogResponse:
+    case .findLetter, .letterContrast, .firstLetter, .matchPairs, .orderWords, .dialogResponse:
         return Normalization.comparisonKey(text)
     }
 }

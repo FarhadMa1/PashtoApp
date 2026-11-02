@@ -1004,7 +1004,7 @@ struct LessonSessionTests {
             maxQuestions: 100,
             using: &wideRNG
         )
-        #expect(open.tasks.count == 13)
+        #expect(open.tasks.count == 9)
         #expect(wide == open)
 
         var cappedRNG = SplitMix64(seed: 11)
@@ -1115,7 +1115,7 @@ struct LessonSessionTests {
 
     @Test func lessonSessionsDefaultToTwentyQuestions() {
         #expect(LessonSessionBuilder.defaultMaxQuestions == 20)
-        let items = (1...8).map { quizItem("e-\($0)", en: "word \($0)") }
+        let items = (1...12).map { quizItem("e-\($0)", en: "word \($0)") }
         let current = quizLesson("l-one", introduce: items)
         let content = quizBundle([current], items: items)
         let lesson = lessonID("l-one")
@@ -1155,8 +1155,8 @@ struct LessonSessionTests {
         #expect(session.tasks.count == 20)
         #expect(open.tasks.count > 20)
         #expect(raised.tasks.count == 12)
-        #expect(Set(session.tasks.compactMap(anchorID).map(\.rawValue)).count == 8)
-        #expect(Set(raised.tasks.compactMap(anchorID).map(\.rawValue)).count == 8)
+        #expect(Set(session.tasks.compactMap(anchorID).map(\.rawValue)).count == 12)
+        #expect(Set(raised.tasks.compactMap(anchorID).map(\.rawValue)).count == 12)
     }
 
     @Test func capNeverDropsAnIntroducedItem() {
@@ -1279,7 +1279,7 @@ struct LessonSessionTests {
         // and that limit is not applied by this builder. Raising maxQuestions
         // to 50 only lengthens the lesson; it does not add review cards.
         #expect(LessonSessionBuilder.defaultMaxQuestions == 20)
-        let items = (1...8).map { quizItem("e-\($0)", en: "word \($0)") }
+        let items = (1...12).map { quizItem("e-\($0)", en: "word \($0)") }
         let current = quizLesson("l-one", introduce: items)
         let content = quizBundle([current], items: items)
         let lesson = lessonID("l-one")

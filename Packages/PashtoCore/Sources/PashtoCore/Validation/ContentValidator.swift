@@ -253,6 +253,9 @@ public enum ContentValidator {
             if item.sound != nil {
                 report.add(.error, id: id, field: "sound", "sound is only used on letters.")
             }
+            if item.contrastHint != nil {
+                report.add(.error, id: id, field: "contrastHint", "contrastHint is only used on letters.")
+            }
             report.add(contentsOf: TokenRules.issues(for: item))
         }
 
@@ -292,6 +295,13 @@ public enum ContentValidator {
         }
         if Text.isBlank(item.sound) {
             report.add(.error, id: id, field: "sound", "sound is required on a letter.")
+        }
+        if let hint = item.contrastHint {
+            if Text.isBlank(hint) {
+                report.add(.error, id: id, field: "contrastHint", "contrastHint is empty.")
+            } else if let expected = LetterContrasts.entry(matching: item.pashto)?.hint, hint != expected {
+                report.add(.error, id: id, field: "contrastHint", "contrastHint must be \"\(expected)\".")
+            }
         }
         if item.tokens != nil {
             report.add(.error, id: id, field: "tokens", "tokens are only used on words and phrases.")

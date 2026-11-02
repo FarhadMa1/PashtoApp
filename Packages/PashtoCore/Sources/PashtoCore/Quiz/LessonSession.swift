@@ -47,13 +47,48 @@ public struct SessionAnswer: Hashable, Codable, Sendable {
 /// That repeat is not appended again if it is also wrong.
 public struct LessonSession: Hashable, Codable, Sendable {
     public let lessonID: LessonID
+    /// The pronunciation setting this session was started with.
+    ///
+    /// Changing `UserSettings.showTransliteration` does not change a session
+    /// that is already running. The next session reads the new value.
+    /// Missing keys in an older payload decode as `true`, which is the default.
+    public let showsPronunciation: Bool
     public private(set) var tasks: [SessionTask]
     public private(set) var answers: [SessionAnswer]
 
-    public init(lessonID: LessonID, tasks: [SessionTask], answers: [SessionAnswer] = []) {
+    public init(
+        lessonID: LessonID,
+        showsPronunciation: Bool = true,
+        tasks: [SessionTask],
+        answers: [SessionAnswer] = []
+    ) {
         self.lessonID = lessonID
+        self.showsPronunciation = showsPronunciation
         self.tasks = tasks
         self.answers = answers
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        lessonID = try container.decode(LessonID.self, forKey: .lessonID)
+        showsPronunciation = try container.decodeIfPresent(Bool.self, forKey: .showsPronunciation) ?? true
+        tasks = try container.decode([SessionTask].self, forKey: .tasks)
+        answers = try container.decodeIfPresent([SessionAnswer].self, forKey: .answers) ?? []
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(lessonID, forKey: .lessonID)
+        try container.encode(showsPronunciation, forKey: .showsPronunciation)
+        try container.encode(tasks, forKey: .tasks)
+        try container.encode(answers, forKey: .answers)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case lessonID
+        case showsPronunciation
+        case tasks
+        case answers
     }
 
     public var current: SessionTask? { tasks.first }
@@ -88,7 +123,8 @@ private func reshuffled(
             targetID: task.targetID,
             prompt: task.prompt,
             usage: task.usage,
-            options: shuffledDifferent(task.options, using: &rng)
+            options: shuffledDifferent(task.options, using: &rng),
+            promptItemID: task.promptItemID
         ))
     case .matchPairs(let task):
         return .matchPairs(MatchPairs.reshuffled(task, using: &rng))
@@ -114,9 +150,13 @@ private struct ItemTasks {
 
 /// One question list per introduced item, then the shared match tasks.
 ///
-/// The generator order is Pashto to English, English to Pashto, pronunciation,
-/// word order, and dialog reply. Match pairs come after those. The placement
-/// test draws from this same draft and the same `rng`.
+/// The generator order is Pashto to English, English to Pashto, then the
+/// pronunciation question when pronunciation is hidden. A letter uses B1 and
+/// B2 instead of the old letter choices while pronunciation is shown, and B2
+/// is kept when it is hidden. A word may add B3, the first letter, unless the
+/// word starts with آ or VoiceOver is on. Word order and dialog reply follow.
+/// Match pairs come after those. The placement test draws from this same draft
+/// and the same `rng`.
 struct LessonTaskDraft {
     var perItem: [[SessionTask]]
     var shared: [SessionTask]
@@ -150,45 +190,82 @@ public enum LessonSessionBuilder {
         seenLessonIDs: [LessonID],
         retiredItemIDs: [ItemID] = [],
         maxQuestions: Int? = defaultMaxQuestions,
+        releasedUnitIDs: [UnitID]? = nil,
+        showsPronunciation: Bool = true,
+        voiceOver: Bool = false,
         using rng: inout some RandomNumberGenerator
     ) -> LessonSession {
+        let course: ContentBundle
+        if let releasedUnitIDs {
+            course = ReleasedCourse.limiting(bundle, to: releasedUnitIDs)
+            let listed = Set(releasedUnitIDs)
+            let lessonIsReleased = course.units.contains { unit in
+                listed.contains(unit.id) && unit.lessons.contains { $0.id == lessonID }
+            }
+            if !lessonIsReleased {
+                return LessonSession(
+                    lessonID: lessonID,
+                    showsPronunciation: showsPronunciation,
+                    tasks: []
+                )
+            }
+        } else {
+            course = bundle
+        }
         var seen = seenLessonIDs
         if !seen.contains(lessonID) {
             seen.append(lessonID)
         }
         let context = QuizContext(
-            bundle: bundle,
+            bundle: course,
             seenLessonIDs: seen,
             retiredItemIDs: retiredItemIDs
         )
-        let targets = Distractors.introducedItems(in: lessonID, bundle: bundle)
-        let draft = Self.draft(for: targets, in: context, using: &rng)
+        let policy = QuizPolicy(showsPronunciation: showsPronunciation, voiceOver: voiceOver)
+        let targets = Distractors.introducedItems(in: lessonID, bundle: course)
+        let draft = Self.draft(for: targets, in: context, policy: policy, using: &rng)
         let groups = draft.perItem.map { ItemTasks(tasks: $0) }
         let tasks = groups.flatMap(\.tasks) + draft.shared
         let cap = maxQuestions.map { max($0, 0) }
         if let cap, cap < tasks.count {
             let selected = select(groups: groups, shared: draft.shared, cap: cap, using: &rng)
-            return LessonSession(lessonID: lessonID, tasks: shuffled(selected, using: &rng))
+            return LessonSession(
+                lessonID: lessonID,
+                showsPronunciation: showsPronunciation,
+                tasks: shuffled(selected, using: &rng)
+            )
         }
-        return LessonSession(lessonID: lessonID, tasks: shuffled(tasks, using: &rng))
+        return LessonSession(
+            lessonID: lessonID,
+            showsPronunciation: showsPronunciation,
+            tasks: shuffled(tasks, using: &rng)
+        )
     }
 
     static func draft(
         for targets: [ContentItem],
         in context: QuizContext,
+        policy: QuizPolicy = .initial,
         using rng: inout some RandomNumberGenerator
     ) -> LessonTaskDraft {
         var perItem: [[SessionTask]] = []
         for target in targets {
             var itemTasks: [SessionTask] = []
-            if let task = PashtoToEnglishChoice().makeTask(for: target, in: context, using: &rng) {
+            for task in QuizSchedule.choices(for: target, in: context, policy: policy, using: &rng) {
                 itemTasks.append(SessionTask(payload: .choice(task)))
             }
-            if let task = EnglishToPashtoChoice().makeTask(for: target, in: context, using: &rng) {
-                itemTasks.append(SessionTask(payload: .choice(task)))
+            if !policy.voiceOver, target.kind == .letter {
+                if let task = LetterTasks.findLetter(for: target, in: context, using: &rng) {
+                    itemTasks.append(SessionTask(payload: .choice(task)))
+                }
+                if let task = LetterTasks.contrast(for: target, in: context, using: &rng) {
+                    itemTasks.append(SessionTask(payload: .choice(task)))
+                }
             }
-            if let task = TransliterationChoice().makeTask(for: target, in: context, using: &rng) {
-                itemTasks.append(SessionTask(payload: .choice(task)))
+            if !policy.voiceOver, target.kind != .letter {
+                if let task = LetterTasks.firstLetter(of: target, in: context, using: &rng) {
+                    itemTasks.append(SessionTask(payload: .choice(task)))
+                }
             }
             if let task = OrderWords.makeTask(for: target, in: context, using: &rng) {
                 itemTasks.append(SessionTask(payload: .orderWords(task)))
@@ -227,7 +304,15 @@ public enum LessonSessionBuilder {
         var repetitions: [SessionTask] = []
         for group in groups {
             let ordered = shuffled(group.tasks, using: &rng)
-            if let first = ordered.first {
+            // A first-letter question grades the letter, not the word it shows.
+            // The word keeps a question that grades the word when it has one.
+            let aboutItem = ordered.filter(gradesTheIntroducedItem)
+            let aboutSomethingElse = ordered.filter { !gradesTheIntroducedItem($0) }
+            if let first = aboutItem.first {
+                selected.append(first)
+                repetitions.append(contentsOf: aboutItem.dropFirst())
+                repetitions.append(contentsOf: aboutSomethingElse)
+            } else if let first = ordered.first {
                 selected.append(first)
                 repetitions.append(contentsOf: ordered.dropFirst())
             }
@@ -238,6 +323,18 @@ public enum LessonSessionBuilder {
             selected.append(contentsOf: shuffled(repetitions, using: &rng).prefix(room))
         }
         return selected
+    }
+
+    /// True when the question's grade is for the item the draft built it for.
+    ///
+    /// A first-letter question is filed under the word, and its grade is the letter.
+    private static func gradesTheIntroducedItem(_ task: SessionTask) -> Bool {
+        switch task.payload {
+        case .choice(let quiz):
+            return quiz.kind != .firstLetter
+        case .orderWords, .matchPairs:
+            return true
+        }
     }
 
     private static func firstPashtoEnglish(

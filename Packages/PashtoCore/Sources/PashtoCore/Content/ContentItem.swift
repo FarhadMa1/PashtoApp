@@ -67,6 +67,11 @@ public struct ContentItem: Codable, Hashable, Sendable {
     public let forms: LetterForms?
     /// Sound of a letter, in transliteration. Distinct from `LessonItemRef.sound`.
     public let sound: String?
+    /// English helper for a letter that shares its sound with another shape.
+    ///
+    /// Absent until the content generator writes it. The quiz uses the built-in
+    /// hint for the eight paired letters when this is missing.
+    public let contrastHint: String?
 
     /// True only for a complete audio block. A partial block never decodes.
     public var hasAudio: Bool { audio != nil }
@@ -88,7 +93,8 @@ public struct ContentItem: Codable, Hashable, Sendable {
         audio: AudioRef? = nil,
         name: String? = nil,
         forms: LetterForms? = nil,
-        sound: String? = nil
+        sound: String? = nil,
+        contrastHint: String? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -107,6 +113,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         self.name = name
         self.forms = forms
         self.sound = sound
+        self.contrastHint = contrastHint
     }
 
     public init(from decoder: Decoder) throws {
@@ -128,6 +135,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         name = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.name, from: container)
         forms = try StrictJSON.decodeIfPresent(LetterForms.self, forKey: CodingKeys.forms, from: container)
         sound = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.sound, from: container)
+        contrastHint = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.contrastHint, from: container)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -149,6 +157,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         try container.encodeIfPresent(name, forKey: .name)
         try container.encodeIfPresent(forms, forKey: .forms)
         try container.encodeIfPresent(sound, forKey: .sound)
+        try container.encodeIfPresent(contrastHint, forKey: .contrastHint)
     }
 
     enum CodingKeys: String, CodingKey, CaseIterable {
@@ -169,5 +178,6 @@ public struct ContentItem: Codable, Hashable, Sendable {
         case name
         case forms
         case sound
+        case contrastHint
     }
 }

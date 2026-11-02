@@ -14,8 +14,10 @@ import PashtoCore
 ///
 /// The count uses `maxQuestions: nil`. The lesson cap is 20 and keeps a
 /// shuffled subset, so one seed can drop a type that another seed keeps.
-/// With the cap off, every question the generators return is counted. The
-/// seed is fixed only so the walk can be repeated. It does not decide which
+/// With the cap off, every question the generators return is counted. Each
+/// lesson is walked twice: once with pronunciation shown and once with it
+/// hidden, because the pronunciation question exists only in the second walk.
+/// The seed is fixed only so the walk can be repeated. It does not decide which
 /// types are present. A missing type is a warning in dev and an error in release.
 enum QuizTypeCoverage {
     static func issues(
@@ -60,18 +62,24 @@ enum QuizTypeCoverage {
         var counts = Dictionary(uniqueKeysWithValues: TaskKind.allCases.map { ($0, 0) })
         var seen: [LessonID] = []
         var rng = SplitMix64(seed: seed)
+        // Pronunciation on skips the pronunciation question. Pronunciation off
+        // is the only walk that builds it. Letter tasks are built in both.
+        // A kind counts when either walk produces it.
         for lesson in lessons {
             seen.append(lesson.id)
-            let session = LessonSessionBuilder.build(
-                for: lesson.id,
-                in: bundle,
-                seenLessonIDs: seen,
-                retiredItemIDs: retiredItemIDs,
-                maxQuestions: nil,
-                using: &rng
-            )
-            for task in session.tasks {
-                counts[task.kind, default: 0] += 1
+            for showsPronunciation in [true, false] {
+                let session = LessonSessionBuilder.build(
+                    for: lesson.id,
+                    in: bundle,
+                    seenLessonIDs: seen,
+                    retiredItemIDs: retiredItemIDs,
+                    maxQuestions: nil,
+                    showsPronunciation: showsPronunciation,
+                    using: &rng
+                )
+                for task in session.tasks {
+                    counts[task.kind, default: 0] += 1
+                }
             }
         }
         return counts

@@ -41,6 +41,7 @@ func makeItem(
     name: String? = nil,
     forms: LetterForms? = nil,
     sound: String? = nil,
+    contrastHint: String? = nil,
     verification: Verification = Verification(status: .draft)
 ) -> ContentItem {
     let response = responseTo.map(itemID)
@@ -60,7 +61,8 @@ func makeItem(
         acceptedOrders: acceptedOrders,
         name: name,
         forms: forms,
-        sound: sound
+        sound: sound,
+        contrastHint: contrastHint
     )
 }
 

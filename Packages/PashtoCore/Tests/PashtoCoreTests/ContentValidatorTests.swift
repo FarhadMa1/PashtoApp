@@ -577,6 +577,40 @@ struct ContentValidatorTests {
         #expect(pashto[0].message.contains("one syllable"))
         #expect(pashto[1].message.contains("salaam"))
     }
+
+    @Test func contrastHintIsOptionalAndCheckedWhenPresent() {
+        let plain = letterItem("e-letter-dal", pashto: "د", hint: nil)
+        #expect(validate(makeBundle(items: [plain])).isEmpty)
+
+        let exact = letterItem("e-letter-dal", pashto: "د", hint: "da, plain, no ring")
+        #expect(validate(makeBundle(items: [exact])).isEmpty)
+
+        let wrong = letterItem("e-letter-dal", pashto: "د", hint: "da")
+        let wrongIssues = validate(makeBundle(items: [wrong]))
+        #expect(wrongIssues.contains { $0.field == "contrastHint" && $0.message == "contrastHint must be \"da, plain, no ring\"." })
+
+        let blank = letterItem("e-letter-be", pashto: "ب", hint: "  ")
+        #expect(validate(makeBundle(items: [blank])).contains { $0.field == "contrastHint" })
+
+        let onWord = makeItem(contrastHint: "da, plain, no ring")
+        let wordIssues = validate(makeBundle(items: [onWord]))
+        #expect(wordIssues.contains { $0.field == "contrastHint" && $0.message == "contrastHint is only used on letters." })
+    }
+
+    private func letterItem(_ id: String, pashto: String, hint: String?) -> ContentItem {
+        makeItem(
+            id,
+            kind: .letter,
+            pashto: pashto,
+            translit: "x",
+            pronunciation: "x",
+            en: "letter",
+            name: pashto,
+            forms: LetterForms(isolated: pashto, initial: pashto, medial: pashto, final: pashto),
+            sound: "x",
+            contrastHint: hint
+        )
+    }
 }
 
 private struct StubStressRule: StressRule {
