@@ -233,6 +233,104 @@ struct QuizTypeCoverageTests {
     }
 }
 
+struct DialogReplyCoverageTests {
+    @Test func realCourseShortagesAreTheTwoGreetingExceptions() throws {
+        let merged = try #require(ContentMerger.merge(root: try repositoryRoot()).merged)
+        let release = DialogReplyCoverage.issues(in: merged.bundle, retiredItemIDs: [], mode: .release)
+        #expect(release.isEmpty)
+        let dev = DialogReplyCoverage.issues(in: merged.bundle, retiredItemIDs: [], mode: .dev)
+        #expect(dev.isEmpty)
+
+        let open = DialogReplyCoverage.issues(
+            in: merged.bundle,
+            retiredItemIDs: [],
+            mode: .release,
+            exceptions: []
+        )
+        #expect(open.map(\.severity) == [.error, .error])
+        #expect(open.map(\.id) == ["e-walaykum-salam", "e-xwar-ma-she"])
+        #expect(open.map(\.field) == ["dialogReply", "dialogReply"])
+        #expect(open[0].message == "e-walaykum-salam in l-greetings-1 has 1 wrong options of the same type for its dialog reply question. At least 3 are needed.")
+        #expect(open[1].message == "e-xwar-ma-she in l-greetings-1 has 0 wrong options of the same type for its dialog reply question. At least 3 are needed.")
+
+        let devOpen = DialogReplyCoverage.issues(
+            in: merged.bundle,
+            retiredItemIDs: [],
+            mode: .dev,
+            exceptions: []
+        )
+        #expect(devOpen.map(\.severity) == [.warning, .warning])
+        #expect(devOpen.map(\.message) == open.map(\.message))
+
+        let checked = ContentCheck.issues(root: try repositoryRoot(), mode: .release)
+        #expect(!checked.contains { $0.field == "dialogReply" })
+    }
+
+    @Test func fewerThanThreeSameTypeOptionsFailsReleaseAndWarnsInDev() {
+        let bundle = phraseReplyBundle(extraPhrases: 2)
+        let release = DialogReplyCoverage.issues(in: bundle, retiredItemIDs: [], mode: .release, exceptions: [])
+        #expect(release.count == 1)
+        #expect(release[0].severity == .error)
+        #expect(release[0].id == "e-reply")
+        #expect(release[0].message == "e-reply in l-one has 2 wrong options of the same type for its dialog reply question. At least 3 are needed.")
+        let dev = DialogReplyCoverage.issues(in: bundle, retiredItemIDs: [], mode: .dev, exceptions: [])
+        #expect(dev.map(\.severity) == [.warning])
+        #expect(dev[0].message == release[0].message)
+
+        let enough = DialogReplyCoverage.issues(
+            in: phraseReplyBundle(extraPhrases: 3),
+            retiredItemIDs: [],
+            mode: .release,
+            exceptions: []
+        )
+        #expect(enough.isEmpty)
+    }
+
+    @Test func sharedUsageIsNotReportedAsTooFewOptions() {
+        let prompt = dialogWord("e-prompt", pashto: "prompt line", en: "prompt")
+        let first = dialogWord("e-reply", pashto: "right answer", en: "formal reply", usage: "formal", responseTo: "e-prompt")
+        let second = dialogWord("e-other", pashto: "other answer", en: "other formal", usage: "FORMAL", responseTo: "e-prompt")
+        let fillers = (1...4).map {
+            dialogWord("e-fill-\($0)", pashto: "phrase \($0) text", en: "filler \($0)")
+        }
+        let bundle = singleLessonBundle([prompt, first, second] + fillers)
+        let release = DialogReplyCoverage.issues(in: bundle, retiredItemIDs: [], mode: .release, exceptions: [])
+        #expect(release.map(\.id) == ["e-reply", "e-other"])
+        #expect(release.allSatisfy { $0.severity == .error })
+        #expect(release.allSatisfy { $0.message.contains("same usage") })
+        #expect(!release.contains { $0.message.contains("wrong options") })
+    }
+
+    @Test func anExceptionThatAlreadyHasThreeOptionsWarns() {
+        let bundle = phraseReplyBundle(extraPhrases: 3)
+        let release = DialogReplyCoverage.issues(
+            in: bundle,
+            retiredItemIDs: [],
+            mode: .release,
+            exceptions: ["e-reply"]
+        )
+        #expect(release.count == 1)
+        #expect(release[0].severity == .warning)
+        #expect(release[0].message == "e-reply in l-one is on the dialog-reply exception list and has 3 wrong options of the same type. The exception is no longer needed.")
+    }
+
+    @Test func questionsDoNotCountTowardTheMinimum() {
+        let prompt = dialogWord("e-prompt", pashto: "prompt", en: "prompt")
+        let reply = dialogWord("e-reply", pashto: "right answer", en: "the reply", responseTo: "e-prompt")
+        let questions = (1...3).map {
+            dialogWord("e-ask-\($0)", pashto: "question \($0)؟", en: "ask \($0)")
+        }
+        let phrases = (1...2).map {
+            dialogWord("e-fill-\($0)", pashto: "phrase \($0) text", en: "fill \($0)")
+        }
+        let bundle = singleLessonBundle([prompt, reply] + questions + phrases)
+        let issues = DialogReplyCoverage.issues(in: bundle, retiredItemIDs: [], mode: .release, exceptions: [])
+        #expect(issues.map(\.message) == [
+            "e-reply in l-one has 2 wrong options of the same type for its dialog reply question. At least 3 are needed.",
+        ])
+    }
+}
+
 struct RegistryTests {
     @Test func emptyRegistryPassesAndMissingOrRetiredIDsFail() {
         let bundle = sampleBundle(itemCount: 6)
@@ -607,7 +705,8 @@ private func word(
     note: String? = nil,
     kind: ContentKind = .word,
     responseTo: String? = nil,
-    tokens: [String]? = nil
+    tokens: [String]? = nil,
+    usage: String? = nil
 ) -> ContentItem {
     ContentItem(
         id: ItemID(rawValue: id)!,
@@ -617,14 +716,16 @@ private func word(
         pronunciation: pronunciation,
         en: en,
         verification: Verification(status: status, checkedBy: checkedBy, checkedOn: checkedOn),
+        usage: usage,
         pronunciationNote: note,
         responseTo: responseTo.flatMap { ItemID(rawValue: $0) },
         tokens: tokens
     )
 }
 
-/// Words for the choice and match questions, one phrase with tokens, and a
-/// greeting/reply pair. `includeDialog` is the only switch for dialog response.
+/// Words for the choice and match questions, phrases for a dialog reply, and
+/// one phrase with tokens. `includeDialog` is the only switch for dialog response.
+/// The reply is a phrase, so it needs three phrase distractors besides its prompt.
 private func coverageBundle(includeDialog: Bool) -> ContentBundle {
     let items = [
         word("e-na", pashto: "نه", translit: "na", pronunciation: "na-sound", en: "no", status: .draft),
@@ -647,6 +748,24 @@ private func coverageBundle(includeDialog: Bool) -> ContentBundle {
             translit: "salam",
             pronunciation: "sa-lam",
             en: "hello",
+            status: .draft,
+            kind: .phrase
+        ),
+        word(
+            "e-welcome",
+            pashto: "ښه راغلاست",
+            translit: "kha raghlay",
+            pronunciation: "kha-ragh-lay",
+            en: "welcome",
+            status: .draft,
+            kind: .phrase
+        ),
+        word(
+            "e-goodbye",
+            pashto: "خدای پامان",
+            translit: "khuday paman",
+            pronunciation: "khu-day-pa-man",
+            en: "goodbye",
             status: .draft,
             kind: .phrase
         ),
@@ -703,6 +822,55 @@ private func courseWithDialogOnlyInLaterUnit() -> ContentBundle {
         items: earlier.items + [reply],
         units: earlier.units + [later],
         nonDistractorGroups: earlier.nonDistractorGroups
+    )
+}
+
+private func dialogWord(
+    _ id: String,
+    pashto: String,
+    en: String,
+    kind: ContentKind = .phrase,
+    usage: String? = nil,
+    responseTo: String? = nil
+) -> ContentItem {
+    word(
+        id,
+        pashto: pashto,
+        translit: "t-\(id)",
+        pronunciation: "p-\(id)",
+        en: en,
+        status: .draft,
+        kind: kind,
+        responseTo: responseTo,
+        usage: usage
+    )
+}
+
+private func phraseReplyBundle(extraPhrases: Int) -> ContentBundle {
+    let prompt = dialogWord("e-prompt", pashto: "prompt", en: "prompt")
+    let reply = dialogWord("e-reply", pashto: "right answer", en: "the reply", responseTo: "e-prompt")
+    let phrases = (1...extraPhrases).map {
+        dialogWord("e-fill-\($0)", pashto: "phrase \($0) text", en: "fill \($0)")
+    }
+    let words = (1...4).map {
+        dialogWord("e-word-\($0)", pashto: "word\($0)", en: "word \($0)", kind: .word)
+    }
+    return singleLessonBundle([prompt, reply] + phrases + words)
+}
+
+private func singleLessonBundle(_ items: [ContentItem]) -> ContentBundle {
+    let lesson = Lesson(
+        id: LessonID(rawValue: "l-one")!,
+        title: "One",
+        items: items.map { LessonItemRef(item: $0.id, role: .introduce) }
+    )
+    return ContentBundle(
+        contentVersion: "test",
+        variant: ContentBundle.kabulVariant,
+        romanization: romanization(difficult: []),
+        items: items,
+        units: [CourseUnit(id: UnitID(rawValue: "u-one")!, track: "main", title: "One", lessons: [lesson])],
+        nonDistractorGroups: []
     )
 }
 
