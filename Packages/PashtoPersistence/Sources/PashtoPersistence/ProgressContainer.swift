@@ -5,7 +5,8 @@ import SwiftData
 ///
 /// A file this build does not understand throws. This type never deletes a
 /// store it cannot open, and it never creates a replacement file in that case.
-/// The screen that offers "Try again" and then "Start fresh" is not here.
+/// `ProgressStoreRestart` moves a broken store aside, and only after the
+/// learner confirms Start over. Update needed does not call it.
 public enum ProgressContainer {
     /// The store named Progress.
     ///
@@ -49,6 +50,9 @@ public enum ProgressContainer {
                 cloudKitDatabase: .none
             )
         }
+        // `ModelConfiguration` only records the URL. The file is not opened
+        // until `ModelContainer`, and that runs only after the schema check
+        // has returned. The check itself opens a private copy, not `url`.
         if let url, FileManager.default.fileExists(atPath: url.path) {
             try StoredSchema.refuseIfNewer(at: url)
         }

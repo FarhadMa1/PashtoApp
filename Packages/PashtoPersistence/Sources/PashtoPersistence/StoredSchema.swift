@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import PashtoCore
+import PashtoSQLite
 import SwiftData
 import SQLite3
 
@@ -10,13 +11,19 @@ import SQLite3
 /// plan does not contain does not throw. It replaces the file. This check
 /// runs first and leaves the original file alone.
 ///
-/// Entity names come from `NSStoreModelVersionHashes` in the store metadata
-/// (`NSPersistentStoreCoordinator.metadataForPersistentStore`). That dictionary
-/// lists the model entities only, not Core Data's persistent-history tables.
-/// A key that is not one of `SchemaV1`'s entities is a newer store.
+/// Entity names come from `NSStoreModelVersionHashes`. The metadata is read
+/// with `NSPersistentStoreCoordinator.metadataForPersistentStore` on a private
+/// copy of the main file and its `-wal` and `-shm`. That call can rewrite the
+/// copy's `-shm`. The original path is not opened here. `immutable=1` is not
+/// used: it would ignore the copied `-wal`, so a newer schema that had not
+/// been checkpointed would be missed.
+///
+/// Metadata that cannot be read, including a missing hash table, is an open
+/// failure. The screen for that is the storage error. A hash key that is not
+/// one of `SchemaV1`'s entities is a newer store.
 ///
 /// `StoreMetaRecord.snapshotVersion` is a row, not store metadata. It is read
-/// from a copy of the file and compared with `ProgressSnapshot.currentVersion`.
+/// from the same copy and compared with `ProgressSnapshot.currentVersion`.
 /// A newer value is refused even when the SwiftData version marker is missing.
 enum StoredSchema {
     static func refuseIfNewer(at url: URL) throws {
@@ -46,6 +53,8 @@ enum StoredSchema {
 
     private static func read(at url: URL) throws -> (versionIdentifiers: [String], entityNames: [String], snapshotVersion: Int?) {
         let copy = try copiedStore(at: url)
+        // Runs on every return, including the path where metadata caught an
+        // exception and came back as an open failure.
         defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
         let metadata = try storeMetadata(at: copy)
         let database = try openReadOnly(copy)
@@ -74,42 +83,77 @@ enum StoredSchema {
         return scratch.appendingPathComponent(url.lastPathComponent)
     }
 
-    private static func storeMetadata(at url: URL) throws -> [String: Any] {
-        do {
-            return try NSPersistentStoreCoordinator.metadataForPersistentStore(
-                ofType: NSSQLiteStoreType,
-                at: url,
-                options: nil
-            )
-        } catch {
-            throw ProgressPersistenceError.failedToOpen("\(error)")
+    /// Public metadata read of the private copy. `NSError` and `NSException`
+    /// both become an open failure, not a newer schema. Any `-shm` this call
+    /// writes stays beside `copy`.
+    private static func storeMetadata(at copy: URL) throws -> [String: Any] {
+        var error: NSError?
+        guard let metadata = pashto_store_metadata(copy, &error) else {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
+        var result: [String: Any] = [:]
+        for (key, value) in metadata {
+            guard let key = key as? String else { continue }
+            result[key] = value
+        }
+        if result.isEmpty {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
+        }
+        return result
     }
 
     private static func versionIdentifiers(in metadata: [String: Any]) -> [String] {
-        if let values = metadata[NSStoreModelVersionIdentifiersKey] as? [String] {
+        let values = metadata[NSStoreModelVersionIdentifiersKey]
+        if let values = values as? [String] {
             return values
         }
-        if let values = metadata[NSStoreModelVersionIdentifiersKey] as? [Any] {
+        if let values = values as? [Any] {
+            return values.compactMap { $0 as? String }
+        }
+        if let values = values as? NSArray {
             return values.compactMap { $0 as? String }
         }
         return []
     }
 
     private static func entityNames(in metadata: [String: Any]) throws -> [String] {
-        if let hashes = metadata[NSStoreModelVersionHashesKey] as? [String: Any] {
-            return Array(hashes.keys)
+        let hashes = metadata[NSStoreModelVersionHashesKey]
+        let names: [String]
+        if let hashes = hashes as? [String: Any] {
+            names = Array(hashes.keys)
+        } else if let hashes = hashes as? [AnyHashable: Any] {
+            names = hashes.keys.compactMap { $0 as? String }
+        } else if let hashes = hashes as? NSDictionary {
+            names = hashes.allKeys.compactMap { $0 as? String }
+        } else {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
-        if let hashes = metadata[NSStoreModelVersionHashesKey] as? [AnyHashable: Any] {
-            return hashes.keys.compactMap { $0 as? String }
+        if names.isEmpty {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
-        throw ProgressPersistenceError.newerSchema("The store has no model hashes.")
+        return names
     }
 
+    /// Snapshot row on the same private copy. Not `immutable=1`, so the copied
+    /// `-wal` is visible. Any `-shm` update stays beside this copy.
     private static func openReadOnly(_ url: URL) throws -> OpaquePointer {
         var database: OpaquePointer?
-        guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READONLY, nil) == SQLITE_OK, let database else {
+        let path = url.path
+            .replacingOccurrences(of: "?", with: "%3F")
+            .replacingOccurrences(of: "#", with: "%23")
+        let uri = "file:\(path)?mode=ro"
+        guard sqlite3_open_v2(uri, &database, SQLITE_OPEN_READONLY | SQLITE_OPEN_URI, nil) == SQLITE_OK,
+              let database
+        else {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be read.")
+        }
+        // query_only rejects a checkpoint on this connection. A file that is
+        // not a database fails here and is closed before return. Any `-shm`
+        // update stays beside the copy.
+        guard sqlite3_exec(database, "PRAGMA query_only = ON", nil, nil, nil) == SQLITE_OK else {
+            let message = String(cString: sqlite3_errmsg(database))
+            sqlite3_close(database)
+            throw ProgressPersistenceError.failedToOpen(message)
         }
         return database
     }

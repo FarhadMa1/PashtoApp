@@ -12,6 +12,162 @@
           }
         }
       }
+    },
+    "storageError.body" : {
+      "comment" : "Storage error body.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong while loading. Try again first."
+          }
+        }
+      }
+    },
+    "storageError.startOver.button" : {
+      "comment" : "Destructive action on the storage error and in the confirming alert.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start over"
+          }
+        }
+      }
+    },
+    "storageError.startOver.cancel" : {
+      "comment" : "Dismiss Start over without changing progress.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "storageError.startOver.confirmMessage" : {
+      "comment" : "Start over confirmation. The store file is moved, not deleted.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your lessons, words and streak start from the beginning. Your settings stay the same."
+          }
+        }
+      }
+    },
+    "storageError.startOver.confirmTitle" : {
+      "comment" : "Title of the confirmation before progress is moved aside.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start over?"
+          }
+        }
+      }
+    },
+    "storageError.title" : {
+      "comment" : "Storage error title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We couldn't open your progress"
+          }
+        }
+      }
+    },
+    "storageError.tryAgain.button" : {
+      "comment" : "Storage error. Opens the same progress file again.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
+    "updateNeeded.body" : {
+      "comment" : "Update needed body. The store is not changed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your progress was saved by a newer version of the app. Update to keep learning. Nothing has been lost."
+          }
+        }
+      }
+    },
+    "updateNeeded.openAppStore.button" : {
+      "comment" : "Update needed. Hidden while AppStoreID is empty.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open App Store"
+          }
+        }
+      }
+    },
+    "updateNeeded.title" : {
+      "comment" : "Title when progress was saved by a newer version of the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update needed"
+          }
+        }
+      }
+    },
+    "welcomeBack.body" : {
+      "comment" : "Welcome back body. Shown when a break was not covered by a freeze.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Good to see you again. Let's warm up with a short review."
+          }
+        }
+      }
+    },
+    "welcomeBack.startReview.button" : {
+      "comment" : "Welcome back. Starts the capped daily review queue.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start review"
+          }
+        }
+      }
+    },
+    "welcomeBack.title" : {
+      "comment" : "Title when the streak would reset because a freeze did not cover the break.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome back"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

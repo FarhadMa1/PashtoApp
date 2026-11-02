@@ -2,6 +2,7 @@ import CoreData
 import Foundation
 import PashtoCore
 import PashtoCoreTesting
+import PashtoSQLite
 import SQLite3
 import SwiftData
 import Testing
@@ -175,6 +176,13 @@ struct SwiftDataProgressStoreTests {
     }
 
     @Test func newerSchemaFileIsLeftUntouched() throws {
+        // Three passes inside this job. The workflow stays a single `swift test`.
+        for _ in 1...3 {
+            try oneNewerSchemaFileIsLeftUntouched()
+        }
+    }
+
+    private func oneNewerSchemaFileIsLeftUntouched() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("pashto-newer-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -192,6 +200,112 @@ struct SwiftDataProgressStoreTests {
 
         #expect(try storedBytes(around: url) == before)
         #expect(try FutureStore.read(at: url) == "keep-me")
+    }
+
+    /// A store this build just wrote must pass the read-only metadata check.
+    /// A false "newer schema" would block progress that has not been lost.
+    @Test func currentSchemaFileIsNotTreatedAsNewer() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try StoreFileEdit.apply(to: url) { _ in }
+        let before = try storedBytes(around: url)
+
+        try StoredSchema.refuseIfNewer(at: url)
+
+        #expect(try storedBytes(around: url) == before)
+    }
+
+    /// A metadata blob that cannot be decoded is a storage error. The file
+    /// stays where it is, including any sidecars that were already there.
+    @Test func truncatedMetadataChoosesStorageError() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let blob = try metadataPlist(at: url, includeSidecars: true, immutable: false)
+        let truncated = blob.count > 8 ? Data(blob.prefix(8)) : Data([0x00])
+        try StoreFileEdit.replaceMetadataPlist(truncated, at: url)
+        try expectStorageErrorLeavesFilesUntouched(at: url)
+    }
+
+    /// `$classname` in an otherwise ordinary archive is a name nothing defines.
+    @Test func unknownClassInMetadataChoosesStorageError() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let record = NSDictionary(dictionary: ["note": "ordinary"])
+        let data = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
+        let renamed = try renamingKeyedArchiveClasses(in: data, to: "PANoSuchClass")
+        try StoreFileEdit.replaceMetadataPlist(renamed, at: url)
+        try expectStorageErrorLeavesFilesUntouched(at: url)
+        #expect(schemaCopies(containing: "PANoSuchClass").isEmpty)
+    }
+
+    /// A readable dictionary with no model hashes is a storage error.
+    @Test func metadataWithoutModelHashesChoosesStorageError() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let record = NSDictionary(dictionary: ["NSStoreModelVersionIdentifiers": ["1.0.0"]])
+        let data = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
+        try StoreFileEdit.replaceMetadataPlist(data, at: url)
+        try expectStorageErrorLeavesFilesUntouched(at: url)
+    }
+
+    /// Copies of this store under `pashto-schema-*`. Matching the class name
+    /// ignores a copy another test still has open.
+    private func schemaCopies(containing marker: String) -> [String] {
+        let root = FileManager.default.temporaryDirectory
+        let names = (try? FileManager.default.contentsOfDirectory(atPath: root.path)) ?? []
+        let needle = Data(marker.utf8)
+        return names.filter { name in
+            guard name.hasPrefix("pashto-schema-") else { return false }
+            let store = root.appendingPathComponent(name).appendingPathComponent("Progress.store")
+            guard let data = try? Data(contentsOf: store) else { return false }
+            return data.range(of: needle) != nil
+        }
+    }
+
+    /// Opening reports the storage error and does not add or rewrite a sidecar.
+    private func expectStorageErrorLeavesFilesUntouched(at url: URL) throws {
+        let before = try storedBytes(around: url)
+        do {
+            _ = try ProgressContainer.make(at: url)
+            Issue.record("this store should not open")
+        } catch {
+            #expect(progressScreen(for: progressOpenFailure(for: error)) == .storageError)
+        }
+        #expect(try storedBytes(around: url) == before)
+    }
+
+    /// The newer entity hash is committed in the wal and not checkpointed into
+    /// the main file. The `-shm` index is removed first, so the check has to
+    /// read that wal without one. `immutable=1` would not see it. The original
+    /// main file, `-wal`, and `-shm` stay byte-identical, and no sidecar appears.
+    @Test func newerSchemaOnlyInTheWalIsRefused() async throws {
+        for _ in 1...3 {
+            try await oneNewerSchemaOnlyInTheWalIsRefused()
+        }
+    }
+
+    private func oneNewerSchemaOnlyInTheWalIsRefused() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try StoreFileEdit.leaveNewerEntityInTheWal(named: "WalOnlyRecord", at: url)
+        let shm = URL(fileURLWithPath: url.path + "-shm")
+        if FileManager.default.fileExists(atPath: shm.path) {
+            try FileManager.default.removeItem(at: shm)
+        }
+        let before = try storedBytes(around: url)
+        #expect(before[url.lastPathComponent] != nil)
+        #expect(before[url.lastPathComponent + "-wal"] != nil)
+        #expect(before[url.lastPathComponent + "-shm"] == nil)
+        let mainOnly = try metadataPlist(at: url, includeSidecars: false, immutable: true)
+        let withWal = try metadataPlist(at: url, includeSidecars: true, immutable: false)
+        #expect(mainOnly != withWal)
+        #expect(try storedBytes(around: url) == before)
+
+        try expectOpenThrows(
+            .newerSchema("Stored entity WalOnlyRecord is not in schema \(SchemaV1.versionIdentifier)."),
+            at: url
+        )
+        #expect(try storedBytes(around: url) == before)
     }
 
     @Test func storeWithOneExtraEntityIsLeftUntouched() async throws {
@@ -441,17 +555,17 @@ private func memoryStore(_ version: String = "2026.11.0") throws -> SwiftDataPro
     return SwiftDataProgressStore(modelContainer: container, contentVersion: version)
 }
 
-private func writeStore(
+func writeStore(
     at url: URL,
     contentVersion: String,
-    _ body: (SwiftDataProgressStore) async throws -> Void
+    _ body: @Sendable (SwiftDataProgressStore) async throws -> Void
 ) async throws {
     let container = try ProgressContainer.make(at: url)
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: contentVersion)
     try await body(store)
 }
 
-private func makeV1File() async throws -> URL {
+func makeV1File() async throws -> URL {
     let directory = FileManager.default.temporaryDirectory
         .appendingPathComponent("pashto-guard-\(UUID().uuidString)", isDirectory: true)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -475,14 +589,14 @@ private func expectOpenThrows(_ expected: ProgressPersistenceError, at url: URL)
     #expect(try storedBytes(around: url) == before)
 }
 
-private func readStore(at url: URL, contentVersion: String) async throws -> ProgressSnapshot {
+func readStore(at url: URL, contentVersion: String) async throws -> ProgressSnapshot {
     let container = try ProgressContainer.make(at: url)
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: contentVersion)
     return try await store.load()
 }
 
 @MainActor
-private func seededActiveSession(
+func seededActiveSession(
     payloadVersion: Int,
     payload: Data,
     sessionID: String
@@ -553,14 +667,95 @@ private func expectKeptCard(in container: ModelContainer, loaded: ProgressSnapsh
     #expect(cards.first?.easeFactor == 2.5)
 }
 
-/// Bytes of the store and its write-ahead log. Shared-memory files are not compared.
-private func storedBytes(around url: URL) throws -> [String: Data] {
+/// Bytes of the store, its write-ahead log, and its shared-memory file.
+/// A sidecar that is absent is not a key. One that appears later makes the
+/// dictionaries differ.
+/// The Swift overlay marks variadic `sqlite3_db_config` unavailable, including
+/// the out-pointer form. The C helper sets no-checkpoint-on-close.
+func disableCheckpointOnClose(_ database: OpaquePointer) {
+    pashto_disable_checkpoint_on_close(UnsafeMutableRawPointer(database))
+}
+
+func storedBytes(around url: URL) throws -> [String: Data] {
     var files: [String: Data] = [:]
-    for file in [url, URL(fileURLWithPath: url.path + "-wal")] {
+    for suffix in ["", "-wal", "-shm"] {
+        let file = URL(fileURLWithPath: url.path + suffix)
         guard FileManager.default.fileExists(atPath: file.path) else { continue }
         files[file.lastPathComponent] = try Data(contentsOf: file)
     }
     return files
+}
+
+/// `Z_PLIST` from a copy, so the original file is not opened. `immutable`
+/// ignores `-wal` and is how the wal-only test shows the main file is unchanged.
+func metadataPlist(at url: URL, includeSidecars: Bool, immutable: Bool) throws -> Data {
+    let scratch = FileManager.default.temporaryDirectory
+        .appendingPathComponent("pashto-plist-\(UUID().uuidString)", isDirectory: true)
+    try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: scratch) }
+    for suffix in includeSidecars ? ["", "-wal", "-shm"] : [""] {
+        let source = URL(fileURLWithPath: url.path + suffix)
+        guard FileManager.default.fileExists(atPath: source.path) else { continue }
+        try FileManager.default.copyItem(
+            at: source,
+            to: scratch.appendingPathComponent(url.lastPathComponent + suffix)
+        )
+    }
+    let copy = scratch.appendingPathComponent(url.lastPathComponent)
+    var database: OpaquePointer?
+    let path = copy.path
+        .replacingOccurrences(of: "?", with: "%3F")
+        .replacingOccurrences(of: "#", with: "%23")
+    let query = immutable ? "mode=ro&immutable=1" : "mode=ro"
+    let uri = "file:\(path)?\(query)"
+    guard sqlite3_open_v2(uri, &database, SQLITE_OPEN_READONLY | SQLITE_OPEN_URI, nil) == SQLITE_OK,
+          let database
+    else {
+        throw ProgressPersistenceError.failedToOpen("The metadata copy could not be read.")
+    }
+    defer { sqlite3_close(database) }
+    var statement: OpaquePointer?
+    guard sqlite3_prepare_v2(database, "SELECT Z_PLIST FROM Z_METADATA LIMIT 1", -1, &statement, nil) == SQLITE_OK,
+          let statement
+    else {
+        throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
+    }
+    defer { sqlite3_finalize(statement) }
+    guard sqlite3_step(statement) == SQLITE_ROW, let blob = sqlite3_column_blob(statement, 0) else {
+        throw ProgressPersistenceError.failedToOpen("The metadata copy has no plist.")
+    }
+    return Data(bytes: blob, count: Int(sqlite3_column_bytes(statement, 0)))
+}
+
+/// Rewrites `$classname` and `$classes` in a keyed archive. The rest of the
+/// plist, including UID references, stays as it was.
+func renamingKeyedArchiveClasses(in data: Data, to className: String) throws -> Data {
+    let plist = try PropertyListSerialization.propertyList(from: data, format: nil)
+    guard let root = (plist as? NSDictionary)?.mutableCopy() as? NSMutableDictionary,
+          let objects = (root["$objects"] as? NSArray)?.mutableCopy() as? NSMutableArray
+    else {
+        throw ProgressPersistenceError.failedToOpen("The archive could not be edited.")
+    }
+    var found = false
+    for index in 0..<objects.count {
+        guard let record = objects[index] as? NSDictionary, record["$classname"] != nil else { continue }
+        let edited = record.mutableCopy() as! NSMutableDictionary
+        edited["$classname"] = className
+        if let classes = edited["$classes"] as? NSArray {
+            let renamed = NSMutableArray(capacity: classes.count)
+            for _ in 0..<classes.count {
+                renamed.add(className)
+            }
+            edited["$classes"] = renamed
+        }
+        objects[index] = edited
+        found = true
+    }
+    guard found else {
+        throw ProgressPersistenceError.failedToOpen("The archive has no class name.")
+    }
+    root["$objects"] = objects
+    return try PropertyListSerialization.data(fromPropertyList: root, format: .binary, options: 0)
 }
 
 enum FutureSchema: VersionedSchema {
@@ -580,7 +775,7 @@ enum FutureSchema: VersionedSchema {
 /// Rewrites a closed SwiftData file so a test can hide the model version
 /// or add an entity the guard must notice. The checkpoint keeps the edit in
 /// the main database instead of a later write-ahead log.
-private enum StoreFileEdit {
+enum StoreFileEdit {
     static func apply(to url: URL, _ body: (OpaquePointer) throws -> Void) throws {
         var database: OpaquePointer?
         guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
@@ -627,6 +822,85 @@ private enum StoreFileEdit {
             at: url,
             options: nil
         )
+    }
+
+    /// Replaces `Z_PLIST` and checkpoints, so the new blob is in the main file.
+    static func replaceMetadataPlist(_ data: Data, at url: URL) throws {
+        try apply(to: url) { database in
+            var statement: OpaquePointer?
+            guard sqlite3_prepare_v2(database, "UPDATE Z_METADATA SET Z_PLIST = ?", -1, &statement, nil) == SQLITE_OK,
+                  let statement
+            else {
+                throw ProgressPersistenceError.failedToOpen("The metadata update could not be prepared.")
+            }
+            defer { sqlite3_finalize(statement) }
+            let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+            let bytes = [UInt8](data)
+            let bound = bytes.withUnsafeBytes { raw in
+                sqlite3_bind_blob(statement, 1, raw.baseAddress, Int32(bytes.count), transient)
+            }
+            guard bound == SQLITE_OK,
+                  sqlite3_step(statement) == SQLITE_DONE,
+                  sqlite3_changes(database) >= 1
+            else {
+                throw ProgressPersistenceError.failedToOpen("The metadata blob was not replaced.")
+            }
+        }
+    }
+
+    /// Commits one extra model-hash key into the wal and does not checkpoint.
+    /// The blob is the plist `setMetadata` wrote on a private copy. A
+    /// secure-coding archive is not a Core Data metadata plist, so the reader
+    /// would report it as unreadable instead of a newer schema. The main file
+    /// still has the previous plist.
+    static func leaveNewerEntityInTheWal(named name: String, at url: URL) throws {
+        let updated = try metadataBlob(addingEntity: name, beside: url)
+        var database: OpaquePointer?
+        guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
+            throw ProgressPersistenceError.failedToOpen("The progress store could not be edited.")
+        }
+        defer { sqlite3_close(database) }
+        disableCheckpointOnClose(database)
+        try exec("PRAGMA journal_mode = WAL", in: database)
+        try exec("PRAGMA wal_autocheckpoint = 0", in: database)
+        var update: OpaquePointer?
+        guard sqlite3_prepare_v2(database, "UPDATE Z_METADATA SET Z_PLIST = ?", -1, &update, nil) == SQLITE_OK,
+              let update
+        else {
+            throw ProgressPersistenceError.failedToOpen("The wal metadata update could not be prepared.")
+        }
+        defer { sqlite3_finalize(update) }
+        let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+        let bytes = [UInt8](updated)
+        let bound = bytes.withUnsafeBytes { raw in
+            sqlite3_bind_blob(update, 1, raw.baseAddress, Int32(bytes.count), transient)
+        }
+        guard bound == SQLITE_OK,
+              sqlite3_step(update) == SQLITE_DONE,
+              sqlite3_changes(database) >= 1
+        else {
+            throw ProgressPersistenceError.failedToOpen("The wal metadata update did not apply.")
+        }
+    }
+
+    /// `setMetadata` on a copy, then the resulting `Z_PLIST`. The original
+    /// store is not opened.
+    private static func metadataBlob(addingEntity name: String, beside url: URL) throws -> Data {
+        let scratch = FileManager.default.temporaryDirectory
+            .appendingPathComponent("pashto-wal-blob-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: scratch) }
+        for suffix in ["", "-wal", "-shm"] {
+            let source = URL(fileURLWithPath: url.path + suffix)
+            guard FileManager.default.fileExists(atPath: source.path) else { continue }
+            try FileManager.default.copyItem(
+                at: source,
+                to: scratch.appendingPathComponent(url.lastPathComponent + suffix)
+            )
+        }
+        let copy = scratch.appendingPathComponent(url.lastPathComponent)
+        try addModelHash(named: name, at: copy)
+        return try metadataPlist(at: copy, includeSidecars: true, immutable: false)
     }
 
     private static var currentSchemaMarker: String {
@@ -687,7 +961,7 @@ private enum FuturePlan: SchemaMigrationPlan {
     static var stages: [MigrationStage] { [] }
 }
 
-private enum FutureStore {
+enum FutureStore {
     static func write(at url: URL, text: String) throws {
         let schema = Schema(versionedSchema: FutureSchema.self)
         let configuration = ModelConfiguration(
@@ -697,15 +971,62 @@ private enum FutureStore {
             allowsSave: true,
             cloudKitDatabase: .none
         )
-        let container = try ModelContainer(
-            for: schema,
-            migrationPlan: FuturePlan.self,
-            configurations: [configuration]
-        )
-        let context = ModelContext(container)
-        context.autosaveEnabled = false
-        context.insert(FutureSchema.Note(text: text))
-        try context.save()
+        try autoreleasepool {
+            let container = try ModelContainer(
+                for: schema,
+                migrationPlan: FuturePlan.self,
+                configurations: [configuration]
+            )
+            let context = ModelContext(container)
+            context.autosaveEnabled = false
+            context.insert(FutureSchema.Note(text: text))
+            try context.save()
+        }
+        // Release the container, then checkpoint on this thread. This does not
+        // hop to the main queue: a background test that syncs there deadlocks
+        // when main is already waiting for that test. A lock that is still
+        // held fails the test once the deadline passes.
+        try settle(at: url)
+    }
+
+    private static func settle(at url: URL) throws {
+        let deadline = Date().addingTimeInterval(2)
+        while true {
+            if try checkpoint(at: url) == 0 {
+                _ = try checkpoint(at: url)
+                return
+            }
+            if Date() >= deadline {
+                throw ProgressPersistenceError.failedToOpen("The progress store was still busy.")
+            }
+            Thread.sleep(forTimeInterval: 0.05)
+        }
+    }
+
+    /// The busy column of `wal_checkpoint`. Zero means the log was truncated.
+    /// `SQLITE_BUSY` is returned as busy so the caller can wait out a close
+    /// without blocking past the deadline.
+    private static func checkpoint(at url: URL) throws -> Int32 {
+        var database: OpaquePointer?
+        guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
+            throw ProgressPersistenceError.failedToOpen("The progress store could not be settled.")
+        }
+        defer { sqlite3_close(database) }
+        sqlite3_busy_timeout(database, 200)
+        disableCheckpointOnClose(database)
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, "PRAGMA wal_checkpoint(TRUNCATE)", -1, &statement, nil) == SQLITE_OK,
+              let statement
+        else {
+            throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
+        }
+        defer { sqlite3_finalize(statement) }
+        let step = sqlite3_step(statement)
+        if step == SQLITE_BUSY || step == SQLITE_LOCKED { return 1 }
+        guard step == SQLITE_ROW else {
+            throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
+        }
+        return sqlite3_column_int(statement, 0)
     }
 
     static func read(at url: URL) throws -> String? {
