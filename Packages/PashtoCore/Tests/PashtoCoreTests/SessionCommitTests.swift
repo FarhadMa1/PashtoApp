@@ -149,14 +149,15 @@ struct SessionCommitTests {
         #expect(restored.answers == direct.answers)
     }
 
-    @Test func anUnfinishedLessonResumesTodayOrTomorrow() {
+    @Test func anUnfinishedLessonResumesForAgeZeroOneOrMinusOne() {
         let active = unfinishedSession(started: dayN)
         let dayAfter = dayN.adding(days: 1)
         #expect(!mustCommit(active))
         #expect(canResume(active, on: dayAfter, contentVersion: "2026.11.0"))
         #expect(canResume(active, on: dayN, contentVersion: "2026.11.0"))
         #expect(!canResume(active, on: dayAfter.adding(days: 1), contentVersion: "2026.11.0"))
-        #expect(!canResume(active, on: dayN.adding(days: -1), contentVersion: "2026.11.0"))
+        #expect(canResume(active, on: dayN.adding(days: -1), contentVersion: "2026.11.0"))
+        #expect(!canResume(active, on: dayN.adding(days: -2), contentVersion: "2026.11.0"))
     }
 
     @Test func resumeRejectsTheWrongVersionOrContent() {

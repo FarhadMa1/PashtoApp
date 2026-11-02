@@ -304,8 +304,17 @@ struct ProgressReconcilerTests {
         #expect(stale.activeSession == nil)
         #expect(stale.cards.isEmpty)
 
-        let future = try await runUnfinished(started: today.adding(days: 1), content: content, on: today)
-        #expect(future.activeSession == nil)
+        let clockBackOneDay = try await runUnfinished(started: today.adding(days: 1), content: content, on: today)
+        #expect(clockBackOneDay.activeSession != nil)
+        #expect(clockBackOneDay.cards.isEmpty)
+        #expect(clockBackOneDay.completedSessions.isEmpty)
+        #expect(clockBackOneDay.streak == .initial)
+
+        let clockBackTwoDays = try await runUnfinished(started: today.adding(days: 2), content: content, on: today)
+        #expect(clockBackTwoDays.activeSession == nil)
+        #expect(clockBackTwoDays.cards.isEmpty)
+        #expect(clockBackTwoDays.completedSessions.isEmpty)
+        #expect(clockBackTwoDays.streak == .initial)
     }
 
     @Test func anUnfinishedReviewStartsOver() async throws {
