@@ -84,13 +84,13 @@ struct SwiftDataProgressStoreTests {
 
         let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "2026.11.0")
         let newer = ProgressSnapshot.currentVersion + 1
-        await #expect(throws: ProgressPersistenceError.newerSnapshot(newer)) {
+        await expectStoreThrows(.newerSnapshot(newer)) {
             try await store.load()
         }
-        await #expect(throws: ProgressPersistenceError.newerSnapshot(newer)) {
+        await expectStoreThrows(.newerSnapshot(newer)) {
             try await store.resetAll()
         }
-        await #expect(throws: ProgressPersistenceError.newerSnapshot(newer)) {
+        await expectStoreThrows(.newerSnapshot(newer)) {
             try await store.commit(Fixture.simpleCommit())
         }
 
@@ -132,7 +132,7 @@ struct SwiftDataProgressStoreTests {
             payload: Data("newer".utf8),
             sessionID: "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA3"
         )
-        await #expect(throws: ProgressPersistenceError.newerPayload(newer)) {
+        await expectStoreThrows(.newerPayload(newer)) {
             try await seeded.store.load()
         }
         let reader = ModelContext(seeded.container)
@@ -334,6 +334,23 @@ private func seededActiveSession(
     try writer.save()
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "2026.11.0")
     return (container, store)
+}
+
+/// `#expect(throws:)` from a `@MainActor` test sends the closure off the
+/// main actor. Xcode 16 rejects that. This stays on the main actor.
+@MainActor
+private func expectStoreThrows(
+    _ expected: ProgressPersistenceError,
+    _ body: () async throws -> Void
+) async {
+    do {
+        try await body()
+        Issue.record("Expected \(expected)")
+    } catch let error as ProgressPersistenceError {
+        #expect(error == expected)
+    } catch {
+        Issue.record("Unexpected error: \(error)")
+    }
 }
 
 @MainActor
