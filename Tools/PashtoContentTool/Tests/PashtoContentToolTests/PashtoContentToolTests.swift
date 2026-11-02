@@ -723,9 +723,9 @@ private func word(
     )
 }
 
-/// Words for the choice and match questions, phrases for a dialog reply, and
-/// one phrase with tokens. `includeDialog` is the only switch for dialog response.
-/// The reply is a phrase, so it needs three phrase distractors besides its prompt.
+/// Words for the choice and match questions, phrases for order and match, and
+/// one greeting/reply pair. `includeDialog` is the only switch for dialog response.
+/// The reply is one word, so its wrong options are single words.
 private func coverageBundle(includeDialog: Bool) -> ContentBundle {
     let items = [
         word("e-na", pashto: "نه", translit: "na", pronunciation: "na-sound", en: "no", status: .draft),

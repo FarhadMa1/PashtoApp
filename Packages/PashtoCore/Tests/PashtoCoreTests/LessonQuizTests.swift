@@ -431,13 +431,13 @@ struct DialogResponseTests {
         #expect(task?.options.contains { $0.itemID == prompt.id } == false)
     }
 
-    @Test func replyShapeUsesKindThenWhitespace() {
+    @Test func replyShapeUsesWordCountNotKind() {
         let greeting = quizItem("e-salam", pashto: "سلام", en: "hello", kind: .phrase)
-        let thanks = quizItem("e-manana", pashto: "مننه", en: "thanks")
-        let sentence = quizItem("e-fine", pashto: "زه ښه یم", en: "I am well")
-        let comma = quizItem("e-yes", pashto: "هو، زما ورور دی", en: "yes he is", kind: .phrase)
-        let joined = quizItem("e-joined", pashto: "من\u{200C}نه", en: "joined")
-        #expect(DialogResponse.replyShape(of: greeting) == .phrase)
+        let thanks = quizItem("e-manana", pashto: "مننه", en: "thanks", kind: .phrase)
+        let sentence = quizItem("e-fine", pashto: "زه ښه یم", en: "I am well", kind: .word)
+        let comma = quizItem("e-yes", pashto: "هو، زما ورور دی", en: "yes he is", kind: .word)
+        let joined = quizItem("e-joined", pashto: "من\u{200C}نه", en: "joined", kind: .phrase)
+        #expect(DialogResponse.replyShape(of: greeting) == .word)
         #expect(DialogResponse.replyShape(of: thanks) == .word)
         #expect(DialogResponse.replyShape(of: sentence) == .phrase)
         #expect(DialogResponse.replyShape(of: comma) == .phrase)
@@ -499,26 +499,33 @@ struct DialogResponseTests {
         #expect(wrong == ["e-early-1", "e-early-2", "e-early-3"])
     }
 
-    @Test func oneWordPhraseKindCountsAsAPhrase() {
-        let prompt = quizItem("e-prompt", pashto: "prompt line", en: "prompt")
-        let reply = quizItem("e-reply", pashto: "سلام", en: "hello", kind: .phrase, responseTo: "e-prompt")
-        let word = quizItem("e-ho", pashto: "هو", en: "yes")
-        let oneWordPhrase = quizItem("e-bye", pashto: "پامان", en: "goodbye word", kind: .phrase)
-        let multiWord = quizItem("e-fine", pashto: "زه ښه یم", en: "I am well")
-        let another = quizItem("e-welcome", pashto: "ښه راغلاست", en: "welcome", kind: .phrase)
-        let items = [prompt, reply, word, oneWordPhrase, multiWord, another]
+    @Test func mananaGetsOnlySingleWordOptions() {
+        let prompt = quizItem("e-prompt", pashto: "څنګه یې؟", en: "how are you", kind: .phrase)
+        let reply = quizItem("e-manana", pashto: "مننه", en: "thanks", kind: .phrase, responseTo: "e-prompt")
+        let salam = quizItem("e-salam", pashto: "سلام", en: "hello", kind: .phrase)
+        let yes = quizItem("e-ho", pashto: "هو", en: "yes")
+        let no = quizItem("e-na", pashto: "نه", en: "no")
+        let question = quizItem("e-ask", pashto: "څوک؟", en: "who", kind: .phrase)
+        let phrase = quizItem("e-fine", pashto: "زه ښه یم", en: "I am well", kind: .phrase)
+        let items = [prompt, reply, salam, yes, no, question, phrase]
         let content = quizBundle([quizLesson("l-one", introduce: items)], items: items)
         let context = quizContext(content, seen: ["l-one"])
-        #expect(DialogResponse.replyShape(of: reply) == .phrase)
-        #expect(DialogResponse.replyShape(of: oneWordPhrase) == .phrase)
-        #expect(DialogResponse.replyShape(of: multiWord) == .phrase)
-        #expect(DialogResponse.eligibleDistractors(for: reply, in: context).map(\.id.rawValue).sorted() == [
-            "e-bye", "e-fine", "e-welcome",
-        ])
-        var rng = SplitMix64(seed: 1)
-        let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
-        #expect(task?.options.contains { $0.itemID == word.id } == false)
-        #expect(task?.options.contains { $0.itemID == oneWordPhrase.id } == true)
+        #expect(DialogResponse.replyShape(of: reply) == .word)
+        #expect(DialogResponse.replyShape(of: salam) == .word)
+        let pool = DialogResponse.eligibleDistractors(for: reply, in: context)
+        #expect(pool.map(\.id.rawValue).sorted() == ["e-ho", "e-na", "e-salam"])
+        #expect(pool.allSatisfy { DialogResponse.replyShape(of: $0) == .word })
+        #expect(pool.allSatisfy { !isArabicQuestionText($0.pashto) })
+        for seed in UInt64(1)...12 {
+            var rng = SplitMix64(seed: seed)
+            let task = DialogResponse().makeTask(for: reply, in: context, using: &rng)
+            let wrong = (task?.options ?? []).filter { $0.itemID != reply.id }
+            #expect(wrong.count == 3)
+            #expect(wrong.allSatisfy { pashtoWordCountForTest($0.text) == 1 })
+            #expect(wrong.allSatisfy { !isArabicQuestionText($0.text) })
+            #expect(task?.options.contains { $0.itemID == phrase.id } == false)
+            #expect(task?.options.contains { $0.itemID == question.id } == false)
+        }
     }
 
     @Test func arabicQuestionMarkIsNeverAWrongOption() {
@@ -526,7 +533,7 @@ struct DialogResponseTests {
         let reply = quizItem("e-reply", pashto: "right answer", en: "the reply", kind: .phrase, responseTo: "e-prompt")
         let question = quizItem("e-ask", pashto: "دا څوک ده؟", en: "who is this", kind: .phrase)
         let spacedQuestion = quizItem("e-spaced", pashto: "څوک دی؟ ", en: "who is he", kind: .phrase)
-        let latin = quizItem("e-latin", pashto: "really?", en: "latin mark", kind: .phrase)
+        let latin = quizItem("e-latin", pashto: "really now?", en: "latin mark", kind: .word)
         let fillers = [
             quizItem("e-fill-1", pashto: "one two", en: "fill one", kind: .phrase),
             quizItem("e-fill-2", pashto: "three four", en: "fill two", kind: .phrase),
@@ -667,9 +674,9 @@ struct DialogResponseTests {
                 #expect(!pool.contains { $0.id == thanks.id })
                 switch item.id.rawValue {
                 case "e-za-xa-yam":
-                    #expect(pool.count == 6)
+                    #expect(pool.count == 5)
                 case "e-hagha-xa-da", "e-hagha-xa-day":
-                    #expect(pool.count == 25)
+                    #expect(pool.count == 24)
                 case "e-xwar-ma-she":
                     #expect(pool.count < DialogResponse.minimumDistractors)
                 default:

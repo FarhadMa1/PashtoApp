@@ -1,9 +1,9 @@
 /// Whether a dialog option is a phrase or a single word.
 ///
-/// A phrase is an item with `kind: phrase`, or Pashto text of more than one
-/// word. Words are split on whitespace only. A comma stays on its word, and
-/// ZWNJ (U+200C) does not split a word. A one-word `kind: phrase`, such as
-/// سلام, is a phrase. Anything else is a word. Approved by Farhad 2026-11-02.
+/// The split is the Pashto word count only. `kind` is ignored. Words are
+/// split on whitespace. A comma stays on its word, and ZWNJ (U+200C) does not
+/// split a word. One word is a word, including مننه and سلام when `kind` is
+/// `phrase`. More than one word is a phrase. Approved by Farhad 2026-11-02.
 public enum DialogReplyShape: Hashable, Sendable {
     case phrase
     case word
@@ -42,9 +42,9 @@ public struct DialogResponse: TaskGenerator {
 
     public init() {}
 
-    /// Phrase or word, using `DialogReplyShape`.
+    /// Phrase or word from the Pashto word count. `kind` is not consulted.
     public static func replyShape(of item: ContentItem) -> DialogReplyShape {
-        if item.kind == .phrase || pashtoWordCount(item.pashto) > 1 {
+        if pashtoWordCount(item.pashto) > 1 {
             return .phrase
         }
         return .word
