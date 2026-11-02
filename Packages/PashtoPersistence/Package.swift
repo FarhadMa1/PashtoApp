@@ -20,6 +20,7 @@ let package = Package(
         .target(
             name: "PashtoPersistence",
             dependencies: [
+                "PashtoSQLite",
                 .product(name: "PashtoCore", package: "PashtoCore"),
             ],
             linkerSettings: [
@@ -32,6 +33,7 @@ let package = Package(
             publicHeadersPath: "include",
             linkerSettings: [
                 .linkedLibrary("sqlite3"),
+                .linkedFramework("CoreData"),
             ]
         ),
         .testTarget(

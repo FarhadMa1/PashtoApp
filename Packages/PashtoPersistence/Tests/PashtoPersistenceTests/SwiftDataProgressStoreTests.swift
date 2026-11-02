@@ -226,14 +226,14 @@ struct SwiftDataProgressStoreTests {
         try expectStorageErrorLeavesFilesUntouched(at: url)
     }
 
-    /// An archive whose class is not store metadata is a storage error.
+    /// `$classname` in an otherwise ordinary archive is a name nothing defines.
     @Test func unknownClassInMetadataChoosesStorageError() async throws {
         let url = try await makeV1File()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
-        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
-        archiver.encode(NotAMetadataClass(), forKey: NSKeyedArchiveRootObjectKey)
-        archiver.finishEncoding()
-        try StoreFileEdit.replaceMetadataPlist(archiver.encodedData, at: url)
+        let record = NSDictionary(dictionary: ["note": "ordinary"])
+        let data = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
+        let renamed = try renamingKeyedArchiveClasses(in: data, to: "PANoSuchClass")
+        try StoreFileEdit.replaceMetadataPlist(renamed, at: url)
         try expectStorageErrorLeavesFilesUntouched(at: url)
     }
 
@@ -712,19 +712,35 @@ func metadataPlist(at url: URL, includeSidecars: Bool, immutable: Bool) throws -
     return Data(bytes: blob, count: Int(sqlite3_column_bytes(statement, 0)))
 }
 
-/// A class name the metadata reader does not treat as store metadata.
-private final class NotAMetadataClass: NSObject, NSCoding {
-    override init() {
-        super.init()
+/// Rewrites `$classname` and `$classes` in a keyed archive. The rest of the
+/// plist, including UID references, stays as it was.
+func renamingKeyedArchiveClasses(in data: Data, to className: String) throws -> Data {
+    let plist = try PropertyListSerialization.propertyList(from: data, format: nil)
+    guard let root = (plist as? NSDictionary)?.mutableCopy() as? NSMutableDictionary,
+          let objects = (root["$objects"] as? NSArray)?.mutableCopy() as? NSMutableArray
+    else {
+        throw ProgressPersistenceError.failedToOpen("The archive could not be edited.")
     }
-
-    required init?(coder: NSCoder) {
-        super.init()
+    var found = false
+    for index in 0..<objects.count {
+        guard let record = objects[index] as? NSDictionary, record["$classname"] != nil else { continue }
+        let edited = record.mutableCopy() as! NSMutableDictionary
+        edited["$classname"] = className
+        if let classes = edited["$classes"] as? NSArray {
+            let renamed = NSMutableArray(capacity: classes.count)
+            for _ in 0..<classes.count {
+                renamed.add(className)
+            }
+            edited["$classes"] = renamed
+        }
+        objects[index] = edited
+        found = true
     }
-
-    func encode(with coder: NSCoder) {
-        coder.encode("nope", forKey: "name")
+    guard found else {
+        throw ProgressPersistenceError.failedToOpen("The archive has no class name.")
     }
+    root["$objects"] = objects
+    return try PropertyListSerialization.data(fromPropertyList: root, format: .binary, options: 0)
 }
 
 enum FutureSchema: VersionedSchema {

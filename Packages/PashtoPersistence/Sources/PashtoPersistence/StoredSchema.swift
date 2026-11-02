@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import PashtoCore
+import PashtoSQLite
 import SwiftData
 import SQLite3
 
@@ -80,15 +81,23 @@ enum StoredSchema {
         return scratch.appendingPathComponent(url.lastPathComponent)
     }
 
-    /// Public metadata read of the private copy. A thrown `NSError` is an
-    /// open failure, not a newer schema, and it does not escape as an
-    /// exception. Any `-shm` this call writes stays beside `copy`.
+    /// Public metadata read of the private copy. `NSError` and `NSException`
+    /// both become an open failure, not a newer schema. Any `-shm` this call
+    /// writes stays beside `copy`.
     private static func storeMetadata(at copy: URL) throws -> [String: Any] {
-        do {
-            return try NSPersistentStoreCoordinator.metadataForPersistentStore(type: .sqlite, at: copy)
-        } catch {
+        var error: NSError?
+        guard let metadata = pashto_store_metadata(copy, &error) else {
             throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
+        var result: [String: Any] = [:]
+        for (key, value) in metadata {
+            guard let key = key as? String else { continue }
+            result[key] = value
+        }
+        if result.isEmpty {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
+        }
+        return result
     }
 
     private static func versionIdentifiers(in metadata: [String: Any]) -> [String] {
