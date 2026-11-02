@@ -1,3 +1,4 @@
+import CoreData
 import Foundation
 import PashtoCore
 import PashtoCoreTesting
@@ -196,21 +197,30 @@ struct SwiftDataProgressStoreTests {
     @Test func storeWithOneExtraEntityIsLeftUntouched() async throws {
         let url = try await makeV1File()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
-        try StoreFileEdit.apply(to: url) { database in
-            try StoreFileEdit.insertEntity(named: "ExtraRecord", in: database)
-            try StoreFileEdit.clearVersionIdentifiers(in: database)
-        }
-        try expectOpenLeavesFileUntouched(at: url)
+        try StoreFileEdit.addModelHash(named: "ExtraRecord", at: url)
+        try expectOpenThrows(
+            .newerSchema("Stored entity ExtraRecord is not in schema \(SchemaV1.versionIdentifier)."),
+            at: url
+        )
     }
 
     @Test func newerStoreMetaVersionIsLeftUntouched() async throws {
         let url = try await makeV1File()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let newer = ProgressSnapshot.currentVersion + 1
         try StoreFileEdit.apply(to: url) { database in
-            try StoreFileEdit.setSnapshotVersion(ProgressSnapshot.currentVersion + 1, in: database)
-            try StoreFileEdit.clearVersionIdentifiers(in: database)
+            try StoreFileEdit.setSnapshotVersion(newer, in: database)
         }
-        try expectOpenLeavesFileUntouched(at: url)
+        try StoreFileEdit.keepCurrentSchemaMarker(at: url)
+        try expectOpenThrows(.newerSnapshot(newer), at: url)
+    }
+
+    @Test func v1FileStoreReopensThroughTheGuard() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let loaded = try await readStore(at: url, contentVersion: "not-the-stored-version")
+        #expect(loaded.contentVersion == "2026.11.0")
+        #expect(loaded.settings == .initial)
     }
 
     @Test func fileStoreSurvivesReopenAndResetKeepsSettings() async throws {
@@ -320,13 +330,15 @@ private func makeV1File() async throws -> URL {
     return url
 }
 
-private func expectOpenLeavesFileUntouched(at url: URL) throws {
+private func expectOpenThrows(_ expected: ProgressPersistenceError, at url: URL) throws {
     let before = try storedBytes(around: url)
     do {
         _ = try ProgressContainer.make(at: url)
-        Issue.record("a store this schema does not own should not open")
+        Issue.record("Expected \(expected)")
+    } catch let error as ProgressPersistenceError {
+        #expect(error == expected)
     } catch {
-        #expect(error is ProgressPersistenceError)
+        Issue.record("Unexpected error: \(error)")
     }
     #expect(try storedBytes(around: url) == before)
 }
@@ -448,17 +460,46 @@ private enum StoreFileEdit {
         try exec("PRAGMA wal_checkpoint(TRUNCATE)", in: database)
     }
 
-    static func insertEntity(named name: String, in database: OpaquePointer) throws {
-        try exec(
-            """
-            INSERT INTO Z_PRIMARYKEY (Z_ENT, Z_NAME, Z_SUPER, Z_MAX)
-            SELECT COALESCE(MAX(Z_ENT), 0) + 1, '\(name)', 0, 0 FROM Z_PRIMARYKEY
-            """,
-            in: database
+    /// Adds one model-hash key. `NSStoreModelVersionHashes` is what the guard
+    /// compares with SchemaV1, so this is an entity the file claims to contain.
+    static func addModelHash(named name: String, at url: URL) throws {
+        var metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(
+            ofType: NSSQLiteStoreType,
+            at: url,
+            options: nil
         )
-        guard sqlite3_changes(database) == 1 else {
-            throw ProgressPersistenceError.failedToOpen("The extra entity was not stored.")
-        }
+        var hashes = metadata[NSStoreModelVersionHashesKey] as? [String: Any] ?? [:]
+        hashes[name] = Data(repeating: 0, count: 32)
+        metadata[NSStoreModelVersionHashesKey] = hashes
+        metadata[NSStoreModelVersionIdentifiersKey] = [currentSchemaMarker]
+        try NSPersistentStoreCoordinator.setMetadata(
+            metadata,
+            forPersistentStoreOfType: NSSQLiteStoreType,
+            at: url,
+            options: nil
+        )
+    }
+
+    /// Leaves the SwiftData version marker at SchemaV1 so a later failure is
+    /// the snapshot row, not the marker.
+    static func keepCurrentSchemaMarker(at url: URL) throws {
+        var metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(
+            ofType: NSSQLiteStoreType,
+            at: url,
+            options: nil
+        )
+        metadata[NSStoreModelVersionIdentifiersKey] = [currentSchemaMarker]
+        try NSPersistentStoreCoordinator.setMetadata(
+            metadata,
+            forPersistentStoreOfType: NSSQLiteStoreType,
+            at: url,
+            options: nil
+        )
+    }
+
+    private static var currentSchemaMarker: String {
+        let version = SchemaV1.versionIdentifier
+        return "\(version.major).\(version.minor).\(version.patch)"
     }
 
     static func setSnapshotVersion(_ version: Int, in database: OpaquePointer) throws {
@@ -477,45 +518,6 @@ private enum StoreFileEdit {
         try exec("UPDATE \(table) SET \(column) = \(version)", in: database)
         guard sqlite3_changes(database) >= 1 else {
             throw ProgressPersistenceError.failedToOpen("StoreMetaRecord was not updated.")
-        }
-    }
-
-    static func clearVersionIdentifiers(in database: OpaquePointer) throws {
-        let rows = try blobs("SELECT rowid, Z_PLIST FROM Z_METADATA", in: database)
-        guard !rows.isEmpty else {
-            throw ProgressPersistenceError.failedToOpen("The store has no metadata row.")
-        }
-        for (rowid, data) in rows {
-            let object = try PropertyListSerialization.propertyList(from: data, format: nil)
-            guard var plist = object as? [String: Any] else {
-                throw ProgressPersistenceError.failedToOpen("The store metadata is not a dictionary.")
-            }
-            plist["NSStoreModelVersionIdentifiers"] = [String]()
-            let rewritten = try PropertyListSerialization.data(fromPropertyList: plist, format: .binary, options: 0)
-            try bindBlob(rewritten, rowid: rowid, in: database)
-        }
-    }
-
-    private static func bindBlob(_ data: Data, rowid: Int64, in database: OpaquePointer) throws {
-        var statement: OpaquePointer?
-        guard sqlite3_prepare_v2(database, "UPDATE Z_METADATA SET Z_PLIST = ? WHERE rowid = ?", -1, &statement, nil) == SQLITE_OK,
-              let statement
-        else {
-            throw ProgressPersistenceError.failedToOpen("The metadata update could not be prepared.")
-        }
-        defer { sqlite3_finalize(statement) }
-        let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
-        let bound = data.withUnsafeBytes { raw in
-            sqlite3_bind_blob(statement, 1, raw.baseAddress, Int32(data.count), transient)
-        }
-        guard bound == SQLITE_OK else {
-            throw ProgressPersistenceError.failedToOpen("The metadata blob could not be stored.")
-        }
-        guard sqlite3_bind_int64(statement, 2, rowid) == SQLITE_OK else {
-            throw ProgressPersistenceError.failedToOpen("The metadata row could not be selected.")
-        }
-        guard sqlite3_step(statement) == SQLITE_DONE else {
-            throw ProgressPersistenceError.failedToOpen("The metadata row was not updated.")
         }
     }
 
@@ -539,22 +541,6 @@ private enum StoreFileEdit {
         while sqlite3_step(statement) == SQLITE_ROW {
             guard let cString = sqlite3_column_text(statement, 0) else { continue }
             values.append(String(cString: cString))
-        }
-        return values
-    }
-
-    private static func blobs(_ sql: String, in database: OpaquePointer) throws -> [(Int64, Data)] {
-        var statement: OpaquePointer?
-        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
-            throw ProgressPersistenceError.failedToOpen("The store query could not be prepared.")
-        }
-        defer { sqlite3_finalize(statement) }
-        var values: [(Int64, Data)] = []
-        while sqlite3_step(statement) == SQLITE_ROW {
-            let rowid = sqlite3_column_int64(statement, 0)
-            guard let blob = sqlite3_column_blob(statement, 1) else { continue }
-            let count = Int(sqlite3_column_bytes(statement, 1))
-            values.append((rowid, Data(bytes: blob, count: count)))
         }
         return values
     }

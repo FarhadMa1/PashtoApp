@@ -1,3 +1,4 @@
+import CoreData
 import Foundation
 import PashtoCore
 import SwiftData
@@ -7,30 +8,17 @@ import SQLite3
 ///
 /// On the macOS 15 / Xcode 16 toolchain, opening a store from a schema this
 /// plan does not contain does not throw. It replaces the file. This check
-/// runs first, read-only, and leaves the file alone.
+/// runs first and leaves the original file alone.
 ///
-/// One unknown entity is enough to refuse the file. A SwiftData version
-/// marker other than `SchemaV1` does the same. `StoreMetaRecord.snapshotVersion`
-/// is compared with `ProgressSnapshot.currentVersion` even when that marker
-/// is missing, and a newer value is refused before the container opens.
+/// Entity names come from `NSStoreModelVersionHashes` in the store metadata
+/// (`NSPersistentStoreCoordinator.metadataForPersistentStore`). That dictionary
+/// lists the model entities only, not Core Data's persistent-history tables.
+/// A key that is not one of `SchemaV1`'s entities is a newer store.
+///
+/// `StoreMetaRecord.snapshotVersion` is a row, not store metadata. It is read
+/// from a copy of the file and compared with `ProgressSnapshot.currentVersion`.
+/// A newer value is refused even when the SwiftData version marker is missing.
 enum StoredSchema {
-    private static let knownEntities: Set<String> = [
-        "ReviewCardRecord",
-        "LessonProgressRecord",
-        "StreakRecord",
-        "SettingsRecord",
-        "StoreMetaRecord",
-        "ActiveSessionRecord",
-        "CompletedSessionRecord",
-    ]
-
-    /// Persistent-history rows SwiftData writes beside the model entities.
-    private static let systemEntities: Set<String> = [
-        "CHANGE",
-        "TRANSACTION",
-        "TRANSACTIONSTRING",
-    ]
-
     static func refuseIfNewer(at url: URL) throws {
         let snapshot = try read(at: url)
         let currentSchema = SchemaV1.versionIdentifier
@@ -41,7 +29,7 @@ enum StoredSchema {
                 )
             }
         }
-        let unknown = snapshot.entities.filter { !isKnownEntity($0) && !isSystemEntity($0) }
+        let unknown = snapshot.entityNames.filter { !modelEntityNames.contains($0) }
         if !unknown.isEmpty {
             throw ProgressPersistenceError.newerSchema(
                 "Stored entity \(unknown.sorted().joined(separator: ", ")) is not in schema \(currentSchema)."
@@ -52,20 +40,29 @@ enum StoredSchema {
         }
     }
 
-    private static func isKnownEntity(_ name: String) -> Bool {
-        if knownEntities.contains(name) { return true }
-        return knownEntities.contains { name.hasSuffix(".\($0)") }
+    private static var modelEntityNames: Set<String> {
+        Set(Schema(versionedSchema: SchemaV1.self).entities.map(\.name))
     }
 
-    private static func isSystemEntity(_ name: String) -> Bool {
-        systemEntities.contains(name) || systemEntities.contains { name.hasSuffix(".\($0)") }
+    private static func read(at url: URL) throws -> (versionIdentifiers: [String], entityNames: [String], snapshotVersion: Int?) {
+        let copy = try copiedStore(at: url)
+        defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
+        let metadata = try storeMetadata(at: copy)
+        let database = try openReadOnly(copy)
+        defer { sqlite3_close(database) }
+        return (
+            versionIdentifiers(in: metadata),
+            try entityNames(in: metadata),
+            snapshotVersion(in: database)
+        )
     }
 
-    private static func read(at url: URL) throws -> (versionIdentifiers: [String], entities: [String], snapshotVersion: Int?) {
+    /// A copy so the metadata read and the snapshot query cannot touch the file
+    /// the caller asked to open.
+    private static func copiedStore(at url: URL) throws -> URL {
         let scratch = FileManager.default.temporaryDirectory
             .appendingPathComponent("pashto-schema-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: scratch) }
         for suffix in ["", "-wal", "-shm"] {
             let source = URL(fileURLWithPath: url.path + suffix)
             guard FileManager.default.fileExists(atPath: source.path) else { continue }
@@ -74,32 +71,47 @@ enum StoredSchema {
                 to: scratch.appendingPathComponent(url.lastPathComponent + suffix)
             )
         }
-        let copy = scratch.appendingPathComponent(url.lastPathComponent)
-        var database: OpaquePointer?
-        let flags = SQLITE_OPEN_READONLY
-        guard sqlite3_open_v2(copy.path, &database, flags, nil) == SQLITE_OK, let database else {
-            throw ProgressPersistenceError.failedToOpen("The progress store could not be read.")
-        }
-        defer { sqlite3_close(database) }
-        return (
-            versionIdentifiers(in: database),
-            column("SELECT Z_NAME FROM Z_PRIMARYKEY", in: database),
-            snapshotVersion(in: database)
-        )
+        return scratch.appendingPathComponent(url.lastPathComponent)
     }
 
-    private static func versionIdentifiers(in database: OpaquePointer) -> [String] {
-        let rows = blobs("SELECT Z_PLIST FROM Z_METADATA", in: database)
-        var identifiers: [String] = []
-        for data in rows {
-            guard
-                let object = try? PropertyListSerialization.propertyList(from: data, format: nil),
-                let plist = object as? [String: Any],
-                let stored = plist["NSStoreModelVersionIdentifiers"] as? [String]
-            else { continue }
-            identifiers.append(contentsOf: stored)
+    private static func storeMetadata(at url: URL) throws -> [String: Any] {
+        do {
+            return try NSPersistentStoreCoordinator.metadataForPersistentStore(
+                ofType: NSSQLiteStoreType,
+                at: url,
+                options: nil
+            )
+        } catch {
+            throw ProgressPersistenceError.failedToOpen("\(error)")
         }
-        return identifiers
+    }
+
+    private static func versionIdentifiers(in metadata: [String: Any]) -> [String] {
+        if let values = metadata[NSStoreModelVersionIdentifiersKey] as? [String] {
+            return values
+        }
+        if let values = metadata[NSStoreModelVersionIdentifiersKey] as? [Any] {
+            return values.compactMap { $0 as? String }
+        }
+        return []
+    }
+
+    private static func entityNames(in metadata: [String: Any]) throws -> [String] {
+        if let hashes = metadata[NSStoreModelVersionHashesKey] as? [String: Any] {
+            return Array(hashes.keys)
+        }
+        if let hashes = metadata[NSStoreModelVersionHashesKey] as? [AnyHashable: Any] {
+            return hashes.keys.compactMap { $0 as? String }
+        }
+        throw ProgressPersistenceError.newerSchema("The store has no model hashes.")
+    }
+
+    private static func openReadOnly(_ url: URL) throws -> OpaquePointer {
+        var database: OpaquePointer?
+        guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READONLY, nil) == SQLITE_OK, let database else {
+            throw ProgressPersistenceError.failedToOpen("The progress store could not be read.")
+        }
+        return database
     }
 
     /// The integer on `StoreMetaRecord`. Nil when the file has no such row.
@@ -151,21 +163,6 @@ enum StoredSchema {
         while sqlite3_step(statement) == SQLITE_ROW {
             guard let cString = sqlite3_column_text(statement, 0) else { continue }
             values.append(String(cString: cString))
-        }
-        return values
-    }
-
-    private static func blobs(_ sql: String, in database: OpaquePointer) -> [Data] {
-        var statement: OpaquePointer?
-        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
-            return []
-        }
-        defer { sqlite3_finalize(statement) }
-        var values: [Data] = []
-        while sqlite3_step(statement) == SQLITE_ROW {
-            guard let blob = sqlite3_column_blob(statement, 0) else { continue }
-            let count = Int(sqlite3_column_bytes(statement, 0))
-            values.append(Data(bytes: blob, count: count))
         }
         return values
     }
