@@ -1,6 +1,5 @@
 import CoreData
 import Foundation
-import ObjectiveC
 import PashtoCore
 import SwiftData
 import SQLite3
@@ -11,20 +10,19 @@ import SQLite3
 /// plan does not contain does not throw. It replaces the file. This check
 /// runs first and leaves the original file alone.
 ///
-/// Entity names come from `NSStoreModelVersionHashes` in the store metadata.
-/// That dictionary is the `Z_PLIST` blob in `Z_METADATA`. It is read from a
-/// private copy of the main file and its `-wal` and `-shm` sidecars, opened
-/// as `file:…?mode=ro`. `immutable=1` is not used: it would ignore the copied
-/// `-wal`, so a newer schema that had not been checkpointed would be missed
-/// and the caller's file could then be opened as current.
+/// Entity names come from `NSStoreModelVersionHashes`. The metadata is read
+/// with `NSPersistentStoreCoordinator.metadataForPersistentStore` on a private
+/// copy of the main file and its `-wal` and `-shm`. That call can rewrite the
+/// copy's `-shm`. The original path is not opened here. `immutable=1` is not
+/// used: it would ignore the copied `-wal`, so a newer schema that had not
+/// been checkpointed would be missed.
 ///
-/// `mode=ro` can still update the copy's `-shm`. The original path is never
-/// opened here. `metadataForPersistentStore` is not used: on this toolchain
-/// it rewrites the `-shm` of the file it is given. A hash key that is not one
-/// of `SchemaV1`'s entities is a newer store.
+/// Metadata that cannot be read, including a missing hash table, is an open
+/// failure. The screen for that is the storage error. A hash key that is not
+/// one of `SchemaV1`'s entities is a newer store.
 ///
 /// `StoreMetaRecord.snapshotVersion` is a row, not store metadata. It is read
-/// from a copy of the file and compared with `ProgressSnapshot.currentVersion`.
+/// from the same copy and compared with `ProgressSnapshot.currentVersion`.
 /// A newer value is refused even when the SwiftData version marker is missing.
 enum StoredSchema {
     static func refuseIfNewer(at url: URL) throws {
@@ -55,9 +53,9 @@ enum StoredSchema {
     private static func read(at url: URL) throws -> (versionIdentifiers: [String], entityNames: [String], snapshotVersion: Int?) {
         let copy = try copiedStore(at: url)
         defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
+        let metadata = try storeMetadata(at: copy)
         let database = try openReadOnly(copy)
         defer { sqlite3_close(database) }
-        let metadata = try storeMetadata(in: database)
         return (
             versionIdentifiers(in: metadata),
             try entityNames(in: metadata),
@@ -82,82 +80,15 @@ enum StoredSchema {
         return scratch.appendingPathComponent(url.lastPathComponent)
     }
 
-    /// `Z_METADATA.Z_PLIST` is the keyed archive Core Data stores beside the rows.
-    /// The connection is already query-only, so this select cannot checkpoint
-    /// or replace a sidecar.
-    private static func storeMetadata(in database: OpaquePointer) throws -> [String: Any] {
-        let tables = column("SELECT name FROM sqlite_master WHERE type = 'table'", in: database)
-        guard let table = tables.first(where: { $0.caseInsensitiveCompare("Z_METADATA") == .orderedSame }),
-              isSafeIdentifier(table)
-        else {
-            throw ProgressPersistenceError.failedToOpen("The progress store has no metadata table.")
+    /// Public metadata read of the private copy. A thrown `NSError` is an
+    /// open failure, not a newer schema, and it does not escape as an
+    /// exception. Any `-shm` this call writes stays beside `copy`.
+    private static func storeMetadata(at copy: URL) throws -> [String: Any] {
+        do {
+            return try NSPersistentStoreCoordinator.metadataForPersistentStore(type: .sqlite, at: copy)
+        } catch {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
-        var statement: OpaquePointer?
-        guard sqlite3_prepare_v2(database, "SELECT Z_PLIST FROM \(table) LIMIT 1", -1, &statement, nil) == SQLITE_OK,
-              let statement
-        else {
-            throw ProgressPersistenceError.failedToOpen(String(cString: sqlite3_errmsg(database)))
-        }
-        defer { sqlite3_finalize(statement) }
-        guard sqlite3_step(statement) == SQLITE_ROW else {
-            throw ProgressPersistenceError.failedToOpen("The progress store has no metadata row.")
-        }
-        guard sqlite3_column_type(statement, 0) != SQLITE_NULL, let blob = sqlite3_column_blob(statement, 0) else {
-            throw ProgressPersistenceError.failedToOpen("The progress store metadata is empty.")
-        }
-        let data = Data(bytes: blob, count: Int(sqlite3_column_bytes(statement, 0)))
-        return try metadataDictionary(from: data)
-    }
-
-    private static func metadataDictionary(from data: Data) throws -> [String: Any] {
-        if let metadata = decodedMetadata(from: data) {
-            return metadata
-        }
-        throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
-    }
-
-    /// A secure archive is preferred. `init(forReadingFrom:)` is the throwing
-    /// reader for anything the secure call refuses. A classic Core Data
-    /// `Z_PLIST` makes that initializer throw archive version -1, so the plist
-    /// is read directly. A blob that is neither is an open failure.
-    private static func decodedMetadata(from data: Data) -> [String: Any]? {
-        let classes: [AnyClass] = [
-            NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSMutableArray.self,
-            NSString.self, NSMutableString.self, NSNumber.self, NSData.self, NSMutableData.self,
-            NSDate.self, NSSet.self, NSMutableSet.self,
-        ]
-        if let object = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data),
-           let metadata = dictionary(from: object) {
-            return metadata
-        }
-        if let metadata = try? metadata(readingFrom: data) {
-            return metadata
-        }
-        guard let record = KeyedArchive.dictionary(from: data) else { return nil }
-        return dictionary(from: record)
-    }
-
-    /// `requiresSecureCoding` stays false because this private-copy blob was not
-    /// written with secure coding. A current store must still decode, or the
-    /// check would report it as a newer schema. The throw stays inside this
-    /// function: an archive this initializer rejects is not an uncaught error.
-    private static func metadata(readingFrom data: Data) throws -> [String: Any]? {
-        let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
-        unarchiver.requiresSecureCoding = false
-        let object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
-        unarchiver.finishDecoding()
-        return dictionary(from: object)
-    }
-
-    private static func dictionary(from object: Any?) -> [String: Any]? {
-        if let metadata = object as? [String: Any] { return metadata }
-        guard let dictionary = object as? NSDictionary else { return nil }
-        var metadata: [String: Any] = [:]
-        for (key, value) in dictionary {
-            guard let key = key as? String else { continue }
-            metadata[key] = value
-        }
-        return metadata.isEmpty ? nil : metadata
     }
 
     private static func versionIdentifiers(in metadata: [String: Any]) -> [String] {
@@ -176,23 +107,24 @@ enum StoredSchema {
 
     private static func entityNames(in metadata: [String: Any]) throws -> [String] {
         let hashes = metadata[NSStoreModelVersionHashesKey]
+        let names: [String]
         if let hashes = hashes as? [String: Any] {
-            return Array(hashes.keys)
+            names = Array(hashes.keys)
+        } else if let hashes = hashes as? [AnyHashable: Any] {
+            names = hashes.keys.compactMap { $0 as? String }
+        } else if let hashes = hashes as? NSDictionary {
+            names = hashes.allKeys.compactMap { $0 as? String }
+        } else {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
-        if let hashes = hashes as? [AnyHashable: Any] {
-            return hashes.keys.compactMap { $0 as? String }
+        if names.isEmpty {
+            throw ProgressPersistenceError.failedToOpen("The progress store metadata could not be read.")
         }
-        if let hashes = hashes as? NSDictionary {
-            return hashes.allKeys.compactMap { $0 as? String }
-        }
-        throw ProgressPersistenceError.newerSchema("The store has no model hashes.")
+        return names
     }
 
-    /// `mode=ro` on a copy that includes `-wal`. Not `immutable=1`.
-    ///
-    /// A missing `-shm` is recovered beside this copy. `mode=ro` can create
-    /// that file while it reads the wal index. The caller's path is a
-    /// different directory, so the original does not gain a sidecar.
+    /// Snapshot row on the same private copy. Not `immutable=1`, so the copied
+    /// `-wal` is visible. Any `-shm` update stays beside this copy.
     private static func openReadOnly(_ url: URL) throws -> OpaquePointer {
         var database: OpaquePointer?
         let path = url.path
@@ -266,81 +198,5 @@ enum StoredSchema {
             values.append(String(cString: cString))
         }
         return values
-    }
-}
-
-/// A classic `NSKeyedArchiver` plist. `init(forReadingFrom:)` throws archive
-/// version -1 on the blob Core Data writes, so the dictionary is rebuilt from
-/// `$objects`. Only the classes that appear in store metadata are decoded.
-enum KeyedArchive {
-    static func dictionary(from data: Data) -> NSDictionary? {
-        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil) as? NSDictionary,
-              let archiver = plist["$archiver"] as? String, archiver == "NSKeyedArchiver",
-              let objects = plist["$objects"] as? NSArray,
-              let top = plist["$top"] as? NSDictionary,
-              let root = top["root"]
-        else { return nil }
-        return decode(root, objects: objects, depth: 0) as? NSDictionary
-    }
-
-    private static func decode(_ object: Any, objects: NSArray, depth: Int) -> Any? {
-        if depth > 64 { return nil }
-        if let index = uid(object) {
-            guard index < objects.count else { return nil }
-            return decode(objects[index], objects: objects, depth: depth + 1)
-        }
-        if let text = object as? String {
-            return text == "$null" ? nil : text as NSString
-        }
-        if object is NSData || object is NSNumber || object is Date { return object }
-        guard let record = object as? NSDictionary else { return object }
-        let name = className(of: record, objects: objects)
-        if name.contains("Dictionary") || (name.isEmpty && record["NS.keys"] != nil) {
-            let keys = record["NS.keys"] as? NSArray ?? NSArray()
-            let values = record["NS.objects"] as? NSArray ?? NSArray()
-            let result = NSMutableDictionary()
-            for index in 0..<min(keys.count, values.count) {
-                guard let key = decode(keys[index], objects: objects, depth: depth + 1) as? NSCopying else { continue }
-                result[key] = decode(values[index], objects: objects, depth: depth + 1) ?? NSNull()
-            }
-            return result
-        }
-        if name.contains("Array") || name.contains("Set") {
-            let values = record["NS.objects"] as? NSArray ?? NSArray()
-            let result = NSMutableArray()
-            for index in 0..<values.count {
-                if let value = decode(values[index], objects: objects, depth: depth + 1) {
-                    result.add(value)
-                }
-            }
-            return result
-        }
-        if name.contains("Data") { return record["NS.data"] }
-        if name.contains("String") { return record["NS.string"] }
-        if name.contains("Number") || name.contains("Boolean") {
-            return record["NS.intval"] ?? record["NS.value"]
-        }
-        if name.contains("Date") { return record["NS.time"] }
-        return nil
-    }
-
-    private static func className(of record: NSDictionary, objects: NSArray) -> String {
-        guard let classRef = record["$class"] else { return "" }
-        let resolved: Any
-        if let index = uid(classRef), index < objects.count {
-            resolved = objects[index]
-        } else {
-            resolved = classRef
-        }
-        guard let classRecord = resolved as? NSDictionary else { return "" }
-        return classRecord["$classname"] as? String ?? ""
-    }
-
-    /// `CF$UID` is the keyed-archive object index. Asking another object for
-    /// that key throws, so the class name has to mention UID first.
-    private static func uid(_ object: Any) -> Int? {
-        guard let object = object as? NSObject else { return nil }
-        guard String(cString: object_getClassName(object)).contains("UID") else { return nil }
-        return (object.value(forKey: "CF$UID") as? NSNumber)?.intValue
     }
 }

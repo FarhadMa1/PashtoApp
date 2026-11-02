@@ -215,25 +215,47 @@ struct SwiftDataProgressStoreTests {
         #expect(try storedBytes(around: url) == before)
     }
 
-    /// A metadata blob that cannot be decoded is an open failure. The file
+    /// A metadata blob that cannot be decoded is a storage error. The file
     /// stays where it is, including any sidecars that were already there.
-    @Test func unreadableMetadataBlobDoesNotReplaceTheFile() async throws {
+    @Test func truncatedMetadataChoosesStorageError() async throws {
         let url = try await makeV1File()
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
-        try StoreFileEdit.replaceMetadataPlist(Data([0x00]), at: url)
-        let before = try storedBytes(around: url)
+        let blob = try metadataPlist(at: url, includeSidecars: true, immutable: false)
+        let truncated = blob.count > 8 ? Data(blob.prefix(8)) : Data([0x00])
+        try StoreFileEdit.replaceMetadataPlist(truncated, at: url)
+        try expectStorageErrorLeavesFilesUntouched(at: url)
+    }
 
+    /// An archive whose class is not store metadata is a storage error.
+    @Test func unknownClassInMetadataChoosesStorageError() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
+        archiver.encode(NotAMetadataClass(), forKey: NSKeyedArchiveRootObjectKey)
+        archiver.finishEncoding()
+        try StoreFileEdit.replaceMetadataPlist(archiver.encodedData, at: url)
+        try expectStorageErrorLeavesFilesUntouched(at: url)
+    }
+
+    /// A readable dictionary with no model hashes is a storage error.
+    @Test func metadataWithoutModelHashesChoosesStorageError() async throws {
+        let url = try await makeV1File()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let record = NSDictionary(dictionary: ["NSStoreModelVersionIdentifiers": ["1.0.0"]])
+        let data = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
+        try StoreFileEdit.replaceMetadataPlist(data, at: url)
+        try expectStorageErrorLeavesFilesUntouched(at: url)
+    }
+
+    /// Opening reports the storage error and does not add or rewrite a sidecar.
+    private func expectStorageErrorLeavesFilesUntouched(at url: URL) throws {
+        let before = try storedBytes(around: url)
         do {
             _ = try ProgressContainer.make(at: url)
-            Issue.record("unreadable metadata should not open")
-        } catch let error as ProgressPersistenceError {
-            if case .newerSchema = error {
-                Issue.record("unreadable metadata must not be reported as a newer schema")
-            }
+            Issue.record("this store should not open")
         } catch {
-            Issue.record("Unexpected error: \(error)")
+            #expect(progressScreen(for: progressOpenFailure(for: error)) == .storageError)
         }
-
         #expect(try storedBytes(around: url) == before)
     }
 
@@ -690,6 +712,21 @@ func metadataPlist(at url: URL, includeSidecars: Bool, immutable: Bool) throws -
     return Data(bytes: blob, count: Int(sqlite3_column_bytes(statement, 0)))
 }
 
+/// A class name the metadata reader does not treat as store metadata.
+private final class NotAMetadataClass: NSObject, NSCoding {
+    override init() {
+        super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init()
+    }
+
+    func encode(with coder: NSCoder) {
+        coder.encode("nope", forKey: "name")
+    }
+}
+
 enum FutureSchema: VersionedSchema {
     static var versionIdentifier: Schema.Version { Schema.Version(2, 0, 0) }
     static var models: [any PersistentModel.Type] { [Note.self] }
@@ -783,6 +820,13 @@ enum StoreFileEdit {
     /// Commits one extra model-hash key into the wal and does not checkpoint.
     /// The main file still has the previous plist.
     static func leaveNewerEntityInTheWal(named name: String, at url: URL) throws {
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(type: .sqlite, at: url)
+        let record = NSMutableDictionary(dictionary: metadata)
+        let hashes = (record[NSStoreModelVersionHashesKey] as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
+            ?? NSMutableDictionary()
+        hashes[name] = Data(repeating: 7, count: 32)
+        record[NSStoreModelVersionHashesKey] = hashes
+        let updated = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
         var database: OpaquePointer?
         guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be edited.")
@@ -791,19 +835,6 @@ enum StoreFileEdit {
         disableCheckpointOnClose(database)
         try exec("PRAGMA journal_mode = WAL", in: database)
         try exec("PRAGMA wal_autocheckpoint = 0", in: database)
-        var statement: OpaquePointer?
-        guard sqlite3_prepare_v2(database, "SELECT Z_PLIST FROM Z_METADATA LIMIT 1", -1, &statement, nil) == SQLITE_OK,
-              let statement
-        else {
-            throw ProgressPersistenceError.failedToOpen("The metadata row could not be read.")
-        }
-        guard sqlite3_step(statement) == SQLITE_ROW, let blob = sqlite3_column_blob(statement, 0) else {
-            sqlite3_finalize(statement)
-            throw ProgressPersistenceError.failedToOpen("The metadata row is empty.")
-        }
-        let original = Data(bytes: blob, count: Int(sqlite3_column_bytes(statement, 0)))
-        sqlite3_finalize(statement)
-        let updated = try plistAddingEntity(named: name, to: original)
         var update: OpaquePointer?
         guard sqlite3_prepare_v2(database, "UPDATE Z_METADATA SET Z_PLIST = ?", -1, &update, nil) == SQLITE_OK,
               let update
@@ -822,37 +853,6 @@ enum StoreFileEdit {
         else {
             throw ProgressPersistenceError.failedToOpen("The wal metadata update did not apply.")
         }
-    }
-
-    private static func plistAddingEntity(named name: String, to data: Data) throws -> Data {
-        guard let metadata = mutableMetadata(from: data) else {
-            throw ProgressPersistenceError.failedToOpen("The metadata plist could not be edited.")
-        }
-        let hashes = (metadata[NSStoreModelVersionHashesKey] as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
-            ?? NSMutableDictionary()
-        hashes[name] = Data(repeating: 7, count: 32)
-        metadata[NSStoreModelVersionHashesKey] = hashes
-        return try NSKeyedArchiver.archivedData(withRootObject: metadata, requiringSecureCoding: true)
-    }
-
-    /// `requiresSecureCoding` is false only while editing this private blob.
-    /// `init(forReadingFrom:)` throws on a classic Core Data archive, and that
-    /// throw is caught here. The plist reader covers that archive.
-    private static func mutableMetadata(from data: Data) -> NSMutableDictionary? {
-        let classes: [AnyClass] = [
-            NSDictionary.self, NSMutableDictionary.self, NSArray.self, NSString.self, NSNumber.self, NSData.self, NSDate.self,
-        ]
-        let object: Any?
-        if let decoded = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: classes, from: data) {
-            object = decoded
-        } else if let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: data) {
-            unarchiver.requiresSecureCoding = false
-            object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
-            unarchiver.finishDecoding()
-        } else {
-            object = KeyedArchive.dictionary(from: data)
-        }
-        return (object as? NSDictionary)?.mutableCopy() as? NSMutableDictionary
     }
 
     private static var currentSchemaMarker: String {
