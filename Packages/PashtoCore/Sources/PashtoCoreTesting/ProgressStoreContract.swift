@@ -137,12 +137,13 @@ private func oneCardPerItem(_ store: any ProgressStore) async throws {
 private func resetAll(_ store: any ProgressStore) async throws {
     let version = try await store.load().contentVersion
     let kept = Sample.session("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA3")
-    try await store.saveActiveSession(Sample.active(id: kept, answers: 1))
-    try await store.updateSettings(UserSettings(
+    let settings = UserSettings(
         dailyGoal: .light,
         showTransliteration: false,
         placementTakenDay: Sample.day
-    ))
+    )
+    try await store.saveActiveSession(Sample.active(id: kept, answers: 1))
+    try await store.updateSettings(settings)
     try await store.commit(Sample.commit(
         id: Sample.session("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA4"),
         cards: [Sample.card("e-one")],
@@ -151,11 +152,24 @@ private func resetAll(_ store: any ProgressStore) async throws {
     ))
     try await store.resetAll()
     let cleared = try await store.load()
-    try expect(
-        cleared == ProgressSnapshot.empty(contentVersion: version),
-        scenarioReset,
-        "reset clears learner progress and keeps the content version"
+    let expected = ProgressSnapshot(
+        contentVersion: version,
+        cards: [],
+        lessonProgress: [],
+        streak: .initial,
+        settings: settings,
+        activeSession: nil,
+        completedSessions: [],
+        lastReconciledContentVersion: nil,
+        latestObservedDay: nil
     )
+    try expect(
+        cleared == expected,
+        scenarioReset,
+        "reset clears progress and keeps settings and the content version"
+    )
+    try expect(cleared.settings.dailyGoal == .light, scenarioReset, "the daily goal stays")
+    try expect(cleared.settings.showTransliteration == false, scenarioReset, "transliteration stays")
 }
 
 private func emptyStore(_ store: any ProgressStore) async throws {

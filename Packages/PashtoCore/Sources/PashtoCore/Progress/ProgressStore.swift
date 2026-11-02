@@ -18,7 +18,10 @@ public protocol ProgressStore: Sendable {
     /// Upserts cards by `itemID`. Does not remove a card that is absent here.
     func applyReconciliation(_ changes: [ReviewCard]) async throws
     func updateSettings(_ settings: UserSettings) async throws
-    /// Clears learner progress. The content version the store was given stays.
+    /// Clears cards, lesson progress, the streak, and sessions.
+    ///
+    /// Settings stay. `contentVersion` stays because it describes the installed
+    /// content, not the learner's progress.
     func resetAll() async throws
 }
 

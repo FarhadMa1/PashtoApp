@@ -13,7 +13,7 @@ struct ProgressStoreTests {
         try await ProgressStoreContract.oneCardPerItemID(InMemoryProgressStore())
     }
 
-    @Test func resetProgressClearsEverything() async throws {
+    @Test func resetProgressKeepsSettings() async throws {
         try await ProgressStoreContract.resetClearsLearnerProgress(
             InMemoryProgressStore(contentVersion: "2026.11.0")
         )

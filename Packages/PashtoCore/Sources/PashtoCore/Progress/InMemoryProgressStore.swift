@@ -69,7 +69,19 @@ public actor InMemoryProgressStore: ProgressStore {
     }
 
     public func resetAll() async throws {
-        snapshot = .empty(contentVersion: snapshot.contentVersion)
+        // Settings stay. contentVersion describes the installed content, not the learner's progress.
+        snapshot = ProgressSnapshot(
+            snapshotVersion: snapshot.snapshotVersion,
+            contentVersion: snapshot.contentVersion,
+            cards: [],
+            lessonProgress: [],
+            streak: .initial,
+            settings: snapshot.settings,
+            activeSession: nil,
+            completedSessions: [],
+            lastReconciledContentVersion: nil,
+            latestObservedDay: nil
+        )
     }
 
     /// `activeSession` is the value to store, including nil when the session is cleared.

@@ -11,7 +11,6 @@ struct ProgressValidationTests {
         #expect(freezes(of: 100) == 2)
         let clamped = validated(snapshot(streak: streak(freezes: 5, toward: 4)))
         #expect(clamped.streak.freezes == 2)
-        #expect(clamped.streak.daysTowardNextFreeze == 4)
         #expect(clamped.streak.current == 3)
     }
 
@@ -52,12 +51,64 @@ struct ProgressValidationTests {
         #expect(validatedCard(interval: 6, repetitions: 2).intervalDays == 6)
     }
 
+    @Test func negativeRepetitionsAndLapsesBecomeZero() {
+        let repaired = validated(snapshot(cards: [
+            card(id: "e-counts", repetitions: -3, lapses: -1),
+        ])).cards[0]
+        #expect(repaired.repetitions == 0)
+        #expect(repaired.lapses == 0)
+        let kept = validated(snapshot(cards: [
+            card(id: "e-kept", repetitions: 4, lapses: 2),
+        ])).cards[0]
+        #expect(kept.repetitions == 4)
+        #expect(kept.lapses == 2)
+    }
+
+    @Test func scoreOutsideZeroThroughOneHundredIsClamped() {
+        #expect(score(of: -1) == 0)
+        #expect(score(of: 0) == 0)
+        #expect(score(of: 80) == 80)
+        #expect(score(of: 100) == 100)
+        #expect(score(of: 101) == 100)
+        #expect(score(of: 250) == 100)
+    }
+
+    @Test func daysTowardNextFreezeOutsideZeroThroughSixAreClamped() {
+        #expect(daysToward(of: -1, freezes: 0) == 0)
+        #expect(daysToward(of: 0, freezes: 1) == 0)
+        #expect(daysToward(of: 6, freezes: 1) == 6)
+        #expect(daysToward(of: 7, freezes: 0) == 6)
+        #expect(daysToward(of: 40, freezes: 1) == 6)
+    }
+
+    @Test func daysTowardNextFreezeIsZeroWhenTwoFreezesAreHeld() {
+        #expect(daysToward(of: 4, freezes: 2) == 0)
+        #expect(daysToward(of: 0, freezes: 2) == 0)
+        let clamped = validated(snapshot(streak: streak(freezes: 5, toward: 4)))
+        #expect(clamped.streak.freezes == 2)
+        #expect(clamped.streak.daysTowardNextFreeze == 0)
+    }
+
     private func freezes(of value: Int) -> Int {
         validated(snapshot(streak: streak(freezes: value, toward: 0))).streak.freezes
     }
 
     private func ease(of value: Double) -> Double {
         validated(snapshot(cards: [card(id: "e-ease", ease: value, interval: 1)])).cards[0].easeFactor
+    }
+
+    private func score(of value: Int) -> Int {
+        let stored = LessonProgress(
+            lessonID: lesson("l-greetings-1"),
+            source: .completed,
+            firstCompletedDay: day,
+            bestScorePercent: value
+        )
+        return validated(snapshot(lessons: [stored])).lessonProgress[0].bestScorePercent
+    }
+
+    private func daysToward(of value: Int, freezes: Int) -> Int {
+        validated(snapshot(streak: streak(freezes: freezes, toward: value))).streak.daysTowardNextFreeze
     }
 
     private func validatedCard(interval: Int, repetitions: Int) -> ReviewCard {
@@ -87,13 +138,19 @@ struct ProgressValidationTests {
         )
     }
 
-    private func card(id: String, ease: Double, interval: Int) -> ReviewCard {
+    private func card(
+        id: String,
+        ease: Double = 2.5,
+        interval: Int = 1,
+        repetitions: Int = 0,
+        lapses: Int = 0
+    ) -> ReviewCard {
         ReviewCard(
             itemID: item(id),
             easeFactor: ease,
             intervalDays: interval,
-            repetitions: 0,
-            lapses: 0,
+            repetitions: repetitions,
+            lapses: lapses,
             dueDay: day,
             lastReviewedDay: nil,
             createdDay: day,
@@ -104,12 +161,13 @@ struct ProgressValidationTests {
 
     private func snapshot(
         cards: [ReviewCard] = [],
+        lessons: [LessonProgress] = [],
         streak: StreakState = .initial
     ) -> ProgressSnapshot {
         ProgressSnapshot(
             contentVersion: "2026.11.0",
             cards: cards,
-            lessonProgress: [],
+            lessonProgress: lessons,
             streak: streak,
             settings: .initial,
             activeSession: nil,
@@ -124,6 +182,13 @@ struct ProgressValidationTests {
     private func item(_ raw: String) -> ItemID {
         guard let id = ItemID(rawValue: raw) else {
             preconditionFailure("Item id \(raw) is not valid")
+        }
+        return id
+    }
+
+    private func lesson(_ raw: String) -> LessonID {
+        guard let id = LessonID(rawValue: raw) else {
+            preconditionFailure("Lesson id \(raw) is not valid")
         }
         return id
     }
