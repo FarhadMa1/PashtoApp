@@ -69,14 +69,21 @@ public actor InMemoryProgressStore: ProgressStore {
     }
 
     public func resetAll() async throws {
-        // Settings stay. contentVersion describes the installed content, not the learner's progress.
+        // The daily goal and transliteration stay. placementTakenDay is cleared
+        // so the placement test can be offered again. contentVersion describes
+        // the installed content, not the learner's progress.
+        let settings = UserSettings(
+            dailyGoal: snapshot.settings.dailyGoal,
+            showTransliteration: snapshot.settings.showTransliteration,
+            placementTakenDay: nil
+        )
         snapshot = ProgressSnapshot(
             snapshotVersion: snapshot.snapshotVersion,
             contentVersion: snapshot.contentVersion,
             cards: [],
             lessonProgress: [],
             streak: .initial,
-            settings: snapshot.settings,
+            settings: settings,
             activeSession: nil,
             completedSessions: [],
             lastReconciledContentVersion: nil,

@@ -5,9 +5,9 @@
 
 ## Context
 
-PashtoApp needs an iOS shell and a place for future lesson and quiz logic. The only approved work right now is that skeleton. There is no Mac in the current development environment. Day-to-day logic tests run on Linux. Compiles, the simulator, and TestFlight will run on Xcode Cloud, with GitHub Actions macOS runners as a fallback that is not enabled yet.
+PashtoApp needs an iOS shell and a place for future lesson and quiz logic. The only approved work right now is that skeleton. There is no Mac in the current development environment. Day-to-day logic tests run on Linux. Compiles, the simulator, and TestFlight will run on Xcode Cloud. A GitHub Actions macOS runner is not used to archive the app. On 2026-11-02 Farhad approved one for the SwiftData package tests.
 
-The Xcode project has to be reproducible without hand-editing `project.pbxproj` on a Mac. XcodeGen (`project.yml`) is the generator.
+The Xcode project has to be reproducible without hand-editing `project.pbxproj` on a Mac. XcodeGen (`project.yml`) is the generator. On 2026-11-02 Farhad approved a GitHub Actions macOS runner for the SwiftData package tests. That job does not archive the app.
 
 Two ways to feed that project to Xcode Cloud were considered:
 
@@ -20,7 +20,19 @@ Two ways to feed that project to Xcode Cloud were considered:
 
 `Packages/PashtoCore` is a Swift package with no Apple-only framework dependencies. The app target links it. Logic tests are `swift test` on that package. GitHub Actions runs them on `ubuntu-24.04` inside the official `swift:6.2.4-noble` image.
 
-No macOS GitHub Actions job is added. Those minutes cost money and need a separate approval. A macOS job remains the documented fallback for `xcodebuild` if Xcode Cloud cannot be used.
+Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard GitHub-hosted `macos-15` runner and selects `/Applications/Xcode_16.app`. For this public repository those runners are free. The job runs `swift test` for `Packages/PashtoPersistence` only, and only when that package, `Packages/PashtoCore/Sources/PashtoCore/Progress`, the shared contract in `PashtoCoreTesting`, or the workflow file changes. Linux does not build that package. A macOS `xcodebuild` of the iOS app is still not a GitHub Actions job. Xcode Cloud remains the archive path.
+
+### Progress file
+
+`Packages/PashtoPersistence` stores progress in SwiftData schema `SchemaV1` (version identifier 1.0.0). `ProgressMigrationPlan` lists that schema and has no stages yet.
+
+`StreakRecord.freezeUsedDays` is the days a streak freeze was used. `StoreMetaRecord.contentVersion` is the content bundle the file was written with. After the first write, `load` returns that stored version and does not replace it. `StoreMetaRecord.snapshotVersion` is `ProgressSnapshot.currentVersion`, the shape of the whole snapshot. It is separate from the SwiftData schema version and from the active session's `payloadVersion`.
+
+V1 may change freely until the first TestFlight build anyone installs. After that, a shipped `VersionedSchema` does not change. A later shape is a new `SchemaVn` and a stage on `ProgressMigrationPlan`. There is no checked-in V1 `.store` file yet. The macOS job will generate it, and that file is checked in before the first TestFlight build.
+
+Days are stored as `Int` days since 1970-01-01. The number is `LocalDay.days(from:)` and is read back with `adding(days:)`. That is the same day number the core uses for the user's local calendar day. It is not the UTC date of an instant. The core counts civil dates with a Gregorian calendar fixed to UTC only so a 23-hour or 25-hour local day still counts as one day.
+
+`load` deletes an active session whose payload version is older than this build, or whose JSON does not decode. It logs that drop and returns the rest of the file. A newer schema, a newer `snapshotVersion`, or a newer session payload still throws, and nothing is written over it.
 
 ### English-only UI, String Catalog
 
@@ -63,7 +75,8 @@ The cost is noisier diffs in `project.pbxproj`, and a discipline rule: any `proj
 
 ## Consequences
 
-- Linux can prove the core package tests pass. It cannot prove the app builds, signs, or launches.
+- Linux can prove the core package tests pass. It cannot prove the app builds, signs, or launches, and it does not build `PashtoPersistence`.
+- The macOS job proves the SwiftData package tests pass. It does not prove the app archives.
 - Xcode Cloud setup is a product-and-scheme selection against a project that is already in the repository. No custom CI script has to stay in sync with `project.yml`.
 - Forgetting to regenerate after a spec edit leaves CI building the old project. Reviewers should treat a `project.yml` change without an `.xcodeproj` change as incomplete.
 - Feature work (content, quizzes, audio, extra screens, accounts) is a new approval, not a follow-on implied by this ADR.

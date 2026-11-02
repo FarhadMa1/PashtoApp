@@ -9,6 +9,10 @@ PashtoApp (iOS, SwiftUI)
     depends on
 PashtoCore (Swift package, no Apple-only frameworks)
 
+PashtoPersistence (SwiftData, iOS 17 / macOS 14)
+    depends on PashtoCore
+    is not linked by the app yet
+
 Tools/PashtoContentTool
     depends on PashtoCore
     is not linked by the app
@@ -42,9 +46,9 @@ The package exposes:
 - `DailyPlan` and `dailyPlan(cards:knownItemIDs:goal:newItemsShownToday:on:)`. At most 50 due cards, oldest `dueDay` then `itemID`. New items follow `DailyGoal` (5, 10, or 15) unless more than 50 cards are due. `applyLessonReviews` runs the lesson quiz as the first review, so those cards are due the next day at the earliest. A new lesson card with no single-item grade is not reviewed; its due day moves to the next day when it would have been today. Placement cards and cards from other lessons stay as they are. A card reviewed today, a paused card, an item id missing from the content, or a `lastReviewedDay` still in the future stays out of the queue and is not deleted.
 - `PathState` and `pathState(progress:content:goal:today:)`. The path is review, the next lesson, done for today with Learn more, or the end of the course. The due count and the new-item cap come from `dailyPlan`. The day is a `LocalDay`. `pathProgress(_:on:)` builds the `PathProgress` for that day from a stored snapshot.
 - `StreakState` and `streak(_:after:on:)`. A completed session counts once per civil day. Seven counted days earn one freeze, and two is the maximum. One freeze covers one missed day and is spent only when the next session is completed. The day is a `LocalDay`.
-- `ProgressSnapshot`, `ProgressStore`, and `InMemoryProgressStore`. The snapshot has `snapshotVersion` and `contentVersion`. The store keeps review cards, lesson progress, the streak, settings, one active lesson, and completed sessions. An answer is saved on the active lesson before the lesson is finished. Cards from that lesson are written when it is committed, on the day of the last answer. `load` clamps freezes to 0...2, ease to at least 1.3, a lesson score to 0...100, and days toward the next freeze to 0...6 (or 0 when two freezes are held). It replaces a non-finite or negative ease, a negative interval, and negative repetitions or lapses. `resetAll` clears cards, lesson progress, the streak, and sessions, and it keeps settings and `contentVersion`. The same contract tests live in `PashtoCoreTesting`. The placement scheduler and SwiftData are not in this revision.
+- `ProgressSnapshot`, `ProgressStore`, and `InMemoryProgressStore`. The snapshot has `snapshotVersion` and `contentVersion`. The store keeps review cards, lesson progress, the streak, settings, one active lesson, and completed sessions. An answer is saved on the active lesson before the lesson is finished. Cards from that lesson are written when it is committed, on the day of the last answer. `load` clamps freezes to 0...2, ease to at least 1.3, a lesson score to 0...100, and days toward the next freeze to 0...6 (or 0 when two freezes are held). It replaces a non-finite or negative ease, a negative interval, and negative repetitions or lapses. `resetAll` clears cards, lesson progress, the streak, sessions, and `placementTakenDay`. It keeps the daily goal, transliteration, and `contentVersion`. The same contract tests live in `PashtoCoreTesting`. The placement scheduler is not in this revision. SwiftData is `Packages/PashtoPersistence`, not this package.
 
-The app does not load a course yet. SwiftData, SwiftUI, `Bundle`, and file access stay in the app. The core decodes `Data` it is given. It does not read the current locale (`Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). `Date()` is allowed only in `SystemDateProvider`. CI and `swift test` run `scripts/linux-guard.sh` against the package sources.
+The app does not load a course yet, and it does not open a SwiftData store yet. SwiftData lives in `Packages/PashtoPersistence`. SwiftUI, `Bundle`, and file access stay out of `PashtoCore`. The core decodes `Data` it is given. It does not read the current locale (`Date.now`, `timeIntervalSinceNow`, `.current` / `.autoupdatingCurrent`, or `NSTimeZone` local, system, and default). `Date()` is allowed only in `SystemDateProvider`. CI and `swift test` run `scripts/linux-guard.sh` against the core sources. The Linux job does not build `PashtoPersistence`.
 
 ## Data, accounts, and audio
 
@@ -61,6 +65,7 @@ These are constraints on later work, not code in this revision.
 | `pashto-content merge --check` and `validate --mode dev` | Linux job `swift test (Linux)` | In this repository |
 | `validate --mode release` | Linux job `release gate` | Runs on every pull request. Not required for merge. Required on the release/TestFlight workflow |
 | App compile, archive, TestFlight | Xcode Cloud, committed `PashtoApp.xcodeproj`, scheme `PashtoApp` | Workflow is created in App Store Connect, not in git |
+| `swift test` for `PashtoPersistence` | GitHub Actions, `macos-15`, Xcode 16 | When the persistence package, PashtoCore progress sources, the shared store contract, or that workflow changes |
 | macOS GitHub Actions check of the Release app bundle | Not added | The app target does not embed `content.json` yet |
 
 `project.yml` is the file to edit. `PashtoApp.xcodeproj` is generated with XcodeGen 2.46.0 and committed so Xcode Cloud can see the project and the shared scheme without installing a generator. Details and the reason are in [decisions/0001-project-structure.md](decisions/0001-project-structure.md).
@@ -68,8 +73,8 @@ These are constraints on later work, not code in this revision.
 ## Out of scope for this revision
 
 - Loading the course inside the app, and a macOS check that the Release bundle contains only `release-units.json`
-- Placement scheduling, SwiftData, and screens that read stored progress
+- Placement scheduling, and screens that read stored progress
 - Audio playback or a pronunciation button
 - Screens other than the placeholder
 - Accounts, sync, or a service
-- An iOS test target, a macOS CI job, or an Xcode Cloud workflow file
+- An iOS test target, a macOS `xcodebuild` of the app, or an Xcode Cloud workflow file

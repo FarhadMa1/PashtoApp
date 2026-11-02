@@ -142,6 +142,11 @@ private func resetAll(_ store: any ProgressStore) async throws {
         showTransliteration: false,
         placementTakenDay: Sample.day
     )
+    let keptSettings = UserSettings(
+        dailyGoal: .light,
+        showTransliteration: false,
+        placementTakenDay: nil
+    )
     try await store.saveActiveSession(Sample.active(id: kept, answers: 1))
     try await store.updateSettings(settings)
     try await store.commit(Sample.commit(
@@ -157,7 +162,7 @@ private func resetAll(_ store: any ProgressStore) async throws {
         cards: [],
         lessonProgress: [],
         streak: .initial,
-        settings: settings,
+        settings: keptSettings,
         activeSession: nil,
         completedSessions: [],
         lastReconciledContentVersion: nil,
@@ -166,8 +171,9 @@ private func resetAll(_ store: any ProgressStore) async throws {
     try expect(
         cleared == expected,
         scenarioReset,
-        "reset clears progress and keeps settings and the content version"
+        "reset clears progress and placementTakenDay, and keeps the goal, transliteration, and content version"
     )
+    try expect(cleared.settings.placementTakenDay == nil, scenarioReset, "placementTakenDay is cleared")
     try expect(cleared.settings.dailyGoal == .light, scenarioReset, "the daily goal stays")
     try expect(cleared.settings.showTransliteration == false, scenarioReset, "transliteration stays")
 }

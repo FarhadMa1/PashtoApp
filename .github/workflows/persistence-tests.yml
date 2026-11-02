@@ -1,0 +1,40 @@
+name: SwiftData tests
+
+# Linux cannot build SwiftData. This job is the macOS check for that package.
+# It stays off the Linux workflow so a core-only change still runs there,
+# and so this runner is not started for unrelated files.
+on:
+  pull_request:
+    paths:
+      - "Packages/PashtoPersistence/**"
+      - "Packages/PashtoCore/Sources/PashtoCore/Progress/**"
+      - "Packages/PashtoCore/Sources/PashtoCoreTesting/**"
+      - ".github/workflows/persistence-tests.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "Packages/PashtoPersistence/**"
+      - "Packages/PashtoCore/Sources/PashtoCore/Progress/**"
+      - "Packages/PashtoCore/Sources/PashtoCoreTesting/**"
+      - ".github/workflows/persistence-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test-persistence:
+    name: swift test (macOS)
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.app
+          xcodebuild -version
+          xcrun swift --version
+
+      - name: Test PashtoPersistence
+        run: swift test --package-path Packages/PashtoPersistence
