@@ -24,6 +24,13 @@ enum StoredSchema {
         "CompletedSessionRecord",
     ]
 
+    /// Persistent-history rows SwiftData writes beside the model entities.
+    private static let systemEntities: Set<String> = [
+        "CHANGE",
+        "TRANSACTION",
+        "TRANSACTIONSTRING",
+    ]
+
     static func refuseIfNewer(at url: URL) throws {
         let snapshot = try read(at: url)
         let currentSchema = SchemaV1.versionIdentifier
@@ -34,7 +41,7 @@ enum StoredSchema {
                 )
             }
         }
-        let unknown = snapshot.entities.filter { !isKnownEntity($0) }
+        let unknown = snapshot.entities.filter { !isKnownEntity($0) && !isSystemEntity($0) }
         if !unknown.isEmpty {
             throw ProgressPersistenceError.newerSchema(
                 "Stored entity \(unknown.sorted().joined(separator: ", ")) is not in schema \(currentSchema)."
@@ -48,6 +55,10 @@ enum StoredSchema {
     private static func isKnownEntity(_ name: String) -> Bool {
         if knownEntities.contains(name) { return true }
         return knownEntities.contains { name.hasSuffix(".\($0)") }
+    }
+
+    private static func isSystemEntity(_ name: String) -> Bool {
+        systemEntities.contains(name) || systemEntities.contains { name.hasSuffix(".\($0)") }
     }
 
     private static func read(at url: URL) throws -> (versionIdentifiers: [String], entities: [String], snapshotVersion: Int?) {
