@@ -26,9 +26,6 @@ permissions:
 jobs:
   build-app:
     name: app build (macOS)
-    # Temporary. The newer-schema trace needs the macOS runner. This job is
-    # turned back on before the final head.
-    if: false
     runs-on: macos-15
     steps:
       - name: Checkout

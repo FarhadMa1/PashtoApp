@@ -11,11 +11,16 @@ import SQLite3
 /// runs first and leaves the original file alone.
 ///
 /// Entity names come from `NSStoreModelVersionHashes` in the store metadata.
-/// That dictionary is the `Z_PLIST` blob in `Z_METADATA`, read with SQLite in
-/// query-only mode from a private copy. `metadataForPersistentStore` is not
-/// used: on this toolchain it rewrites the `-shm` sidecar of the file it
-/// opens. The copy keeps that write, if any, off the caller's file. A key
-/// that is not one of `SchemaV1`'s entities is a newer store.
+/// That dictionary is the `Z_PLIST` blob in `Z_METADATA`. It is read from a
+/// private copy of the main file and its `-wal` and `-shm` sidecars, opened
+/// as `file:…?mode=ro`. `immutable=1` is not used: it would ignore the copied
+/// `-wal`, so a newer schema that had not been checkpointed would be missed
+/// and the caller's file could then be opened as current.
+///
+/// `mode=ro` can still update the copy's `-shm`. The original path is never
+/// opened here. `metadataForPersistentStore` is not used: on this toolchain
+/// it rewrites the `-shm` of the file it is given. A hash key that is not one
+/// of `SchemaV1`'s entities is a newer store.
 ///
 /// `StoreMetaRecord.snapshotVersion` is a row, not store metadata. It is read
 /// from a copy of the file and compared with `ProgressSnapshot.currentVersion`.
@@ -47,62 +52,16 @@ enum StoredSchema {
     }
 
     private static func read(at url: URL) throws -> (versionIdentifiers: [String], entityNames: [String], snapshotVersion: Int?) {
-        // Temporary trace for the newer-schema byte check. Removed once the
-        // open path is fixed. Reading these bytes does not open SQLite.
-        diag("phase=before-open original=\(fileStamp(url))")
         let copy = try copiedStore(at: url)
         defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
-        diag("phase=after-copy original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-        let database: OpaquePointer
-        do {
-            database = try openReadOnly(copy)
-            diag("phase=after-sqlite-open original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-        } catch {
-            diag("phase=sqlite-open-threw original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-            throw error
-        }
+        let database = try openReadOnly(copy)
         defer { sqlite3_close(database) }
-        let metadata: [String: Any]
-        do {
-            metadata = try storeMetadata(in: database)
-            diag("phase=after-metadata original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-        } catch {
-            diag("phase=metadata-threw original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-            throw error
-        }
-        let snapshot = (
+        let metadata = try storeMetadata(in: database)
+        return (
             versionIdentifiers(in: metadata),
             try entityNames(in: metadata),
             snapshotVersion(in: database)
         )
-        diag("phase=after-check original=\(fileStamp(url)) copy=\(fileStamp(copy))")
-        return snapshot
-    }
-
-    private static func diag(_ message: String) {
-        FileHandle.standardError.write(Data("SCHEMA-DIAG \(message)\n".utf8))
-    }
-
-    /// Size and checksum of the main file and both sidecars. `absent` means
-    /// that path does not exist.
-    private static func fileStamp(_ url: URL) -> String {
-        ["", "-wal", "-shm"].map { suffix in
-            let label = suffix.isEmpty ? "main" : String(suffix.dropFirst())
-            let path = url.path + suffix
-            guard FileManager.default.fileExists(atPath: path),
-                  let data = try? Data(contentsOf: URL(fileURLWithPath: path))
-            else { return "\(label)=absent" }
-            return "\(label)=\(data.count):\(fnv(data))"
-        }.joined(separator: ",")
-    }
-
-    private static func fnv(_ data: Data) -> String {
-        var hash: UInt64 = 14_695_981_039_346_656_037
-        for byte in data {
-            hash ^= UInt64(byte)
-            hash &*= 1_099_511_628_211
-        }
-        return String(hash, radix: 16)
     }
 
     /// A copy so the metadata read and the snapshot query cannot touch the file
@@ -157,6 +116,9 @@ enum StoredSchema {
            let metadata = object as? [String: Any] {
             return metadata
         }
+        // Some SwiftData archives are not secure-coded. This fallback runs only
+        // on the private copy, after the secure decode has failed. A blob that
+        // decodes as neither is an open failure, not a newer schema.
         let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
         unarchiver.requiresSecureCoding = false
         guard let metadata = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [String: Any] else {
@@ -185,13 +147,21 @@ enum StoredSchema {
         throw ProgressPersistenceError.newerSchema("The store has no model hashes.")
     }
 
+    /// `mode=ro` on a copy that includes `-wal`. Not `immutable=1`.
     private static func openReadOnly(_ url: URL) throws -> OpaquePointer {
         var database: OpaquePointer?
-        guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READONLY, nil) == SQLITE_OK, let database else {
+        let path = url.path
+            .replacingOccurrences(of: "?", with: "%3F")
+            .replacingOccurrences(of: "#", with: "%23")
+        let uri = "file:\(path)?mode=ro"
+        guard sqlite3_open_v2(uri, &database, SQLITE_OPEN_READONLY | SQLITE_OPEN_URI, nil) == SQLITE_OK,
+              let database
+        else {
             throw ProgressPersistenceError.failedToOpen("The progress store could not be read.")
         }
-        // query_only rejects a write, including a checkpoint, on this connection.
-        // A file that is not a database fails here and is closed before return.
+        // query_only rejects a checkpoint on this connection. A file that is
+        // not a database fails here and is closed before return. Any `-shm`
+        // update stays beside the copy.
         guard sqlite3_exec(database, "PRAGMA query_only = ON", nil, nil, nil) == SQLITE_OK else {
             let message = String(cString: sqlite3_errmsg(database))
             sqlite3_close(database)

@@ -97,7 +97,9 @@ struct ProgressScreenPersistenceTests {
         defer { try? FileManager.default.removeItem(at: directory) }
         let url = directory.appendingPathComponent("Progress.store")
         try Data("not a store".utf8).write(to: url)
-        let before = try Data(contentsOf: url)
+        let before = try storedBytes(around: url)
+        #expect(before[url.lastPathComponent + "-wal"] == nil)
+        #expect(before[url.lastPathComponent + "-shm"] == nil)
 
         do {
             _ = try ProgressContainer.make(at: url)
@@ -105,7 +107,7 @@ struct ProgressScreenPersistenceTests {
         } catch {
             #expect(progressScreen(for: progressOpenFailure(for: error)) == .storageError)
         }
-        #expect(try Data(contentsOf: url) == before)
+        #expect(try storedBytes(around: url) == before)
     }
 
     @Test @MainActor func loadOfAnUnknownValueChoosesStorageError() async throws {

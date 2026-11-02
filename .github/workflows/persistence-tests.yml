@@ -43,35 +43,5 @@ jobs:
           xcrun swift --version
           xcrun swift --version | grep -q "Swift version 6"
 
-      # Temporary. Repeats the newer-schema byte check before and after the
-      # open-path fix. Delete this step on the final head.
-      - name: Repeat newer schema file check
-        continue-on-error: true
-        run: |
-          set +e
-          pass=0
-          fail=0
-          mkdir -p /tmp/schema-repeat
-          for i in $(seq 1 20); do
-            swift test --package-path Packages/PashtoPersistence --filter newerSchemaFileIsLeftUntouched > "/tmp/schema-repeat/run-$i.log" 2>&1
-            code=$?
-            if [ "$code" -eq 0 ]; then
-              pass=$((pass + 1))
-              echo "SCHEMA_REPEAT run=$i result=pass"
-            else
-              fail=$((fail + 1))
-              echo "SCHEMA_REPEAT run=$i result=fail exit=$code"
-              grep "SCHEMA-DIAG" "/tmp/schema-repeat/run-$i.log" || true
-              grep "Expectation failed" "/tmp/schema-repeat/run-$i.log" || true
-            fi
-          done
-          echo "SCHEMA_REPEAT summary pass=$pass fail=$fail"
-          echo "----- SCHEMA-DIAG run 1 -----"
-          grep "SCHEMA-DIAG" /tmp/schema-repeat/run-1.log || true
-          {
-            echo "### newerSchemaFileIsLeftUntouched x20"
-            echo "pass=$pass fail=$fail"
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Test PashtoPersistence
         run: swift test --package-path Packages/PashtoPersistence

@@ -50,6 +50,9 @@ public enum ProgressContainer {
                 cloudKitDatabase: .none
             )
         }
+        // `ModelConfiguration` only records the URL. The file is not opened
+        // until `ModelContainer`, and that runs only after the schema check
+        // has returned. The check itself opens a private copy, not `url`.
         if let url, FileManager.default.fileExists(atPath: url.path) {
             try StoredSchema.refuseIfNewer(at: url)
         }
