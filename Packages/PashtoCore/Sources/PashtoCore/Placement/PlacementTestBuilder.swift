@@ -68,23 +68,59 @@ public enum PlacementTestBuilder {
     /// The window is the first `unitCount` units after the alphabet, in course
     /// order. The alphabet is not included. An unreleased unit is not included.
     /// A released unit past the window is not included. An empty release list
-    /// returns an empty array.
+    /// returns an empty array. The walk uses `PlacementFillCheck` so a release
+    /// run can be repeated. `placementFill(using:)` is the same walk with the
+    /// caller's generator.
     public static func releasedUnitsThatCannotFillQuestions(
         in bundle: ContentBundle,
         releasedUnitIDs: [UnitID],
         policy: PlacementPolicy = .standard
     ) -> [UnitID] {
-        guard policy.questionsPerUnit > 0, policy.unitCount > 0 else { return [] }
+        var rng = PlacementFillCheck()
+        return placementFill(
+            in: bundle,
+            releasedUnitIDs: releasedUnitIDs,
+            policy: policy,
+            using: &rng
+        ).failingUnitIDs
+    }
+
+    /// How many placement questions each released unit in the window can produce.
+    ///
+    /// One question for each introduced item that has one. Shared matches are
+    /// added only when that is still short of `policy.questionsPerUnit`. The
+    /// alphabet is left out. An unreleased unit is left out. `rng` is the draw
+    /// `build` uses for those questions. The release gate reads
+    /// `failingUnitIDs`.
+    static func placementFill(
+        in bundle: ContentBundle,
+        releasedUnitIDs: [UnitID],
+        policy: PlacementPolicy = .standard,
+        using rng: inout some RandomNumberGenerator
+    ) -> PlacementFillResult {
+        guard policy.questionsPerUnit > 0, policy.unitCount > 0 else {
+            return PlacementFillResult(questionsPerUnit: policy.questionsPerUnit, units: [])
+        }
         let released = Set(releasedUnitIDs)
         let window = bundle.units.dropFirst().prefix(policy.unitCount)
-        var short: [UnitID] = []
-        var rng = PlacementFillCheck()
+        var units: [PlacementFillResult.Unit] = []
         for unit in window where released.contains(unit.id) {
-            if questions(for: unit, in: bundle, count: policy.questionsPerUnit, using: &rng) == nil {
-                short.append(unit.id)
+            let produced = availableTasks(
+                for: unit,
+                in: bundle,
+                count: policy.questionsPerUnit,
+                using: &rng
+            ) ?? []
+            // `questions` shuffles a list that filled. Later units must see that draw.
+            if produced.count >= policy.questionsPerUnit {
+                _ = shuffled(produced, using: &rng)
             }
+            units.append(PlacementFillResult.Unit(
+                unitID: unit.id,
+                producibleQuestions: produced.count
+            ))
         }
-        return short
+        return PlacementFillResult(questionsPerUnit: policy.questionsPerUnit, units: units)
     }
 
     /// One task for each introduced item, drawn with `rng`, then `count` of those.
@@ -92,6 +128,23 @@ public enum PlacementTestBuilder {
     /// Nil when the unit cannot fill `count`. The unit's own lessons are the
     /// seen set, so a distractor is taken from this unit and not from another.
     private static func questions(
+        for unit: CourseUnit,
+        in bundle: ContentBundle,
+        count: Int,
+        using rng: inout some RandomNumberGenerator
+    ) -> [SessionTask]? {
+        guard let available = availableTasks(for: unit, in: bundle, count: count, using: &rng) else {
+            return nil
+        }
+        guard available.count >= count else { return nil }
+        return Array(shuffled(available, using: &rng).prefix(count))
+    }
+
+    /// The questions a unit can offer toward `count`, before the final shuffle.
+    ///
+    /// Nil when the unit is not in the course. The list is short of `count`
+    /// when the unit cannot fill it. Shared matches are on the list only then.
+    private static func availableTasks(
         for unit: CourseUnit,
         in bundle: ContentBundle,
         count: Int,
@@ -118,9 +171,30 @@ public enum PlacementTestBuilder {
         if onePerItem.count < count {
             onePerItem.append(contentsOf: draft.shared)
         }
-        guard onePerItem.count >= count else { return nil }
-        return Array(shuffled(onePerItem, using: &rng).prefix(count))
+        return onePerItem
     }
+}
+
+/// The release gate's placement fill for one course.
+///
+/// `passes` when every reported unit can produce `questionsPerUnit` questions.
+/// `failingUnitIDs` is that check, in course order.
+struct PlacementFillResult: Hashable, Sendable {
+    struct Unit: Hashable, Sendable {
+        let unitID: UnitID
+        let producibleQuestions: Int
+    }
+
+    let questionsPerUnit: Int
+    let units: [Unit]
+
+    var failingUnitIDs: [UnitID] {
+        units.compactMap { unit in
+            unit.producibleQuestions < questionsPerUnit ? unit.unitID : nil
+        }
+    }
+
+    var passes: Bool { failingUnitIDs.isEmpty }
 }
 
 /// Fixed generator for the release check. The fill decision does not depend
