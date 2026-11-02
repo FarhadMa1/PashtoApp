@@ -1,6 +1,42 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Cancel" : {
+      "comment" : "Dismiss Start over without changing progress.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Good to see you again. Let's warm up with a short review." : {
+      "comment" : "Welcome back body. Shown when a break was not covered by a freeze.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Good to see you again. Let's warm up with a short review."
+          }
+        }
+      }
+    },
+    "Open App Store" : {
+      "comment" : "Update needed. Hidden while AppStoreID is empty.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open App Store"
+          }
+        }
+      }
+    },
     "Pashto" : {
       "comment" : "Placeholder title on the root view. English is the only UI language for now.",
       "extractionState" : "manual",
@@ -9,6 +45,126 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pashto"
+          }
+        }
+      }
+    },
+    "Something went wrong while loading. Try again first." : {
+      "comment" : "Storage error body.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong while loading. Try again first."
+          }
+        }
+      }
+    },
+    "Start over" : {
+      "comment" : "Destructive action on the storage error, and the confirming alert button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start over"
+          }
+        }
+      }
+    },
+    "Start over?" : {
+      "comment" : "Title of the confirmation before progress is moved aside.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start over?"
+          }
+        }
+      }
+    },
+    "Start review" : {
+      "comment" : "Welcome back. Starts the capped daily review queue.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start review"
+          }
+        }
+      }
+    },
+    "Try again" : {
+      "comment" : "Storage error. Opens the same progress file again.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
+    "Update needed" : {
+      "comment" : "Title when progress was saved by a newer version of the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update needed"
+          }
+        }
+      }
+    },
+    "We couldn't open your progress" : {
+      "comment" : "Storage error title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We couldn't open your progress"
+          }
+        }
+      }
+    },
+    "Welcome back" : {
+      "comment" : "Title when the streak would reset because a freeze did not cover the break.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome back"
+          }
+        }
+      }
+    },
+    "Your lessons, words and streak start from the beginning. Your settings stay the same." : {
+      "comment" : "Start over confirmation. The store file is moved, not deleted.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your lessons, words and streak start from the beginning. Your settings stay the same."
+          }
+        }
+      }
+    },
+    "Your progress was saved by a newer version of the app. Update to keep learning. Nothing has been lost." : {
+      "comment" : "Update needed body. The store is not changed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your progress was saved by a newer version of the app. Update to keep learning. Nothing has been lost."
           }
         }
       }

@@ -37,6 +37,8 @@ settings:
 packages:
   PashtoCore:
     path: Packages/PashtoCore
+  PashtoPersistence:
+    path: Packages/PashtoPersistence
 targets:
   PashtoApp:
     type: application
@@ -46,6 +48,7 @@ targets:
       - path: PashtoApp
     dependencies:
       - package: PashtoCore
+      - package: PashtoPersistence
     settings:
       base:
         # Final bundle id for Mangal Labs.

@@ -441,7 +441,7 @@ private func memoryStore(_ version: String = "2026.11.0") throws -> SwiftDataPro
     return SwiftDataProgressStore(modelContainer: container, contentVersion: version)
 }
 
-private func writeStore(
+func writeStore(
     at url: URL,
     contentVersion: String,
     _ body: (SwiftDataProgressStore) async throws -> Void
@@ -451,7 +451,7 @@ private func writeStore(
     try await body(store)
 }
 
-private func makeV1File() async throws -> URL {
+func makeV1File() async throws -> URL {
     let directory = FileManager.default.temporaryDirectory
         .appendingPathComponent("pashto-guard-\(UUID().uuidString)", isDirectory: true)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -475,14 +475,14 @@ private func expectOpenThrows(_ expected: ProgressPersistenceError, at url: URL)
     #expect(try storedBytes(around: url) == before)
 }
 
-private func readStore(at url: URL, contentVersion: String) async throws -> ProgressSnapshot {
+func readStore(at url: URL, contentVersion: String) async throws -> ProgressSnapshot {
     let container = try ProgressContainer.make(at: url)
     let store = SwiftDataProgressStore(modelContainer: container, contentVersion: contentVersion)
     return try await store.load()
 }
 
 @MainActor
-private func seededActiveSession(
+func seededActiveSession(
     payloadVersion: Int,
     payload: Data,
     sessionID: String
@@ -554,7 +554,7 @@ private func expectKeptCard(in container: ModelContainer, loaded: ProgressSnapsh
 }
 
 /// Bytes of the store and its write-ahead log. Shared-memory files are not compared.
-private func storedBytes(around url: URL) throws -> [String: Data] {
+func storedBytes(around url: URL) throws -> [String: Data] {
     var files: [String: Data] = [:]
     for file in [url, URL(fileURLWithPath: url.path + "-wal")] {
         guard FileManager.default.fileExists(atPath: file.path) else { continue }
@@ -580,7 +580,7 @@ enum FutureSchema: VersionedSchema {
 /// Rewrites a closed SwiftData file so a test can hide the model version
 /// or add an entity the guard must notice. The checkpoint keeps the edit in
 /// the main database instead of a later write-ahead log.
-private enum StoreFileEdit {
+enum StoreFileEdit {
     static func apply(to url: URL, _ body: (OpaquePointer) throws -> Void) throws {
         var database: OpaquePointer?
         guard sqlite3_open(url.path, &database) == SQLITE_OK, let database else {
@@ -687,7 +687,7 @@ private enum FuturePlan: SchemaMigrationPlan {
     static var stages: [MigrationStage] { [] }
 }
 
-private enum FutureStore {
+enum FutureStore {
     static func write(at url: URL, text: String) throws {
         let schema = Schema(versionedSchema: FutureSchema.self)
         let configuration = ModelConfiguration(

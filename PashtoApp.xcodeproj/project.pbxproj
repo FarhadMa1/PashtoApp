@@ -13,6 +13,15 @@
 		68E02FABA91DAA33FCA7EF30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB198D583572EA4F7E128283 /* Assets.xcassets */; };
 		E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20749347E5913E3C376940D0 /* PashtoApp.swift */; };
 		F3E1543DABC4E3A24A86D2CA /* PashtoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 76088B5BA2092E9464066602 /* PashtoCore */; };
+		A1A11C000000000000000003 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A11C000000000000000002 /* AppModel.swift */; };
+		A1A11C000000000000000005 /* AppStoreListing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A11C000000000000000004 /* AppStoreListing.swift */; };
+		A1A11C000000000000000007 /* ProgressStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A11C000000000000000006 /* ProgressStoreLocation.swift */; };
+		A1A11C000000000000000009 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A11C000000000000000008 /* RootView.swift */; };
+		A1DE51000000000000000003 /* LapisStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DE51000000000000000002 /* LapisStyle.swift */; };
+		A15C4E000000000000000003 /* StorageErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15C4E000000000000000002 /* StorageErrorScreen.swift */; };
+		A15C4E000000000000000005 /* UpdateNeededScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15C4E000000000000000004 /* UpdateNeededScreen.swift */; };
+		A15C4E000000000000000007 /* WelcomeBackScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15C4E000000000000000006 /* WelcomeBackScreen.swift */; };
+		A1PE51000000000000000004 /* PashtoPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = A1PE51000000000000000003 /* PashtoPersistence */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +33,15 @@
 		C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		D1020344AFA863654DE80D5B /* PashtoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PashtoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E427EEE4D83973BBDF72044C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A1A11C000000000000000002 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		A1A11C000000000000000004 /* AppStoreListing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreListing.swift; sourceTree = "<group>"; };
+		A1A11C000000000000000006 /* ProgressStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStoreLocation.swift; sourceTree = "<group>"; };
+		A1A11C000000000000000008 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A1DE51000000000000000002 /* LapisStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapisStyle.swift; sourceTree = "<group>"; };
+		A15C4E000000000000000002 /* StorageErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageErrorScreen.swift; sourceTree = "<group>"; };
+		A15C4E000000000000000004 /* UpdateNeededScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNeededScreen.swift; sourceTree = "<group>"; };
+		A15C4E000000000000000006 /* WelcomeBackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeBackScreen.swift; sourceTree = "<group>"; };
+		A1PE51000000000000000001 /* PashtoPersistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoPersistence; path = Packages/PashtoPersistence; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +50,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3E1543DABC4E3A24A86D2CA /* PashtoCore in Frameworks */,
+				A1PE51000000000000000004 /* PashtoPersistence in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,12 +62,44 @@
 			children = (
 				BB198D583572EA4F7E128283 /* Assets.xcassets */,
 				E427EEE4D83973BBDF72044C /* ContentView.swift */,
+				A1DE51000000000000000001 /* Design */,
 				8118EC685984C6F8EEC84F32 /* Info.plist */,
+				A1A11C000000000000000001 /* Launch */,
 				C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */,
 				20749347E5913E3C376940D0 /* PashtoApp.swift */,
 				76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */,
+				A15C4E000000000000000001 /* Screens */,
 			);
 			path = PashtoApp;
+			sourceTree = "<group>";
+		};
+		A1A11C000000000000000001 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				A1A11C000000000000000002 /* AppModel.swift */,
+				A1A11C000000000000000004 /* AppStoreListing.swift */,
+				A1A11C000000000000000006 /* ProgressStoreLocation.swift */,
+				A1A11C000000000000000008 /* RootView.swift */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		A1DE51000000000000000001 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A1DE51000000000000000002 /* LapisStyle.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		A15C4E000000000000000001 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				A15C4E000000000000000002 /* StorageErrorScreen.swift */,
+				A15C4E000000000000000004 /* UpdateNeededScreen.swift */,
+				A15C4E000000000000000006 /* WelcomeBackScreen.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		0726DE5562051BCD6C16A108 = {
@@ -72,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				3E2DD5B8D6DE03B23DB286AB /* PashtoCore */,
+				A1PE51000000000000000001 /* PashtoPersistence */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -94,6 +146,7 @@
 			name = PashtoApp;
 			packageProductDependencies = (
 				76088B5BA2092E9464066602 /* PashtoCore */,
+				A1PE51000000000000000003 /* PashtoPersistence */,
 			);
 			productName = PashtoApp;
 			productReference = D1020344AFA863654DE80D5B /* PashtoApp.app */;
@@ -124,6 +177,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				BDD82C0D39661FE2AB5C037A /* XCLocalSwiftPackageReference "Packages/PashtoCore" */,
+				A1PE51000000000000000002 /* XCLocalSwiftPackageReference "Packages/PashtoPersistence" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E0C51D041284535332ADA6E2 /* Products */;
@@ -155,6 +209,14 @@
 			files = (
 				5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */,
 				E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */,
+				A1A11C000000000000000003 /* AppModel.swift in Sources */,
+				A1A11C000000000000000005 /* AppStoreListing.swift in Sources */,
+				A1A11C000000000000000007 /* ProgressStoreLocation.swift in Sources */,
+				A1A11C000000000000000009 /* RootView.swift in Sources */,
+				A1DE51000000000000000003 /* LapisStyle.swift in Sources */,
+				A15C4E000000000000000003 /* StorageErrorScreen.swift in Sources */,
+				A15C4E000000000000000005 /* UpdateNeededScreen.swift in Sources */,
+				A15C4E000000000000000007 /* WelcomeBackScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,12 +434,22 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/PashtoCore;
 		};
+		A1PE51000000000000000002 /* XCLocalSwiftPackageReference "Packages/PashtoPersistence" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PashtoPersistence;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		76088B5BA2092E9464066602 /* PashtoCore */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = BDD82C0D39661FE2AB5C037A /* XCLocalSwiftPackageReference "Packages/PashtoCore" */;
 			productName = PashtoCore;
+		};
+		A1PE51000000000000000003 /* PashtoPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1PE51000000000000000002 /* XCLocalSwiftPackageReference "Packages/PashtoPersistence" */;
+			productName = PashtoPersistence;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

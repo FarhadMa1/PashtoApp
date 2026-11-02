@@ -1,0 +1,28 @@
+import SwiftUI
+
+/// Chooses the progress screen. The ordinary app is the existing root.
+struct RootView: View {
+    @Bindable var model: AppModel
+
+    var body: some View {
+        switch model.phase {
+        case .loading:
+            Lapis.background.ignoresSafeArea()
+        case .updateNeeded:
+            UpdateNeededScreen(showsAppStoreButton: model.isAppStoreButtonVisible) {
+                model.openAppStore()
+            }
+        case .storageError:
+            StorageErrorScreen(
+                tryAgain: { Task { await model.tryAgain() } },
+                startOver: { Task { await model.confirmStartOver() } }
+            )
+        case .welcomeBack:
+            WelcomeBackScreen {
+                model.startReview()
+            }
+        case .ready:
+            ContentView(reviewStarted: model.isReviewing)
+        }
+    }
+}
