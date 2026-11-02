@@ -33,22 +33,42 @@ jobs:
       - name: Select Xcode with Swift 6
         run: |
           set -euo pipefail
+          # The image default is already a Swift 6 Xcode. Ask that swift first.
+          # Contents/Developer/usr/bin/swift is not present in every bundle on
+          # the runner, so the fallback is the toolchain binary inside the app.
+          has_swift6() {
+            local out
+            out="$("$@" --version 2>&1 || true)"
+            printf '%s\n' "$out" | grep -q "Swift version 6"
+          }
           selected=""
-          for app in /Applications/Xcode_*.app /Applications/Xcode.app; do
-            [ -d "$app" ] || continue
-            if "$app/Contents/Developer/usr/bin/swift" --version 2>/dev/null | grep -q "Swift version 6"; then
-              selected="$app"
-              break
-            fi
-          done
+          if has_swift6 swift; then
+            selected="$(xcode-select -p)"
+          else
+            for app in /Applications/Xcode_*.app /Applications/Xcode.app; do
+              [ -d "$app" ] || continue
+              for bin in \
+                "$app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift" \
+                "$app/Contents/Developer/usr/bin/swift"
+              do
+                [ -x "$bin" ] || continue
+                if has_swift6 "$bin"; then
+                  selected="$app/Contents/Developer"
+                  break 2
+                fi
+              done
+            done
+          fi
           if [ -z "$selected" ]; then
             echo "::error::No Xcode with Swift 6 is installed"
+            swift --version 2>&1 || true
             ls -d /Applications/Xcode*.app || true
             exit 1
           fi
           sudo xcode-select -s "$selected"
           xcodebuild -version
           swift --version
+          swift --version 2>&1 | grep -q "Swift version 6"
 
       - name: Test PashtoPersistence
         run: swift test --package-path Packages/PashtoPersistence
