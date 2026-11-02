@@ -7,16 +7,18 @@ on:
   pull_request:
     paths:
       - "Packages/PashtoPersistence/**"
+      - "Packages/PashtoPersistence/Package.swift"
       - "Packages/PashtoCore/Sources/**"
-      - "Packages/PashtoCore/Sources/PashtoCoreTesting/**"
+      - "Packages/PashtoCore/Package.swift"
       - ".github/workflows/persistence-tests.yml"
   push:
     branches:
       - main
     paths:
       - "Packages/PashtoPersistence/**"
+      - "Packages/PashtoPersistence/Package.swift"
       - "Packages/PashtoCore/Sources/**"
-      - "Packages/PashtoCore/Sources/PashtoCoreTesting/**"
+      - "Packages/PashtoCore/Package.swift"
       - ".github/workflows/persistence-tests.yml"
 
 permissions:
