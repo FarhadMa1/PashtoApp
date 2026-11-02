@@ -53,6 +53,8 @@ enum StoredSchema {
 
     private static func read(at url: URL) throws -> (versionIdentifiers: [String], entityNames: [String], snapshotVersion: Int?) {
         let copy = try copiedStore(at: url)
+        // Runs on every return, including the path where metadata caught an
+        // exception and came back as an open failure.
         defer { try? FileManager.default.removeItem(at: copy.deletingLastPathComponent()) }
         let metadata = try storeMetadata(at: copy)
         let database = try openReadOnly(copy)

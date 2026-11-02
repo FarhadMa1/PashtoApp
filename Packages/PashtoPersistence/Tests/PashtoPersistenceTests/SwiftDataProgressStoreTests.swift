@@ -235,6 +235,7 @@ struct SwiftDataProgressStoreTests {
         let renamed = try renamingKeyedArchiveClasses(in: data, to: "PANoSuchClass")
         try StoreFileEdit.replaceMetadataPlist(renamed, at: url)
         try expectStorageErrorLeavesFilesUntouched(at: url)
+        #expect(schemaCopies(containing: "PANoSuchClass").isEmpty)
     }
 
     /// A readable dictionary with no model hashes is a storage error.
@@ -245,6 +246,20 @@ struct SwiftDataProgressStoreTests {
         let data = try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
         try StoreFileEdit.replaceMetadataPlist(data, at: url)
         try expectStorageErrorLeavesFilesUntouched(at: url)
+    }
+
+    /// Copies of this store under `pashto-schema-*`. Matching the class name
+    /// ignores a copy another test still has open.
+    private func schemaCopies(containing marker: String) -> [String] {
+        let root = FileManager.default.temporaryDirectory
+        let names = (try? FileManager.default.contentsOfDirectory(atPath: root.path)) ?? []
+        let needle = Data(marker.utf8)
+        return names.filter { name in
+            guard name.hasPrefix("pashto-schema-") else { return false }
+            let store = root.appendingPathComponent(name).appendingPathComponent("Progress.store")
+            guard let data = try? Data(contentsOf: store) else { return false }
+            return data.range(of: needle) != nil
+        }
     }
 
     /// Opening reports the storage error and does not add or rewrite a sidecar.

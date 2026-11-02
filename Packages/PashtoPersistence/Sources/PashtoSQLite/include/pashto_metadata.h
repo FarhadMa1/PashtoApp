@@ -1,5 +1,5 @@
-#ifndef PASHto_METADATA_H
-#define PASHto_METADATA_H
+#ifndef PASHTO_METADATA_H
+#define PASHTO_METADATA_H
 
 #import <Foundation/Foundation.h>
 

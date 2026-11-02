@@ -7,7 +7,10 @@ NSDictionary *pashto_store_metadata(NSURL *url, NSError **error) {
                                                                           URL:url
                                                                       options:nil
                                                                         error:error];
-    } @catch (id exception) {
+    }
+    // `id` catches every Objective-C exception, not only NSException.
+    // Core Data can raise either. The caller then deletes its temp copy.
+    @catch (id exception) {
         if (error != NULL) {
             NSString *reason = @"The progress store metadata could not be read.";
             if ([exception isKindOfClass:[NSException class]]) {
