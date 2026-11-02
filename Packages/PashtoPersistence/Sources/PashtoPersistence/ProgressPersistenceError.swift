@@ -13,7 +13,7 @@ public enum ProgressPersistenceError: Error, Equatable, Sendable, CustomStringCo
     case newerPayload(Int)
     /// The snapshot version is older than this build, and nothing migrates it yet.
     case unsupportedSnapshot(Int)
-    /// The session payload version is older than this build. The row is left in place.
+    /// The session payload version is older than this build. `load` deletes the row.
     case unsupportedPayload(Int)
     /// A stored enum string is not one this build knows.
     case unknownStoredValue(field: String, value: String)
@@ -23,7 +23,7 @@ public enum ProgressPersistenceError: Error, Equatable, Sendable, CustomStringCo
     case invalidDayNumber(Int)
     /// Two rows share a key that is supposed to be unique.
     case duplicateStoredValue(field: String, value: String)
-    /// The active-session JSON could not be decoded. The row is left in place.
+    /// The active-session JSON could not be decoded. `load` deletes the row.
     case unreadableActiveSession
     /// `ModelContainer` could not open the file. The file was not deleted.
     case failedToOpen(String)
@@ -39,7 +39,7 @@ public enum ProgressPersistenceError: Error, Equatable, Sendable, CustomStringCo
         case .unsupportedSnapshot(let version):
             return "The progress store uses snapshot version \(version), which this version of the app cannot read. It was not changed."
         case .unsupportedPayload(let version):
-            return "The lesson in progress uses payload version \(version), which this version of the app cannot read. It was not changed."
+            return "The lesson in progress uses payload version \(version), which this version of the app cannot read. The lesson was discarded."
         case .unknownStoredValue(let field, let value):
             return "The progress store has an unknown value \(value) for \(field). It was not changed."
         case .invalidIdentifier(let field, let value):
@@ -49,7 +49,7 @@ public enum ProgressPersistenceError: Error, Equatable, Sendable, CustomStringCo
         case .duplicateStoredValue(let field, let value):
             return "The progress store has more than one row for \(field) \(value). It was not changed."
         case .unreadableActiveSession:
-            return "The lesson in progress could not be read. It was not changed."
+            return "The lesson in progress could not be read. The lesson was discarded."
         case .failedToOpen(let detail):
             return "The progress store could not be opened. It was not changed. \(detail)"
         }

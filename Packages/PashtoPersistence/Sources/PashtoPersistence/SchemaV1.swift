@@ -179,6 +179,7 @@ enum SchemaV1: VersionedSchema {
     /// `payload` is `ActiveSessionSnapshot` as JSON. `payloadVersion` is the
     /// column checked before that JSON is decoded, so a newer payload is not
     /// read and then written back without the fields this build does not know.
+    /// An older or unreadable payload is deleted by `load`.
     @Model
     final class ActiveSessionRecord {
         @Attribute(.unique) var key: String

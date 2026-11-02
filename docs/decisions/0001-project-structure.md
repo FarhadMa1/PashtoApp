@@ -22,6 +22,18 @@ Two ways to feed that project to Xcode Cloud were considered:
 
 Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard GitHub-hosted macOS runner. For this public repository those runners are free. The job runs `swift test` for `Packages/PashtoPersistence` only, and only when that package, `Packages/PashtoCore/Sources/PashtoCore/Progress`, the shared contract in `PashtoCoreTesting`, or the workflow file changes. Linux does not build that package. A macOS `xcodebuild` of the iOS app is still not a GitHub Actions job. Xcode Cloud remains the archive path.
 
+### Progress file
+
+`Packages/PashtoPersistence` stores progress in SwiftData schema `SchemaV1` (version identifier 1.0.0). `ProgressMigrationPlan` lists that schema and has no stages yet.
+
+`StreakRecord.freezeUsedDays` is the days a streak freeze was used. `StoreMetaRecord.contentVersion` is the content bundle the file was written with. After the first write, `load` returns that stored version and does not replace it. `StoreMetaRecord.snapshotVersion` is `ProgressSnapshot.currentVersion`, the shape of the whole snapshot. It is separate from the SwiftData schema version and from the active session's `payloadVersion`.
+
+V1 may change freely until the first TestFlight build anyone installs. After that, a shipped `VersionedSchema` does not change. A later shape is a new `SchemaVn` and a stage on `ProgressMigrationPlan`. There is no checked-in V1 `.store` file yet. The macOS job will generate it, and that file is checked in before the first TestFlight build.
+
+Days are stored as `Int` days since 1970-01-01. The number is `LocalDay.days(from:)` and is read back with `adding(days:)`. That is the same day number the core uses for the user's local calendar day. It is not the UTC date of an instant. The core counts civil dates with a Gregorian calendar fixed to UTC only so a 23-hour or 25-hour local day still counts as one day.
+
+`load` deletes an active session whose payload version is older than this build, or whose JSON does not decode. It logs that drop and returns the rest of the file. A newer schema, a newer `snapshotVersion`, or a newer session payload still throws, and nothing is written over it.
+
 ### English-only UI, String Catalog
 
 The development language is English. User-facing strings go in `PashtoApp/Localizable.xcstrings`. Additional UI languages are new localizations in that catalog, not a new mechanism. Pashto lesson text, later, is right-to-left per text block inside an otherwise English, left-to-right UI. No Pashto strings and no RTL layout are in this revision.

@@ -1,6 +1,10 @@
 import Foundation
+import os
 import PashtoCore
 import SwiftData
+
+/// Log for a dropped active session. No lesson text is included.
+private let progressLog = Logger(subsystem: "com.mangallabs.pashto", category: "progress")
 
 /// SwiftData store for one device.
 ///
@@ -16,8 +20,10 @@ import SwiftData
 /// lesson in memory and try the save again on the next answer, or when it
 /// moves to the background. This package does not show that message.
 ///
-/// A snapshot, schema, or session payload from a newer build throws, and
-/// nothing is written over it.
+/// A newer snapshot or schema throws, and nothing is written over it.
+/// An active session this build cannot read — an older payload version, or
+/// JSON that does not decode — is deleted on `load`, logged, and the rest
+/// of the file loads. A newer session payload is not deleted.
 @ModelActor
 public actor SwiftDataProgressStore: ProgressStore {
     private let installedContentVersion: String
@@ -35,6 +41,7 @@ public actor SwiftDataProgressStore: ProgressStore {
 
     public func load() async throws -> ProgressSnapshot {
         try refuseIfNewer()
+        try discardUnreadableActiveSession()
         return validated(try makeSnapshot())
     }
 
@@ -129,6 +136,8 @@ public actor SwiftDataProgressStore: ProgressStore {
 
     /// A newer snapshot or a newer session payload must not be overwritten.
     /// An older snapshot this build does not migrate is refused the same way.
+    /// An older or unreadable active session is not refused here. `load`
+    /// deletes that row instead.
     private func refuseIfNewer() throws {
         if let meta = try metaRow() {
             if meta.snapshotVersion > ProgressSnapshot.currentVersion {
@@ -141,6 +150,33 @@ public actor SwiftDataProgressStore: ProgressStore {
         if let active = try activeRow(),
            active.payloadVersion > ActiveSessionSnapshot.currentPayloadVersion {
             throw ProgressPersistenceError.newerPayload(active.payloadVersion)
+        }
+    }
+
+    /// Deletes one active session this build cannot read, then saves that
+    /// deletion on its own. The other rows stay. A failed `save()` is rolled
+    /// back and rethrown, so a session that is still on disk is not reported
+    /// as gone.
+    private func discardUnreadableActiveSession() throws {
+        guard let active = try activeRow() else { return }
+        do {
+            _ = try activeSession(active)
+        } catch ProgressPersistenceError.newerPayload(let version) {
+            throw ProgressPersistenceError.newerPayload(version)
+        } catch {
+            let version = active.payloadVersion
+            modelContext.delete(active)
+            if modelContext.hasChanges {
+                do {
+                    try modelContext.save()
+                } catch {
+                    if modelContext.hasChanges {
+                        modelContext.rollback()
+                    }
+                    throw error
+                }
+            }
+            progressLog.error("Dropped an active session that could not be read. Payload version \(version).")
         }
     }
 

@@ -103,6 +103,82 @@ struct SwiftDataProgressStoreTests {
         #expect(metas.first?.contentVersion == "2026.11.0")
     }
 
+    @Test @MainActor func loadDropsAnUnreadableActiveSession() async throws {
+        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+        let writer = container.mainContext
+        writer.autosaveEnabled = false
+        let day = DayNumber.encode(LocalDay(year: 2026, month: 11, day: 1))
+        writer.insert(
+            ReviewCardRecord(
+                itemID: "e-keep",
+                easeFactor: 2.5,
+                intervalDays: 1,
+                repetitions: 0,
+                lapses: 0,
+                dueDay: day,
+                lastReviewedDay: nil,
+                createdDay: day,
+                state: ReviewCardState.active.rawValue,
+                source: ReviewCardSource.lesson.rawValue
+            )
+        )
+        writer.insert(
+            ActiveSessionRecord(
+                key: RecordKey.active,
+                sessionID: Fixture.id("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA1"),
+                kind: SessionKind.lesson.rawValue,
+                lessonID: nil,
+                startedDay: day,
+                contentVersion: "2026.11.0",
+                payloadVersion: 0,
+                payload: Data("not-json".utf8),
+                updatedAt: Date(timeIntervalSince1970: 0)
+            )
+        )
+        try writer.save()
+
+        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "2026.11.0")
+        let loaded = try await store.load()
+        #expect(loaded.activeSession == nil)
+        #expect(loaded.cards.map(\.itemID.rawValue) == ["e-keep"])
+        #expect(loaded.cards.first?.easeFactor == 2.5)
+
+        let reader = ModelContext(container)
+        let sessions = try reader.fetch(FetchDescriptor<ActiveSessionRecord>())
+        let cards = try reader.fetch(FetchDescriptor<ReviewCardRecord>())
+        #expect(sessions.isEmpty)
+        #expect(cards.count == 1)
+        #expect(cards.first?.itemID == "e-keep")
+        #expect(cards.first?.easeFactor == 2.5)
+    }
+
+    @Test @MainActor func localDayRoundTripsAsTheCoreDayNumber() async throws {
+        let container = try ProgressContainer.make(name: UUID().uuidString, inMemory: true)
+        let store = SwiftDataProgressStore(modelContainer: container, contentVersion: "2026.11.0")
+        let day = LocalDay(year: 2026, month: 11, day: 1)
+        let sessionID = Fixture.id("EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEE1")
+        try await store.commit(
+            SessionCommit(
+                sessionID: sessionID,
+                cards: [Fixture.card("e-day", ease: 2.5, day: day)],
+                lessonProgress: nil,
+                streak: Fixture.streak(on: day, freezes: 0),
+                completed: Fixture.completed(sessionID, day: day)
+            )
+        )
+
+        let loaded = try await store.load()
+        let stored = day.days(from: LocalDay(year: 1970, month: 1, day: 1))
+        #expect(loaded.cards.first?.createdDay == day)
+        #expect(loaded.cards.first?.dueDay == day)
+        #expect(loaded.completedSessions.first?.completedDay == day)
+        #expect(loaded.streak.lastActiveDay == day)
+
+        let cards = try container.mainContext.fetch(FetchDescriptor<ReviewCardRecord>())
+        #expect(cards.first?.createdDay == stored)
+        #expect(cards.first?.dueDay == stored)
+    }
+
     @Test func newerSchemaFileIsLeftUntouched() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("pashto-newer-\(UUID().uuidString)", isDirectory: true)
