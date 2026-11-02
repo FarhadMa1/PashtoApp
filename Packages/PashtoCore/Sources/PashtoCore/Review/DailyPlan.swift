@@ -42,8 +42,8 @@ public struct DailyPlan: Hashable, Sendable {
 
     /// True when `newItemsRemaining` is greater than zero.
     ///
-    /// This is the cap only. Whether a lesson is left in the course is decided
-    /// with the path, which is a later step.
+    /// This is the cap only. `pathState` decides whether a lesson is left
+    /// in the course.
     public let canStartLesson: Bool
 
     public init(
@@ -92,6 +92,7 @@ public struct DailyPlan: Hashable, Sendable {
 /// old card, so the cards alone cannot say which items were new.
 ///
 /// `today` is a `LocalDay`. This function does not read a clock.
+/// `pathState` reads this plan when it decides what the lesson path shows.
 public func dailyPlan(
     cards: [ReviewCard],
     knownItemIDs: Set<ItemID>,
