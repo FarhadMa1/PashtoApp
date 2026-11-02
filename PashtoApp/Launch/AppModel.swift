@@ -6,9 +6,10 @@ import UIKit
 
 /// Opens progress and chooses Update needed, the storage error, Welcome back, or the app.
 ///
-/// A newer store is only shown. Start over runs only from the storage error,
-/// and it moves the file aside before a new store is created. Settings read
-/// from the old file are written into the new one.
+/// A newer store is only shown. Start over runs only from the storage error.
+/// It moves the file aside, then writes the goal, transliteration, and content
+/// version into a fresh store. The placement day is cleared. A failure removes
+/// the fresh file and moves the backup back.
 @MainActor
 @Observable
 final class AppModel {
@@ -51,11 +52,14 @@ final class AppModel {
         self.clock = DayClock(provider: SystemDateProvider(), calendar: calendar)
     }
 
+    static let appStoreIDKey = "AppStoreID"
+
     static func live() -> AppModel {
         let url = try? ProgressStoreLocation.url()
+        let identifier = Bundle.main.object(forInfoDictionaryKey: appStoreIDKey) as? String ?? ""
         return AppModel(
             storeURL: url,
-            appStoreID: AppStoreListing.identifier(),
+            appStoreID: identifier,
             phase: url == nil ? .storageError : .loading
         )
     }
@@ -98,24 +102,34 @@ final class AppModel {
         snapshot = nil
         do {
             let url = try resolvedURL()
-            let preserved = try ProgressStoreRestart.moveAside(
+            let restarted = try await ProgressStartOver.replace(
                 storeAt: url,
-                timestamp: Self.backupTimestamp(Date())
+                timestamp: Self.backupTimestamp(Date()),
+                installedContentVersion: Self.installedContentVersion,
+                make: { url in
+                    try ProgressContainer.make(at: url)
+                },
+                write: { container, carried in
+                    let store = SwiftDataProgressStore(
+                        modelContainer: container,
+                        contentVersion: carried.contentVersion
+                    )
+                    try await store.updateSettings(carried.settings)
+                }
             )
-            let container = try ProgressContainer.make(at: url)
             let store = SwiftDataProgressStore(
-                modelContainer: container,
-                contentVersion: Self.installedContentVersion
+                modelContainer: restarted.container,
+                contentVersion: restarted.carried.contentVersion
             )
-            if let settings = preserved.settings {
-                try await store.updateSettings(settings)
-            }
             let snapshot = try await store.load()
-            self.container = container
+            self.container = restarted.container
             self.progressStore = store
             self.snapshot = snapshot
             phase = progressScreen(streak: snapshot.streak, on: clock.today)
         } catch {
+            container = nil
+            progressStore = nil
+            snapshot = nil
             phase = .storageError
         }
     }
@@ -144,7 +158,10 @@ final class AppModel {
     }
 
     func openAppStore() {
-        guard phase == .updateNeeded, let url = AppStoreListing.listingURL(appStoreID: appStoreID) else {
+        guard phase == .updateNeeded, let id = appStoreIDForListing(appStoreID) else {
+            return
+        }
+        guard let url = URL(string: "https://apps.apple.com/app/id\(id)") else {
             return
         }
         UIApplication.shared.open(url)

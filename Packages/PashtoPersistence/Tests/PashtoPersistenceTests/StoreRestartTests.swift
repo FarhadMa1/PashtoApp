@@ -119,6 +119,7 @@ struct StoreRestartTests {
 
         let preserved = try ProgressStoreRestart.moveAside(storeAt: storeURL, timestamp: "20261102T150000Z")
         #expect(preserved.settings == settings)
+        #expect(preserved.contentVersion == "2026.11.0")
         let backupStore = preserved.movedFiles.first { $0.lastPathComponent == "Progress.store" }
         let backup = try #require(backupStore)
         #expect(try Data(contentsOf: backup) == before)
@@ -126,21 +127,174 @@ struct StoreRestartTests {
 
         let backedUp = try await readStore(at: backup, contentVersion: "ignored")
         #expect(backedUp.settings == settings)
+        #expect(backedUp.contentVersion == "2026.11.0")
         #expect(backedUp.cards == [card])
         #expect(backedUp.streak.freezes == 2)
         #expect(backedUp.streak.current == 4)
+    }
 
-        let container = try ProgressContainer.make(at: storeURL)
-        let fresh = SwiftDataProgressStore(modelContainer: container, contentVersion: "unbundled")
-        if let restored = preserved.settings {
-            try await fresh.updateSettings(restored)
+    @Test @MainActor func startOverCarriesSettingsAndContentVersionAndClearsPlacement() async throws {
+        let directory = try makeDirectory("pashto-carry")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let storeURL = directory.appendingPathComponent("Progress.store")
+        let day = LocalDay(year: 2026, month: 11, day: 1)
+        let settings = UserSettings(
+            dailyGoal: .serious,
+            showTransliteration: false,
+            placementTakenDay: day
+        )
+        let card = ReviewCard.introduced(itemID: try item("e-salam"), on: day)
+        let sessionID = UUID(uuidString: "EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEE3")!
+        try await writeStore(at: storeURL, contentVersion: "2026.11.0") { store in
+            try await store.updateSettings(settings)
+            try await store.commit(
+                SessionCommit(
+                    sessionID: sessionID,
+                    cards: [card],
+                    lessonProgress: nil,
+                    streak: StreakState(
+                        current: 4,
+                        longest: 4,
+                        lastActiveDay: day,
+                        freezes: 2,
+                        daysTowardNextFreeze: 0,
+                        freezeUsedDays: []
+                    ),
+                    completed: CompletedSession(
+                        sessionID: sessionID,
+                        kind: .lesson,
+                        lessonID: nil,
+                        completedDay: day,
+                        questionCount: 1,
+                        firstTryCorrect: 1
+                    )
+                )
+            )
         }
+
+        let before = try Data(contentsOf: storeURL)
+        #expect(StoredSettings.contentVersion(at: storeURL) == "2026.11.0")
+        #expect(try Data(contentsOf: storeURL) == before)
+
+        let restarted = try await ProgressStartOver.replace(
+            storeAt: storeURL,
+            timestamp: "20261102T160000Z",
+            installedContentVersion: "unbundled",
+            make: { url in
+                try ProgressContainer.make(at: url)
+            },
+            write: { container, carried in
+                let store = SwiftDataProgressStore(
+                    modelContainer: container,
+                    contentVersion: carried.contentVersion
+                )
+                try await store.updateSettings(carried.settings)
+            }
+        )
+
+        let fresh = SwiftDataProgressStore(
+            modelContainer: restarted.container,
+            contentVersion: "not-the-stored-version"
+        )
         let opened = try await fresh.load()
-        #expect(opened.settings == settings)
+        #expect(opened.settings.dailyGoal == .serious)
+        #expect(opened.settings.showTransliteration == false)
+        #expect(opened.settings.placementTakenDay == nil)
+        #expect(opened.contentVersion == "2026.11.0")
         #expect(opened.cards.isEmpty)
         #expect(opened.lessonProgress.isEmpty)
         #expect(opened.streak == .initial)
         #expect(opened.completedSessions.isEmpty)
+
+        let backup = try #require(
+            restarted.carried.movedFiles.first { $0.lastPathComponent == "Progress.store" }
+        )
+        #expect(try Data(contentsOf: backup) == before)
+        #expect(try StoredSettings.read(at: backup) == settings)
+        #expect(StoredSettings.contentVersion(at: backup) == "2026.11.0")
+        #expect(try Data(contentsOf: backup) == before)
+    }
+
+    @Test @MainActor func aFailedStartOverRemovesTheNewStoreAndRestoresTheOriginal() async throws {
+        let directory = try makeDirectory("pashto-undo")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let storeURL = directory.appendingPathComponent("Progress.store")
+        let day = LocalDay(year: 2026, month: 11, day: 1)
+        let settings = UserSettings(
+            dailyGoal: .light,
+            showTransliteration: true,
+            placementTakenDay: day
+        )
+        let card = ReviewCard.introduced(itemID: try item("e-salam"), on: day)
+        let sessionID = UUID(uuidString: "EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEE4")!
+        try await writeStore(at: storeURL, contentVersion: "2026.11.0") { store in
+            try await store.updateSettings(settings)
+            try await store.commit(
+                SessionCommit(
+                    sessionID: sessionID,
+                    cards: [card],
+                    lessonProgress: nil,
+                    streak: StreakState(
+                        current: 3,
+                        longest: 3,
+                        lastActiveDay: day,
+                        freezes: 1,
+                        daysTowardNextFreeze: 0,
+                        freezeUsedDays: []
+                    ),
+                    completed: CompletedSession(
+                        sessionID: sessionID,
+                        kind: .lesson,
+                        lessonID: nil,
+                        completedDay: day,
+                        questionCount: 1,
+                        firstTryCorrect: 1
+                    )
+                )
+            )
+        }
+
+        let before = try Data(contentsOf: storeURL)
+        let inode = try fileNumber(at: storeURL)
+        let sibling = directory.appendingPathComponent("notes.txt")
+        let siblingBytes = Data("leave-me".utf8)
+        try siblingBytes.write(to: sibling)
+        let timestamp = "20261102T170000Z"
+
+        do {
+            _ = try await ProgressStartOver.replace(
+                storeAt: storeURL,
+                timestamp: timestamp,
+                installedContentVersion: "unbundled",
+                make: { url in
+                    try ProgressContainer.make(at: url)
+                },
+                write: { _, _ in },
+                beforeWrite: {
+                    throw ProgressPersistenceError.failedToOpen("injected")
+                }
+            )
+            Issue.record("Start over should throw after the injected failure")
+        } catch let error as ProgressPersistenceError {
+            #expect(error == .failedToOpen("injected"))
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
+
+        #expect(try Data(contentsOf: storeURL) == before)
+        #expect(try fileNumber(at: storeURL) == inode)
+        #expect(try Data(contentsOf: sibling) == siblingBytes)
+        let backup = directory
+            .appendingPathComponent(ProgressStoreRestart.backupsDirectoryName)
+            .appendingPathComponent(timestamp)
+            .appendingPathComponent("Progress.store")
+        #expect(FileManager.default.fileExists(atPath: backup.path) == false)
+
+        let restored = try await readStore(at: storeURL, contentVersion: "ignored")
+        #expect(restored.settings == settings)
+        #expect(restored.settings.placementTakenDay == day)
+        #expect(restored.contentVersion == "2026.11.0")
+        #expect(restored.cards == [card])
     }
 
     private func makeDirectory(_ name: String) throws -> URL {

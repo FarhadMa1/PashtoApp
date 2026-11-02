@@ -9,11 +9,19 @@ import SQLite3
 /// when there was no file to move.
 public struct PreservedProgress: Equatable, Sendable {
     public let settings: UserSettings?
+    /// The content version stored in the file, when the meta row could be read.
+    public let contentVersion: String?
     public let backupDirectory: URL
     public let movedFiles: [URL]
 
-    public init(settings: UserSettings?, backupDirectory: URL, movedFiles: [URL]) {
+    public init(
+        settings: UserSettings?,
+        contentVersion: String?,
+        backupDirectory: URL,
+        movedFiles: [URL]
+    ) {
         self.settings = settings
+        self.contentVersion = contentVersion
         self.backupDirectory = backupDirectory
         self.movedFiles = movedFiles
     }
@@ -27,9 +35,11 @@ public struct PreservedProgress: Equatable, Sendable {
 /// changed. The bytes are not rewritten. Nothing is deleted: a failed move
 /// is moved back, and a file that cannot be moved back stays in the backup.
 ///
-/// Settings are read from a copy before the move. The caller writes them
-/// into the fresh store. This type does not open `ModelContainer` and does
-/// not create the replacement file.
+/// Settings and the content version are read from a copy before the move.
+/// The caller writes the fresh store. This type does not open `ModelContainer`
+/// and does not create the replacement file. A later failure uses
+/// `undoReplacement`, which removes only the files that appeared at the
+/// original path and moves the backup back.
 public enum ProgressStoreRestart {
     /// Sibling directory that holds one folder per start-over.
     public static let backupsDirectoryName = "Backups"
@@ -39,12 +49,17 @@ public enum ProgressStoreRestart {
 
     public static func moveAside(storeAt url: URL, timestamp: String) throws -> PreservedProgress {
         try validate(timestamp)
-        let settings = readSettings(at: url)
+        let header = readHeader(at: url)
         let files = existingFiles(at: url)
         let backups = url.deletingLastPathComponent()
             .appendingPathComponent(backupsDirectoryName, isDirectory: true)
         guard !files.isEmpty else {
-            return PreservedProgress(settings: settings, backupDirectory: backups, movedFiles: [])
+            return PreservedProgress(
+                settings: header.settings,
+                contentVersion: header.contentVersion,
+                backupDirectory: backups,
+                movedFiles: []
+            )
         }
 
         let fileManager = FileManager.default
@@ -67,10 +82,34 @@ public enum ProgressStoreRestart {
             throw error
         }
         return PreservedProgress(
-            settings: settings,
+            settings: header.settings,
+            contentVersion: header.contentVersion,
             backupDirectory: directory,
             movedFiles: moved.map(\.destination)
         )
+    }
+
+    /// Removes the store files created after `moveAside`, then moves the backup back.
+    ///
+    /// The files at the original path are the ones this attempt created. They
+    /// are the only files removed. Each backup file is moved back to the name
+    /// it had. A backup file is left in place when the original path is still
+    /// occupied, so the original bytes stay on disk.
+    static func undoReplacement(storeAt url: URL, preserved: PreservedProgress) {
+        let fileManager = FileManager.default
+        for suffix in fileSuffixes {
+            let created = URL(fileURLWithPath: url.path + suffix)
+            guard fileManager.fileExists(atPath: created.path), !fileManager.isDirectory(created) else {
+                continue
+            }
+            try? fileManager.removeItem(at: created)
+        }
+        let parent = url.deletingLastPathComponent()
+        for backedUp in preserved.movedFiles {
+            let destination = parent.appendingPathComponent(backedUp.lastPathComponent)
+            if fileManager.fileExists(atPath: destination.path) { continue }
+            try? fileManager.moveItem(at: backedUp, to: destination)
+        }
     }
 
     private static func validate(_ timestamp: String) throws {
@@ -116,12 +155,8 @@ public enum ProgressStoreRestart {
         }
     }
 
-    private static func readSettings(at url: URL) -> UserSettings? {
-        do {
-            return try StoredSettings.read(at: url)
-        } catch {
-            return nil
-        }
+    private static func readHeader(at url: URL) -> StoredHeader {
+        (try? StoredSettings.load(at: url)) ?? StoredHeader(settings: nil, contentVersion: nil)
     }
 
     /// Puts files back when a later move fails. A file that cannot return
@@ -142,17 +177,29 @@ extension FileManager {
     }
 }
 
+struct StoredHeader: Equatable {
+    var settings: UserSettings?
+    var contentVersion: String?
+}
+
 /// Reads `SettingsRecord` without opening the store in SwiftData.
 ///
 /// The read uses a copy, so the file the learner owns is not written. A
-/// missing file or a file with no settings table returns nil. A settings
-/// table whose columns this build does not recognise throws, and the message
-/// names the columns.
+/// missing file, a missing table, or columns this build does not recognise
+/// come back as nil settings. Start over can still move that file.
 enum StoredSettings {
     static func read(at url: URL) throws -> UserSettings? {
+        try load(at: url).settings
+    }
+
+    static func contentVersion(at url: URL) -> String? {
+        (try? load(at: url))?.contentVersion
+    }
+
+    static func load(at url: URL) throws -> StoredHeader {
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: url.path), !fileManager.isDirectory(url) else {
-            return nil
+            return StoredHeader(settings: nil, contentVersion: nil)
         }
         let copy = try copiedStore(at: url)
         defer { try? fileManager.removeItem(at: copy.deletingLastPathComponent()) }
@@ -162,6 +209,19 @@ enum StoredSettings {
         // ignores the open flag from writing the copy.
         _ = sqlite3_exec(database, "PRAGMA query_only = ON", nil, nil, nil)
 
+        let settings: UserSettings?
+        do {
+            settings = try readSettings(in: database)
+        } catch {
+            settings = nil
+        }
+        return StoredHeader(
+            settings: settings,
+            contentVersion: try? readContentVersion(in: database)
+        )
+    }
+
+    private static func readSettings(in database: OpaquePointer) throws -> UserSettings? {
         let tables = try column("SELECT name FROM sqlite_master WHERE type = 'table'", in: database)
         guard let table = tables.first(where: { $0.range(of: "SETTINGSRECORD", options: .caseInsensitive) != nil }),
               isSafeIdentifier(table)
@@ -205,6 +265,48 @@ enum StoredSettings {
             showTransliteration: showTransliteration,
             placementTakenDay: placementDay
         )
+    }
+
+    /// `ZCONTENTVERSION` only. `ZLASTRECONCILEDCONTENTVERSION` also contains
+    /// that word and is a different column.
+    private static func readContentVersion(in database: OpaquePointer) throws -> String? {
+        let tables = try column("SELECT name FROM sqlite_master WHERE type = 'table'", in: database)
+        guard let table = tables.first(where: { $0.range(of: "STOREMETARECORD", options: .caseInsensitive) != nil }),
+              isSafeIdentifier(table)
+        else { return nil }
+        let columns = try column("SELECT name FROM pragma_table_info('\(table)')", in: database)
+        guard let version = exactColumn(columns, "CONTENTVERSION") else { return nil }
+        let key = columns.first { name in
+            let upper = name.uppercased()
+            return upper == "KEY" || upper == "ZKEY"
+        }
+        var sql = "SELECT \(version) FROM \(table)"
+        if let key, isSafeIdentifier(key) {
+            sql += " WHERE \(key) = 'meta'"
+        }
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
+            return nil
+        }
+        defer { sqlite3_finalize(statement) }
+        guard sqlite3_step(statement) == SQLITE_ROW else { return nil }
+        guard sqlite3_column_type(statement, 0) != SQLITE_NULL,
+              let cString = sqlite3_column_text(statement, 0)
+        else { return nil }
+        let value = String(cString: cString)
+        return value.isEmpty ? nil : value
+    }
+
+    /// The content-version column. A reconciled-version column contains the
+    /// same word and is left out. The shortest remaining name is the match.
+    private static func exactColumn(_ columns: [String], _ target: String) -> String? {
+        let matches = columns.filter { name in
+            guard isSafeIdentifier(name) else { return false }
+            let upper = name.uppercased()
+            if upper.contains("RECONCILED") { return false }
+            return upper == target || upper == "Z\(target)" || upper.hasSuffix(target)
+        }
+        return matches.min { $0.count < $1.count }
     }
 
     /// A copy so the settings query cannot touch the file that will be moved.
