@@ -296,8 +296,8 @@ enum KeyedArchive {
         guard let record = object as? NSDictionary else { return object }
         let name = className(of: record, objects: objects)
         if name.contains("Dictionary") || (name.isEmpty && record["NS.keys"] != nil) {
-            let keys = record["NS.keys"] as? NSArray ?? []
-            let values = record["NS.objects"] as? NSArray ?? []
+            let keys = record["NS.keys"] as? NSArray ?? NSArray()
+            let values = record["NS.objects"] as? NSArray ?? NSArray()
             let result = NSMutableDictionary()
             for index in 0..<min(keys.count, values.count) {
                 guard let key = decode(keys[index], objects: objects, depth: depth + 1) as? NSCopying else { continue }
@@ -306,7 +306,7 @@ enum KeyedArchive {
             return result
         }
         if name.contains("Array") || name.contains("Set") {
-            let values = record["NS.objects"] as? NSArray ?? []
+            let values = record["NS.objects"] as? NSArray ?? NSArray()
             let result = NSMutableArray()
             for index in 0..<values.count {
                 if let value = decode(values[index], objects: objects, depth: depth + 1) {

@@ -2,6 +2,7 @@ import CoreData
 import Foundation
 import PashtoCore
 import PashtoCoreTesting
+import PashtoSQLite
 import SQLite3
 import SwiftData
 import Testing
@@ -632,12 +633,10 @@ private func expectKeptCard(in container: ModelContainer, loaded: ProgressSnapsh
 /// Bytes of the store, its write-ahead log, and its shared-memory file.
 /// A sidecar that is absent is not a key. One that appears later makes the
 /// dictionaries differ.
-/// The Swift overlay types `sqlite3_db_config` as `Any...`, so `nil` does not compile.
+/// The Swift overlay marks variadic `sqlite3_db_config` unavailable, including
+/// the out-pointer form. The C helper sets no-checkpoint-on-close.
 func disableCheckpointOnClose(_ database: OpaquePointer) {
-    var out: Int32 = 0
-    withUnsafeMutablePointer(to: &out) {
-        _ = sqlite3_db_config(database, SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE, Int32(1), $0)
-    }
+    pashto_disable_checkpoint_on_close(UnsafeMutableRawPointer(database))
 }
 
 func storedBytes(around url: URL) throws -> [String: Data] {
