@@ -1,0 +1,94 @@
+{
+  "snapshotVersion": 1,
+  "contentVersion": "2026.11.0-a",
+  "cards": [
+    {
+      "itemID": "e-kept",
+      "easeFactor": 2.5,
+      "intervalDays": 6,
+      "repetitions": 2,
+      "lapses": 0,
+      "dueDay": "2026-11-20",
+      "lastReviewedDay": "2026-10-15",
+      "createdDay": "2026-10-01",
+      "state": "active",
+      "source": "lesson"
+    },
+    {
+      "itemID": "e-missing",
+      "easeFactor": 2.5,
+      "intervalDays": 4,
+      "repetitions": 1,
+      "lapses": 1,
+      "dueDay": "2026-11-05",
+      "lastReviewedDay": "2026-10-20",
+      "createdDay": "2026-10-01",
+      "state": "active",
+      "source": "lesson"
+    },
+    {
+      "itemID": "e-old",
+      "easeFactor": 2.5,
+      "intervalDays": 6,
+      "repetitions": 2,
+      "lapses": 1,
+      "dueDay": "2026-12-01",
+      "lastReviewedDay": "2026-10-02",
+      "createdDay": "2026-10-02",
+      "state": "active",
+      "source": "lesson"
+    },
+    {
+      "itemID": "e-retired",
+      "easeFactor": 1.3,
+      "intervalDays": 1,
+      "repetitions": 0,
+      "lapses": 3,
+      "dueDay": "2026-11-03",
+      "lastReviewedDay": "2026-11-01",
+      "createdDay": "2026-10-01",
+      "state": "active",
+      "source": "lesson"
+    }
+  ],
+  "lessonProgress": [
+    {
+      "lessonID": "l-done",
+      "source": "completed",
+      "firstCompletedDay": "2026-10-01",
+      "bestScorePercent": 80
+    },
+    {
+      "lessonID": "l-old",
+      "source": "completed",
+      "firstCompletedDay": "2026-10-02",
+      "bestScorePercent": 50
+    }
+  ],
+  "streak": {
+    "current": 4,
+    "longest": 9,
+    "lastActiveDay": "2026-10-02",
+    "freezes": 1,
+    "daysTowardNextFreeze": 3,
+    "freezeUsedDays": ["2026-09-30"]
+  },
+  "settings": {
+    "dailyGoal": 10,
+    "showTransliteration": true,
+    "placementTakenDay": null
+  },
+  "activeSession": null,
+  "completedSessions": [
+    {
+      "sessionID": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1",
+      "kind": "lesson",
+      "lessonID": "l-done",
+      "completedDay": "2026-10-01",
+      "questionCount": 4,
+      "firstTryCorrect": 3
+    }
+  ],
+  "lastReconciledContentVersion": null,
+  "latestObservedDay": "2026-11-01"
+}

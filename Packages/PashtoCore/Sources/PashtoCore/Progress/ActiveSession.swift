@@ -36,10 +36,14 @@ public struct CompletedSession: Codable, Hashable, Sendable {
 /// The lesson in progress, saved after each answer.
 ///
 /// There is at most one. Saving it does not create cards and does not change
-/// the streak. Cards are written when the lesson is committed. A lesson can
-/// be continued on the day it started or the next day. After that, or when
-/// the content version or the payload version does not match, `canResume`
-/// is false and the caller discards it. Discarding creates no cards.
+/// the streak. Cards are written when the lesson is committed.
+///
+/// An unfinished lesson can be continued on the day it started, the next
+/// day, or the day before, when the content version and the payload version
+/// match. `canResume` is that check. The day before covers a clock set back
+/// by one day. A finished lesson is not continued: `mustCommit` is true,
+/// and startup commits it on the day of the last answer. A newer payload is
+/// left stored. Discarding an unfinished session creates no cards.
 public struct ActiveSessionSnapshot: Codable, Hashable, Sendable {
     /// The only payload this build can read.
     public static let currentPayloadVersion = 1
@@ -82,23 +86,43 @@ public struct ActiveSessionSnapshot: Codable, Hashable, Sendable {
     }
 }
 
-/// Whether `session` can be continued on `today` for `contentVersion`.
+/// Whether an unfinished `session` can be continued on `today` for `contentVersion`.
 ///
-/// True when it is a lesson, the payload version is the one this build
-/// reads, `contentVersion` matches, and `startedDay` is `today` or the day
-/// before. A session started two or more days earlier is not continued.
-/// A clock set so that `startedDay` is still in the future is not continued
-/// either. The caller discards it. This function does not delete it, and it
-/// does not read a clock.
+/// True when it is an unfinished lesson, the payload version is the one this
+/// build reads, `contentVersion` matches, and the age of `startedDay` on
+/// `today` is 0, 1, or -1. Age 0 is the day it started. Age 1 is the next
+/// day. Age -1 is a clock set back by one day, so `startedDay` is tomorrow.
+/// A session started two or more days earlier (age 2 or more) is not
+/// continued. A clock set back by two or more days (age -2 or less) is not
+/// continued either. A finished lesson is not continued: every question is
+/// already answered, and `mustCommit` is how startup handles it. Check
+/// `mustCommit` before treating a false result as a session to drop. This
+/// function does not delete the session, and it does not read a clock.
 public func canResume(
     _ session: ActiveSessionSnapshot,
     on today: LocalDay,
     contentVersion: String
 ) -> Bool {
-    guard session.kind == .lesson, let lesson = session.lesson else { return false }
+    guard session.kind == .lesson, let lesson = session.lesson, !lesson.isComplete else { return false }
     guard lesson.lessonID == session.lessonID else { return false }
     guard session.payloadVersion == ActiveSessionSnapshot.currentPayloadVersion else { return false }
     guard session.contentVersion == contentVersion else { return false }
     let age = today.days(from: session.startedDay)
-    return age == 0 || age == 1
+    return age == 0 || age == 1 || age == -1
+}
+
+/// Whether startup must commit `session` instead of resuming or dropping it.
+///
+/// True when it is a lesson this build can read, every question is answered,
+/// and the lesson id on the session matches the payload. How many days ago
+/// it started does not matter. The content version does not matter. The
+/// commit uses `lastAnswerDay` when an answer was stored, not the day the
+/// app starts. A newer payload is never committed, because committing would
+/// replace it. A review session is not committed: this build does not store
+/// its questions, so an interrupted review starts over.
+public func mustCommit(_ session: ActiveSessionSnapshot) -> Bool {
+    guard session.payloadVersion <= ActiveSessionSnapshot.currentPayloadVersion else { return false }
+    guard session.kind == .lesson, let lesson = session.lesson else { return false }
+    guard lesson.lessonID == session.lessonID else { return false }
+    return lesson.isComplete
 }

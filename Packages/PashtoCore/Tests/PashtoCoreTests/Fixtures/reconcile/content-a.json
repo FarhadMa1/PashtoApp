@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "2026.11.0-a",
+  "variant": "af-kabul",
+  "romanization": {
+    "table": [
+      {
+        "letter": "a",
+        "translit": "a",
+        "ascii": "a",
+        "pronunciation": "a",
+        "description": "test"
+      }
+    ],
+    "difficultCharacters": [],
+    "unstressedWords": []
+  },
+  "items": [
+    {
+      "id": "e-kept",
+      "kind": "word",
+      "pashto": "kept",
+      "translit": "kept",
+      "pronunciation": "kept",
+      "en": "kept",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-retired",
+      "kind": "word",
+      "pashto": "retired",
+      "translit": "retired",
+      "pronunciation": "retired",
+      "en": "retired",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-missing",
+      "kind": "word",
+      "pashto": "missing",
+      "translit": "missing",
+      "pronunciation": "missing",
+      "en": "missing",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-old",
+      "kind": "word",
+      "pashto": "old",
+      "translit": "old",
+      "pronunciation": "old",
+      "en": "old",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-future",
+      "kind": "word",
+      "pashto": "future",
+      "translit": "future",
+      "pronunciation": "future",
+      "en": "future",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    },
+    {
+      "id": "e-sound",
+      "kind": "word",
+      "pashto": "sound",
+      "translit": "sound",
+      "pronunciation": "sound",
+      "en": "sound",
+      "verification": { "status": "verified", "checkedBy": "test", "checkedOn": "2026-10-01" }
+    }
+  ],
+  "units": [
+    {
+      "id": "u-course",
+      "track": "main",
+      "title": "Course",
+      "lessons": [
+        {
+          "id": "l-done",
+          "title": "Done",
+          "items": [
+            { "item": "e-kept", "role": "introduce" },
+            { "item": "e-retired", "role": "introduce" },
+            { "item": "e-missing", "role": "introduce" },
+            { "item": "e-sound", "role": "soundExample", "sound": "s" }
+          ]
+        },
+        {
+          "id": "l-old",
+          "title": "Old",
+          "items": [
+            { "item": "e-old", "role": "introduce" }
+          ]
+        },
+        {
+          "id": "l-future",
+          "title": "Future",
+          "items": [
+            { "item": "e-future", "role": "introduce" }
+          ]
+        }
+      ]
+    }
+  ],
+  "nonDistractorGroups": []
+}

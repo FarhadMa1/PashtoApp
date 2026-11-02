@@ -55,13 +55,24 @@ public actor InMemoryProgressStore: ProgressStore {
         )
     }
 
-    public func applyReconciliation(_ changes: [ReviewCard]) async throws {
-        guard !changes.isEmpty else { return }
+    public func applyReconciliation(
+        _ changes: [ReviewCard],
+        reconciledContentVersion: String?
+    ) async throws {
+        let versionChanged = reconciledContentVersion != nil
+            && reconciledContentVersion != snapshot.lastReconciledContentVersion
+        guard !changes.isEmpty || versionChanged else { return }
         var cards = snapshot.cards
         for change in changes {
             upsert(change, into: &cards)
         }
-        store(snapshot, cards: sortedCards(cards), activeSession: snapshot.activeSession)
+        store(
+            snapshot,
+            cards: changes.isEmpty ? nil : sortedCards(cards),
+            activeSession: snapshot.activeSession,
+            lastReconciledContentVersion: reconciledContentVersion,
+            updatesLastReconciledContentVersion: versionChanged
+        )
     }
 
     public func updateSettings(_ settings: UserSettings) async throws {
@@ -102,7 +113,9 @@ public actor InMemoryProgressStore: ProgressStore {
         streak: StreakState? = nil,
         settings: UserSettings? = nil,
         activeSession: ActiveSessionSnapshot?,
-        completedSessions: [CompletedSession]? = nil
+        completedSessions: [CompletedSession]? = nil,
+        lastReconciledContentVersion: String? = nil,
+        updatesLastReconciledContentVersion: Bool = false
     ) {
         snapshot = ProgressSnapshot(
             snapshotVersion: base.snapshotVersion,
@@ -113,7 +126,9 @@ public actor InMemoryProgressStore: ProgressStore {
             settings: settings ?? base.settings,
             activeSession: activeSession,
             completedSessions: completedSessions ?? base.completedSessions,
-            lastReconciledContentVersion: base.lastReconciledContentVersion,
+            lastReconciledContentVersion: updatesLastReconciledContentVersion
+                ? lastReconciledContentVersion
+                : base.lastReconciledContentVersion,
             latestObservedDay: base.latestObservedDay
         )
     }

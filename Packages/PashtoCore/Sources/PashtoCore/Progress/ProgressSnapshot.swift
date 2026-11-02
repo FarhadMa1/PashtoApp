@@ -26,7 +26,10 @@ public struct ProgressSnapshot: Hashable, Sendable {
     public let settings: UserSettings
     public let activeSession: ActiveSessionSnapshot?
     public let completedSessions: [CompletedSession]
-    /// The content version last compared with the cards. Nothing writes this yet.
+    /// The content version last compared with the cards.
+    ///
+    /// `ProgressReconciler` writes this for debugging and tests. No rule reads
+    /// it. `contentVersion` stays the version stored with the progress.
     public let lastReconciledContentVersion: String?
     /// The latest civil day the app has seen. Nothing writes this yet.
     public let latestObservedDay: LocalDay?
