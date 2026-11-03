@@ -131,6 +131,71 @@ struct CelebrationMotionTests {
         #expect(AnswerHaptic.kind(for: .incorrect) == .error)
     }
 
+    @Test func oneTapSkipsTheLessonFinishToTheFinalNumbers() {
+        let stats = LessonFinishStats(answered: 6, correct: 4)
+        let frame = LessonFinishSkip.afterOneTap(stats)
+        #expect(frame.starAtRest)
+        #expect(frame.girihVisible)
+        #expect(frame.correct == 4)
+        #expect(frame.answered == 6)
+        #expect(frame.correct == stats.correct)
+        #expect(frame.answered == stats.answered)
+
+        let counting = CounterPlan.plan(target: 4, reduceMotion: false, voiceOver: false, skipped: false)
+        #expect(counting.start == 0)
+        #expect(counting.animates)
+        #expect(frame.correct == counting.end)
+    }
+
+    @Test func theGoalHapticFiresOnlyWhenTheCountCrossesTheLimit() {
+        #expect(DailyGoalCrossing.reached(from: 4, to: 5, limit: 5))
+        #expect(DailyGoalCrossing.reached(from: 9, to: 10, limit: 10))
+        #expect(DailyGoalCrossing.reached(from: 14, to: 16, limit: 15))
+        #expect(DailyGoalCrossing.reached(from: 5, to: 6, limit: 5) == false)
+        #expect(DailyGoalCrossing.reached(from: 3, to: 4, limit: 10) == false)
+        #expect(DailyGoalCrossing.reached(from: 15, to: 16, limit: 15) == false)
+        #expect(DailyGoalCrossing.reached(from: 0, to: 0, limit: 0) == false)
+        #expect(DailyGoalCrossing.reached(from: 0, to: 4, limit: 5) == false)
+    }
+
+    @Test func theGoalRingClampsAtTheFullCircle() {
+        #expect(DailyGoalCrossing.fraction(16, limit: 15) == 1)
+        #expect(DailyGoalCrossing.fraction(3, limit: 10) == 0.3)
+        #expect(DailyGoalCrossing.fraction(0, limit: 0) == 0)
+        #expect(DailyGoalCrossing.fraction(-2, limit: 10) == 0)
+
+        let over = GoalRingPlan.plan(from: 14, to: 16, goal: 15, reduceMotion: false, voiceOver: false)
+        #expect(over.toFraction == 1)
+        #expect(over.showsCheck)
+        #expect(over.spoken == "16/15")
+    }
+
+    @Test func pendingHomeMotionIsConsumedOnlyOnce() {
+        var cue = HomeMotionCue()
+        let fresh = cue.consume()
+        #expect(fresh == nil)
+        #expect(cue.pending == nil)
+
+        let home = lessonID("l-home")
+        let motion = PendingHomeMotion(id: UUID(uuidString: "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA")!, streakFrom: 2, goalFrom: 4, lessonID: home)
+        cue.stage(motion)
+        #expect(cue.pending == motion)
+
+        let later = PendingHomeMotion(id: UUID(uuidString: "BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB")!, streakFrom: 3, goalFrom: 5, lessonID: home)
+        cue.stage(later)
+
+        let played = cue.consume()
+        #expect(played == later)
+        #expect(cue.pending == nil)
+        let again = cue.consume()
+        #expect(again == nil)
+
+        var relaunch = HomeMotionCue()
+        let replay = relaunch.consume()
+        #expect(replay == nil)
+        #expect(relaunch.pending == nil)
+    }
+
     private func answer(id: ItemID, correct: Bool, repeated: Bool) -> SessionAnswer {
         let task = SessionTask(
             payload: .choice(QuizTask(

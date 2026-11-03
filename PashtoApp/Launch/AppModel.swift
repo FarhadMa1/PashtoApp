@@ -74,16 +74,10 @@ final class AppModel {
     private(set) var courseStillMissingToken = 0
     /// True while Try again is still working. The error screen shows progress and disables its buttons.
     private(set) var isRetrying = false
-    /// Bumps when a finished lesson changes the streak. The home plays one pulse.
-    private(set) var streakPulseToken = 0
-    /// The streak count from before `streakPulseToken` last changed.
-    private(set) var streakBeforePulse = 0
-    /// Bumps when a finished lesson changes today's new-item count.
-    private(set) var goalPulseToken = 0
-    /// The new-item count from before `goalPulseToken` last changed.
-    private(set) var goalBeforePulse = 0
-    /// The lesson whose path segment should fill. Nil until a finish lands.
-    private(set) var freshLessonID: LessonID?
+    /// From-values for the home animation after a finish. The home consumes this once.
+    private var homeMotion = HomeMotionCue()
+    /// The finish the home has not played yet. Nil after it is consumed, and nil on a relaunch.
+    private(set) var pendingHomeMotion: PendingHomeMotion?
     /// Why the storage error is showing. Nil on every other screen.
     ///
     /// Start over is offered only when the progress store could not be opened.
@@ -105,9 +99,11 @@ final class AppModel {
         startedReview != nil
     }
 
-    /// Counted days. The home shows the number. It does not add a caption.
+    /// Counted days the home shows. A gap the freezes cannot cover is 0.
+    /// The stored streak is left as it is. The home does not add a caption.
     var streakCount: Int {
-        snapshot?.streak.current ?? 0
+        guard let snapshot else { return 0 }
+        return displayedStreakCount(snapshot.streak, on: clock.today)
     }
 
     /// New items introduced today, against `goalTotal`.
@@ -368,18 +364,22 @@ final class AppModel {
 
     /// The learner finished the quiz. One commit saves the lesson, the cards, and the streak.
     ///
-    /// The day is the civil day of the last answer. A failed save shows the
+    /// Called when the last answer is given. Continue does not call this, so
+    /// `day` is the civil day the quiz finished. A failed save shows the
     /// storage error and does not remove progress or the answers still on screen.
-    /// The quiz closes only after that save, and only when `openLesson` is still
-    /// this session. A lesson opened while the save was in flight stays on screen.
+    /// The finished session replaces the last question immediately, so that
+    /// question cannot be answered again. The quiz closes after the save, and
+    /// only when `openLesson` is still this session. A lesson opened while the
+    /// save was in flight stays on screen.
     func finishLesson(_ session: LessonSession) {
         let finished = openLesson.attempt?.sessionID
         let bundled = course
         let store = progressStore
         let day = clock.today
-        let beforeStreak = snapshot?.streak.current ?? 0
+        let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
         let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
         let lessonID = session.lessonID
+        openLesson.showFinishedSession(session)
         Task {
             guard let bundled, let store else { return }
             do {
@@ -393,7 +393,6 @@ final class AppModel {
                     beforeStreak: beforeStreak,
                     beforeGoal: beforeGoal,
                     lesson: lessonID,
-                    on: day,
                     saved: saved
                 )
                 snapshot = saved
@@ -417,7 +416,7 @@ final class AppModel {
         guard let course, let store = progressStore else { return }
         let finished = openLesson.attempt?.sessionID
         let day = clock.today
-        let beforeStreak = snapshot?.streak.current ?? 0
+        let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
         let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
         let lessonID = openLesson.session?.lessonID
         do {
@@ -427,7 +426,6 @@ final class AppModel {
                     beforeStreak: beforeStreak,
                     beforeGoal: beforeGoal,
                     lesson: lessonID,
-                    on: day,
                     saved: saved
                 )
             }
@@ -443,27 +441,30 @@ final class AppModel {
 
     /// Records the home motion for a finish that just landed.
     ///
-    /// The day is the one captured before the save, so a midnight during the
-    /// write does not compare the new cards with a different day.
+    /// `beforeStreak` and `beforeGoal` were taken on the day the quiz finished,
+    /// before this save returned. The home plays the cue once and then clears it.
     private func showHomeMotion(
         beforeStreak: Int,
         beforeGoal: Int,
         lesson: LessonID,
-        on day: LocalDay,
         saved: ProgressSnapshot
     ) {
-        if saved.streak.current != beforeStreak {
-            streakBeforePulse = beforeStreak
-            streakPulseToken += 1
-        }
-        let afterGoal = newItemsShown(on: day, in: saved.cards)
-        if afterGoal != beforeGoal {
-            goalBeforePulse = beforeGoal
-            goalPulseToken += 1
-        }
-        if saved.lessonProgress.contains(where: { $0.lessonID == lesson }) {
-            freshLessonID = lesson
-        }
+        let finished = saved.lessonProgress.contains(where: { $0.lessonID == lesson }) ? lesson : nil
+        homeMotion.stage(
+            PendingHomeMotion(
+                id: UUID(),
+                streakFrom: beforeStreak,
+                goalFrom: beforeGoal,
+                lessonID: finished
+            )
+        )
+        pendingHomeMotion = homeMotion.pending
+    }
+
+    /// Drops the home animation after the home has played it.
+    func consumePendingHomeMotion() {
+        _ = homeMotion.consume()
+        pendingHomeMotion = homeMotion.pending
     }
 
     func openAppStore() {

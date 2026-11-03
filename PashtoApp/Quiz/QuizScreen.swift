@@ -457,7 +457,7 @@ struct PashtoLine: View {
     @ViewBuilder private var word: some View {
         let line = Text(text)
             .multilineTextAlignment(.leading)
-            .modifier(FitSingleWord(enabled: fitsWidth))
+            .modifier(FitSingleWord(text: text, enabled: fitsWidth))
         if let textColor {
             line.foregroundStyle(textColor)
         } else {
@@ -468,13 +468,18 @@ struct PashtoLine: View {
 
 /// One word has no place to wrap, so it scales down instead of clipping. A phrase is unchanged.
 private struct FitSingleWord: ViewModifier {
+    var text: String
     var enabled: Bool
 
+    private var scales: Bool {
+        enabled && !text.contains(where: \.isWhitespace)
+    }
+
     @ViewBuilder func body(content: Content) -> some View {
-        if enabled {
+        if scales {
             content
                 .lineLimit(1)
-                .minimumScaleFactor(0.1)
+                .minimumScaleFactor(0.4)
                 .allowsTightening(true)
                 .frame(maxWidth: .infinity)
         } else {

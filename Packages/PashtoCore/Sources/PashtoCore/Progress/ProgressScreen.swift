@@ -105,6 +105,16 @@ public func progressScreen(streak state: StreakState, on day: LocalDay) -> Progr
     streakWouldReset(state, on: day) ? .welcomeBack : .ready
 }
 
+/// The streak number the home shows on `day`.
+///
+/// Freezes that still cover the missed days leave the stored count on screen.
+/// A gap those freezes cannot cover shows 0. The stored streak is not written,
+/// and opening the app still spends nothing. `streakWouldReset` is the gap.
+public func displayedStreakCount(_ state: StreakState, on day: LocalDay) -> Int {
+    guard !streakWouldReset(state, on: day) else { return 0 }
+    return max(0, state.current)
+}
+
 /// True when a completed session on `day` starts the streak over.
 ///
 /// The gap is the same one `streak(_:after:on:)` uses. A freeze that covers

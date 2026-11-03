@@ -96,16 +96,15 @@ struct GlyphCard: View {
 
 /// Hides a face once it has turned past the edge, so the glyph is not mirrored.
 ///
-/// SwiftUI samples `animatableData` from a nonisolated witness. The sample runs
-/// on the main actor, so the read and write go through `MainActor.assumeIsolated`.
+/// `animatableData` is a plain nonisolated value. SwiftUI samples it off the main actor.
 private struct SpinFace: ViewModifier, Animatable {
     var angle: Double
     var shown: Bool
     var spins: Bool
 
     nonisolated var animatableData: Double {
-        get { MainActor.assumeIsolated { angle } }
-        set { MainActor.assumeIsolated { self.angle = newValue } }
+        get { angle }
+        set { angle = newValue }
     }
 
     func body(content: Content) -> some View {

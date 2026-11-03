@@ -102,7 +102,19 @@ public enum QuizResultPalette {
         ContrastPair(name: "lesson bar fill on track, dark", foreground: lessonBarFillDark, background: lessonBarTrackDark, minimumRatio: 3),
         ContrastPair(name: "lesson bar outline on the page, light", foreground: lessonBarOutlineLight, background: pageLight, minimumRatio: 3),
         ContrastPair(name: "lesson bar outline on the page, dark", foreground: lessonBarOutlineDark, background: pageDark, minimumRatio: 3),
+        ContrastPair(name: "muted track on the page, light", foreground: muted, background: pageLight, minimumRatio: 3),
+        ContrastPair(name: "muted track on the page, dark", foreground: muted, background: pageDark, minimumRatio: 3),
+        ContrastPair(name: "muted track on the card, light", foreground: muted, background: white, minimumRatio: 3),
+        ContrastPair(name: "muted track on the card, dark", foreground: muted, background: cardSurfaceDark, minimumRatio: 3),
+        ContrastPair(name: "achievement star outline on the page, light", foreground: ringLight, background: pageLight, minimumRatio: 3),
     ]
+
+    /// Unfilled goal track, path connector, and not-yet-reached node outline.
+    /// `#7C8799` in both modes.
+    public static let muted: UInt32 = 0x7C8799
+
+    /// Card surface behind a muted outline. Light is white. Dark is `#1E293B`.
+    public static let cardSurfaceDark: UInt32 = 0x1E293B
 
     /// 1 pt outline around the lesson bar. Light `#1E3A8A`, dark `#93B4F5`.
     ///

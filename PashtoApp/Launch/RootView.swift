@@ -49,14 +49,11 @@ struct RootView: View {
                 quizItems: model.lessonItems,
                 lessons: model.releasedLessons,
                 streakCount: model.streakCount,
-                streakFrom: model.streakBeforePulse,
-                streakToken: model.streakPulseToken,
                 goalDone: model.goalDone,
-                goalFrom: model.goalBeforePulse,
                 goalTotal: model.goalTotal,
-                goalToken: model.goalPulseToken,
                 finishedLessonIDs: model.finishedLessonIDs,
-                freshLessonID: model.freshLessonID,
+                pendingHomeMotion: model.pendingHomeMotion,
+                consumeHomeMotion: { model.consumePendingHomeMotion() },
                 startLesson: { lesson in
                     Task { await model.startLesson(lesson, voiceOver: voiceOverEnabled) }
                 },

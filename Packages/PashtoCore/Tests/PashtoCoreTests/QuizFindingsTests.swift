@@ -429,6 +429,26 @@ struct QuizFindingsTests {
         #expect(QuizResultPalette.lessonBarOutlineDark == 0x93B4F5)
         #expect(QuizResultPalette.pageLight == 0xFAF7F0)
         #expect(QuizResultPalette.pageDark == 0x0F172A)
+        #expect(QuizResultPalette.muted == 0x7C8799)
+        #expect(QuizResultPalette.cardSurfaceDark == 0x1E293B)
+        let muted = QuizResultPalette.markPairs.filter { $0.name.hasPrefix("muted track") }
+        #expect(muted.map(\.name) == [
+            "muted track on the page, light",
+            "muted track on the page, dark",
+            "muted track on the card, light",
+            "muted track on the card, dark",
+        ])
+        #expect(muted.map(\.foreground) == Array(repeating: QuizResultPalette.muted, count: 4))
+        #expect(muted.map(\.background) == [
+            QuizResultPalette.pageLight,
+            QuizResultPalette.pageDark,
+            QuizResultPalette.white,
+            QuizResultPalette.cardSurfaceDark,
+        ])
+        let star = QuizResultPalette.markPairs.filter { $0.name == "achievement star outline on the page, light" }
+        #expect(star.map(\.foreground) == [QuizResultPalette.ringLight])
+        #expect(star.map(\.background) == [QuizResultPalette.pageLight])
+        #expect(QuizResultPalette.ringLight == 0xB97D22)
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {

@@ -171,6 +171,16 @@ public final class OpenLesson {
         schedule(snapshot, generation: answerGeneration, to: store)
     }
 
+    /// Puts the finished session on screen before the save returns.
+    ///
+    /// The last question is no longer current, so leaving the celebration
+    /// cannot ask it again. A different lesson is left as it was. The save
+    /// still writes `session`.
+    public func showFinishedSession(_ session: LessonSession) {
+        guard attempt?.lessonID == session.lessonID else { return }
+        launch.replaceSession(session)
+    }
+
     /// Writes a finished lesson: the active session, then one commit.
     ///
     /// The quiz stays open when the write throws, with the same answers.

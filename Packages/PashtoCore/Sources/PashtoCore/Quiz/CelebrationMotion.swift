@@ -102,6 +102,45 @@ public struct CounterPlan: Equatable, Sendable {
     }
 }
 
+/// Where one tap on the finished lesson leaves the celebration.
+///
+/// The star is at rest, the girih is visible, and both numbers are the final
+/// first-try counts. Nothing keeps counting.
+public struct LessonFinishSkip: Equatable, Sendable {
+    public var starAtRest: Bool
+    public var girihVisible: Bool
+    public var correct: Int
+    public var answered: Int
+
+    public init(starAtRest: Bool, girihVisible: Bool, correct: Int, answered: Int) {
+        self.starAtRest = starAtRest
+        self.girihVisible = girihVisible
+        self.correct = correct
+        self.answered = answered
+    }
+
+    public static func afterOneTap(_ stats: LessonFinishStats) -> LessonFinishSkip {
+        let correct = CounterPlan.plan(
+            target: stats.correct,
+            reduceMotion: false,
+            voiceOver: false,
+            skipped: true
+        )
+        let answered = CounterPlan.plan(
+            target: stats.answered,
+            reduceMotion: false,
+            voiceOver: false,
+            skipped: true
+        )
+        return LessonFinishSkip(
+            starAtRest: true,
+            girihVisible: true,
+            correct: correct.spoken,
+            answered: answered.spoken
+        )
+    }
+}
+
 /// First-try numbers on the finished-lesson celebration.
 ///
 /// A question asked again after a miss is not counted. The same rule is what

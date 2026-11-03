@@ -7,6 +7,8 @@ enum Lapis {
     static let background = dynamic(light: 0xFAF7F0, dark: 0x0F172A)
     static let text = dynamic(light: 0x111827, dark: 0xF1F5F9)
     static let secondaryText = dynamic(light: 0x6B7280, dark: 0x94A3B8)
+    /// Unfilled goal track, path connector, and not-yet-reached node outline. `#7C8799` in both modes.
+    static let muted = dynamic(light: QuizResultPalette.muted, dark: QuizResultPalette.muted)
     static let saffron = dynamic(light: 0xE8A33D, dark: 0xF2B85B)
     /// Ring, dot, selected match frame, and selected choice frame. Light `#B97D22` clears 3:1. `#E8A33D` does not.
     static let ring = dynamic(light: QuizResultPalette.ringLight, dark: QuizResultPalette.ringDark)
@@ -134,8 +136,12 @@ struct SaffronButtonStyle: ButtonStyle {
 }
 
 /// Two rounded squares, one turned 45 degrees. The approved badge.
-struct Octagram: Shape {
+struct Octagram: InsettableShape {
+    var insetAmount: CGFloat = 0
+
     func path(in rect: CGRect) -> Path {
+        let rect = rect.insetBy(dx: insetAmount, dy: insetAmount)
+        guard rect.width > 0, rect.height > 0 else { return Path() }
         let side = min(rect.width, rect.height)
         let origin = CGPoint(x: rect.midX - side / 2, y: rect.midY - side / 2)
         let inset = side * 0.18
@@ -152,6 +158,12 @@ struct Octagram: Shape {
             .translatedBy(x: -rect.midX, y: -rect.midY)
         path.addPath(Path(roundedRect: square, cornerRadius: radius), transform: turn)
         return path
+    }
+
+    func inset(by amount: CGFloat) -> Octagram {
+        var copy = self
+        copy.insetAmount += amount
+        return copy
     }
 }
 
