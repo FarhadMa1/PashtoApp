@@ -850,9 +850,8 @@ struct LessonSessionTests {
         })
 
         let howAreYou = try #require(sessions.first { $0.lessonID.rawValue == "l-greetings-2" })
-        // Word order stays out of the session until tile pronunciation is decided.
-        #expect(!OrderWords.includedInSessions)
-        #expect(howAreYou.tasks.filter { $0.kind == .orderWords }.isEmpty)
+        #expect(OrderWords.includedInSessions)
+        #expect(!howAreYou.tasks.filter { $0.kind == .orderWords }.isEmpty)
 
         var orderCount = 0
         var dialogCount = 0
@@ -863,6 +862,12 @@ struct LessonSessionTests {
                 case .orderWords(let order):
                     orderCount += 1
                     #expect(order.acceptedOrders == nil)
+                    let item = try #require(bundle.items.first { $0.id == order.targetID })
+                    #expect(QuizPresentation.sentencePronunciation(item: item, showsPronunciation: true, answered: false) == nil)
+                    for tile in order.tiles {
+                        #expect(tile.pronunciation?.isEmpty == false)
+                        #expect(tile.pronunciation == item.tokenPronunciations?[tile.index])
+                    }
                 case .choice(let quiz) where quiz.kind == .dialogResponse:
                     dialogCount += 1
                     let reply = try #require(bundle.items.first { $0.id == quiz.targetID })
@@ -893,7 +898,7 @@ struct LessonSessionTests {
                 }
             }
         }
-        #expect(orderCount == 0)
+        #expect(orderCount == 22)
         // Nine replies point at their prompts, so each yields a dialog
         // question. Five lessons can build a response match.
         #expect(dialogCount == 9)

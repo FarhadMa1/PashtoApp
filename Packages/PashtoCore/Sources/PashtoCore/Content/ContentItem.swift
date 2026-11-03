@@ -59,6 +59,11 @@ public struct ContentItem: Codable, Hashable, Sendable {
     public let pronunciationNote: String?
     public let responseTo: ItemID?
     public let tokens: [String]?
+    /// Pronunciation of each word-order tile, in the same order as `tokens`.
+    ///
+    /// One entry per token. A tile can be more than one Pashto word.
+    /// Absent when the item has no `tokens`.
+    public let tokenPronunciations: [String]?
     public let acceptedOrders: [[Int]]?
     public let audio: AudioRef?
     public let verification: Verification
@@ -89,6 +94,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         pronunciationNote: String? = nil,
         responseTo: ItemID? = nil,
         tokens: [String]? = nil,
+        tokenPronunciations: [String]? = nil,
         acceptedOrders: [[Int]]? = nil,
         audio: AudioRef? = nil,
         name: String? = nil,
@@ -107,6 +113,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         self.pronunciationNote = pronunciationNote
         self.responseTo = responseTo
         self.tokens = tokens
+        self.tokenPronunciations = tokenPronunciations
         self.acceptedOrders = acceptedOrders
         self.audio = audio
         self.verification = verification
@@ -129,6 +136,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         pronunciationNote = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.pronunciationNote, from: container)
         responseTo = try StrictJSON.decodeIfPresent(ItemID.self, forKey: CodingKeys.responseTo, from: container)
         tokens = try StrictJSON.decodeIfPresent([String].self, forKey: CodingKeys.tokens, from: container)
+        tokenPronunciations = try StrictJSON.decodeIfPresent([String].self, forKey: CodingKeys.tokenPronunciations, from: container)
         acceptedOrders = try StrictJSON.decodeIfPresent([[Int]].self, forKey: CodingKeys.acceptedOrders, from: container)
         audio = try StrictJSON.decodeIfPresent(AudioRef.self, forKey: CodingKeys.audio, from: container)
         verification = try StrictJSON.decode(Verification.self, forKey: CodingKeys.verification, from: container)
@@ -151,6 +159,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         try container.encodeIfPresent(pronunciationNote, forKey: .pronunciationNote)
         try container.encodeIfPresent(responseTo, forKey: .responseTo)
         try container.encodeIfPresent(tokens, forKey: .tokens)
+        try container.encodeIfPresent(tokenPronunciations, forKey: .tokenPronunciations)
         try container.encodeIfPresent(acceptedOrders, forKey: .acceptedOrders)
         try container.encodeIfPresent(audio, forKey: .audio)
         try container.encode(verification, forKey: .verification)
@@ -172,6 +181,7 @@ public struct ContentItem: Codable, Hashable, Sendable {
         case pronunciationNote
         case responseTo
         case tokens
+        case tokenPronunciations
         case acceptedOrders
         case audio
         case verification

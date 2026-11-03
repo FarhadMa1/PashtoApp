@@ -3,10 +3,14 @@ enum TokenRules {
     static func issues(for item: ContentItem) -> [ValidationIssue] {
         let id = item.id.rawValue
         guard let tokens = item.tokens else {
+            var issues: [ValidationIssue] = []
             if item.acceptedOrders != nil {
-                return [error(id, "acceptedOrders", "acceptedOrders is set without tokens.")]
+                issues.append(error(id, "acceptedOrders", "acceptedOrders is set without tokens."))
             }
-            return []
+            if item.tokenPronunciations != nil {
+                issues.append(error(id, "tokenPronunciations", "tokenPronunciations is set without tokens."))
+            }
+            return issues
         }
 
         var issues: [ValidationIssue] = []
@@ -34,6 +38,30 @@ enum TokenRules {
                 "tokens",
                 "tokens join to \"\(joined)\", which does not match pashto without a trailing ؟ or ، (\"\(expected)\")."
             ))
+        }
+
+        if let spoken = item.tokenPronunciations {
+            if spoken.count != tokens.count {
+                issues.append(error(
+                    id,
+                    "tokenPronunciations",
+                    "tokenPronunciations has \(spoken.count) entries and tokens has \(tokens.count)."
+                ))
+            } else {
+                for pronunciation in spoken {
+                    if Text.isBlank(pronunciation) {
+                        issues.append(error(id, "tokenPronunciations", "tokenPronunciations contains an empty entry."))
+                    } else if hasEdgeSpace(pronunciation) {
+                        issues.append(error(
+                            id,
+                            "tokenPronunciations",
+                            "token pronunciation \"\(pronunciation)\" has leading or trailing space."
+                        ))
+                    }
+                }
+            }
+        } else {
+            issues.append(error(id, "tokenPronunciations", "tokenPronunciations is required when tokens are set."))
         }
 
         if let orders = item.acceptedOrders {

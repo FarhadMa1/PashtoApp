@@ -156,8 +156,8 @@ private struct ItemTasks {
 /// B3 are not built when pronunciation is hidden. B2 is built in both cases,
 /// and it is the only letter task when pronunciation is hidden. VoiceOver
 /// builds none of the letter tasks, and it does not fall back to the old
-/// letter meaning questions while pronunciation is shown. Word order stays
-/// out of the session until `OrderWords.includedInSessions` is turned on.
+/// letter meaning questions while pronunciation is shown. Word order is
+/// included while `OrderWords.includedInSessions` is true.
 /// Dialog reply and match pairs follow. The placement test draws from this
 /// same draft and the same `rng`.
 struct LessonTaskDraft {
@@ -275,8 +275,6 @@ public enum LessonSessionBuilder {
                     itemTasks.append(SessionTask(payload: .choice(task)))
                 }
             }
-            // Word order is paused. Farhad is still deciding the pronunciation
-            // under each tile. `OrderWords.includedInSessions` turns it back on.
             if OrderWords.includedInSessions,
                let task = OrderWords.makeTask(for: target, in: context, using: &rng) {
                 itemTasks.append(SessionTask(payload: .orderWords(task)))

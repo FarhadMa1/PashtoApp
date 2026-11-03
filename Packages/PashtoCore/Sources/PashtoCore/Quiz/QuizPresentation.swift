@@ -154,6 +154,15 @@ public enum QuizPresentation {
         return spokenPronunciation(text: text, item: item, showsPronunciation: showsPronunciation)
     }
 
+    /// Pronunciation under one word tile.
+    ///
+    /// Shown before the answer, whenever the session is showing pronunciation.
+    /// The whole sentence stays hidden until `sentencePronunciation`.
+    public static func tilePronunciation(_ pronunciation: String?, showsPronunciation: Bool) -> String? {
+        guard showsPronunciation, let pronunciation, !Text.isBlank(pronunciation) else { return nil }
+        return pronunciation
+    }
+
     /// Pronunciation of a whole ordered sentence.
     ///
     /// Hidden until the learner has answered. Before that, the pronunciation

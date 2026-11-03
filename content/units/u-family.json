@@ -138,6 +138,11 @@
         "څوک",
         "دی"
       ],
+      "tokenPronunciations": [
+        "daa",
+        "tsok",
+        "day"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -161,6 +166,11 @@
         "دا",
         "څوک",
         "ده"
+      ],
+      "tokenPronunciations": [
+        "daa",
+        "tsok",
+        "da"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -187,6 +197,12 @@
         "پلار",
         "دی"
       ],
+      "tokenPronunciations": [
+        "daa",
+        "zmaa",
+        "plaar",
+        "day"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -211,6 +227,12 @@
         "زما",
         "مور",
         "ده"
+      ],
+      "tokenPronunciations": [
+        "daa",
+        "zmaa",
+        "mor",
+        "da"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -297,6 +319,12 @@
         "ورور",
         "دی"
       ],
+      "tokenPronunciations": [
+        "daa",
+        "zmaa",
+        "wror",
+        "day"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -321,6 +349,12 @@
         "زما",
         "خور",
         "ده"
+      ],
+      "tokenPronunciations": [
+        "daa",
+        "zmaa",
+        "khor",
+        "da"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -366,6 +400,12 @@
         "ستا",
         "ورور",
         "دی"
+      ],
+      "tokenPronunciations": [
+        "daa",
+        "staa",
+        "wror",
+        "day"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -432,6 +472,12 @@
         "څنګه",
         "ده"
       ],
+      "tokenPronunciations": [
+        "mor",
+        "dey",
+        "TSAN-ga",
+        "da"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -455,6 +501,11 @@
         "هغه",
         "ښه",
         "ده"
+      ],
+      "tokenPronunciations": [
+        "ha-GHA",
+        "kha",
+        "da"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -481,6 +532,12 @@
         "څنګه",
         "دی"
       ],
+      "tokenPronunciations": [
+        "plaar",
+        "dey",
+        "TSAN-ga",
+        "day"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -504,6 +561,11 @@
         "هغه",
         "ښه",
         "دی"
+      ],
+      "tokenPronunciations": [
+        "ha-GHA",
+        "kha",
+        "day"
       ],
       "acceptedOrders": null,
       "audio": null,

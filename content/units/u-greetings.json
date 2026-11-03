@@ -158,6 +158,11 @@
         "څنګه",
         "یاست"
       ],
+      "tokenPronunciations": [
+        "TAA-so",
+        "TSAN-ga",
+        "yaast"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -181,6 +186,11 @@
         "زه",
         "ښه",
         "یم"
+      ],
+      "tokenPronunciations": [
+        "za",
+        "kha",
+        "yam"
       ],
       "acceptedOrders": null,
       "audio": null,
