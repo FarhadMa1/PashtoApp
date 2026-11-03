@@ -28,4 +28,12 @@ public enum QuizDraft {
         next[left] = nil
         return next
     }
+
+    /// The mark for one linked pair after the answer.
+    ///
+    /// A correct pair stays marked when another pair is wrong.
+    public static func pairMark(linkedRight: ItemID?, correctRight: ItemID, revealed: Bool) -> QuizResultMark? {
+        guard revealed, let linkedRight else { return nil }
+        return linkedRight == correctRight ? .correct : .incorrect
+    }
 }

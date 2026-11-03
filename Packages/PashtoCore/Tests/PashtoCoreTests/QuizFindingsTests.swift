@@ -255,6 +255,45 @@ struct QuizFindingsTests {
         #expect(QuizPresentation.matchAccessibilityLabel(text: "سلام", pronunciation: "sa-LAAM", linkedText: "hello") == "سلام, sa-LAAM, hello")
     }
 
+    @Test func aWrongMatchStillMarksTheCorrectPairs() {
+        let hello = itemID("e-hello")
+        let helloEn = itemID("e-hello-en")
+        let thanks = itemID("e-thanks")
+        let thanksEn = itemID("e-thanks-en")
+        let bye = itemID("e-bye")
+        let byeEn = itemID("e-bye-en")
+        let task = MatchPairsTask(
+            mode: .pashtoEnglish,
+            pairs: [
+                MatchPair(left: MatchSide(itemID: hello, text: "سلام"), right: MatchSide(itemID: helloEn, text: "hello")),
+                MatchPair(left: MatchSide(itemID: thanks, text: "مننه"), right: MatchSide(itemID: thanksEn, text: "thanks")),
+                MatchPair(left: MatchSide(itemID: bye, text: "خدای"), right: MatchSide(itemID: byeEn, text: "bye")),
+            ],
+            rightOrder: [1, 2, 0]
+        )
+        let links = [hello: helloEn, thanks: byeEn, bye: thanksEn]
+        let answer = QuizAnswer.matches(task.pairs.map { MatchLink(left: $0.left.itemID, right: links[$0.left.itemID]!) })
+        #expect(grade(task, answer) == .incorrect)
+        #expect(QuizDraft.pairMark(linkedRight: links[hello], correctRight: helloEn, revealed: true) == .correct)
+        #expect(QuizDraft.pairMark(linkedRight: links[thanks], correctRight: thanksEn, revealed: true) == .incorrect)
+        #expect(QuizDraft.pairMark(linkedRight: links[bye], correctRight: byeEn, revealed: true) == .incorrect)
+        #expect(QuizDraft.pairMark(linkedRight: helloEn, correctRight: helloEn, revealed: false) == nil)
+    }
+
+    @Test func resultColorsMeetContrast() {
+        for pair in QuizResultPalette.textPairs {
+            let ratio = QuizResultPalette.contrastRatio(foreground: pair.foreground, background: pair.background)
+            #expect(pair.minimumRatio == 4.5)
+            #expect(ratio >= pair.minimumRatio)
+        }
+        for pair in QuizResultPalette.markPairs {
+            let ratio = QuizResultPalette.contrastRatio(foreground: pair.foreground, background: pair.background)
+            #expect(pair.minimumRatio == 3)
+            #expect(ratio >= pair.minimumRatio)
+        }
+        #expect(QuizResultPalette.correctMarkLight != QuizResultPalette.correctTextLight)
+    }
+
     @Test func feedbackUsesASymbolAndTheExistingWords() {
         #expect(QuizResultMark.correct.symbolName == "checkmark")
         #expect(QuizResultMark.incorrect.symbolName == "xmark")

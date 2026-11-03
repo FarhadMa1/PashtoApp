@@ -44,7 +44,6 @@ struct QuizScreen: View {
     @State private var selectedLeft: ItemID?
     @State private var placed: [Int] = []
     @State private var rng = SystemRandomNumberGenerator()
-    @AccessibilityFocusState private var feedbackFocused: Bool
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     private let itemsByID: [ItemID: ContentItem]
@@ -75,12 +74,8 @@ struct QuizScreen: View {
             .padding(.top, 20)
             .padding(.bottom, 12)
             .onChange(of: result) { _, graded in
-                guard let graded else {
-                    feedbackFocused = false
-                    return
-                }
+                guard let graded else { return }
                 AccessibilityNotification.Announcement(QuizCopy.feedbackSpoken(correct: graded == .correct)).post()
-                feedbackFocused = true
             }
         } footer: {
             Button(action: advance) {
@@ -146,14 +141,16 @@ struct QuizScreen: View {
                     pronunciation: option.pronunciation,
                     arabic: QuizPresentation.containsArabicScript(option.text),
                     mark: option.highlight,
-                    reservesPronunciation: option.reservesPronunciation
+                    reservesPronunciation: option.reservesPronunciation,
+                    textColor: mark == nil ? nil : Lapis.fillText,
+                    pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation
                 )
                 .font(.title3.weight(.semibold))
                 Spacer(minLength: 0)
                 if let mark {
                     Image(systemName: mark.symbolName)
                         .font(.body.weight(.bold))
-                        .foregroundStyle(mark == .correct ? Lapis.correct : Lapis.destructive)
+                        .foregroundStyle(markColor(mark))
                         .accessibilityHidden(true)
                 }
             }
@@ -209,18 +206,23 @@ struct QuizScreen: View {
         return HStack(spacing: 8) {
             Image(systemName: mark.symbolName)
                 .font(.headline.weight(.bold))
+                .foregroundStyle(markColor(mark))
                 .accessibilityHidden(true)
             Text(feedbackKey(result))
                 .font(.headline)
+                .foregroundStyle(result == .correct ? Lapis.correctText : Lapis.destructive)
         }
-        .foregroundStyle(result == .correct ? Lapis.correct : Lapis.destructive)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(result == .correct ? Lapis.correctFill : Lapis.incorrectFill)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text(feedbackKey(result)))
         .accessibilityAddTraits(.isHeader)
-        .accessibilityFocused($feedbackFocused)
+    }
+
+    /// The check and the cross. Light green is not dark enough for text.
+    private func markColor(_ mark: QuizResultMark) -> Color {
+        mark == .correct ? Lapis.correct : Lapis.destructive
     }
 
     private func feedbackKey(_ result: GradeResult) -> LocalizedStringKey {
@@ -237,6 +239,11 @@ struct QuizScreen: View {
             ForEach(task.pairs, id: \.left.itemID) { pair in
                 let linked = linkedSide(in: task, id: links[pair.left.itemID])
                 let spoken = pronunciation(for: pair.left.text, itemID: pair.left.itemID)
+                let mark = QuizDraft.pairMark(
+                    linkedRight: links[pair.left.itemID],
+                    correctRight: pair.right.itemID,
+                    revealed: revealed
+                )
                 Button {
                     guard !revealed else { return }
                     if selectedLeft == pair.left.itemID {
@@ -246,37 +253,48 @@ struct QuizScreen: View {
                         selectedLeft = pair.left.itemID
                     }
                 } label: {
-                    VStack(alignment: .leading, spacing: 4) {
-                        PashtoLine(
-                            text: pair.left.text,
-                            pronunciation: spoken,
-                            arabic: QuizPresentation.containsArabicScript(pair.left.text)
-                        )
-                        if let linked {
+                    HStack(spacing: 10) {
+                        VStack(alignment: .leading, spacing: 4) {
                             PashtoLine(
-                                text: linked.text,
-                                pronunciation: pronunciation(for: linked.text, itemID: linked.itemID),
-                                arabic: QuizPresentation.containsArabicScript(linked.text)
+                                text: pair.left.text,
+                                pronunciation: spoken,
+                                arabic: QuizPresentation.containsArabicScript(pair.left.text),
+                                textColor: mark == nil ? nil : Lapis.fillText,
+                                pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation
                             )
-                            .font(.subheadline)
+                            if let linked {
+                                PashtoLine(
+                                    text: linked.text,
+                                    pronunciation: pronunciation(for: linked.text, itemID: linked.itemID),
+                                    arabic: QuizPresentation.containsArabicScript(linked.text),
+                                    textColor: mark == nil ? nil : Lapis.fillText,
+                                    pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation
+                                )
+                                .font(.subheadline)
+                            }
+                        }
+                        Spacer(minLength: 0)
+                        if let mark {
+                            Image(systemName: mark.symbolName)
+                                .font(.body.weight(.bold))
+                                .foregroundStyle(markColor(mark))
+                                .accessibilityHidden(true)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(fill(for: mark))
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .strokeBorder(selectedLeft == pair.left.itemID ? Lapis.saffron : Lapis.secondaryText.opacity(0.35), lineWidth: 2)
+                            .strokeBorder(matchBorder(selected: selectedLeft == pair.left.itemID, mark: mark), lineWidth: 2)
                     )
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(Lapis.text)
-                .accessibilityLabel(
-                    QuizPresentation.matchAccessibilityLabel(
-                        text: pair.left.text,
-                        pronunciation: spoken,
-                        linkedText: linked?.text
-                    )
-                )
+                .accessibilityLabel(matchLabel(text: pair.left.text, pronunciation: spoken, linkedText: linked?.text, mark: mark))
             }
             ForEach(task.rightColumn, id: \.itemID) { side in
                 Button {
@@ -302,6 +320,27 @@ struct QuizScreen: View {
                 )
             }
         }
+    }
+
+    private func matchBorder(selected: Bool, mark: QuizResultMark?) -> Color {
+        switch mark {
+        case .correct:
+            return Lapis.correct
+        case .incorrect:
+            return Lapis.destructive
+        case nil:
+            return selected ? Lapis.saffron : Lapis.secondaryText.opacity(0.35)
+        }
+    }
+
+    private func matchLabel(text: String, pronunciation: String?, linkedText: String?, mark: QuizResultMark?) -> String {
+        let base = QuizPresentation.matchAccessibilityLabel(
+            text: text,
+            pronunciation: pronunciation,
+            linkedText: linkedText
+        )
+        guard let mark else { return base }
+        return "\(base), \(QuizCopy.feedbackSpoken(correct: mark == .correct))"
     }
 
     private func linkedSide(in task: MatchPairsTask, id: ItemID?) -> MatchSide? {
@@ -434,12 +473,13 @@ private struct PashtoLine: View {
     var arabic: Bool
     var mark: LetterMark?
     var reservesPronunciation = false
+    var textColor: Color? = nil
+    var pronunciationColor: Color = Lapis.secondaryText
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             ZStack(alignment: .top) {
-                Text(text)
-                    .multilineTextAlignment(.leading)
+                word
                 if let mark {
                     LetterMarkView(mark: mark)
                         .offset(y: -6)
@@ -448,7 +488,7 @@ private struct PashtoLine: View {
             if let pronunciation {
                 Text(pronunciation)
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Lapis.secondaryText)
+                    .foregroundStyle(pronunciationColor)
                     .environment(\.layoutDirection, .leftToRight)
             } else if reservesPronunciation {
                 Text(" ")
@@ -458,6 +498,15 @@ private struct PashtoLine: View {
             }
         }
         .environment(\.layoutDirection, arabic ? .rightToLeft : .leftToRight)
+    }
+
+    @ViewBuilder private var word: some View {
+        let line = Text(text).multilineTextAlignment(.leading)
+        if let textColor {
+            line.foregroundStyle(textColor)
+        } else {
+            line
+        }
     }
 }
 
