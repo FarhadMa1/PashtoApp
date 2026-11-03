@@ -359,12 +359,7 @@ struct QuizScreen: View {
         revealed = true
         let graded = grade(task, .choice(id))
         result = graded
-        switch graded {
-        case .correct:
-            correctHaptics += 1
-        case .incorrect:
-            wrongHaptics += 1
-        }
+        noteGrade(graded)
     }
 
     private func link(_ right: ItemID) {
@@ -376,8 +371,10 @@ struct QuizScreen: View {
     private func advance() {
         guard let task = session.current, let answer = answer(for: task) else { return }
         if !revealed {
-            result = grade(task, answer)
+            let graded = grade(task, answer)
+            result = graded
             revealed = true
+            noteGrade(graded)
             return
         }
         var generator = rng
@@ -393,6 +390,16 @@ struct QuizScreen: View {
             onFinish(session)
         } else {
             onAnswer(session)
+        }
+    }
+
+    /// One haptic for every task kind. A choice plays it on the tap. Match and word order play it when Continue grades.
+    private func noteGrade(_ graded: GradeResult) {
+        switch AnswerHaptic.kind(for: graded) {
+        case .success:
+            correctHaptics += 1
+        case .error:
+            wrongHaptics += 1
         }
     }
 
@@ -420,6 +427,8 @@ struct PashtoLine: View {
     var reservesPronunciation = false
     var textColor: Color? = nil
     var pronunciationColor: Color = Lapis.secondaryText
+    /// Shrinks one long word so the 56 pt glyph stays inside the card at the largest type size.
+    var fitsWidth = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -446,11 +455,30 @@ struct PashtoLine: View {
     }
 
     @ViewBuilder private var word: some View {
-        let line = Text(text).multilineTextAlignment(.leading)
+        let line = Text(text)
+            .multilineTextAlignment(.leading)
+            .modifier(FitSingleWord(enabled: fitsWidth))
         if let textColor {
             line.foregroundStyle(textColor)
         } else {
             line
+        }
+    }
+}
+
+/// One word has no place to wrap, so it scales down instead of clipping. A phrase is unchanged.
+private struct FitSingleWord: ViewModifier {
+    var enabled: Bool
+
+    @ViewBuilder func body(content: Content) -> some View {
+        if enabled {
+            content
+                .lineLimit(1)
+                .minimumScaleFactor(0.1)
+                .allowsTightening(true)
+                .frame(maxWidth: .infinity)
+        } else {
+            content
         }
     }
 }

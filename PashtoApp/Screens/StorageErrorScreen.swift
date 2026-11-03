@@ -15,6 +15,8 @@ struct StorageErrorScreen: View {
     var tryAgain: () -> Void
     var startOver: (() -> Void)?
     var missingCourseAttempts = 0
+    /// True while Try again is still working. The buttons stay disabled and the progress indicator is shown.
+    var isBusy = false
     @State private var confirmingStartOver = false
 
     var body: some View {
@@ -44,9 +46,17 @@ struct StorageErrorScreen: View {
         } footer: {
             VStack(spacing: 8) {
                 Button(action: tryAgain) {
-                    Text("storageError.tryAgain.button")
+                    HStack(spacing: 10) {
+                        if isBusy {
+                            ProgressView()
+                                .tint(Lapis.saffronInk)
+                                .accessibilityHidden(true)
+                        }
+                        Text("storageError.tryAgain.button")
+                    }
                 }
                 .buttonStyle(SaffronButtonStyle())
+                .disabled(isBusy)
                 if startOver != nil {
                     Button("storageError.startOver.button", role: .destructive, action: { confirmingStartOver = true })
                         .buttonStyle(.plain)
@@ -54,6 +64,7 @@ struct StorageErrorScreen: View {
                         .foregroundStyle(Lapis.destructive)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
+                        .disabled(isBusy)
                 }
             }
         }

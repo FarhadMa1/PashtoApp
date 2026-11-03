@@ -407,12 +407,28 @@ struct QuizFindingsTests {
         #expect(lessonBar.map(\.name) == [
             "lesson bar fill on track, light",
             "lesson bar fill on track, dark",
+            "lesson bar outline on the page, light",
+            "lesson bar outline on the page, dark",
         ])
-        #expect(lessonBar.map(\.foreground) == [QuizResultPalette.lessonBarFillLight, QuizResultPalette.lessonBarFillDark])
-        #expect(lessonBar.map(\.background) == [QuizResultPalette.lessonBarTrackLight, QuizResultPalette.lessonBarTrackDark])
+        #expect(lessonBar.map(\.foreground) == [
+            QuizResultPalette.lessonBarFillLight,
+            QuizResultPalette.lessonBarFillDark,
+            QuizResultPalette.lessonBarOutlineLight,
+            QuizResultPalette.lessonBarOutlineDark,
+        ])
+        #expect(lessonBar.map(\.background) == [
+            QuizResultPalette.lessonBarTrackLight,
+            QuizResultPalette.lessonBarTrackDark,
+            QuizResultPalette.pageLight,
+            QuizResultPalette.pageDark,
+        ])
         #expect(QuizResultPalette.lessonBarFillLight == QuizResultPalette.ringLight)
         #expect(QuizResultPalette.lessonBarFillDark == QuizResultPalette.ringDark)
         #expect(QuizResultPalette.lessonBarFillLight != 0xE8A33D)
+        #expect(QuizResultPalette.lessonBarOutlineLight == 0x1E3A8A)
+        #expect(QuizResultPalette.lessonBarOutlineDark == 0x93B4F5)
+        #expect(QuizResultPalette.pageLight == 0xFAF7F0)
+        #expect(QuizResultPalette.pageDark == 0x0F172A)
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {

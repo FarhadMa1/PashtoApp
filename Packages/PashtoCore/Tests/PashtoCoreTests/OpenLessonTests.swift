@@ -250,6 +250,45 @@ struct OpenLessonTests {
         #expect(lesson.session == nil)
     }
 
+    @Test func aFailedFinishDoesNotLetAnOlderSnapshotReplaceTheSession() async throws {
+        let store = HookedStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 11).today
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-home", progress: try await store.load(), on: day, seed: 1)
+        try submit(&session, correct: true)
+        await store.failNextSave()
+        await saved(lesson, session, on: day, to: store)
+        #expect(lesson.hasUnsavedAnswers)
+        #expect(try await store.load().activeSession == nil)
+        let partial = session.answers.count
+
+        try answerAll(&session, correct: true)
+        #expect(session.isComplete)
+        let complete = session.answers.count
+        #expect(complete > partial)
+
+        await store.failNextCommit()
+        await #expect(throws: ProgressStoreContractError.self) {
+            try await lesson.finishLesson(session, on: day, in: course, to: store)
+        }
+        let held = try await store.load()
+        #expect(held.activeSession?.lesson?.answers.count == complete)
+        #expect(held.lessonProgress.isEmpty)
+        #expect(lesson.hasUnsavedAnswers == false)
+        #expect(lesson.canRetryFailedFinish)
+        let writesBeforeRetry = await store.savedAnswerCounts
+
+        lesson.retryUnsavedAnswers(to: store)
+        await lesson.waitUntilSavesFinish()
+
+        let after = try await store.load()
+        #expect(after.activeSession?.lesson?.answers.count == complete)
+        #expect(after.activeSession?.lesson?.answers.count != partial)
+        #expect(await store.savedAnswerCounts == writesBeforeRetry)
+        #expect(lesson.canRetryFailedFinish)
+        #expect(lesson.session?.answers.count == complete)
+    }
+
     @Test func aRetryDuringFinishDoesNotRestoreTheLesson() async throws {
         let pause = CommitPause()
         await pause.arm()

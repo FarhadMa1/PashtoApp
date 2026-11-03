@@ -45,6 +45,11 @@ enum Lapis {
         dark: QuizResultPalette.fillPronunciationDark
     )
     static let badge = dynamic(light: 0x1E3A8A, dark: 0x2747A6)
+    /// 1 pt lesson-bar outline. Light `#1E3A8A`, dark `#93B4F5`. Both clear 3:1 on the page.
+    static let primary = dynamic(
+        light: QuizResultPalette.lessonBarOutlineLight,
+        dark: QuizResultPalette.lessonBarOutlineDark
+    )
     static let badgeInk = color(0xFAF7F0)
     static let heroTop = color(0x2747A6)
     static let heroMiddle = color(0x1E3A8A)

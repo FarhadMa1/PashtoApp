@@ -65,6 +65,60 @@ enum Motion {
         }
     }
 
+    static var lessonStar: Animation {
+        .spring(response: CelebrationMotion.star, dampingFraction: CelebrationMotion.starDamping)
+    }
+
+    static var girih: Animation {
+        .easeOut(duration: CelebrationMotion.girih)
+    }
+
+    static var pathFill: Animation {
+        .easeOut(duration: CelebrationMotion.pathFill)
+    }
+
+    static var pathPulse: Animation {
+        .easeOut(duration: CelebrationMotion.pathPulse).repeatForever(autoreverses: false)
+    }
+
+    static var goalRing: Animation {
+        .spring(
+            response: CelebrationMotion.goalSpringResponse,
+            dampingFraction: CelebrationMotion.goalSpringDamping
+        )
+    }
+
+    static var goalCheck: Animation {
+        .easeOut(duration: CelebrationMotion.goalCheck)
+    }
+
+    static func lessonStarAnimation(reduceMotion: Bool) -> Animation {
+        switch LessonStarStyle.style(reduceMotion: reduceMotion) {
+        case .unfold:
+            lessonStar
+        case .fade:
+            fade
+        }
+    }
+
+    static func girihAnimation(reduceMotion: Bool) -> Animation? {
+        switch GirihEntrance.style(reduceMotion: reduceMotion) {
+        case .fadeIn:
+            girih
+        case .still:
+            nil
+        }
+    }
+
+    static func pathFillAnimation(reduceMotion: Bool) -> Animation? {
+        switch CoursePathMotion.FillStyle.style(reduceMotion: reduceMotion) {
+        case .ease:
+            pathFill
+        case .jump:
+            nil
+        }
+    }
+
     static func pairStep(_ step: PairMergeStep?, reduceMotion: Bool) -> Animation? {
         switch step {
         case .glide:

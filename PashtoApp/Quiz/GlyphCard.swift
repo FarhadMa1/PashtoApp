@@ -61,7 +61,8 @@ struct GlyphCard: View {
             PashtoLine(
                 text: side.glyph,
                 pronunciation: side.pronunciation,
-                arabic: QuizPresentation.containsArabicScript(side.glyph)
+                arabic: QuizPresentation.containsArabicScript(side.glyph),
+                fitsWidth: prominent
             )
             .font(prominent ? .system(size: glyphSize, weight: .medium) : .title2.weight(.semibold))
             .foregroundStyle(Lapis.text)
@@ -95,15 +96,16 @@ struct GlyphCard: View {
 
 /// Hides a face once it has turned past the edge, so the glyph is not mirrored.
 ///
-/// `angle` is nonisolated because `Animatable` is interpolated off the view's actor.
+/// SwiftUI samples `animatableData` from a nonisolated witness. The sample runs
+/// on the main actor, so the read and write go through `MainActor.assumeIsolated`.
 private struct SpinFace: ViewModifier, Animatable {
-    nonisolated(unsafe) var angle: Double
+    var angle: Double
     var shown: Bool
     var spins: Bool
 
     nonisolated var animatableData: Double {
-        get { angle }
-        set { angle = newValue }
+        get { MainActor.assumeIsolated { angle } }
+        set { MainActor.assumeIsolated { self.angle = newValue } }
     }
 
     func body(content: Content) -> some View {

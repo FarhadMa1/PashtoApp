@@ -100,7 +100,15 @@ public enum QuizResultPalette {
         ContrastPair(name: "selected choice frame on the page, dark", foreground: ringDark, background: pageDark, minimumRatio: 3),
         ContrastPair(name: "lesson bar fill on track, light", foreground: lessonBarFillLight, background: lessonBarTrackLight, minimumRatio: 3),
         ContrastPair(name: "lesson bar fill on track, dark", foreground: lessonBarFillDark, background: lessonBarTrackDark, minimumRatio: 3),
+        ContrastPair(name: "lesson bar outline on the page, light", foreground: lessonBarOutlineLight, background: pageLight, minimumRatio: 3),
+        ContrastPair(name: "lesson bar outline on the page, dark", foreground: lessonBarOutlineDark, background: pageDark, minimumRatio: 3),
     ]
+
+    /// 1 pt outline around the lesson bar. Light `#1E3A8A`, dark `#93B4F5`.
+    ///
+    /// Measured against the page, which is also the colour of the track.
+    public static let lessonBarOutlineLight: UInt32 = 0x1E3A8A
+    public static let lessonBarOutlineDark: UInt32 = 0x93B4F5
 
     /// WCAG relative contrast of two sRGB colours.
     public static func contrastRatio(foreground: UInt32, background: UInt32) -> Double {
