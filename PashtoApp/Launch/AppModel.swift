@@ -12,8 +12,9 @@ import UIKit
 /// the fresh file and moves the backup back.
 ///
 /// A missing or undecodable `content.json` or `release-units.json` uses that
-/// same storage error and does not open the home. Start over is not run in
+/// same storage error and does not open the home. Start over is hidden in
 /// that case: moving the progress file aside would not restore the course.
+/// Try again reads the bundle again.
 @MainActor
 @Observable
 final class AppModel {
@@ -46,6 +47,9 @@ final class AppModel {
     private var progressStore: SwiftDataProgressStore?
     private var snapshot: ProgressSnapshot?
     private var isOpening = false
+    /// Start over only helps a store that will not open. It stays hidden when
+    /// the bundled course itself could not be read.
+    private(set) var offersStartOver = false
 
     var isAppStoreButtonVisible: Bool {
         showsAppStoreButton(appStoreID: appStoreID)
@@ -267,13 +271,15 @@ final class AppModel {
         case .ready(let bundled):
             course = bundled.bundle
             releasedUnitIDs = bundled.releasedUnitIDs
+            offersStartOver = true
             return bundled.installedContentVersion
         case .unavailable:
             course = nil
             releasedUnitIDs = []
+            offersStartOver = false
             refreshReleasedLessons()
             if let screen = load.blockingScreen {
-                phase = screen
+                phase = phase(for: screen)
             }
             return nil
         }

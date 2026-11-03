@@ -30,9 +30,9 @@ settings:
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
     CODE_SIGN_STYLE: Automatic
-    # The bundled-course check reads the built .app. The user-script sandbox
-    # hides that folder, so the check would fail every build.
-    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    # Stays on. The bundled-course script lists the two built JSON files as
+    # inputs and a stamp as its output, so the sandbox can read and write them.
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_EMIT_LOC_STRINGS: YES
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     STRING_CATALOG_GENERATE_SYMBOLS: YES
@@ -78,6 +78,11 @@ targets:
         name: Verify bundled course
         basedOnDependencyAnalysis: false
         showEnvVars: false
+        inputFiles:
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/content.json
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/release-units.json
+        outputFiles:
+          - $(DERIVED_FILE_DIR)/course-files-check.stamp
 schemes:
   PashtoApp:
     build:

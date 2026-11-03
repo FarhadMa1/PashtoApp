@@ -64,6 +64,8 @@ struct BundledCourseTests {
         let source = try String(contentsOf: script, encoding: .utf8)
         #expect(source.contains(BundledCourseLoader.contentFileName))
         #expect(source.contains(BundledCourseLoader.releaseUnitsFileName))
+        #expect(source.contains("UNLOCALIZED_RESOURCES_FOLDER_PATH"))
+        #expect(source.contains("course-files-check.stamp"))
         #expect(source.contains("error:"))
 
         let root = FileManager.default.temporaryDirectory
@@ -76,17 +78,20 @@ struct BundledCourseTests {
         #expect(bothMissing.status != 0)
         #expect(bothMissing.output.contains("error: content.json is missing"))
         #expect(bothMissing.output.contains("error: release-units.json is missing"))
+        #expect(!FileManager.default.fileExists(atPath: bothMissing.stamp.path))
 
         try Data("{}".utf8).write(to: app.appendingPathComponent("release-units.json"))
         let contentMissing = try runBundleCheck(script: script, app: app)
         #expect(contentMissing.status != 0)
         #expect(contentMissing.output.contains("error: content.json is missing"))
         #expect(!contentMissing.output.contains("release-units.json is missing"))
+        #expect(!FileManager.default.fileExists(atPath: contentMissing.stamp.path))
 
         try Data("{}".utf8).write(to: app.appendingPathComponent("content.json"))
         let present = try runBundleCheck(script: script, app: app)
         #expect(present.status == 0)
         #expect(present.output.isEmpty)
+        #expect(FileManager.default.fileExists(atPath: present.stamp.path))
     }
 }
 
@@ -117,13 +122,20 @@ private func repositoryRoot() -> URL {
         .deletingLastPathComponent()
 }
 
-private func runBundleCheck(script: URL, app: URL) throws -> (status: Int32, output: String) {
+private func runBundleCheck(script: URL, app: URL) throws -> (status: Int32, output: String, stamp: URL) {
+    let derived = app.deletingLastPathComponent().appendingPathComponent("Derived", isDirectory: true)
+    try FileManager.default.createDirectory(at: derived, withIntermediateDirectories: true)
+    let stamp = derived.appendingPathComponent("course-files-check.stamp")
+    if FileManager.default.fileExists(atPath: stamp.path) {
+        try FileManager.default.removeItem(at: stamp)
+    }
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/bin/sh")
     process.arguments = [script.path]
     var environment = ProcessInfo.processInfo.environment
     environment["TARGET_BUILD_DIR"] = app.deletingLastPathComponent().path
-    environment["WRAPPER_NAME"] = app.lastPathComponent
+    environment["UNLOCALIZED_RESOURCES_FOLDER_PATH"] = app.lastPathComponent
+    environment["DERIVED_FILE_DIR"] = derived.path
     process.environment = environment
     let pipe = Pipe()
     process.standardOutput = pipe
@@ -131,5 +143,5 @@ private func runBundleCheck(script: URL, app: URL) throws -> (status: Int32, out
     try process.run()
     process.waitUntilExit()
     let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    return (process.terminationStatus, String(decoding: data, as: UTF8.self))
+    return (process.terminationStatus, String(decoding: data, as: UTF8.self), stamp)
 }

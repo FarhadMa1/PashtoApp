@@ -159,14 +159,21 @@ struct RootLessonSessionTests {
         #expect(spec.contains("path: scripts/verify-bundled-course.sh"))
         #expect(spec.contains("name: Verify bundled course"))
         #expect(spec.contains("basedOnDependencyAnalysis: false"))
-        #expect(spec.contains("ENABLE_USER_SCRIPT_SANDBOXING: NO"))
+        #expect(spec.contains("ENABLE_USER_SCRIPT_SANDBOXING: YES"))
+        #expect(spec.contains("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/content.json"))
+        #expect(spec.contains("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/release-units.json"))
+        #expect(spec.contains("$(DERIVED_FILE_DIR)/course-files-check.stamp"))
         #expect(project.contains("PBXShellScriptBuildPhase"))
         #expect(project.contains("Verify bundled course"))
         #expect(project.contains("alwaysOutOfDate = 1"))
+        #expect(project.contains("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/content.json"))
+        #expect(project.contains("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/release-units.json"))
+        #expect(project.contains("$(DERIVED_FILE_DIR)/course-files-check.stamp"))
         #expect(project.contains("content.json"))
         #expect(project.contains("release-units.json"))
         #expect(project.contains("error:"))
-        #expect(project.contains("ENABLE_USER_SCRIPT_SANDBOXING = NO"))
+        #expect(project.contains("ENABLE_USER_SCRIPT_SANDBOXING = YES"))
+        #expect(!project.contains("ENABLE_USER_SCRIPT_SANDBOXING = NO"))
     }
 
     @Test func cachedLessonsStayPutUntilVoiceOverChanges() {

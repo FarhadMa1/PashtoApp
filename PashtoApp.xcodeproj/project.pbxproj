@@ -249,15 +249,18 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/content.json",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/release-units.json",
 			);
 			name = "Verify bundled course";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/course-files-check.stamp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n# Fails the app build when content.json or release-units.json is not in the built .app.\n# Copy Bundle Resources places both files at the root of the iOS app wrapper.\nset -eu\n\napp=\"${TARGET_BUILD_DIR:?TARGET_BUILD_DIR is not set}/${WRAPPER_NAME:?WRAPPER_NAME is not set}\"\nmissing=0\n\nfor name in content.json release-units.json; do\n  if [ ! -f \"${app}/${name}\" ]; then\n    echo \"error: ${name} is missing from the built app (${app}/${name})\"\n    missing=1\n  fi\ndone\n\nif [ \"$missing\" -ne 0 ]; then\n  exit 1\nfi\n";
+			shellScript = "#!/bin/sh\n# Fails the app build when content.json or release-units.json is not in the built .app.\n# Copy Bundle Resources places both files at the root of the iOS app wrapper.\n# Those paths are this phase's inputs, and the stamp is its output, so the\n# user-script sandbox can read the course files and write the stamp.\nset -eu\n\nresources=\"${TARGET_BUILD_DIR:?TARGET_BUILD_DIR is not set}/${UNLOCALIZED_RESOURCES_FOLDER_PATH:?UNLOCALIZED_RESOURCES_FOLDER_PATH is not set}\"\nstamp=\"${DERIVED_FILE_DIR:?DERIVED_FILE_DIR is not set}/course-files-check.stamp\"\nmissing=0\n\nfor name in content.json release-units.json; do\n  if [ ! -f \"${resources}/${name}\" ]; then\n    echo \"error: ${name} is missing from the built app (${resources}/${name})\"\n    missing=1\n  fi\ndone\n\nif [ \"$missing\" -ne 0 ]; then\n  exit 1\nfi\n\ntouch \"$stamp\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -350,7 +353,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -445,7 +448,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

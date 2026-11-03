@@ -3,10 +3,11 @@ import SwiftUI
 /// Shown when the progress store cannot be opened for a reason other than a newer version.
 ///
 /// Try again opens the same file. Start over asks first, then the caller moves
-/// that file aside. This view does not touch the file itself.
+/// that file aside. Pass no start-over action to hide that button, which is
+/// what a missing course does. This view does not touch the file itself.
 struct StorageErrorScreen: View {
     var tryAgain: () -> Void
-    var startOver: () -> Void
+    var startOver: (() -> Void)?
     @State private var confirmingStartOver = false
 
     var body: some View {
@@ -38,16 +39,18 @@ struct StorageErrorScreen: View {
                     Text("storageError.tryAgain.button")
                 }
                 .buttonStyle(SaffronButtonStyle())
-                Button("storageError.startOver.button", role: .destructive, action: { confirmingStartOver = true })
-                    .buttonStyle(.plain)
-                    .font(.body.weight(.bold))
-                    .foregroundStyle(Lapis.destructive)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
+                if startOver != nil {
+                    Button("storageError.startOver.button", role: .destructive, action: { confirmingStartOver = true })
+                        .buttonStyle(.plain)
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(Lapis.destructive)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                }
             }
         }
         .alert("storageError.startOver.confirmTitle", isPresented: $confirmingStartOver) {
-            Button("storageError.startOver.button", role: .destructive, action: startOver)
+            Button("storageError.startOver.button", role: .destructive, action: { startOver?() })
             Button("storageError.startOver.cancel", role: .cancel) {}
         } message: {
             Text("storageError.startOver.confirmMessage")

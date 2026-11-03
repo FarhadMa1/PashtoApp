@@ -26,7 +26,9 @@ struct RootView: View {
         case .storageError:
             StorageErrorScreen(
                 tryAgain: { Task { await model.tryAgain() } },
-                startOver: { Task { await model.confirmStartOver() } }
+                startOver: model.offersStartOver
+                    ? { Task { await model.confirmStartOver() } }
+                    : nil
             )
         case .welcomeBack:
             WelcomeBackScreen {
