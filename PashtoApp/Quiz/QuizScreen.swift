@@ -17,8 +17,9 @@ enum QuizLaunch {
         voiceOver: Bool,
         using rng: inout some RandomNumberGenerator
     ) -> LessonSession {
-        LessonSessionBuilder.build(
-            for: lessonID,
+        var launch = RootLessonSession()
+        return launch.start(
+            lessonID: lessonID,
             in: bundle,
             seenLessonIDs: seenLessonIDs,
             releasedUnitIDs: releasedUnitIDs,
@@ -186,7 +187,7 @@ struct QuizScreen: View {
         case .incorrect:
             return Lapis.destructive
         case nil:
-            return pickedChoice == option.itemID ? Lapis.saffron : Lapis.secondaryText.opacity(0.35)
+            return pickedChoice == option.itemID ? Lapis.ring : Lapis.secondaryText.opacity(0.35)
         }
     }
 

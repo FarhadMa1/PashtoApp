@@ -27,6 +27,13 @@ final class AppModel {
     private(set) var phase: Phase
     /// The capped review queue from the last Start review. Nil until then.
     private(set) var startedReview: ShortCappedReview?
+    /// The course the app was given, and the ids from `release-units.json`.
+    ///
+    /// Both stay empty when those files are not in the bundle. The session is
+    /// never built from the whole course in their place.
+    private var course: ContentBundle?
+    private var releasedUnitIDs: [UnitID] = []
+    private var lessonLaunch = RootLessonSession()
     private let appStoreID: String
     private var storeURL: URL?
     private let clock: DayClock<SystemDateProvider>
@@ -41,6 +48,22 @@ final class AppModel {
 
     var isReviewing: Bool {
         startedReview != nil
+    }
+
+    /// The lesson quiz on screen. Nil when the learner is on the home.
+    var activeLesson: LessonSession? {
+        lessonLaunch.isActive ? lessonLaunch.session : nil
+    }
+
+    /// Items the open quiz may draw. Released units only.
+    var lessonItems: [ContentItem] {
+        lessonLaunch.items
+    }
+
+    /// Lessons the home can start. Empty when the release list is empty.
+    var releasedLessons: [ReleasedLesson] {
+        guard let course else { return [] }
+        return RootLessonSession.lessons(in: course, releasedUnitIDs: releasedUnitIDs)
     }
 
     /// `ProgressScreen` is the choice in PashtoCore. `Phase` also has loading,
@@ -58,6 +81,9 @@ final class AppModel {
         self.storeURL = storeURL
         self.appStoreID = appStoreID
         self.phase = phase
+        let loaded = Self.releasedCourse(in: .main)
+        self.course = loaded.course
+        self.releasedUnitIDs = loaded.unitIDs
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .autoupdatingCurrent
         self.clock = DayClock(provider: SystemDateProvider(), calendar: calendar)
@@ -147,10 +173,9 @@ final class AppModel {
 
     /// Selects today's capped review queue and leaves Welcome back.
     ///
-    /// The quiz screen is not in this revision. The queue is the one
-    /// `shortCappedReview` already returns. Content is not bundled yet, so
-    /// every stored card id is treated as known. Otherwise the queue would
-    /// be empty.
+    /// The queue is the one `shortCappedReview` already returns. This does not
+    /// open a lesson quiz. Content is not bundled yet, so every stored card
+    /// id is treated as known. Otherwise the queue would be empty.
     func startReview() {
         guard phase == .welcomeBack, let snapshot else {
             phase = .ready
@@ -168,6 +193,30 @@ final class AppModel {
         phase = .ready
     }
 
+    /// Opens a quiz for one released lesson. An unlisted lesson does not start.
+    func startLesson(_ lessonID: LessonID) {
+        guard phase == .ready, let course else { return }
+        var rng = SystemRandomNumberGenerator()
+        var launch = lessonLaunch
+        launch.start(
+            lessonID: lessonID,
+            in: course,
+            seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
+            releasedUnitIDs: releasedUnitIDs,
+            showsPronunciation: snapshot?.settings.showTransliteration ?? true,
+            voiceOver: UIAccessibility.isVoiceOverRunning,
+            using: &rng
+        )
+        lessonLaunch = launch
+    }
+
+    /// Finishing or leaving the quiz. The home is shown again.
+    func endLesson() {
+        var launch = lessonLaunch
+        launch.end()
+        lessonLaunch = launch
+    }
+
     func openAppStore() {
         guard phase == .updateNeeded, let id = appStoreIDForListing(appStoreID) else {
             return
@@ -183,6 +232,25 @@ final class AppModel {
         let url = try ProgressStoreLocation.url()
         storeURL = url
         return url
+    }
+
+    private struct ReleaseList: Decodable {
+        var units: [String]
+    }
+
+    /// Reads the bundled course and the release list. A missing file releases nothing.
+    private static func releasedCourse(in bundle: Bundle) -> (course: ContentBundle?, unitIDs: [UnitID]) {
+        guard
+            let contentURL = bundle.url(forResource: "content", withExtension: "json"),
+            let releaseURL = bundle.url(forResource: "release-units", withExtension: "json"),
+            let content = try? Data(contentsOf: contentURL),
+            let release = try? Data(contentsOf: releaseURL),
+            let course = try? JSONDecoder().decode(ContentBundle.self, from: content),
+            let list = try? JSONDecoder().decode(ReleaseList.self, from: release)
+        else {
+            return (nil, [])
+        }
+        return (course, list.units.compactMap(UnitID.init(rawValue:)))
     }
 
     /// UTC, so the backup folder name does not depend on the locale.

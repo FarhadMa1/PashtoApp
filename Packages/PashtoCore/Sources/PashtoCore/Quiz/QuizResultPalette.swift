@@ -33,10 +33,11 @@ public enum QuizResultPalette {
     public static let pageLight: UInt32 = 0xFAF7F0
     public static let pageDark: UInt32 = 0x0F172A
 
-    /// Ring and dot on a same-sound letter.
+    /// Ring, dot, and the frame around a selected choice or match card.
     ///
     /// Light `#B97D22` is the colour that clears 3:1. `#E8A33D` is about 2.2:1
-    /// on white and is not used here. Dark `#F2B85B` is for the dark fills.
+    /// on white and about 2:1 on the page, so it is not used for that frame.
+    /// Dark `#F2B85B` is for the dark fills and the dark page.
     /// On white that dark gold is about 1.8:1, and the ring is not drawn on white.
     public static let ringLight: UInt32 = 0xB97D22
     public static let ringDark: UInt32 = 0xF2B85B
@@ -85,9 +86,11 @@ public enum QuizResultPalette {
         ContrastPair(name: "ring and dot on correct fill, light", foreground: ringLight, background: correctFillLight, minimumRatio: 3),
         ContrastPair(name: "ring and dot on wrong fill, light", foreground: ringLight, background: incorrectFillLight, minimumRatio: 3),
         ContrastPair(name: "ring and dot on the page, light", foreground: ringLight, background: pageLight, minimumRatio: 3),
+        ContrastPair(name: "selected choice frame on the page, light", foreground: ringLight, background: pageLight, minimumRatio: 3),
         ContrastPair(name: "ring and dot on correct fill, dark", foreground: ringDark, background: correctFillDark, minimumRatio: 3),
         ContrastPair(name: "ring and dot on wrong fill, dark", foreground: ringDark, background: incorrectFillDark, minimumRatio: 3),
         ContrastPair(name: "ring and dot on the page, dark", foreground: ringDark, background: pageDark, minimumRatio: 3),
+        ContrastPair(name: "selected choice frame on the page, dark", foreground: ringDark, background: pageDark, minimumRatio: 3),
     ]
 
     /// WCAG relative contrast of two sRGB colours.

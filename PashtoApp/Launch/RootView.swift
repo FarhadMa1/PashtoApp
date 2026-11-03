@@ -22,7 +22,14 @@ struct RootView: View {
                 model.startReview()
             }
         case .ready:
-            ContentView(reviewStarted: model.isReviewing)
+            ContentView(
+                reviewStarted: model.isReviewing,
+                quiz: model.activeLesson,
+                quizItems: model.lessonItems,
+                lessons: model.releasedLessons,
+                startLesson: { model.startLesson($0) },
+                endSession: { model.endLesson() }
+            )
         }
     }
 }
