@@ -19,14 +19,18 @@ import UIKit
 ///
 /// Each answer is saved on the active lesson. A failed answer stays in memory:
 /// the quiz continues, and that save is tried again on the next answer and
-/// when the app goes to the background. The storage error is shown when the
-/// finished lesson still cannot be saved, and when progress cannot be loaded.
-/// Try again retries that finish and keeps the answers. Start over stays hidden
-/// for a failed save and for a missing course. It is offered when the progress
-/// store cannot be opened. Opening a lesson from its home row continues a saved
-/// lesson on the day it started or the next day, unless VoiceOver would now
-/// skip a question that is still waiting. Startup runs the progress reconciler.
-/// The home list follows `snapshot`.
+/// when the app goes to the background. That background write asks for time
+/// to finish. A retry still waiting when the lesson finishes is dropped, so
+/// the finished lesson is not put back in progress. The storage error is shown
+/// when the finished lesson still cannot be saved, when progress cannot be
+/// loaded, and when a read fails while a lesson is opening. Try again retries
+/// a failed finish and keeps the answers. A failed read while opening reloads,
+/// and Start over stays hidden, as it does for a failed save and a missing
+/// course. Start over is offered when the progress store cannot be opened.
+/// A second tap while a lesson is opening is ignored. Opening a lesson from
+/// its home row continues a saved lesson on the day it started or the next
+/// day, unless VoiceOver would now skip a question that is still waiting.
+/// Startup runs the progress reconciler. The home list follows `snapshot`.
 @MainActor
 @Observable
 final class AppModel {
@@ -58,17 +62,21 @@ final class AppModel {
     private let clock: DayClock<DateProviderBox>
     private var container: ModelContainer?
     private var progressStore: SwiftDataProgressStore?
+    /// Keeps a background save alive until it lands. Not part of the screen.
+    @ObservationIgnored
+    private let backgroundSave = BackgroundLessonSave()
     /// The home list reads this in `didSet`, so a finished lesson cannot leave it stale.
     private var snapshot: ProgressSnapshot? {
         didSet { refreshReleasedLessons() }
     }
-    private var isOpening = false
+    private let lessonOpen = LessonOpening()
     /// Increments when Try again still cannot read the course. The error screen reacts.
     private(set) var courseStillMissingToken = 0
     /// Why the storage error is showing. Nil on every other screen.
     ///
     /// Start over is offered only when the progress store could not be opened.
-    /// A missing course and a failed lesson save keep that button hidden.
+    /// A missing course, a failed lesson save, and a failed read while opening
+    /// a lesson keep that button hidden.
     private var storageErrorReason: StorageErrorReason?
 
     /// Start over only helps a store that will not open.
@@ -144,9 +152,8 @@ final class AppModel {
     }
 
     func loadProgress() async {
-        guard !isOpening else { return }
-        isOpening = true
-        defer { isOpening = false }
+        guard lessonOpen.begin() else { return }
+        defer { lessonOpen.end() }
         guard let version = decodedCourse?.installedContentVersion, let course else { return }
         do {
             let url = try resolvedURL()
@@ -188,13 +195,13 @@ final class AppModel {
     }
 
     func confirmStartOver() async {
-        guard phase == .storageError, !isOpening else { return }
+        guard phase == .storageError, !lessonOpen.isOpening else { return }
         guard let storageErrorReason, storageErrorActions(for: storageErrorReason).showsStartOver else {
             return
         }
         guard let version = prepareCourse() else { return }
-        isOpening = true
-        defer { isOpening = false }
+        guard lessonOpen.begin() else { return }
+        defer { lessonOpen.end() }
         openLesson.endLesson()
         openLesson.discardPendingSaves()
         container = nil
@@ -270,9 +277,12 @@ final class AppModel {
     ///
     /// `voiceOver` is the value `RootView` already read from the environment.
     /// A lesson that was saved and can still be continued opens where it left off.
+    /// A second tap while this open is still loading does not start another.
     func startLesson(_ lessonID: LessonID, voiceOver: Bool) async {
         voiceOverChanged(to: voiceOver)
         guard phase == .ready, let course, let store = progressStore else { return }
+        guard lessonOpen.begin() else { return }
+        defer { lessonOpen.end() }
         do {
             await openLesson.waitUntilSavesFinish()
             if openLesson.hasUnsavedAnswers {
@@ -292,7 +302,7 @@ final class AppModel {
                 using: &rng
             )
         } catch {
-            storageErrorReason = .progressUnreadable
+            storageErrorReason = .lessonOpenUnreadable
             phase = .storageError
         }
     }
@@ -308,9 +318,17 @@ final class AppModel {
     }
 
     /// Writes an answer the store has not kept yet. Called when the app backgrounds.
+    ///
+    /// The system is asked for time to finish the write. The task ends when the
+    /// save has landed, or when that time runs out.
     func saveLessonOnBackground() {
-        guard let store = progressStore else { return }
+        guard let store = progressStore, openLesson.hasUnsavedAnswers else { return }
+        let token = backgroundSave.begin()
         openLesson.retryUnsavedAnswers(to: store)
+        Task {
+            await openLesson.waitUntilSavesFinish()
+            self.backgroundSave.end(matching: token)
+        }
     }
 
     /// The learner finished the quiz. One commit saves the lesson, the cards, and the streak.
@@ -443,5 +461,39 @@ final class AppModel {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
         return formatter.string(from: date)
+    }
+}
+
+/// One system background task for a lesson save.
+///
+/// A later save keeps the same task. An earlier end does not stop that later
+/// save. Ending the task twice is ignored.
+@MainActor
+private final class BackgroundLessonSave {
+    private var taskID: UIBackgroundTaskIdentifier = .invalid
+    private var token = 0
+
+    /// Asks for time to write. Returns the token this attempt holds.
+    func begin() -> Int {
+        token += 1
+        if taskID == .invalid {
+            taskID = UIApplication.shared.beginBackgroundTask { [weak self] in
+                self?.endCurrent()
+            }
+        }
+        return token
+    }
+
+    /// Ends the task when `expected` is still the latest begin.
+    func end(matching expected: Int) {
+        guard expected == token else { return }
+        endCurrent()
+    }
+
+    private func endCurrent() {
+        guard taskID != .invalid else { return }
+        let ending = taskID
+        taskID = .invalid
+        UIApplication.shared.endBackgroundTask(ending)
     }
 }

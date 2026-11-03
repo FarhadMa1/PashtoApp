@@ -250,6 +250,36 @@ struct OpenLessonTests {
         #expect(lesson.session == nil)
     }
 
+    @Test func aRetryDuringFinishDoesNotRestoreTheLesson() async throws {
+        let pause = CommitPause()
+        await pause.arm()
+        let store = HookedStore(contentVersion: "test", savePause: pause)
+        let day = clock(day: 2, hour: 11).today
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-home", progress: try await store.load(), on: day, seed: 1)
+        try submit(&session, correct: true)
+        await store.failNextSave()
+        await saved(lesson, session, on: day, to: store)
+        #expect(lesson.hasUnsavedAnswers)
+        #expect(try await store.load().activeSession == nil)
+
+        try answerAll(&session, correct: true)
+        let finishing = Task { @MainActor in
+            try await lesson.finishLesson(session, on: day, in: course, to: store)
+        }
+        await pause.waitUntilPaused()
+        lesson.retryUnsavedAnswers(to: store)
+        await pause.release()
+
+        let saved = try await finishing.value
+        await lesson.waitUntilSavesFinish()
+        #expect(saved.activeSession == nil)
+        #expect(saved.lessonProgress.map(\.lessonID) == [lessonID("l-home")])
+        let stored = try await store.load()
+        #expect(stored.activeSession == nil)
+        #expect(stored.lessonProgress.map(\.lessonID) == [lessonID("l-home")])
+    }
+
     @Test func anOlderAnswerCannotOverwriteANewerOne() async throws {
         let store = HookedStore(contentVersion: "test")
         let day = clock(day: 2, hour: 16).today
@@ -265,6 +295,46 @@ struct OpenLessonTests {
         #expect(stored.activeSession?.lesson?.answers.count == 2)
         #expect(stored.activeSession?.lesson == session)
         #expect(await store.activeSaveCount == 1)
+
+        let pause = CommitPause()
+        await pause.arm()
+        let slowed = HookedStore(contentVersion: "test", savePause: pause)
+        let resumed = OpenLesson()
+        var older = try start(resumed, "l-home", progress: try await slowed.load(), on: day, seed: 3)
+        try submit(&older, correct: true)
+        resumed.saveAnswer(older, on: day, to: slowed)
+        await pause.waitUntilPaused()
+        try submit(&older, correct: true)
+        resumed.saveAnswer(older, on: day, to: slowed)
+        await pause.release()
+        await resumed.waitUntilSavesFinish()
+
+        let landed = try await slowed.load()
+        #expect(landed.activeSession?.lesson == older)
+        #expect(landed.activeSession?.lesson?.answers.count == 2)
+        #expect(await slowed.savedAnswerCounts == [1, 2])
+    }
+
+    @Test func aSecondTapWhileALessonIsOpeningIsIgnored() async {
+        let pause = CommitPause()
+        await pause.arm()
+        let opening = LessonOpening()
+        let first = Task { @MainActor in
+            #expect(opening.begin())
+            defer { opening.end() }
+            await pause.pauseIfArmed()
+        }
+        await pause.waitUntilPaused()
+        let second = await MainActor.run { opening.begin() }
+        #expect(second == false)
+        #expect(await MainActor.run { opening.isOpening })
+        await pause.release()
+        await first.value
+        let next = await MainActor.run { opening.begin() }
+        #expect(next)
+        #expect(await MainActor.run { opening.isOpening })
+        await MainActor.run { opening.end() }
+        #expect(await MainActor.run { opening.isOpening } == false)
     }
 
     @Test func theQuizAppearsAfterStartAndDisappearsAfterEndAndAnAnswerChangesIt() async throws {
@@ -733,10 +803,12 @@ private actor HookedStore: ProgressStore {
     private var savesToFail = 0
     private var commitsToFail = 0
     private let pause: CommitPause?
+    private let savePause: CommitPause?
 
-    init(contentVersion: String, pause: CommitPause? = nil) {
+    init(contentVersion: String, pause: CommitPause? = nil, savePause: CommitPause? = nil) {
         inner = InMemoryProgressStore(contentVersion: contentVersion)
         self.pause = pause
+        self.savePause = savePause
     }
 
     func failNextSave() {
@@ -752,13 +824,17 @@ private actor HookedStore: ProgressStore {
     }
 
     private(set) var activeSaveCount = 0
+    /// How many answers each active-session write carried, in the order they landed.
+    private(set) var savedAnswerCounts: [Int] = []
 
     func saveActiveSession(_ session: ActiveSessionSnapshot) async throws {
         if savesToFail > 0 {
             savesToFail -= 1
             throw ProgressStoreContractError.writeFailed
         }
+        await savePause?.pauseIfArmed()
         activeSaveCount += 1
+        savedAnswerCounts.append(session.lesson?.answers.count ?? 0)
         try await inner.saveActiveSession(session)
     }
 

@@ -12,7 +12,10 @@ import Observation
 /// Each answer is written on its own. A failed answer leaves the quiz where it
 /// is. The next answer, and a retry while the app is in the background, writes
 /// the whole session. A failed finish keeps that session too and can be retried.
-/// Saves are ordered: a later answer cannot be overwritten by an earlier one.
+/// Saves are ordered: a later answer cannot be overwritten by an earlier one,
+/// including one that is already being written. A retry still waiting when the
+/// finish commits is dropped, so the finished lesson is not saved again as the
+/// one in progress.
 ///
 /// `endLesson` closes the quiz. It does not discard a save that has not landed.
 @MainActor
@@ -323,8 +326,10 @@ public final class OpenLesson {
 
     private func noteFinishSaved() {
         pendingFinish = nil
-        unsavedAnswers = false
-        lastAnswerSnapshot = nil
+        // The retry queued while this finish was writing still holds the old
+        // session. Dropping it here means that write does not land after the
+        // commit and put the finished lesson back in progress.
+        dropUnsavedAnswer()
     }
 
     private func dropUnsavedAnswer() {

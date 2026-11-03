@@ -46,18 +46,20 @@ public func screenAfterFailedLessonSave() -> ProgressScreen {
 public enum StorageErrorReason: Equatable, Sendable {
     /// The course files are missing or cannot be decoded.
     case courseUnreadable
-    /// The progress store could not be opened or read.
+    /// The progress store could not be opened or read at launch.
     case progressUnreadable
     /// The finished lesson could not be saved.
     case lessonSaveFailed
+    /// The progress store could not be read while a lesson was opening.
+    case lessonOpenUnreadable
 }
 
 /// What the storage error offers for `reason`.
 ///
-/// A missing course and a failed lesson save offer Try again only. A progress
-/// store that cannot be opened also offers Start over. Try again reloads the
-/// course and the store, except after a failed lesson save, where it retries
-/// that save.
+/// A missing course, a failed lesson save, and a failed read while opening a
+/// lesson offer Try again only. A progress store that cannot be opened at
+/// launch also offers Start over. Try again reloads the course and the store,
+/// except after a failed lesson save, where it retries that save.
 public struct StorageErrorActions: Equatable, Sendable {
     public var showsStartOver: Bool
     /// True when Try again retries the finished lesson. False when it reloads.
@@ -78,6 +80,8 @@ public func storageErrorActions(for reason: StorageErrorReason) -> StorageErrorA
         StorageErrorActions(showsStartOver: true, retriesLessonSave: false)
     case .lessonSaveFailed:
         StorageErrorActions(showsStartOver: false, retriesLessonSave: true)
+    case .lessonOpenUnreadable:
+        StorageErrorActions(showsStartOver: false, retriesLessonSave: false)
     }
 }
 
