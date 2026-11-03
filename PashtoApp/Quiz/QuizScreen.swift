@@ -44,6 +44,7 @@ struct QuizScreen: View {
     @State private var selectedLeft: ItemID?
     @State private var placed: [Int] = []
     @State private var rng = SystemRandomNumberGenerator()
+    @AccessibilityFocusState private var feedbackFocused: Bool
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     private let itemsByID: [ItemID: ContentItem]
@@ -73,6 +74,14 @@ struct QuizScreen: View {
             .padding(.horizontal, 20)
             .padding(.top, 20)
             .padding(.bottom, 12)
+            .onChange(of: result) { _, graded in
+                guard let graded else {
+                    feedbackFocused = false
+                    return
+                }
+                AccessibilityNotification.Announcement(QuizCopy.feedbackSpoken(correct: graded == .correct)).post()
+                feedbackFocused = true
+            }
         } footer: {
             Button(action: advance) {
                 Text("quiz.continue.button")
@@ -211,6 +220,7 @@ struct QuizScreen: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text(feedbackKey(result)))
         .accessibilityAddTraits(.isHeader)
+        .accessibilityFocused($feedbackFocused)
     }
 
     private func feedbackKey(_ result: GradeResult) -> LocalizedStringKey {
@@ -489,10 +499,13 @@ enum QuizCopy {
             }
         }
         guard let mark else { return base }
-        let status = mark == .correct
+        return "\(base), \(feedbackSpoken(correct: mark == .correct))"
+    }
+
+    static func feedbackSpoken(correct: Bool) -> String {
+        correct
             ? String(localized: "quiz.feedback.correct")
             : String(localized: "quiz.feedback.incorrect")
-        return "\(base), \(status)"
     }
 
     private static func optionNumber(_ number: Int) -> String {
