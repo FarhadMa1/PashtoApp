@@ -156,6 +156,83 @@ struct RootLessonSessionTests {
         #expect(spec.contains("path: content/content.json"))
         #expect(spec.contains("path: content/release-units.json"))
         #expect(spec.contains("buildPhase: resources"))
+        #expect(spec.contains("path: scripts/verify-bundled-course.sh"))
+        #expect(spec.contains("name: Verify bundled course"))
+        #expect(spec.contains("basedOnDependencyAnalysis: false"))
+        #expect(spec.contains("ENABLE_USER_SCRIPT_SANDBOXING: NO"))
+        #expect(project.contains("PBXShellScriptBuildPhase"))
+        #expect(project.contains("Verify bundled course"))
+        #expect(project.contains("alwaysOutOfDate = 1"))
+        #expect(project.contains("content.json"))
+        #expect(project.contains("release-units.json"))
+        #expect(project.contains("error:"))
+        #expect(project.contains("ENABLE_USER_SCRIPT_SANDBOXING = NO"))
+    }
+
+    @Test func cachedLessonsStayPutUntilVoiceOverChanges() {
+        let plain = makeItem(
+            "e-da",
+            kind: .letter,
+            pashto: "د",
+            translit: "da",
+            pronunciation: "da",
+            en: "da, plain",
+            name: "da"
+        )
+        let ring = makeItem(
+            "e-dda",
+            kind: .letter,
+            pashto: "ډ",
+            translit: "dda",
+            pronunciation: "dda",
+            en: "da with a ring",
+            name: "dda"
+        )
+        let lesson = Lesson(
+            id: lessonID("l-letters"),
+            title: "Letters",
+            items: [],
+            letters: [plain.id, ring.id]
+        )
+        let bundle = makeBundle(
+            items: [plain, ring],
+            units: [
+                CourseUnit(id: unitID("u-sounds"), track: "main", title: "Sounds", lessons: [lesson]),
+            ]
+        )
+        let released = [unitID("u-sounds")]
+
+        var cache = ReleasedLessonCache()
+        cache.refresh(
+            course: bundle,
+            releasedUnitIDs: released,
+            showsPronunciation: true,
+            voiceOver: false
+        )
+        #expect(cache.lessons.map(\.id) == [lessonID("l-letters")])
+        #expect(cache.rebuildCount == 1)
+
+        cache.refresh(
+            course: bundle,
+            releasedUnitIDs: released,
+            showsPronunciation: true,
+            voiceOver: false
+        )
+        #expect(cache.rebuildCount == 1)
+        #expect(cache.lessons.map(\.id) == [lessonID("l-letters")])
+
+        cache.refresh(
+            course: bundle,
+            releasedUnitIDs: released,
+            showsPronunciation: true,
+            voiceOver: true
+        )
+        #expect(cache.lessons.isEmpty)
+        #expect(cache.rebuildCount == 2)
+
+        cache.refresh(course: nil, releasedUnitIDs: [], voiceOver: true)
+        #expect(cache.lessons.isEmpty)
+        #expect(cache.rebuildCount == 3)
     }
 
     @Test func releasedLessonsKeepCourseOrderAndSkipUnlistedUnits() {

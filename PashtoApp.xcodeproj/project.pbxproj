@@ -172,6 +172,7 @@
 				C4A9DEDD77598225FD97579E /* Sources */,
 				A6268C0FD80B6227F8164876 /* Resources */,
 				2F407C1E98320909BF51FA63 /* Frameworks */,
+				58AD55EBEE0D6546BC9DF374 /* Verify bundled course */,
 			);
 			buildRules = (
 			);
@@ -237,6 +238,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		58AD55EBEE0D6546BC9DF374 /* Verify bundled course */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Verify bundled course";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n# Fails the app build when content.json or release-units.json is not in the built .app.\n# Copy Bundle Resources places both files at the root of the iOS app wrapper.\nset -eu\n\napp=\"${TARGET_BUILD_DIR:?TARGET_BUILD_DIR is not set}/${WRAPPER_NAME:?WRAPPER_NAME is not set}\"\nmissing=0\n\nfor name in content.json release-units.json; do\n  if [ ! -f \"${app}/${name}\" ]; then\n    echo \"error: ${name} is missing from the built app (${app}/${name})\"\n    missing=1\n  fi\ndone\n\nif [ \"$missing\" -ne 0 ]; then\n  exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C4A9DEDD77598225FD97579E /* Sources */ = {
@@ -326,7 +350,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -421,7 +445,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

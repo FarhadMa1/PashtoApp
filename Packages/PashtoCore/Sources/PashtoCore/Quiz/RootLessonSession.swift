@@ -129,6 +129,57 @@ public struct RootLessonSession: Equatable, Sendable {
     }
 }
 
+/// The home's lesson list, kept so it is not rebuilt on every read.
+///
+/// VoiceOver is part of the key. Turning it on or off changes which tasks a
+/// lesson is given, and a lesson with no tasks is left off the home.
+public struct ReleasedLessonCache: Sendable {
+    public private(set) var lessons: [ReleasedLesson] = []
+    private(set) var rebuildCount = 0
+    private var key: Key?
+
+    public init() {}
+
+    /// Rebuilds when the course, the release list, progress, pronunciation, or VoiceOver changed.
+    public mutating func refresh(
+        course: ContentBundle?,
+        releasedUnitIDs: [UnitID],
+        seenLessonIDs: [LessonID] = [],
+        showsPronunciation: Bool = true,
+        voiceOver: Bool = false
+    ) {
+        let next = Key(
+            course: course,
+            releasedUnitIDs: releasedUnitIDs,
+            seenLessonIDs: seenLessonIDs,
+            showsPronunciation: showsPronunciation,
+            voiceOver: voiceOver
+        )
+        guard next != key else { return }
+        key = next
+        rebuildCount += 1
+        guard let course else {
+            lessons = []
+            return
+        }
+        lessons = RootLessonSession.lessons(
+            in: course,
+            releasedUnitIDs: releasedUnitIDs,
+            seenLessonIDs: seenLessonIDs,
+            showsPronunciation: showsPronunciation,
+            voiceOver: voiceOver
+        )
+    }
+
+    private struct Key: Equatable, Sendable {
+        var course: ContentBundle?
+        var releasedUnitIDs: [UnitID]
+        var seenLessonIDs: [LessonID]
+        var showsPronunciation: Bool
+        var voiceOver: Bool
+    }
+}
+
 /// Enough for the home to ask whether a lesson has any question.
 private struct LessonProbeGenerator: RandomNumberGenerator {
     private var state: UInt64 = 0xA5A5A5A5A5A5A5A5

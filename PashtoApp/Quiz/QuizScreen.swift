@@ -1,35 +1,6 @@
 import PashtoCore
 import SwiftUI
 
-/// Builds a lesson quiz from released units only.
-///
-/// `showsPronunciation` is copied from the settings at the moment the session
-/// starts. A later change to `showTransliteration` is used by the next session.
-/// `voiceOver` is the value at that same moment: letter tasks are replaced
-/// with meaning tasks when it is on.
-enum QuizLaunch {
-    static func lessonSession(
-        for lessonID: LessonID,
-        in bundle: ContentBundle,
-        seenLessonIDs: [LessonID],
-        releasedUnitIDs: [UnitID],
-        settings: UserSettings,
-        voiceOver: Bool,
-        using rng: inout some RandomNumberGenerator
-    ) -> LessonSession {
-        var launch = RootLessonSession()
-        return launch.start(
-            lessonID: lessonID,
-            in: bundle,
-            seenLessonIDs: seenLessonIDs,
-            releasedUnitIDs: releasedUnitIDs,
-            showsPronunciation: settings.showTransliteration,
-            voiceOver: voiceOver,
-            using: &rng
-        )
-    }
-}
-
 /// One quiz question: the prompt, the choices, and the feedback after an answer.
 ///
 /// Pashto is drawn right to left, with `pronunciation` underneath. Scholarly

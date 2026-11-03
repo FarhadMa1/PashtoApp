@@ -10,6 +10,10 @@ import UIKit
 /// It moves the file aside, then writes the goal, transliteration, and content
 /// version into a fresh store. The placement day is cleared. A failure removes
 /// the fresh file and moves the backup back.
+///
+/// A missing or undecodable `content.json` or `release-units.json` uses that
+/// same storage error and does not open the home. Start over is not run in
+/// that case: moving the progress file aside would not restore the course.
 @MainActor
 @Observable
 final class AppModel {
@@ -21,19 +25,19 @@ final class AppModel {
         case ready
     }
 
-    /// The progress file keeps this until it stores the bundled content version.
-    /// Copying the course into the app does not write that version on its own.
-    static let installedContentVersion = "unbundled"
-
     private(set) var phase: Phase
     /// The capped review queue from the last Start review. Nil until then.
     private(set) var startedReview: ShortCappedReview?
     /// The course the app was given, and the ids from `release-units.json`.
     ///
-    /// Both stay empty when those files are not in the bundle. The session is
-    /// never built from the whole course in their place.
+    /// Both stay empty when those files are missing or cannot be decoded, and
+    /// the storage error is shown. The session is never built from the whole
+    /// course in their place.
     private var course: ContentBundle?
     private var releasedUnitIDs: [UnitID] = []
+    private var lessonCache = ReleasedLessonCache()
+    /// VoiceOver at the last refresh. Letter lessons change tasks when it flips.
+    private var voiceOverRunning: Bool
     private var lessonLaunch = RootLessonSession()
     private let appStoreID: String
     private var storeURL: URL?
@@ -63,18 +67,10 @@ final class AppModel {
 
     /// Lessons the home can start. Empty when the release list is empty.
     ///
-    /// A lesson that would open with no questions is left out. The settings
-    /// are the ones `startLesson` will use.
-    var releasedLessons: [ReleasedLesson] {
-        guard let course else { return [] }
-        return RootLessonSession.lessons(
-            in: course,
-            releasedUnitIDs: releasedUnitIDs,
-            seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
-            showsPronunciation: snapshot?.settings.showTransliteration ?? true,
-            voiceOver: UIAccessibility.isVoiceOverRunning
-        )
-    }
+    /// A lesson that would open with no questions is left out. The list is
+    /// cached. It is rebuilt when progress changes and when VoiceOver turns
+    /// on or off, because VoiceOver changes which tasks a lesson is given.
+    private(set) var releasedLessons: [ReleasedLesson] = []
 
     /// `ProgressScreen` is the choice in PashtoCore. `Phase` also has loading,
     /// which that choice does not.
@@ -91,12 +87,13 @@ final class AppModel {
         self.storeURL = storeURL
         self.appStoreID = appStoreID
         self.phase = phase
-        let loaded = Self.releasedCourse(in: .main)
-        self.course = loaded.course
-        self.releasedUnitIDs = loaded.unitIDs
+        self.voiceOverRunning = UIAccessibility.isVoiceOverRunning
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .autoupdatingCurrent
         self.clock = DayClock(provider: SystemDateProvider(), calendar: calendar)
+        if prepareCourse() != nil {
+            refreshReleasedLessons()
+        }
     }
 
     static let appStoreIDKey = "AppStoreID"
@@ -115,22 +112,25 @@ final class AppModel {
         guard !isOpening else { return }
         isOpening = true
         defer { isOpening = false }
+        guard let version = prepareCourse() else { return }
         do {
             let url = try resolvedURL()
             let container = try ProgressContainer.make(at: url)
             let store = SwiftDataProgressStore(
                 modelContainer: container,
-                contentVersion: Self.installedContentVersion
+                contentVersion: version
             )
             let snapshot = try await store.load()
             self.container = container
             self.progressStore = store
             self.snapshot = snapshot
+            refreshReleasedLessons()
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
             progressStore = nil
             snapshot = nil
+            refreshReleasedLessons()
             phase = phase(for: progressScreen(for: progressOpenFailure(for: error)))
         }
     }
@@ -142,17 +142,19 @@ final class AppModel {
 
     func confirmStartOver() async {
         guard phase == .storageError, !isOpening else { return }
+        guard let version = prepareCourse() else { return }
         isOpening = true
         defer { isOpening = false }
         container = nil
         progressStore = nil
         snapshot = nil
+        refreshReleasedLessons()
         do {
             let url = try resolvedURL()
             let restarted = try await ProgressStartOver.replace(
                 storeAt: url,
                 timestamp: Self.backupTimestamp(Date()),
-                installedContentVersion: Self.installedContentVersion,
+                installedContentVersion: version,
                 make: { url in
                     try ProgressContainer.make(at: url)
                 },
@@ -172,11 +174,13 @@ final class AppModel {
             self.container = restarted.container
             self.progressStore = store
             self.snapshot = snapshot
+            refreshReleasedLessons()
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
             progressStore = nil
             snapshot = nil
+            refreshReleasedLessons()
             phase = .storageError
         }
     }
@@ -203,8 +207,20 @@ final class AppModel {
         phase = .ready
     }
 
+    /// Rebuilds the home list when VoiceOver turns on or off.
+    ///
+    /// `RootView` forwards `accessibilityVoiceOverEnabled`, the SwiftUI
+    /// equivalent of `UIAccessibility.voiceOverStatusDidChangeNotification`.
+    /// A lesson that loses every task under the new setting drops off the home.
+    func voiceOverChanged(to enabled: Bool) {
+        guard enabled != voiceOverRunning else { return }
+        voiceOverRunning = enabled
+        refreshReleasedLessons()
+    }
+
     /// Opens a quiz for one released lesson. An unlisted lesson does not start.
     func startLesson(_ lessonID: LessonID) {
+        voiceOverChanged(to: UIAccessibility.isVoiceOverRunning)
         guard phase == .ready, let course else { return }
         var rng = SystemRandomNumberGenerator()
         var launch = lessonLaunch
@@ -214,7 +230,7 @@ final class AppModel {
             seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
             releasedUnitIDs: releasedUnitIDs,
             showsPronunciation: snapshot?.settings.showTransliteration ?? true,
-            voiceOver: UIAccessibility.isVoiceOverRunning,
+            voiceOver: voiceOverRunning,
             using: &rng
         )
         lessonLaunch = launch
@@ -244,23 +260,50 @@ final class AppModel {
         return url
     }
 
-    private struct ReleaseList: Decodable {
-        var units: [String]
+    /// The bundled content version, or nil when the storage error is already showing.
+    private func prepareCourse() -> String? {
+        let load = Self.bundledCourse(in: .main)
+        switch load {
+        case .ready(let bundled):
+            course = bundled.bundle
+            releasedUnitIDs = bundled.releasedUnitIDs
+            return bundled.installedContentVersion
+        case .unavailable:
+            course = nil
+            releasedUnitIDs = []
+            refreshReleasedLessons()
+            if let screen = load.blockingScreen {
+                phase = screen
+            }
+            return nil
+        }
     }
 
-    /// Reads the bundled course and the release list. A missing file releases nothing.
-    private static func releasedCourse(in bundle: Bundle) -> (course: ContentBundle?, unitIDs: [UnitID]) {
-        guard
-            let contentURL = bundle.url(forResource: "content", withExtension: "json"),
-            let releaseURL = bundle.url(forResource: "release-units", withExtension: "json"),
-            let content = try? Data(contentsOf: contentURL),
-            let release = try? Data(contentsOf: releaseURL),
-            let course = try? JSONDecoder().decode(ContentBundle.self, from: content),
-            let list = try? JSONDecoder().decode(ReleaseList.self, from: release)
-        else {
-            return (nil, [])
+    private func refreshReleasedLessons() {
+        lessonCache.refresh(
+            course: course,
+            releasedUnitIDs: releasedUnitIDs,
+            seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
+            showsPronunciation: snapshot?.settings.showTransliteration ?? true,
+            voiceOver: voiceOverRunning
+        )
+        let lessons = lessonCache.lessons
+        if lessons != releasedLessons {
+            releasedLessons = lessons
         }
-        return (course, list.units.compactMap(UnitID.init(rawValue:)))
+    }
+
+    private static func bundledCourse(in bundle: Bundle) -> BundledCourseLoad {
+        BundledCourseLoader.load(
+            content: bundledData(resource: "content", in: bundle),
+            releaseUnits: bundledData(resource: "release-units", in: bundle)
+        )
+    }
+
+    /// Nil when the file is missing or cannot be read. Decoding is separate.
+    private static func bundledData(resource: String, in bundle: Bundle) -> Data? {
+        guard let url = bundle.url(forResource: resource, withExtension: "json") else { return nil }
+        return try? Data(contentsOf: url)
     }
 
     /// UTC, so the backup folder name does not depend on the locale.
