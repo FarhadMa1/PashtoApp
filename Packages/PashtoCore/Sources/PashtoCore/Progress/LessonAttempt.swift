@@ -1,11 +1,12 @@
 import Foundation
 
-/// One lesson the learner started, saved only when they finish it.
+/// One lesson the learner started.
 ///
-/// The commit is `sessionCommit`. Cards, the lesson row, and the streak follow
-/// those rules. This type does not add a rule of its own. An unfinished
-/// session writes nothing: leaving it creates no cards and does not change
-/// the streak.
+/// `saveActive` writes the lesson in progress after an answer. That write
+/// does not create cards and does not change the streak. `save` commits a
+/// finished lesson through `sessionCommit`. Cards, the lesson row, and the
+/// streak follow those rules. This type does not add a rule of its own.
+/// An unfinished session is not committed: leaving it creates no cards.
 public struct LessonAttempt: Hashable, Sendable {
     public let sessionID: UUID
     public let lessonID: LessonID
@@ -53,6 +54,39 @@ public struct LessonAttempt: Hashable, Sendable {
             lessonProgress: progress.lessonProgress,
             streak: progress.streak
         )
+    }
+
+    /// The active-session record for `session`.
+    ///
+    /// `lastAnswerDay` is stored only when `session` has an answer. The day
+    /// is the civil day of the latest answer, which the caller supplies.
+    /// A lesson that has not been answered yet keeps a nil day.
+    public func activeSnapshot(
+        _ session: LessonSession,
+        answeredOn lastAnswerDay: LocalDay?
+    ) -> ActiveSessionSnapshot {
+        ActiveSessionSnapshot(
+            sessionID: sessionID,
+            kind: .lesson,
+            lessonID: lessonID,
+            startedDay: startedDay,
+            lastAnswerDay: session.answers.isEmpty ? nil : lastAnswerDay,
+            contentVersion: contentVersion,
+            lesson: session
+        )
+    }
+
+    /// Writes the lesson in progress. Does not create cards or change the streak.
+    ///
+    /// A session for another lesson writes nothing. A thrown error also writes
+    /// nothing: the store replaces the active session in one save.
+    public func saveActive(
+        _ session: LessonSession,
+        answeredOn lastAnswerDay: LocalDay?,
+        to store: any ProgressStore
+    ) async throws {
+        guard session.lessonID == lessonID else { return }
+        try await store.saveActiveSession(activeSnapshot(session, answeredOn: lastAnswerDay))
     }
 
     /// Writes a finished lesson with one `commit`, then reads the store back.

@@ -41,11 +41,12 @@ struct RootView: View {
                 quiz: model.activeLesson,
                 quizItems: model.lessonItems,
                 lessons: model.releasedLessons,
-                startLesson: { model.startLesson($0, voiceOver: voiceOverEnabled) },
+                startLesson: { lesson in
+                    Task { await model.startLesson(lesson, voiceOver: voiceOverEnabled) }
+                },
                 endSession: { model.endLesson() },
-                finishSession: { session in
-                    Task { await model.finishLesson(session) }
-                }
+                answerSession: { model.saveAnswer($0) },
+                finishSession: { model.finishLesson($0) }
             )
         }
     }

@@ -14,6 +14,11 @@ struct ProgressScreenTests {
         #expect(progressScreen(for: .other).canStartOver == true)
     }
 
+    @Test func aFailedLessonSaveChoosesStorageError() {
+        #expect(screenAfterFailedLessonSave() == .storageError)
+        #expect(screenAfterFailedLessonSave().canStartOver == true)
+    }
+
     @Test func anEmptyAppStoreIDHidesTheButton() {
         #expect(showsAppStoreButton(appStoreID: "") == false)
         #expect(showsAppStoreButton(appStoreID: "   ") == false)

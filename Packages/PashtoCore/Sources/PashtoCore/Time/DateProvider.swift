@@ -17,6 +17,20 @@ public struct FixedDateProvider: DateProvider {
     }
 }
 
+/// A `DateProvider` held as a value, so a clock can be stored without a generic.
+///
+/// `now` is read from the provider that was passed in. The app uses this so a
+/// test can pass a fixed clock and the running app can pass `SystemDateProvider`.
+public struct DateProviderBox: DateProvider {
+    private let base: any DateProvider
+
+    public init(_ base: any DateProvider) {
+        self.base = base
+    }
+
+    public var now: Date { base.now }
+}
+
 /// Today's `LocalDay` for a clock and a time zone.
 ///
 /// The calendar identifier is not stored. `today` is the Gregorian date in

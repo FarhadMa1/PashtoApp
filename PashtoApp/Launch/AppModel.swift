@@ -17,9 +17,12 @@ import UIKit
 /// Try again reads the bundle again. When the course is still missing, the
 /// error screen gives a shake, or a fade when Reduce Motion is on.
 ///
-/// A finished lesson is saved with one `commit`: the lesson row, the review
-/// cards for the items it practised, and the streak. Leaving before the end
-/// writes nothing. The home list follows `snapshot`.
+/// Each answer is saved on the active lesson. Leaving before the end keeps
+/// those answers. Opening that same lesson again, from its home row, continues
+/// them on the day it started or the next day. Startup runs the progress
+/// reconciler: a finished lesson is committed, and an unfinished lesson outside
+/// that window is dropped. A failed save shows the storage error. Progress
+/// already stored is left where it was. The home list follows `snapshot`.
 @MainActor
 @Observable
 final class AppModel {
@@ -44,12 +47,11 @@ final class AppModel {
     /// Decoded once at startup. Try again replaces it only when the bytes change.
     private var decodedCourse: BundledCourseDecode?
     private var home = ReleasedLessonList()
-    private var lessonLaunch = RootLessonSession()
-    /// The lesson on screen, remembered so finishing it can be committed.
-    private var openLesson: LessonAttempt?
+    /// The lesson on screen. Its session id is what a finish is allowed to close.
+    private var openLesson = OpenLesson()
     private let appStoreID: String
     private var storeURL: URL?
-    private let clock: DayClock<SystemDateProvider>
+    private let clock: DayClock<DateProviderBox>
     private var container: ModelContainer?
     private var progressStore: SwiftDataProgressStore?
     /// The home list reads this in `didSet`, so a finished lesson cannot leave it stale.
@@ -73,12 +75,12 @@ final class AppModel {
 
     /// The lesson quiz on screen. Nil when the learner is on the home.
     var activeLesson: LessonSession? {
-        lessonLaunch.isActive ? lessonLaunch.session : nil
+        openLesson.session
     }
 
     /// Items the open quiz may draw. Released units only.
     var lessonItems: [ContentItem] {
-        lessonLaunch.items
+        openLesson.items
     }
 
     /// Lessons the home can start. Empty when the release list is empty.
@@ -99,13 +101,18 @@ final class AppModel {
         }
     }
 
-    init(storeURL: URL?, appStoreID: String, phase: Phase) {
+    init(
+        storeURL: URL?,
+        appStoreID: String,
+        phase: Phase,
+        dateProvider: any DateProvider = SystemDateProvider()
+    ) {
         self.storeURL = storeURL
         self.appStoreID = appStoreID
         self.phase = phase
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .autoupdatingCurrent
-        self.clock = DayClock(provider: SystemDateProvider(), calendar: calendar)
+        self.clock = DayClock(provider: DateProviderBox(dateProvider), calendar: calendar)
         prepareCourse()
     }
 
@@ -125,7 +132,7 @@ final class AppModel {
         guard !isOpening else { return }
         isOpening = true
         defer { isOpening = false }
-        guard let version = decodedCourse?.installedContentVersion else { return }
+        guard let version = decodedCourse?.installedContentVersion, let course else { return }
         do {
             let url = try resolvedURL()
             let container = try ProgressContainer.make(at: url)
@@ -133,7 +140,11 @@ final class AppModel {
                 modelContainer: container,
                 contentVersion: version
             )
-            let snapshot = try await store.load()
+            let snapshot = try await ProgressReconciler.run(
+                store: store,
+                content: course,
+                on: clock.today
+            )
             self.container = container
             self.progressStore = store
             self.snapshot = snapshot
@@ -159,6 +170,7 @@ final class AppModel {
         guard let version = prepareCourse() else { return }
         isOpening = true
         defer { isOpening = false }
+        openLesson.leave()
         container = nil
         progressStore = nil
         snapshot = nil
@@ -231,62 +243,78 @@ final class AppModel {
     /// Opens a quiz for one released lesson. An unlisted lesson does not start.
     ///
     /// `voiceOver` is the value `RootView` already read from the environment.
-    func startLesson(_ lessonID: LessonID, voiceOver: Bool) {
+    /// A lesson that was saved and can still be continued opens where it left off.
+    func startLesson(_ lessonID: LessonID, voiceOver: Bool) async {
         voiceOverChanged(to: voiceOver)
-        guard phase == .ready, let course else { return }
-        var rng = SystemRandomNumberGenerator()
-        var launch = lessonLaunch
-        launch.start(
-            lessonID: lessonID,
-            in: course,
-            seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
-            releasedUnitIDs: releasedUnitIDs,
-            showsPronunciation: snapshot?.settings.showTransliteration ?? true,
-            voiceOver: home.voiceOver,
-            using: &rng
-        )
-        lessonLaunch = launch
-        if launch.isActive, let started = launch.session {
-            openLesson = LessonAttempt(
-                lessonID: started.lessonID,
-                startedDay: clock.today,
-                contentVersion: course.contentVersion
+        guard phase == .ready, let course, let store = progressStore else { return }
+        do {
+            await openLesson.waitUntilSavesFinish()
+            let progress = try await store.load()
+            var rng = SystemRandomNumberGenerator()
+            openLesson.start(
+                lessonID: lessonID,
+                in: course,
+                progress: progress,
+                releasedUnitIDs: releasedUnitIDs,
+                showsPronunciation: progress.settings.showTransliteration,
+                voiceOver: home.voiceOver,
+                on: clock.today,
+                using: &rng
             )
-        } else {
-            openLesson = nil
+        } catch {
+            phase = phase(for: screenAfterFailedLessonSave())
+        }
+    }
+
+    /// Saves the answer that was just given. The quiz stays open.
+    ///
+    /// The record is taken before this returns, so closing the quiz does not
+    /// drop the answer. A failed save shows the storage error and leaves the
+    /// progress already stored where it was.
+    func saveAnswer(_ session: LessonSession) {
+        guard let store = progressStore else { return }
+        guard let snapshot = openLesson.answerToSave(session, on: clock.today) else { return }
+        Task {
+            do {
+                try await openLesson.persist(snapshot, to: store)
+            } catch {
+                phase = phase(for: screenAfterFailedLessonSave())
+            }
         }
     }
 
     /// The learner finished the quiz. One commit saves the lesson, the cards, and the streak.
     ///
-    /// The day is today when the session has an answer, and the day it started
-    /// otherwise. A failed save leaves the stored progress as it was. The quiz
-    /// still closes: there is no second message for that failure.
-    func finishLesson(_ session: LessonSession) async {
-        let attempt = openLesson
+    /// The day is the civil day of the last answer. A failed save shows the
+    /// storage error and does not remove progress. The quiz closes only when
+    /// `openLesson` is still this session. A lesson opened while the save was
+    /// in flight stays on screen.
+    func finishLesson(_ session: LessonSession) {
+        let finished = openLesson.attempt?.sessionID
+        let attempt = openLesson.attempt
         let bundled = course
         let store = progressStore
-        defer { endLesson() }
-        guard let attempt, let bundled, let store else { return }
-        let answeredOn = session.answers.isEmpty ? nil : clock.today
-        do {
-            snapshot = try await attempt.save(
-                session,
-                answeredOn: answeredOn,
-                in: bundled,
-                to: store
-            )
-        } catch {
-            return
+        let day = clock.today
+        Task {
+            defer { openLesson.leaveIfStill(finished) }
+            guard let attempt, let bundled, let store else { return }
+            do {
+                snapshot = try await openLesson.saveFinished(
+                    attempt: attempt,
+                    session: session,
+                    on: day,
+                    in: bundled,
+                    to: store
+                )
+            } catch {
+                phase = phase(for: screenAfterFailedLessonSave())
+            }
         }
     }
 
-    /// Leaving the quiz before the end. Nothing is written.
+    /// Leaving the quiz before the end. Answers already saved stay saved.
     func endLesson() {
-        openLesson = nil
-        var launch = lessonLaunch
-        launch.end()
-        lessonLaunch = launch
+        openLesson.leave()
     }
 
     func openAppStore() {

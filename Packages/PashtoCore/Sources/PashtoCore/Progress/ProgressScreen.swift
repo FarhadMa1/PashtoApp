@@ -30,6 +30,14 @@ public enum ProgressScreen: Equatable, Sendable {
     }
 }
 
+/// The screen when saving a lesson answer, or the finished lesson, fails.
+///
+/// This is the existing storage error. The failed save does not choose a
+/// new message, and it does not remove progress the store already kept.
+public func screenAfterFailedLessonSave() -> ProgressScreen {
+    .storageError
+}
+
 /// The screen for a store that could not be opened.
 public func progressScreen(for failure: ProgressOpenFailure) -> ProgressScreen {
     switch failure {
