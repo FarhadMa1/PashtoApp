@@ -9,11 +9,15 @@
 /* Begin PBXBuildFile section */
 		0BA7E5FCB0CDADC718983062 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */; };
 		1B85723CDA5A6E0699CC804F /* content.json in Resources */ = {isa = PBXBuildFile; fileRef = 2E7E47B640D712A33D52EC82 /* content.json */; };
+		21A05073FF4D4CB0BA403D07 /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87592241A3F002CDC42374F0 /* Motion.swift */; };
 		27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */; };
 		2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */ = {isa = PBXBuildFile; fileRef = 652503DE42EB750727E88CEF /* release-units.json */; };
+		3530111B87046DF5440D3C30 /* GlyphCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */; };
 		4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */; };
+		4478F73538EE2286163AB2AA /* MatchingBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */; };
 		553568DE12A69B71500FA8A7 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9032BBBE0603F628A79CF3 /* AppModel.swift */; };
 		5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427EEE4D83973BBDF72044C /* ContentView.swift */; };
+		644132CFDE88EAAFBC17B121 /* LessonProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */; };
 		68E02FABA91DAA33FCA7EF30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB198D583572EA4F7E128283 /* Assets.xcassets */; };
 		7C3CF5EEC47EF612EE538B95 /* UpdateNeededScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */; };
 		8E78ED144AB73CD9F3E1A437 /* PashtoPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = BD251F923BB6C48D5AF2E09E /* PashtoPersistence */; };
@@ -30,14 +34,18 @@
 		03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNeededScreen.swift; sourceTree = "<group>"; };
 		20749347E5913E3C376940D0 /* PashtoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PashtoApp.swift; sourceTree = "<group>"; };
 		2E7E47B640D712A33D52EC82 /* content.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = content.json; sourceTree = "<group>"; };
+		3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphCard.swift; sourceTree = "<group>"; };
 		3E2DD5B8D6DE03B23DB286AB /* PashtoCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoCore; path = Packages/PashtoCore; sourceTree = SOURCE_ROOT; };
 		43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeBackScreen.swift; sourceTree = "<group>"; };
+		51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingBoard.swift; sourceTree = "<group>"; };
 		5E9032BBBE0603F628A79CF3 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		652503DE42EB750727E88CEF /* release-units.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "release-units.json"; sourceTree = "<group>"; };
 		67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStoreLocation.swift; sourceTree = "<group>"; };
 		6791E1EE79678E1A2816B03F /* LapisStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapisStyle.swift; sourceTree = "<group>"; };
 		76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8118EC685984C6F8EEC84F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		87592241A3F002CDC42374F0 /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
+		8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonProgressBar.swift; sourceTree = "<group>"; };
 		A9F7FCFA89751587AB46DDDE /* PashtoPersistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoPersistence; path = Packages/PashtoPersistence; sourceTree = SOURCE_ROOT; };
 		BB198D583572EA4F7E128283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -101,6 +109,9 @@
 		61BD7F05B60F669B0840E6DA /* Quiz */ = {
 			isa = PBXGroup;
 			children = (
+				3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */,
+				8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */,
+				51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */,
 				DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */,
 			);
 			path = Quiz;
@@ -119,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				6791E1EE79678E1A2816B03F /* LapisStyle.swift */,
+				87592241A3F002CDC42374F0 /* Motion.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -233,7 +245,11 @@
 			files = (
 				553568DE12A69B71500FA8A7 /* AppModel.swift in Sources */,
 				5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */,
+				3530111B87046DF5440D3C30 /* GlyphCard.swift in Sources */,
 				98F24341E577C90C0E7A4B37 /* LapisStyle.swift in Sources */,
+				644132CFDE88EAAFBC17B121 /* LessonProgressBar.swift in Sources */,
+				4478F73538EE2286163AB2AA /* MatchingBoard.swift in Sources */,
+				21A05073FF4D4CB0BA403D07 /* Motion.swift in Sources */,
 				E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */,
 				C465E70F7E879ADE2B4505C5 /* ProgressStoreLocation.swift in Sources */,
 				4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */,
