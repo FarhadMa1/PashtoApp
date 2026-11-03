@@ -14,9 +14,20 @@ struct ProgressScreenTests {
         #expect(progressScreen(for: .other).canStartOver == true)
     }
 
-    @Test func aFailedLessonSaveChoosesStorageError() {
+    @Test func storageErrorActionsFollowTheThreeReasons() {
         #expect(screenAfterFailedLessonSave() == .storageError)
-        #expect(screenAfterFailedLessonSave().canStartOver == true)
+
+        let course = storageErrorActions(for: .courseUnreadable)
+        #expect(course.showsStartOver == false)
+        #expect(course.retriesLessonSave == false)
+
+        let progress = storageErrorActions(for: .progressUnreadable)
+        #expect(progress.showsStartOver == true)
+        #expect(progress.retriesLessonSave == false)
+
+        let save = storageErrorActions(for: .lessonSaveFailed)
+        #expect(save.showsStartOver == false)
+        #expect(save.retriesLessonSave == true)
     }
 
     @Test func anEmptyAppStoreIDHidesTheButton() {

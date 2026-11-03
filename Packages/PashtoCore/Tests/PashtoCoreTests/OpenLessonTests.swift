@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 import Testing
 import PashtoCoreTesting
 @testable import PashtoCore
@@ -20,7 +21,7 @@ struct OpenLessonTests {
         let sessionID = try #require(lesson.attempt?.sessionID)
         var answered = started
         try submit(&answered, correct: true)
-        try await lesson.saveAnswer(answered, on: today, to: store)
+        await saved(lesson, answered, on: today, to: store)
 
         let saved = try await store.load()
         #expect(saved.activeSession?.sessionID == sessionID)
@@ -32,7 +33,7 @@ struct OpenLessonTests {
         #expect(saved.streak == .initial)
         #expect(saved.completedSessions.isEmpty)
 
-        lesson.leave()
+        lesson.endLesson()
         #expect(lesson.session == nil)
         let kept = try await store.load()
         #expect(kept.activeSession?.lesson == answered)
@@ -71,7 +72,7 @@ struct OpenLessonTests {
         var session = try start(lesson, "l-salam", progress: try await store.load(), on: started, seed: 1)
         #expect(lesson.attempt?.startedDay == started)
         try submit(&session, correct: true)
-        try await lesson.saveAnswer(session, on: started, to: store)
+        await saved(lesson, session, on: started, to: store)
         let halfway = try await store.load()
         #expect(halfway.activeSession?.lastAnswerDay == started)
         #expect(halfway.cards.isEmpty)
@@ -103,7 +104,7 @@ struct OpenLessonTests {
         #expect(session.answers.map(\.result) == [.incorrect])
         #expect(session.tasks.count == 1)
         #expect(session.current?.isRepeat == true)
-        try await lesson.saveAnswer(session, on: day, to: store)
+        await saved(lesson, session, on: day, to: store)
 
         let stored = try #require(try await store.load().activeSession?.lesson)
         #expect(stored == session)
@@ -157,28 +158,230 @@ struct OpenLessonTests {
         #expect(both.cards.contains { cardIDs.contains($0.itemID) })
     }
 
-    @Test func aFailedSaveKeepsTheProgressAlreadyStored() async throws {
+    @Test func aFailedAnswerSaveKeepsTheQuizAndTheNextSaveWritesItAll() async throws {
         let store = HookedStore(contentVersion: "test")
         let day = clock(day: 2, hour: 11).today
         try await seed(store, lesson: "l-salam", tasks: [choice("e-salam"), choice("e-manana")], on: day)
         let lesson = OpenLesson()
         var session = try start(lesson, "l-salam", progress: try await store.load(), on: day, seed: 1)
         try submit(&session, correct: true)
-        try await lesson.saveAnswer(session, on: day, to: store)
+        await saved(lesson, session, on: day, to: store)
         let kept = try await store.load()
         #expect(kept.activeSession?.lesson?.answers.count == 1)
 
         try submit(&session, correct: false)
+        let shown = session.current
         await store.failNextSave()
-        await #expect(throws: ProgressStoreContractError.self) {
-            try await lesson.saveAnswer(session, on: day, to: store)
-        }
-        #expect(screenAfterFailedLessonSave() == .storageError)
+        await saved(lesson, session, on: day, to: store)
+        #expect(lesson.hasUnsavedAnswers)
+        #expect(lesson.canRetryFailedFinish == false)
+        #expect(storageErrorActions(for: .lessonSaveFailed).showsStartOver == false)
         let loaded = try await store.load()
         #expect(loaded == kept)
         #expect(lesson.session == session)
+        #expect(lesson.session?.current == shown)
         #expect(loaded.cards.isEmpty)
         #expect(loaded.streak == .initial)
+
+        lesson.endLesson()
+        #expect(lesson.session == nil)
+        let continued = try start(lesson, "l-salam", progress: loaded, on: day, seed: 4)
+        #expect(continued.answers == session.answers)
+
+        try submit(&session, correct: true)
+        await saved(lesson, session, on: day, to: store)
+        #expect(lesson.hasUnsavedAnswers == false)
+        let written = try await store.load()
+        #expect(written.activeSession?.lesson?.answers.count == session.answers.count)
+        #expect(written.activeSession?.lesson == session)
+        #expect(written.cards.isEmpty)
+    }
+
+    @Test func aBackgroundRetryWritesTheAnswerTheQuizKept() async throws {
+        let store = HookedStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 11).today
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-home", progress: try await store.load(), on: day, seed: 1)
+        try submit(&session, correct: true)
+        await store.failNextSave()
+        await saved(lesson, session, on: day, to: store)
+        #expect(lesson.hasUnsavedAnswers)
+        #expect(try await store.load().activeSession == nil)
+
+        lesson.retryUnsavedAnswers(to: store)
+        await lesson.waitUntilSavesFinish()
+        #expect(lesson.hasUnsavedAnswers == false)
+        #expect(try await store.load().activeSession?.lesson == session)
+        #expect(lesson.session == session)
+    }
+
+    @Test func aFailedFinishKeepsTheAnswersAndTryAgainWritesThem() async throws {
+        let store = HookedStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 11).today
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-home", progress: try await store.load(), on: day, seed: 1)
+        try answerAll(&session, correct: true)
+        #expect(session.isComplete)
+        let answers = session.answers
+
+        await store.failNextSave()
+        await #expect(throws: ProgressStoreContractError.self) {
+            try await lesson.finishLesson(session, on: day, in: course, to: store)
+        }
+        #expect(lesson.session?.answers == answers)
+        #expect(lesson.canRetryFailedFinish)
+        #expect(screenAfterFailedLessonSave() == .storageError)
+        #expect(storageErrorActions(for: .lessonSaveFailed).retriesLessonSave)
+        #expect(try await store.load().lessonProgress.isEmpty)
+
+        await store.failNextSave()
+        await #expect(throws: ProgressStoreContractError.self) {
+            try await lesson.retryFailedFinish(in: course, to: store)
+        }
+        #expect(lesson.session?.answers == answers)
+        #expect(lesson.canRetryFailedFinish)
+
+        let saved = try await lesson.retryFailedFinish(in: course, to: store)
+        #expect(saved.lessonProgress.map(\.lessonID) == [lessonID("l-home")])
+        #expect(saved.activeSession == nil)
+        #expect(lesson.session?.answers == answers)
+        #expect(lesson.canRetryFailedFinish == false)
+        lesson.endLesson()
+        #expect(lesson.session == nil)
+    }
+
+    @Test func anOlderAnswerCannotOverwriteANewerOne() async throws {
+        let store = HookedStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 16).today
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-home", progress: try await store.load(), on: day, seed: 2)
+        try submit(&session, correct: true)
+        lesson.saveAnswer(session, on: day, to: store)
+        try submit(&session, correct: true)
+        lesson.saveAnswer(session, on: day, to: store)
+        await lesson.waitUntilSavesFinish()
+
+        let stored = try await store.load()
+        #expect(stored.activeSession?.lesson?.answers.count == 2)
+        #expect(stored.activeSession?.lesson == session)
+        #expect(await store.activeSaveCount == 1)
+    }
+
+    @Test func theQuizAppearsAfterStartAndDisappearsAfterEndAndAnAnswerChangesIt() async throws {
+        let host = QuizHost()
+        let day = clock(day: 2, hour: 10).today
+        let progress = try await InMemoryProgressStore(contentVersion: "test").load()
+        #expect(host.quiz == nil)
+
+        let opened = ChangeFlag()
+        withObservationTracking {
+            _ = host.quiz
+        } onChange: {
+            opened.fired = true
+        }
+        var session = try start(host.lesson, "l-home", progress: progress, on: day, seed: 1)
+        #expect(host.quiz != nil)
+        #expect(opened.fired)
+
+        let closed = ChangeFlag()
+        withObservationTracking {
+            _ = host.quiz
+        } onChange: {
+            closed.fired = true
+        }
+        host.lesson.endLesson()
+        #expect(host.quiz == nil)
+        #expect(closed.fired)
+
+        session = try start(host.lesson, "l-home", progress: progress, on: day, seed: 1)
+        let shown = host.quiz?.current
+        let answered = ChangeFlag()
+        withObservationTracking {
+            _ = host.quiz?.current
+            _ = host.quiz?.answers
+        } onChange: {
+            answered.fired = true
+        }
+        try submit(&session, correct: true)
+        _ = host.lesson.answerToSave(session, on: day)
+        #expect(answered.fired)
+        #expect(host.quiz?.answers.count == 1)
+        #expect(host.quiz?.current != shown)
+    }
+
+    @Test func voiceOverRestartsALessonThatStillHasALetterQuestion() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 9).today
+        let sessionID = UUID(uuidString: "33333333-3333-3333-3333-333333333333")!
+        try await seed(
+            store,
+            lesson: "l-home",
+            tasks: [letterTask("e-door"), choice("e-fever")],
+            on: day,
+            sessionID: sessionID
+        )
+        let blocked = OpenLesson()
+        let fresh = try start(
+            blocked,
+            "l-home",
+            progress: try await store.load(),
+            on: day,
+            seed: 6,
+            voiceOver: true
+        )
+        #expect(blocked.attempt?.sessionID != sessionID)
+        #expect(fresh.answers.isEmpty)
+        #expect(fresh.tasks.contains { $0.kind == .findLetter } == false)
+
+        let allowed = OpenLesson()
+        let resumed = try start(
+            allowed,
+            "l-home",
+            progress: try await store.load(),
+            on: day,
+            seed: 7,
+            voiceOver: false
+        )
+        #expect(allowed.attempt?.sessionID == sessionID)
+        #expect(resumed.tasks.contains { $0.kind == .findLetter })
+
+        let meaningID = UUID(uuidString: "44444444-4444-4444-4444-444444444444")!
+        try await seed(store, lesson: "l-home", tasks: [choice("e-door")], on: day, sessionID: meaningID)
+        let meaning = OpenLesson()
+        _ = try start(
+            meaning,
+            "l-home",
+            progress: try await store.load(),
+            on: day,
+            seed: 8,
+            voiceOver: true
+        )
+        #expect(meaning.attempt?.sessionID == meaningID)
+        #expect(meaning.session?.tasks.count == 1)
+        #expect(meaning.session?.answers.isEmpty == true)
+    }
+
+    @Test func aResumedLessonKeepsThePronunciationItStartedWith() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 9).today
+        try await seed(
+            store,
+            lesson: "l-salam",
+            tasks: [choice("e-salam")],
+            on: day,
+            showsPronunciation: false
+        )
+        let lesson = OpenLesson()
+        let resumed = try start(
+            lesson,
+            "l-salam",
+            progress: try await store.load(),
+            on: day,
+            seed: 1,
+            showsPronunciation: true
+        )
+        #expect(resumed.showsPronunciation == false)
+        #expect(lesson.attempt?.startedDay == day)
     }
 
     @Test func aFailedFinishLeavesTheLessonForTheNextLaunch() async throws {
@@ -248,7 +451,7 @@ struct OpenLessonTests {
         await pause.release()
 
         let saved = try await finishing.value
-        lesson.leaveIfStill(finishedID)
+        lesson.endLessonIfStill(finishedID)
         #expect(lesson.attempt?.lessonID == lessonID("l-other"))
         #expect(lesson.session?.lessonID == lessonID("l-other"))
         #expect(lesson.session?.answers.isEmpty == true)
@@ -306,16 +509,18 @@ struct OpenLessonTests {
         _ id: String,
         progress: ProgressSnapshot,
         on day: LocalDay,
-        seed: UInt64
+        seed: UInt64,
+        voiceOver: Bool = false,
+        showsPronunciation: Bool = true
     ) throws -> LessonSession {
         var rng = SplitMix64(seed: seed)
-        lesson.start(
+        lesson.startLesson(
             lessonID: lessonID(id),
             in: course,
             progress: progress,
             releasedUnitIDs: [unitID("u-home")],
-            showsPronunciation: true,
-            voiceOver: false,
+            showsPronunciation: showsPronunciation,
+            voiceOver: voiceOver,
             on: day,
             using: &rng
         )
@@ -350,12 +555,23 @@ struct OpenLessonTests {
         )
     }
 
+    private func saved(
+        _ lesson: OpenLesson,
+        _ session: LessonSession,
+        on day: LocalDay,
+        to store: any ProgressStore
+    ) async {
+        lesson.saveAnswer(session, on: day, to: store)
+        await lesson.waitUntilSavesFinish()
+    }
+
     private func seed(
         _ store: any ProgressStore,
         lesson raw: String,
         tasks: [SessionTask],
         on day: LocalDay,
-        sessionID: UUID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+        sessionID: UUID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
+        showsPronunciation: Bool = true
     ) async throws {
         let attempt = LessonAttempt(
             sessionID: sessionID,
@@ -363,7 +579,11 @@ struct OpenLessonTests {
             startedDay: day,
             contentVersion: course.contentVersion
         )
-        let session = LessonSession(lessonID: lessonID(raw), tasks: tasks)
+        let session = LessonSession(
+            lessonID: lessonID(raw),
+            showsPronunciation: showsPronunciation,
+            tasks: tasks
+        )
         try await attempt.saveActive(session, answeredOn: nil, to: store)
     }
 
@@ -401,6 +621,22 @@ struct OpenLessonTests {
         case .matchPairs, .orderWords:
             return .choice(itemID("e-nope"))
         }
+    }
+
+    private func letterTask(_ id: String) -> SessionTask {
+        let target = itemID(id)
+        return SessionTask(
+            payload: .choice(QuizTask(
+                kind: .findLetter,
+                targetID: target,
+                prompt: "shape",
+                usage: nil,
+                options: [
+                    QuizOption(itemID: target, text: id),
+                    QuizOption(itemID: itemID("e-other"), text: "other"),
+                ]
+            ))
+        )
     }
 
     private func choice(_ id: String) -> SessionTask {
@@ -515,11 +751,14 @@ private actor HookedStore: ProgressStore {
         try await inner.load()
     }
 
+    private(set) var activeSaveCount = 0
+
     func saveActiveSession(_ session: ActiveSessionSnapshot) async throws {
         if savesToFail > 0 {
             savesToFail -= 1
             throw ProgressStoreContractError.writeFailed
         }
+        activeSaveCount += 1
         try await inner.saveActiveSession(session)
     }
 
@@ -554,4 +793,17 @@ private actor HookedStore: ProgressStore {
     func resetAll() async throws {
         try await inner.resetAll()
     }
+}
+
+/// The same shape as the app model: the quiz is read off the lesson.
+@MainActor
+@Observable
+private final class QuizHost {
+    let lesson = OpenLesson()
+
+    var quiz: LessonSession? { lesson.session }
+}
+
+private final class ChangeFlag: @unchecked Sendable {
+    var fired = false
 }

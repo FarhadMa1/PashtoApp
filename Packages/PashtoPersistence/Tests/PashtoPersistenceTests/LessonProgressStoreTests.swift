@@ -41,7 +41,7 @@ struct LessonProgressStoreTests {
             #expect(reconciled.activeSession?.sessionID == salamSession)
             let lesson = OpenLesson()
             var rng = SeededGenerator(seed: 1)
-            lesson.start(
+            lesson.startLesson(
                 lessonID: mustLesson("l-salam"),
                 in: bundle,
                 progress: reconciled,
@@ -55,7 +55,8 @@ struct LessonProgressStoreTests {
             #expect(lesson.attempt?.sessionID == salamSession)
             #expect(session.answers.isEmpty)
             try submit(&session, correct: true)
-            try await lesson.saveAnswer(session, on: day, to: store)
+            lesson.saveAnswer(session, on: day, to: store)
+            await lesson.waitUntilSavesFinish()
         }
 
         let halfway = try await readStore(at: url, contentVersion: version)
@@ -69,7 +70,7 @@ struct LessonProgressStoreTests {
             let progress = try await store.load()
             let lesson = OpenLesson()
             var rng = SeededGenerator(seed: 2)
-            lesson.start(
+            lesson.startLesson(
                 lessonID: mustLesson("l-salam"),
                 in: bundle,
                 progress: progress,
@@ -126,7 +127,7 @@ struct LessonProgressStoreTests {
 
         let lesson = OpenLesson()
         var rng = SeededGenerator(seed: 3)
-        lesson.start(
+        lesson.startLesson(
             lessonID: mustLesson("l-salam"),
             in: bundle,
             progress: try await store.load(),
@@ -138,7 +139,8 @@ struct LessonProgressStoreTests {
         )
         var session = try #require(lesson.session)
         try submit(&session, correct: true)
-        try await lesson.saveAnswer(session, on: day, to: store)
+        lesson.saveAnswer(session, on: day, to: store)
+        await lesson.waitUntilSavesFinish()
         let kept = try await store.load()
         #expect(kept.lessonProgress.map(\.lessonID) == [mustLesson("l-book")])
         #expect(kept.cards.map(\.itemID) == [mustItem("e-book")])
@@ -146,12 +148,9 @@ struct LessonProgressStoreTests {
 
         try submit(&session, correct: false)
         await store.prepareFailedSave()
-        do {
-            try await lesson.saveAnswer(session, on: day, to: store)
-            Issue.record("The save should fail")
-        } catch let error as ProgressWriteError {
-            #expect(error == .saveFailed)
-        }
+        lesson.saveAnswer(session, on: day, to: store)
+        await lesson.waitUntilSavesFinish()
+        #expect(lesson.hasUnsavedAnswers)
         let loaded = try await store.load()
         #expect(loaded.lessonProgress == kept.lessonProgress)
         #expect(loaded.cards == kept.cards)

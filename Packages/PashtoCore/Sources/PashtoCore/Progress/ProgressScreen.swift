@@ -30,12 +30,55 @@ public enum ProgressScreen: Equatable, Sendable {
     }
 }
 
-/// The screen when saving a lesson answer, or the finished lesson, fails.
+/// The screen when the finished lesson still cannot be saved.
 ///
-/// This is the existing storage error. The failed save does not choose a
-/// new message, and it does not remove progress the store already kept.
+/// One answer that fails does not use this screen: the quiz stays up and the
+/// save is tried again. This is the existing storage error. It does not
+/// choose a new message, and it does not remove progress the store already kept.
 public func screenAfterFailedLessonSave() -> ProgressScreen {
     .storageError
+}
+
+/// Why the storage error is on screen.
+///
+/// The screen is the same in every case. The reason chooses Start over and
+/// what Try again does.
+public enum StorageErrorReason: Equatable, Sendable {
+    /// The course files are missing or cannot be decoded.
+    case courseUnreadable
+    /// The progress store could not be opened or read.
+    case progressUnreadable
+    /// The finished lesson could not be saved.
+    case lessonSaveFailed
+}
+
+/// What the storage error offers for `reason`.
+///
+/// A missing course and a failed lesson save offer Try again only. A progress
+/// store that cannot be opened also offers Start over. Try again reloads the
+/// course and the store, except after a failed lesson save, where it retries
+/// that save.
+public struct StorageErrorActions: Equatable, Sendable {
+    public var showsStartOver: Bool
+    /// True when Try again retries the finished lesson. False when it reloads.
+    public var retriesLessonSave: Bool
+
+    public init(showsStartOver: Bool, retriesLessonSave: Bool) {
+        self.showsStartOver = showsStartOver
+        self.retriesLessonSave = retriesLessonSave
+    }
+}
+
+/// The buttons and the Try again action for `reason`.
+public func storageErrorActions(for reason: StorageErrorReason) -> StorageErrorActions {
+    switch reason {
+    case .courseUnreadable:
+        StorageErrorActions(showsStartOver: false, retriesLessonSave: false)
+    case .progressUnreadable:
+        StorageErrorActions(showsStartOver: true, retriesLessonSave: false)
+    case .lessonSaveFailed:
+        StorageErrorActions(showsStartOver: false, retriesLessonSave: true)
+    }
 }
 
 /// The screen for a store that could not be opened.

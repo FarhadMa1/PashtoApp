@@ -86,6 +86,25 @@ public struct ActiveSessionSnapshot: Codable, Hashable, Sendable {
     }
 }
 
+/// True when a saved lesson still has a question VoiceOver does not ask.
+///
+/// Find-the-letter, letter contrast, and first-letter tasks are not built
+/// while VoiceOver is on. If one of those is still waiting, the lesson starts
+/// over instead of continuing. Other questions, including meaning questions,
+/// stay. Pronunciation is not part of this check: a lesson that does continue
+/// keeps the pronunciation setting it was started with.
+public func resumeConflictsWithVoiceOver(_ session: LessonSession, voiceOver: Bool) -> Bool {
+    guard voiceOver else { return false }
+    return session.tasks.contains { task in
+        switch task.kind {
+        case .findLetter, .letterContrast, .firstLetter:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 /// Whether an unfinished `session` can be continued on `today` for `contentVersion`.
 ///
 /// True when it is an unfinished lesson, the payload version is the one this

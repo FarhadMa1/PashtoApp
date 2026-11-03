@@ -6,11 +6,17 @@ struct RootView: View {
     /// SwiftUI's equivalent of `UIAccessibility.voiceOverStatusDidChangeNotification`.
     /// It changes when VoiceOver turns on or off.
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         phaseContent
             .onChange(of: voiceOverEnabled, initial: true) { _, enabled in
                 model.voiceOverChanged(to: enabled)
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .background {
+                    model.saveLessonOnBackground()
+                }
             }
     }
 
