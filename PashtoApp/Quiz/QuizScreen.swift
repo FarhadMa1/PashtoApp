@@ -21,10 +21,17 @@ struct QuizScreen: View {
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     private let itemsByID: [ItemID: ContentItem]
+    var onAnswer: (LessonSession) -> Void
     var onFinish: (LessonSession) -> Void
 
-    init(session: LessonSession, items: [ContentItem], onFinish: @escaping (LessonSession) -> Void = { _ in }) {
+    init(
+        session: LessonSession,
+        items: [ContentItem],
+        onAnswer: @escaping (LessonSession) -> Void = { _ in },
+        onFinish: @escaping (LessonSession) -> Void = { _ in }
+    ) {
         _session = State(initialValue: session)
+        self.onAnswer = onAnswer
         self.onFinish = onFinish
         var map: [ItemID: ContentItem] = [:]
         for item in items where map[item.id] == nil {
@@ -384,6 +391,8 @@ struct QuizScreen: View {
         placed = []
         if session.isComplete {
             onFinish(session)
+        } else {
+            onAnswer(session)
         }
     }
 

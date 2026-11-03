@@ -17,6 +17,7 @@ struct ContentView: View {
     var lessons: [ReleasedLesson] = []
     var startLesson: (LessonID) -> Void = { _ in }
     var endSession: () -> Void = {}
+    var answerSession: (LessonSession) -> Void = { _ in }
     var finishSession: (LessonSession) -> Void = { _ in }
 
     var body: some View {
@@ -55,7 +56,12 @@ struct ContentView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
-            QuizScreen(session: quiz, items: quizItems, onFinish: finishSession)
+            QuizScreen(
+                session: quiz,
+                items: quizItems,
+                onAnswer: answerSession,
+                onFinish: finishSession
+            )
         }
         .background(Lapis.background.ignoresSafeArea())
     }

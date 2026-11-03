@@ -17,9 +17,20 @@ import UIKit
 /// Try again reads the bundle again. When the course is still missing, the
 /// error screen gives a shake, or a fade when Reduce Motion is on.
 ///
-/// A finished lesson is saved with one `commit`: the lesson row, the review
-/// cards for the items it practised, and the streak. Leaving before the end
-/// writes nothing. The home list follows `snapshot`.
+/// Each answer is saved on the active lesson. A failed answer stays in memory:
+/// the quiz continues, and that save is tried again on the next answer and
+/// when the app goes to the background. That background write asks for time
+/// to finish. A retry still waiting when the lesson finishes is dropped, so
+/// the finished lesson is not put back in progress. The storage error is shown
+/// when the finished lesson still cannot be saved, when progress cannot be
+/// loaded, and when a read fails while a lesson is opening. Try again retries
+/// a failed finish and keeps the answers. A failed read while opening reloads,
+/// and Start over stays hidden, as it does for a failed save and a missing
+/// course. Start over is offered when the progress store cannot be opened.
+/// A second tap while a lesson is opening is ignored. Opening a lesson from
+/// its home row continues a saved lesson on the day it started or the next
+/// day, unless VoiceOver would now skip a question that is still waiting.
+/// Startup runs the progress reconciler. The home list follows `snapshot`.
 @MainActor
 @Observable
 final class AppModel {
@@ -44,24 +55,35 @@ final class AppModel {
     /// Decoded once at startup. Try again replaces it only when the bytes change.
     private var decodedCourse: BundledCourseDecode?
     private var home = ReleasedLessonList()
-    private var lessonLaunch = RootLessonSession()
-    /// The lesson on screen, remembered so finishing it can be committed.
-    private var openLesson: LessonAttempt?
+    /// The lesson on screen. Its session id is what a finish is allowed to close.
+    private var openLesson = OpenLesson()
     private let appStoreID: String
     private var storeURL: URL?
-    private let clock: DayClock<SystemDateProvider>
+    private let clock: DayClock<DateProviderBox>
     private var container: ModelContainer?
     private var progressStore: SwiftDataProgressStore?
+    /// Keeps a background save alive until it lands. Not part of the screen.
+    @ObservationIgnored
+    private let backgroundSave = BackgroundLessonSave()
     /// The home list reads this in `didSet`, so a finished lesson cannot leave it stale.
     private var snapshot: ProgressSnapshot? {
         didSet { refreshReleasedLessons() }
     }
-    private var isOpening = false
+    private let lessonOpen = LessonOpening()
     /// Increments when Try again still cannot read the course. The error screen reacts.
     private(set) var courseStillMissingToken = 0
-    /// Start over only helps a store that will not open. It stays hidden when
-    /// the bundled course itself could not be read.
-    private(set) var offersStartOver = false
+    /// Why the storage error is showing. Nil on every other screen.
+    ///
+    /// Start over is offered only when the progress store could not be opened.
+    /// A missing course, a failed lesson save, and a failed read while opening
+    /// a lesson keep that button hidden.
+    private var storageErrorReason: StorageErrorReason?
+
+    /// Start over only helps a store that will not open.
+    var offersStartOver: Bool {
+        guard let storageErrorReason else { return false }
+        return storageErrorActions(for: storageErrorReason).showsStartOver
+    }
 
     var isAppStoreButtonVisible: Bool {
         showsAppStoreButton(appStoreID: appStoreID)
@@ -73,12 +95,12 @@ final class AppModel {
 
     /// The lesson quiz on screen. Nil when the learner is on the home.
     var activeLesson: LessonSession? {
-        lessonLaunch.isActive ? lessonLaunch.session : nil
+        openLesson.session
     }
 
     /// Items the open quiz may draw. Released units only.
     var lessonItems: [ContentItem] {
-        lessonLaunch.items
+        openLesson.items
     }
 
     /// Lessons the home can start. Empty when the release list is empty.
@@ -99,14 +121,22 @@ final class AppModel {
         }
     }
 
-    init(storeURL: URL?, appStoreID: String, phase: Phase) {
+    init(
+        storeURL: URL?,
+        appStoreID: String,
+        phase: Phase,
+        dateProvider: any DateProvider = SystemDateProvider()
+    ) {
         self.storeURL = storeURL
         self.appStoreID = appStoreID
         self.phase = phase
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = .autoupdatingCurrent
-        self.clock = DayClock(provider: SystemDateProvider(), calendar: calendar)
+        self.clock = DayClock(provider: DateProviderBox(dateProvider), calendar: calendar)
         prepareCourse()
+        if self.phase == .storageError, storageErrorReason == nil {
+            storageErrorReason = .progressUnreadable
+        }
     }
 
     static let appStoreIDKey = "AppStoreID"
@@ -122,10 +152,9 @@ final class AppModel {
     }
 
     func loadProgress() async {
-        guard !isOpening else { return }
-        isOpening = true
-        defer { isOpening = false }
-        guard let version = decodedCourse?.installedContentVersion else { return }
+        guard lessonOpen.begin() else { return }
+        defer { lessonOpen.end() }
+        guard let version = decodedCourse?.installedContentVersion, let course else { return }
         do {
             let url = try resolvedURL()
             let container = try ProgressContainer.make(at: url)
@@ -133,21 +162,32 @@ final class AppModel {
                 modelContainer: container,
                 contentVersion: version
             )
-            let snapshot = try await store.load()
+            let snapshot = try await ProgressReconciler.run(
+                store: store,
+                content: course,
+                on: clock.today
+            )
             self.container = container
             self.progressStore = store
             self.snapshot = snapshot
+            storageErrorReason = nil
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
             progressStore = nil
             snapshot = nil
-            phase = phase(for: progressScreen(for: progressOpenFailure(for: error)))
+            let screen = progressScreen(for: progressOpenFailure(for: error))
+            storageErrorReason = screen == .storageError ? .progressUnreadable : nil
+            phase = phase(for: screen)
         }
     }
 
     func tryAgain() async {
         guard phase == .storageError else { return }
+        if let storageErrorReason, storageErrorActions(for: storageErrorReason).retriesLessonSave {
+            await retryFailedLessonSave()
+            return
+        }
         if prepareCourse() == nil {
             courseStillMissingToken += 1
         }
@@ -155,10 +195,15 @@ final class AppModel {
     }
 
     func confirmStartOver() async {
-        guard phase == .storageError, !isOpening else { return }
+        guard phase == .storageError, !lessonOpen.isOpening else { return }
+        guard let storageErrorReason, storageErrorActions(for: storageErrorReason).showsStartOver else {
+            return
+        }
         guard let version = prepareCourse() else { return }
-        isOpening = true
-        defer { isOpening = false }
+        guard lessonOpen.begin() else { return }
+        defer { lessonOpen.end() }
+        openLesson.endLesson()
+        openLesson.discardPendingSaves()
         container = nil
         progressStore = nil
         snapshot = nil
@@ -231,62 +276,111 @@ final class AppModel {
     /// Opens a quiz for one released lesson. An unlisted lesson does not start.
     ///
     /// `voiceOver` is the value `RootView` already read from the environment.
-    func startLesson(_ lessonID: LessonID, voiceOver: Bool) {
+    /// A lesson that was saved and can still be continued opens where it left off.
+    /// A second tap while this open is still loading does not start another.
+    func startLesson(_ lessonID: LessonID, voiceOver: Bool) async {
         voiceOverChanged(to: voiceOver)
-        guard phase == .ready, let course else { return }
-        var rng = SystemRandomNumberGenerator()
-        var launch = lessonLaunch
-        launch.start(
-            lessonID: lessonID,
-            in: course,
-            seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
-            releasedUnitIDs: releasedUnitIDs,
-            showsPronunciation: snapshot?.settings.showTransliteration ?? true,
-            voiceOver: home.voiceOver,
-            using: &rng
-        )
-        lessonLaunch = launch
-        if launch.isActive, let started = launch.session {
-            openLesson = LessonAttempt(
-                lessonID: started.lessonID,
-                startedDay: clock.today,
-                contentVersion: course.contentVersion
+        guard phase == .ready, let course, let store = progressStore else { return }
+        guard lessonOpen.begin() else { return }
+        defer { lessonOpen.end() }
+        do {
+            await openLesson.waitUntilSavesFinish()
+            if openLesson.hasUnsavedAnswers {
+                openLesson.retryUnsavedAnswers(to: store)
+                await openLesson.waitUntilSavesFinish()
+            }
+            let progress = try await store.load()
+            var rng = SystemRandomNumberGenerator()
+            openLesson.startLesson(
+                lessonID: lessonID,
+                in: course,
+                progress: progress,
+                releasedUnitIDs: releasedUnitIDs,
+                showsPronunciation: progress.settings.showTransliteration,
+                voiceOver: home.voiceOver,
+                on: clock.today,
+                using: &rng
             )
-        } else {
-            openLesson = nil
+        } catch {
+            storageErrorReason = .lessonOpenUnreadable
+            phase = .storageError
+        }
+    }
+
+    /// Saves the answer that was just given. The quiz stays on that question.
+    ///
+    /// The record is taken before this returns, so closing the quiz does not
+    /// drop the answer. A failed save is not shown. The next answer and a
+    /// background retry write the whole session. Progress already stored stays.
+    func saveAnswer(_ session: LessonSession) {
+        guard let store = progressStore else { return }
+        openLesson.saveAnswer(session, on: clock.today, to: store)
+    }
+
+    /// Writes an answer the store has not kept yet. Called when the app backgrounds.
+    ///
+    /// The system is asked for time to finish the write. The task ends when the
+    /// save has landed, or when that time runs out.
+    func saveLessonOnBackground() {
+        guard let store = progressStore, openLesson.hasUnsavedAnswers else { return }
+        let token = backgroundSave.begin()
+        openLesson.retryUnsavedAnswers(to: store)
+        Task {
+            await openLesson.waitUntilSavesFinish()
+            self.backgroundSave.end(matching: token)
         }
     }
 
     /// The learner finished the quiz. One commit saves the lesson, the cards, and the streak.
     ///
-    /// The day is today when the session has an answer, and the day it started
-    /// otherwise. A failed save leaves the stored progress as it was. The quiz
-    /// still closes: there is no second message for that failure.
-    func finishLesson(_ session: LessonSession) async {
-        let attempt = openLesson
+    /// The day is the civil day of the last answer. A failed save shows the
+    /// storage error and does not remove progress or the answers still on screen.
+    /// The quiz closes only after that save, and only when `openLesson` is still
+    /// this session. A lesson opened while the save was in flight stays on screen.
+    func finishLesson(_ session: LessonSession) {
+        let finished = openLesson.attempt?.sessionID
         let bundled = course
         let store = progressStore
-        defer { endLesson() }
-        guard let attempt, let bundled, let store else { return }
-        let answeredOn = session.answers.isEmpty ? nil : clock.today
-        do {
-            snapshot = try await attempt.save(
-                session,
-                answeredOn: answeredOn,
-                in: bundled,
-                to: store
-            )
-        } catch {
-            return
+        let day = clock.today
+        Task {
+            guard let bundled, let store else { return }
+            do {
+                let saved = try await openLesson.finishLesson(
+                    session,
+                    on: day,
+                    in: bundled,
+                    to: store
+                )
+                snapshot = saved
+                openLesson.endLessonIfStill(finished)
+                storageErrorReason = nil
+                phase = phase(for: progressScreen(streak: saved.streak, on: day))
+            } catch {
+                storageErrorReason = .lessonSaveFailed
+                phase = phase(for: screenAfterFailedLessonSave())
+            }
         }
     }
 
-    /// Leaving the quiz before the end. Nothing is written.
+    /// Leaving the quiz before the end. Answers already saved stay saved.
     func endLesson() {
-        openLesson = nil
-        var launch = lessonLaunch
-        launch.end()
-        lessonLaunch = launch
+        openLesson.endLesson()
+    }
+
+    /// Writes the finished lesson again. The answers kept on screen are what get saved.
+    private func retryFailedLessonSave() async {
+        guard let course, let store = progressStore else { return }
+        let finished = openLesson.attempt?.sessionID
+        do {
+            let saved = try await openLesson.retryFailedFinish(in: course, to: store)
+            snapshot = saved
+            openLesson.endLessonIfStill(finished)
+            storageErrorReason = nil
+            phase = phase(for: progressScreen(streak: saved.streak, on: clock.today))
+        } catch {
+            storageErrorReason = .lessonSaveFailed
+            phase = phase(for: screenAfterFailedLessonSave())
+        }
     }
 
     func openAppStore() {
@@ -322,14 +416,16 @@ final class AppModel {
             course = bundled.bundle
             releasedUnitIDs = bundled.releasedUnitIDs
             home.setCourse(bundled.bundle, releasedUnitIDs: bundled.releasedUnitIDs)
-            offersStartOver = true
+            if storageErrorReason == .courseUnreadable {
+                storageErrorReason = nil
+            }
             publishLessons()
             return bundled.installedContentVersion
         case .unavailable:
             course = nil
             releasedUnitIDs = []
             home.setCourse(nil, releasedUnitIDs: [])
-            offersStartOver = false
+            storageErrorReason = .courseUnreadable
             publishLessons()
             if let screen = decoded.load.blockingScreen {
                 phase = phase(for: screen)
@@ -365,5 +461,39 @@ final class AppModel {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
         return formatter.string(from: date)
+    }
+}
+
+/// One system background task for a lesson save.
+///
+/// A later save keeps the same task. An earlier end does not stop that later
+/// save. Ending the task twice is ignored.
+@MainActor
+private final class BackgroundLessonSave {
+    private var taskID: UIBackgroundTaskIdentifier = .invalid
+    private var token = 0
+
+    /// Asks for time to write. Returns the token this attempt holds.
+    func begin() -> Int {
+        token += 1
+        if taskID == .invalid {
+            taskID = UIApplication.shared.beginBackgroundTask { [weak self] in
+                self?.endCurrent()
+            }
+        }
+        return token
+    }
+
+    /// Ends the task when `expected` is still the latest begin.
+    func end(matching expected: Int) {
+        guard expected == token else { return }
+        endCurrent()
+    }
+
+    private func endCurrent() {
+        guard taskID != .invalid else { return }
+        let ending = taskID
+        taskID = .invalid
+        UIApplication.shared.endBackgroundTask(ending)
     }
 }

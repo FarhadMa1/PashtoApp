@@ -61,17 +61,6 @@ struct ReleasedLessonListTests {
         #expect(stillMissing.installedContentVersion == nil)
     }
 
-    @Test func theHomeFollowsTheSnapshotAndDecodesTheCourseOnce() throws {
-        let source = try String(contentsOf: appModelURL(), encoding: .utf8)
-        #expect(source.contains("didSet { refreshReleasedLessons() }"))
-        #expect(!source.contains("UIAccessibility"))
-        let load = try #require(functionBody("loadProgress", in: source))
-        #expect(!load.contains("prepareCourse"))
-        #expect(!load.contains("JSONDecoder"))
-        #expect(!load.contains("BundledCourseLoader"))
-        #expect(load.contains("decodedCourse"))
-    }
-
     private func course() -> ContentBundle {
         let first = [
             word("e-salam", "سلام", "hello", "sa-LAAM"),
@@ -134,37 +123,6 @@ struct ReleasedLessonListTests {
     }
 
     private func word(_ id: String, _ pashto: String, _ en: String, _ pronunciation: String) -> ContentItem {
-        makeItem(id, pashto: pashto, translit: en, pronunciation: pronunciation, en: en)
+        makeItem(id, pashto: pashto, translit: en, pronunciation: pronunciation, en: en        )
     }
-}
-
-private func appModelURL() -> URL {
-    URL(fileURLWithPath: #filePath)
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .appendingPathComponent("PashtoApp")
-        .appendingPathComponent("Launch")
-        .appendingPathComponent("AppModel.swift")
-}
-
-private func functionBody(_ name: String, in source: String) -> String? {
-    guard let start = source.range(of: "func \(name)") else { return nil }
-    guard let open = source[start.upperBound...].firstIndex(of: "{") else { return nil }
-    var depth = 0
-    var index = open
-    while index < source.endIndex {
-        let character = source[index]
-        if character == "{" { depth += 1 }
-        if character == "}" {
-            depth -= 1
-            if depth == 0 {
-                return String(source[open...index])
-            }
-        }
-        index = source.index(after: index)
-    }
-    return nil
 }

@@ -122,6 +122,33 @@ public struct RootLessonSession: Equatable, Sendable {
         return session
     }
 
+    /// Continues a lesson that was already saved.
+    ///
+    /// The questions and the answers are the ones in `session`. They are not
+    /// built again. A session with nothing left to answer does not open.
+    public mutating func resume(
+        _ session: LessonSession,
+        in bundle: ContentBundle,
+        releasedUnitIDs: [UnitID]
+    ) {
+        guard !session.tasks.isEmpty else {
+            self.session = nil
+            items = []
+            return
+        }
+        let course = ReleasedCourse.limiting(bundle, to: releasedUnitIDs)
+        self.session = session
+        items = course.items
+    }
+
+    /// Replaces the open session after an answer, when it is the same lesson.
+    ///
+    /// A different lesson is left as it was. Clearing the session is `end`.
+    public mutating func replaceSession(_ session: LessonSession) {
+        guard let current = self.session, current.lessonID == session.lessonID else { return }
+        self.session = session
+    }
+
     /// Finishing or leaving. The session is gone and the home shows again.
     public mutating func end() {
         session = nil

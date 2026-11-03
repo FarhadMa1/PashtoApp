@@ -30,6 +30,61 @@ public enum ProgressScreen: Equatable, Sendable {
     }
 }
 
+/// The screen when the finished lesson still cannot be saved.
+///
+/// One answer that fails does not use this screen: the quiz stays up and the
+/// save is tried again. This is the existing storage error. It does not
+/// choose a new message, and it does not remove progress the store already kept.
+public func screenAfterFailedLessonSave() -> ProgressScreen {
+    .storageError
+}
+
+/// Why the storage error is on screen.
+///
+/// The screen is the same in every case. The reason chooses Start over and
+/// what Try again does.
+public enum StorageErrorReason: Equatable, Sendable {
+    /// The course files are missing or cannot be decoded.
+    case courseUnreadable
+    /// The progress store could not be opened or read at launch.
+    case progressUnreadable
+    /// The finished lesson could not be saved.
+    case lessonSaveFailed
+    /// The progress store could not be read while a lesson was opening.
+    case lessonOpenUnreadable
+}
+
+/// What the storage error offers for `reason`.
+///
+/// A missing course, a failed lesson save, and a failed read while opening a
+/// lesson offer Try again only. A progress store that cannot be opened at
+/// launch also offers Start over. Try again reloads the course and the store,
+/// except after a failed lesson save, where it retries that save.
+public struct StorageErrorActions: Equatable, Sendable {
+    public var showsStartOver: Bool
+    /// True when Try again retries the finished lesson. False when it reloads.
+    public var retriesLessonSave: Bool
+
+    public init(showsStartOver: Bool, retriesLessonSave: Bool) {
+        self.showsStartOver = showsStartOver
+        self.retriesLessonSave = retriesLessonSave
+    }
+}
+
+/// The buttons and the Try again action for `reason`.
+public func storageErrorActions(for reason: StorageErrorReason) -> StorageErrorActions {
+    switch reason {
+    case .courseUnreadable:
+        StorageErrorActions(showsStartOver: false, retriesLessonSave: false)
+    case .progressUnreadable:
+        StorageErrorActions(showsStartOver: true, retriesLessonSave: false)
+    case .lessonSaveFailed:
+        StorageErrorActions(showsStartOver: false, retriesLessonSave: true)
+    case .lessonOpenUnreadable:
+        StorageErrorActions(showsStartOver: false, retriesLessonSave: false)
+    }
+}
+
 /// The screen for a store that could not be opened.
 public func progressScreen(for failure: ProgressOpenFailure) -> ProgressScreen {
     switch failure {
