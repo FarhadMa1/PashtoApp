@@ -121,6 +121,11 @@
       "pashto" : "تاسو څنګه یاست؟",
       "pronunciation" : "TAA-so TSAN-ga yaast?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "TAA-so",
+        "TSAN-ga",
+        "yaast"
+      ],
       "tokens" : [
         "تاسو",
         "څنګه",
@@ -143,6 +148,11 @@
       "pronunciation" : "za kha yam",
       "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo" : "e-tsanga-ye",
+      "tokenPronunciations" : [
+        "za",
+        "kha",
+        "yam"
+      ],
       "tokens" : [
         "زه",
         "ښه",
@@ -523,6 +533,12 @@
       "pashto" : "زما نوم احمد دی",
       "pronunciation" : "zmaa noom AH-mad day",
       "responseTo" : "e-staso-num-tsa-day",
+      "tokenPronunciations" : [
+        "zmaa",
+        "noom",
+        "AH-mad",
+        "day"
+      ],
       "tokens" : [
         "زما",
         "نوم",
@@ -544,6 +560,12 @@
       "pashto" : "ستا نوم څه دی؟",
       "pronunciation" : "staa noom tsa day?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "staa",
+        "noom",
+        "tsa",
+        "day"
+      ],
       "tokens" : [
         "ستا",
         "نوم",
@@ -566,6 +588,12 @@
       "pashto" : "ستاسو نوم څه دی؟",
       "pronunciation" : "STAA-so noom tsa day?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "STAA-so",
+        "noom",
+        "tsa",
+        "day"
+      ],
       "tokens" : [
         "ستاسو",
         "نوم",
@@ -588,6 +616,13 @@
       "pashto" : "ته د کوم ځای یې؟",
       "pronunciation" : "ta da koom dzaay ye?",
       "pronunciationNote" : "ځ: dz as in kids.",
+      "tokenPronunciations" : [
+        "ta",
+        "da",
+        "koom",
+        "dzaay",
+        "ye"
+      ],
       "tokens" : [
         "ته",
         "د",
@@ -612,6 +647,13 @@
       "pronunciation" : "za la naar-WEY TSA-kha yam",
       "pronunciationNote" : "څ: ts as in cats. خ: kh, like ch in Scottish loch.",
       "responseTo" : "e-ta-da-kum-dzay-ye",
+      "tokenPronunciations" : [
+        "za",
+        "la",
+        "naar-WEY",
+        "TSA-kha",
+        "yam"
+      ],
       "tokens" : [
         "زه",
         "له",
@@ -634,6 +676,11 @@
       "pashto" : "زه افغان یم",
       "pronunciation" : "za af-GHAAN yam",
       "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "za",
+        "af-GHAAN",
+        "yam"
+      ],
       "tokens" : [
         "زه",
         "افغان",
@@ -655,6 +702,11 @@
       "pashto" : "زه افغانه یم",
       "pronunciation" : "za af-GHAA-na yam",
       "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "za",
+        "af-GHAA-na",
+        "yam"
+      ],
       "tokens" : [
         "زه",
         "افغانه",
@@ -676,6 +728,11 @@
       "pashto" : "زه ښوونکی یم",
       "pronunciation" : "za kho-WOON-kay yam",
       "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "za",
+        "kho-WOON-kay",
+        "yam"
+      ],
       "tokens" : [
         "زه",
         "ښوونکی",
@@ -697,6 +754,11 @@
       "pashto" : "زه پښتو زده کوم",
       "pronunciation" : "za pakh-TO zda ka-WAM",
       "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "za",
+        "pakh-TO",
+        "zda ka-WAM"
+      ],
       "tokens" : [
         "زه",
         "پښتو",
@@ -1034,6 +1096,11 @@
       "pashto" : "دا څوک دی؟",
       "pronunciation" : "daa tsok day?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "daa",
+        "tsok",
+        "day"
+      ],
       "tokens" : [
         "دا",
         "څوک",
@@ -1055,6 +1122,11 @@
       "pashto" : "دا څوک ده؟",
       "pronunciation" : "daa tsok da?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "daa",
+        "tsok",
+        "da"
+      ],
       "tokens" : [
         "دا",
         "څوک",
@@ -1076,6 +1148,12 @@
       "pashto" : "دا زما پلار دی",
       "pronunciation" : "daa zmaa plaar day",
       "responseTo" : "e-daa-tsok-day",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "plaar",
+        "day"
+      ],
       "tokens" : [
         "دا",
         "زما",
@@ -1097,6 +1175,12 @@
       "pashto" : "دا زما مور ده",
       "pronunciation" : "daa zmaa mor da",
       "responseTo" : "e-daa-tsok-da",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "mor",
+        "da"
+      ],
       "tokens" : [
         "دا",
         "زما",
@@ -1160,6 +1244,12 @@
       "kind" : "phrase",
       "pashto" : "دا زما ورور دی",
       "pronunciation" : "daa zmaa wror day",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "wror",
+        "day"
+      ],
       "tokens" : [
         "دا",
         "زما",
@@ -1181,6 +1271,12 @@
       "pashto" : "دا زما خور ده",
       "pronunciation" : "daa zmaa khor da",
       "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "khor",
+        "da"
+      ],
       "tokens" : [
         "دا",
         "زما",
@@ -1216,6 +1312,12 @@
       "kind" : "phrase",
       "pashto" : "دا ستا ورور دی؟",
       "pronunciation" : "daa staa wror day?",
+      "tokenPronunciations" : [
+        "daa",
+        "staa",
+        "wror",
+        "day"
+      ],
       "tokens" : [
         "دا",
         "ستا",
@@ -1271,6 +1373,12 @@
       "pashto" : "مور دې څنګه ده؟",
       "pronunciation" : "mor dey TSAN-ga da?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "mor",
+        "dey",
+        "TSAN-ga",
+        "da"
+      ],
       "tokens" : [
         "مور",
         "دې",
@@ -1294,6 +1402,11 @@
       "pronunciation" : "ha-GHA kha da",
       "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo" : "e-mor-de-tsanga-da",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "kha",
+        "da"
+      ],
       "tokens" : [
         "هغه",
         "ښه",
@@ -1314,6 +1427,12 @@
       "pashto" : "پلار دې څنګه دی؟",
       "pronunciation" : "plaar dey TSAN-ga day?",
       "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "plaar",
+        "dey",
+        "TSAN-ga",
+        "day"
+      ],
       "tokens" : [
         "پلار",
         "دې",
@@ -1337,6 +1456,11 @@
       "pronunciation" : "ha-GHA kha day",
       "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo" : "e-plar-de-tsanga-day",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "kha",
+        "day"
+      ],
       "tokens" : [
         "هغه",
         "ښه",

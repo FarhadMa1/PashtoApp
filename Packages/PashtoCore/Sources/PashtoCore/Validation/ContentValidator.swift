@@ -306,6 +306,9 @@ public enum ContentValidator {
         if item.tokens != nil {
             report.add(.error, id: id, field: "tokens", "tokens are only used on words and phrases.")
         }
+        if item.tokenPronunciations != nil {
+            report.add(.error, id: id, field: "tokenPronunciations", "tokenPronunciations are only used on words and phrases.")
+        }
         if item.acceptedOrders != nil {
             report.add(.error, id: id, field: "acceptedOrders", "acceptedOrders is only used on words and phrases.")
         }

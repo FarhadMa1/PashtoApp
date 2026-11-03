@@ -201,15 +201,16 @@ struct QuizFindingsTests {
         })
     }
 
-    @Test func orderSentencePronunciationWaitsUntilTheAnswerAndSessionsSkipTheTask() throws {
-        #expect(!OrderWords.includedInSessions)
+    @Test func orderSentencePronunciationWaitsUntilTheAnswerAndSessionsIncludeTheTask() throws {
+        #expect(OrderWords.includedInSessions)
         let phrase = makeItem(
             "e-phrase",
             pashto: "زه ښه",
             translit: "za kha",
             pronunciation: "za-KHA",
             en: "I am well",
-            tokens: ["زه", "ښه"]
+            tokens: ["زه", "ښه"],
+            tokenPronunciations: ["za", "kha"]
         )
         let lesson = Lesson(
             id: lessonID("l-order"),
@@ -229,7 +230,16 @@ struct QuizFindingsTests {
             releasedUnitIDs: nil,
             using: &rng
         )
-        #expect(!session.tasks.contains { $0.kind == .orderWords })
+        #expect(session.tasks.contains { $0.kind == .orderWords })
+        guard case .orderWords(let order) = session.tasks.first(where: { $0.kind == .orderWords })?.payload else {
+            Issue.record("Missing word-order task")
+            return
+        }
+        #expect(order.tiles.compactMap(\.pronunciation).sorted() == ["kha", "za"])
+        for tile in order.tiles {
+            #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: true) == tile.pronunciation)
+            #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: false) == nil)
+        }
         var direct = SplitMix64(seed: 1)
         let context = QuizContext(bundle: bundle, seenLessonIDs: [lesson.id])
         #expect(OrderWords.makeTask(for: phrase, in: context, using: &direct) != nil)
@@ -237,6 +247,97 @@ struct QuizFindingsTests {
         #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: true, answered: false) == nil)
         #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: true, answered: true) == "za-KHA")
         #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: false, answered: true) == nil)
+    }
+
+    /// Farhad approved these spellings on 2026-11-03. The test compares them character for character.
+    @Test func everyOrderingTileMatchesTheApprovedPronunciation() throws {
+        let bundle = try loadRepositoryContent()
+        let table = approvedTilePronunciations
+        #expect(table.count == 35)
+        var seen: Set<String> = []
+        var orderingSentences = 0
+        for item in bundle.items {
+            guard let tokens = item.tokens else {
+                #expect(item.tokenPronunciations == nil)
+                continue
+            }
+            orderingSentences += 1
+            let spoken = try #require(item.tokenPronunciations)
+            #expect(spoken.count == tokens.count)
+            for (token, pronunciation) in zip(tokens, spoken) {
+                #expect(!pronunciation.isEmpty)
+                #expect(pronunciation == table[token])
+                seen.insert(token)
+            }
+        }
+        #expect(orderingSentences == 22)
+        #expect(seen == Set(table.keys))
+
+        let released = try releasedOrderingItems(in: bundle)
+        for item in released {
+            guard let tokens = item.tokens else { continue }
+            let spoken = try #require(item.tokenPronunciations)
+            #expect(spoken.count == tokens.count)
+            for (token, pronunciation) in zip(tokens, spoken) {
+                #expect(!pronunciation.isEmpty)
+                #expect(pronunciation == table[token])
+            }
+        }
+
+        let lessons = bundle.units.flatMap(\.lessons)
+        var seenLessons: [LessonID] = []
+        var rng = SplitMix64(seed: 1)
+        var orderCount = 0
+        for lesson in lessons {
+            seenLessons.append(lesson.id)
+            let session = LessonSessionBuilder.build(
+                for: lesson.id,
+                in: bundle,
+                seenLessonIDs: seenLessons,
+                maxQuestions: nil,
+                releasedUnitIDs: nil,
+                showsPronunciation: true,
+                using: &rng
+            )
+            for task in session.tasks {
+                guard case .orderWords(let order) = task.payload else { continue }
+                orderCount += 1
+                let item = try #require(bundle.items.first { $0.id == order.targetID })
+                #expect(QuizPresentation.sentencePronunciation(item: item, showsPronunciation: true, answered: false) == nil)
+                #expect(QuizPresentation.sentencePronunciation(item: item, showsPronunciation: session.showsPronunciation, answered: true) == item.pronunciation)
+                for tile in order.tiles {
+                    let pronunciation = try #require(tile.pronunciation)
+                    #expect(!pronunciation.isEmpty)
+                    #expect(pronunciation == table[tile.text])
+                    #expect(pronunciation == item.tokenPronunciations?[tile.index])
+                    #expect(QuizPresentation.tilePronunciation(pronunciation, showsPronunciation: true) == pronunciation)
+                }
+            }
+        }
+        #expect(orderCount == 22)
+
+        var hiddenRNG = SplitMix64(seed: 1)
+        let hidden = LessonSessionBuilder.build(
+            for: lessonID("l-greetings-2"),
+            in: bundle,
+            seenLessonIDs: lessons.map(\.id),
+            maxQuestions: nil,
+            releasedUnitIDs: nil,
+            showsPronunciation: false,
+            using: &hiddenRNG
+        )
+        let hiddenOrders = hidden.tasks.compactMap { task -> OrderWordsTask? in
+            guard case .orderWords(let order) = task.payload else { return nil }
+            return order
+        }
+        #expect(!hiddenOrders.isEmpty)
+        for order in hiddenOrders {
+            for tile in order.tiles {
+                #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: false) == nil)
+            }
+            let item = try #require(bundle.items.first { $0.id == order.targetID })
+            #expect(QuizPresentation.sentencePronunciation(item: item, showsPronunciation: false, answered: true) == nil)
+        }
     }
 
     @Test func matchLinksCanBeChangedAndPlacedTilesCanBeRemoved() {
@@ -292,6 +393,9 @@ struct QuizFindingsTests {
             #expect(ratio >= pair.minimumRatio)
         }
         #expect(QuizResultPalette.correctMarkLight != QuizResultPalette.correctTextLight)
+        #expect(QuizResultPalette.ringLight == 0xB97D22)
+        #expect(QuizResultPalette.ringDark == 0xF2B85B)
+        #expect(QuizResultPalette.ringLight != 0xE8A33D)
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {
@@ -414,6 +518,72 @@ private func choiceTasks(in session: LessonSession, kind: TaskKind) -> [QuizTask
 private func word(_ id: String, _ pashto: String, _ en: String) -> ContentItem {
     makeItem(id, pashto: pashto, translit: en + "-scholar", pronunciation: en, en: en)
 }
+
+private func releasedOrderingItems(in bundle: ContentBundle) throws -> [ContentItem] {
+    var url = URL(fileURLWithPath: #filePath)
+    for _ in 0..<5 {
+        url.deleteLastPathComponent()
+    }
+    url.appendPathComponent("content")
+    url.appendPathComponent("release-units.json")
+    let file = try JSONDecoder().decode(ReleaseUnitsFile.self, from: Data(contentsOf: url))
+    let released = Set(file.units)
+    var ids: Set<ItemID> = []
+    for unit in bundle.units where released.contains(unit.id.rawValue) {
+        for lesson in unit.lessons {
+            for ref in lesson.items {
+                ids.insert(ref.item)
+            }
+            for letter in lesson.letters {
+                ids.insert(letter)
+            }
+        }
+    }
+    return bundle.items.filter { ids.contains($0.id) }
+}
+
+private struct ReleaseUnitsFile: Decodable {
+    let units: [String]
+}
+
+/// Spellings Farhad approved on 2026-11-03. Compared character for character.
+private let approvedTilePronunciations: [String: String] = [
+    "دا": "daa",
+    "دی": "day",
+    "ده": "da",
+    "د": "da",
+    "زه": "za",
+    "ته": "ta",
+    "زما": "zmaa",
+    "ستا": "staa",
+    "تاسو": "TAA-so",
+    "ستاسو": "STAA-so",
+    "هغه": "ha-GHA",
+    "یم": "yam",
+    "یاست": "yaast",
+    "یې": "ye",
+    "ښه": "kha",
+    "څوک": "tsok",
+    "څه": "tsa",
+    "څنګه": "TSAN-ga",
+    "دې": "dey",
+    "کوم": "koom",
+    "ځای": "dzaay",
+    "نوم": "noom",
+    "مور": "mor",
+    "پلار": "plaar",
+    "ورور": "wror",
+    "خور": "khor",
+    "احمد": "AH-mad",
+    "افغان": "af-GHAAN",
+    "افغانه": "af-GHAA-na",
+    "ښوونکی": "kho-WOON-kay",
+    "له": "la",
+    "ناروې": "naar-WEY",
+    "څخه": "TSA-kha",
+    "پښتو": "pakh-TO",
+    "زده کوم": "zda ka-WAM",
+]
 
 private func letter(_ id: String, _ pashto: String, _ en: String) -> ContentItem {
     makeItem(

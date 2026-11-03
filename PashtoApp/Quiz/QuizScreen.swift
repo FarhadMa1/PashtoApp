@@ -289,12 +289,16 @@ struct QuizScreen: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .strokeBorder(matchBorder(selected: selectedLeft == pair.left.itemID, mark: mark), lineWidth: 2)
+                            .strokeBorder(
+                                matchBorder(selected: selectedLeft == pair.left.itemID, mark: mark),
+                                lineWidth: selectedLeft == pair.left.itemID && mark == nil ? 3 : 2
+                            )
                     )
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(Lapis.text)
                 .accessibilityLabel(matchLabel(text: pair.left.text, pronunciation: spoken, linkedText: linked?.text, mark: mark))
+                .accessibilityAddTraits(selectedLeft == pair.left.itemID ? .isSelected : AccessibilityTraits())
             }
             ForEach(task.rightColumn, id: \.itemID) { side in
                 Button {
@@ -329,7 +333,7 @@ struct QuizScreen: View {
         case .incorrect:
             return Lapis.destructive
         case nil:
-            return selected ? Lapis.saffron : Lapis.secondaryText.opacity(0.35)
+            return selected ? Lapis.ring : Lapis.secondaryText.opacity(0.35)
         }
     }
 
@@ -360,10 +364,15 @@ struct QuizScreen: View {
                                 guard !revealed else { return }
                                 placed = QuizDraft.place(placed, tile: tile.index)
                             } label: {
-                                Text(tile.text)
+                                PashtoLine(
+                                    text: tile.text,
+                                    pronunciation: tilePronunciation(tile),
+                                    arabic: QuizPresentation.containsArabicScript(tile.text)
+                                )
                             }
                             .buttonStyle(.plain)
                             .disabled(revealed)
+                            .accessibilityLabel(tileAccessibility(tile))
                         }
                         if !task.fixedEnding.isEmpty {
                             Text(task.fixedEnding)
@@ -390,7 +399,7 @@ struct QuizScreen: View {
                 } label: {
                     PashtoLine(
                         text: tile.text,
-                        pronunciation: nil,
+                        pronunciation: tilePronunciation(tile),
                         arabic: QuizPresentation.containsArabicScript(tile.text)
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -399,8 +408,20 @@ struct QuizScreen: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(Lapis.text)
                 .disabled(revealed)
+                .accessibilityLabel(tileAccessibility(tile))
             }
         }
+    }
+
+    private func tilePronunciation(_ tile: WordTile) -> String? {
+        QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: session.showsPronunciation)
+    }
+
+    private func tileAccessibility(_ tile: WordTile) -> String {
+        if let spoken = tilePronunciation(tile) {
+            return "\(tile.text), \(spoken)"
+        }
+        return tile.text
     }
 
     private func pronunciation(for text: String, itemID: ItemID) -> String? {
@@ -518,11 +539,11 @@ private struct LetterMarkView: View {
         switch mark {
         case .ring:
             Circle()
-                .stroke(Lapis.saffron, lineWidth: 2)
+                .stroke(Lapis.ring, lineWidth: 2)
                 .frame(width: 14, height: 14)
         case .dot:
             Circle()
-                .fill(Lapis.saffron)
+                .fill(Lapis.ring)
                 .frame(width: 8, height: 8)
         }
     }

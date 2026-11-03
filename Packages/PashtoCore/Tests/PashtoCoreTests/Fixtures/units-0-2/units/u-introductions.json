@@ -119,6 +119,12 @@
         "احمد",
         "دی"
       ],
+      "tokenPronunciations": [
+        "zmaa",
+        "noom",
+        "AH-mad",
+        "day"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -144,6 +150,12 @@
         "څه",
         "دی"
       ],
+      "tokenPronunciations": [
+        "staa",
+        "noom",
+        "tsa",
+        "day"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -168,6 +180,12 @@
         "نوم",
         "څه",
         "دی"
+      ],
+      "tokenPronunciations": [
+        "STAA-so",
+        "noom",
+        "tsa",
+        "day"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -195,6 +213,13 @@
         "ځای",
         "یې"
       ],
+      "tokenPronunciations": [
+        "ta",
+        "da",
+        "koom",
+        "dzaay",
+        "ye"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -221,6 +246,13 @@
         "څخه",
         "یم"
       ],
+      "tokenPronunciations": [
+        "za",
+        "la",
+        "naar-WEY",
+        "TSA-kha",
+        "yam"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -244,6 +276,11 @@
         "زه",
         "افغان",
         "یم"
+      ],
+      "tokenPronunciations": [
+        "za",
+        "af-GHAAN",
+        "yam"
       ],
       "acceptedOrders": null,
       "audio": null,
@@ -269,6 +306,11 @@
         "افغانه",
         "یم"
       ],
+      "tokenPronunciations": [
+        "za",
+        "af-GHAA-na",
+        "yam"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -293,6 +335,11 @@
         "ښوونکی",
         "یم"
       ],
+      "tokenPronunciations": [
+        "za",
+        "kho-WOON-kay",
+        "yam"
+      ],
       "acceptedOrders": null,
       "audio": null,
       "verification": {
@@ -316,6 +363,11 @@
         "زه",
         "پښتو",
         "زده کوم"
+      ],
+      "tokenPronunciations": [
+        "za",
+        "pakh-TO",
+        "zda ka-WAM"
       ],
       "acceptedOrders": null,
       "audio": null,

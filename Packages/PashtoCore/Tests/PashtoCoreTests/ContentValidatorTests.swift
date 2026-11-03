@@ -217,15 +217,36 @@ struct ContentValidatorTests {
             translit: "z\u{0259} y\u{0259}m",
             pronunciation: "za yam",
             tokens: tokens,
+            tokenPronunciations: ["za", "yam"],
             acceptedOrders: [[1, 0]]
         )
         #expect(validate(makeBundle(items: [phrase])).isEmpty)
+
+        let missingSpoken = makeItem(
+            pashto: pashto + "\u{061F}",
+            translit: "z\u{0259} y\u{0259}m",
+            pronunciation: "za yam",
+            tokens: tokens,
+            acceptedOrders: [[1, 0]]
+        )
+        #expect(validate(makeBundle(items: [missingSpoken])).contains { $0.field == "tokenPronunciations" })
+
+        let blankSpoken = makeItem(
+            pashto: pashto + "\u{061F}",
+            translit: "z\u{0259} y\u{0259}m",
+            pronunciation: "za yam",
+            tokens: tokens,
+            tokenPronunciations: ["za", " "],
+            acceptedOrders: [[1, 0]]
+        )
+        #expect(validate(makeBundle(items: [blankSpoken])).contains { $0.field == "tokenPronunciations" && $0.message.contains("empty") })
 
         let marked = makeItem(
             pashto: pashto,
             translit: "z\u{0259} y\u{0259}m",
             pronunciation: "za yam",
-            tokens: ["\u{0632}\u{0647}\u{061F}", "\u{06CC}\u{0645}"]
+            tokens: ["\u{0632}\u{0647}\u{061F}", "\u{06CC}\u{0645}"],
+            tokenPronunciations: ["za", "yam"]
         )
         #expect(validate(makeBundle(items: [marked])).first?.message.contains("\u{061F}") == true)
 
@@ -233,7 +254,8 @@ struct ContentValidatorTests {
             pashto: pashto,
             translit: "z\u{0259} y\u{0259}m",
             pronunciation: "za yam",
-            tokens: ["\u{0632}\u{0647}\u{060C}", "\u{06CC}\u{0645}"]
+            tokens: ["\u{0632}\u{0647}\u{060C}", "\u{06CC}\u{0645}"],
+            tokenPronunciations: ["za", "yam"]
         )
         #expect(validate(makeBundle(items: [comma])).contains { $0.message.contains("\u{060C}") })
 
@@ -242,6 +264,7 @@ struct ContentValidatorTests {
             translit: "z\u{0259} y\u{0259}m",
             pronunciation: "za yam",
             tokens: tokens,
+            tokenPronunciations: ["za", "yam"],
             acceptedOrders: [[0, 0], [0, 1]]
         )
         let orderIssues = validate(makeBundle(items: [badOrder]))
@@ -551,6 +574,7 @@ struct ContentValidatorTests {
             translit: "sal\u{0101}\u{0301}m na",
             pronunciation: "sa-LAAM na",
             tokens: ["س\u{0640}لام", "نه"],
+            tokenPronunciations: ["sa-LAAM", "na"],
             acceptedOrders: [[1, 0]]
         )
         #expect(validate(makeBundle(items: [phrase])).contains { $0.field == "tokens" && $0.message.contains("tatweel (U+0640)") })

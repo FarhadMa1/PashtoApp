@@ -5,10 +5,13 @@
 public struct WordTile: Hashable, Codable, Sendable {
     public let index: Int
     public let text: String
+    /// Pronunciation under this tile. Nil when the item has none stored.
+    public let pronunciation: String?
 
-    public init(index: Int, text: String) {
+    public init(index: Int, text: String, pronunciation: String? = nil) {
         self.index = index
         self.text = text
+        self.pronunciation = pronunciation
     }
 }
 
@@ -43,12 +46,8 @@ public struct OrderWordsTask: Hashable, Codable, Sendable {
 }
 
 public enum OrderWords {
-    /// Sessions do not build this task yet.
-    ///
-    /// Each tile still has no pronunciation of its own, and Farhad is deciding
-    /// that before the task is shown. The generator below stays. Set this to
-    /// `true` when the tile pronunciation is settled.
-    public static let includedInSessions = false
+    /// Word order is in the lesson session. Each tile carries its pronunciation.
+    public static let includedInSessions = true
 
     /// Nil when the item is unseen, has fewer than 2 usable tokens, or every
     /// arrangement is already correct.
@@ -71,9 +70,10 @@ public enum OrderWords {
             using: &rng
         ) else { return nil }
 
+        let spoken = tilePronunciations(for: tokens, on: item)
         return OrderWordsTask(
             targetID: item.id,
-            tiles: order.map { WordTile(index: $0, text: tokens[$0]) },
+            tiles: order.map { WordTile(index: $0, text: tokens[$0], pronunciation: spoken[$0]) },
             fixedEnding: TokenRules.fixedEnding(of: item.pashto),
             tokens: tokens,
             acceptedOrders: accepted
@@ -95,14 +95,22 @@ public enum OrderWords {
         ) else {
             return task
         }
+        let spoken = Dictionary(uniqueKeysWithValues: task.tiles.map { ($0.index, $0.pronunciation) })
         return OrderWordsTask(
             targetID: task.targetID,
-            tiles: order.map { WordTile(index: $0, text: task.tokens[$0]) },
+            tiles: order.map { WordTile(index: $0, text: task.tokens[$0], pronunciation: spoken[$0] ?? nil) },
             fixedEnding: task.fixedEnding,
             tokens: task.tokens,
             acceptedOrders: task.acceptedOrders
         )
     }
+}
+
+private func tilePronunciations(for tokens: [String], on item: ContentItem) -> [String?] {
+    guard let stored = item.tokenPronunciations, stored.count == tokens.count else {
+        return Array(repeating: nil, count: tokens.count)
+    }
+    return stored.map { Text.isBlank($0) ? nil : $0 }
 }
 
 public func grade(_ task: OrderWordsTask, _ answer: QuizAnswer) -> GradeResult {

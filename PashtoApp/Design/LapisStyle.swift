@@ -8,6 +8,8 @@ enum Lapis {
     static let text = dynamic(light: 0x111827, dark: 0xF1F5F9)
     static let secondaryText = dynamic(light: 0x6B7280, dark: 0x94A3B8)
     static let saffron = dynamic(light: 0xE8A33D, dark: 0xF2B85B)
+    /// Ring, dot, and the selected match frame. Light `#B97D22` clears 3:1. `#E8A33D` does not.
+    static let ring = dynamic(light: QuizResultPalette.ringLight, dark: QuizResultPalette.ringDark)
     static let saffronInk = color(0x1F1300)
     static let saffronShadow = color(0xB97D22)
     static let destructive = dynamic(
