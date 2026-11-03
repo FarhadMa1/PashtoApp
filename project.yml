@@ -46,6 +46,12 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: PashtoApp
+      # Bundle root, so Bundle.main finds them by file name. The release
+      # file decides which units the home may open. The rest of content/ stays out.
+      - path: content/content.json
+        buildPhase: resources
+      - path: content/release-units.json
+        buildPhase: resources
     dependencies:
       - package: PashtoCore
       - package: PashtoPersistence

@@ -396,6 +396,13 @@ struct QuizFindingsTests {
         #expect(QuizResultPalette.ringLight == 0xB97D22)
         #expect(QuizResultPalette.ringDark == 0xF2B85B)
         #expect(QuizResultPalette.ringLight != 0xE8A33D)
+        let selectedChoice = QuizResultPalette.markPairs.filter { $0.name.hasPrefix("selected choice frame") }
+        #expect(selectedChoice.map(\.name) == [
+            "selected choice frame on the page, light",
+            "selected choice frame on the page, dark",
+        ])
+        #expect(selectedChoice.map(\.foreground) == [QuizResultPalette.ringLight, QuizResultPalette.ringDark])
+        #expect(QuizResultPalette.contrastRatio(foreground: 0xE8A33D, background: QuizResultPalette.pageLight) < 3)
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {

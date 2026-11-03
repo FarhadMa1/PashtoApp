@@ -272,6 +272,41 @@ struct ContentValidatorTests {
         #expect(orderIssues.allSatisfy { $0.field == "acceptedOrders" })
     }
 
+    @Test func orderingSentenceRejectsATokenPronunciationCountMismatch() {
+        let pashto = "\u{0632}\u{0647} \u{06CC}\u{0645}"
+        let tokens = ["\u{0632}\u{0647}", "\u{06CC}\u{0645}"]
+        let short = makeItem(
+            "e-order-short",
+            kind: .phrase,
+            pashto: pashto,
+            translit: "z\u{0259} y\u{0259}m",
+            pronunciation: "za yam",
+            en: "I am",
+            tokens: tokens,
+            tokenPronunciations: ["za"]
+        )
+        let long = makeItem(
+            "e-order-long",
+            kind: .phrase,
+            pashto: pashto,
+            translit: "z\u{0259} y\u{0259}m",
+            pronunciation: "za yam",
+            en: "I am",
+            tokens: tokens,
+            tokenPronunciations: ["za", "yam", "extra"]
+        )
+
+        for item in [short, long] {
+            let issues = validate(makeBundle(items: [item]))
+            #expect(issues.contains { issue in
+                issue.severity == .error
+                    && issue.field == "tokenPronunciations"
+                    && issue.message.contains("tokenPronunciations has")
+                    && issue.message.contains("tokens has")
+            })
+        }
+    }
+
     @Test func duplicateIDsMeaningsAndLessonGlosses() {
         let first = makeItem("e-salam", en: "hello")
         let second = makeItem("e-salam-2", pashto: "نه", translit: "na", pronunciation: "na", en: "hello")
