@@ -78,6 +78,30 @@ struct ProgressScreenTests {
         #expect(next.current == 1)
     }
 
+    @Test func theHomeStreakKeepsTheStoredCountWhileFreezesCoverTheGap() {
+        let stored = streakState(freezes: 1, daysTowardNextFreeze: 2)
+        let today = last.adding(days: 2)
+        #expect(streakWouldReset(stored, on: today) == false)
+        #expect(displayedStreakCount(stored, on: today) == stored.current)
+        #expect(displayedStreakCount(stored, on: last) == stored.current)
+        #expect(displayedStreakCount(.initial, on: today) == 0)
+
+        let two = streakState(freezes: 2, daysTowardNextFreeze: 0)
+        #expect(displayedStreakCount(two, on: last.adding(days: 3)) == two.current)
+    }
+
+    @Test func theHomeStreakShowsZeroWhenFreezesCannotCoverTheGap() {
+        let broken = streakState(freezes: 0, daysTowardNextFreeze: 3)
+        let today = last.adding(days: 2)
+        #expect(streakWouldReset(broken, on: today))
+        #expect(displayedStreakCount(broken, on: today) == 0)
+        #expect(broken.current == 4)
+
+        let short = streakState(freezes: 2, daysTowardNextFreeze: 0)
+        #expect(displayedStreakCount(short, on: last.adding(days: 4)) == 0)
+        #expect(streak(broken, after: .openedApp, on: today) == broken)
+    }
+
     @Test func aCoveredBreakStaysReadyAndCanSpendAFreeze() {
         let today = last.adding(days: 2)
         let state = streakState(freezes: 1, daysTowardNextFreeze: 2)

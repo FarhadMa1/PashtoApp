@@ -72,6 +72,12 @@ final class AppModel {
     private let lessonOpen = LessonOpening()
     /// Increments when Try again still cannot read the course. The error screen reacts.
     private(set) var courseStillMissingToken = 0
+    /// True while Try again is still working. The error screen shows progress and disables its buttons.
+    private(set) var isRetrying = false
+    /// From-values for the home animation after a finish. The home consumes this once.
+    private var homeMotion = HomeMotionCue()
+    /// The finish the home has not played yet. Nil after it is consumed, and nil on a relaunch.
+    private(set) var pendingHomeMotion: PendingHomeMotion?
     /// Why the storage error is showing. Nil on every other screen.
     ///
     /// Start over is offered only when the progress store could not be opened.
@@ -91,6 +97,29 @@ final class AppModel {
 
     var isReviewing: Bool {
         startedReview != nil
+    }
+
+    /// Counted days the home shows. A gap the freezes cannot cover is 0.
+    /// The stored streak is left as it is. The home does not add a caption.
+    var streakCount: Int {
+        guard let snapshot else { return 0 }
+        return displayedStreakCount(snapshot.streak, on: clock.today)
+    }
+
+    /// New items introduced today, against `goalTotal`.
+    var goalDone: Int {
+        guard let snapshot else { return 0 }
+        return newItemsShown(on: clock.today, in: snapshot.cards)
+    }
+
+    /// The stored new-item limit: 5, 10, or 15.
+    var goalTotal: Int {
+        snapshot?.settings.dailyGoal.newItemLimit ?? DailyGoal.regular.newItemLimit
+    }
+
+    /// Lessons already finished or skipped by placement. The path draws these.
+    var finishedLessonIDs: Set<LessonID> {
+        Set(snapshot?.lessonProgress.map(\.lessonID) ?? [])
     }
 
     /// The lesson quiz on screen. Nil when the learner is on the home.
@@ -183,7 +212,9 @@ final class AppModel {
     }
 
     func tryAgain() async {
-        guard phase == .storageError else { return }
+        guard phase == .storageError, !isRetrying else { return }
+        isRetrying = true
+        defer { isRetrying = false }
         if let storageErrorReason, storageErrorActions(for: storageErrorReason).retriesLessonSave {
             await retryFailedLessonSave()
             return
@@ -333,15 +364,22 @@ final class AppModel {
 
     /// The learner finished the quiz. One commit saves the lesson, the cards, and the streak.
     ///
-    /// The day is the civil day of the last answer. A failed save shows the
+    /// Called when the last answer is given. Continue does not call this, so
+    /// `day` is the civil day the quiz finished. A failed save shows the
     /// storage error and does not remove progress or the answers still on screen.
-    /// The quiz closes only after that save, and only when `openLesson` is still
-    /// this session. A lesson opened while the save was in flight stays on screen.
+    /// The finished session replaces the last question immediately, so that
+    /// question cannot be answered again. The quiz closes after the save, and
+    /// only when `openLesson` is still this session. A lesson opened while the
+    /// save was in flight stays on screen.
     func finishLesson(_ session: LessonSession) {
         let finished = openLesson.attempt?.sessionID
         let bundled = course
         let store = progressStore
         let day = clock.today
+        let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
+        let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
+        let lessonID = session.lessonID
+        openLesson.showFinishedSession(session)
         Task {
             guard let bundled, let store else { return }
             do {
@@ -350,6 +388,12 @@ final class AppModel {
                     on: day,
                     in: bundled,
                     to: store
+                )
+                showHomeMotion(
+                    beforeStreak: beforeStreak,
+                    beforeGoal: beforeGoal,
+                    lesson: lessonID,
+                    saved: saved
                 )
                 snapshot = saved
                 openLesson.endLessonIfStill(finished)
@@ -371,16 +415,56 @@ final class AppModel {
     private func retryFailedLessonSave() async {
         guard let course, let store = progressStore else { return }
         let finished = openLesson.attempt?.sessionID
+        let day = clock.today
+        let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
+        let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
+        let lessonID = openLesson.session?.lessonID
         do {
             let saved = try await openLesson.retryFailedFinish(in: course, to: store)
+            if let lessonID {
+                showHomeMotion(
+                    beforeStreak: beforeStreak,
+                    beforeGoal: beforeGoal,
+                    lesson: lessonID,
+                    saved: saved
+                )
+            }
             snapshot = saved
             openLesson.endLessonIfStill(finished)
             storageErrorReason = nil
-            phase = phase(for: progressScreen(streak: saved.streak, on: clock.today))
+            phase = phase(for: progressScreen(streak: saved.streak, on: day))
         } catch {
             storageErrorReason = .lessonSaveFailed
             phase = phase(for: screenAfterFailedLessonSave())
         }
+    }
+
+    /// Records the home motion for a finish that just landed.
+    ///
+    /// `beforeStreak` and `beforeGoal` were taken on the day the quiz finished,
+    /// before this save returned. The home plays the cue once and then clears it.
+    private func showHomeMotion(
+        beforeStreak: Int,
+        beforeGoal: Int,
+        lesson: LessonID,
+        saved: ProgressSnapshot
+    ) {
+        let finished = saved.lessonProgress.contains(where: { $0.lessonID == lesson }) ? lesson : nil
+        homeMotion.stage(
+            PendingHomeMotion(
+                id: UUID(),
+                streakFrom: beforeStreak,
+                goalFrom: beforeGoal,
+                lessonID: finished
+            )
+        )
+        pendingHomeMotion = homeMotion.pending
+    }
+
+    /// Drops the home animation after the home has played it.
+    func consumePendingHomeMotion() {
+        _ = homeMotion.consume()
+        pendingHomeMotion = homeMotion.pending
     }
 
     func openAppStore() {
@@ -466,16 +550,17 @@ final class AppModel {
 
 /// One system background task for a lesson save.
 ///
-/// A later save keeps the same task. An earlier end does not stop that later
-/// save. Ending the task twice is ignored.
+/// Which attempt is current lives in `BackgroundSaveOrder`. A later save keeps
+/// the same system task. An earlier end does not stop that later save.
+/// Ending the task twice is ignored. The system ending the task still ends it.
 @MainActor
 private final class BackgroundLessonSave {
     private var taskID: UIBackgroundTaskIdentifier = .invalid
-    private var token = 0
+    private var order = BackgroundSaveOrder()
 
     /// Asks for time to write. Returns the token this attempt holds.
     func begin() -> Int {
-        token += 1
+        let token = order.begin()
         if taskID == .invalid {
             taskID = UIApplication.shared.beginBackgroundTask { [weak self] in
                 self?.endCurrent()
@@ -486,7 +571,7 @@ private final class BackgroundLessonSave {
 
     /// Ends the task when `expected` is still the latest begin.
     func end(matching expected: Int) {
-        guard expected == token else { return }
+        guard order.end(matching: expected) else { return }
         endCurrent()
     }
 

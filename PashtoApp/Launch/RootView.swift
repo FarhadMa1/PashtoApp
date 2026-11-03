@@ -35,7 +35,8 @@ struct RootView: View {
                 startOver: model.offersStartOver
                     ? { Task { await model.confirmStartOver() } }
                     : nil,
-                missingCourseAttempts: model.courseStillMissingToken
+                missingCourseAttempts: model.courseStillMissingToken,
+                isBusy: model.isRetrying
             )
         case .welcomeBack:
             WelcomeBackScreen {
@@ -47,6 +48,12 @@ struct RootView: View {
                 quiz: model.activeLesson,
                 quizItems: model.lessonItems,
                 lessons: model.releasedLessons,
+                streakCount: model.streakCount,
+                goalDone: model.goalDone,
+                goalTotal: model.goalTotal,
+                finishedLessonIDs: model.finishedLessonIDs,
+                pendingHomeMotion: model.pendingHomeMotion,
+                consumeHomeMotion: { model.consumePendingHomeMotion() },
                 startLesson: { lesson in
                     Task { await model.startLesson(lesson, voiceOver: voiceOverEnabled) }
                 },

@@ -4,6 +4,7 @@ import SwiftUI
 /// Lesson bar. It springs forward as a question is answered.
 ///
 /// The fill is the ring gold and the track is the page colour, so the fill clears 3:1.
+/// A 1 pt lapis outline sits on the track. Light `#1E3A8A` and dark `#93B4F5` both clear 3:1 on the page.
 /// At 100% the glow is saffron, and it is decorative. Reduce Motion jumps to the new width and skips the glow.
 /// The system progress view speaks the value, so this adds no catalog string.
 struct LessonProgressBar: View {
@@ -23,6 +24,9 @@ struct LessonProgressBar: View {
             }
         }
         .frame(height: 12)
+        .overlay {
+            Capsule().strokeBorder(Lapis.primary, lineWidth: 1)
+        }
         .animation(Motion.progressAdvance(reduceMotion: reduceMotion), value: bar.fraction)
         .onChange(of: bar.showsGlow) { _, full in
             guard QuizMotion.playsGlow(barIsFull: full, reduceMotion: reduceMotion) else { return }
