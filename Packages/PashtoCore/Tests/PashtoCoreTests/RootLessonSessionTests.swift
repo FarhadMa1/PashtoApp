@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import PashtoCore
 
@@ -79,6 +80,84 @@ struct RootLessonSessionTests {
         #expect(launch.session == nil)
     }
 
+    @Test func aLessonWithNoQuestionsIsLeftOffTheHome() {
+        let examples = [
+            word("e-alef", "ا", "alef"),
+            word("e-be", "ب", "be"),
+        ]
+        let introduced = [
+            word("e-door", "در", "door"),
+            word("e-fever", "تب", "fever"),
+            word("e-on", "بر", "on"),
+            word("e-water", "اوبه", "water"),
+        ]
+        let sounds = Lesson(
+            id: lessonID("l-sounds-1"),
+            title: "New sounds",
+            items: examples.map { LessonItemRef(item: $0.id, role: .soundExample, sound: "a") }
+        )
+        let home = lesson("l-home", title: "Home lesson", items: introduced)
+        let bundle = makeBundle(
+            items: examples + introduced,
+            units: [
+                CourseUnit(id: unitID("u-sounds"), track: "main", title: "Sounds", lessons: [sounds]),
+                CourseUnit(id: unitID("u-home"), track: "main", title: "Home", lessons: [home]),
+            ]
+        )
+        let offered = RootLessonSession.lessons(
+            in: bundle,
+            releasedUnitIDs: [unitID("u-sounds"), unitID("u-home")]
+        )
+        #expect(offered.map(\.id) == [lessonID("l-home")])
+    }
+
+    @Test func bundledCourseLessonsArePlayableOrHidden() throws {
+        let bundle = try JSONDecoder().decode(ContentBundle.self, from: Data(contentsOf: bundledCourseURL()))
+        let released = ["u-sounds", "u-greetings", "u-introductions", "u-family"].map(unitID)
+        let settings = [(true, false), (true, true), (false, false), (false, true)]
+        for (showsPronunciation, voiceOver) in settings {
+            let offered = RootLessonSession.lessons(
+                in: bundle,
+                releasedUnitIDs: released,
+                showsPronunciation: showsPronunciation,
+                voiceOver: voiceOver
+            )
+            let offeredIDs = Set(offered.map(\.id))
+            #expect(!offeredIDs.contains(lessonID("l-sounds-1")))
+            var rng = SplitMix64(seed: 1)
+            for unit in bundle.units where released.contains(unit.id) {
+                for lesson in unit.lessons {
+                    let session = LessonSessionBuilder.build(
+                        for: lesson.id,
+                        in: bundle,
+                        seenLessonIDs: [],
+                        releasedUnitIDs: released,
+                        showsPronunciation: showsPronunciation,
+                        voiceOver: voiceOver,
+                        using: &rng
+                    )
+                    if session.tasks.isEmpty {
+                        #expect(!offeredIDs.contains(lesson.id))
+                    } else {
+                        #expect(offeredIDs.contains(lesson.id))
+                    }
+                }
+            }
+        }
+    }
+
+    @Test func appTargetCopiesTheCourseAndTheReleaseList() throws {
+        let root = repositoryRoot()
+        let project = try String(contentsOf: root.appendingPathComponent("PashtoApp.xcodeproj/project.pbxproj"), encoding: .utf8)
+        let resources = try #require(resourceBuildPhase(in: project) as String?)
+        #expect(resources.contains("content.json in Resources"))
+        #expect(resources.contains("release-units.json in Resources"))
+        let spec = try String(contentsOf: root.appendingPathComponent("project.yml"), encoding: .utf8)
+        #expect(spec.contains("path: content/content.json"))
+        #expect(spec.contains("path: content/release-units.json"))
+        #expect(spec.contains("buildPhase: resources"))
+    }
+
     @Test func releasedLessonsKeepCourseOrderAndSkipUnlistedUnits() {
         let course = sampleCourse()
         let offered = RootLessonSession.lessons(
@@ -137,6 +216,27 @@ private func lesson(_ id: String, title: String, items: [ContentItem]) -> Lesson
 
 private func word(_ id: String, _ pashto: String, _ en: String) -> ContentItem {
     makeItem(id, pashto: pashto, translit: en, pronunciation: en, en: en)
+}
+
+private func repositoryRoot() -> URL {
+    URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+}
+
+private func bundledCourseURL() -> URL {
+    repositoryRoot().appendingPathComponent("content").appendingPathComponent("content.json")
+}
+
+private func resourceBuildPhase(in project: String) -> String? {
+    guard
+        let start = project.range(of: "/* Begin PBXResourcesBuildPhase section */"),
+        let end = project.range(of: "/* End PBXResourcesBuildPhase section */")
+    else { return nil }
+    return String(project[start.lowerBound..<end.lowerBound])
 }
 
 private func itemIDs(in session: LessonSession) -> Set<ItemID> {

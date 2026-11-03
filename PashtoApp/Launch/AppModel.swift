@@ -21,7 +21,8 @@ final class AppModel {
         case ready
     }
 
-    /// Content is not in the app bundle yet. The store keeps this until a bundle version is written.
+    /// The progress file keeps this until it stores the bundled content version.
+    /// Copying the course into the app does not write that version on its own.
     static let installedContentVersion = "unbundled"
 
     private(set) var phase: Phase
@@ -61,9 +62,18 @@ final class AppModel {
     }
 
     /// Lessons the home can start. Empty when the release list is empty.
+    ///
+    /// A lesson that would open with no questions is left out. The settings
+    /// are the ones `startLesson` will use.
     var releasedLessons: [ReleasedLesson] {
         guard let course else { return [] }
-        return RootLessonSession.lessons(in: course, releasedUnitIDs: releasedUnitIDs)
+        return RootLessonSession.lessons(
+            in: course,
+            releasedUnitIDs: releasedUnitIDs,
+            seenLessonIDs: snapshot?.lessonProgress.map(\.lessonID) ?? [],
+            showsPronunciation: snapshot?.settings.showTransliteration ?? true,
+            voiceOver: UIAccessibility.isVoiceOverRunning
+        )
     }
 
     /// `ProgressScreen` is the choice in PashtoCore. `Phase` also has loading,
@@ -174,8 +184,8 @@ final class AppModel {
     /// Selects today's capped review queue and leaves Welcome back.
     ///
     /// The queue is the one `shortCappedReview` already returns. This does not
-    /// open a lesson quiz. Content is not bundled yet, so every stored card
-    /// id is treated as known. Otherwise the queue would be empty.
+    /// open a lesson quiz. Every stored card id is treated as known, because
+    /// this queue is not drawn from the course. Otherwise it would be empty.
     func startReview() {
         guard phase == .welcomeBack, let snapshot else {
             phase = .ready

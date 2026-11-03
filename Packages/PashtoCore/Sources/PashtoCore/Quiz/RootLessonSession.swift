@@ -34,20 +34,61 @@ public struct RootLessonSession: Equatable, Sendable {
         return !session.tasks.isEmpty
     }
 
-    /// Lessons in released units, in course order.
+    /// Lessons in released units that can open a quiz, in course order.
     ///
     /// A unit that is not listed is skipped. An empty list returns nothing,
-    /// which is the home's existing empty state.
-    public static func lessons(in bundle: ContentBundle, releasedUnitIDs: [UnitID]) -> [ReleasedLesson] {
+    /// which is the home's existing empty state. A lesson is also skipped when
+    /// `LessonSessionBuilder` would give it no questions under these settings,
+    /// so the home does not offer a button that does nothing. `l-sounds-1` is
+    /// that case: every item is a `soundExample`, and a sound example is not
+    /// introduced.
+    public static func lessons(
+        in bundle: ContentBundle,
+        releasedUnitIDs: [UnitID],
+        seenLessonIDs: [LessonID] = [],
+        showsPronunciation: Bool = true,
+        voiceOver: Bool = false
+    ) -> [ReleasedLesson] {
         let course = ReleasedCourse.limiting(bundle, to: releasedUnitIDs)
         let listed = Set(releasedUnitIDs)
         var lessons: [ReleasedLesson] = []
         for unit in course.units where listed.contains(unit.id) {
             for lesson in unit.lessons {
+                guard hasQuestions(
+                    lesson.id,
+                    in: bundle,
+                    seenLessonIDs: seenLessonIDs,
+                    releasedUnitIDs: releasedUnitIDs,
+                    showsPronunciation: showsPronunciation,
+                    voiceOver: voiceOver
+                ) else { continue }
                 lessons.append(ReleasedLesson(id: lesson.id, title: lesson.title, unitID: unit.id))
             }
         }
         return lessons
+    }
+
+    /// Same builder `start` uses. A fresh generator each time, because only
+    /// the question count matters here, not the order.
+    private static func hasQuestions(
+        _ lessonID: LessonID,
+        in bundle: ContentBundle,
+        seenLessonIDs: [LessonID],
+        releasedUnitIDs: [UnitID],
+        showsPronunciation: Bool,
+        voiceOver: Bool
+    ) -> Bool {
+        var rng = LessonProbeGenerator()
+        let session = LessonSessionBuilder.build(
+            for: lessonID,
+            in: bundle,
+            seenLessonIDs: seenLessonIDs,
+            releasedUnitIDs: releasedUnitIDs,
+            showsPronunciation: showsPronunciation,
+            voiceOver: voiceOver,
+            using: &rng
+        )
+        return !session.tasks.isEmpty
     }
 
     /// Builds the session for one tap. An unreleased lesson, or an empty release list, does not start one.
@@ -85,5 +126,18 @@ public struct RootLessonSession: Equatable, Sendable {
     public mutating func end() {
         session = nil
         items = []
+    }
+}
+
+/// Enough for the home to ask whether a lesson has any question.
+private struct LessonProbeGenerator: RandomNumberGenerator {
+    private var state: UInt64 = 0xA5A5A5A5A5A5A5A5
+
+    mutating func next() -> UInt64 {
+        state &+= 0x9E3779B97F4A7C15
+        var mixed = state
+        mixed = (mixed ^ (mixed >> 30)) &* 0xBF58476D1CE4E5B9
+        mixed = (mixed ^ (mixed >> 27)) &* 0x94D049BB133111EB
+        return mixed ^ (mixed >> 31)
     }
 }

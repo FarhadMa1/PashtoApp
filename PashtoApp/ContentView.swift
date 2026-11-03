@@ -40,12 +40,16 @@ struct ContentView: View {
                 Button(action: endSession) {
                     HStack(spacing: 6) {
                         Image(systemName: "chevron.backward")
+                            .accessibilityHidden(true)
                         Text("Pashto")
                     }
                     .font(.body.weight(.semibold))
                     .foregroundStyle(Lapis.text)
                 }
                 .buttonStyle(.plain)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Pashto"))
+                .accessibilityAddTraits(.isButton)
                 Spacer()
             }
             .padding(.horizontal, 20)
