@@ -403,6 +403,16 @@ struct QuizFindingsTests {
         ])
         #expect(selectedChoice.map(\.foreground) == [QuizResultPalette.ringLight, QuizResultPalette.ringDark])
         #expect(QuizResultPalette.contrastRatio(foreground: 0xE8A33D, background: QuizResultPalette.pageLight) < 3)
+        let lessonBar = QuizResultPalette.markPairs.filter { $0.name.hasPrefix("lesson bar") }
+        #expect(lessonBar.map(\.name) == [
+            "lesson bar fill on track, light",
+            "lesson bar fill on track, dark",
+        ])
+        #expect(lessonBar.map(\.foreground) == [QuizResultPalette.lessonBarFillLight, QuizResultPalette.lessonBarFillDark])
+        #expect(lessonBar.map(\.background) == [QuizResultPalette.lessonBarTrackLight, QuizResultPalette.lessonBarTrackDark])
+        #expect(QuizResultPalette.lessonBarFillLight == QuizResultPalette.ringLight)
+        #expect(QuizResultPalette.lessonBarFillDark == QuizResultPalette.ringDark)
+        #expect(QuizResultPalette.lessonBarFillLight != 0xE8A33D)
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {

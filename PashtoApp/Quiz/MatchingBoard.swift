@@ -1,4 +1,3 @@
-import Observation
 import PashtoCore
 import SwiftUI
 
@@ -47,8 +46,8 @@ struct MatchingBoard: View {
             // feed back into the next frame and the tiles would chase each other.
             guard !revealed else { return }
             var next: [String: CGRect] = [:]
-            for spot in found {
-                next[spot.key] = spot.rect
+            for place in found {
+                next[place.key] = place.rect
             }
             if next != spots { spots = next }
         }
@@ -66,9 +65,9 @@ struct MatchingBoard: View {
         let linked = linkedSide(links[pair.left.itemID])
         let spoken = pronunciation(for: pair.left.text, itemID: pair.left.itemID)
         let mark = pairMark(pair)
-        let step = step(for: pair.left.itemID, mark: mark)
+        let phase = step(for: pair.left.itemID, mark: mark)
         let overlay = hasMeetingPoint(pair)
-        let visual = sourceMark(mark, step: step, hasOverlay: overlay)
+        let visual = sourceMark(mark, step: phase, hasOverlay: overlay)
         return Button {
             guard !revealed else { return }
             onLeft(pair.left.itemID)
@@ -92,22 +91,24 @@ struct MatchingBoard: View {
         .buttonStyle(.plain)
         .foregroundStyle(Lapis.text)
         .disabled(revealed)
-        .opacity(sourceOpacity(mark, step: step, hasOverlay: overlay))
+        .opacity(sourceOpacity(mark, step: phase, hasOverlay: overlay))
         .offset(glideOffset(pair, fromLeft: true))
         .modifier(ShakeMotion(token: mark == .incorrect ? clock.shakeToken : 0))
-        .animation(Motion.pairStep(step, reduceMotion: reduceMotion), value: step)
+        .animation(Motion.pairStep(phase, reduceMotion: reduceMotion), value: phase)
         .background { spot(leftKey(pair.left.itemID)) }
         .accessibilityLabel(matchLabel(text: pair.left.text, pronunciation: spoken, linkedText: linked?.text, mark: mark))
         .accessibilityAddTraits(selectedLeft == pair.left.itemID ? .isSelected : [])
-        .zIndex(step == .glide ? 1 : 0)
+        .accessibilityHidden(phase == .gone)
+        .allowsHitTesting(phase != .gone)
+        .zIndex(phase == .glide ? 1 : 0)
     }
 
     private func rightTile(_ side: MatchSide) -> some View {
         let pair = task.pairs.first { links[$0.left.itemID] == side.itemID }
         let mark = pair.flatMap { pairMark($0) }
-        let step = pair.flatMap { step(for: $0.left.itemID, mark: mark) }
+        let phase = pair.flatMap { step(for: $0.left.itemID, mark: mark) }
         let overlay = pair.map { hasMeetingPoint($0) } ?? false
-        let visual = sourceMark(mark, step: step, hasOverlay: overlay)
+        let visual = sourceMark(mark, step: phase, hasOverlay: overlay)
         return Button {
             onRight(side.itemID)
         } label: {
@@ -129,10 +130,10 @@ struct MatchingBoard: View {
         .buttonStyle(.plain)
         .foregroundStyle(Lapis.text)
         .disabled(revealed || selectedLeft == nil)
-        .opacity(sourceOpacity(mark, step: step, hasOverlay: overlay))
+        .opacity(sourceOpacity(mark, step: phase, hasOverlay: overlay))
         .offset(pair.map { glideOffset($0, fromLeft: false) } ?? .zero)
         .modifier(ShakeMotion(token: mark == .incorrect ? clock.shakeToken : 0))
-        .animation(Motion.pairStep(step, reduceMotion: reduceMotion), value: step)
+        .animation(Motion.pairStep(phase, reduceMotion: reduceMotion), value: phase)
         .background { spot(rightKey(side.itemID)) }
         .accessibilityLabel(
             QuizPresentation.matchAccessibilityLabel(
@@ -141,13 +142,15 @@ struct MatchingBoard: View {
                 linkedText: nil
             )
         )
-        .zIndex(step == .glide ? 1 : 0)
+        .accessibilityHidden(phase == .gone)
+        .allowsHitTesting(phase != .gone)
+        .zIndex(phase == .glide ? 1 : 0)
     }
 
     @ViewBuilder
     private func mergedTile(_ pair: MatchPair) -> some View {
         if let meeting = meetingPoint(pair), pairMark(pair) == .correct {
-            let step = step(for: pair.left.itemID, mark: .correct)
+            let phase = step(for: pair.left.itemID, mark: .correct)
             HStack(spacing: 10) {
                 Image(systemName: QuizResultMark.correct.symbolName)
                     .font(.body.weight(.bold))
@@ -171,10 +174,10 @@ struct MatchingBoard: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .strokeBorder(Lapis.correct, lineWidth: 2)
             )
-            .scaleEffect(overlayScale(step))
-            .opacity(overlayOpacity(step))
+            .scaleEffect(overlayScale(phase))
+            .opacity(overlayOpacity(phase))
             .position(meeting.center)
-            .animation(Motion.pairStep(step, reduceMotion: reduceMotion), value: step)
+            .animation(Motion.pairStep(phase, reduceMotion: reduceMotion), value: phase)
             .allowsHitTesting(false)
             .accessibilityHidden(true)
         }
@@ -365,59 +368,6 @@ struct MatchingBoard: View {
 
     private func leftKey(_ id: ItemID) -> String { "L:\(id.rawValue)" }
     private func rightKey(_ id: ItemID) -> String { "R:\(id.rawValue)" }
-}
-
-/// Plays the pair timeline off the view, so the sleep does not capture the view.
-@MainActor
-@Observable
-private final class PairMergeClock {
-    var steps: [ItemID: PairMergeStep] = [:]
-    var shakeToken = 0
-    @ObservationIgnored private var task: Task<Void, Never>?
-
-    nonisolated init() {}
-
-    func play(events: [(id: ItemID, mark: QuizResultMark)], reduceMotion: Bool) {
-        task?.cancel()
-        var upcoming: [(time: TimeInterval, id: ItemID, step: PairMergeStep)] = []
-        var next: [ItemID: PairMergeStep] = [:]
-        var shakes = false
-        for event in events {
-            let frames = PairMergePlan.frames(mark: event.mark, reduceMotion: reduceMotion)
-            if let first = frames.first {
-                next[event.id] = first.step
-            }
-            for frame in frames where frame.time > 0 {
-                upcoming.append((frame.time, event.id, frame.step))
-            }
-            if event.mark == .incorrect, !reduceMotion { shakes = true }
-        }
-        steps = next
-        if shakes { shakeToken += 1 }
-        upcoming.sort { lhs, rhs in
-            if lhs.time == rhs.time { return lhs.id.rawValue < rhs.id.rawValue }
-            return lhs.time < rhs.time
-        }
-        let frames = upcoming
-        task = Task { @MainActor [weak self] in
-            var elapsed = 0.0
-            for frame in frames {
-                let wait = frame.time - elapsed
-                if wait > 0.000_5 {
-                    try? await Task.sleep(for: .milliseconds(Int((wait * 1000).rounded())))
-                }
-                if Task.isCancelled { return }
-                elapsed = frame.time
-                self?.steps[frame.id] = frame.step
-            }
-        }
-    }
-
-    func stop() {
-        task?.cancel()
-        task = nil
-        steps = [:]
-    }
 }
 
 private struct TileSpot: Equatable {

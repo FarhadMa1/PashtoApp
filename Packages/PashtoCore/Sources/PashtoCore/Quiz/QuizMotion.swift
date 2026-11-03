@@ -233,11 +233,25 @@ public struct GlyphCardSide: Equatable, Sendable {
     }
 }
 
+/// How large a Pashto prompt is drawn.
+public enum GlyphPromptScale: Equatable, Sendable {
+    /// One letter or one word.
+    case prominent
+    /// A phrase or a sentence. Any prompt that contains a space.
+    case title
+}
+
+public enum GlyphPromptScaleChoice {
+    /// A single letter or a single word is prominent. A space keeps the title size.
+    public static func scale(for text: String) -> GlyphPromptScale {
+        text.contains(" ") ? .title : .prominent
+    }
+}
+
 /// Front and back of a new letter or word.
 ///
 /// The front is the prompt as the quiz already shows it. The back adds the
-/// English gloss when that gloss is not the unanswered choice. Pashto-to-English
-/// keeps the gloss off until the question has been answered.
+/// English gloss only after the question has been answered, for every task kind.
 public struct GlyphCardModel: Equatable, Sendable {
     public var front: GlyphCardSide
     public var back: GlyphCardSide
@@ -264,11 +278,14 @@ public struct GlyphCardModel: Equatable, Sendable {
         )
     }
 
-    /// The gloss, or nil while it would be the unanswered Pashto-to-English choice.
+    /// The gloss, or nil until the question has been answered.
     static func meaningOnBack(_ meaning: String?, kind: TaskKind, answered: Bool) -> String? {
-        guard let meaning = blankToNil(meaning) else { return nil }
-        if kind == .meaningPashtoToEnglish, !answered { return nil }
-        return meaning
+        guard answered else { return nil }
+        switch kind {
+        case .meaningPashtoToEnglish, .meaningEnglishToPashto, .transliterationChoice,
+             .findLetter, .letterContrast, .firstLetter, .matchPairs, .orderWords, .dialogResponse:
+            return blankToNil(meaning)
+        }
     }
 }
 

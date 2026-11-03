@@ -33,6 +33,13 @@ public enum QuizResultPalette {
     public static let pageLight: UInt32 = 0xFAF7F0
     public static let pageDark: UInt32 = 0x0F172A
 
+    /// Lesson bar fill. Saffron `#E8A33D` is about 2:1 on the page, so the bar uses the ring gold.
+    /// The track is the page colour. Fill against track is at least 3:1 in both modes.
+    public static let lessonBarFillLight: UInt32 = ringLight
+    public static let lessonBarFillDark: UInt32 = ringDark
+    public static let lessonBarTrackLight: UInt32 = pageLight
+    public static let lessonBarTrackDark: UInt32 = pageDark
+
     /// Ring, dot, and the frame around a selected choice or match card.
     ///
     /// Light `#B97D22` is the colour that clears 3:1. `#E8A33D` is about 2.2:1
@@ -91,6 +98,8 @@ public enum QuizResultPalette {
         ContrastPair(name: "ring and dot on wrong fill, dark", foreground: ringDark, background: incorrectFillDark, minimumRatio: 3),
         ContrastPair(name: "ring and dot on the page, dark", foreground: ringDark, background: pageDark, minimumRatio: 3),
         ContrastPair(name: "selected choice frame on the page, dark", foreground: ringDark, background: pageDark, minimumRatio: 3),
+        ContrastPair(name: "lesson bar fill on track, light", foreground: lessonBarFillLight, background: lessonBarTrackLight, minimumRatio: 3),
+        ContrastPair(name: "lesson bar fill on track, dark", foreground: lessonBarFillDark, background: lessonBarTrackDark, minimumRatio: 3),
     ]
 
     /// WCAG relative contrast of two sRGB colours.

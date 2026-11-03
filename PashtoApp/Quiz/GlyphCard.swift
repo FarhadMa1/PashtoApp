@@ -5,7 +5,7 @@ import SwiftUI
 ///
 /// The front is the prompt the quiz already shows, including pronunciation
 /// only when that prompt already has it. The back adds the English gloss
-/// when `GlyphCardModel` says the gloss is not the unanswered choice.
+/// only after the question has been answered. A phrase stays at the title size.
 /// Nothing here posts an accessibility announcement.
 struct GlyphCard: View {
     var model: GlyphCardModel
@@ -63,7 +63,7 @@ struct GlyphCard: View {
                 pronunciation: side.pronunciation,
                 arabic: QuizPresentation.containsArabicScript(side.glyph)
             )
-            .font(.system(size: glyphSize, weight: .medium))
+            .font(prominent ? .system(size: glyphSize, weight: .medium) : .title2.weight(.semibold))
             .foregroundStyle(Lapis.text)
             .frame(maxWidth: .infinity)
             if let meaning = side.meaning {
@@ -75,6 +75,10 @@ struct GlyphCard: View {
             }
         }
         .modifier(SpinFace(angle: angle, shown: shown, spins: spins))
+    }
+
+    private var prominent: Bool {
+        GlyphPromptScaleChoice.scale(for: model.front.glyph) == .prominent
     }
 
     private var spoken: String {

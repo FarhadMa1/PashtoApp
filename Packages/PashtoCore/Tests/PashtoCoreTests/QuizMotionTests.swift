@@ -159,8 +159,18 @@ struct QuizMotionTests {
         )
         #expect(other.front.pronunciation == nil)
         #expect(other.back.pronunciation == nil)
-        #expect(other.back.meaning == "hello")
-        #expect(other.canFlip)
+        #expect(other.back.meaning == nil)
+        #expect(!other.canFlip)
+
+        let otherAnswered = GlyphCardModel.make(
+            glyph: "سلام",
+            pronunciation: nil,
+            meaning: "hello",
+            kind: .dialogResponse,
+            answered: true
+        )
+        #expect(otherAnswered.back.meaning == "hello")
+        #expect(otherAnswered.canFlip)
 
         let blank = GlyphCardModel.make(
             glyph: "ا",
@@ -180,8 +190,30 @@ struct QuizMotionTests {
             kind: .firstLetter,
             answered: false
         )
-        #expect(letter.back.meaning == "thank you")
+        #expect(letter.back.meaning == nil)
         #expect(letter.back.pronunciation == "ma-NA-na")
+        #expect(!letter.canFlip)
+
+        let letterAnswered = GlyphCardModel.make(
+            glyph: "مننه",
+            pronunciation: "ma-NA-na",
+            meaning: "thank you",
+            kind: .firstLetter,
+            answered: true
+        )
+        #expect(letterAnswered.back.meaning == "thank you")
+        #expect(letterAnswered.back.pronunciation == "ma-NA-na")
+        #expect(letterAnswered.canFlip)
+    }
+
+    @Test func aSpaceKeepsThePromptAtTitleSize() {
+        #expect(GlyphPromptScaleChoice.scale(for: "ا") == .prominent)
+        #expect(GlyphPromptScaleChoice.scale(for: "سلام") == .prominent)
+        #expect(GlyphPromptScaleChoice.scale(for: "مننه") == .prominent)
+        #expect(GlyphPromptScaleChoice.scale(for: "") == .prominent)
+        #expect(GlyphPromptScaleChoice.scale(for: "ستاسو په لیدو خوشحاله شوم") == .title)
+        #expect(GlyphPromptScaleChoice.scale(for: "hello world") == .title)
+        #expect(GlyphPromptScaleChoice.scale(for: " ") == .title)
     }
 
     @Test func pairsGlideThenMergeAndWrongPairsStayMarked() {
@@ -202,5 +234,54 @@ struct QuizMotionTests {
         #expect(quietWrong.map(\.step) == [.fade, .hold])
         #expect(!quietWrong.map(\.step).contains(.shake))
         #expect(!quietWrong.map(\.step).contains(.glide))
+    }
+
+    @Test @MainActor func pairClockPlaysTheMergeThenTheShake() async {
+        let hello = ItemID(rawValue: "e-hello")
+        let thanks = ItemID(rawValue: "e-thanks")
+        #expect(hello != nil)
+        #expect(thanks != nil)
+        guard let hello, let thanks else { return }
+
+        let correct = PairMergeClock(sleep: { _ in })
+        correct.play(events: [(id: hello, mark: .correct)], reduceMotion: false)
+        #expect(correct.steps[hello] == .glide)
+        #expect(correct.shakeToken == 0)
+        await correct.waitUntilIdle()
+        #expect(correct.played.map(\.step) == [.glide, .merged, .gone])
+        #expect(correct.played.map(\.time).elementsEqual(
+            [0, QuizMotion.pairGlide, QuizMotion.pairGlide + QuizMotion.pairMerge]
+        ) { abs($0 - $1) < 0.000_001 })
+        #expect(correct.steps[hello] == .gone)
+
+        let wrong = PairMergeClock(sleep: { _ in })
+        wrong.play(events: [(id: thanks, mark: .incorrect)], reduceMotion: false)
+        await wrong.waitUntilIdle()
+        #expect(wrong.played.map(\.step) == [.shake, .hold])
+        #expect(wrong.played.map(\.time).elementsEqual([0, QuizMotion.answerShake]) { abs($0 - $1) < 0.000_001 })
+        #expect(wrong.shakeToken == 1)
+        #expect(wrong.steps[thanks] == .hold)
+
+        let quiet = PairMergeClock(sleep: { _ in })
+        quiet.play(
+            events: [(id: thanks, mark: .incorrect), (id: hello, mark: .correct)],
+            reduceMotion: true
+        )
+        await quiet.waitUntilIdle()
+        #expect(quiet.shakeToken == 0)
+        #expect(quiet.played.map(\.step) == [.fade, .fade, .gone, .hold])
+        #expect(quiet.played.map(\.id) == [thanks, hello, hello, thanks])
+        #expect(!quiet.played.map(\.step).contains(.glide))
+        #expect(!quiet.played.map(\.step).contains(.shake))
+
+        let stopped = PairMergeClock { _ in
+            try? await Task.sleep(for: .seconds(30))
+        }
+        stopped.play(events: [(id: hello, mark: .correct)], reduceMotion: false)
+        stopped.stop()
+        #expect(stopped.steps.isEmpty)
+        #expect(stopped.played.isEmpty)
+        await stopped.waitUntilIdle()
+        #expect(stopped.steps.isEmpty)
     }
 }

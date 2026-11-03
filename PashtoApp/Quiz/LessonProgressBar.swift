@@ -1,9 +1,10 @@
 import PashtoCore
 import SwiftUI
 
-/// Saffron lesson bar. It springs forward as a question is answered.
+/// Lesson bar. It springs forward as a question is answered.
 ///
-/// At 100% it glows once. Reduce Motion jumps to the new width and skips the glow.
+/// The fill is the ring gold and the track is the page colour, so the fill clears 3:1.
+/// At 100% the glow is saffron, and it is decorative. Reduce Motion jumps to the new width and skips the glow.
 /// The system progress view speaks the value, so this adds no catalog string.
 struct LessonProgressBar: View {
     var bar: LessonBar
@@ -14,9 +15,9 @@ struct LessonProgressBar: View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Lapis.secondaryText.opacity(0.25))
+                    .fill(Lapis.background)
                 Capsule()
-                    .fill(Lapis.saffron)
+                    .fill(Lapis.ring)
                     .frame(width: max(0, geo.size.width * CGFloat(bar.fraction)))
                     .modifier(SaffronGlow(token: glowToken))
             }
