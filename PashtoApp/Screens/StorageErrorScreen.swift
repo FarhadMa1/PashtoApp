@@ -1,3 +1,4 @@
+import PashtoCore
 import SwiftUI
 
 /// Shown when the progress store cannot be opened for a reason other than a newer version.
@@ -5,9 +6,15 @@ import SwiftUI
 /// Try again opens the same file. Start over asks first, then the caller moves
 /// that file aside. Pass no start-over action to hide that button, which is
 /// what a missing course does. This view does not touch the file itself.
+///
+/// `missingCourseAttempts` counts Try again while the course is still missing.
+/// The error content shakes, and plays an error haptic. Reduce Motion fades
+/// it instead. The existing body is announced again when that string is in
+/// the catalog.
 struct StorageErrorScreen: View {
     var tryAgain: () -> Void
     var startOver: (() -> Void)?
+    var missingCourseAttempts = 0
     @State private var confirmingStartOver = false
 
     var body: some View {
@@ -33,6 +40,7 @@ struct StorageErrorScreen: View {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 20)
             .padding(.top, 12)
+            .modifier(MissingCourseFeedback(attempts: missingCourseAttempts))
         } footer: {
             VStack(spacing: 8) {
                 Button(action: tryAgain) {
@@ -55,6 +63,37 @@ struct StorageErrorScreen: View {
         } message: {
             Text("storageError.startOver.confirmMessage")
         }
+    }
+}
+
+/// Shake, or a short fade when Reduce Motion is on, after Try again still has no course.
+private struct MissingCourseFeedback: ViewModifier {
+    var attempts: Int
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func body(content: Content) -> some View {
+        content
+            .modifier(ShakeMotion(token: reduceMotion ? 0 : attempts))
+            .keyframeAnimator(initialValue: 1.0, trigger: reduceMotion ? attempts : 0) { view, opacity in
+                view.opacity(opacity)
+            } keyframes: { _ in
+                KeyframeTrack {
+                    LinearKeyframe(0.45, duration: QuizMotion.reduceMotionFade)
+                    LinearKeyframe(1.0, duration: QuizMotion.reduceMotionFade)
+                }
+            }
+            .sensoryFeedback(.error, trigger: attempts)
+            .onChange(of: attempts) { _, attempts in
+                guard attempts > 0 else { return }
+                announceExistingStorageError()
+            }
+    }
+
+    /// The catalog body, posted only when that string is present.
+    private func announceExistingStorageError() {
+        let message = String(localized: "storageError.body")
+        guard message != "storageError.body" else { return }
+        AccessibilityNotification.Announcement(message).post()
     }
 }
 

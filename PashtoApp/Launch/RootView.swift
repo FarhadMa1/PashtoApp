@@ -28,7 +28,8 @@ struct RootView: View {
                 tryAgain: { Task { await model.tryAgain() } },
                 startOver: model.offersStartOver
                     ? { Task { await model.confirmStartOver() } }
-                    : nil
+                    : nil,
+                missingCourseAttempts: model.courseStillMissingToken
             )
         case .welcomeBack:
             WelcomeBackScreen {
@@ -40,8 +41,11 @@ struct RootView: View {
                 quiz: model.activeLesson,
                 quizItems: model.lessonItems,
                 lessons: model.releasedLessons,
-                startLesson: { model.startLesson($0) },
-                endSession: { model.endLesson() }
+                startLesson: { model.startLesson($0, voiceOver: voiceOverEnabled) },
+                endSession: { model.endLesson() },
+                finishSession: { session in
+                    Task { await model.finishLesson(session) }
+                }
             )
         }
     }
