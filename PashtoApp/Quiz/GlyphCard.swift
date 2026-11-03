@@ -90,12 +90,14 @@ struct GlyphCard: View {
 }
 
 /// Hides a face once it has turned past the edge, so the glyph is not mirrored.
+///
+/// `angle` is nonisolated because `Animatable` is interpolated off the view's actor.
 private struct SpinFace: ViewModifier, Animatable {
-    var angle: Double
+    nonisolated(unsafe) var angle: Double
     var shown: Bool
     var spins: Bool
 
-    var animatableData: Double {
+    nonisolated var animatableData: Double {
         get { angle }
         set { angle = newValue }
     }

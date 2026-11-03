@@ -426,7 +426,7 @@ private struct TileSpot: Equatable {
 }
 
 private struct TileSpotKey: PreferenceKey {
-    static var defaultValue: [TileSpot] = []
+    static let defaultValue: [TileSpot] = []
 
     static func reduce(value: inout [TileSpot], nextValue: () -> [TileSpot]) {
         value.append(contentsOf: nextValue())
