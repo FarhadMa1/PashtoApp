@@ -14,9 +14,13 @@ import PashtoCore
 ///
 /// The count uses `maxQuestions: nil`. The lesson cap is 20 and keeps a
 /// shuffled subset, so one seed can drop a type that another seed keeps.
-/// With the cap off, every question the generators return is counted. The
-/// seed is fixed only so the walk can be repeated. It does not decide which
-/// types are present. A missing type is a warning in dev and an error in release.
+/// With the cap off, every question the generators return is counted. Each
+/// lesson is walked twice: once with pronunciation shown and once with it
+/// hidden, because the pronunciation question exists only in the second walk.
+/// B1 and B3 exist only in the first walk. B2 exists in both. Word order is
+/// not required while sessions leave it out. The seed is fixed only so the
+/// walk can be repeated. It does not decide which types are present. A missing
+/// type is a warning in dev and an error in release.
 enum QuizTypeCoverage {
     static func issues(
         in bundle: ContentBundle,
@@ -32,7 +36,7 @@ enum QuizTypeCoverage {
             retiredItemIDs: retiredItemIDs,
             seed: coverageSeed
         )
-        return TaskKind.allCases.compactMap { kind in
+        return requiredKinds.compactMap { kind in
             guard counts[kind, default: 0] == 0 else { return nil }
             return IssueText.make(
                 severity,
@@ -60,18 +64,28 @@ enum QuizTypeCoverage {
         var counts = Dictionary(uniqueKeysWithValues: TaskKind.allCases.map { ($0, 0) })
         var seen: [LessonID] = []
         var rng = SplitMix64(seed: seed)
+        // Pronunciation on skips the pronunciation question. Pronunciation off
+        // is the only walk that builds it. B1 and B3 are built only while
+        // pronunciation is shown. B2 is built in both walks. Word order is
+        // paused, so it is not a required kind until the session builds it.
+        // A kind counts when either walk produces it.
+        let released = releaseUnitIDs?.compactMap(UnitID.init(rawValue:))
         for lesson in lessons {
             seen.append(lesson.id)
-            let session = LessonSessionBuilder.build(
-                for: lesson.id,
-                in: bundle,
-                seenLessonIDs: seen,
-                retiredItemIDs: retiredItemIDs,
-                maxQuestions: nil,
-                using: &rng
-            )
-            for task in session.tasks {
-                counts[task.kind, default: 0] += 1
+            for showsPronunciation in [true, false] {
+                let session = LessonSessionBuilder.build(
+                    for: lesson.id,
+                    in: bundle,
+                    seenLessonIDs: seen,
+                    retiredItemIDs: retiredItemIDs,
+                    maxQuestions: nil,
+                    releasedUnitIDs: released,
+                    showsPronunciation: showsPronunciation,
+                    using: &rng
+                )
+                for task in session.tasks {
+                    counts[task.kind, default: 0] += 1
+                }
             }
         }
         return counts
@@ -79,6 +93,13 @@ enum QuizTypeCoverage {
 
     /// Fixed seed for a repeatable walk. Kind totals stay the same for any other seed.
     private static let coverageSeed: UInt64 = 1
+
+    /// Word order is left out of the gate while sessions do not build it.
+    private static var requiredKinds: [TaskKind] {
+        TaskKind.allCases.filter { kind in
+            kind != .orderWords || OrderWords.includedInSessions
+        }
+    }
 }
 
 /// Deterministic generator. Same step as the SplitMix64 in the PashtoCore tests.

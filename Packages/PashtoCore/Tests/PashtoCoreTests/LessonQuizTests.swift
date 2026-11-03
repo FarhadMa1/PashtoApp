@@ -759,7 +759,7 @@ struct LessonSessionTests {
             for: lessonID("l-one"),
             in: content,
             seenLessonIDs: [lessonID("l-one")],
-            using: &rng
+            releasedUnitIDs: nil, using: &rng
         )
         #expect(!session.tasks.isEmpty)
         let missed = session.tasks[0]
@@ -810,7 +810,7 @@ struct LessonSessionTests {
                 for: lesson.id,
                 in: bundle,
                 seenLessonIDs: seen,
-                using: &rng
+                releasedUnitIDs: nil, using: &rng
             )
             let introduced = Distractors.introducedItems(in: lesson.id, bundle: bundle)
             if introduced.isEmpty {
@@ -829,7 +829,7 @@ struct LessonSessionTests {
             for: lessonID("l-sounds-1"),
             in: bundle,
             seenLessonIDs: lessons.map(\.id),
-            using: &soundsRNG
+            releasedUnitIDs: nil, using: &soundsRNG
         )
         // l-sounds-1 only references sound examples. Those items are not seen,
         // and the lesson introduces nothing, so the session is empty.
@@ -850,7 +850,9 @@ struct LessonSessionTests {
         })
 
         let howAreYou = try #require(sessions.first { $0.lessonID.rawValue == "l-greetings-2" })
-        #expect(howAreYou.tasks.filter { $0.kind == .orderWords }.count == 2)
+        // Word order stays out of the session until tile pronunciation is decided.
+        #expect(!OrderWords.includedInSessions)
+        #expect(howAreYou.tasks.filter { $0.kind == .orderWords }.isEmpty)
 
         var orderCount = 0
         var dialogCount = 0
@@ -891,7 +893,7 @@ struct LessonSessionTests {
                 }
             }
         }
-        #expect(orderCount == 22)
+        #expect(orderCount == 0)
         // Nine replies point at their prompts, so each yields a dialog
         // question. Five lessons can build a response match.
         #expect(dialogCount == 9)
@@ -995,16 +997,16 @@ struct LessonSessionTests {
         let lesson = lessonID("l-one")
 
         var openRNG = SplitMix64(seed: 11)
-        let open = LessonSessionBuilder.build(for: lesson, in: content, seenLessonIDs: [lesson], using: &openRNG)
+        let open = LessonSessionBuilder.build(for: lesson, in: content, seenLessonIDs: [lesson], releasedUnitIDs: nil, using: &openRNG)
         var wideRNG = SplitMix64(seed: 11)
         let wide = LessonSessionBuilder.build(
             for: lesson,
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 100,
-            using: &wideRNG
+            releasedUnitIDs: nil, using: &wideRNG
         )
-        #expect(open.tasks.count == 13)
+        #expect(open.tasks.count == 9)
         #expect(wide == open)
 
         var cappedRNG = SplitMix64(seed: 11)
@@ -1013,7 +1015,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 4,
-            using: &cappedRNG
+            releasedUnitIDs: nil, using: &cappedRNG
         )
         var againRNG = SplitMix64(seed: 11)
         let again = LessonSessionBuilder.build(
@@ -1021,7 +1023,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 4,
-            using: &againRNG
+            releasedUnitIDs: nil, using: &againRNG
         )
         #expect(capped.tasks.count == 4)
         #expect(again == capped)
@@ -1033,7 +1035,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 6,
-            using: &midRNG
+            releasedUnitIDs: nil, using: &midRNG
         )
         #expect(mid.tasks.count == 6)
         #expect(Set(mid.tasks.compactMap(anchorID).map(\.rawValue)) == ["e-1", "e-2", "e-3", "e-4"])
@@ -1045,7 +1047,7 @@ struct LessonSessionTests {
                 in: content,
                 seenLessonIDs: [lesson],
                 maxQuestions: 4,
-                using: &rng
+                releasedUnitIDs: nil, using: &rng
             )
             #expect(session.tasks.count == 4)
             #expect(Set(session.tasks.compactMap(anchorID).map(\.rawValue)) == ["e-1", "e-2", "e-3", "e-4"])
@@ -1056,7 +1058,7 @@ struct LessonSessionTests {
                 in: content,
                 seenLessonIDs: [lesson],
                 maxQuestions: 2,
-                using: &tight
+                releasedUnitIDs: nil, using: &tight
             )
             // Two is below the four new items, so the cap keeps one question
             // each and drops the repetitions.
@@ -1071,7 +1073,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 0,
-            using: &zeroRNG
+            releasedUnitIDs: nil, using: &zeroRNG
         )
         #expect(floor.tasks.count == 4)
         #expect(Set(floor.tasks.compactMap(anchorID).map(\.rawValue)) == ["e-1", "e-2", "e-3", "e-4"])
@@ -1084,7 +1086,7 @@ struct LessonSessionTests {
                 in: content,
                 seenLessonIDs: [lesson],
                 maxQuestions: 4,
-                using: &rng
+                releasedUnitIDs: nil, using: &rng
             )
             if other != capped {
                 differed = true
@@ -1098,7 +1100,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 2,
-            using: &sessionRNG
+            releasedUnitIDs: nil, using: &sessionRNG
         )
         var answerRNG = SplitMix64(seed: 1)
         let missed = session.tasks[0]
@@ -1115,7 +1117,7 @@ struct LessonSessionTests {
 
     @Test func lessonSessionsDefaultToTwentyQuestions() {
         #expect(LessonSessionBuilder.defaultMaxQuestions == 20)
-        let items = (1...8).map { quizItem("e-\($0)", en: "word \($0)") }
+        let items = (1...12).map { quizItem("e-\($0)", en: "word \($0)") }
         let current = quizLesson("l-one", introduce: items)
         let content = quizBundle([current], items: items)
         let lesson = lessonID("l-one")
@@ -1125,7 +1127,7 @@ struct LessonSessionTests {
             for: lesson,
             in: content,
             seenLessonIDs: [lesson],
-            using: &defaultRNG
+            releasedUnitIDs: nil, using: &defaultRNG
         )
         var explicitRNG = SplitMix64(seed: 3)
         let explicit = LessonSessionBuilder.build(
@@ -1133,7 +1135,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 20,
-            using: &explicitRNG
+            releasedUnitIDs: nil, using: &explicitRNG
         )
         var openRNG = SplitMix64(seed: 3)
         let open = LessonSessionBuilder.build(
@@ -1141,7 +1143,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: nil,
-            using: &openRNG
+            releasedUnitIDs: nil, using: &openRNG
         )
         var raisedRNG = SplitMix64(seed: 3)
         let raised = LessonSessionBuilder.build(
@@ -1149,14 +1151,14 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 12,
-            using: &raisedRNG
+            releasedUnitIDs: nil, using: &raisedRNG
         )
         #expect(session == explicit)
         #expect(session.tasks.count == 20)
         #expect(open.tasks.count > 20)
         #expect(raised.tasks.count == 12)
-        #expect(Set(session.tasks.compactMap(anchorID).map(\.rawValue)).count == 8)
-        #expect(Set(raised.tasks.compactMap(anchorID).map(\.rawValue)).count == 8)
+        #expect(Set(session.tasks.compactMap(anchorID).map(\.rawValue)).count == 12)
+        #expect(Set(raised.tasks.compactMap(anchorID).map(\.rawValue)).count == 12)
     }
 
     @Test func capNeverDropsAnIntroducedItem() {
@@ -1171,7 +1173,7 @@ struct LessonSessionTests {
             for: lesson,
             in: content,
             seenLessonIDs: [lesson],
-            using: &defaultRNG
+            releasedUnitIDs: nil, using: &defaultRNG
         )
         var againRNG = SplitMix64(seed: 5)
         let again = LessonSessionBuilder.build(
@@ -1179,7 +1181,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 20,
-            using: &againRNG
+            releasedUnitIDs: nil, using: &againRNG
         )
         #expect(session == again)
         #expect(session.tasks.count == 21)
@@ -1192,7 +1194,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 3,
-            using: &tightRNG
+            releasedUnitIDs: nil, using: &tightRNG
         )
         #expect(tight.tasks.count == 21)
         #expect(Set(tight.tasks.compactMap(anchorID).map(\.rawValue)) == introduced)
@@ -1211,7 +1213,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 10,
-            using: &roomRNG
+            releasedUnitIDs: nil, using: &roomRNG
         )
         let covered = Set(withRoom.tasks.compactMap(anchorID).map(\.rawValue))
         #expect(withRoom.tasks.count == 10)
@@ -1224,7 +1226,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 8,
-            using: &fullRNG
+            releasedUnitIDs: nil, using: &fullRNG
         )
         #expect(noRepetitions.tasks.count == 8)
         #expect(Set(noRepetitions.tasks.compactMap(anchorID).map(\.rawValue)) == introduced)
@@ -1242,7 +1244,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 8,
-            using: &sessionRNG
+            releasedUnitIDs: nil, using: &sessionRNG
         )
         #expect(session.tasks.count == 8)
         var answerRNG = SplitMix64(seed: 1)
@@ -1260,7 +1262,7 @@ struct LessonSessionTests {
             for: lessonID("l-long"),
             in: longContent,
             seenLessonIDs: [lessonID("l-long")],
-            using: &longRNG
+            releasedUnitIDs: nil, using: &longRNG
         )
         #expect(longSession.tasks.count == 21)
         let missed = longSession.tasks[0]
@@ -1279,7 +1281,7 @@ struct LessonSessionTests {
         // and that limit is not applied by this builder. Raising maxQuestions
         // to 50 only lengthens the lesson; it does not add review cards.
         #expect(LessonSessionBuilder.defaultMaxQuestions == 20)
-        let items = (1...8).map { quizItem("e-\($0)", en: "word \($0)") }
+        let items = (1...12).map { quizItem("e-\($0)", en: "word \($0)") }
         let current = quizLesson("l-one", introduce: items)
         let content = quizBundle([current], items: items)
         let lesson = lessonID("l-one")
@@ -1289,7 +1291,7 @@ struct LessonSessionTests {
             for: lesson,
             in: content,
             seenLessonIDs: [lesson],
-            using: &lessonRNG
+            releasedUnitIDs: nil, using: &lessonRNG
         )
         var reviewSizedRNG = SplitMix64(seed: 4)
         let reviewSized = LessonSessionBuilder.build(
@@ -1297,7 +1299,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: 50,
-            using: &reviewSizedRNG
+            releasedUnitIDs: nil, using: &reviewSizedRNG
         )
         var openRNG = SplitMix64(seed: 4)
         let open = LessonSessionBuilder.build(
@@ -1305,7 +1307,7 @@ struct LessonSessionTests {
             in: content,
             seenLessonIDs: [lesson],
             maxQuestions: nil,
-            using: &openRNG
+            releasedUnitIDs: nil, using: &openRNG
         )
         #expect(lessonSession.tasks.count == 20)
         #expect(reviewSized == open)
@@ -1589,7 +1591,7 @@ private func courseSessions(_ bundle: ContentBundle, seed: UInt64) throws -> [Le
             in: bundle,
             seenLessonIDs: seen,
             maxQuestions: nil,
-            using: &rng
+            releasedUnitIDs: nil, using: &rng
         ))
     }
     return sessions

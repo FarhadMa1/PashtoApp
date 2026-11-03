@@ -298,7 +298,8 @@ struct QuizTypeCoverageTests {
             releaseUnitIDs: ["u-sounds"]
         ).map(\.id.rawValue))
         #expect(selected == ["u-sounds"])
-        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)))
+        let paused = OrderWords.includedInSessions ? Set<String>() : ["orderWords"]
+        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)).subtracting(paused))
 
         let dev = ContentCheck.issues(root: root, mode: .dev).filter { $0.field == "quizType" }
         #expect(dev.isEmpty)
@@ -778,7 +779,10 @@ private func word(
     kind: ContentKind = .word,
     responseTo: String? = nil,
     tokens: [String]? = nil,
-    usage: String? = nil
+    usage: String? = nil,
+    name: String? = nil,
+    sound: String? = nil,
+    forms: LetterForms? = nil
 ) -> ContentItem {
     ContentItem(
         id: ItemID(rawValue: id)!,
@@ -791,7 +795,10 @@ private func word(
         usage: usage,
         pronunciationNote: note,
         responseTo: responseTo.flatMap { ItemID(rawValue: $0) },
-        tokens: tokens
+        tokens: tokens,
+        name: name,
+        forms: forms,
+        sound: sound
     )
 }
 
@@ -852,19 +859,45 @@ private func coverageBundle(includeDialog: Bool) -> ContentBundle {
             responseTo: includeDialog ? "e-salam" : nil
         ),
     ]
+    let letters = coverageLetters()
     let lesson = Lesson(
         id: LessonID(rawValue: "l-coverage-1")!,
         title: "Coverage",
-        items: items.map { LessonItemRef(item: $0.id, role: .introduce) }
+        items: items.map { LessonItemRef(item: $0.id, role: .introduce) },
+        letters: letters.map(\.id)
     )
     return ContentBundle(
         contentVersion: "test",
         variant: ContentBundle.kabulVariant,
         romanization: romanization(difficult: []),
-        items: items,
+        items: items + letters,
         units: [CourseUnit(id: UnitID(rawValue: "u-coverage")!, track: "main", title: "Coverage", lessons: [lesson])],
         nonDistractorGroups: []
     )
+}
+
+/// Three letters, including the ta pair, so find-the-letter, same-sound, and
+/// first-letter questions can be built. ته in the word list starts with ت.
+private func coverageLetters() -> [ContentItem] {
+    func letter(_ id: String, _ pashto: String, _ name: String, _ sound: String, _ pronunciation: String, _ en: String) -> ContentItem {
+        word(
+            id,
+            pashto: pashto,
+            translit: sound,
+            pronunciation: pronunciation,
+            en: en,
+            status: .draft,
+            kind: .letter,
+            name: name,
+            sound: sound,
+            forms: LetterForms(isolated: pashto, initial: pashto, medial: pashto, final: pashto)
+        )
+    }
+    return [
+        letter("e-letter-te", "ت", "تې", "t", "ta", "the letter ta"),
+        letter("e-letter-tte", "ټ", "ټې", "ṭ", "tta", "the letter ta with a ring"),
+        letter("e-letter-be", "ب", "بې", "b", "ba", "the letter ba"),
+    ]
 }
 
 /// The first unit can build every type except dialog response. The reply that

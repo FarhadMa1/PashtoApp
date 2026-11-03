@@ -1,3 +1,4 @@
+import PashtoCore
 import SwiftUI
 import UIKit
 
@@ -9,7 +10,38 @@ enum Lapis {
     static let saffron = dynamic(light: 0xE8A33D, dark: 0xF2B85B)
     static let saffronInk = color(0x1F1300)
     static let saffronShadow = color(0xB97D22)
-    static let destructive = dynamic(light: 0xB42318, dark: 0xFDA29B)
+    static let destructive = dynamic(
+        light: QuizResultPalette.incorrectMarkLight,
+        dark: QuizResultPalette.incorrectMarkDark
+    )
+    /// Border and check icon. Light `#16A34A` is not used for text.
+    static let correct = dynamic(
+        light: QuizResultPalette.correctMarkLight,
+        dark: QuizResultPalette.correctMarkDark
+    )
+    /// Banner text. Darker than the light-mode check, because `#16A34A` on mint is about 3.1:1.
+    static let correctText = dynamic(
+        light: QuizResultPalette.correctTextLight,
+        dark: QuizResultPalette.correctTextDark
+    )
+    static let correctFill = dynamic(
+        light: QuizResultPalette.correctFillLight,
+        dark: QuizResultPalette.correctFillDark
+    )
+    static let incorrectFill = dynamic(
+        light: QuizResultPalette.incorrectFillLight,
+        dark: QuizResultPalette.incorrectFillDark
+    )
+    /// Pashto and English on a correct or wrong fill.
+    static let fillText = dynamic(
+        light: QuizResultPalette.fillTextLight,
+        dark: QuizResultPalette.fillTextDark
+    )
+    /// Pronunciation on a correct or wrong fill.
+    static let fillPronunciation = dynamic(
+        light: QuizResultPalette.fillPronunciationLight,
+        dark: QuizResultPalette.fillPronunciationDark
+    )
     static let badge = dynamic(light: 0x1E3A8A, dark: 0x2747A6)
     static let badgeInk = color(0xFAF7F0)
     static let heroTop = color(0x2747A6)

@@ -85,6 +85,18 @@ struct ContentDecodingTests {
         #expect(again == decoded)
     }
 
+    @Test func contrastHintDecodesWhenPresentAndStaysNilWhenOmitted() throws {
+        let withHint = minimalItem(kind: "letter").replacingOccurrences(
+            of: #""verification": {"status": "draft"}"#,
+            with: #""contrastHint": "da, plain, no ring", "verification": {"status": "draft"}"#
+        )
+        let decoded = try JSONDecoder().decode(ContentItem.self, from: Data(withHint.utf8))
+        #expect(decoded.contrastHint == "da, plain, no ring")
+
+        let omitted = try JSONDecoder().decode(ContentItem.self, from: Data(minimalItem(kind: "letter").utf8))
+        #expect(omitted.contrastHint == nil)
+    }
+
     @Test func nullEnglishDecodesAsMissing() throws {
         let json = """
         {

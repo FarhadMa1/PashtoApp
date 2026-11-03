@@ -479,7 +479,7 @@ struct DailyPlanTests {
                     for: lesson.id,
                     in: bundle,
                     seenLessonIDs: seen,
-                    using: &rng
+                    releasedUnitIDs: nil, using: &rng
                 )
                 let introduced = Distractors.introducedItems(in: lesson.id, bundle: bundle)
                 var graded: Set<ItemID> = []
@@ -521,7 +521,7 @@ struct DailyPlanTests {
             for: greetings.id,
             in: bundle,
             seenLessonIDs: seen,
-            using: &rng
+            releasedUnitIDs: nil, using: &rng
         )
         let day = LocalDay(year: 2026, month: 11, day: 1)
         let introduced = reviewCards(introducedIn: greetings, on: day)
@@ -587,10 +587,17 @@ struct DailyPlanTests {
         in context: QuizContext,
         using rng: inout SplitMix64
     ) -> Bool {
-        if PashtoToEnglishChoice().makeTask(for: item, in: context, using: &rng) != nil { return true }
-        if EnglishToPashtoChoice().makeTask(for: item, in: context, using: &rng) != nil { return true }
-        if TransliterationChoice().makeTask(for: item, in: context, using: &rng) != nil { return true }
-        if OrderWords.makeTask(for: item, in: context, using: &rng) != nil { return true }
+        let policy = QuizPolicy.initial
+        if !QuizSchedule.choices(for: item, in: context, policy: policy, using: &rng).isEmpty { return true }
+        if item.kind == .letter {
+            if LetterTasks.findLetter(for: item, in: context, using: &rng) != nil { return true }
+            if LetterTasks.contrast(for: item, in: context, using: &rng) != nil { return true }
+        } else if LetterTasks.firstLetter(of: item, in: context, using: &rng) != nil {
+            return true
+        }
+        if OrderWords.includedInSessions, OrderWords.makeTask(for: item, in: context, using: &rng) != nil {
+            return true
+        }
         if DialogResponse().makeTask(for: item, in: context, using: &rng) != nil { return true }
         return false
     }

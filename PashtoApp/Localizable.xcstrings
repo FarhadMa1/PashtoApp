@@ -145,6 +145,186 @@
         }
       }
     },
+    "quiz.continue.button" : {
+      "comment" : "Quiz. Shown after an answer so the learner can move to the next question.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "quiz.feedback.correct" : {
+      "comment" : "Quiz feedback when the selected answer is right.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct"
+          }
+        }
+      }
+    },
+    "quiz.feedback.incorrect" : {
+      "comment" : "Quiz feedback when the selected answer is wrong.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrect"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.da.plain" : {
+      "comment" : "Letter task. Hint for د, the plain da with no ring.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "da, plain, no ring"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.da.ring" : {
+      "comment" : "Letter task. Hint for ډ, da with a ring.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "da with a ring (tongue curled back)"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.ra.plain" : {
+      "comment" : "Letter task. Hint for ر, the plain ra with no ring.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ra, plain, no ring"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.ra.ring" : {
+      "comment" : "Letter task. Hint for ړ, ra with a ring.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ra with a ring (tongue curled back)"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.ta.plain" : {
+      "comment" : "Letter task. Hint for ت, ta with two dots and no ring.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ta, two dots, no ring"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.ta.ring" : {
+      "comment" : "Letter task. Hint for ټ, ta with a ring.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ta with a ring (tongue curled back)"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.za.dalDot" : {
+      "comment" : "Letter task. Hint for ذ, za with the dot on the da shape.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "za, dot on the da shape"
+          }
+        }
+      }
+    },
+    "quiz.letterHint.za.raDot" : {
+      "comment" : "Letter task. Hint for ز, za with the dot on the ra shape.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "za, dot on the ra shape"
+          }
+        }
+      }
+    },
+    "quiz.option.1" : {
+      "comment" : "VoiceOver label for the first answer choice before it is answered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option 1"
+          }
+        }
+      }
+    },
+    "quiz.option.2" : {
+      "comment" : "VoiceOver label for the second answer choice before it is answered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option 2"
+          }
+        }
+      }
+    },
+    "quiz.option.3" : {
+      "comment" : "VoiceOver label for the third answer choice before it is answered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option 3"
+          }
+        }
+      }
+    },
+    "quiz.option.4" : {
+      "comment" : "VoiceOver label for the fourth answer choice before it is answered.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option 4"
+          }
+        }
+      }
+    },
     "welcomeBack.startReview.button" : {
       "comment" : "Welcome back. Starts the capped daily review queue.",
       "extractionState" : "manual",

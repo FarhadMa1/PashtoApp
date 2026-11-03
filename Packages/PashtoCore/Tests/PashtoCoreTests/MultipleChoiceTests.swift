@@ -380,9 +380,8 @@ struct MultipleChoiceTests {
             }
             if lesson.id.rawValue == "l-greetings-2" {
                 let letterKinds = Set(tasks.filter { $0.targetID.rawValue == "e-letter-pe" }.map(\.kind))
-                #expect(letterKinds == [
-                    .meaningPashtoToEnglish, .meaningEnglishToPashto, .transliterationChoice,
-                ])
+                // Pronunciation is on, so the old letter choices are not built.
+                #expect(letterKinds.isEmpty)
             }
         }
 
@@ -511,7 +510,7 @@ private func task(
         return EnglishToPashtoChoice().makeTask(for: items[0], in: context, using: &rng)
     case .transliterationChoice:
         return TransliterationChoice().makeTask(for: items[0], in: context, using: &rng)
-    case .matchPairs, .orderWords, .dialogResponse:
+    case .findLetter, .letterContrast, .firstLetter, .matchPairs, .orderWords, .dialogResponse:
         return nil
     }
 }

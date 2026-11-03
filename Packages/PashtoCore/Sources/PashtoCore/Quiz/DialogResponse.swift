@@ -89,7 +89,8 @@ public struct DialogResponse: TaskGenerator {
             targetID: prepared.reply.id,
             prompt: prepared.promptText,
             usage: blankToNil(prepared.reply.usage),
-            options: options
+            options: options,
+            promptItemID: prepared.promptID
         )
     }
 }
@@ -97,6 +98,7 @@ public struct DialogResponse: TaskGenerator {
 private struct PreparedReply {
     var reply: ContentItem
     var replyText: String
+    var promptID: ItemID
     var promptText: String
     var distractors: [ContentItem]
     var skip: DialogReplySkip?
@@ -126,6 +128,7 @@ private func prepare(_ target: ContentItem, in context: QuizContext) -> Prepared
         return PreparedReply(
             reply: reply,
             replyText: replyText,
+            promptID: prompt.id,
             promptText: promptText,
             distractors: [],
             skip: .sharedUsage
@@ -154,6 +157,7 @@ private func prepare(_ target: ContentItem, in context: QuizContext) -> Prepared
     return PreparedReply(
         reply: reply,
         replyText: replyText,
+        promptID: prompt.id,
         promptText: promptText,
         distractors: distractors,
         skip: nil
