@@ -152,11 +152,14 @@ private struct ItemTasks {
 ///
 /// The generator order is Pashto to English, English to Pashto, then the
 /// pronunciation question when pronunciation is hidden. A letter uses B1 and
-/// B2 instead of the old letter choices while pronunciation is shown, and B2
-/// is kept when it is hidden. A word may add B3, the first letter, unless the
-/// word starts with آ or VoiceOver is on. Word order and dialog reply follow.
-/// Match pairs come after those. The placement test draws from this same draft
-/// and the same `rng`.
+/// B2 instead of the old letter choices while pronunciation is shown. B1 and
+/// B3 are not built when pronunciation is hidden. B2 is built in both cases,
+/// and it is the only letter task when pronunciation is hidden. VoiceOver
+/// builds none of the letter tasks, and it does not fall back to the old
+/// letter meaning questions while pronunciation is shown. Word order stays
+/// out of the session until `OrderWords.includedInSessions` is turned on.
+/// Dialog reply and match pairs follow. The placement test draws from this
+/// same draft and the same `rng`.
 struct LessonTaskDraft {
     var perItem: [[SessionTask]]
     var shared: [SessionTask]
@@ -174,6 +177,10 @@ struct LessonTaskDraft {
 /// question. Review sessions do not use this cap; a review day is limited
 /// to 50 cards on its own.
 ///
+/// `releasedUnitIDs` has no default. Pass nil only when the caller really
+/// means the whole bundle, such as a dev check. An empty list releases
+/// nothing, so a forgotten list cannot quiz unreleased units.
+///
 /// Every item this lesson introduces keeps one question. The cap does not
 /// remove that question, even when the session then runs past the cap. Further
 /// questions repeat an item the session already covers, and those
@@ -190,7 +197,7 @@ public enum LessonSessionBuilder {
         seenLessonIDs: [LessonID],
         retiredItemIDs: [ItemID] = [],
         maxQuestions: Int? = defaultMaxQuestions,
-        releasedUnitIDs: [UnitID]? = nil,
+        releasedUnitIDs: [UnitID]?,
         showsPronunciation: Bool = true,
         voiceOver: Bool = false,
         using rng: inout some RandomNumberGenerator
@@ -255,19 +262,23 @@ public enum LessonSessionBuilder {
                 itemTasks.append(SessionTask(payload: .choice(task)))
             }
             if !policy.voiceOver, target.kind == .letter {
-                if let task = LetterTasks.findLetter(for: target, in: context, using: &rng) {
+                if policy.showsPronunciation,
+                   let task = LetterTasks.findLetter(for: target, in: context, using: &rng) {
                     itemTasks.append(SessionTask(payload: .choice(task)))
                 }
                 if let task = LetterTasks.contrast(for: target, in: context, using: &rng) {
                     itemTasks.append(SessionTask(payload: .choice(task)))
                 }
             }
-            if !policy.voiceOver, target.kind != .letter {
+            if !policy.voiceOver, policy.showsPronunciation, target.kind != .letter {
                 if let task = LetterTasks.firstLetter(of: target, in: context, using: &rng) {
                     itemTasks.append(SessionTask(payload: .choice(task)))
                 }
             }
-            if let task = OrderWords.makeTask(for: target, in: context, using: &rng) {
+            // Word order is paused. Farhad is still deciding the pronunciation
+            // under each tile. `OrderWords.includedInSessions` turns it back on.
+            if OrderWords.includedInSessions,
+               let task = OrderWords.makeTask(for: target, in: context, using: &rng) {
                 itemTasks.append(SessionTask(payload: .orderWords(task)))
             }
             if let task = DialogResponse().makeTask(for: target, in: context, using: &rng) {

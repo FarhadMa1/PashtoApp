@@ -12,7 +12,9 @@ public enum TaskKind: String, Hashable, Codable, Sendable, CaseIterable {
     /// Built only when pronunciation is hidden. A visible pronunciation would
     /// be the answer. Letter items do not use this when pronunciation is shown.
     case transliterationChoice
-    /// See a letter's name or sound and choose its glyph.
+    /// See the letter's English description and choose its glyph.
+    ///
+    /// The Pashto name and the `sound` field are not the question.
     case findLetter
     /// See one shape hint and choose which of two same-sound letters it is.
     case letterContrast
@@ -189,10 +191,9 @@ struct QuizPolicy: Hashable, Sendable {
 /// The choice questions one item contributes.
 ///
 /// Meaning questions are always available, except for a letter while
-/// pronunciation is on screen and VoiceOver is off: those old letter
-/// questions are replaced by B1 and B2. The pronunciation question is built
-/// only when pronunciation is hidden. VoiceOver keeps the meaning questions
-/// for a letter and does not use the letter tasks.
+/// pronunciation is on screen. Those old letter questions name the letter
+/// ("the letter ta"), so VoiceOver does not bring them back. The pronunciation
+/// question is built only when pronunciation is hidden.
 enum QuizSchedule {
     static func choices(
         for target: ContentItem,
@@ -200,7 +201,7 @@ enum QuizSchedule {
         policy: QuizPolicy,
         using rng: inout some RandomNumberGenerator
     ) -> [QuizTask] {
-        if target.kind == .letter, policy.showsPronunciation, !policy.voiceOver {
+        if target.kind == .letter, policy.showsPronunciation {
             return []
         }
         var tasks: [QuizTask] = []

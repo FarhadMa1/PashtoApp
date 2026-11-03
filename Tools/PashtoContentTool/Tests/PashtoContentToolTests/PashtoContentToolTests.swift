@@ -298,7 +298,8 @@ struct QuizTypeCoverageTests {
             releaseUnitIDs: ["u-sounds"]
         ).map(\.id.rawValue))
         #expect(selected == ["u-sounds"])
-        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)))
+        let paused = OrderWords.includedInSessions ? Set<String>() : ["orderWords"]
+        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)).subtracting(paused))
 
         let dev = ContentCheck.issues(root: root, mode: .dev).filter { $0.field == "quizType" }
         #expect(dev.isEmpty)

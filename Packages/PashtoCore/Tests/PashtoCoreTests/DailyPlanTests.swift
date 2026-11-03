@@ -479,7 +479,7 @@ struct DailyPlanTests {
                     for: lesson.id,
                     in: bundle,
                     seenLessonIDs: seen,
-                    using: &rng
+                    releasedUnitIDs: nil, using: &rng
                 )
                 let introduced = Distractors.introducedItems(in: lesson.id, bundle: bundle)
                 var graded: Set<ItemID> = []
@@ -521,7 +521,7 @@ struct DailyPlanTests {
             for: greetings.id,
             in: bundle,
             seenLessonIDs: seen,
-            using: &rng
+            releasedUnitIDs: nil, using: &rng
         )
         let day = LocalDay(year: 2026, month: 11, day: 1)
         let introduced = reviewCards(introducedIn: greetings, on: day)
@@ -595,7 +595,9 @@ struct DailyPlanTests {
         } else if LetterTasks.firstLetter(of: item, in: context, using: &rng) != nil {
             return true
         }
-        if OrderWords.makeTask(for: item, in: context, using: &rng) != nil { return true }
+        if OrderWords.includedInSessions, OrderWords.makeTask(for: item, in: context, using: &rng) != nil {
+            return true
+        }
         if DialogResponse().makeTask(for: item, in: context, using: &rng) != nil { return true }
         return false
     }

@@ -2,12 +2,15 @@ import Foundation
 
 /// Letter questions for v1.0.
 ///
-/// B1 shows a letter's name or sound and asks for the glyph.
+/// B1 shows the letter's English description (`en`) and asks for the glyph.
+/// The Pashto name and the `sound` field stay off the question: the name
+/// starts with the answer, and `sound` is scholarly transliteration.
+/// B1 never offers the sound twin. The twin would be a second right answer.
 /// B2 shows one shape hint and asks which of two same-sound letters it is.
-/// B3 shows a word and asks for its first letter. A word that starts with آ
-/// is skipped. B1 and B3 option pronunciations are a display rule, not stored
-/// on the task: the glyph is the option, and the pronunciation stays off it
-/// until the question has been answered.
+/// B3 shows a word and asks for its first letter, and the sound twin is one
+/// of the wrong glyphs. A word that starts with آ is skipped. Leading
+/// diacritics are not the first letter. B1 and B3 option pronunciations are
+/// a display rule, not stored on the task.
 enum LetterTasks {
     static func findLetter(
         for target: ContentItem,
@@ -15,8 +18,10 @@ enum LetterTasks {
         using rng: inout some RandomNumberGenerator
     ) -> QuizTask? {
         guard target.kind == .letter else { return nil }
-        guard let prompt = nameOrSound(for: target, using: &rng) else { return nil }
-        guard let options = glyphOptions(correct: target, in: context, using: &rng) else { return nil }
+        guard let prompt = englishPrompt(for: target) else { return nil }
+        guard let options = glyphOptions(correct: target, in: context, includeSoundTwin: false, using: &rng) else {
+            return nil
+        }
         return QuizTask(
             kind: .findLetter,
             targetID: target.id,
@@ -63,7 +68,9 @@ enum LetterTasks {
         guard !startsWithAlefMadda(word.pashto) else { return nil }
         guard let first = firstGlyph(in: word.pashto) else { return nil }
         guard let letter = seenLetter(matching: first, in: context) else { return nil }
-        guard let options = glyphOptions(correct: letter, in: context, using: &rng) else { return nil }
+        guard let options = glyphOptions(correct: letter, in: context, includeSoundTwin: true, using: &rng) else {
+            return nil
+        }
         return QuizTask(
             kind: .firstLetter,
             targetID: letter.id,
@@ -74,40 +81,29 @@ enum LetterTasks {
         )
     }
 
-    /// True when the first non-space scalar is آ (U+0622).
+    /// True when the first letter is آ (U+0622). Spaces and combining marks are skipped.
     static func startsWithAlefMadda(_ pashto: String) -> Bool {
-        guard let first = pashto.unicodeScalars.first(where: { !$0.properties.isWhitespace }) else {
-            return false
-        }
-        return first == alefWithMadda
+        baseScalar(in: pashto) == alefWithMadda
     }
 
     private static let alefWithMadda = Unicode.Scalar(0x0622)!
 
-    private static func nameOrSound(
-        for letter: ContentItem,
-        using rng: inout some RandomNumberGenerator
-    ) -> String? {
-        let name = blankToNil(letter.name)
-        let sound = blankToNil(letter.sound)
-        switch (name, sound) {
-        case let (name?, sound?):
-            return rng.next() % 2 == 0 ? name : sound
-        case let (name?, nil):
-            return name
-        case let (nil, sound?):
-            return sound
-        case (nil, nil):
-            return nil
-        }
+    /// English description only. `name` and `sound` are never the question.
+    private static func englishPrompt(for letter: ContentItem) -> String? {
+        blankToNil(letter.en)
     }
 
+    /// The first letter, after spaces and combining marks. آ has no glyph question.
     private static func firstGlyph(in pashto: String) -> String? {
-        guard let first = pashto.unicodeScalars.first(where: { !$0.properties.isWhitespace }) else {
-            return nil
-        }
-        if first == alefWithMadda { return nil }
+        guard let first = baseScalar(in: pashto), first != alefWithMadda else { return nil }
         return String(first)
+    }
+
+    /// First scalar that is not a space and not a combining mark.
+    private static func baseScalar(in pashto: String) -> Unicode.Scalar? {
+        pashto.unicodeScalars.first { scalar in
+            !scalar.properties.isWhitespace && scalar.properties.canonicalCombiningClass == .notReordered
+        }
     }
 
     private static func seenLetter(matching glyph: String, in context: QuizContext) -> ContentItem? {
@@ -126,16 +122,30 @@ enum LetterTasks {
 
     /// Same source order as the other choice questions: this lesson, then
     /// earlier lessons, then earlier units. At least three glyphs, at most four.
+    ///
+    /// B1 passes `includeSoundTwin: false`. The twin sounds the same, so it
+    /// would be a second right answer. B3 passes `true` and puts that twin
+    /// in the wrong answers when the learner has already seen it.
     private static func glyphOptions(
         correct: ContentItem,
         in context: QuizContext,
+        includeSoundTwin: Bool,
         using rng: inout some RandomNumberGenerator
     ) -> [QuizOption]? {
         let course = CourseOrder(context.bundle)
         guard let correctGlyph = glyph(of: correct) else { return nil }
+        let twinGlyph = LetterContrasts.entry(matching: correct.pashto)?.partnerGlyph
         let ranked = Distractors.candidates(for: correct, in: context)
         var distractors: [QuizOption] = []
         var seenKeys = [Normalization.nfc(correctGlyph)]
+        if includeSoundTwin, let twin = soundTwin(of: correct, glyph: twinGlyph, in: context),
+           let text = glyph(of: twin) {
+            let key = Normalization.nfc(text)
+            if !seenKeys.contains(key) {
+                seenKeys.append(key)
+                distractors.append(QuizOption(itemID: twin.id, text: text))
+            }
+        }
         let levels: [DistractorSource] = [.sameLesson, .earlierLessonInUnit, .earlierUnit]
         for level in levels where distractors.count < 3 {
             var pool: [(item: ContentItem, text: String)] = []
@@ -144,6 +154,9 @@ enum LetterTasks {
                 guard let text = glyph(of: item) else { continue }
                 let key = Normalization.nfc(text)
                 guard !seenKeys.contains(key) else { continue }
+                if let twinGlyph, Normalization.nfc(twinGlyph) == key, !includeSoundTwin {
+                    continue
+                }
                 pool.append((item, text))
             }
             while distractors.count < 3, !pool.isEmpty {
@@ -163,5 +176,16 @@ enum LetterTasks {
 
     private static func glyph(of item: ContentItem) -> String? {
         blankToNil(item.pashto)
+    }
+
+    private static func soundTwin(
+        of letter: ContentItem,
+        glyph: String?,
+        in context: QuizContext
+    ) -> ContentItem? {
+        guard let glyph else { return nil }
+        guard let twin = seenLetter(matching: glyph, in: context) else { return nil }
+        guard twin.id != letter.id else { return nil }
+        return twin
     }
 }

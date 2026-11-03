@@ -43,6 +43,13 @@ public struct OrderWordsTask: Hashable, Codable, Sendable {
 }
 
 public enum OrderWords {
+    /// Sessions do not build this task yet.
+    ///
+    /// Each tile still has no pronunciation of its own, and Farhad is deciding
+    /// that before the task is shown. The generator below stays. Set this to
+    /// `true` when the tile pronunciation is settled.
+    public static let includedInSessions = false
+
     /// Nil when the item is unseen, has fewer than 2 usable tokens, or every
     /// arrangement is already correct.
     public static func makeTask(

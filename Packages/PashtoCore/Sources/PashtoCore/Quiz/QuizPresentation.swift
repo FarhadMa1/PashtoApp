@@ -32,9 +32,34 @@ public struct QuizOptionFace: Hashable, Sendable {
     public let itemID: ItemID
     public let text: String
     public let pronunciation: String?
+    /// True for B1 and B3. The line is kept even while `pronunciation` is nil,
+    /// so the choice does not grow when the answer is shown.
+    public let reservesPronunciation: Bool
     public let accessibility: QuizAccessibilityText
     /// Ring or dot, drawn on a same-sound choice after the answer.
     public let highlight: LetterMark?
+}
+
+/// The check or the cross next to Correct / Incorrect.
+///
+/// Colour is not the only cue. `spokenEnglish` matches the app catalog.
+public enum QuizResultMark: Hashable, Sendable {
+    case correct
+    case incorrect
+
+    public var symbolName: String {
+        switch self {
+        case .correct: "checkmark"
+        case .incorrect: "xmark"
+        }
+    }
+
+    public var spokenEnglish: String {
+        switch self {
+        case .correct: "Correct"
+        case .incorrect: "Incorrect"
+        }
+    }
 }
 
 /// A multiple-choice question ready to draw.
@@ -78,15 +103,20 @@ public enum QuizPresentation {
             }
             let accessibility: QuizAccessibilityText
             let number = offset + 1
-            if voiceOver, !answered, (1...4).contains(number) {
+            // Option N is only for letter glyphs. Reading those aloud is the answer.
+            // Meaning questions and every other task keep the real text.
+            let letterGlyph = task.kind == .findLetter || task.kind == .letterContrast || task.kind == .firstLetter
+            if voiceOver, !answered, letterGlyph, (1...4).contains(number) {
                 accessibility = .optionNumber(number)
             } else {
                 accessibility = .visible(option.text)
             }
+            let reservesPronunciation = task.kind == .findLetter || task.kind == .firstLetter
             return QuizOptionFace(
                 itemID: option.itemID,
                 text: option.text,
                 pronunciation: pronunciation,
+                reservesPronunciation: reservesPronunciation,
                 accessibility: accessibility,
                 highlight: highlight
             )
@@ -122,6 +152,35 @@ public enum QuizPresentation {
         let hidesUntilAnswer = kind == .findLetter || kind == .firstLetter
         if hidesUntilAnswer, !answered { return nil }
         return spokenPronunciation(text: text, item: item, showsPronunciation: showsPronunciation)
+    }
+
+    /// Pronunciation of a whole ordered sentence.
+    ///
+    /// Hidden until the learner has answered. Before that, the pronunciation
+    /// is the sentence in the right order.
+    public static func sentencePronunciation(
+        item: ContentItem?,
+        showsPronunciation: Bool,
+        answered: Bool
+    ) -> String? {
+        guard answered, let item else { return nil }
+        return spokenPronunciation(text: item.pashto, item: item, showsPronunciation: showsPronunciation)
+    }
+
+    /// What VoiceOver reads for one side of a match, including a link the learner made.
+    public static func matchAccessibilityLabel(
+        text: String,
+        pronunciation: String?,
+        linkedText: String?
+    ) -> String {
+        var parts = [text]
+        if let pronunciation, !Text.isBlank(pronunciation) {
+            parts.append(pronunciation)
+        }
+        if let linkedText, !Text.isBlank(linkedText) {
+            parts.append(linkedText)
+        }
+        return parts.joined(separator: ", ")
     }
 
     /// The pronunciation field under Arabic script, or nil.

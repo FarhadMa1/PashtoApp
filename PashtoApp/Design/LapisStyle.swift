@@ -10,6 +10,11 @@ enum Lapis {
     static let saffronInk = color(0x1F1300)
     static let saffronShadow = color(0xB97D22)
     static let destructive = dynamic(light: 0xB42318, dark: 0xFDA29B)
+    /// A1. Correct is green on mint in both appearances. The spec does not swap it in dark mode.
+    static let correct = color(0x16A34A)
+    static let correctFill = color(0xECFDF3)
+    /// A2. The wrong border is the destructive red, including its dark color.
+    static let incorrectFill = color(0xFEF2F2)
     static let badge = dynamic(light: 0x1E3A8A, dark: 0x2747A6)
     static let badgeInk = color(0xFAF7F0)
     static let heroTop = color(0x2747A6)

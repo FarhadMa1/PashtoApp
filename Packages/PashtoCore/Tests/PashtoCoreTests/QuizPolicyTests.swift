@@ -149,11 +149,16 @@ struct QuizPolicyTests {
         #expect(!prompts.contains("آب"))
     }
 
-    @Test func voiceOverUsesMeaningTasksAndNeutralOptionLabels() throws {
+    @Test func voiceOverUsesMeaningTasksAndKeepsTheirRealLabels() throws {
         let session = courseSession(showsPronunciation: true, voiceOver: true)
+        let letters = Set(sampleLetters().map(\.id))
         #expect(!session.tasks.contains { $0.kind == .findLetter })
         #expect(!session.tasks.contains { $0.kind == .letterContrast })
         #expect(!session.tasks.contains { $0.kind == .firstLetter })
+        #expect(!session.tasks.contains { task in
+            guard case .choice(let quiz) = task.payload else { return false }
+            return letters.contains(quiz.targetID)
+        })
         #expect(session.tasks.contains { $0.kind == .meaningPashtoToEnglish })
 
         let meaning = try #require(choiceTasks(in: session, kind: .meaningPashtoToEnglish).first)
@@ -164,21 +169,11 @@ struct QuizPolicyTests {
             voiceOver: true,
             answered: false
         )
-        let revealed = QuizPresentation.face(
-            for: meaning,
-            items: sampleItems(),
-            showsPronunciation: true,
-            voiceOver: true,
-            answered: true
-        )
-        #expect(hidden.options.map(\.accessibility.spokenEnglish) == [
-            "Option 1", "Option 2", "Option 3", "Option 4",
-        ].prefix(hidden.options.count).map { $0 })
+        #expect(hidden.options.map(\.accessibility) == meaning.options.map { .visible($0.text) })
         #expect(hidden.options.allSatisfy {
-            if case .optionNumber = $0.accessibility { return true }
-            return false
+            if case .optionNumber = $0.accessibility { return false }
+            return true
         })
-        #expect(revealed.options.map(\.accessibility) == meaning.options.map { .visible($0.text) })
     }
 
     @Test func onlyReleasedUnitsAreUsed() {

@@ -1,0 +1,391 @@
+import Foundation
+import Testing
+@testable import PashtoCore
+
+struct QuizFindingsTests {
+    @Test func dialogPromptPronouncesTheQuestionNotTheReply() throws {
+        let bundle = try loadRepositoryContent()
+        let lessons = bundle.units.flatMap(\.lessons)
+        var seen: [LessonID] = []
+        var rng = SplitMix64(seed: 1)
+        var checked = 0
+        for lesson in lessons {
+            seen.append(lesson.id)
+            let session = LessonSessionBuilder.build(
+                for: lesson.id,
+                in: bundle,
+                seenLessonIDs: seen,
+                maxQuestions: nil,
+                releasedUnitIDs: nil,
+                showsPronunciation: true,
+                using: &rng
+            )
+            for task in session.tasks {
+                guard case .choice(let quiz) = task.payload, quiz.kind == .dialogResponse else { continue }
+                let reply = try #require(bundle.items.first { $0.id == quiz.targetID })
+                let prompt = try #require(bundle.items.first { $0.id == reply.responseTo })
+                #expect(quiz.promptItemID == prompt.id)
+                let face = QuizPresentation.face(
+                    for: quiz,
+                    items: bundle.items,
+                    showsPronunciation: true,
+                    voiceOver: false,
+                    answered: false
+                )
+                #expect(face.prompt.text == prompt.pashto)
+                #expect(face.prompt.pronunciation == prompt.pronunciation)
+                #expect(face.prompt.pronunciation != reply.pronunciation)
+                #expect(face.prompt.text != reply.translit)
+                checked += 1
+            }
+        }
+        #expect(checked > 0)
+    }
+
+    @Test func findLetterOnRealContentUsesEnglishAndNeverTheGlyphOrItsTwin() throws {
+        let bundle = try loadRepositoryContent()
+        let lessons = bundle.units.flatMap(\.lessons)
+        var seen: [LessonID] = []
+        var rng = SplitMix64(seed: 3)
+        var checked = 0
+        for lesson in lessons {
+            seen.append(lesson.id)
+            let session = LessonSessionBuilder.build(
+                for: lesson.id,
+                in: bundle,
+                seenLessonIDs: seen,
+                maxQuestions: nil,
+                releasedUnitIDs: nil,
+                showsPronunciation: true,
+                voiceOver: false,
+                using: &rng
+            )
+            for task in session.tasks {
+                guard case .choice(let quiz) = task.payload, quiz.kind == .findLetter else { continue }
+                let letter = try #require(bundle.items.first { $0.id == quiz.targetID })
+                #expect(quiz.prompt == letter.en)
+                #expect(!quiz.prompt.contains(letter.pashto))
+                #expect(quiz.prompt != letter.name)
+                #expect(quiz.prompt != letter.sound)
+                #expect(quiz.prompt != letter.translit)
+                if let twin = LetterContrasts.entry(matching: letter.pashto)?.partnerGlyph {
+                    #expect(!quiz.options.contains { Normalization.nfc($0.text) == Normalization.nfc(twin) })
+                }
+                let face = QuizPresentation.face(
+                    for: quiz,
+                    items: bundle.items,
+                    showsPronunciation: true,
+                    voiceOver: false,
+                    answered: false
+                )
+                #expect(!QuizPresentation.containsArabicScript(face.prompt.text))
+                #expect(face.prompt.pronunciation == nil)
+                #expect(face.options.allSatisfy { $0.pronunciation == nil && $0.reservesPronunciation })
+                checked += 1
+            }
+        }
+        #expect(checked > 0)
+    }
+
+    @Test func sameSoundCoversTaRaAndZa() {
+        let session = contrastSession(showsPronunciation: true)
+        let hidden = contrastSession(showsPronunciation: false)
+        #expect(session.tasks.contains { $0.kind == .letterContrast })
+        #expect(session.tasks.contains { $0.kind == .findLetter })
+        #expect(session.tasks.contains { $0.kind == .firstLetter })
+        #expect(hidden.tasks.contains { $0.kind == .letterContrast })
+        #expect(!hidden.tasks.contains { $0.kind == .findLetter })
+        #expect(!hidden.tasks.contains { $0.kind == .firstLetter })
+        let prompts = Dictionary(uniqueKeysWithValues: choiceTasks(in: session, kind: .letterContrast).map {
+            ($0.targetID.rawValue, $0)
+        })
+        let expected: [(String, String, String)] = [
+            ("e-te", "ت", "ټ"),
+            ("e-tte", "ټ", "ت"),
+            ("e-re", "ر", "ړ"),
+            ("e-rre", "ړ", "ر"),
+            ("e-zal", "ذ", "ز"),
+            ("e-ze", "ز", "ذ"),
+        ]
+        for (id, glyph, twin) in expected {
+            let task = prompts[id]
+            #expect(task?.prompt == LetterContrasts.entry(matching: glyph)?.hint)
+            #expect(Set(task?.options.map(\.text) ?? []) == [glyph, twin])
+        }
+        let off = Dictionary(uniqueKeysWithValues: choiceTasks(in: hidden, kind: .letterContrast).map {
+            ($0.targetID.rawValue, Set($0.options.map(\.text)))
+        })
+        #expect(off["e-te"] == ["ت", "ټ"])
+        #expect(off["e-re"] == ["ر", "ړ"])
+        #expect(off["e-ze"] == ["ز", "ذ"])
+    }
+
+    @Test func findLetterAndFirstLetterNeedTwoWrongGlyphs() {
+        var only = letterCourse(words: [word("e-dar", "در", "door")], letters: [letter("e-dal", "د", "the letter da")])
+        #expect(LetterTasks.findLetter(for: only.letters[0], in: only.context, using: &only.rng) == nil)
+        #expect(LetterTasks.firstLetter(of: only.words[0], in: only.context, using: &only.rng) == nil)
+
+        var twins = letterCourse(
+            words: [word("e-dar", "در", "door")],
+            letters: [
+                letter("e-dal", "د", "the letter da"),
+                letter("e-ddal", "ډ", "the letter da with a ring"),
+            ]
+        )
+        #expect(LetterTasks.findLetter(for: twins.letters[0], in: twins.context, using: &twins.rng) == nil)
+        #expect(LetterTasks.firstLetter(of: twins.words[0], in: twins.context, using: &twins.rng) == nil)
+    }
+
+    @Test func firstLetterUsesTheSoundTwinAsAWrongOption() throws {
+        var course = letterCourse(
+            words: [
+                word("e-dar", "در", "door"),
+                word("e-tar", "تر", "until"),
+                word("e-rar", "رر", "flow"),
+                word("e-zar", "ذر", "speck"),
+            ],
+            letters: [
+                letter("e-dal", "د", "the letter da"),
+                letter("e-ddal", "ډ", "the letter da with a ring"),
+                letter("e-te", "ت", "the letter ta"),
+                letter("e-tte", "ټ", "the letter ta with a ring"),
+                letter("e-re", "ر", "the letter ra"),
+                letter("e-rre", "ړ", "the letter ra with a ring"),
+                letter("e-zal", "ذ", "the letter za, dot on da"),
+                letter("e-ze", "ز", "the letter za, dot on ra"),
+                letter("e-be", "ب", "the letter ba"),
+            ]
+        )
+        let pairs = [("در", "ډ"), ("تر", "ټ"), ("رر", "ړ"), ("ذر", "ز")]
+        for (prompt, twin) in pairs {
+            let task = try #require(LetterTasks.firstLetter(of: course.words.first { $0.pashto == prompt }!, in: course.context, using: &course.rng))
+            #expect(task.options.contains { $0.text == twin })
+            let find = try #require(course.letters.first { $0.pashto == String(prompt.prefix(1)) })
+            let b1 = try #require(LetterTasks.findLetter(for: find, in: course.context, using: &course.rng))
+            #expect(!b1.options.contains { $0.text == twin })
+            #expect(!b1.prompt.contains(find.pashto))
+        }
+    }
+
+    @Test func voiceOverTurnedOnMidSessionLabelsOnlyLetterGlyphs() throws {
+        let started = contrastSession(showsPronunciation: true)
+        #expect(started.tasks.contains { $0.kind == .findLetter })
+        let find = try #require(choiceTasks(in: started, kind: .findLetter).first)
+        let meaning = try #require(choiceTasks(in: started, kind: .meaningPashtoToEnglish).first)
+        let voiced = QuizPresentation.face(
+            for: find,
+            items: contrastItems(),
+            showsPronunciation: true,
+            voiceOver: true,
+            answered: false
+        )
+        #expect(voiced.options.allSatisfy {
+            if case .optionNumber = $0.accessibility { return true }
+            return false
+        })
+        let meaningFace = QuizPresentation.face(
+            for: meaning,
+            items: contrastItems(),
+            showsPronunciation: true,
+            voiceOver: true,
+            answered: false
+        )
+        #expect(meaningFace.options.map(\.accessibility) == meaning.options.map { .visible($0.text) })
+        #expect(started.tasks.contains { $0.kind == .findLetter })
+
+        let fromTheStart = contrastSession(showsPronunciation: true, voiceOver: true)
+        let letters = Set(contrastItems().filter { $0.kind == .letter }.map(\.id))
+        #expect(!fromTheStart.tasks.contains { task in
+            guard case .choice(let quiz) = task.payload else { return false }
+            return letters.contains(quiz.targetID)
+        })
+    }
+
+    @Test func orderSentencePronunciationWaitsUntilTheAnswerAndSessionsSkipTheTask() throws {
+        #expect(!OrderWords.includedInSessions)
+        let phrase = makeItem(
+            "e-phrase",
+            pashto: "زه ښه",
+            translit: "za kha",
+            pronunciation: "za-KHA",
+            en: "I am well",
+            tokens: ["زه", "ښه"]
+        )
+        let lesson = Lesson(
+            id: lessonID("l-order"),
+            title: "order",
+            items: [LessonItemRef(item: phrase.id, role: .introduce)]
+        )
+        let bundle = makeBundle(
+            items: [phrase],
+            units: [CourseUnit(id: unitID("u-order"), track: "main", title: "order", lessons: [lesson])]
+        )
+        var rng = SplitMix64(seed: 1)
+        let session = LessonSessionBuilder.build(
+            for: lesson.id,
+            in: bundle,
+            seenLessonIDs: [lesson.id],
+            maxQuestions: nil,
+            releasedUnitIDs: nil,
+            using: &rng
+        )
+        #expect(!session.tasks.contains { $0.kind == .orderWords })
+        var direct = SplitMix64(seed: 1)
+        let context = QuizContext(bundle: bundle, seenLessonIDs: [lesson.id])
+        #expect(OrderWords.makeTask(for: phrase, in: context, using: &direct) != nil)
+
+        #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: true, answered: false) == nil)
+        #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: true, answered: true) == "za-KHA")
+        #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: false, answered: true) == nil)
+    }
+
+    @Test func matchLinksCanBeChangedAndPlacedTilesCanBeRemoved() {
+        let left = itemID("e-left")
+        let other = itemID("e-other")
+        let right = itemID("e-right")
+        let taken = itemID("e-taken")
+        var links: [ItemID: ItemID] = [left: right]
+        links = QuizDraft.link(links, left: other, right: right)
+        #expect(links[other] == right)
+        #expect(links[left] == nil)
+        links = QuizDraft.unlink(links, left: other)
+        #expect(links.isEmpty)
+        #expect(QuizDraft.place([0, 1], tile: 1) == [0])
+        #expect(QuizDraft.place([0], tile: 2) == [0, 2])
+        #expect(QuizPresentation.matchAccessibilityLabel(text: "سلام", pronunciation: "sa-LAAM", linkedText: "hello") == "سلام, sa-LAAM, hello")
+    }
+
+    @Test func feedbackUsesASymbolAndTheExistingWords() {
+        #expect(QuizResultMark.correct.symbolName == "checkmark")
+        #expect(QuizResultMark.incorrect.symbolName == "xmark")
+        #expect(QuizResultMark.correct.spokenEnglish == "Correct")
+        #expect(QuizResultMark.incorrect.spokenEnglish == "Incorrect")
+    }
+
+    @Test func anEmptyReleaseListQuizzesNothing() {
+        let course = letterCourse(words: [word("e-dar", "در", "door"), word("e-tab", "تب", "fever")], letters: [])
+        var rng = SplitMix64(seed: 1)
+        let session = LessonSessionBuilder.build(
+            for: lessonID("l-letters"),
+            in: course.bundle,
+            seenLessonIDs: [lessonID("l-letters")],
+            maxQuestions: nil,
+            releasedUnitIDs: [],
+            showsPronunciation: true,
+            using: &rng
+        )
+        #expect(session.tasks.isEmpty)
+        #expect(session.showsPronunciation)
+    }
+
+    @Test func firstLetterSkipsALeadingDiacritic() throws {
+        var course = letterCourse(
+            words: [word("e-dar", "\u{064E}در", "door"), word("e-aab", "\u{064E}آب", "water")],
+            letters: [
+                letter("e-dal", "د", "the letter da"),
+                letter("e-te", "ت", "the letter ta"),
+                letter("e-be", "ب", "the letter ba"),
+            ]
+        )
+        let task = try #require(LetterTasks.firstLetter(of: course.words[0], in: course.context, using: &course.rng))
+        #expect(task.targetID == itemID("e-dal"))
+        #expect(LetterTasks.firstLetter(of: course.words[1], in: course.context, using: &course.rng) == nil)
+        #expect(LetterTasks.startsWithAlefMadda("\u{064E}آب"))
+    }
+}
+
+private struct LetterCourse {
+    var bundle: ContentBundle
+    var words: [ContentItem]
+    var letters: [ContentItem]
+    var context: QuizContext
+    var rng = SplitMix64(seed: 1)
+}
+
+private func letterCourse(words: [ContentItem], letters: [ContentItem]) -> LetterCourse {
+    let lesson = Lesson(
+        id: lessonID("l-letters"),
+        title: "letters",
+        items: words.map { LessonItemRef(item: $0.id, role: .introduce) },
+        letters: letters.map(\.id)
+    )
+    let bundle = makeBundle(
+        items: words + letters,
+        units: [CourseUnit(id: unitID("u-letters"), track: "main", title: "letters", lessons: [lesson])]
+    )
+    return LetterCourse(
+        bundle: bundle,
+        words: words,
+        letters: letters,
+        context: QuizContext(bundle: bundle, seenLessonIDs: [lesson.id])
+    )
+}
+
+private func contrastSession(showsPronunciation: Bool, voiceOver: Bool = false) -> LessonSession {
+    let items = contrastItems()
+    let words = items.filter { $0.kind != .letter }
+    let letters = items.filter { $0.kind == .letter }
+    let lesson = Lesson(
+        id: lessonID("l-contrast"),
+        title: "contrast",
+        items: words.map { LessonItemRef(item: $0.id, role: .introduce) },
+        letters: letters.map(\.id)
+    )
+    let bundle = makeBundle(
+        items: items,
+        units: [CourseUnit(id: unitID("u-contrast"), track: "main", title: "contrast", lessons: [lesson])]
+    )
+    var rng = SplitMix64(seed: 2)
+    return LessonSessionBuilder.build(
+        for: lesson.id,
+        in: bundle,
+        seenLessonIDs: [lesson.id],
+        maxQuestions: nil,
+        releasedUnitIDs: [lesson.id].compactMap { _ in unitID("u-contrast") },
+        showsPronunciation: showsPronunciation,
+        voiceOver: voiceOver,
+        using: &rng
+    )
+}
+
+private func contrastItems() -> [ContentItem] {
+    [
+        word("e-door", "در", "door"),
+        word("e-fever", "تب", "fever"),
+        word("e-on", "بر", "on"),
+        letter("e-dal", "د", "the letter da"),
+        letter("e-ddal", "ډ", "the letter da with a ring"),
+        letter("e-te", "ت", "the letter ta"),
+        letter("e-tte", "ټ", "the letter ta with a ring"),
+        letter("e-re", "ر", "the letter ra"),
+        letter("e-rre", "ړ", "the letter ra with a ring"),
+        letter("e-zal", "ذ", "the letter za, dot on da"),
+        letter("e-ze", "ز", "the letter za, dot on ra"),
+        letter("e-be", "ب", "the letter ba"),
+    ]
+}
+
+private func choiceTasks(in session: LessonSession, kind: TaskKind) -> [QuizTask] {
+    session.tasks.compactMap { task in
+        guard case .choice(let quiz) = task.payload, quiz.kind == kind else { return nil }
+        return quiz
+    }
+}
+
+private func word(_ id: String, _ pashto: String, _ en: String) -> ContentItem {
+    makeItem(id, pashto: pashto, translit: en + "-scholar", pronunciation: en, en: en)
+}
+
+private func letter(_ id: String, _ pashto: String, _ en: String) -> ContentItem {
+    makeItem(
+        id,
+        kind: .letter,
+        pashto: pashto,
+        translit: en,
+        pronunciation: en,
+        en: en,
+        name: pashto + "ال",
+        forms: LetterForms(isolated: pashto, initial: pashto, medial: pashto, final: pashto),
+        sound: en
+    )
+}
