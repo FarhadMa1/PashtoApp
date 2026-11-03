@@ -12,8 +12,9 @@ public struct BundledCourse: Equatable, Sendable {
 
     /// The version a new progress file stores.
     ///
-    /// This is `contentVersion` in `content.json`. A course that did not
-    /// decode has no version to report.
+    /// This is `bundle.contentVersion`, the `contentVersion` field of the
+    /// course that decoded. `BundledCourse` is built only after that decode,
+    /// so this property is always that version.
     public var installedContentVersion: String {
         bundle.contentVersion
     }
@@ -66,4 +67,51 @@ public enum BundledCourseLoader {
 /// The file the app ships uses `note` for authors and `units` for the list.
 private struct ReleaseUnitsFile: Decodable {
     var units: [String]
+}
+
+/// One decode of the two bundled course files.
+///
+/// `replacing` returns this value when the bytes are unchanged, so the same
+/// `content.json` is not decoded again. A failed decode has no version: that
+/// is `installedContentVersion` here, which is nil, not a missing field on
+/// `BundledCourse`.
+public struct BundledCourseDecode: Equatable, Sendable {
+    public let content: Data?
+    public let releaseUnits: Data?
+    public let load: BundledCourseLoad
+    /// How many times a new pair of files has been decoded, including this value.
+    public let decodeCount: Int
+
+    public init(content: Data?, releaseUnits: Data?) {
+        self.init(content: content, releaseUnits: releaseUnits, decodeCount: 1)
+    }
+
+    private init(content: Data?, releaseUnits: Data?, decodeCount: Int) {
+        self.content = content
+        self.releaseUnits = releaseUnits
+        self.load = BundledCourseLoader.load(content: content, releaseUnits: releaseUnits)
+        self.decodeCount = decodeCount
+    }
+
+    /// The version a new progress file stores, or nil when the course did not decode.
+    public var installedContentVersion: String? {
+        switch load {
+        case .ready(let course):
+            course.installedContentVersion
+        case .unavailable:
+            nil
+        }
+    }
+
+    /// Decodes `content` and `releaseUnits` only when either value differs.
+    public func replacing(content: Data?, releaseUnits: Data?) -> BundledCourseDecode {
+        if content == self.content, releaseUnits == self.releaseUnits {
+            return self
+        }
+        return BundledCourseDecode(
+            content: content,
+            releaseUnits: releaseUnits,
+            decodeCount: decodeCount + 1
+        )
+    }
 }
