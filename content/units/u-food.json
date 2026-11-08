@@ -1,0 +1,532 @@
+{
+  "id": "u-food",
+  "track": "main",
+  "title": "Food and drink",
+  "items": [
+    {
+      "id": "e-o-ba",
+      "kind": "word",
+      "pashto": "اوبه",
+      "translit": "obá",
+      "pronunciation": "o-BA",
+      "en": "water",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-do-day",
+      "kind": "word",
+      "pashto": "ډوډۍ",
+      "translit": "ḍoḍə́y",
+      "pronunciation": "do-DAY",
+      "en": "bread",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-wri-jey",
+      "kind": "word",
+      "pashto": "وریجې",
+      "translit": "wrijé",
+      "pronunciation": "wri-JEY",
+      "en": "rice",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-gho-kha",
+      "kind": "word",
+      "pashto": "غوښه",
+      "translit": "ɣóx̌a",
+      "pronunciation": "GHO-kha",
+      "en": "meat",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ma-na",
+      "kind": "word",
+      "pashto": "مڼه",
+      "translit": "maṇá",
+      "pronunciation": "ma-NA",
+      "en": "apple",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ڼ is an n with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-chaay",
+      "kind": "word",
+      "pashto": "چای",
+      "translit": "čāy",
+      "pronunciation": "chaay",
+      "en": "tea",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-kah-wa",
+      "kind": "word",
+      "pashto": "قهوه",
+      "translit": "kahwá",
+      "pronunciation": "kah-WA",
+      "en": "coffee",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. In قهوه, say k as in the approved kah-WA; do not replace it with q.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-shee-dey",
+      "kind": "word",
+      "pashto": "شیدې",
+      "translit": "šidé",
+      "pronunciation": "shee-DEY",
+      "en": "milk",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ghwaa-ram",
+      "kind": "word",
+      "pashto": "غواړم",
+      "translit": "ɣwāṛə́m",
+      "pronunciation": "ghwaa-RAM",
+      "en": "I want",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-shta",
+      "kind": "word",
+      "pashto": "شته",
+      "translit": "šta",
+      "pronunciation": "shta",
+      "en": "there is",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-na-shta",
+      "kind": "word",
+      "pashto": "نشته",
+      "translit": "naštá",
+      "pronunciation": "na-SHTA",
+      "en": "there is not",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-tsa-ghwaa-rey",
+      "kind": "phrase",
+      "pashto": "څه غواړې؟",
+      "translit": "tsə ɣwāṛé?",
+      "pronunciation": "tsa ghwaa-REY?",
+      "en": "what would you like? (informal)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. څ is ts, said together. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-o-ba-ghwaa-ram",
+      "kind": "phrase",
+      "pashto": "زه اوبه غواړم",
+      "translit": "zə obá ɣwāṛə́m",
+      "pronunciation": "za o-BA ghwaa-RAM",
+      "en": "I would like water",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-chaay-ghwaa-ram",
+      "kind": "phrase",
+      "pashto": "زه چای غواړم",
+      "translit": "zə čāy ɣwāṛə́m",
+      "pronunciation": "za chaay ghwaa-RAM",
+      "en": "I would like tea",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-ma-na-da",
+      "kind": "phrase",
+      "pashto": "دا مڼه ده",
+      "translit": "dā maṇá da",
+      "pronunciation": "daa ma-NA da",
+      "en": "this is an apple",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ڼ is an n with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-daa-do-day-da",
+      "kind": "phrase",
+      "pashto": "دا ډوډۍ ده",
+      "translit": "dā ḍoḍə́y da",
+      "pronunciation": "daa do-DAY da",
+      "en": "this is bread",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-chaay-shta",
+      "kind": "phrase",
+      "pashto": "چای شته؟",
+      "translit": "čāy šta?",
+      "pronunciation": "chaay shta?",
+      "en": "is there tea?",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ho-chaay-shta",
+      "kind": "phrase",
+      "pashto": "هو، چای شته",
+      "translit": "ho, čāy šta",
+      "pronunciation": "ho, chaay shta",
+      "en": "yes, there is tea",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-na-chaay-na-shta",
+      "kind": "phrase",
+      "pashto": "نه، چای نشته",
+      "translit": "na, čāy naštá",
+      "pronunciation": "na, chaay na-SHTA",
+      "en": "no, there is no tea",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-food-1",
+      "title": "Food and water",
+      "items": [
+        {
+          "item": "e-o-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-do-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wri-jey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-gho-kha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ma-na",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-food-2",
+      "title": "Drinks and asking for things",
+      "items": [
+        {
+          "item": "e-chaay",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kah-wa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shee-dey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ghwaa-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shta",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-food-3",
+      "title": "Saying what you want",
+      "items": [
+        {
+          "item": "e-na-shta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tsa-ghwaa-rey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-o-ba-ghwaa-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-chaay-ghwaa-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-ma-na-da",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-food-1",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-tsa-ghwaa-rey"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-o-ba-ghwaa-ram"
+            }
+          ]
+        },
+        {
+          "id": "d-food-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-tsa-ghwaa-rey"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-chaay-ghwaa-ram"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-food-4",
+      "title": "Asking what is available",
+      "items": [
+        {
+          "item": "e-daa-do-day-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-chaay-shta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ho-chaay-shta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-na-chaay-na-shta",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-food-3",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-chaay-shta"
+            },
+            {
+              "speaker": "B",
+              "item": "e-ho-chaay-shta"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -44,6 +44,58 @@ struct BundledCourseTests {
         #expect(!lessons.isEmpty)
         #expect(lessons.allSatisfy { course.releasedUnitIDs.contains($0.unitID) })
         #expect(!lessons.contains { $0.id == lessonID("l-sounds-1") })
+
+        let future = [
+            "u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation",
+        ].map(unitID)
+        #expect(course.bundle.units.map(\.id) == course.releasedUnitIDs + future)
+        let futureLessons = course.bundle.units.filter { future.contains($0.id) }.flatMap(\.lessons)
+        #expect(futureLessons.count == 17)
+        #expect(Set(lessons.map(\.id)).isDisjoint(with: Set(futureLessons.map(\.id))))
+        #expect(futureLessons.allSatisfy { $0.letters.isEmpty })
+
+        let limited = ReleasedCourse.limiting(course.bundle, to: course.releasedUnitIDs)
+        let futureIntroduced = Set(futureLessons.flatMap { lesson in
+            lesson.items.filter { $0.role == .introduce }.map(\.item)
+        })
+        let releasedReferences = Set(limited.units.flatMap { unit in
+            unit.lessons.flatMap { lesson in
+                lesson.items.map(\.item)
+                    + lesson.letters
+                    + lesson.dialogs.flatMap { $0.turns.map(\.item) }
+            }
+        })
+        let hiddenFromRelease = futureIntroduced.subtracting(releasedReferences)
+        #expect(hiddenFromRelease.count == futureIntroduced.count - 6)
+        #expect(limited.items.allSatisfy { !hiddenFromRelease.contains($0.id) })
+
+        let day = LocalDay(year: 2026, month: 11, day: 8)
+        let cards = futureIntroduced.map { ReviewCard.introduced(itemID: $0, on: day) }
+        for offset in 0..<40 {
+            let word = DailyWordSelection.select(
+                cards: cards,
+                in: course.bundle,
+                releasedUnitIDs: course.releasedUnitIDs,
+                on: LocalDay(year: 2026, month: 11, day: 1 + (offset % 28)),
+                showsPronunciation: true
+            )
+            if let word {
+                #expect(!hiddenFromRelease.contains(word.itemID))
+                #expect(releasedReferences.contains(word.itemID))
+            }
+        }
+
+        var quiz = RootLessonSession()
+        for lesson in lessons {
+            var rng = SplitMix64(seed: 3)
+            quiz.start(
+                lessonID: lesson.id,
+                in: course.bundle,
+                releasedUnitIDs: course.releasedUnitIDs,
+                using: &rng
+            )
+            #expect(quiz.items.allSatisfy { !hiddenFromRelease.contains($0.id) })
+        }
     }
 
     @Test func placementAndReleasedLessonsUseTheReleaseList() {

@@ -52,6 +52,36 @@
           "item": "e-na",
           "role": "soundExample",
           "sound": "a"
+        },
+        {
+          "item": "e-shpag",
+          "role": "soundExample",
+          "sound": "ǧ"
+        },
+        {
+          "item": "e-o-mar",
+          "role": "soundExample",
+          "sound": "ʿ"
+        },
+        {
+          "item": "e-ma-na",
+          "role": "soundExample",
+          "sound": "ṇ"
+        },
+        {
+          "item": "e-kah-wa",
+          "role": "soundExample",
+          "sound": "q"
+        },
+        {
+          "item": "e-tak-see",
+          "role": "soundExample",
+          "sound": "ṭ"
+        },
+        {
+          "item": "e-zha-ba",
+          "role": "soundExample",
+          "sound": "ž"
         }
       ]
     }

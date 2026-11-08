@@ -562,16 +562,11 @@ struct MergeTests {
         #expect(file.units == ["u-sounds", "u-greetings", "u-introductions", "u-family"])
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(!release.contains { $0.message.contains("does not include u-sounds") })
-        let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
-        let errors = release.filter { $0.severity == .error }
-        #expect(errors.count == sounds.count)
-        #expect(errors.allSatisfy { $0.field == "soundExample" && $0.id == "u-sounds" })
-        for (index, sound) in sounds.enumerated() {
-            #expect(errors[index].message.contains(sound))
-        }
+        #expect(!release.contains { $0.severity == .error })
+        #expect(!release.contains { $0.field == "soundExample" })
     }
 
-    @Test func releaseListContainingSoundsUnitReportsTheSixMissingSounds() throws {
+    @Test func releaseListContainingSoundsUnitHasTheSixApprovedExamples() throws {
         let merged = try #require(ContentMerger.merge(root: try repositoryRoot()).merged)
         let issues = ReleaseGate.issues(
             in: merged.bundle,
@@ -580,27 +575,87 @@ struct MergeTests {
             specialSounds: merged.specialSounds,
             mode: .release
         )
-        let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
-        let soundErrors = issues.filter { $0.field == "soundExample" && $0.severity == .error }
-        #expect(soundErrors.count == sounds.count)
-        for (index, sound) in sounds.enumerated() {
-            #expect(soundErrors[index].id == "u-sounds")
-            #expect(soundErrors[index].message.contains(sound))
-        }
+        #expect(!issues.contains { $0.field == "soundExample" })
     }
 
-    @Test func devModeWarnsAboutTheSixMissingSounds() throws {
+    @Test func devModeHasNoSoundExampleFindings() throws {
         let root = try repositoryRoot()
         let dev = ContentCheck.issues(root: root, mode: .dev)
-        let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
-        let warnings = dev.filter { $0.field == "soundExample" }
-        #expect(warnings.count == sounds.count)
+        #expect(!dev.contains { $0.field == "soundExample" })
         #expect(!dev.contains { $0.severity == .error })
-        for (index, sound) in sounds.enumerated() {
-            #expect(warnings[index].severity == .warning)
-            #expect(warnings[index].id == "u-sounds")
-            #expect(warnings[index].message.contains(sound))
+    }
+
+    @Test func unitsFourThroughEightAreNewWordLessonsWithSixSoundExamples() throws {
+        let root = try repositoryRoot()
+        let merged = try #require(ContentMerger.merge(root: root).merged)
+        let bundle = merged.bundle
+        let releaseFile = try JSONDecoder().decode(
+            ReleaseUnitsFile.self,
+            from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
+        )
+        let releasedIDs = ["u-sounds", "u-greetings", "u-introductions", "u-family"]
+        #expect(releaseFile.units == releasedIDs)
+        let futureIDs = ["u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation"]
+        #expect(bundle.units.map(\.id.rawValue) == releasedIDs + futureIDs)
+
+        let earlyPashto = Set(bundle.items.compactMap { item -> String? in
+            guard let unit = merged.itemUnits[item.id.rawValue], releasedIDs.contains(unit) else { return nil }
+            guard item.kind == .word || item.kind == .phrase else { return nil }
+            return item.pashto
+        })
+        let futureUnits = bundle.units.filter { futureIDs.contains($0.id.rawValue) }
+        #expect(futureUnits.flatMap(\.lessons).count == 17)
+        #expect(futureUnits.allSatisfy { $0.lessons.allSatisfy(\.letters.isEmpty) })
+        #expect(!futureUnits.contains { $0.lessons.contains { $0.id.rawValue.contains("letter") } })
+
+        var introducedPashto: [String] = []
+        for unit in futureUnits {
+            for lesson in unit.lessons {
+                let introduced = lesson.items.filter { $0.role == .introduce }
+                #expect((4...6).contains(introduced.count), "\(lesson.id.rawValue) has \(introduced.count) new cards")
+                #expect(lesson.items.allSatisfy { $0.role == .introduce })
+                for reference in introduced {
+                    let item = try #require(bundle.items.first { $0.id == reference.item })
+                    #expect(item.kind == .word || item.kind == .phrase)
+                    #expect(!earlyPashto.contains(item.pashto), "\(item.id.rawValue) repeats units 0–3")
+                    #expect(item.responseTo == nil)
+                    #expect(item.tokens == nil)
+                    introducedPashto.append(item.pashto)
+                }
+            }
         }
+        let bread = bundle.items.filter { $0.pashto == "ډوډۍ" }
+        #expect(bread.count == 1)
+        #expect(bread[0].id.rawValue == "e-do-day")
+        #expect(bread[0].en == "bread")
+        #expect(bread[0].pronunciation == "do-DAY")
+        #expect(!earlyPashto.contains("ډوډۍ"))
+
+        let examples: [(sound: String, id: String, pashto: String, pronunciation: String, en: String, unit: String)] = [
+            ("ǧ", "e-shpag", "شپږ", "shpag", "six", "u-numbers"),
+            ("ʿ", "e-o-mar", "عمر", "o-MAR", "age", "u-numbers"),
+            ("ṇ", "e-ma-na", "مڼه", "ma-NA", "apple", "u-food"),
+            ("q", "e-kah-wa", "قهوه", "kah-WA", "coffee", "u-food"),
+            ("ṭ", "e-tak-see", "ټکسي", "tak-SEE", "taxi", "u-town"),
+            ("ž", "e-zha-ba", "ژبه", "ZHA-ba", "language", "u-conversation"),
+        ]
+        let sounds = try #require(bundle.units.first { $0.id.rawValue == "u-sounds" }?.lessons.first { $0.id.rawValue == "l-sounds-1" })
+        for example in examples {
+            let refs = sounds.items.filter { $0.role == .soundExample && $0.item.rawValue == example.id }
+            #expect(refs.count == 1)
+            #expect(refs.first?.sound == example.sound)
+            let item = try #require(bundle.items.first { $0.id.rawValue == example.id })
+            #expect(item.pashto == example.pashto)
+            #expect(item.pronunciation == example.pronunciation)
+            #expect(item.en == example.en)
+            let introductions = bundle.units.flatMap { unit in
+                unit.lessons.flatMap { lesson in
+                    lesson.items.filter { $0.role == .introduce && $0.item.rawValue == example.id }.map { _ in unit.id.rawValue }
+                }
+            }
+            #expect(introductions == [example.unit])
+        }
+        #expect(Set(introducedPashto).isSuperset(of: Set(examples.map(\.pashto))))
     }
 
     @Test func soundsUnitOnlySoundExamplesBypassesSizeRule() {
