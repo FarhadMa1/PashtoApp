@@ -348,6 +348,126 @@
           }
         }
       }
+    },
+    "celebration.lessonComplete" : {
+      "comment" : "Finished lesson. The title VoiceOver focuses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lesson complete"
+          }
+        }
+      }
+    },
+    "celebration.correct" : {
+      "comment" : "Finished lesson. Label for the first-try correct count. Not the new-word count, and not quiz.feedback.correct.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "correct"
+          }
+        }
+      }
+    },
+    "celebration.dayStreak" : {
+      "comment" : "Home streak. The same label for every count.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "day streak"
+          }
+        }
+      }
+    },
+    "celebration.dailyGoal" : {
+      "comment" : "Daily goal ring. New words against the stored limit of 5, 10, or 15.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily goal"
+          }
+        }
+      }
+    },
+    "celebration.toGo" : {
+      "comment" : "Daily goal. New words still under the limit.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "to go"
+          }
+        }
+      }
+    },
+    "celebration.goalReached" : {
+      "comment" : "Daily goal. Shown when today's new words meet the limit.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal reached"
+          }
+        }
+      }
+    },
+    "celebration.word.one" : {
+      "comment" : "Daily goal. One new word.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "word"
+          }
+        }
+      }
+    },
+    "celebration.word.other" : {
+      "comment" : "Daily goal. Any new-word count other than 1.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "words"
+          }
+        }
+      }
+    },
+    "path.now" : {
+      "comment" : "Course path. The first lesson that is not finished.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now"
+          }
+        }
+      }
+    },
+    "path.locked" : {
+      "comment" : "Course path. A lesson the caller has marked locked. Not used for a finished lesson, and not quiz Correct.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locked"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
