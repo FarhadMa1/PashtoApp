@@ -23,6 +23,9 @@ struct ContentView: View {
     var finishedLessonIDs: Set<LessonID> = []
     var pendingHomeMotion: PendingHomeMotion?
     var consumeHomeMotion: () -> Void = {}
+    /// Rescue and freeze events not yet claimed. Empty after they play, and empty on a relaunch.
+    var pendingStreakEvents: [StreakEventID] = []
+    var claimStreakEvents: (StreakEventID.Kind) -> [StreakEventID] = { _ in [] }
     var startLesson: (LessonID) -> Void = { _ in }
     var endSession: () -> Void = {}
     var answerSession: (LessonSession) -> Void = { _ in }
@@ -101,7 +104,9 @@ struct ContentView: View {
                         shown: streakShown,
                         count: streakCount,
                         pulse: streakPulse,
-                        animates: animatesHomeMotion
+                        animates: animatesHomeMotion,
+                        pendingEvents: pendingStreakEvents,
+                        claimEvents: claimStreakEvents
                     )
                 }
                 Text(verbatim: dailyGoalSpeech(done: goalShown))
@@ -453,19 +458,46 @@ private struct DailyGoalRing: View {
 /// The streak number and one pulse of the saffron star.
 ///
 /// Reduce Motion and VoiceOver show the final number at once and do not pulse the star.
+/// A rescued day fades a snowflake over that star once. A new freeze plays a larger
+/// star once. Neither adds words, and neither is read on its own.
 private struct StreakMark: View {
     var shown: Int
     var count: Int
     var pulse: Int
     var animates: Bool
+    var pendingEvents: [StreakEventID]
+    var claimEvents: (StreakEventID.Kind) -> [StreakEventID]
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
+    @State private var showingSnowflake = false
+    @State private var snowflakeOpacity = 0.0
+    @State private var rescueToken = 0
+    @State private var showingStar = false
+    @State private var starAtRest = true
+    @State private var starToken = 0
 
     var body: some View {
         HStack(spacing: 8) {
-            Octagram()
-                .fill(Lapis.saffron)
-                .frame(width: 28, height: 28)
-                .modifier(StreakStarPulse(token: pulse))
-                .accessibilityHidden(true)
+            ZStack {
+                Octagram()
+                    .fill(Lapis.saffron)
+                    .frame(width: 28, height: 28)
+                    .modifier(StreakStarPulse(token: pulse))
+            }
+            .frame(width: 28, height: 28)
+            .overlay { freezeStar }
+            .overlay {
+                if showingSnowflake {
+                    Image(systemName: "snowflake")
+                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(Lapis.badgeInk)
+                        .opacity(snowflakeOpacity)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
+            }
+            .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
                 Text(shown, format: .number)
                     .font(.title2.weight(.bold).monospacedDigit())
@@ -480,6 +512,78 @@ private struct StreakMark: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: CelebrationCopy.streakSpoken(count, label: ApprovedCopy.dayStreak)))
+        .onAppear(perform: claimPending)
+        .onChange(of: pendingEvents) { _, _ in claimPending() }
+        .task(id: rescueToken) { await playRescue() }
+        .task(id: starToken) { await playStar() }
+    }
+
+    @ViewBuilder private var freezeStar: some View {
+        if showingStar {
+            Octagram()
+                .fill(Lapis.saffron)
+                .overlay {
+                    Octagram().strokeBorder(Lapis.ring, lineWidth: 2)
+                }
+                .padding(4)
+                .scaleEffect(starAtRest ? 1 : 0.3)
+                .rotationEffect(.degrees(starAtRest ? 0 : -45))
+                .opacity(starAtRest ? 1 : 0)
+                .frame(width: 72, height: 72)
+                .contentShape(Rectangle())
+                .onTapGesture(perform: skipStar)
+                .accessibilityHidden(true)
+        }
+    }
+
+    /// Claims each stored day once. A second call, and a later visit, get nothing.
+    private func claimPending() {
+        let rescues = claimEvents(.rescuedDay)
+        if !rescues.isEmpty {
+            showingSnowflake = true
+            rescueToken += 1
+        }
+        let earned = claimEvents(.freezeEarned)
+        if !earned.isEmpty {
+            showingStar = true
+            starAtRest = FreezeStarMotion.style(
+                reduceMotion: reduceMotion,
+                voiceOver: voiceOver,
+                skipped: false
+            ) == .final
+            starToken += 1
+        }
+    }
+
+    private func playRescue() async {
+        guard rescueToken > 0, showingSnowflake else { return }
+        if RescueMotion.style(reduceMotion: reduceMotion) == .shown {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { snowflakeOpacity = 1 }
+            return
+        }
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) { snowflakeOpacity = 0 }
+        await Task.yield()
+        guard !Task.isCancelled else { return }
+        withAnimation(Motion.rescueFade) { snowflakeOpacity = 1 }
+    }
+
+    /// Reduce Motion and VoiceOver are already at rest. A tap skips there too.
+    private func playStar() async {
+        guard starToken > 0, showingStar, !starAtRest else { return }
+        await Task.yield()
+        guard !Task.isCancelled, !starAtRest else { return }
+        withAnimation(Motion.freezeStar) { starAtRest = true }
+    }
+
+    private func skipStar() {
+        guard showingStar, !starAtRest else { return }
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) { starAtRest = true }
     }
 }
 

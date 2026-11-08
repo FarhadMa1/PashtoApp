@@ -18,7 +18,15 @@ struct QuizScreen: View {
     @State private var rng = SystemRandomNumberGenerator()
     @State private var correctHaptics = 0
     @State private var wrongHaptics = 0
+    /// The card that is fading out. It keeps the question that just left.
+    @State private var outgoing: QuestionCardState?
+    @State private var outgoingVisible = true
+    /// False while the new card is still off to the right, or invisible for Reduce Motion.
+    @State private var incomingSettled = true
+    @State private var changeToken = 0
+    @State private var cardWidth: CGFloat = 0
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let itemsByID: [ItemID: ContentItem]
     var onAnswer: (LessonSession) -> Void
@@ -44,12 +52,7 @@ struct QuizScreen: View {
         LapisScreen {
             VStack(alignment: .leading, spacing: 16) {
                 LessonProgressBar(bar: lessonBar)
-                if let task = session.current {
-                    question(task)
-                    if revealed, let result {
-                        feedback(result)
-                    }
-                }
+                questionStage
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
@@ -71,28 +74,115 @@ struct QuizScreen: View {
         }
     }
 
-    @ViewBuilder
-    private func question(_ task: SessionTask) -> some View {
-        switch task.payload {
-        case .choice(let quiz):
-            choice(quiz)
-        case .matchPairs(let match):
-            matchPairs(match)
-        case .orderWords(let order):
-            orderWords(order)
+    private var questionStage: some View {
+        ZStack(alignment: .topLeading) {
+            if let outgoing {
+                questionCard(outgoing, interactive: false)
+                    .opacity(outgoingVisible ? 1 : 0)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+            if let live = liveCard {
+                questionCard(live, interactive: true)
+                    .id(live.identity)
+                    .offset(x: incomingOffset)
+                    .opacity(incomingOpacity)
+                    .zIndex(1)
+            }
+        }
+        .background {
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear { cardWidth = proxy.size.width }
+                    .onChange(of: proxy.size.width) { _, width in
+                        cardWidth = width
+                    }
+            }
+        }
+        .task(id: changeToken) {
+            await playQuestionChange()
         }
     }
 
-    private func choice(_ quiz: QuizTask) -> some View {
+    private var liveCard: QuestionCardState? {
+        guard let task = session.current else { return nil }
+        return QuestionCardState(
+            identity: QuestionIdentity(answerCount: session.answers.count, isRepeat: task.isRepeat),
+            task: task,
+            revealed: revealed,
+            result: result,
+            pickedChoice: pickedChoice,
+            links: links,
+            selectedLeft: selectedLeft,
+            placed: placed,
+            showsPronunciation: session.showsPronunciation,
+            playsReveal: true
+        )
+    }
+
+    /// The new card starts at the right, or invisible when Reduce Motion is on.
+    private var incomingOffset: CGFloat {
+        switch QuestionChange.style(reduceMotion: reduceMotion) {
+        case .slideFromRight:
+            incomingSettled ? 0 : max(cardWidth, 1)
+        case .crossfade:
+            0
+        }
+    }
+
+    private var incomingOpacity: Double {
+        switch QuestionChange.style(reduceMotion: reduceMotion) {
+        case .slideFromRight:
+            1
+        case .crossfade:
+            incomingSettled ? 1 : 0
+        }
+    }
+
+    /// Slides the new card and fades the old one. Reduce Motion crossfades.
+    /// The sleep only clears the old card. Continue and the new question stay open.
+    private func playQuestionChange() async {
+        guard changeToken > 0 else { return }
+        let reduce = reduceMotion
+        withAnimation(Motion.questionAdvance(reduceMotion: reduce)) {
+            incomingSettled = true
+        }
+        withAnimation(reduce ? Motion.fade : .easeOut(duration: QuizMotion.questionSpring)) {
+            outgoingVisible = false
+        }
+        try? await Task.sleep(for: .seconds(QuestionChange.duration(reduceMotion: reduce)))
+        if !Task.isCancelled {
+            outgoing = nil
+        }
+    }
+
+    @ViewBuilder
+    private func questionCard(_ card: QuestionCardState, interactive: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            switch card.task.payload {
+            case .choice(let quiz):
+                choice(quiz, card: card, interactive: interactive)
+            case .matchPairs(let match):
+                matchPairs(match, card: card, interactive: interactive)
+            case .orderWords(let order):
+                orderWords(order, card: card, interactive: interactive)
+            }
+            if card.revealed, let result = card.result {
+                feedback(result)
+            }
+        }
+    }
+
+    private func choice(_ quiz: QuizTask, card: QuestionCardState, interactive: Bool) -> some View {
         let face = QuizPresentation.face(
             for: quiz,
             items: Array(itemsByID.values),
-            showsPronunciation: session.showsPronunciation,
+            showsPronunciation: card.showsPronunciation,
             voiceOver: voiceOverEnabled,
-            answered: revealed
+            answered: card.revealed
         )
         return VStack(alignment: .leading, spacing: 16) {
-            prompt(face.prompt, task: quiz)
+            prompt(face.prompt, task: quiz, card: card)
             if let usage = face.usage {
                 Text(usage)
                     .font(.subheadline)
@@ -100,14 +190,20 @@ struct QuizScreen: View {
             }
             VStack(spacing: 10) {
                 ForEach(face.options, id: \.itemID) { option in
-                    choiceButton(option, correctID: quiz.targetID, mark: mark(for: option.itemID, correctID: quiz.targetID))
+                    choiceButton(
+                        option,
+                        correctID: quiz.targetID,
+                        mark: mark(for: option.itemID, correctID: quiz.targetID, card: card),
+                        card: card,
+                        interactive: interactive
+                    )
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func prompt(_ prompt: QuizPromptFace, task: QuizTask) -> some View {
+    private func prompt(_ prompt: QuizPromptFace, task: QuizTask, card: QuestionCardState) -> some View {
         let text = QuizCopy.prompt(prompt)
         if QuizPresentation.containsArabicScript(text) {
             GlyphCard(
@@ -116,10 +212,11 @@ struct QuizScreen: View {
                     pronunciation: prompt.pronunciation,
                     meaning: itemsByID[task.promptItemID ?? task.targetID]?.en,
                     kind: task.kind,
-                    answered: revealed
-                )
+                    answered: card.revealed
+                ),
+                playsReveal: card.playsReveal
             )
-            .id(questionToken)
+            .id(card.identity)
         } else {
             PashtoLine(
                 text: text,
@@ -131,7 +228,13 @@ struct QuizScreen: View {
         }
     }
 
-    private func choiceButton(_ option: QuizOptionFace, correctID: ItemID, mark: QuizResultMark?) -> some View {
+    private func choiceButton(
+        _ option: QuizOptionFace,
+        correctID: ItemID,
+        mark: QuizResultMark?,
+        card: QuestionCardState,
+        interactive: Bool
+    ) -> some View {
         Button {
             pick(option.itemID)
         } label: {
@@ -173,17 +276,17 @@ struct QuizScreen: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(Lapis.text)
-        .disabled(revealed)
-        .modifier(ChoiceMotion(mark: mark, moves: pickedChoice == option.itemID))
+        .disabled(!interactive || card.revealed)
+        .modifier(ChoiceMotion(mark: mark, moves: interactive && card.pickedChoice == option.itemID))
         .accessibilityLabel(QuizCopy.choiceLabel(option, mark: mark))
-        .id("\(questionToken)-\(option.itemID.rawValue)")
+        .id("\(card.identity.answerCount)-\(option.itemID.rawValue)")
     }
 
     /// Correct stays marked after a wrong pick, so the right glyph is not only a color.
-    private func mark(for optionID: ItemID, correctID: ItemID) -> QuizResultMark? {
-        guard revealed else { return nil }
+    private func mark(for optionID: ItemID, correctID: ItemID, card: QuestionCardState) -> QuizResultMark? {
+        guard card.revealed else { return nil }
         if optionID == correctID { return .correct }
-        if optionID == pickedChoice { return .incorrect }
+        if optionID == card.pickedChoice { return .incorrect }
         return nil
     }
 
@@ -242,16 +345,16 @@ struct QuizScreen: View {
         }
     }
 
-    private func matchPairs(_ task: MatchPairsTask) -> some View {
+    private func matchPairs(_ task: MatchPairsTask, card: QuestionCardState, interactive: Bool) -> some View {
         MatchingBoard(
             task: task,
-            links: links,
-            selectedLeft: selectedLeft,
-            revealed: revealed,
-            showsPronunciation: session.showsPronunciation,
+            links: card.links,
+            selectedLeft: card.selectedLeft,
+            revealed: card.revealed,
+            showsPronunciation: card.showsPronunciation,
             itemsByID: itemsByID,
             onLeft: { id in
-                guard !revealed else { return }
+                guard interactive, !revealed else { return }
                 if selectedLeft == id {
                     links = QuizDraft.unlink(links, left: id)
                     selectedLeft = nil
@@ -259,32 +362,35 @@ struct QuizScreen: View {
                     selectedLeft = id
                 }
             },
-            onRight: { link($0) }
+            onRight: { id in
+                guard interactive else { return }
+                link(id)
+            }
         )
-        .id(questionToken)
+        .id(card.identity)
     }
 
-    private func orderWords(_ task: OrderWordsTask) -> some View {
-        let chosen = placed.compactMap { index in task.tiles.first { $0.index == index } }
-        let pool = task.tiles.filter { !placed.contains($0.index) }
+    private func orderWords(_ task: OrderWordsTask, card: QuestionCardState, interactive: Bool) -> some View {
+        let chosen = card.placed.compactMap { index in task.tiles.first { $0.index == index } }
+        let pool = task.tiles.filter { !card.placed.contains($0.index) }
         return VStack(alignment: .leading, spacing: 12) {
             if !chosen.isEmpty || !task.fixedEnding.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 8) {
                         ForEach(chosen, id: \.index) { tile in
                             Button {
-                                guard !revealed else { return }
+                                guard interactive, !card.revealed else { return }
                                 placed = QuizDraft.place(placed, tile: tile.index)
                             } label: {
                                 PashtoLine(
                                     text: tile.text,
-                                    pronunciation: tilePronunciation(tile),
+                                    pronunciation: tilePronunciation(tile, showsPronunciation: card.showsPronunciation),
                                     arabic: QuizPresentation.containsArabicScript(tile.text)
                                 )
                             }
                             .buttonStyle(.plain)
-                            .disabled(revealed)
-                            .accessibilityLabel(tileAccessibility(tile))
+                            .disabled(!interactive || card.revealed)
+                            .accessibilityLabel(tileAccessibility(tile, showsPronunciation: card.showsPronunciation))
                         }
                         if !task.fixedEnding.isEmpty {
                             Text(task.fixedEnding)
@@ -293,8 +399,8 @@ struct QuizScreen: View {
                     .environment(\.layoutDirection, .rightToLeft)
                     if let pronunciation = QuizPresentation.sentencePronunciation(
                         item: itemsByID[task.targetID],
-                        showsPronunciation: session.showsPronunciation,
-                        answered: revealed
+                        showsPronunciation: card.showsPronunciation,
+                        answered: card.revealed
                     ) {
                         Text(pronunciation)
                             .font(.subheadline.weight(.medium))
@@ -306,12 +412,12 @@ struct QuizScreen: View {
             }
             ForEach(pool, id: \.index) { tile in
                 Button {
-                    guard !revealed else { return }
+                    guard interactive, !card.revealed else { return }
                     placed = QuizDraft.place(placed, tile: tile.index)
                 } label: {
                     PashtoLine(
                         text: tile.text,
-                        pronunciation: tilePronunciation(tile),
+                        pronunciation: tilePronunciation(tile, showsPronunciation: card.showsPronunciation),
                         arabic: QuizPresentation.containsArabicScript(tile.text)
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -319,18 +425,18 @@ struct QuizScreen: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(Lapis.text)
-                .disabled(revealed)
-                .accessibilityLabel(tileAccessibility(tile))
+                .disabled(!interactive || card.revealed)
+                .accessibilityLabel(tileAccessibility(tile, showsPronunciation: card.showsPronunciation))
             }
         }
     }
 
-    private func tilePronunciation(_ tile: WordTile) -> String? {
-        QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: session.showsPronunciation)
+    private func tilePronunciation(_ tile: WordTile, showsPronunciation: Bool) -> String? {
+        QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: showsPronunciation)
     }
 
-    private func tileAccessibility(_ tile: WordTile) -> String {
-        if let spoken = tilePronunciation(tile) {
+    private func tileAccessibility(_ tile: WordTile, showsPronunciation: Bool) -> String {
+        if let spoken = tilePronunciation(tile, showsPronunciation: showsPronunciation) {
             return "\(tile.text), \(spoken)"
         }
         return tile.text
@@ -344,8 +450,6 @@ struct QuizScreen: View {
             currentIsRepeat: session.current?.isRepeat ?? false
         )
     }
-
-    private var questionToken: Int { session.answers.count }
 
     private var canContinue: Bool {
         guard let task = session.current else { return false }
@@ -377,6 +481,18 @@ struct QuizScreen: View {
             noteGrade(graded)
             return
         }
+        let leaving = QuestionCardState(
+            identity: QuestionIdentity(answerCount: session.answers.count, isRepeat: task.isRepeat),
+            task: task,
+            revealed: revealed,
+            result: result,
+            pickedChoice: pickedChoice,
+            links: links,
+            selectedLeft: selectedLeft,
+            placed: placed,
+            showsPronunciation: session.showsPronunciation,
+            playsReveal: false
+        )
         var generator = rng
         session.submit(answer, using: &generator)
         rng = generator
@@ -388,9 +504,17 @@ struct QuizScreen: View {
         placed = []
         if session.isComplete {
             onFinish(session)
-        } else {
-            onAnswer(session)
+            return
         }
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            outgoing = leaving
+            outgoingVisible = true
+            incomingSettled = false
+        }
+        changeToken += 1
+        onAnswer(session)
     }
 
     /// One haptic for every task kind. A choice plays it on the tap. Match and word order play it when Continue grades.
@@ -419,6 +543,22 @@ struct QuizScreen: View {
 }
 
 /// Pashto on its own line, right to left, with pronunciation underneath.
+/// One question as it looked when it was drawn.
+///
+/// The card that is leaving keeps this copy. The live card reads the session.
+private struct QuestionCardState {
+    var identity: QuestionIdentity
+    var task: SessionTask
+    var revealed: Bool
+    var result: GradeResult?
+    var pickedChoice: ItemID?
+    var links: [ItemID: ItemID]
+    var selectedLeft: ItemID?
+    var placed: [Int]
+    var showsPronunciation: Bool
+    var playsReveal: Bool
+}
+
 struct PashtoLine: View {
     var text: String
     var pronunciation: String?

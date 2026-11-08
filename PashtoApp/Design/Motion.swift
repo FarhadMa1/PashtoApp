@@ -56,6 +56,27 @@ enum Motion {
         }
     }
 
+    static var questionSpring: Animation {
+        .spring(response: QuizMotion.questionSpring, dampingFraction: QuizMotion.questionSpringDamping)
+    }
+
+    static func questionAdvance(reduceMotion: Bool) -> Animation {
+        switch QuestionChange.style(reduceMotion: reduceMotion) {
+        case .slideFromRight:
+            questionSpring
+        case .crossfade:
+            fade
+        }
+    }
+
+    static var rescueFade: Animation {
+        .easeOut(duration: StreakMotion.rescueFade)
+    }
+
+    static var freezeStar: Animation {
+        .spring(response: StreakMotion.freezeStar, dampingFraction: CelebrationMotion.starDamping)
+    }
+
     static func flip(reduceMotion: Bool) -> Animation {
         switch CardFlip.style(reduceMotion: reduceMotion) {
         case .rotation:

@@ -9,10 +9,18 @@ import SwiftUI
 /// Nothing here posts an accessibility announcement.
 struct GlyphCard: View {
     var model: GlyphCardModel
+    /// False for a card that is leaving. It is already on screen and only fades.
+    var playsReveal: Bool = true
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var flipped = false
-    @State private var shown = false
+    @State private var shown: Bool
     @ScaledMetric(relativeTo: .largeTitle) private var glyphSize: CGFloat = 56
+
+    init(model: GlyphCardModel, playsReveal: Bool = true) {
+        self.model = model
+        self.playsReveal = playsReveal
+        _shown = State(initialValue: !playsReveal)
+    }
 
     var body: some View {
         let flipStyle = CardFlip.style(reduceMotion: reduceMotion)
@@ -34,6 +42,7 @@ struct GlyphCard: View {
             }
         }
         .onAppear {
+            guard playsReveal else { return }
             withAnimation(Motion.reveal(reduceMotion: reduceMotion)) {
                 shown = true
             }

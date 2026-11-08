@@ -16,6 +16,7 @@ struct QuizMotionTests {
             QuizMotion.pairMerge,
             QuizMotion.pairFadeOut,
             QuizMotion.reduceMotionFade,
+            QuizMotion.questionSpring,
         ]
         for duration in feedback {
             #expect(duration >= 0.15)
@@ -31,6 +32,31 @@ struct QuizMotionTests {
         #expect(QuizMotion.pairFadeOut == 0.25)
         #expect(QuizMotion.reduceMotionFade == 0.2)
         #expect(QuizMotion.checkFade == 0.2)
+        #expect(QuizMotion.questionSpring == 0.28)
+        #expect(QuizMotion.questionSpringDamping == 0.86)
+    }
+
+    @Test func nextQuestionSlidesFromTheRightAndDoesNotBlockInput() {
+        #expect(QuestionChange.style(reduceMotion: false) == .slideFromRight)
+        #expect(QuestionChange.style(reduceMotion: true) == .crossfade)
+        #expect(QuestionChange.duration(reduceMotion: false) == 0.28)
+        #expect(QuestionChange.duration(reduceMotion: true) == QuizMotion.reduceMotionFade)
+        #expect(QuestionChange.blocksInput == false)
+
+        let first = QuestionIdentity(answerCount: 0, isRepeat: false)
+        let answered = QuestionIdentity(answerCount: 0, isRepeat: false)
+        let next = QuestionIdentity(answerCount: 1, isRepeat: false)
+        let repeated = QuestionIdentity(answerCount: 1, isRepeat: true)
+        #expect(first == answered)
+        #expect(first != next)
+        #expect(next != repeated)
+
+        var seen: Set<QuestionIdentity> = []
+        for count in 0..<6 {
+            let identity = QuestionIdentity(answerCount: count, isRepeat: false)
+            #expect(seen.insert(identity).inserted)
+            #expect(QuestionIdentity(answerCount: count, isRepeat: false) == identity)
+        }
     }
 
     @Test func popPeaksThenReturnsAndStaysAtOneOtherwise() {
