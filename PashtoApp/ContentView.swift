@@ -282,7 +282,7 @@ private struct LessonFinishedView: View {
         CelebrationCopy.accessibleResult(
             stats: stats,
             praise: praise,
-            showsPronunciation: session.showsPronunciation,
+            showsPronunciation: true,
             reduceMotion: reduceMotion,
             voiceOver: voiceOver,
             title: ApprovedCopy.lessonComplete,
@@ -327,7 +327,7 @@ private struct LessonFinishedView: View {
                     Spacer(minLength: 0)
                     PashtoLine(
                         text: praise.pashto,
-                        pronunciation: session.showsPronunciation ? praise.pronunciation : nil,
+                        pronunciation: praise.pronunciation,
                         arabic: true
                     )
                     .font(.title.weight(.semibold))

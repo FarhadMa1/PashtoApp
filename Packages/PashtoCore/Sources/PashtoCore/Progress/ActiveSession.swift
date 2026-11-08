@@ -105,6 +105,16 @@ public func resumeConflictsWithVoiceOver(_ session: LessonSession, voiceOver: Bo
     }
 }
 
+/// True when a saved lesson still has a question the playable quiz does not ask.
+///
+/// Find-the-letter, letter contrast, first-letter, and pronunciation-choice
+/// tasks are not built anymore. If one is still waiting, the lesson starts
+/// over instead of continuing. Meaning questions, word order, and matching
+/// stay. A finished lesson is not this check: `mustCommit` still records it.
+public func resumeContainsUnplayableTask(_ session: LessonSession) -> Bool {
+    session.tasks.contains { PlayableCourse.retiredQuizKinds.contains($0.kind) }
+}
+
 /// Whether an unfinished `session` can be continued on `today` for `contentVersion`.
 ///
 /// True when it is an unfinished lesson, the payload version is the one this

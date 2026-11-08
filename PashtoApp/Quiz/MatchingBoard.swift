@@ -189,7 +189,8 @@ struct MatchingBoard: View {
             pronunciation: pronunciation(for: text, itemID: itemID),
             arabic: QuizPresentation.containsArabicScript(text),
             textColor: mark == nil ? nil : Lapis.fillText,
-            pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation
+            pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation,
+            pronunciationLeads: true
         )
     }
 

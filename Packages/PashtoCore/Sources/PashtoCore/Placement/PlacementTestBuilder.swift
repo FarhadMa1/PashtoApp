@@ -50,12 +50,13 @@ public enum PlacementTestBuilder {
         guard policy.questionsPerUnit > 0, policy.unitCount > 0 else {
             return PlacementTest(units: [])
         }
+        let playable = PlayableCourse.hidingScript(bundle)
         let released = Set(releasedUnitIDs)
-        let window = bundle.units.dropFirst().prefix(policy.unitCount)
+        let window = playable.units.dropFirst().prefix(policy.unitCount)
         var units: [PlacementUnitQuestions] = []
         for unit in window {
             guard released.contains(unit.id) else { break }
-            guard let tasks = questions(for: unit, in: bundle, count: policy.questionsPerUnit, using: &rng) else {
+            guard let tasks = questions(for: unit, in: playable, count: policy.questionsPerUnit, using: &rng) else {
                 break
             }
             units.append(PlacementUnitQuestions(unitID: unit.id, tasks: tasks))
@@ -101,13 +102,14 @@ public enum PlacementTestBuilder {
         guard policy.questionsPerUnit > 0, policy.unitCount > 0 else {
             return PlacementFillResult(questionsPerUnit: policy.questionsPerUnit, units: [])
         }
+        let playable = PlayableCourse.hidingScript(bundle)
         let released = Set(releasedUnitIDs)
-        let window = bundle.units.dropFirst().prefix(policy.unitCount)
+        let window = playable.units.dropFirst().prefix(policy.unitCount)
         var units: [PlacementFillResult.Unit] = []
         for unit in window where released.contains(unit.id) {
             let produced = availableTasks(
                 for: unit,
-                in: bundle,
+                in: playable,
                 count: policy.questionsPerUnit,
                 using: &rng
             ) ?? []

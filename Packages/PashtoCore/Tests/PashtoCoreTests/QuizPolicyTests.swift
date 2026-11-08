@@ -3,7 +3,7 @@ import Testing
 @testable import PashtoCore
 
 struct QuizPolicyTests {
-    @Test func pronunciationOnAsksForMeaningAndSkipsThePronunciationTask() {
+    @Test func pronunciationChoiceIsNotBuilt() {
         let on = courseSession(showsPronunciation: true)
         let off = courseSession(showsPronunciation: false)
 
@@ -11,7 +11,7 @@ struct QuizPolicyTests {
         #expect(!off.showsPronunciation)
         #expect(on.tasks.contains { $0.kind == .meaningPashtoToEnglish })
         #expect(!on.tasks.contains { $0.kind == .transliterationChoice })
-        #expect(off.tasks.contains { $0.kind == .transliterationChoice })
+        #expect(!off.tasks.contains { $0.kind == .transliterationChoice })
     }
 
     @Test func aRunningSessionKeepsThePronunciationSettingItStartedWith() throws {
@@ -24,7 +24,7 @@ struct QuizPolicyTests {
 
         let next = courseSession(showsPronunciation: changed.showTransliteration)
         #expect(next.showsPronunciation == false)
-        #expect(next.tasks.contains { $0.kind == .transliterationChoice })
+        #expect(!next.tasks.contains { $0.kind == .transliterationChoice })
 
         let stored = Data(#"{"lessonID":"l-one","tasks":[],"answers":[]}"#.utf8)
         let decoded = try JSONDecoder().decode(LessonSession.self, from: stored)
@@ -205,7 +205,7 @@ struct QuizPolicyTests {
         #expect(blocked.showsPronunciation)
     }
 
-    @Test func pronunciationStaysHiddenWhenTheSettingIsOff() throws {
+    @Test func storedPreferenceDoesNotHidePronunciation() throws {
         let session = courseSession(showsPronunciation: false)
         let task = try #require(choiceTasks(in: session, kind: .meaningEnglishToPashto).first)
         let face = QuizPresentation.face(
@@ -216,7 +216,11 @@ struct QuizPolicyTests {
             answered: true
         )
         #expect(face.prompt.pronunciation == nil)
-        #expect(face.options.allSatisfy { $0.pronunciation == nil })
+        #expect(face.options.allSatisfy { $0.pronunciation != nil })
+        #expect(face.options.allSatisfy { option in
+            let item = sampleItems().first { $0.id == option.itemID }
+            return option.pronunciation == item?.pronunciation && option.pronunciation != item?.translit
+        })
     }
 }
 

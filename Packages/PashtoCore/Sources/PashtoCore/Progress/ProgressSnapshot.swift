@@ -139,6 +139,18 @@ public func newItemsShown(on day: LocalDay, in cards: [ReviewCard]) -> Int {
     return seen.count
 }
 
+/// Lesson cards created on `day` whose items are still in the playable course.
+///
+/// A paused letter card from a lesson that no longer introduces letters is
+/// left out. The card stays in the store. Placement cards are still not counted.
+public func playableNewItemsShown(
+    on day: LocalDay,
+    in cards: [ReviewCard],
+    knownItemIDs: Set<ItemID>
+) -> Int {
+    newItemsShown(on: day, in: cards.filter { knownItemIDs.contains($0.itemID) })
+}
+
 /// The `PathProgress` for `day`.
 ///
 /// Finished and placement-skipped lessons are both finished. The new-item

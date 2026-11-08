@@ -71,7 +71,8 @@ struct GlyphCard: View {
                 text: side.glyph,
                 pronunciation: side.pronunciation,
                 arabic: QuizPresentation.containsArabicScript(side.glyph),
-                fitsWidth: prominent
+                fitsWidth: prominent,
+                pronunciationLeads: true
             )
             .font(prominent ? .system(size: glyphSize, weight: .medium) : .title2.weight(.semibold))
             .foregroundStyle(Lapis.text)
@@ -93,7 +94,7 @@ struct GlyphCard: View {
 
     private var spoken: String {
         let side = flipped ? model.back : model.front
-        return [side.glyph, side.pronunciation, side.meaning]
+        return [side.pronunciation, side.glyph, side.meaning]
             .compactMap { value in
                 guard let value else { return nil }
                 let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)

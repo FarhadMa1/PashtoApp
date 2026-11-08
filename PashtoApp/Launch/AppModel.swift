@@ -110,10 +110,19 @@ final class AppModel {
         return displayedStreakCount(snapshot.streak, on: clock.today)
     }
 
+    /// Items the playable course still introduces. Hidden letters are not in this set.
+    private var knownPlayableItems: Set<ItemID> {
+        Set(course?.items.map(\.id) ?? [])
+    }
+
     /// New items introduced today, against `goalTotal`.
     var goalDone: Int {
-        guard let snapshot else { return 0 }
-        return newItemsShown(on: clock.today, in: snapshot.cards)
+        guard let snapshot, let course else { return 0 }
+        return playableNewItemsShown(
+            on: clock.today,
+            in: snapshot.cards,
+            knownItemIDs: Set(course.items.map(\.id))
+        )
     }
 
     /// The stored new-item limit: 5, 10, or 15.
@@ -294,20 +303,21 @@ final class AppModel {
     /// Selects today's capped review queue and leaves Welcome back.
     ///
     /// The queue is the one `shortCappedReview` already returns. This does not
-    /// open a lesson quiz. Every stored card id is treated as known, because
-    /// this queue is not drawn from the course. Otherwise it would be empty.
+    /// open a lesson quiz. Known ids are the playable course, so a hidden
+    /// letter card is not due. Without a course, every stored card id is
+    /// known, so the queue is not emptied by a missing bundle.
     func startReview() {
         guard phase == .welcomeBack, let snapshot else {
             phase = .ready
             return
         }
         let today = clock.today
-        let known = Set(snapshot.cards.map(\.itemID))
+        let known = course.map { Set($0.items.map(\.id)) } ?? Set(snapshot.cards.map(\.itemID))
         startedReview = shortCappedReview(
             cards: snapshot.cards,
             knownItemIDs: known,
             goal: snapshot.settings.dailyGoal,
-            newItemsShownToday: newItemsShown(on: today, in: snapshot.cards),
+            newItemsShownToday: playableNewItemsShown(on: today, in: snapshot.cards, knownItemIDs: known),
             on: today
         )
         phase = .ready
@@ -396,7 +406,7 @@ final class AppModel {
         let store = progressStore
         let day = clock.today
         let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
-        let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
+        let beforeGoal = snapshot.map { playableNewItemsShown(on: day, in: $0.cards, knownItemIDs: knownPlayableItems) } ?? 0
         let beforeStreakState = snapshot?.streak ?? .initial
         let lessonID = session.lessonID
         openLesson.showFinishedSession(session)
@@ -438,7 +448,7 @@ final class AppModel {
         let finished = openLesson.attempt?.sessionID
         let day = clock.today
         let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
-        let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
+        let beforeGoal = snapshot.map { playableNewItemsShown(on: day, in: $0.cards, knownItemIDs: knownPlayableItems) } ?? 0
         let beforeStreakState = snapshot?.streak ?? .initial
         let lessonID = openLesson.session?.lessonID
         do {
@@ -530,9 +540,10 @@ final class AppModel {
         decodedCourse = decoded
         switch decoded.load {
         case .ready(let bundled):
-            course = bundled.bundle
+            let playable = PlayableCourse.hidingScript(bundled.bundle)
+            course = playable
             releasedUnitIDs = bundled.releasedUnitIDs
-            home.setCourse(bundled.bundle, releasedUnitIDs: bundled.releasedUnitIDs)
+            home.setCourse(playable, releasedUnitIDs: bundled.releasedUnitIDs)
             if storageErrorReason == .courseUnreadable {
                 storageErrorReason = nil
             }

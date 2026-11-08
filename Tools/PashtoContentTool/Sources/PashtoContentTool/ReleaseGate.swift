@@ -8,11 +8,12 @@ import PashtoCore
 /// unverified items are errors in `release` and warnings in `dev`. A difficult
 /// character with no `soundExample` in the first unit is a warning in `dev`.
 /// It is an error in `release` only when `u-sounds` is listed in
-/// `release-units.json`. A non-empty release list that omits `u-sounds` is an
-/// error. An empty list is allowed. A released unit in the placement window
-/// that cannot produce five placement questions is an error in `release` and
-/// a warning in `dev`. The alphabet is not a placement unit. A missing romanization table is a warning
-/// in `dev` and an error in `release`. Audio in v1.0 is a warning in both modes.
+/// `release-units.json`. An empty list is allowed. Omitting `u-sounds` is
+/// allowed. Letters in units 1–3 are not playable cards. A released unit in
+/// the placement window that cannot produce five placement questions is an
+/// error in `release` and a warning in `dev`. The alphabet is not a placement
+/// unit. A missing romanization table is a warning in `dev` and an error in
+/// `release`. Audio in v1.0 is a warning in both modes.
 public enum ReleaseGate {
     public static func issues(
         in bundle: ContentBundle,
@@ -43,14 +44,6 @@ public enum ReleaseGate {
         let releaseUnits = Set(releaseUnitIDs)
         let released = releasedUnits(in: bundle, releaseUnitIDs: releaseUnitIDs)
         let releasedIDs = Set(released.map(\.id.rawValue))
-        if mode == .release, !releaseUnits.isEmpty, !releaseUnits.contains(Self.soundsUnitID) {
-            issues.append(IssueText.make(
-                .error,
-                id: Self.soundsUnitID,
-                field: "release-units.json",
-                "release-units.json lists units and does not include \(Self.soundsUnitID)."
-            ))
-        }
         if bundle.romanization.table.isEmpty {
             issues.append(IssueText.make(
                 releaseSeverity,
@@ -102,7 +95,7 @@ public enum ReleaseGate {
                         ))
                     }
                 } else {
-                    let count = cardCount(in: lesson)
+                    let count = cardCount(in: lesson, unitID: unit.id)
                     if count < 4 {
                         issues.append(IssueText.make(
                             releaseSeverity,
@@ -166,9 +159,14 @@ public enum ReleaseGate {
 
     private static let soundsUnitID = "u-sounds"
 
-    /// Items that create cards: `introduce` refs and letters. A `soundExample` does not.
-    private static func cardCount(in lesson: Lesson) -> Int {
-        lesson.items.filter { $0.role == .introduce }.count + lesson.letters.count
+    /// Items that create cards. A `soundExample` does not.
+    ///
+    /// Units 1–3 do not count letters. Those letters stay in the files and are
+    /// not playable cards. Every other unit still counts its letters.
+    private static func cardCount(in lesson: Lesson, unitID: UnitID) -> Int {
+        let introduced = lesson.items.filter { $0.role == .introduce }.count
+        guard PlayableCourse.countsLettersAsCards(unitID) else { return introduced }
+        return introduced + lesson.letters.count
     }
 
     private static func itemIDs(in unit: CourseUnit) -> [String] {

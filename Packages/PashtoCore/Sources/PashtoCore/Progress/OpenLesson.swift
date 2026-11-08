@@ -5,9 +5,10 @@ import Observation
 ///
 /// `startLesson` opens a released lesson. When the store still has that lesson
 /// and `canResume` allows it, the saved questions and answers are what open,
-/// unless a remaining question is one VoiceOver would not ask. Then the lesson
-/// starts fresh. A resumed session keeps the pronunciation setting it started
-/// with. There is no second button for continuing.
+/// unless a remaining question is one VoiceOver would not ask, or one the
+/// playable quiz no longer asks. Then the lesson starts fresh. A resumed
+/// session keeps the pronunciation setting it started with. There is no
+/// second button for continuing.
 ///
 /// Each answer is written on its own. A failed answer leaves the quiz where it
 /// is. The next answer, and a retry while the app is in the background, writes
@@ -83,7 +84,8 @@ public final class OpenLesson {
            pending.lessonID == lessonID,
            let stored = pending.lesson,
            canResume(pending, on: today, contentVersion: bundle.contentVersion),
-           !resumeConflictsWithVoiceOver(stored, voiceOver: voiceOver) {
+           !resumeConflictsWithVoiceOver(stored, voiceOver: voiceOver),
+           !resumeContainsUnplayableTask(stored) {
             resumeStored(
                 stored,
                 sessionID: pending.sessionID,
@@ -99,7 +101,8 @@ public final class OpenLesson {
            active.lessonID == lessonID,
            let stored = active.lesson,
            canResume(active, on: today, contentVersion: bundle.contentVersion),
-           !resumeConflictsWithVoiceOver(stored, voiceOver: voiceOver) {
+           !resumeConflictsWithVoiceOver(stored, voiceOver: voiceOver),
+           !resumeContainsUnplayableTask(stored) {
             resumeStored(
                 stored,
                 sessionID: active.sessionID,

@@ -85,8 +85,7 @@ struct CelebrationCopyTests {
             reduceMotion: true,
             voiceOver: true
         )
-        #expect(hidden == "Lesson complete, ډېره ښه, 4 correct")
-        #expect(!hidden.contains("DE-ra kha"))
+        #expect(hidden == "Lesson complete, ډېره ښه, DE-ra kha, 4 correct")
 
         let one = CelebrationCopy.accessibleResult(
             stats: LessonFinishStats(answered: 6, correct: 1),
@@ -95,7 +94,7 @@ struct CelebrationCopyTests {
             reduceMotion: false,
             voiceOver: true
         )
-        #expect(one == "Lesson complete, ښه, 1 correct")
+        #expect(one == "Lesson complete, ښه, kha, 1 correct")
         #expect(!one.contains("word"))
         #expect(!one.contains("6"))
 
@@ -180,7 +179,7 @@ struct CelebrationCopyTests {
             reduceMotion: true,
             voiceOver: true
         )
-        #expect(tiedSpeech == "Lesson complete, ښه, 6 correct")
+        #expect(tiedSpeech == "Lesson complete, ښه, kha, 6 correct")
         #expect(!tiedSpeech.contains("6/6"))
     }
 

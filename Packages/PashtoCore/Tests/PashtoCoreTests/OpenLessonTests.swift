@@ -523,7 +523,7 @@ struct OpenLessonTests {
         #expect(fresh.tasks.contains { $0.kind == .findLetter } == false)
 
         let allowed = OpenLesson()
-        let resumed = try start(
+        let restarted = try start(
             allowed,
             "l-home",
             progress: try await store.load(),
@@ -531,8 +531,9 @@ struct OpenLessonTests {
             seed: 7,
             voiceOver: false
         )
-        #expect(allowed.attempt?.sessionID == sessionID)
-        #expect(resumed.tasks.contains { $0.kind == .findLetter })
+        #expect(allowed.attempt?.sessionID != sessionID)
+        #expect(restarted.answers.isEmpty)
+        #expect(restarted.tasks.contains { $0.kind == .findLetter } == false)
 
         let meaningID = UUID(uuidString: "44444444-4444-4444-4444-444444444444")!
         try await seed(store, lesson: "l-home", tasks: [choice("e-door")], on: day, sessionID: meaningID)

@@ -48,7 +48,7 @@ struct BundledCourseTests {
         let future = [
             "u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation",
         ].map(unitID)
-        #expect(course.bundle.units.map(\.id) == course.releasedUnitIDs + future)
+        #expect(course.bundle.units.map(\.id) == [unitID("u-sounds")] + course.releasedUnitIDs + future)
         let futureLessons = course.bundle.units.filter { future.contains($0.id) }.flatMap(\.lessons)
         #expect(futureLessons.count == 17)
         #expect(Set(lessons.map(\.id)).isDisjoint(with: Set(futureLessons.map(\.id))))
@@ -66,7 +66,7 @@ struct BundledCourseTests {
             }
         })
         let hiddenFromRelease = futureIntroduced.subtracting(releasedReferences)
-        #expect(hiddenFromRelease.count == futureIntroduced.count - 6)
+        #expect(hiddenFromRelease == futureIntroduced)
         #expect(limited.items.allSatisfy { !hiddenFromRelease.contains($0.id) })
 
         let day = LocalDay(year: 2026, month: 11, day: 8)
@@ -233,7 +233,6 @@ struct BundledCourseTests {
 }
 
 private let approvedReleaseUnitIDs = [
-    "u-sounds",
     "u-greetings",
     "u-introductions",
     "u-family",
