@@ -1,11 +1,12 @@
 # 0001. Project structure
 
 - Date: 2026-10-25
+- Updated: 2026-11-08
 - Status: Accepted
 
 ## Context
 
-PashtoApp needs an iOS shell and a place for future lesson and quiz logic. The only approved work right now is that skeleton. There is no Mac in the current development environment. Day-to-day logic tests run on Linux. Compiles, the simulator, and TestFlight will run on Xcode Cloud. A GitHub Actions macOS runner is not used to archive the app. On 2026-11-02 Farhad approved one for the SwiftData package tests.
+PashtoApp needs an iOS shell and a place for future lesson and quiz logic. The only approved work right now is that skeleton. There is no Mac in the current development environment. Day-to-day logic tests run on Linux. The iOS simulator build runs on a GitHub Actions macOS runner. On 2026-11-02 Farhad approved that runner for the SwiftData package tests. On 2026-11-08 he chose a manual GitHub Actions workflow for the first TestFlight upload.
 
 The Xcode project has to be reproducible without hand-editing `project.pbxproj` on a Mac. XcodeGen (`project.yml`) is the generator. On 2026-11-02 Farhad approved a GitHub Actions macOS runner for the SwiftData package tests. That job does not archive the app.
 
@@ -20,7 +21,11 @@ Two ways to feed that project to Xcode Cloud were considered:
 
 `Packages/PashtoCore` is a Swift package with no Apple-only framework dependencies. The app target links it. Logic tests are `swift test` on that package. GitHub Actions runs them on `ubuntu-24.04` inside the official `swift:6.2.4-noble` image.
 
-Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard GitHub-hosted `macos-15` runner and the latest stable Xcode on that image. For this public repository those runners are free. The job runs `swift test` for `Packages/PashtoPersistence` only, and only when that package, `Packages/PashtoCore/Sources/PashtoCore/Progress`, the shared contract in `PashtoCoreTesting`, or the workflow file changes. Linux does not build that package. A macOS `xcodebuild` of the iOS app is still not a GitHub Actions job. Xcode Cloud remains the archive path.
+Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard GitHub-hosted `macos-15` runner and Xcode 26.3, the same selection as the simulator build. For this public repository those runners are free. The job runs `swift test` for `Packages/PashtoPersistence` only, and only when that package, `Packages/PashtoCore` sources, or the workflow file changes. Linux does not build that package. That job does not archive the app.
+
+TestFlight is `.github/workflows/testflight.yml`. It starts only with `workflow_dispatch`, on `macos-15`, with that same Xcode 26.3 selection. The job uses the GitHub environment `testflight`. Before the archive it runs `pashto-content merge --check` and `pashto-content validate --mode release`, and a nonzero exit fails the job. The pull-request release gate still reports findings and stays green. This workflow does not.
+
+Xcode Cloud is not the first upload path. Apple's document "Configuring your first Xcode Cloud workflow" says the first setup is done in Xcode, which creates the product and connects the repository. The App Store Connect API can create a workflow (`ciWorkflows`) and start a build (`ciBuildRuns`) for a product that already exists. It has no call that creates a `ciProduct` or an `scmRepository`. A read of the API on 2026-11-08 found no ciProducts, scmProviders, or scmRepositories, and app 6832282075 had no ciProduct. This repository has no Mac for that Xcode step. A later Xcode Cloud product still needs it.
 
 ### Progress file
 
@@ -28,7 +33,9 @@ Farhad approved a macOS GitHub Actions job on 2026-11-02. It uses a standard Git
 
 `StreakRecord.freezeUsedDays` is the days a streak freeze was used. `StoreMetaRecord.contentVersion` is the content bundle the file was written with. After the first write, `load` returns that stored version and does not replace it. `StoreMetaRecord.snapshotVersion` is `ProgressSnapshot.currentVersion`, the shape of the whole snapshot. It is separate from the SwiftData schema version and from the active session's `payloadVersion`.
 
-V1 may change freely until the first TestFlight build anyone installs. After that, a shipped `VersionedSchema` does not change. A later shape is a new `SchemaVn` and a stage on `ProgressMigrationPlan`. There is no checked-in V1 `.store` file yet. The macOS job will generate it, and that file is checked in before the first TestFlight build.
+V1 may change freely until the first TestFlight build anyone installs. After that, a shipped `VersionedSchema` does not change. A later shape is a new `SchemaVn` and a stage on `ProgressMigrationPlan`.
+
+The checked-in file is `Packages/PashtoPersistence/Tests/PashtoPersistenceTests/Fixtures/SchemaV1.store`. SHA-256 `133f7419cb6e5536fb4d428f07bccb7c59003937a7b9333bfe3412462fc702f5`. SwiftData tests run [42499940186](https://github.com/FarhadMa1/PashtoApp/actions/runs/42499940186) wrote it on a GitHub-hosted `macos-15` runner. The checkout was merge `ae40a91467d98013fc68debe7774f43e0ceed558` of `68ddf6611db55d5ffc3478a94ef3a27374d67ed6` into `394d0701646d7dbf60d13fffc85283686d9dc56d`. Xcode was 26.3 (17C529). Swift was 6.2.4 (swiftlang-6.2.4.1.4 clang-1700.6.4.2). The command was `PASHTO_SCHEMA_V1_STORE=<path> swift test --package-path Packages/PashtoPersistence --filter writesSchemaV1StoreWhenRequested`. That opens `SchemaV1` through `ProgressContainer`, writes the initial settings at content version `2026.11.0` (the same writes as `makeV1File`), and checkpoints the write-ahead log. Linux did not write the file, and the bytes were not assembled by hand. `swift test --package-path Packages/PashtoPersistence` opens it in `SchemaV1FixtureTests`. `SchemaV1` does not change after this file.
 
 Days are stored as `Int` days since 1970-01-01. The number is `LocalDay.days(from:)` and is read back with `adding(days:)`. That is the same day number the core uses for the user's local calendar day. It is not the UTC date of an instant. The core counts civil dates with a Gregorian calendar fixed to UTC only so a 23-hour or 25-hour local day still counts as one day.
 
@@ -66,7 +73,7 @@ The cost is noisier diffs in `project.pbxproj`, and a discipline rule: any `proj
 - iOS 17 minimum, Swift 6 language mode (`SWIFT_VERSION` 6.0), Swift tools version 6.0 in the package.
 - iPhone only, portrait.
 - Bundle id `com.mangallabs.pashto` is final. It was chosen to match the owner's future company, Mangal Labs.
-- No development team in the project. Signing team comes from Xcode Cloud or a local Xcode account.
+- No development team is stored in the project. The TestFlight workflow passes team `82RFYU3NS3` on the archive. A local Xcode account can still sign a local build.
 - `ITSAppUsesNonExemptEncryption` is false so export compliance is not re-asked on every upload. The app uses no custom encryption.
 - App category is education. The display name is Pashto.
 - The app icon is a flat placeholder image so the catalog has the required 1024 slot. Replace it before shipping.
@@ -76,7 +83,9 @@ The cost is noisier diffs in `project.pbxproj`, and a discipline rule: any `proj
 ## Consequences
 
 - Linux can prove the core package tests pass. It cannot prove the app builds, signs, or launches, and it does not build `PashtoPersistence`.
-- The macOS job proves the SwiftData package tests pass. It does not prove the app archives.
-- Xcode Cloud setup is a product-and-scheme selection against a project that is already in the repository. No custom CI script has to stay in sync with `project.yml`.
+- The macOS test job proves the SwiftData package tests pass. It does not prove the app archives. The TestFlight workflow is the archive, and it has not been dispatched.
+- The archive is unsigned. The target identity is Apple Development, and a development profile needs a registered device. The account has no certificates or profiles yet, so the archive does not ask Apple for a development profile. Export signs and uploads: `method` `app-store-connect`, `destination` `upload`, `signingStyle` `automatic`, `-allowProvisioningUpdates`, and `-authenticationKeyPath`, `-authenticationKeyID`, and `-authenticationKeyIssuerID`. Those are the documented `xcodebuild` options for an App Store Connect API key. The first export asks Apple to create the distribution certificate and the App Store profile. That can fail.
+- The only secret is `ASC_API_KEY_P8`, the full `.p8`, in the `testflight` environment. The key id `9U5475FGSS`, the issuer id `4eb37ecd-e901-443a-8d09-eef88b03d2a8`, and the team id are written in the workflow. The API does not show the key's role. The key can read users, certificates, profiles, and bundle ids, which fits Admin. A lower role gets a cloud signing permission error. Farhad confirms the role under Users and Access, Integrations, App Store Connect API, Team Keys. The environment, the secret, and the first upload are still to be done. The workflow writes the key to the runner temp directory with `umask 077` and `chmod 0600`, and deletes it on failure, cancel, and exit. Pull requests and forks do not run this workflow.
+- Xcode can later add an Xcode Cloud product against the committed project. No custom CI script has to stay in sync with `project.yml`.
 - Forgetting to regenerate after a spec edit leaves CI building the old project. Reviewers should treat a `project.yml` change without an `.xcodeproj` change as incomplete.
 - Feature work (content, quizzes, audio, extra screens, accounts) is a new approval, not a follow-on implied by this ADR.

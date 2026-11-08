@@ -63,12 +63,17 @@ These are constraints on later work, not code in this revision.
 | --- | --- | --- |
 | `swift test` for `PashtoCore` and `PashtoContentTool` | GitHub Actions, `ubuntu-24.04`, Swift 6.2.4 | In this repository |
 | `pashto-content merge --check` and `validate --mode dev` | Linux job `swift test (Linux)` | In this repository |
-| `validate --mode release` | Linux job `release gate` | Runs on every pull request. Not required for merge. Required on the release/TestFlight workflow |
-| App compile, archive, TestFlight | Xcode Cloud, committed `PashtoApp.xcodeproj`, scheme `PashtoApp` | Workflow is created in App Store Connect, not in git |
-| `swift test` for `PashtoPersistence` | GitHub Actions, `macos-15`, latest stable Xcode | When the persistence package, PashtoCore progress sources, the shared store contract, or that workflow changes |
-| macOS GitHub Actions check of the Release app bundle | Not added | The app target does not embed `content.json` yet |
+| `validate --mode release` | Linux job `release gate` | Runs on every pull request. Findings stay green there. Not required for merge |
+| `merge --check` and `validate --mode release` | GitHub Actions `testflight.yml`, before archive | A nonzero exit fails the upload. Manual `workflow_dispatch` only |
+| App archive and TestFlight upload | GitHub Actions `macos-15`, Xcode 26.3, scheme `PashtoApp` | Manual. The `testflight` environment and `ASC_API_KEY_P8` are not set up yet, and the workflow has not been dispatched |
+| `swift test` for `PashtoPersistence` | GitHub Actions, `macos-15`, Xcode 26.3 | When the persistence package, PashtoCore sources, or that workflow changes. `SchemaV1FixtureTests` opens the checked-in V1 store |
+| Release app bundle | The app target copies `content.json` and `release-units.json`. `scripts/verify-bundled-course.sh` fails the build if either file is missing | The TestFlight workflow runs `merge --check` before that build |
 
-`project.yml` is the file to edit. `PashtoApp.xcodeproj` is generated with XcodeGen 2.46.0 and committed so Xcode Cloud can see the project and the shared scheme without installing a generator. Details and the reason are in [decisions/0001-project-structure.md](decisions/0001-project-structure.md).
+`project.yml` is the file to edit. `PashtoApp.xcodeproj` is generated with XcodeGen 2.46.0 and committed so Xcode and the TestFlight workflow can see the project and the shared scheme without installing a generator. Details and the reason are in [decisions/0001-project-structure.md](decisions/0001-project-structure.md).
+
+The TestFlight job is manual because Xcode Cloud's first product is created in Xcode. The workflow passes team `82RFYU3NS3`. The key id `9U5475FGSS` and the issuer id `4eb37ecd-e901-443a-8d09-eef88b03d2a8` are in the workflow. The `.p8` is the only secret. The archive is unsigned. The target identity is Apple Development, a development profile needs a registered device, and the account has no certificates or profiles yet. Export uses `app-store-connect`, `upload`, and the authentication key flags. The first export can fail if the key is not Admin or if Apple does not create the distribution certificate. The API does not report the key's role. Farhad confirms it in App Store Connect before the first dispatch.
+
+The V1 store is `Packages/PashtoPersistence/Tests/PashtoPersistenceTests/Fixtures/SchemaV1.store`. The macOS job above wrote it. Provenance, the SHA-256, and the command are in [decisions/0001-project-structure.md](decisions/0001-project-structure.md). `SchemaV1` stays as it was when that file was written.
 
 ## Out of scope for this revision
 
@@ -77,4 +82,4 @@ These are constraints on later work, not code in this revision.
 - Audio playback or a pronunciation button
 - Screens other than the placeholder
 - Accounts, sync, or a service
-- An iOS test target, a macOS `xcodebuild` of the app, or an Xcode Cloud workflow file
+- An iOS test target, or an Xcode Cloud workflow file. The manual archive is `.github/workflows/testflight.yml`
