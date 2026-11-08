@@ -170,6 +170,82 @@ struct CelebrationMotionTests {
         #expect(over.spoken == "16/15")
     }
 
+    @Test func theHomeCueStaysPendingUntilTheFinalValuesAreShown() {
+        let home = lessonID("l-home")
+        let motion = PendingHomeMotion(
+            id: UUID(uuidString: "CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC")!,
+            streakFrom: 4,
+            goalFrom: 9,
+            lessonID: home
+        )
+        var cue = HomeMotionCue()
+        cue.stage(motion)
+        var playback = HomeMotionPlayback()
+
+        let held = playback.prepare(cue.pending, reduceMotion: false, voiceOver: false)
+        #expect(held == .holdFrom(motion))
+        #expect(held.consumesCue == false)
+        #expect(playback.displayedStreak(live: 5, pending: cue.pending, reduceMotion: false, voiceOver: false) == 4)
+        #expect(playback.displayedGoal(live: 10, pending: cue.pending, reduceMotion: false, voiceOver: false) == 9)
+        #expect(playback.waitingLessonID(pending: cue.pending, reduceMotion: false, voiceOver: false) == home)
+        #expect(playback.animates == false)
+        #expect(cue.pending == motion)
+
+        let moving = playback.advance(afterRenderingFrom: motion.id, animated: true)
+        #expect(moving == .animateToFinal(motion))
+        #expect(moving.consumesCue)
+        #expect(playback.animates)
+        #expect(playback.displayedStreak(live: 5, pending: cue.pending, reduceMotion: false, voiceOver: false) == 5)
+        #expect(playback.displayedGoal(live: 10, pending: cue.pending, reduceMotion: false, voiceOver: false) == 10)
+        #expect(playback.waitingLessonID(pending: cue.pending, reduceMotion: false, voiceOver: false) == nil)
+        #expect(cue.pending == motion)
+
+        let consumed = cue.consume()
+        #expect(consumed == motion)
+        #expect(playback.displayedStreak(live: 5, pending: nil, reduceMotion: false, voiceOver: false) == 5)
+        #expect(playback.displayedGoal(live: 10, pending: nil, reduceMotion: false, voiceOver: false) == 10)
+        #expect(playback.waitingLessonID(pending: nil, reduceMotion: false, voiceOver: false) == nil)
+
+        let reentry = playback.prepare(nil, reduceMotion: false, voiceOver: false)
+        #expect(reentry == .none)
+        #expect(reentry.consumesCue == false)
+        cue.stage(motion)
+        let sameCue = playback.prepare(cue.pending, reduceMotion: false, voiceOver: false)
+        #expect(sameCue == .none)
+        #expect(playback.displayedStreak(live: 5, pending: cue.pending, reduceMotion: false, voiceOver: false) == 5)
+
+        var relaunch = HomeMotionPlayback()
+        let quiet = HomeMotionCue()
+        let again = relaunch.prepare(quiet.pending, reduceMotion: false, voiceOver: false)
+        #expect(again == .none)
+        #expect(relaunch.displayedStreak(live: 5, pending: nil, reduceMotion: false, voiceOver: false) == 5)
+        #expect(relaunch.advance(afterRenderingFrom: motion.id, animated: true) == .none)
+    }
+
+    @Test func reduceMotionAndVoiceOverShowTheFinalHomeValuesBeforeTheCueIsConsumed() {
+        let motion = PendingHomeMotion(
+            id: UUID(uuidString: "DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD")!,
+            streakFrom: 2,
+            goalFrom: 3,
+            lessonID: lessonID("l-home")
+        )
+        var reduced = HomeMotionPlayback()
+        let jumped = reduced.prepare(motion, reduceMotion: true, voiceOver: false)
+        #expect(jumped == .jumpToFinal(motion))
+        #expect(jumped.consumesCue)
+        #expect(reduced.animates == false)
+        #expect(reduced.displayedStreak(live: 3, pending: motion, reduceMotion: true, voiceOver: false) == 3)
+        #expect(reduced.displayedGoal(live: 4, pending: motion, reduceMotion: true, voiceOver: false) == 4)
+        #expect(reduced.waitingLessonID(pending: motion, reduceMotion: true, voiceOver: false) == nil)
+
+        var spoken = HomeMotionPlayback()
+        let read = spoken.prepare(motion, reduceMotion: false, voiceOver: true)
+        #expect(read == .jumpToFinal(motion))
+        #expect(spoken.displayedStreak(live: 3, pending: motion, reduceMotion: false, voiceOver: true) == 3)
+        #expect(spoken.displayedGoal(live: 4, pending: motion, reduceMotion: false, voiceOver: true) == 4)
+        #expect(spoken.waitingLessonID(pending: motion, reduceMotion: false, voiceOver: true) == nil)
+    }
+
     @Test func pendingHomeMotionIsConsumedOnlyOnce() {
         var cue = HomeMotionCue()
         let fresh = cue.consume()

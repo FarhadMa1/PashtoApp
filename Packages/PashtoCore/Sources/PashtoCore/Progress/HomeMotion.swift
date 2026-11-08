@@ -41,6 +41,152 @@ public struct HomeMotionCue: Equatable, Sendable {
     }
 }
 
+/// What the home does with one cue.
+///
+/// `holdFrom` draws the from-values and leaves the cue pending. `animateToFinal`
+/// and `jumpToFinal` are the only actions that may consume it, and only after
+/// the screen is already showing the live values. Clearing the cue then changes
+/// nothing on screen, so the from-to change is not cut off.
+public enum HomeMotionAction: Equatable, Sendable {
+    case none
+    case holdFrom(PendingHomeMotion)
+    case animateToFinal(PendingHomeMotion)
+    case jumpToFinal(PendingHomeMotion)
+
+    /// True only after the live values are what the screen shows.
+    public var consumesCue: Bool {
+        switch self {
+        case .animateToFinal, .jumpToFinal:
+            true
+        case .none, .holdFrom:
+            false
+        }
+    }
+}
+
+/// The order in which the home plays one finish.
+///
+/// The from-values are shown first. The live values replace them on a later
+/// step, and only that step may consume the cue. A cue that has already
+/// reached the live values is not played again. Reduce Motion and VoiceOver
+/// go straight to the live values.
+public struct HomeMotionPlayback: Equatable, Sendable {
+    public enum Stage: Equatable, Sendable {
+        case idle
+        case atFrom(PendingHomeMotion)
+        case atFinal(PendingHomeMotion)
+    }
+
+    public private(set) var stage: Stage = .idle
+    /// True only for the step that moves from the from-values to the live ones.
+    public private(set) var animates = false
+    private var playedID: UUID?
+
+    public init() {}
+
+    /// The first step for `pending`.
+    ///
+    /// An empty cue, and a cue that already played, do nothing. Reduce Motion
+    /// and VoiceOver show the live values immediately.
+    public mutating func prepare(
+        _ pending: PendingHomeMotion?,
+        reduceMotion: Bool,
+        voiceOver: Bool
+    ) -> HomeMotionAction {
+        guard let pending else { return .none }
+        if playedID == pending.id { return .none }
+        if reduceMotion || voiceOver {
+            animates = false
+            stage = .atFinal(pending)
+            playedID = pending.id
+            return .jumpToFinal(pending)
+        }
+        if case .atFrom(let current) = stage, current.id == pending.id {
+            animates = false
+            return .holdFrom(current)
+        }
+        animates = false
+        stage = .atFrom(pending)
+        return .holdFrom(pending)
+    }
+
+    /// The step after the from-values have been drawn.
+    ///
+    /// `animated` is false when Reduce Motion or VoiceOver turned on while
+    /// those from-values were waiting. A different id, or a cue that already
+    /// finished, does nothing.
+    public mutating func advance(afterRenderingFrom id: UUID, animated: Bool) -> HomeMotionAction {
+        guard case .atFrom(let motion) = stage, motion.id == id, playedID != id else {
+            return .none
+        }
+        animates = animated
+        stage = .atFinal(motion)
+        playedID = id
+        return animated ? .animateToFinal(motion) : .jumpToFinal(motion)
+    }
+
+    /// The streak number on screen.
+    ///
+    /// Reduce Motion and VoiceOver use `live`. So does a cue that has reached
+    /// its final step. Until then the from-value is what is shown, including
+    /// on the first frame before `prepare`.
+    public func displayedStreak(
+        live: Int,
+        pending: PendingHomeMotion?,
+        reduceMotion: Bool,
+        voiceOver: Bool
+    ) -> Int {
+        displayed(live: live, from: \.streakFrom, pending: pending, reduceMotion: reduceMotion, voiceOver: voiceOver)
+    }
+
+    /// The daily-goal count on screen. The same rules as `displayedStreak`.
+    public func displayedGoal(
+        live: Int,
+        pending: PendingHomeMotion?,
+        reduceMotion: Bool,
+        voiceOver: Bool
+    ) -> Int {
+        displayed(live: live, from: \.goalFrom, pending: pending, reduceMotion: reduceMotion, voiceOver: voiceOver)
+    }
+
+    /// The lesson whose path segment is still empty.
+    ///
+    /// Nil once the live path is shown, and nil for Reduce Motion and VoiceOver.
+    public func waitingLessonID(
+        pending: PendingHomeMotion?,
+        reduceMotion: Bool,
+        voiceOver: Bool
+    ) -> LessonID? {
+        if reduceMotion || voiceOver { return nil }
+        switch stage {
+        case .idle:
+            return pending?.lessonID
+        case .atFrom(let motion):
+            return motion.lessonID
+        case .atFinal:
+            return nil
+        }
+    }
+
+    private func displayed(
+        live: Int,
+        from keyPath: KeyPath<PendingHomeMotion, Int>,
+        pending: PendingHomeMotion?,
+        reduceMotion: Bool,
+        voiceOver: Bool
+    ) -> Int {
+        if reduceMotion || voiceOver { return live }
+        switch stage {
+        case .idle:
+            return pending.map { $0[keyPath: keyPath] } ?? live
+        case .atFrom(let motion):
+            return motion[keyPath: keyPath]
+        case .atFinal:
+            return live
+        }
+    }
+}
+
 /// When the daily-goal success haptic is allowed to play.
 ///
 /// The ring is the new-item count over the stored limit of 5, 10, or 15.

@@ -31,11 +31,8 @@ struct ContentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @State private var celebration: LessonSession?
-    /// The cue being played. It outlives `pendingHomeMotion`, which is cleared after the play.
-    @State private var heldMotion: PendingHomeMotion?
-    @State private var streakAtFinal = false
-    @State private var goalAtFinal = false
-    @State private var pathAtFinal = false
+    /// From-values first, then the live counts. Consuming the cue does not change these.
+    @State private var playback = HomeMotionPlayback()
     @State private var streakPulse = 0
     @State private var goalHaptic = 0
 
@@ -94,9 +91,19 @@ struct ContentView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(alignment: .center, spacing: 16) {
-                    DailyGoalRing(shown: goalShown, done: goalDone, total: goalTotal)
+                    DailyGoalRing(
+                        shown: goalShown,
+                        done: goalDone,
+                        total: goalTotal,
+                        animates: animatesHomeMotion
+                    )
                     Spacer(minLength: 8)
-                    StreakMark(shown: streakShown, count: streakCount, pulse: streakPulse)
+                    StreakMark(
+                        shown: streakShown,
+                        count: streakCount,
+                        pulse: streakPulse,
+                        animates: animatesHomeMotion
+                    )
                 }
                 Text("Pashto")
                     .font(.title2.weight(.semibold))
@@ -105,6 +112,7 @@ struct ContentView: View {
                     lessons: lessons,
                     finished: finishedLessonIDs,
                     waitingLessonID: pathWaitingID,
+                    animates: animatesHomeMotion,
                     startLesson: startLesson
                 )
             }
@@ -120,63 +128,82 @@ struct ContentView: View {
     }
 
     private var streakShown: Int {
-        playingValue(from: pendingHomeMotion?.streakFrom, final: streakCount, atFinal: streakAtFinal)
+        playback.displayedStreak(
+            live: streakCount,
+            pending: pendingHomeMotion,
+            reduceMotion: reduceMotion,
+            voiceOver: voiceOver
+        )
     }
 
     private var goalShown: Int {
-        playingValue(from: pendingHomeMotion?.goalFrom, final: goalDone, atFinal: goalAtFinal)
+        playback.displayedGoal(
+            live: goalDone,
+            pending: pendingHomeMotion,
+            reduceMotion: reduceMotion,
+            voiceOver: voiceOver
+        )
     }
 
     /// The finished lesson whose path segment has not filled yet.
     private var pathWaitingID: LessonID? {
-        guard !reduceMotion, !voiceOver, let pending = pendingHomeMotion else { return nil }
-        guard heldMotion?.id != pending.id || !pathAtFinal else { return nil }
-        return pending.lessonID
+        playback.waitingLessonID(
+            pending: pendingHomeMotion,
+            reduceMotion: reduceMotion,
+            voiceOver: voiceOver
+        )
     }
 
-    /// The from-value while `pending` is the cue still being played.
+    /// Reduce Motion and VoiceOver do not animate. Everyone else does.
     ///
-    /// Reduce Motion and VoiceOver return the live count. Once the cue is
-    /// consumed, the live count stays.
-    private func playingValue(from: Int?, final: Int, atFinal: Bool) -> Int {
-        guard !reduceMotion, !voiceOver, let pending = pendingHomeMotion, let from else { return final }
-        if heldMotion?.id != pending.id || !atFinal { return from }
-        return final
+    /// The modifiers stay attached while the from-values are on screen, so the
+    /// later change to the live counts has an animation to use. The snap back
+    /// to a new from-value is made with animations disabled. Clearing the cue
+    /// does not change the values those modifiers watch.
+    private var animatesHomeMotion: Bool {
+        !reduceMotion && !voiceOver
     }
 
-    /// Starts at the from-values already on screen, then moves to the live counts.
+    /// Shows the from-values, lets that frame render, then moves to the live counts.
     ///
-    /// Reduce Motion does not animate. VoiceOver shows the final value at once.
-    /// The goal haptic plays only when the count crosses the limit. The cue is
-    /// then dropped, so a later visit does not play it again.
+    /// The cue stays pending through the from-frame. It is consumed only once
+    /// the live values are already what the screen shows, so that clear cannot
+    /// jump the animation. A cue that has played is left alone on a later visit.
+    /// Reduce Motion and VoiceOver show the live values at once.
     private func playHomeMotion() async {
-        guard let pending = pendingHomeMotion else { return }
-        let crossed = DailyGoalCrossing.reached(from: pending.goalFrom, to: goalDone, limit: goalTotal)
-        let streakChanges = pending.streakFrom != streakCount
-        if reduceMotion || voiceOver {
-            heldMotion = pending
-            streakAtFinal = true
-            goalAtFinal = true
-            pathAtFinal = true
-        } else {
-            heldMotion = pending
-            streakAtFinal = false
-            goalAtFinal = false
-            pathAtFinal = false
-            await Task.yield()
-            guard !Task.isCancelled, pendingHomeMotion?.id == pending.id else { return }
-            if streakChanges { streakPulse += 1 }
-            withAnimation(.easeOut(duration: CelebrationMotion.streakPulse)) {
-                streakAtFinal = true
-            }
-            withAnimation(Motion.goalRing) {
-                goalAtFinal = true
-            }
-            withAnimation(Motion.pathFill) {
-                pathAtFinal = true
-            }
+        let pending = pendingHomeMotion
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        let opening = withTransaction(transaction) {
+            playback.prepare(pending, reduceMotion: reduceMotion, voiceOver: voiceOver)
         }
+        switch opening {
+        case .none:
+            return
+        case .jumpToFinal(let motion):
+            noteGoalCrossing(motion)
+            consumePlayedCue(motion)
+        case .holdFrom(let motion):
+            await Task.yield()
+            guard !Task.isCancelled, pendingHomeMotion?.id == motion.id else { return }
+            let animated = !reduceMotion && !voiceOver
+            let next = playback.advance(afterRenderingFrom: motion.id, animated: animated)
+            guard next.consumesCue else { return }
+            if animated, motion.streakFrom != streakCount { streakPulse += 1 }
+            noteGoalCrossing(motion)
+            consumePlayedCue(motion)
+        case .animateToFinal:
+            return
+        }
+    }
+
+    private func noteGoalCrossing(_ motion: PendingHomeMotion) {
+        let crossed = DailyGoalCrossing.reached(from: motion.goalFrom, to: goalDone, limit: goalTotal)
         if crossed { goalHaptic += 1 }
+    }
+
+    private func consumePlayedCue(_ motion: PendingHomeMotion) {
+        guard pendingHomeMotion?.id == motion.id else { return }
         consumeHomeMotion()
     }
 }
@@ -325,6 +352,7 @@ private struct DailyGoalRing: View {
     var shown: Int
     var done: Int
     var total: Int
+    var animates: Bool
 
     private var fraction: Double {
         DailyGoalCrossing.fraction(shown, limit: total)
@@ -351,6 +379,7 @@ private struct DailyGoalRing: View {
                     .trim(from: 0, to: fraction)
                     .stroke(Lapis.ring, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                     .rotationEffect(.degrees(-90))
+                    .animation(animates ? Motion.goalRing : nil, value: fraction)
                 Octagram()
                     .fill(Lapis.badge)
                     .frame(width: 36, height: 36)
@@ -360,12 +389,14 @@ private struct DailyGoalRing: View {
                     .scaleEffect(showsCheck ? 1 : 0.4)
                     .opacity(showsCheck ? 1 : 0)
                     .offset(x: 22, y: 22)
+                    .animation(animates ? Motion.goalCheck : nil, value: showsCheck)
                     .accessibilityHidden(true)
             }
             .frame(width: 64, height: 64)
             HStack(spacing: 0) {
                 Text(shown, format: .number)
                     .contentTransition(.numericText())
+                    .animation(animates ? Motion.goalRing : nil, value: shown)
                 Text(verbatim: "/\(max(total, 0))")
             }
             .font(.headline.weight(.bold).monospacedDigit())
@@ -378,11 +409,12 @@ private struct DailyGoalRing: View {
 
 /// The streak number and one pulse of the saffron star.
 ///
-/// Reduce Motion fades the star over 0.2 s. VoiceOver and Reduce Motion both show the final number at once.
+/// Reduce Motion and VoiceOver show the final number at once and do not pulse the star.
 private struct StreakMark: View {
     var shown: Int
     var count: Int
     var pulse: Int
+    var animates: Bool
 
     var body: some View {
         HStack(spacing: 8) {
@@ -395,6 +427,7 @@ private struct StreakMark: View {
                 .font(.title2.weight(.bold).monospacedDigit())
                 .foregroundStyle(Lapis.text)
                 .contentTransition(.numericText())
+                .animation(animates ? .easeOut(duration: CelebrationMotion.streakPulse) : nil, value: shown)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: "\(StreakRoll.plan(from: shown, to: count, reduceMotion: true, voiceOver: true).spoken)"))
@@ -426,6 +459,7 @@ private struct CoursePathList: View {
     var finished: Set<LessonID>
     /// The lesson whose connector stays empty until the fill animation runs.
     var waitingLessonID: LessonID?
+    var animates: Bool
     var startLesson: (LessonID) -> Void
 
     private var nextID: LessonID? {
@@ -502,6 +536,7 @@ private struct CoursePathList: View {
             Capsule()
                 .fill(Lapis.ring)
                 .frame(height: filled ? 28 : 0)
+                .animation(animates ? Motion.pathFill : nil, value: filled)
         }
         .frame(width: 4, height: 28)
         .accessibilityHidden(true)
