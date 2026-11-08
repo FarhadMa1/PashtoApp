@@ -78,6 +78,8 @@ public enum QuizResultPalette {
         ContrastPair(name: "pronunciation on wrong fill, light", foreground: fillPronunciationLight, background: incorrectFillLight, minimumRatio: 4.5),
         ContrastPair(name: "pronunciation on correct fill, dark", foreground: fillPronunciationDark, background: correctFillDark, minimumRatio: 4.5),
         ContrastPair(name: "pronunciation on wrong fill, dark", foreground: fillPronunciationDark, background: incorrectFillDark, minimumRatio: 4.5),
+        ContrastPair(name: "badge ink on the badge, light", foreground: badgeInk, background: badgeLight, minimumRatio: 4.5),
+        ContrastPair(name: "badge ink on the badge, dark", foreground: badgeInk, background: badgeDark, minimumRatio: 4.5),
     ]
 
     public static let markPairs: [ContrastPair] = [
@@ -107,11 +109,21 @@ public enum QuizResultPalette {
         ContrastPair(name: "muted track on the card, light", foreground: muted, background: white, minimumRatio: 3),
         ContrastPair(name: "muted track on the card, dark", foreground: muted, background: cardSurfaceDark, minimumRatio: 3),
         ContrastPair(name: "achievement star outline on the page, light", foreground: ringLight, background: pageLight, minimumRatio: 3),
+        ContrastPair(name: "badge on the page, light", foreground: badgeLight, background: pageLight, minimumRatio: 3),
+        ContrastPair(name: "badge on the page, dark", foreground: badgeDark, background: pageDark, minimumRatio: 3),
     ]
 
     /// Unfilled goal track, path connector, and not-yet-reached node outline.
     /// `#7C8799` in both modes.
     public static let muted: UInt32 = 0x7C8799
+
+    /// Next-lesson badge. Light `#1E3A8A`. Dark `#4666D2`.
+    ///
+    /// Dark is measured against the page `#0F172A` at 3:1. Cream ink `#FAF7F0`
+    /// is measured against the badge at 4.5:1.
+    public static let badgeLight: UInt32 = 0x1E3A8A
+    public static let badgeDark: UInt32 = 0x4666D2
+    public static let badgeInk: UInt32 = 0xFAF7F0
 
     /// Card surface behind a muted outline. Light is white. Dark is `#1E293B`.
     public static let cardSurfaceDark: UInt32 = 0x1E293B

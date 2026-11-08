@@ -46,13 +46,15 @@ enum Lapis {
         light: QuizResultPalette.fillPronunciationLight,
         dark: QuizResultPalette.fillPronunciationDark
     )
-    static let badge = dynamic(light: 0x1E3A8A, dark: 0x2747A6)
+    /// Next-lesson fill. Light `#1E3A8A`. Dark `#4666D2`.
+    static let badge = dynamic(light: QuizResultPalette.badgeLight, dark: QuizResultPalette.badgeDark)
     /// 1 pt lesson-bar outline. Light `#1E3A8A`, dark `#93B4F5`. Both clear 3:1 on the page.
     static let primary = dynamic(
         light: QuizResultPalette.lessonBarOutlineLight,
         dark: QuizResultPalette.lessonBarOutlineDark
     )
-    static let badgeInk = color(0xFAF7F0)
+    /// Cream on the badge. `#FAF7F0` in both modes.
+    static let badgeInk = color(QuizResultPalette.badgeInk)
     static let heroTop = color(0x2747A6)
     static let heroMiddle = color(0x1E3A8A)
     static let heroBottom = color(0x152B6B)

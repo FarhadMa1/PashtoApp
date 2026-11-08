@@ -449,6 +449,25 @@ struct QuizFindingsTests {
         #expect(star.map(\.foreground) == [QuizResultPalette.ringLight])
         #expect(star.map(\.background) == [QuizResultPalette.pageLight])
         #expect(QuizResultPalette.ringLight == 0xB97D22)
+        #expect(QuizResultPalette.badgeLight == 0x1E3A8A)
+        #expect(QuizResultPalette.badgeDark == 0x4666D2)
+        #expect(QuizResultPalette.badgeInk == 0xFAF7F0)
+        let badgeOnPage = QuizResultPalette.markPairs.filter { $0.name.hasPrefix("badge on the page") }
+        #expect(badgeOnPage.map(\.name) == [
+            "badge on the page, light",
+            "badge on the page, dark",
+        ])
+        #expect(badgeOnPage.map(\.foreground) == [QuizResultPalette.badgeLight, QuizResultPalette.badgeDark])
+        #expect(badgeOnPage.map(\.background) == [QuizResultPalette.pageLight, QuizResultPalette.pageDark])
+        #expect(badgeOnPage.map(\.minimumRatio) == [3, 3])
+        let badgeInk = QuizResultPalette.textPairs.filter { $0.name.hasPrefix("badge ink") }
+        #expect(badgeInk.map(\.name) == [
+            "badge ink on the badge, light",
+            "badge ink on the badge, dark",
+        ])
+        #expect(badgeInk.map(\.foreground) == [QuizResultPalette.badgeInk, QuizResultPalette.badgeInk])
+        #expect(badgeInk.map(\.background) == [QuizResultPalette.badgeLight, QuizResultPalette.badgeDark])
+        #expect(badgeInk.map(\.minimumRatio) == [4.5, 4.5])
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {
