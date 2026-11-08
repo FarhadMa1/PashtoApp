@@ -552,12 +552,23 @@ struct MergeTests {
         #expect(!validator.contains { $0.severity == .error })
     }
 
-    @Test func emptyReleaseListDoesNotRequireTheSoundsUnit() throws {
+    @Test func approvedReleaseListIsUnitsZeroThroughThree() throws {
         let root = try repositoryRoot()
         #expect(ContentMerger.checkCommittedBundle(root: root).isEmpty)
+        let file = try JSONDecoder().decode(
+            ReleaseUnitsFile.self,
+            from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
+        )
+        #expect(file.units == ["u-sounds", "u-greetings", "u-introductions", "u-family"])
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(!release.contains { $0.message.contains("does not include u-sounds") })
-        #expect(!release.contains { $0.field == "soundExample" })
+        let sounds = ["ټ (ṭ)", "ڼ (ṇ)", "ږ (ǧ)", "ژ (ž)", "ق (q)", "ع (ʿ)"]
+        let errors = release.filter { $0.severity == .error }
+        #expect(errors.count == sounds.count)
+        #expect(errors.allSatisfy { $0.field == "soundExample" && $0.id == "u-sounds" })
+        for (index, sound) in sounds.enumerated() {
+            #expect(errors[index].message.contains(sound))
+        }
     }
 
     @Test func releaseListContainingSoundsUnitReportsTheSixMissingSounds() throws {

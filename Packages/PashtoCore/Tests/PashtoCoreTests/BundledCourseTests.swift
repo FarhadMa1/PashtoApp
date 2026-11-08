@@ -16,7 +16,92 @@ struct BundledCourseTests {
         #expect(!course.installedContentVersion.isEmpty)
         #expect(course.installedContentVersion != "unbundled")
         #expect(loaded.blockingScreen == nil)
-        #expect(course.releasedUnitIDs.isEmpty)
+        #expect(course.releasedUnitIDs == approvedReleaseUnitIDs)
+    }
+
+    @Test func theBundledReleaseListIsUnitsZeroThroughThree() throws {
+        guard case .ready(let course) = try loadBundledCourse() else {
+            Issue.record("The bundled course did not decode")
+            return
+        }
+        let inCourseOrder = course.bundle.units.map(\.id).filter { approvedReleaseUnitIDs.contains($0) }
+        #expect(course.releasedUnitIDs == approvedReleaseUnitIDs)
+        #expect(course.releasedUnitIDs == inCourseOrder)
+
+        var rng = SplitMix64(seed: 8)
+        let placement = PlacementTestBuilder.build(
+            in: course.bundle,
+            releasedUnitIDs: course.releasedUnitIDs,
+            using: &rng
+        )
+        #expect(placement.unitIDs.map(\.rawValue) == ["u-greetings", "u-introductions", "u-family"])
+        #expect(!placement.unitIDs.contains(unitID("u-sounds")))
+
+        let lessons = RootLessonSession.lessons(
+            in: course.bundle,
+            releasedUnitIDs: course.releasedUnitIDs
+        )
+        #expect(!lessons.isEmpty)
+        #expect(lessons.allSatisfy { course.releasedUnitIDs.contains($0.unitID) })
+        #expect(!lessons.contains { $0.id == lessonID("l-sounds-1") })
+    }
+
+    @Test func placementAndReleasedLessonsUseTheReleaseList() {
+        let course = bundleWithAnUnreleasedUnit()
+        let released = approvedReleaseUnitIDs
+        let fromList = ReleasedCourse.limiting(course.bundle, to: released)
+        #expect(fromList.units.map(\.id) == released)
+        #expect(course.bundle.units.contains { $0.id == unitID("u-hidden") })
+        #expect(!fromList.units.contains { $0.id == unitID("u-hidden") })
+        #expect(fromList.items.allSatisfy { !$0.id.rawValue.hasPrefix("e-hidden-") })
+
+        var listedPlacement = SplitMix64(seed: 4)
+        let placement = PlacementTestBuilder.build(
+            in: course.bundle,
+            releasedUnitIDs: released,
+            using: &listedPlacement
+        )
+        #expect(placement.unitIDs.map(\.rawValue) == ["u-greetings"])
+        #expect(!placement.unitIDs.contains(unitID("u-hidden")))
+
+        var bundlePlacement = SplitMix64(seed: 4)
+        let fromWholeBundle = PlacementTestBuilder.build(
+            in: course.bundle,
+            releasedUnitIDs: course.bundle.units.map(\.id),
+            using: &bundlePlacement
+        )
+        #expect(fromWholeBundle.unitIDs.map(\.rawValue) == ["u-greetings", "u-hidden", "u-introductions"])
+
+        let lessons = RootLessonSession.lessons(in: course.bundle, releasedUnitIDs: released)
+        #expect(lessons.map(\.id) == [
+            lessonID("l-greetings-1"),
+            lessonID("l-introductions-1"),
+            lessonID("l-family-1"),
+        ])
+        let everyUnit = RootLessonSession.lessons(
+            in: course.bundle,
+            releasedUnitIDs: course.bundle.units.map(\.id)
+        )
+        #expect(everyUnit.contains { $0.id == course.hiddenLesson })
+
+        var wholeBundle = SplitMix64(seed: 4)
+        let quizzedFromBundle = LessonSessionBuilder.build(
+            for: course.hiddenLesson,
+            in: course.bundle,
+            seenLessonIDs: [],
+            releasedUnitIDs: nil,
+            using: &wholeBundle
+        )
+        var heldToList = SplitMix64(seed: 4)
+        let quizzedFromList = LessonSessionBuilder.build(
+            for: course.hiddenLesson,
+            in: course.bundle,
+            seenLessonIDs: [],
+            releasedUnitIDs: released,
+            using: &heldToList
+        )
+        #expect(!quizzedFromBundle.tasks.isEmpty)
+        #expect(quizzedFromList.tasks.isEmpty)
     }
 
     @Test func missingOrUndecodableFilesUseTheStorageError() throws {
@@ -93,6 +178,70 @@ struct BundledCourseTests {
         #expect(present.output.isEmpty)
         #expect(FileManager.default.fileExists(atPath: present.stamp.path))
     }
+}
+
+private let approvedReleaseUnitIDs = [
+    "u-sounds",
+    "u-greetings",
+    "u-introductions",
+    "u-family",
+].map(unitID)
+
+private func loadBundledCourse() throws -> BundledCourseLoad {
+    let content = try Data(contentsOf: courseFile("content.json"))
+    let release = try Data(contentsOf: courseFile("release-units.json"))
+    return BundledCourseLoader.load(content: content, releaseUnits: release)
+}
+
+private struct UnreleasedUnitCourse {
+    var bundle: ContentBundle
+    var hiddenLesson: LessonID
+}
+
+/// Approved units, plus `u-hidden` inside the placement window.
+private func bundleWithAnUnreleasedUnit() -> UnreleasedUnitCourse {
+    let sound = makeItem("e-sound-a", pashto: "ا", translit: "a", pronunciation: "a", en: "alef")
+    let sounds = Lesson(
+        id: lessonID("l-sounds-1"),
+        title: "Sounds",
+        items: [LessonItemRef(item: sound.id, role: .soundExample, sound: "a")]
+    )
+    let greetings = numberedWords("e-greet", 1...6)
+    let hidden = numberedWords("e-hidden", 1...6)
+    let introductions = numberedWords("e-intro", 1...6)
+    let family = numberedWords("e-family", 1...6)
+    let hiddenLesson = introducedLesson("l-hidden-1", items: hidden)
+    let bundle = makeBundle(
+        items: [sound] + greetings + hidden + introductions + family,
+        units: [
+            CourseUnit(id: unitID("u-sounds"), track: "main", title: "Sounds", lessons: [sounds]),
+            CourseUnit(id: unitID("u-greetings"), track: "main", title: "Greetings", lessons: [introducedLesson("l-greetings-1", items: greetings)]),
+            CourseUnit(id: unitID("u-hidden"), track: "main", title: "Hidden", lessons: [hiddenLesson]),
+            CourseUnit(id: unitID("u-introductions"), track: "main", title: "Introductions", lessons: [introducedLesson("l-introductions-1", items: introductions)]),
+            CourseUnit(id: unitID("u-family"), track: "main", title: "Family", lessons: [introducedLesson("l-family-1", items: family)]),
+        ]
+    )
+    return UnreleasedUnitCourse(bundle: bundle, hiddenLesson: hiddenLesson.id)
+}
+
+private func numberedWords(_ prefix: String, _ range: ClosedRange<Int>) -> [ContentItem] {
+    range.map { number in
+        makeItem(
+            "\(prefix)-\(number)",
+            pashto: "\(prefix)\(number)",
+            translit: "\(prefix)\(number)",
+            pronunciation: "\(prefix)\(number)",
+            en: "\(prefix) \(number)"
+        )
+    }
+}
+
+private func introducedLesson(_ id: String, items: [ContentItem]) -> Lesson {
+    Lesson(
+        id: lessonID(id),
+        title: id,
+        items: items.map { LessonItemRef(item: $0.id, role: .introduce) }
+    )
 }
 
 private func sampleBundle() -> ContentBundle {

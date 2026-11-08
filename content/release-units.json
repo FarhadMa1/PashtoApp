@@ -1,4 +1,9 @@
 {
-  "note": "No unit is listed yet. An empty list is allowed. A non-empty list must include u-sounds. Add a unit id when that unit should ship.",
-  "units": []
+  "note": "Units 0-3 are released, in course order. An empty list is allowed. A non-empty list must include u-sounds. Add a unit id when that unit should ship.",
+  "units": [
+    "u-sounds",
+    "u-greetings",
+    "u-introductions",
+    "u-family"
+  ]
 }
