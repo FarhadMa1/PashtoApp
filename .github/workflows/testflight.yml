@@ -1,0 +1,152 @@
+name: TestFlight
+
+# Manual App Store Connect upload. This file has no pull_request, push, or
+# schedule trigger, so ordinary PR checks and fork builds do not receive the
+# API key. The key lives in the testflight environment. Create that
+# environment and ASC_API_KEY_P8 before the first dispatch. Limit the
+# environment to the default branch so a branch dispatch cannot read it.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testflight
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    name: archive and upload
+    runs-on: macos-15
+    timeout-minutes: 90
+    environment: testflight
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 26.3
+        # maxim-lobanov/setup-xcode v1.7.0
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90
+        with:
+          xcode-version: "26.3"
+
+      # Strict tool exit codes. The pull-request release gate keeps warnings
+      # and error findings green. This step does not. merge --check fails when
+      # content/content.json does not match the sources the archive will ship.
+      - name: Check the content bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          xcrun swift run --package-path Tools/PashtoContentTool pashto-content merge --check
+          xcrun swift run --package-path Tools/PashtoContentTool pashto-content validate --mode release
+
+      # The target's signing identity is Apple Development. A development
+      # profile needs a registered device, and the account has no certificates
+      # or profiles yet. The archive stays unsigned and still records the team
+      # and the build number. Export is the signing step: method
+      # app-store-connect, destination upload, automatic signing.
+      # -allowProvisioningUpdates and the authentication key flags are the
+      # documented xcodebuild options for an App Store Connect API key.
+      # The first export can fail if the key is not Admin or if Apple
+      # refuses the new certificate.
+      - name: Archive and upload
+        shell: bash
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${ASC_API_KEY_P8:-}" ]; then
+            echo "::error::ASC_API_KEY_P8 is empty"
+            exit 1
+          fi
+          case "${GITHUB_RUN_NUMBER:-}" in
+            ''|*[!0-9]*)
+              echo "::error::GITHUB_RUN_NUMBER is not a positive integer"
+              exit 1
+              ;;
+          esac
+          key_file="${RUNNER_TEMP}/AuthKey_9U5475FGSS.p8"
+          archive="${RUNNER_TEMP}/PashtoApp.xcarchive"
+          export_dir="${RUNNER_TEMP}/PashtoAppExport"
+          plist="${RUNNER_TEMP}/ExportOptions.plist"
+          cleanup() {
+            rm -f "$key_file"
+          }
+          trap cleanup EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          umask 077
+          rm -f "$key_file"
+          printf '%s' "$ASC_API_KEY_P8" > "$key_file"
+          chmod 0600 "$key_file"
+          unset ASC_API_KEY_P8
+          if [ ! -s "$key_file" ]; then
+            echo "::error::ASC_API_KEY_P8 is empty"
+            exit 1
+          fi
+          mode="$(stat -f %Lp "$key_file")"
+          case "$mode" in
+            600|0600) ;;
+            *)
+              echo "::error::API key file mode is ${mode}"
+              exit 1
+              ;;
+          esac
+          if ! grep -q -- '-----BEGIN PRIVATE KEY-----' "$key_file"; then
+            echo "::error::ASC_API_KEY_P8 does not contain a private key header"
+            exit 1
+          fi
+          if ! grep -q -- '-----END PRIVATE KEY-----' "$key_file"; then
+            echo "::error::ASC_API_KEY_P8 does not contain a private key footer"
+            exit 1
+          fi
+          cat > "$plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>destination</key>
+            <string>upload</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+            <key>teamID</key>
+            <string>82RFYU3NS3</string>
+            <key>uploadSymbols</key>
+            <true/>
+            <key>manageAppVersionAndBuildNumber</key>
+            <false/>
+          </dict>
+          </plist>
+          PLIST
+          xcodebuild archive \
+            -project PashtoApp.xcodeproj \
+            -scheme PashtoApp \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$archive" \
+            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            DEVELOPMENT_TEAM=82RFYU3NS3 \
+            CURRENT_PROJECT_VERSION="${GITHUB_RUN_NUMBER}"
+          xcodebuild -exportArchive \
+            -archivePath "$archive" \
+            -exportPath "$export_dir" \
+            -exportOptionsPlist "$plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$key_file" \
+            -authenticationKeyID "9U5475FGSS" \
+            -authenticationKeyIssuerID "4eb37ecd-e901-443a-8d09-eef88b03d2a8"
+
+      - name: Remove the API key
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          rm -f "${RUNNER_TEMP}/AuthKey_9U5475FGSS.p8"
