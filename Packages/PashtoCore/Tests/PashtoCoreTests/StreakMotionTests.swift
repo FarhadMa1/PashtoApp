@@ -279,11 +279,28 @@ struct StreakMotionTests {
         #expect(RescueMark.backingDark != RescueMark.saffronDark)
     }
 
-    @Test func voiceOverKeepsTheExistingStreakSentence() {
+    @Test func voiceOverSpeaksTheFinalFreezeCountOnce() {
+        #expect(CelebrationCopy.streakFreezeEarned == "Streak freeze earned")
+        #expect(FreezeStarSpeech.earnedClause == "streak freeze earned")
         #expect(FreezeStarSpeech.postsAnnouncement == false)
-        #expect(FreezeStarSpeech.label(count: 7) == CelebrationCopy.streakSpoken(7))
-        #expect(FreezeStarSpeech.label(count: 7) == "7 day streak")
-        #expect(FreezeStarSpeech.label(count: 14, dayStreak: "day streak") == "14 day streak")
+        #expect(FreezeStarSpeech.speaksPhases == false)
+        #expect(FreezeStarSpeech.label(count: 7) == "7 day streak, streak freeze earned")
+        #expect(FreezeStarSpeech.label(count: 14) == "14 day streak, streak freeze earned")
+        #expect(FreezeStarSpeech.label(count: 21, dayStreak: "day streak") == "21 day streak, streak freeze earned")
+        #expect(FreezeStarSpeech.label(count: 14) != FreezeStarSpeech.label(count: 7))
+        #expect(!FreezeStarSpeech.label(count: 14).contains("7 day"))
+        #expect(FreezeStarSpeech.label(count: 0) == "0 day streak, streak freeze earned")
+        #expect(FreezeStarSpeech.label(count: -3) == "0 day streak, streak freeze earned")
+
+        let earned = StreakEventID(kind: .freezeEarned, day: start.adding(days: 6))
+        var cue = StreakMotionCue()
+        cue.stage([earned])
+        let claimed = cue.claim(.freezeEarned)
+        #expect(claimed == [earned])
+        #expect(FreezeStarSpeech.label(count: 7) == "7 day streak, streak freeze earned")
+        #expect(cue.claim(.freezeEarned).isEmpty)
+        cue.stage([earned])
+        #expect(cue.claim(.freezeEarned).isEmpty)
     }
 
     private func running(days: Int) -> StreakState {

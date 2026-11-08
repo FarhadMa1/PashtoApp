@@ -217,8 +217,8 @@ public struct FreezeStarPhase: Equatable, Sendable {
 /// Motion unfolds, holds, then shrinks and fades toward the streak icon.
 /// Reduce Motion fades in, holds, and fades out. That path does not scale,
 /// turn, or travel. A tap removes the overlay at once. VoiceOver does not
-/// change the picture and does not add an announcement. The streak sentence
-/// already on the home is the only label.
+/// change the picture. The card's one label is the final streak count and the
+/// earned line. The phases are not spoken, and a second announcement is not posted.
 public struct FreezeStarPlan: Equatable, Sendable {
     public var phases: [FreezeStarPhase]
     public var removesOverlay: Bool
@@ -315,13 +315,18 @@ public struct FreezeCelebrationPlayback: Equatable, Sendable {
 
 /// What VoiceOver is given for the freeze star.
 ///
-/// The label is the streak sentence already on the home. The star does not
-/// post another announcement and does not add words.
+/// The label is the final streak count and `streak freeze earned`. The count
+/// is the one passed in for that event, so a later earn does not keep saying 7.
+/// `postsAnnouncement` stays false: the label is the one sentence, and nothing
+/// posts a second announcement or speaks a phase.
 public enum FreezeStarSpeech {
     public static let postsAnnouncement = false
+    public static let speaksPhases = false
+    /// The clause after the count. It is the visible line, lowercased, so the sentence reads as one.
+    public static let earnedClause = "streak freeze earned"
 
     public static func label(count: Int, dayStreak: String = CelebrationCopy.dayStreak) -> String {
-        CelebrationCopy.streakSpoken(count, label: dayStreak)
+        "\(CelebrationCopy.streakSpoken(count, label: dayStreak)), \(earnedClause)"
     }
 }
 

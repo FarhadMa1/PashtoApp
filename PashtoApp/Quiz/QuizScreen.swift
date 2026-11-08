@@ -569,11 +569,21 @@ struct PashtoLine: View {
     var pronunciationColor: Color = Lapis.secondaryText
     /// Shrinks one long word so the 56 pt glyph stays inside the card at the largest type size.
     var fitsWidth = false
+    /// Centers the word and the pronunciation under it. The quiz leaves this off.
+    var centers = false
 
     var body: some View {
+        if centers {
+            centeredLine
+        } else {
+            leadingLine
+        }
+    }
+
+    private var leadingLine: some View {
         VStack(alignment: .leading, spacing: 2) {
             ZStack(alignment: .top) {
-                word
+                word(alignment: .leading)
                 if let mark {
                     LetterMarkView(mark: mark)
                         .offset(y: -6)
@@ -594,9 +604,27 @@ struct PashtoLine: View {
         .environment(\.layoutDirection, arabic ? .rightToLeft : .leftToRight)
     }
 
-    @ViewBuilder private var word: some View {
+    private var centeredLine: some View {
+        VStack(alignment: .center, spacing: 2) {
+            word(alignment: .center)
+                .frame(maxWidth: .infinity)
+            if let pronunciation {
+                Text(pronunciation)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(pronunciationColor)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .environment(\.layoutDirection, .leftToRight)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .environment(\.layoutDirection, arabic ? .rightToLeft : .leftToRight)
+    }
+
+    @ViewBuilder private func word(alignment: TextAlignment) -> some View {
         let line = Text(text)
-            .multilineTextAlignment(.leading)
+            .multilineTextAlignment(alignment)
             .modifier(FitSingleWord(text: text, enabled: fitsWidth))
         if let textColor {
             line.foregroundStyle(textColor)

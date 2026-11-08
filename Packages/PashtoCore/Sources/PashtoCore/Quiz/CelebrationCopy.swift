@@ -10,6 +10,8 @@ public enum CelebrationCopy {
     public static let lessonComplete = "Lesson complete"
     public static let correct = "correct"
     public static let dayStreak = "day streak"
+    /// Visible line on the freeze card. The VoiceOver sentence lowercases it after the count.
+    public static let streakFreezeEarned = "Streak freeze earned"
     public static let dailyGoal = "Daily goal"
     public static let toGo = "to go"
     public static let goalReached = "Goal reached"
