@@ -92,21 +92,194 @@ struct StreakMotionTests {
         #expect(relaunch.claim(.rescuedDay) == [StreakEventID(kind: .rescuedDay, day: missed)])
     }
 
-    @Test func rescueAndFreezeStarFollowReduceMotionAndVoiceOver() {
+    @Test func rescueFadesAndReduceMotionStaysAShortOpacityFade() {
         #expect(StreakMotion.rescueFade == 0.35)
-        #expect(StreakMotion.freezeStar == 0.45)
+        #expect(StreakMotion.rescueReduceFade == 0.2)
+        #expect(StreakMotion.rescueReduceFade == QuizMotion.reduceMotionFade)
         #expect(RescueMotion.style(reduceMotion: false) == .fade)
-        #expect(RescueMotion.style(reduceMotion: true) == .shown)
+        #expect(RescueMotion.style(reduceMotion: true) == .calm)
         #expect(RescueMotion.style(reduceMotion: false).duration == 0.35)
-        #expect(RescueMotion.style(reduceMotion: true).duration == 0)
+        #expect(RescueMotion.style(reduceMotion: true).duration == 0.2)
+        #expect(RescueMotion.style(reduceMotion: false).opacityOnly)
+        #expect(RescueMotion.style(reduceMotion: true).opacityOnly)
+        #expect(RescueMotion.style(reduceMotion: true).duration > 0)
+    }
 
-        #expect(FreezeStarMotion.style(reduceMotion: false, voiceOver: false, skipped: false) == .unfold)
-        #expect(FreezeStarMotion.style(reduceMotion: true, voiceOver: false, skipped: false) == .final)
-        #expect(FreezeStarMotion.style(reduceMotion: false, voiceOver: true, skipped: false) == .final)
-        #expect(FreezeStarMotion.style(reduceMotion: false, voiceOver: false, skipped: true) == .final)
-        #expect(FreezeStarMotion.style(reduceMotion: false, voiceOver: false, skipped: false).duration == 0.45)
-        #expect(FreezeStarMotion.style(reduceMotion: true, voiceOver: true, skipped: true).duration == 0)
+    @Test func freezeStarUnfoldsHoldsThenLeavesWithinTheCap() {
+        let plan = FreezeStarPlan.make(reduceMotion: false, voiceOver: false, skipped: false)
+        #expect(plan.phases.map(\.step) == [.unfold, .hold, .settle])
+        #expect(plan.phases.map(\.duration) == [
+            StreakMotion.freezeStar,
+            StreakMotion.freezeHold,
+            StreakMotion.freezeDismiss,
+        ])
+        #expect(plan.phases[0].duration == 0.45)
+        #expect(plan.phases[1].duration == 0.70)
+        #expect(plan.phases[2].duration == 0.35)
+        #expect(abs(plan.duration - 1.5) < 0.000_001)
+        #expect(plan.duration <= StreakMotion.freezeMaximum)
+        #expect(StreakMotion.freezeMaximum == 1.5)
+        #expect(plan.removesOverlay)
+        #expect(!plan.opacityOnly)
 
+        let unfold = plan.phases[0]
+        #expect(unfold.starts.opacity == 0)
+        #expect(unfold.starts.scale == 0.3)
+        #expect(unfold.starts.rotationDegrees == -45)
+        #expect(!unfold.starts.travels)
+        #expect(!unfold.starts.showsGirih)
+        #expect(unfold.ends.opacity == 1)
+        #expect(unfold.ends.scale == 1)
+        #expect(unfold.ends.rotationDegrees == 0)
+        #expect(unfold.ends.showsGirih)
+        #expect(!unfold.ends.travels)
+
+        let hold = plan.phases[1]
+        #expect(hold.starts == hold.ends)
+        #expect(hold.ends.showsGirih)
+        #expect(!hold.ends.travels)
+
+        let settle = plan.phases[2]
+        #expect(settle.ends.opacity == 0)
+        #expect(settle.ends.scale < 1)
+        #expect(settle.ends.girihOpacity == 0)
+        #expect(settle.ends.travels)
+        #expect(settle.ends.offsetTowardIcon > 0)
+        #expect(settle.ends.rotationDegrees == 0)
+    }
+
+    @Test func reduceMotionFadesTheStarInHoldsThenFadesItOut() {
+        let plan = FreezeStarPlan.make(reduceMotion: true, voiceOver: false, skipped: false)
+        let withVoiceOver = FreezeStarPlan.make(reduceMotion: true, voiceOver: true, skipped: false)
+        let movingWithVoiceOver = FreezeStarPlan.make(reduceMotion: false, voiceOver: true, skipped: false)
+        #expect(plan == withVoiceOver)
+        #expect(movingWithVoiceOver == FreezeStarPlan.make(reduceMotion: false, voiceOver: false, skipped: false))
+        #expect(plan.phases.map(\.step) == [.fadeIn, .hold, .fadeOut])
+        #expect(plan.phases.map(\.duration) == [0.2, 0.8, 0.2])
+        #expect(plan.phases[0].duration == StreakMotion.freezeReduceFade)
+        #expect(plan.phases[1].duration == StreakMotion.freezeReduceHold)
+        #expect(plan.phases[2].duration == StreakMotion.freezeReduceFade)
+        #expect(abs(plan.duration - 1.2) < 0.000_001)
+        #expect(plan.duration <= StreakMotion.freezeMaximum)
+        #expect(plan.opacityOnly)
+        #expect(plan.removesOverlay)
+
+        let fadeIn = plan.phases[0]
+        #expect(fadeIn.starts.opacity == 0)
+        #expect(fadeIn.ends.opacity == 1)
+        #expect(fadeIn.ends.showsGirih)
+        #expect(fadeIn.starts.isStill)
+        #expect(fadeIn.ends.isStill)
+
+        let fadeOut = plan.phases[2]
+        #expect(fadeOut.starts.opacity == 1)
+        #expect(fadeOut.ends.opacity == 0)
+        #expect(!fadeOut.ends.showsGirih)
+        #expect(fadeOut.ends.isStill)
+        #expect(!fadeOut.ends.travels)
+        #expect(fadeOut.ends.scale == 1)
+        #expect(fadeOut.ends.rotationDegrees == 0)
+    }
+
+    @Test func skipFinishAndLeaveRemoveTheOverlayAndReentryStaysClear() {
+        let skipped = FreezeStarPlan.make(reduceMotion: false, voiceOver: false, skipped: true)
+        let skippedCalm = FreezeStarPlan.make(reduceMotion: true, voiceOver: true, skipped: true)
+        #expect(skipped == skippedCalm)
+        #expect(skipped.phases.map(\.step) == [.gone])
+        #expect(skipped.duration == 0)
+        #expect(skipped.removesOverlay)
+        #expect(skipped.opacityOnly)
+        #expect(skipped.phases[0].ends.opacity == 0)
+
+        var playback = FreezeCelebrationPlayback()
+        #expect(!playback.visible)
+        playback.begin(reduceMotion: false)
+        #expect(playback.visible)
+        #expect(playback.plan?.removesOverlay == true)
+        playback.finish()
+        #expect(!playback.visible)
+
+        playback.begin(reduceMotion: true, voiceOver: true)
+        #expect(playback.visible)
+        #expect(playback.plan?.opacityOnly == true)
+        playback.skip()
+        #expect(!playback.visible)
+        #expect(playback.plan?.duration == 0)
+        #expect(playback.plan?.phases.first?.step == .gone)
+
+        playback.begin(reduceMotion: false)
+        playback.leave()
+        #expect(!playback.visible)
+        #expect(playback.plan == nil)
+
+        let reentry = FreezeCelebrationPlayback()
+        #expect(!reentry.visible)
+        #expect(reentry.plan == nil)
+
+        var cue = StreakMotionCue()
+        let earned = StreakEventID(kind: .freezeEarned, day: start.adding(days: 6))
+        cue.stage([earned])
+        #expect(cue.claim(.freezeEarned) == [earned])
+        cue.stage([earned])
+        #expect(cue.claim(.freezeEarned).isEmpty)
+        #expect(!reentry.visible)
+    }
+
+    @Test func freezeStarIsLargerThanTheLessonStarAndLeavesTheCountClear() {
+        #expect(FreezeCelebrationLayout.lessonStarSide == 104)
+        #expect(FreezeCelebrationLayout.starSide > FreezeCelebrationLayout.lessonStarSide)
+        #expect(FreezeCelebrationLayout.starFitsInCard)
+        #expect(FreezeCelebrationLayout.cardHeight > FreezeCelebrationLayout.starSide)
+        #expect(FreezeCelebrationLayout.streakIconSide == 28)
+        #expect(!FreezeCelebrationLayout.hostsStarInStreakIcon)
+        #expect(FreezeCelebrationLayout.starSide > FreezeCelebrationLayout.streakIconSide)
+        #expect(!FreezeCelebrationLayout.coversStreakLabel)
+        #expect(FreezeCelebrationLayout.showsGirih)
+        #expect(FreezeCelebrationLayout.outlineUsesRing)
+        #expect(FreezeCelebrationLayout.rescueFitsInIcon)
+        #expect(FreezeCelebrationLayout.rescueGlyphSide < FreezeCelebrationLayout.rescueBadgeSide)
+        #expect(FreezeCelebrationLayout.rescueBadgeSide < FreezeCelebrationLayout.streakIconSide)
+    }
+
+    @Test func snowflakeInkOnTheBadgeClearsIconContrastInBothModes() {
+        #expect(RescueMark.glyph == QuizResultPalette.badgeInk)
+        #expect(RescueMark.backingLight == QuizResultPalette.badgeLight)
+        #expect(RescueMark.backingDark == QuizResultPalette.badgeDark)
+        #expect(RescueMark.glyph == 0xFAF7F0)
+        #expect(RescueMark.backingLight == 0x1E3A8A)
+        #expect(RescueMark.backingDark == 0x4666D2)
+        #expect(RescueMark.pairs.map(\.minimumRatio) == [3, 3])
+        let light = QuizResultPalette.contrastRatio(
+            foreground: RescueMark.glyph,
+            background: RescueMark.backingLight
+        )
+        let dark = QuizResultPalette.contrastRatio(
+            foreground: RescueMark.glyph,
+            background: RescueMark.backingDark
+        )
+        #expect(light >= 3)
+        #expect(dark >= 3)
+        #expect(light >= 9)
+        #expect(dark >= 4.5)
+        for pair in RescueMark.pairs {
+            let ratio = QuizResultPalette.contrastRatio(foreground: pair.foreground, background: pair.background)
+            #expect(ratio >= pair.minimumRatio)
+        }
+        let onSaffronLight = QuizResultPalette.contrastRatio(
+            foreground: RescueMark.glyph,
+            background: RescueMark.saffronLight
+        )
+        let onSaffronDark = QuizResultPalette.contrastRatio(
+            foreground: RescueMark.glyph,
+            background: RescueMark.saffronDark
+        )
+        #expect(onSaffronLight < 3)
+        #expect(onSaffronDark < 3)
+        #expect(RescueMark.backingLight != RescueMark.saffronLight)
+        #expect(RescueMark.backingDark != RescueMark.saffronDark)
+    }
+
+    @Test func voiceOverKeepsTheExistingStreakSentence() {
         #expect(FreezeStarSpeech.postsAnnouncement == false)
         #expect(FreezeStarSpeech.label(count: 7) == CelebrationCopy.streakSpoken(7))
         #expect(FreezeStarSpeech.label(count: 7) == "7 day streak")

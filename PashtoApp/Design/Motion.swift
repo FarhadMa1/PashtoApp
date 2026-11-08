@@ -69,12 +69,21 @@ enum Motion {
         }
     }
 
-    static var rescueFade: Animation {
-        .easeOut(duration: StreakMotion.rescueFade)
+    static func rescueFade(reduceMotion: Bool) -> Animation {
+        .easeOut(duration: RescueMotion.style(reduceMotion: reduceMotion).duration)
     }
 
-    static var freezeStar: Animation {
-        .spring(response: StreakMotion.freezeStar, dampingFraction: CelebrationMotion.starDamping)
+    static func freezePhase(_ phase: FreezeStarPhase) -> Animation? {
+        switch phase.step {
+        case .unfold:
+            .spring(response: phase.duration, dampingFraction: CelebrationMotion.starDamping)
+        case .fadeIn, .fadeOut:
+            .easeOut(duration: phase.duration)
+        case .settle:
+            .easeInOut(duration: phase.duration)
+        case .hold, .gone:
+            nil
+        }
     }
 
     static func flip(reduceMotion: Bool) -> Animation {

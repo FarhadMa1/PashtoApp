@@ -38,6 +38,8 @@ struct ContentView: View {
     @State private var playback = HomeMotionPlayback()
     @State private var streakPulse = 0
     @State private var goalHaptic = 0
+    /// The freeze star card. Cleared when it finishes, when it is skipped, and when the home goes away.
+    @State private var freezeCelebration = false
 
     var body: some View {
         if let celebration {
@@ -106,8 +108,12 @@ struct ContentView: View {
                         pulse: streakPulse,
                         animates: animatesHomeMotion,
                         pendingEvents: pendingStreakEvents,
-                        claimEvents: claimStreakEvents
+                        claimEvents: claimStreakEvents,
+                        onFreezeEarned: { freezeCelebration = true }
                     )
+                }
+                if freezeCelebration {
+                    FreezeEarnedCelebration(onDismiss: { freezeCelebration = false })
                 }
                 Text(verbatim: dailyGoalSpeech(done: goalShown))
                     .font(.subheadline.weight(.semibold))
@@ -132,6 +138,7 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Lapis.background.ignoresSafeArea())
         .sensoryFeedback(.success, trigger: goalHaptic)
+        .onDisappear { freezeCelebration = false }
         .task(id: pendingHomeMotion?.id) {
             await playHomeMotion()
         }
@@ -458,8 +465,9 @@ private struct DailyGoalRing: View {
 /// The streak number and one pulse of the saffron star.
 ///
 /// Reduce Motion and VoiceOver show the final number at once and do not pulse the star.
-/// A rescued day fades a snowflake over that star once. A new freeze plays a larger
-/// star once. Neither adds words, and neither is read on its own.
+/// A rescued day fades a snowflake inside that star once. The glyph sits on a badge
+/// circle, clipped to the icon, so the count beside it stays clear. A new freeze asks
+/// the home to play the larger star below this row. Neither adds words.
 private struct StreakMark: View {
     var shown: Int
     var count: Int
@@ -467,36 +475,25 @@ private struct StreakMark: View {
     var animates: Bool
     var pendingEvents: [StreakEventID]
     var claimEvents: (StreakEventID.Kind) -> [StreakEventID]
+    var onFreezeEarned: () -> Void = {}
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @State private var showingSnowflake = false
     @State private var snowflakeOpacity = 0.0
     @State private var rescueToken = 0
-    @State private var showingStar = false
-    @State private var starAtRest = true
-    @State private var starToken = 0
+
+    private var iconSide: CGFloat { CGFloat(FreezeCelebrationLayout.streakIconSide) }
 
     var body: some View {
         HStack(spacing: 8) {
             ZStack {
                 Octagram()
                     .fill(Lapis.saffron)
-                    .frame(width: 28, height: 28)
+                    .frame(width: iconSide, height: iconSide)
                     .modifier(StreakStarPulse(token: pulse))
             }
-            .frame(width: 28, height: 28)
-            .overlay { freezeStar }
-            .overlay {
-                if showingSnowflake {
-                    Image(systemName: "snowflake")
-                        .font(.footnote.weight(.bold))
-                        .foregroundStyle(Lapis.badgeInk)
-                        .opacity(snowflakeOpacity)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-                }
-            }
+            .frame(width: iconSide, height: iconSide)
+            .overlay { snowflake }
             .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
                 Text(shown, format: .number)
@@ -515,24 +512,23 @@ private struct StreakMark: View {
         .onAppear(perform: claimPending)
         .onChange(of: pendingEvents) { _, _ in claimPending() }
         .task(id: rescueToken) { await playRescue() }
-        .task(id: starToken) { await playStar() }
     }
 
-    @ViewBuilder private var freezeStar: some View {
-        if showingStar {
-            Octagram()
-                .fill(Lapis.saffron)
-                .overlay {
-                    Octagram().strokeBorder(Lapis.ring, lineWidth: 2)
-                }
-                .padding(4)
-                .scaleEffect(starAtRest ? 1 : 0.3)
-                .rotationEffect(.degrees(starAtRest ? 0 : -45))
-                .opacity(starAtRest ? 1 : 0)
-                .frame(width: 72, height: 72)
-                .contentShape(Rectangle())
-                .onTapGesture(perform: skipStar)
-                .accessibilityHidden(true)
+    @ViewBuilder private var snowflake: some View {
+        if showingSnowflake {
+            let badge = CGFloat(FreezeCelebrationLayout.rescueBadgeSide)
+            ZStack {
+                Circle()
+                    .fill(Lapis.badge)
+                    .frame(width: badge, height: badge)
+                Image(systemName: "snowflake")
+                    .font(.system(size: CGFloat(FreezeCelebrationLayout.rescueGlyphSide), weight: .bold))
+                    .foregroundStyle(Lapis.badgeInk)
+            }
+            .frame(width: iconSide, height: iconSide)
+            .opacity(snowflakeOpacity)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
         }
     }
 
@@ -545,45 +541,103 @@ private struct StreakMark: View {
         }
         let earned = claimEvents(.freezeEarned)
         if !earned.isEmpty {
-            showingStar = true
-            starAtRest = FreezeStarMotion.style(
-                reduceMotion: reduceMotion,
-                voiceOver: voiceOver,
-                skipped: false
-            ) == .final
-            starToken += 1
+            onFreezeEarned()
         }
     }
 
+    /// Opacity only. Reduce Motion uses the shorter fade and still starts from zero.
     private func playRescue() async {
         guard rescueToken > 0, showingSnowflake else { return }
-        if RescueMotion.style(reduceMotion: reduceMotion) == .shown {
-            var transaction = Transaction()
-            transaction.disablesAnimations = true
-            withTransaction(transaction) { snowflakeOpacity = 1 }
-            return
-        }
         var transaction = Transaction()
         transaction.disablesAnimations = true
         withTransaction(transaction) { snowflakeOpacity = 0 }
         await Task.yield()
         guard !Task.isCancelled else { return }
-        withAnimation(Motion.rescueFade) { snowflakeOpacity = 1 }
+        withAnimation(Motion.rescueFade(reduceMotion: reduceMotion)) { snowflakeOpacity = 1 }
+    }
+}
+
+/// The new-freeze star, in its own card under the streak row.
+///
+/// It is larger than the lesson-finish star, with girih behind it and a lapis ring.
+/// Motion unfolds, holds, then shrinks and fades upward toward the streak icon.
+/// Reduce Motion only changes opacity: fade in, hold, fade out. A tap, the end of
+/// the timeline, and leaving the home all remove the card. The count stays in the
+/// row above, and this card is not read.
+private struct FreezeEarnedCelebration: View {
+    var onDismiss: () -> Void
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
+    @Environment(\.layoutDirection) private var layoutDirection
+    @State private var frame = FreezeStarFrame(
+        opacity: 0, scale: 0.3, rotationDegrees: -45, offsetTowardIcon: 0, girihOpacity: 0
+    )
+    @State private var skipped = false
+
+    var body: some View {
+        let side = CGFloat(FreezeCelebrationLayout.starSide)
+        ZStack {
+            GirihPattern()
+                .opacity(frame.girihOpacity)
+            Octagram()
+                .fill(Lapis.saffron)
+                .overlay {
+                    Octagram().strokeBorder(Lapis.ring, lineWidth: 1)
+                }
+                .frame(width: side, height: side)
+                .scaleEffect(frame.scale)
+                .rotationEffect(.degrees(frame.rotationDegrees))
+                .opacity(frame.opacity)
+                .offset(travel)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: CGFloat(FreezeCelebrationLayout.cardHeight))
+        .background(Lapis.heroGradient)
+        .clipShape(RoundedRectangle(cornerRadius: CGFloat(FreezeCelebrationLayout.cornerRadius), style: .continuous))
+        .contentShape(Rectangle())
+        .onTapGesture(perform: skip)
+        .accessibilityHidden(true)
+        .transition(.identity)
+        .task { await play() }
     }
 
-    /// Reduce Motion and VoiceOver are already at rest. A tap skips there too.
-    private func playStar() async {
-        guard starToken > 0, showingStar, !starAtRest else { return }
-        await Task.yield()
-        guard !Task.isCancelled, !starAtRest else { return }
-        withAnimation(Motion.freezeStar) { starAtRest = true }
+    /// Up, and toward the trailing streak icon. The card is clipped, so this cannot cover the count.
+    private var travel: CGSize {
+        let amount = CGFloat(frame.offsetTowardIcon)
+        let towardTrailing: CGFloat = layoutDirection == .rightToLeft ? -1 : 1
+        return CGSize(width: amount * 0.65 * towardTrailing, height: -amount)
     }
 
-    private func skipStar() {
-        guard showingStar, !starAtRest else { return }
+    private func play() async {
+        let plan = FreezeStarPlan.make(reduceMotion: reduceMotion, voiceOver: voiceOver, skipped: false)
+        guard let first = plan.phases.first else {
+            onDismiss()
+            return
+        }
         var transaction = Transaction()
         transaction.disablesAnimations = true
-        withTransaction(transaction) { starAtRest = true }
+        withTransaction(transaction) { frame = first.starts }
+        await Task.yield()
+        for phase in plan.phases {
+            if Task.isCancelled || skipped { return }
+            if let animation = Motion.freezePhase(phase) {
+                withAnimation(animation) { frame = phase.ends }
+            } else {
+                frame = phase.ends
+            }
+            if phase.duration > 0 {
+                try? await Task.sleep(for: .seconds(phase.duration))
+            }
+            if Task.isCancelled || skipped { return }
+        }
+        if Task.isCancelled || skipped { return }
+        onDismiss()
+    }
+
+    private func skip() {
+        skipped = true
+        onDismiss()
     }
 }
 
