@@ -566,10 +566,11 @@ private struct StreakMark: View {
 ///
 /// It is larger than the lesson-finish star, with girih behind it and a lapis ring.
 /// Motion unfolds, holds, then shrinks and fades upward toward the streak icon.
-/// Reduce Motion only changes opacity: fade in, hold, fade out. A tap, the end of
-/// the timeline, and leaving the home all remove the card. The count stays in the
-/// row above. VoiceOver reads one final sentence for this event and does not
-/// speak the phases.
+/// Reduce Motion only changes opacity: fade in, hold, fade out. Without VoiceOver,
+/// the end of that timeline removes the card. With VoiceOver the card stays at
+/// the held frame until a tap or leaving the home. Speech finishing does not
+/// remove it. The count stays in the row above. VoiceOver reads one final
+/// sentence for this event and does not speak the phases.
 private struct FreezeEarnedCelebration: View {
     var count: Int
     var onDismiss: () -> Void
@@ -665,6 +666,7 @@ private struct FreezeEarnedCelebration: View {
             if Task.isCancelled || skipped { return }
         }
         if Task.isCancelled || skipped { return }
+        guard plan.removesOverlay else { return }
         onDismiss()
     }
 
