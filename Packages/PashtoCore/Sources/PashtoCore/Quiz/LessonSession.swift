@@ -150,14 +150,15 @@ private struct ItemTasks {
 
 /// One question list per introduced item, then the shared match tasks.
 ///
-/// The generator order is Pashto to English, English to Pashto, then the
-/// pronunciation question when pronunciation is hidden. A letter uses B1 and
-/// B2 instead of the old letter choices while pronunciation is shown. B1 and
-/// B3 are not built when pronunciation is hidden. B2 is built in both cases,
-/// and it is the only letter task when pronunciation is hidden. VoiceOver
-/// builds none of the letter tasks, and it does not fall back to the old
-/// letter meaning questions while pronunciation is shown. Word order is
-/// included while `OrderWords.includedInSessions` is true.
+/// The generator order is Pashto to English, then English to Pashto. A
+/// pronunciation choice is not built. A letter uses B1 and B2 instead of the
+/// old letter choices while pronunciation is shown, and only when that letter
+/// is still introduced. B1 and B3 are not built when pronunciation is hidden.
+/// B2 is built in both cases when the letter is introduced, and it is the only
+/// letter task when pronunciation is hidden. VoiceOver builds none of the
+/// letter tasks, and it does not fall back to the old letter meaning questions
+/// while pronunciation is shown. Word order is included while
+/// `OrderWords.includedInSessions` is true.
 /// Dialog reply and match pairs follow. The placement test draws from this
 /// same draft and the same `rng`.
 struct LessonTaskDraft {

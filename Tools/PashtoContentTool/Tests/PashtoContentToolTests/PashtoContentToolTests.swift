@@ -76,7 +76,8 @@ struct ReleaseGateTests {
             specialSounds: [],
             mode: .release
         )
-        #expect(withLetters.contains { $0.severity == .warning && $0.message.contains("has 5 items") })
+        #expect(withLetters.contains { $0.severity == .error && $0.message.contains("has 3 items") })
+        #expect(!withLetters.contains { $0.message.contains("has 5 items") })
 
         let soundsOnly = ReleaseGate.issues(
             in: lessonBundle(introduces: 0, soundExamples: 9),
@@ -88,7 +89,7 @@ struct ReleaseGateTests {
         #expect(soundsOnly.contains { $0.severity == .error && $0.message.contains("has 0 items") })
     }
 
-    @Test func releaseListRequiresTheSoundsUnitAndThenChecksSpecialSounds() {
+    @Test func omittingTheSoundsUnitIsAllowedAndListingItChecksSpecialSounds() {
         let bundle = sampleBundle(itemCount: 6)
         let sound = SpecialSound(character: "ټ", translit: "ṭ")
 
@@ -98,7 +99,7 @@ struct ReleaseGateTests {
         #expect(!empty.contains { $0.severity == .error })
 
         let greetings = ReleaseGate.issues(in: bundle, releaseUnitIDs: ["u-greetings"], itemUnits: [:], specialSounds: [sound], mode: .release)
-        #expect(greetings.contains { $0.severity == .error && $0.field == "release-units.json" && $0.message.contains("does not include u-sounds") })
+        #expect(!greetings.contains { $0.message.contains("does not include u-sounds") })
         #expect(!greetings.contains { $0.field == "soundExample" })
 
         let covered = bundleWithSoundExample()
@@ -298,8 +299,11 @@ struct QuizTypeCoverageTests {
             releaseUnitIDs: ["u-sounds"]
         ).map(\.id.rawValue))
         #expect(selected == ["u-sounds"])
-        let paused = OrderWords.includedInSessions ? Set<String>() : ["orderWords"]
-        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)).subtracting(paused))
+        var notRequired = Set(PlayableCourse.retiredQuizKinds.map(\.rawValue))
+        if !OrderWords.includedInSessions {
+            notRequired.insert("orderWords")
+        }
+        #expect(missing == Set(TaskKind.allCases.map(\.rawValue)).subtracting(notRequired))
 
         let dev = ContentCheck.issues(root: root, mode: .dev).filter { $0.field == "quizType" }
         #expect(dev.isEmpty)
@@ -493,7 +497,7 @@ struct MergeTests {
 
         let withoutSounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: ["u-greetings"], registry: [])
         let withoutSoundIssues = ContentCheck.issues(root: withoutSounds, mode: .release)
-        #expect(withoutSoundIssues.contains { $0.severity == .error && $0.message.contains("does not include u-sounds") })
+        #expect(!withoutSoundIssues.contains { $0.message.contains("does not include u-sounds") })
         #expect(!withoutSoundIssues.contains { $0.field == "soundExample" })
 
         let sounds = try writeCourse(itemCount: 6, difficult: true, releaseUnits: ["u-sounds"], registry: [], unitID: "u-sounds")
@@ -559,7 +563,7 @@ struct MergeTests {
             ReleaseUnitsFile.self,
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
-        #expect(file.units == ["u-sounds", "u-greetings", "u-introductions", "u-family"])
+        #expect(file.units == ["u-greetings", "u-introductions", "u-family"])
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(!release.contains { $0.message.contains("does not include u-sounds") })
         #expect(!release.contains { $0.severity == .error })
@@ -593,13 +597,14 @@ struct MergeTests {
             ReleaseUnitsFile.self,
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
-        let releasedIDs = ["u-sounds", "u-greetings", "u-introductions", "u-family"]
+        let earlyIDs = ["u-sounds", "u-greetings", "u-introductions", "u-family"]
+        let releasedIDs = ["u-greetings", "u-introductions", "u-family"]
         #expect(releaseFile.units == releasedIDs)
         let futureIDs = ["u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation"]
-        #expect(bundle.units.map(\.id.rawValue) == releasedIDs + futureIDs)
+        #expect(bundle.units.map(\.id.rawValue) == earlyIDs + futureIDs)
 
         let earlyPashto = Set(bundle.items.compactMap { item -> String? in
-            guard let unit = merged.itemUnits[item.id.rawValue], releasedIDs.contains(unit) else { return nil }
+            guard let unit = merged.itemUnits[item.id.rawValue], earlyIDs.contains(unit) else { return nil }
             guard item.kind == .word || item.kind == .phrase else { return nil }
             return item.pashto
         })

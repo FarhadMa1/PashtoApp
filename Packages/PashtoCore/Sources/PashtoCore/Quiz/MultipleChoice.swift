@@ -9,8 +9,8 @@ public enum TaskKind: String, Hashable, Codable, Sendable, CaseIterable {
     case meaningEnglishToPashto
     /// See the Pashto and choose the pronunciation.
     ///
-    /// Built only when pronunciation is hidden. A visible pronunciation would
-    /// be the answer. Letter items do not use this when pronunciation is shown.
+    /// Not built for the playable quiz. A visible pronunciation would be the
+    /// answer. Saved sessions that still contain one are started over.
     case transliterationChoice
     /// See the letter's English description and choose its glyph.
     ///
@@ -145,12 +145,14 @@ public struct TransliterationChoice: TaskGenerator {
 ///
 /// The lesson's own introduced items are treated as seen, together with
 /// `seenLessonIDs`. Questions are returned in lesson order. For each item the
-/// order is Pashto to English, then English to Pashto. The pronunciation
-/// question is added only when `showsPronunciation` is false. When
-/// pronunciation is shown, a letter does not get those choice questions: the
-/// pronunciation under the letter would be the answer. Letter tasks B1–B3 are
-/// built by `LessonSessionBuilder`. A kind that cannot reach three options is
-/// skipped. The generator returns nothing when the lesson introduces no items.
+/// order is Pashto to English, then English to Pashto. A pronunciation
+/// choice is not built: the pronunciation is always on screen, so it would
+/// be the answer. A letter does not get the meaning questions while
+/// pronunciation is on screen, because the pronunciation under the letter
+/// would be the answer. Letter tasks B1–B3 are built by `LessonSessionBuilder`
+/// only when the lesson still introduces letters. A kind that cannot reach
+/// three options is skipped. The generator returns nothing when the lesson
+/// introduces no items.
 public enum MultipleChoiceQuiz {
     public static func questions(
         for lessonID: LessonID,
@@ -192,8 +194,8 @@ struct QuizPolicy: Hashable, Sendable {
 ///
 /// Meaning questions are always available, except for a letter while
 /// pronunciation is on screen. Those old letter questions name the letter
-/// ("the letter ta"), so VoiceOver does not bring them back. The pronunciation
-/// question is built only when pronunciation is hidden.
+/// ("the letter ta"), so VoiceOver does not bring them back. A pronunciation
+/// choice is not built. The stored preference does not bring it back.
 enum QuizSchedule {
     static func choices(
         for target: ContentItem,
@@ -209,9 +211,6 @@ enum QuizSchedule {
             tasks.append(task)
         }
         if let task = EnglishToPashtoChoice().makeTask(for: target, in: context, using: &rng) {
-            tasks.append(task)
-        }
-        if !policy.showsPronunciation, let task = TransliterationChoice().makeTask(for: target, in: context, using: &rng) {
             tasks.append(task)
         }
         return tasks

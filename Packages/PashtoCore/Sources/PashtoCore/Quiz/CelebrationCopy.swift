@@ -63,11 +63,11 @@ public enum CelebrationCopy {
     /// `CounterPlan.spoken` is the final correct count in every mode, including
     /// while a sighted counter is still stepping. The answered total is the
     /// denominator of the labelled fraction, so this sentence does not repeat it.
-    /// Pronunciation is included only when this session is already showing it.
+    /// Pronunciation is included. The stored preference does not leave it out.
     public static func accessibleResult(
         stats: LessonFinishStats,
         praise: LessonPraise,
-        showsPronunciation: Bool,
+        showsPronunciation _: Bool,
         reduceMotion: Bool,
         voiceOver: Bool,
         title: String = lessonComplete,
@@ -80,11 +80,9 @@ public enum CelebrationCopy {
             label: correct
         )
         var parts = [title, praise.pashto]
-        if showsPronunciation {
-            let pronunciation = praise.pronunciation.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !pronunciation.isEmpty {
-                parts.append(pronunciation)
-            }
+        let pronunciation = praise.pronunciation.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !pronunciation.isEmpty {
+            parts.append(pronunciation)
         }
         parts.append("\(layout.correctPlan.spoken) \(correct)")
         return parts.joined(separator: ", ")

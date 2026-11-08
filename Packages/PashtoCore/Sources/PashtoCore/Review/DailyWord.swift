@@ -8,9 +8,9 @@ public enum DailyWordCopy {
 
 /// One learned word for a civil day.
 ///
-/// `pronunciation` is the simple pronunciation already chosen for Pashto, or
-/// nil when that preference is off or the field is blank. This value never
-/// carries scholarly transliteration.
+/// `pronunciation` is the simple pronunciation already stored for Pashto, or
+/// nil when that field is blank. The stored preference does not leave it out.
+/// This value never carries scholarly transliteration.
 public struct DailyWord: Equatable, Sendable {
     public var itemID: ItemID
     public var pashto: String
@@ -43,6 +43,8 @@ public enum DailyWordSelection {
         on day: LocalDay,
         showsPronunciation: Bool
     ) -> DailyWord? {
+        // `showsPronunciation` is the stored preference. It does not hide the word.
+        _ = showsPronunciation
         let released = ReleasedCourse.limiting(bundle, to: releasedUnitIDs)
         var itemsByID: [ItemID: ContentItem] = [:]
         for item in released.items where itemsByID[item.id] == nil {

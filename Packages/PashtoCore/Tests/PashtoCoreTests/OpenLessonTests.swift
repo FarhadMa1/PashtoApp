@@ -523,7 +523,7 @@ struct OpenLessonTests {
         #expect(fresh.tasks.contains { $0.kind == .findLetter } == false)
 
         let allowed = OpenLesson()
-        let resumed = try start(
+        let restarted = try start(
             allowed,
             "l-home",
             progress: try await store.load(),
@@ -531,8 +531,9 @@ struct OpenLessonTests {
             seed: 7,
             voiceOver: false
         )
-        #expect(allowed.attempt?.sessionID == sessionID)
-        #expect(resumed.tasks.contains { $0.kind == .findLetter })
+        #expect(allowed.attempt?.sessionID != sessionID)
+        #expect(restarted.answers.isEmpty)
+        #expect(restarted.tasks.contains { $0.kind == .findLetter } == false)
 
         let meaningID = UUID(uuidString: "44444444-4444-4444-4444-444444444444")!
         try await seed(store, lesson: "l-home", tasks: [choice("e-door")], on: day, sessionID: meaningID)
@@ -646,6 +647,109 @@ struct OpenLessonTests {
         #expect(lesson.session?.answers.isEmpty == true)
         #expect(saved.lessonProgress.map(\.lessonID) == [lessonID("l-home")])
         #expect(saved.activeSession == nil)
+    }
+
+    @Test func anInterruptedRetiredQuestionRestartsWithoutTouchingStoredProgress() async throws {
+        let store = InMemoryProgressStore(contentVersion: course.contentVersion)
+        let day = clock(day: 2, hour: 9).today
+        let finishedID = UUID(uuidString: "55555555-5555-5555-5555-555555555555")!
+        try await seed(store, lesson: "l-salam", tasks: [choice("e-salam")], on: day, sessionID: finishedID)
+        let completed = OpenLesson()
+        var done = try start(completed, "l-salam", progress: try await store.load(), on: day, seed: 1)
+        try submit(&done, correct: true)
+        let committed = try await finish(completed, done, on: day, to: store)
+        let learned = try #require(committed.cards.first { $0.itemID == itemID("e-salam") })
+        #expect(learned.repetitions > 0)
+        #expect(learned.lastReviewedDay == day)
+        let streak = committed.streak
+        let lessons = committed.lessonProgress
+        let completedSessions = committed.completedSessions
+        #expect(lessons.map(\.lessonID) == [lessonID("l-salam")])
+        #expect(streak.current == 1)
+        #expect(committed.activeSession == nil)
+
+        let savedMeaning = choice("e-door")
+        let interruptedID = UUID(uuidString: "66666666-6666-6666-6666-666666666666")!
+        let interrupted = LessonSession(
+            lessonID: lessonID("l-home"),
+            tasks: [letterTask("e-alif")],
+            answers: [SessionAnswer(task: savedMeaning, answer: .choice(itemID("e-door")), result: .correct)]
+        )
+        let attempt = LessonAttempt(
+            sessionID: interruptedID,
+            lessonID: lessonID("l-home"),
+            startedDay: day,
+            contentVersion: course.contentVersion
+        )
+        try await attempt.saveActive(interrupted, answeredOn: day, to: store)
+
+        let recovered = try await ProgressReconciler.run(store: store, content: course, on: day)
+        #expect(recovered.cards == committed.cards)
+        #expect(recovered.streak == streak)
+        #expect(recovered.lessonProgress == lessons)
+        #expect(recovered.completedSessions == completedSessions)
+        #expect(recovered.snapshotVersion == committed.snapshotVersion)
+        #expect(recovered.activeSession?.sessionID == interruptedID)
+        #expect(recovered.activeSession?.lesson?.answers.count == 1)
+
+        let opener = OpenLesson()
+        var fresh = try start(opener, "l-home", progress: recovered, on: day, seed: 4)
+        #expect(opener.attempt?.sessionID != interruptedID)
+        #expect(fresh.answers.isEmpty)
+        #expect(fresh.tasks.allSatisfy { !PlayableCourse.retiredQuizKinds.contains($0.kind) })
+
+        try submit(&fresh, correct: true)
+        await saved(opener, fresh, on: day, to: store)
+        let afterAnswer = try await store.load()
+        #expect(afterAnswer.cards == committed.cards)
+        #expect(afterAnswer.streak == streak)
+        #expect(afterAnswer.lessonProgress == lessons)
+        #expect(afterAnswer.completedSessions == completedSessions)
+        #expect(afterAnswer.activeSession?.sessionID == opener.attempt?.sessionID)
+        #expect(afterAnswer.activeSession?.lesson?.answers.contains { $0.task.kind == .findLetter } == false)
+
+        let keptID = UUID(uuidString: "77777777-7777-7777-7777-777777777777")!
+        let kept = LessonSession(
+            lessonID: lessonID("l-other"),
+            tasks: [choice("e-pen")],
+            answers: [SessionAnswer(task: choice("e-book"), answer: .choice(itemID("e-book")), result: .correct)]
+        )
+        try await LessonAttempt(
+            sessionID: keptID,
+            lessonID: lessonID("l-other"),
+            startedDay: day,
+            contentVersion: course.contentVersion
+        ).saveActive(kept, answeredOn: day, to: store)
+        let continued = OpenLesson()
+        let resumed = try start(continued, "l-other", progress: try await store.load(), on: day, seed: 5)
+        #expect(continued.attempt?.sessionID == keptID)
+        #expect(resumed.answers.map(\.task.kind) == [.meaningPashtoToEnglish])
+        #expect(resumed.tasks.map(\.kind) == [.meaningPashtoToEnglish])
+        let stillStored = try await store.load()
+        #expect(stillStored.cards == committed.cards)
+        #expect(stillStored.streak == streak)
+        #expect(stillStored.lessonProgress == lessons)
+
+        let finishedOtherID = UUID(uuidString: "88888888-8888-8888-8888-888888888888")!
+        let finishedOther = LessonSession(
+            lessonID: lessonID("l-other"),
+            tasks: [],
+            answers: [SessionAnswer(task: choice("e-book"), answer: .choice(itemID("e-book")), result: .correct)]
+        )
+        try await LessonAttempt(
+            sessionID: finishedOtherID,
+            lessonID: lessonID("l-other"),
+            startedDay: day,
+            contentVersion: course.contentVersion
+        ).saveActive(finishedOther, answeredOn: day, to: store)
+        let committedAgain = try await ProgressReconciler.run(store: store, content: course, on: day)
+        #expect(committedAgain.activeSession == nil)
+        #expect(committedAgain.streak == streak)
+        #expect(committedAgain.lessonProgress.first { $0.lessonID == lessonID("l-salam") } == lessons[0])
+        let salam = try #require(committedAgain.cards.first { $0.itemID == itemID("e-salam") })
+        #expect(salam == learned)
+        #expect(committedAgain.completedSessions.contains { $0.sessionID == finishedID })
+        #expect(committedAgain.completedSessions.contains { $0.sessionID == finishedOtherID })
     }
 
     @Test func theInjectedClockSuppliesTheDay() {

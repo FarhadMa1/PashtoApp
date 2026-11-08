@@ -30,13 +30,13 @@ public enum ReleasedCourse {
             let kept = group.filter { referenced.contains($0) }
             return kept.count >= 2 ? kept : nil
         }
-        return ContentBundle(
+        return PlayableCourse.hidingScript(ContentBundle(
             contentVersion: bundle.contentVersion,
             variant: bundle.variant,
             romanization: bundle.romanization,
             items: items,
             units: units,
             nonDistractorGroups: groups
-        )
+        ))
     }
 }

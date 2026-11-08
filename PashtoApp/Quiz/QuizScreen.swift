@@ -3,7 +3,8 @@ import SwiftUI
 
 /// One quiz question: the prompt, the choices, and the feedback after an answer.
 ///
-/// Pashto is drawn right to left, with `pronunciation` underneath. Scholarly
+/// The stored pronunciation is the large line. Pashto is smaller beneath it,
+/// right to left. The pronunciation stays left to right. Scholarly
 /// transliteration is not shown. B1 and B3 keep pronunciation off the choices
 /// until the question has been answered. A same-sound choice draws its ring
 /// or dot after the answer.
@@ -221,7 +222,8 @@ struct QuizScreen: View {
             PashtoLine(
                 text: text,
                 pronunciation: prompt.pronunciation,
-                arabic: false
+                arabic: false,
+                pronunciationLeads: true
             )
             .font(.title2.weight(.semibold))
             .foregroundStyle(Lapis.text)
@@ -246,7 +248,8 @@ struct QuizScreen: View {
                     mark: option.highlight,
                     reservesPronunciation: option.reservesPronunciation,
                     textColor: mark == nil ? nil : Lapis.fillText,
-                    pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation
+                    pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation,
+                    pronunciationLeads: true
                 )
                 .font(.title3.weight(.semibold))
                 Spacer(minLength: 0)
@@ -385,7 +388,8 @@ struct QuizScreen: View {
                                 PashtoLine(
                                     text: tile.text,
                                     pronunciation: tilePronunciation(tile, showsPronunciation: card.showsPronunciation),
-                                    arabic: QuizPresentation.containsArabicScript(tile.text)
+                                    arabic: QuizPresentation.containsArabicScript(tile.text),
+                                    pronunciationLeads: true
                                 )
                             }
                             .buttonStyle(.plain)
@@ -418,7 +422,8 @@ struct QuizScreen: View {
                     PashtoLine(
                         text: tile.text,
                         pronunciation: tilePronunciation(tile, showsPronunciation: card.showsPronunciation),
-                        arabic: QuizPresentation.containsArabicScript(tile.text)
+                        arabic: QuizPresentation.containsArabicScript(tile.text),
+                        pronunciationLeads: true
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 8)
@@ -437,7 +442,7 @@ struct QuizScreen: View {
 
     private func tileAccessibility(_ tile: WordTile, showsPronunciation: Bool) -> String {
         if let spoken = tilePronunciation(tile, showsPronunciation: showsPronunciation) {
-            return "\(tile.text), \(spoken)"
+            return "\(spoken), \(tile.text)"
         }
         return tile.text
     }
@@ -571,6 +576,8 @@ struct PashtoLine: View {
     var fitsWidth = false
     /// Centers the word and the pronunciation under it. The quiz leaves this off.
     var centers = false
+    /// Quiz prompts and answers. Pronunciation is the large line and Pashto is smaller beneath it.
+    var pronunciationLeads = false
 
     var body: some View {
         if centers {
@@ -580,25 +587,27 @@ struct PashtoLine: View {
         }
     }
 
+    private var pronunciationFirst: Bool {
+        pronunciationLeads && pronunciation.map { !$0.trimmingCharacters(in: .whitespaces).isEmpty } == true
+    }
+
     private var leadingLine: some View {
         VStack(alignment: .leading, spacing: 2) {
-            ZStack(alignment: .top) {
-                word(alignment: .leading)
-                if let mark {
-                    LetterMarkView(mark: mark)
-                        .offset(y: -6)
+            if pronunciationFirst {
+                pronunciationText(alignment: .leading)
+                script(alignment: .leading)
+                    .font(.subheadline.weight(.medium))
+            } else {
+                script(alignment: .leading)
+                if let pronunciation {
+                    pronunciationText(alignment: .leading)
+                        .font(.subheadline.weight(.medium))
+                } else if reservesPronunciation {
+                    Text(" ")
+                        .font(.subheadline.weight(.medium))
+                        .opacity(0)
+                        .accessibilityHidden(true)
                 }
-            }
-            if let pronunciation {
-                Text(pronunciation)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(pronunciationColor)
-                    .environment(\.layoutDirection, .leftToRight)
-            } else if reservesPronunciation {
-                Text(" ")
-                    .font(.subheadline.weight(.medium))
-                    .opacity(0)
-                    .accessibilityHidden(true)
             }
         }
         .environment(\.layoutDirection, arabic ? .rightToLeft : .leftToRight)
@@ -606,19 +615,52 @@ struct PashtoLine: View {
 
     private var centeredLine: some View {
         VStack(alignment: .center, spacing: 2) {
-            word(alignment: .center)
-                .frame(maxWidth: .infinity)
-            if let pronunciation {
-                Text(pronunciation)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(pronunciationColor)
+            if pronunciationFirst {
+                pronunciationText(alignment: .center)
                     .multilineTextAlignment(.center)
+                script(alignment: .center)
+                    .font(.subheadline.weight(.medium))
                     .frame(maxWidth: .infinity)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .environment(\.layoutDirection, .leftToRight)
+            } else {
+                script(alignment: .center)
+                    .frame(maxWidth: .infinity)
+                if let pronunciation {
+                    pronunciationText(alignment: .center)
+                        .font(.subheadline.weight(.medium))
+                        .multilineTextAlignment(.center)
+                }
             }
         }
         .frame(maxWidth: .infinity)
+        .environment(\.layoutDirection, arabic ? .rightToLeft : .leftToRight)
+    }
+
+    @ViewBuilder
+    private func pronunciationText(alignment: TextAlignment) -> some View {
+        let line = Text(pronunciation ?? "")
+            .multilineTextAlignment(alignment)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: alignment == .center ? .center : .leading)
+            .environment(\.layoutDirection, .leftToRight)
+        if pronunciationFirst {
+            if let textColor {
+                line.foregroundStyle(textColor)
+            } else {
+                line
+            }
+        } else {
+            line.foregroundStyle(pronunciationColor)
+        }
+    }
+
+    private func script(alignment: TextAlignment) -> some View {
+        ZStack(alignment: .top) {
+            word(alignment: alignment)
+            if let mark {
+                LetterMarkView(mark: mark)
+                    .offset(y: -6)
+            }
+        }
         .environment(\.layoutDirection, arabic ? .rightToLeft : .leftToRight)
     }
 
@@ -688,7 +730,7 @@ enum QuizCopy {
             base = optionNumber(number)
         case .visible(let text):
             if let pronunciation = option.pronunciation {
-                base = "\(text), \(pronunciation)"
+                base = "\(pronunciation), \(text)"
             } else {
                 base = text
             }

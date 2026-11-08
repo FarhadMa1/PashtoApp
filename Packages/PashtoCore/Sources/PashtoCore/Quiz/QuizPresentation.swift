@@ -141,7 +141,7 @@ public enum QuizPresentation {
     ///
     /// B1 and B3 keep it off until the question is answered, because the
     /// pronunciation would name the letter. Every other Arabic option shows
-    /// it whenever the session is showing pronunciation.
+    /// the stored pronunciation. The stored preference does not hide it.
     public static func optionPronunciation(
         kind: TaskKind,
         text: String,
@@ -156,17 +156,20 @@ public enum QuizPresentation {
 
     /// Pronunciation under one word tile.
     ///
-    /// Shown before the answer, whenever the session is showing pronunciation.
-    /// The whole sentence stays hidden until `sentencePronunciation`.
-    public static func tilePronunciation(_ pronunciation: String?, showsPronunciation: Bool) -> String? {
-        guard showsPronunciation, let pronunciation, !Text.isBlank(pronunciation) else { return nil }
+    /// The stored field only. Nothing is built from transliteration or from
+    /// neighbouring tiles. Shown before the answer. The whole sentence stays
+    /// hidden until `sentencePronunciation`. `showsPronunciation` is the stored
+    /// preference and does not hide this line.
+    public static func tilePronunciation(_ pronunciation: String?, showsPronunciation _: Bool) -> String? {
+        guard let pronunciation, !Text.isBlank(pronunciation) else { return nil }
         return pronunciation
     }
 
     /// Pronunciation of a whole ordered sentence.
     ///
     /// Hidden until the learner has answered. Before that, the pronunciation
-    /// is the sentence in the right order.
+    /// is the sentence in the right order. After the answer, the stored
+    /// preference does not hide it.
     public static func sentencePronunciation(
         item: ContentItem?,
         showsPronunciation: Bool,
@@ -177,30 +180,35 @@ public enum QuizPresentation {
     }
 
     /// What VoiceOver reads for one side of a match, including a link the learner made.
+    ///
+    /// Pronunciation comes first when it is on screen, then the Pashto or English,
+    /// then a link the learner already made.
     public static func matchAccessibilityLabel(
         text: String,
         pronunciation: String?,
         linkedText: String?
     ) -> String {
-        var parts = [text]
+        var parts: [String] = []
         if let pronunciation, !Text.isBlank(pronunciation) {
             parts.append(pronunciation)
         }
+        parts.append(text)
         if let linkedText, !Text.isBlank(linkedText) {
             parts.append(linkedText)
         }
         return parts.joined(separator: ", ")
     }
 
-    /// The pronunciation field under Arabic script, or nil.
+    /// The pronunciation field for Arabic script, or nil.
     ///
-    /// This never reads `translit`.
+    /// This never reads `translit`. `showsPronunciation` is the stored
+    /// preference. It does not hide the pronunciation.
     public static func spokenPronunciation(
         text: String,
         item: ContentItem?,
-        showsPronunciation: Bool
+        showsPronunciation _: Bool
     ) -> String? {
-        guard showsPronunciation, containsArabicScript(text) else { return nil }
+        guard containsArabicScript(text) else { return nil }
         guard let pronunciation = item?.pronunciation, !Text.isBlank(pronunciation) else { return nil }
         return pronunciation
     }

@@ -238,7 +238,7 @@ struct QuizFindingsTests {
         #expect(order.tiles.compactMap(\.pronunciation).sorted() == ["kha", "za"])
         for tile in order.tiles {
             #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: true) == tile.pronunciation)
-            #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: false) == nil)
+            #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: false) == tile.pronunciation)
         }
         var direct = SplitMix64(seed: 1)
         let context = QuizContext(bundle: bundle, seenLessonIDs: [lesson.id])
@@ -246,7 +246,7 @@ struct QuizFindingsTests {
 
         #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: true, answered: false) == nil)
         #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: true, answered: true) == "za-KHA")
-        #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: false, answered: true) == nil)
+        #expect(QuizPresentation.sentencePronunciation(item: phrase, showsPronunciation: false, answered: true) == "za-KHA")
     }
 
     /// Farhad approved these spellings on 2026-11-03. The test compares them character for character.
@@ -333,10 +333,10 @@ struct QuizFindingsTests {
         #expect(!hiddenOrders.isEmpty)
         for order in hiddenOrders {
             for tile in order.tiles {
-                #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: false) == nil)
+                #expect(QuizPresentation.tilePronunciation(tile.pronunciation, showsPronunciation: false) == tile.pronunciation)
             }
             let item = try #require(bundle.items.first { $0.id == order.targetID })
-            #expect(QuizPresentation.sentencePronunciation(item: item, showsPronunciation: false, answered: true) == nil)
+            #expect(QuizPresentation.sentencePronunciation(item: item, showsPronunciation: false, answered: true) == item.pronunciation)
         }
     }
 
@@ -353,7 +353,7 @@ struct QuizFindingsTests {
         #expect(links.isEmpty)
         #expect(QuizDraft.place([0, 1], tile: 1) == [0])
         #expect(QuizDraft.place([0], tile: 2) == [0, 2])
-        #expect(QuizPresentation.matchAccessibilityLabel(text: "سلام", pronunciation: "sa-LAAM", linkedText: "hello") == "سلام, sa-LAAM, hello")
+        #expect(QuizPresentation.matchAccessibilityLabel(text: "سلام", pronunciation: "sa-LAAM", linkedText: "hello") == "sa-LAAM, سلام, hello")
     }
 
     @Test func aWrongMatchStillMarksTheCorrectPairs() {

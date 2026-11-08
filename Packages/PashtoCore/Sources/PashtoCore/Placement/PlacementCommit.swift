@@ -36,7 +36,8 @@ public func placementCommit(
     existingCards: [ReviewCard] = [],
     existingLessons: [LessonProgress] = []
 ) -> PlacementCommit {
-    let alphabet = bundle.units.first?.id
+    let playable = PlayableCourse.hidingScript(bundle)
+    let alphabet = playable.units.first?.id
     var skipped: [PlacementUnitScore] = []
     var seenUnits = Set<UnitID>()
     for score in scores where score.skipped && score.unitID != alphabet {
@@ -50,7 +51,7 @@ public func placementCommit(
     }
     var lessons: [LessonProgress] = []
     for score in skipped {
-        guard let unit = bundle.units.first(where: { $0.id == score.unitID }) else { continue }
+        guard let unit = playable.units.first(where: { $0.id == score.unitID }) else { continue }
         let percent = scorePercent(correct: score.correct, questions: score.questions)
         for lesson in unit.lessons where knownLessons.insert(lesson.id).inserted {
             lessons.append(LessonProgress(
@@ -65,9 +66,9 @@ public func placementCommit(
     let skippedIDs = Set(skipped.map(\.unitID))
     var knownItems = Set(existingCards.map(\.itemID))
     var itemIDs: [ItemID] = []
-    let course = CourseOrder(bundle)
+    let course = CourseOrder(playable)
     for introduction in course.introductions {
-        let unitID = bundle.units[introduction.unitIndex].id
+        let unitID = playable.units[introduction.unitIndex].id
         guard skippedIDs.contains(unitID) else { continue }
         guard knownItems.insert(introduction.itemID).inserted else { continue }
         itemIDs.append(introduction.itemID)

@@ -16,11 +16,13 @@ import PashtoCore
 /// shuffled subset, so one seed can drop a type that another seed keeps.
 /// With the cap off, every question the generators return is counted. Each
 /// lesson is walked twice: once with pronunciation shown and once with it
-/// hidden, because the pronunciation question exists only in the second walk.
-/// B1 and B3 exist only in the first walk. B2 exists in both. Word order is
-/// required while sessions include it. The seed is fixed only so the
-/// walk can be repeated. It does not decide which types are present. A missing
-/// type is a warning in dev and an error in release.
+/// hidden. A pronunciation choice is not built on either walk. B1 and B3 exist
+/// only in the first walk, and only when the lesson still introduces letters.
+/// B2 exists in both walks in that case. Release does not require the letter
+/// tasks or the pronunciation choice: units 1–3 hide their letters. Word order
+/// is required while sessions include it. The seed is fixed only so the walk
+/// can be repeated. It does not decide which types are present. A missing
+/// required type is a warning in dev and an error in release.
 enum QuizTypeCoverage {
     static func issues(
         in bundle: ContentBundle,
@@ -36,7 +38,7 @@ enum QuizTypeCoverage {
             retiredItemIDs: retiredItemIDs,
             seed: coverageSeed
         )
-        return requiredKinds.compactMap { kind in
+        return requiredKinds(for: mode).compactMap { kind in
             guard counts[kind, default: 0] == 0 else { return nil }
             return IssueText.make(
                 severity,
@@ -55,19 +57,20 @@ enum QuizTypeCoverage {
         retiredItemIDs: [ItemID],
         seed: UInt64 = coverageSeed
     ) -> [TaskKind: Int] {
+        let course = releaseUnitIDs == nil ? bundle : PlayableCourse.hidingScript(bundle)
         let lessons: [Lesson]
         if let releaseUnitIDs {
-            lessons = ReleaseGate.releasedUnits(in: bundle, releaseUnitIDs: releaseUnitIDs).flatMap(\.lessons)
+            lessons = ReleaseGate.releasedUnits(in: course, releaseUnitIDs: releaseUnitIDs).flatMap(\.lessons)
         } else {
-            lessons = bundle.units.flatMap(\.lessons)
+            lessons = course.units.flatMap(\.lessons)
         }
         var counts = Dictionary(uniqueKeysWithValues: TaskKind.allCases.map { ($0, 0) })
         var seen: [LessonID] = []
         var rng = SplitMix64(seed: seed)
-        // Pronunciation on skips the pronunciation question. Pronunciation off
-        // is the only walk that builds it. B1 and B3 are built only while
-        // pronunciation is shown. B2 is built in both walks. Word order counts
-        // when sessions include it.
+        // Neither walk builds a pronunciation choice. B1 and B3 are built only
+        // while pronunciation is shown and the lesson still introduces letters.
+        // B2 is built in both walks in that case. Word order counts when
+        // sessions include it.
         // A kind counts when either walk produces it.
         let released = releaseUnitIDs?.compactMap(UnitID.init(rawValue:))
         for lesson in lessons {
@@ -75,7 +78,7 @@ enum QuizTypeCoverage {
             for showsPronunciation in [true, false] {
                 let session = LessonSessionBuilder.build(
                     for: lesson.id,
-                    in: bundle,
+                    in: course,
                     seenLessonIDs: seen,
                     retiredItemIDs: retiredItemIDs,
                     maxQuestions: nil,
@@ -95,9 +98,15 @@ enum QuizTypeCoverage {
     private static let coverageSeed: UInt64 = 1
 
     /// Word order is required only while sessions build it.
-    private static var requiredKinds: [TaskKind] {
+    ///
+    /// Release does not require letter tasks or a pronunciation choice.
+    /// Dev still requires letter tasks, because the source course still has them.
+    private static func requiredKinds(for mode: ToolMode) -> [TaskKind] {
         TaskKind.allCases.filter { kind in
-            kind != .orderWords || OrderWords.includedInSessions
+            if kind == .orderWords, !OrderWords.includedInSessions { return false }
+            if kind == .transliterationChoice { return false }
+            if mode == .release, PlayableCourse.retiredQuizKinds.contains(kind) { return false }
+            return true
         }
     }
 }
