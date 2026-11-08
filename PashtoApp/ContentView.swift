@@ -30,6 +30,8 @@ struct ContentView: View {
     var endSession: () -> Void = {}
     var answerSession: (LessonSession) -> Void = { _ in }
     var finishSession: (LessonSession) -> Void = { _ in }
+    /// Learned word for the local date. Nil omits the card. There is no empty-state line.
+    var dailyWord: DailyWord? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
@@ -113,7 +115,7 @@ struct ContentView: View {
                     )
                 }
                 if freezeCelebration {
-                    FreezeEarnedCelebration(onDismiss: { freezeCelebration = false })
+                    FreezeEarnedCelebration(count: streakCount, onDismiss: { freezeCelebration = false })
                 }
                 Text(verbatim: dailyGoalSpeech(done: goalShown))
                     .font(.subheadline.weight(.semibold))
@@ -121,6 +123,9 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(Text(verbatim: dailyGoalSpeech(done: goalDone)))
+                if let dailyWord {
+                    DailyWordCard(word: dailyWord)
+                }
                 Text("Pashto")
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(Lapis.text)
@@ -467,7 +472,7 @@ private struct DailyGoalRing: View {
 /// Reduce Motion and VoiceOver show the final number at once and do not pulse the star.
 /// A rescued day fades a snowflake inside that star once. The glyph sits on a badge
 /// circle, clipped to the icon, so the count beside it stays clear. A new freeze asks
-/// the home to play the larger star below this row. Neither adds words.
+/// the home to play the larger star below this row. The star card carries the earned line.
 private struct StreakMark: View {
     var shown: Int
     var count: Int
@@ -561,45 +566,74 @@ private struct StreakMark: View {
 ///
 /// It is larger than the lesson-finish star, with girih behind it and a lapis ring.
 /// Motion unfolds, holds, then shrinks and fades upward toward the streak icon.
-/// Reduce Motion only changes opacity: fade in, hold, fade out. A tap, the end of
-/// the timeline, and leaving the home all remove the card. The count stays in the
-/// row above, and this card is not read.
+/// Reduce Motion only changes opacity: fade in, hold, fade out. Without VoiceOver,
+/// the end of that timeline removes the card. With VoiceOver the card stays at
+/// the held frame until a tap or leaving the home. Speech finishing does not
+/// remove it. The count stays in the row above. VoiceOver reads one final
+/// sentence for this event and does not speak the phases.
 private struct FreezeEarnedCelebration: View {
+    var count: Int
     var onDismiss: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @Environment(\.layoutDirection) private var layoutDirection
+    @AccessibilityFocusState private var freezeFocused: Bool
     @State private var frame = FreezeStarFrame(
         opacity: 0, scale: 0.3, rotationDegrees: -45, offsetTowardIcon: 0, girihOpacity: 0
     )
     @State private var skipped = false
+    @State private var didFocusFreeze = false
+
+    private var speech: String {
+        FreezeStarSpeech.label(count: count, dayStreak: ApprovedCopy.dayStreak)
+    }
 
     var body: some View {
         let side = CGFloat(FreezeCelebrationLayout.starSide)
-        ZStack {
-            GirihPattern()
-                .opacity(frame.girihOpacity)
-            Octagram()
-                .fill(Lapis.saffron)
-                .overlay {
-                    Octagram().strokeBorder(Lapis.ring, lineWidth: 1)
-                }
-                .frame(width: side, height: side)
-                .scaleEffect(frame.scale)
-                .rotationEffect(.degrees(frame.rotationDegrees))
+        VStack(spacing: 0) {
+            ZStack {
+                Octagram()
+                    .fill(Lapis.saffron)
+                    .overlay {
+                        Octagram().strokeBorder(Lapis.ring, lineWidth: 1)
+                    }
+                    .frame(width: side, height: side)
+                    .scaleEffect(frame.scale)
+                    .rotationEffect(.degrees(frame.rotationDegrees))
+                    .opacity(frame.opacity)
+                    .offset(travel)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Text(verbatim: ApprovedCopy.streakFreezeEarned)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(Lapis.badgeInk)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
                 .opacity(frame.opacity)
-                .offset(travel)
         }
         .frame(maxWidth: .infinity)
         .frame(height: CGFloat(FreezeCelebrationLayout.cardHeight))
-        .background(Lapis.heroGradient)
+        .background {
+            Lapis.heroGradient
+            GirihPattern()
+                .opacity(frame.girihOpacity)
+        }
         .clipShape(RoundedRectangle(cornerRadius: CGFloat(FreezeCelebrationLayout.cornerRadius), style: .continuous))
         .contentShape(Rectangle())
         .onTapGesture(perform: skip)
-        .accessibilityHidden(true)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: speech))
+        .accessibilityFocused($freezeFocused)
         .transition(.identity)
         .task { await play() }
+        .task {
+            guard !didFocusFreeze else { return }
+            didFocusFreeze = true
+            freezeFocused = true
+        }
     }
 
     /// Up, and toward the trailing streak icon. The card is clipped, so this cannot cover the count.
@@ -632,6 +666,7 @@ private struct FreezeEarnedCelebration: View {
             if Task.isCancelled || skipped { return }
         }
         if Task.isCancelled || skipped { return }
+        guard plan.removesOverlay else { return }
         onDismiss()
     }
 
@@ -825,11 +860,161 @@ private struct PathNodeHalo: View {
     }
 }
 
+/// Today's learned word. The front is the Pashto word. The back is the English meaning.
+///
+/// The border is the same 1 pt lapis outline as the lesson bar, on the Today surface.
+/// Pronunciation uses the body text colour and sits under the word. Reduce Motion
+/// crossfades. A turn counter-rotates the meaning so it is not mirrored. Only the
+/// face that is showing is accessible. The back is the meaning itself: no second
+/// label was approved for turning back to the word.
+private struct DailyWordCard: View {
+    var word: DailyWord
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var face: DailyWordFace = .front
+
+    private var presentation: DailyWordPresentation {
+        DailyWordPresentation(face: face, reduceMotion: reduceMotion)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(verbatim: ApprovedCopy.wordOfTheDay)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(Lapis.text)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            ZStack {
+                frontFace
+                backFace
+            }
+            .frame(maxWidth: .infinity)
+            if presentation.showsFront {
+                Button(action: showMeaning) {
+                    Text(verbatim: ApprovedCopy.showMeaning)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(Lapis.text)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Lapis.background)
+        .clipShape(RoundedRectangle(cornerRadius: CGFloat(DailyWordLayout.cornerRadius), style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: CGFloat(DailyWordLayout.cornerRadius), style: .continuous)
+                .strokeBorder(Lapis.primary, lineWidth: CGFloat(DailyWordLayout.borderWidth))
+        }
+    }
+
+    private var frontFace: some View {
+        pashtoLine
+            .padding(.vertical, 8)
+            .modifier(DailyWordSpin(
+                angle: presentation.frontAngle,
+                shown: presentation.showsFront,
+                spins: presentation.flip.rotates
+            ))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: DailyWordSpeech.active(word: word, face: .front)))
+            .accessibilityHidden(!presentation.showsFront)
+            .allowsHitTesting(false)
+    }
+
+    private var backFace: some View {
+        Button(action: showWord) {
+            Text(verbatim: word.meaning)
+                .font(.title2.weight(.semibold))
+                .foregroundStyle(Lapis.text)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .environment(\.layoutDirection, .leftToRight)
+        }
+        .buttonStyle(.plain)
+        .modifier(DailyWordSpin(
+            angle: presentation.backAngle,
+            shown: presentation.showsBack,
+            spins: presentation.flip.rotates
+        ))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: DailyWordSpeech.active(word: word, face: .back)))
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHidden(!presentation.showsBack)
+        .allowsHitTesting(presentation.showsBack)
+    }
+
+    private var pashtoLine: some View {
+        PashtoLine(
+            text: word.pashto,
+            pronunciation: word.pronunciation,
+            arabic: QuizPresentation.containsArabicScript(word.pashto),
+            pronunciationColor: Lapis.text,
+            fitsWidth: true,
+            centers: true
+        )
+        .font(.largeTitle.weight(.medium))
+        .foregroundStyle(Lapis.text)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func showMeaning() {
+        flip(to: .back)
+    }
+
+    /// Returns to the word. The control's name is the meaning. No extra label.
+    private func showWord() {
+        flip(to: .front)
+    }
+
+    private func flip(to next: DailyWordFace) {
+        withAnimation(Motion.dailyWordFlip(reduceMotion: reduceMotion)) {
+            face = next
+        }
+    }
+}
+
+/// Hides a daily-word face once it has turned past the edge, so the meaning is not mirrored.
+///
+/// Reduce Motion leaves the angle at 0 and only changes opacity. The face does not scale or travel.
+private struct DailyWordSpin: ViewModifier, Animatable {
+    var angle: Double
+    var shown: Bool
+    var spins: Bool
+
+    nonisolated var animatableData: Double {
+        get { angle }
+        set { angle = newValue }
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .rotation3DEffect(
+                .degrees(spins ? angle : 0),
+                axis: (x: 0, y: 1, z: 0),
+                perspective: spins ? 0.6 : 0
+            )
+            .opacity(visible ? 1 : 0)
+            .accessibilityHidden(!visible)
+    }
+
+    private var visible: Bool {
+        guard spins else { return shown }
+        return DailyWordFlipVisibility.showsFace(angle: angle)
+    }
+}
+
 /// Catalog strings for the celebration. The English matches `CelebrationCopy`.
 private enum ApprovedCopy {
     static var lessonComplete: String { String(localized: "celebration.lessonComplete") }
     static var correct: String { String(localized: "celebration.correct") }
     static var dayStreak: String { String(localized: "celebration.dayStreak") }
+    static var streakFreezeEarned: String { String(localized: "celebration.streakFreezeEarned") }
+    static var wordOfTheDay: String { String(localized: "today.wordOfTheDay") }
+    static var showMeaning: String { String(localized: "today.showMeaning") }
     static var dailyGoal: String { String(localized: "celebration.dailyGoal") }
     static var toGo: String { String(localized: "celebration.toGo") }
     static var goalReached: String { String(localized: "celebration.goalReached") }

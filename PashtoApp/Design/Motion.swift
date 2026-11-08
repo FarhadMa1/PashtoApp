@@ -95,6 +95,16 @@ enum Motion {
         }
     }
 
+    /// Daily-word turn. 0.4 s on the Y axis, or a 0.2 s crossfade. Not the quiz spring.
+    static func dailyWordFlip(reduceMotion: Bool) -> Animation {
+        switch DailyWordFlip.style(reduceMotion: reduceMotion) {
+        case .rotation:
+            .easeInOut(duration: DailyWordFlip.rotationDuration)
+        case .crossfade:
+            .easeOut(duration: DailyWordFlip.crossfadeDuration)
+        }
+    }
+
     static var lessonStar: Animation {
         .spring(response: CelebrationMotion.star, dampingFraction: CelebrationMotion.starDamping)
     }

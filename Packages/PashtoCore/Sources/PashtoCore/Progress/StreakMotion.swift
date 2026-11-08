@@ -212,15 +212,18 @@ public struct FreezeStarPhase: Equatable, Sendable {
     }
 }
 
-/// The whole freeze celebration, then nothing left on screen.
+/// The whole freeze celebration.
 ///
 /// Motion unfolds, holds, then shrinks and fades toward the streak icon.
 /// Reduce Motion fades in, holds, and fades out. That path does not scale,
-/// turn, or travel. A tap removes the overlay at once. VoiceOver does not
-/// change the picture and does not add an announcement. The streak sentence
-/// already on the home is the only label.
+/// turn, or travel. A tap removes the card at once. Without VoiceOver the
+/// timeline removes it too. With VoiceOver the same entrance plays and the
+/// card then stays until a tap or leaving the home. Speech finishing does
+/// not remove it. The card's one label is the final streak count and the
+/// earned line. The phases are not spoken, and a second announcement is not posted.
 public struct FreezeStarPlan: Equatable, Sendable {
     public var phases: [FreezeStarPhase]
+    /// The timeline may remove the card when this is true. VoiceOver leaves it false.
     public var removesOverlay: Bool
 
     public init(phases: [FreezeStarPhase], removesOverlay: Bool) {
@@ -237,9 +240,12 @@ public struct FreezeStarPlan: Equatable, Sendable {
         phases.allSatisfy { $0.starts.isStill && $0.ends.isStill }
     }
 
-    /// VoiceOver keeps the existing streak sentence, so `voiceOver` does not change the picture.
-    public static func make(reduceMotion: Bool, voiceOver _: Bool, skipped: Bool) -> FreezeStarPlan {
+    /// VoiceOver uses the same entrance, then keeps the card. It does not add an exit.
+    public static func make(reduceMotion: Bool, voiceOver: Bool, skipped: Bool) -> FreezeStarPlan {
         if skipped { return skippedPlan }
+        if voiceOver {
+            return reduceMotion ? calmHeldPlan : movingHeldPlan
+        }
         return reduceMotion ? calmPlan : movingPlan
     }
 
@@ -274,6 +280,24 @@ public struct FreezeStarPlan: Equatable, Sendable {
         removesOverlay: true
     )
 
+    /// Unfold and hold, still showing. No settle, and the timeline does not remove the card.
+    private static let movingHeldPlan = FreezeStarPlan(
+        phases: [
+            FreezeStarPhase(step: .unfold, duration: StreakMotion.freezeStar, starts: folded, ends: rest),
+            FreezeStarPhase(step: .hold, duration: StreakMotion.freezeHold, starts: rest, ends: rest),
+        ],
+        removesOverlay: false
+    )
+
+    /// Fade in and hold, still showing. No fade out, and the timeline does not remove the card.
+    private static let calmHeldPlan = FreezeStarPlan(
+        phases: [
+            FreezeStarPhase(step: .fadeIn, duration: StreakMotion.freezeReduceFade, starts: stillHidden, ends: rest),
+            FreezeStarPhase(step: .hold, duration: StreakMotion.freezeReduceHold, starts: rest, ends: rest),
+        ],
+        removesOverlay: false
+    )
+
     private static let skippedPlan = FreezeStarPlan(
         phases: [
             FreezeStarPhase(step: .gone, duration: 0, starts: stillHidden, ends: stillHidden),
@@ -284,44 +308,69 @@ public struct FreezeStarPlan: Equatable, Sendable {
 
 /// Whether the freeze card is on screen.
 ///
-/// `begin` shows it. `finish`, `skip`, and `leave` all clear it. A new playback,
-/// such as coming back to the home, starts hidden.
+/// `begin` shows it. Without VoiceOver, `finish` clears it when the timeline ends.
+/// With VoiceOver, `finish` leaves it up: speech ending is not a dismissal, and
+/// there is no timeout. `skip` is the tap. `leave` is navigating onward. A new
+/// playback, such as coming back to the home, starts hidden.
 public struct FreezeCelebrationPlayback: Equatable, Sendable {
     public private(set) var visible = false
     public private(set) var plan: FreezeStarPlan?
+    /// The entrance has finished and VoiceOver is keeping the card for a tap or leaving.
+    public private(set) var holdingForDismissal = false
 
     public init() {}
 
     public mutating func begin(reduceMotion: Bool, voiceOver: Bool = false) {
         plan = FreezeStarPlan.make(reduceMotion: reduceMotion, voiceOver: voiceOver, skipped: false)
         visible = true
+        holdingForDismissal = false
     }
 
+    /// The entrance timeline ended. VoiceOver keeps the card. Otherwise it leaves.
     public mutating func finish() {
+        guard visible else { return }
+        if plan?.removesOverlay == false {
+            holdingForDismissal = true
+            return
+        }
         visible = false
+        holdingForDismissal = false
     }
+
+    /// The spoken sentence ending. This never removes the card.
+    public mutating func noteSpeechFinished() {}
 
     public mutating func skip() {
         plan = FreezeStarPlan.make(reduceMotion: false, voiceOver: false, skipped: true)
         visible = false
+        holdingForDismissal = false
     }
 
     /// The home went away. The card does not come back with it.
     public mutating func leave() {
         visible = false
         plan = nil
+        holdingForDismissal = false
     }
 }
 
 /// What VoiceOver is given for the freeze star.
 ///
-/// The label is the streak sentence already on the home. The star does not
-/// post another announcement and does not add words.
+/// The label is the final streak count and `streak freeze earned`. The count
+/// is the one passed in for that event, so a later earn does not keep saying 7.
+/// `postsAnnouncement` stays false: the label is the one sentence, and nothing
+/// posts a second announcement or speaks a phase. The sentence ending does not
+/// remove the card, and the card does not block the rest of the home.
 public enum FreezeStarSpeech {
     public static let postsAnnouncement = false
+    public static let speaksPhases = false
+    public static let dismissesOnSpeechCompletion = false
+    public static let blocksInput = false
+    /// The clause after the count. It is the visible line, lowercased, so the sentence reads as one.
+    public static let earnedClause = "streak freeze earned"
 
     public static func label(count: Int, dayStreak: String = CelebrationCopy.dayStreak) -> String {
-        CelebrationCopy.streakSpoken(count, label: dayStreak)
+        "\(CelebrationCopy.streakSpoken(count, label: dayStreak)), \(earnedClause)"
     }
 }
 

@@ -121,6 +121,21 @@ final class AppModel {
         snapshot?.settings.dailyGoal.newItemLimit ?? DailyGoal.regular.newItemLimit
     }
 
+    /// The learned word for the user's local date.
+    ///
+    /// The candidates are persisted review cards in released units. Nil when
+    /// none of those cards is vocabulary with an English meaning.
+    var dailyWord: DailyWord? {
+        guard let snapshot, let course else { return nil }
+        return DailyWordSelection.select(
+            cards: snapshot.cards,
+            in: course,
+            releasedUnitIDs: releasedUnitIDs,
+            on: clock.today,
+            showsPronunciation: snapshot.settings.showTransliteration
+        )
+    }
+
     /// Lessons already finished or skipped by placement. The path draws these.
     var finishedLessonIDs: Set<LessonID> {
         Set(snapshot?.lessonProgress.map(\.lessonID) ?? [])

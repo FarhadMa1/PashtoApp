@@ -385,6 +385,18 @@
         }
       }
     },
+    "celebration.streakFreezeEarned" : {
+      "comment" : "Visible line on the freeze card. VoiceOver speaks this after the streak count, in lowercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streak freeze earned"
+          }
+        }
+      }
+    },
     "celebration.dailyGoal" : {
       "comment" : "Daily goal ring. New words against the stored limit of 5, 10, or 15.",
       "extractionState" : "manual",
@@ -453,6 +465,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Now"
+          }
+        }
+      }
+    },
+    "today.wordOfTheDay" : {
+      "comment" : "Today card title for the learned word chosen for the local date.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word of the day"
+          }
+        }
+      }
+    },
+    "today.showMeaning" : {
+      "comment" : "Turns the daily-word card from the Pashto word to the English meaning.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show meaning"
           }
         }
       }
