@@ -59,8 +59,8 @@ public enum CelebrationCopy {
     /// What VoiceOver reads when the lesson finishes.
     ///
     /// `CounterPlan.spoken` is the final correct count in every mode, including
-    /// while a sighted counter is still stepping. The answered count is not
-    /// included: it is not a new-word count, and it has no approved name.
+    /// while a sighted counter is still stepping. The answered total is the
+    /// denominator of the labelled fraction, so this sentence does not repeat it.
     /// Pronunciation is included only when this session is already showing it.
     public static func accessibleResult(
         stats: LessonFinishStats,
@@ -71,12 +71,12 @@ public enum CelebrationCopy {
         title: String = lessonComplete,
         correct: String = correct
     ) -> String {
-        let finalCorrect = CounterPlan.plan(
-            target: stats.correct,
+        let layout = resultLayout(
+            stats: stats,
             reduceMotion: reduceMotion,
             voiceOver: voiceOver,
-            skipped: false
-        ).spoken
+            label: correct
+        )
         var parts = [title, praise.pashto]
         if showsPronunciation {
             let pronunciation = praise.pronunciation.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -84,8 +84,70 @@ public enum CelebrationCopy {
                 parts.append(pronunciation)
             }
         }
-        parts.append("\(finalCorrect) \(correct)")
+        parts.append("\(layout.correctPlan.spoken) \(correct)")
         return parts.joined(separator: ", ")
+    }
+
+    /// The one labelled figure on the finished lesson.
+    ///
+    /// The answered total is the denominator of `fraction`. It is not returned
+    /// again as its own number.
+    public static func resultLayout(
+        stats: LessonFinishStats,
+        reduceMotion: Bool,
+        voiceOver: Bool,
+        skipped: Bool = false,
+        label: String = correct
+    ) -> CelebrationResultLayout {
+        CelebrationResultLayout(
+            correctPlan: CounterPlan.plan(
+                target: stats.correct,
+                reduceMotion: reduceMotion,
+                voiceOver: voiceOver,
+                skipped: skipped
+            ),
+            answeredTotal: max(0, stats.answered),
+            label: label,
+            showsSeparateAnsweredCount: false
+        )
+    }
+}
+
+/// The finished-lesson numbers the screen is allowed to draw.
+///
+/// `fraction` is the correct count over the answered total, with `label`
+/// under it. `unlabeledLines` is empty: that answered total is not drawn again.
+public struct CelebrationResultLayout: Equatable, Sendable {
+    public var correctPlan: CounterPlan
+    public var answeredTotal: Int
+    public var label: String
+    public var showsSeparateAnsweredCount: Bool
+
+    public init(
+        correctPlan: CounterPlan,
+        answeredTotal: Int,
+        label: String,
+        showsSeparateAnsweredCount: Bool
+    ) {
+        self.correctPlan = correctPlan
+        self.answeredTotal = answeredTotal
+        self.label = label
+        self.showsSeparateAnsweredCount = showsSeparateAnsweredCount
+    }
+
+    /// Final correct count over the answered total, such as `4/6`.
+    public var fraction: String {
+        "\(correctPlan.spoken)/\(answeredTotal)"
+    }
+
+    /// The fraction and its label. Nothing else.
+    public var labelledLines: [String] {
+        [fraction, label]
+    }
+
+    /// Numbers with no label. The answered total is not one of these.
+    public var unlabeledLines: [String] {
+        showsSeparateAnsweredCount ? ["\(answeredTotal)"] : []
     }
 }
 

@@ -121,6 +121,69 @@ struct CelebrationCopyTests {
         #expect(speech.contains("4 correct"))
     }
 
+    @Test func theLabelledFractionIsTheOnlyAnsweredTotal() {
+        let stats = LessonFinishStats(answered: 6, correct: 4)
+        let modes = [(false, false), (true, false), (false, true), (true, true)]
+        for (reduce, voice) in modes {
+            let layout = CelebrationCopy.resultLayout(
+                stats: stats,
+                reduceMotion: reduce,
+                voiceOver: voice
+            )
+            #expect(layout.fraction == "4/6")
+            #expect(layout.label == "correct")
+            #expect(layout.labelledLines == ["4/6", "correct"])
+            #expect(layout.showsSeparateAnsweredCount == false)
+            #expect(layout.unlabeledLines.isEmpty)
+            #expect(layout.correctPlan.spoken == 4)
+            #expect(layout.answeredTotal == 6)
+
+            let speech = CelebrationCopy.accessibleResult(
+                stats: stats,
+                praise: .kha,
+                showsPronunciation: true,
+                reduceMotion: reduce,
+                voiceOver: voice
+            )
+            #expect(speech == "Lesson complete, ښه, kha, 4 correct")
+            #expect(!speech.contains("6"))
+            #expect(speech.split(separator: " ").filter { $0 == "6" }.isEmpty)
+        }
+
+        let quiet = CelebrationCopy.resultLayout(
+            stats: stats,
+            reduceMotion: true,
+            voiceOver: true
+        )
+        #expect(quiet.correctPlan.start == 4)
+        #expect(quiet.correctPlan.animates == false)
+        let read = CelebrationCopy.resultLayout(
+            stats: stats,
+            reduceMotion: false,
+            voiceOver: true
+        )
+        #expect(read.correctPlan.start == read.correctPlan.spoken)
+        #expect(read.fraction == "4/6")
+
+        let tied = LessonFinishStats(answered: 6, correct: 6)
+        let tiedLayout = CelebrationCopy.resultLayout(
+            stats: tied,
+            reduceMotion: false,
+            voiceOver: true
+        )
+        #expect(tiedLayout.fraction == "6/6")
+        #expect(tiedLayout.unlabeledLines.isEmpty)
+        let tiedSpeech = CelebrationCopy.accessibleResult(
+            stats: tied,
+            praise: .kha,
+            showsPronunciation: false,
+            reduceMotion: true,
+            voiceOver: true
+        )
+        #expect(tiedSpeech == "Lesson complete, ښه, 6 correct")
+        #expect(!tiedSpeech.contains("6/6"))
+    }
+
     @Test func coursePathUsesNowAndLockedAndNotQuizCorrect() {
         let first = lessonID("l-a")
         let current = lessonID("l-b")
@@ -147,6 +210,31 @@ struct CelebrationCopyTests {
         #expect(CoursePathCopy.locked != QuizResultMark.correct.spokenEnglish)
     }
 
+    @Test func nowUsesBodyTextAndClearsNormalContrastOnTheDarkPage() throws {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let lapis = try String(contentsOf: root.appendingPathComponent("PashtoApp/Design/LapisStyle.swift"), encoding: .utf8)
+        let screen = try String(contentsOf: root.appendingPathComponent("PashtoApp/ContentView.swift"), encoding: .utf8)
+        let textDark = try dynamicHex("text", dark: true, in: lapis)
+        let pageDark = try dynamicHex("background", dark: true, in: lapis)
+        #expect(textDark == 0xF1F5F9)
+        #expect(pageDark == QuizResultPalette.pageDark)
+        #expect(pageDark == 0x0F172A)
+        #expect(textDark != QuizResultPalette.badgeDark)
+        #expect(QuizResultPalette.badgeDark == 0x4666D2)
+        let ratio = QuizResultPalette.contrastRatio(foreground: textDark, background: pageDark)
+        #expect(ratio >= 4.5)
+
+        let now = try #require(screen.range(of: "ApprovedCopy.now"))
+        let caption = screen[now.lowerBound...].prefix(180)
+        #expect(caption.contains("foregroundStyle(Lapis.text)"))
+        #expect(!caption.contains("Lapis.badge"))
+    }
+
     @Test func catalogMatchesTheApprovedEnglish() throws {
         let url = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
@@ -170,6 +258,16 @@ struct CelebrationCopyTests {
         #expect(try catalogValue("path.now", in: data) == CoursePathCopy.now)
         #expect(try catalogValue("path.locked", in: data) == CoursePathCopy.locked)
         #expect(try catalogValue("quiz.feedback.correct", in: data) == "Correct")
+    }
+
+    private func dynamicHex(_ name: String, dark: Bool, in source: String) throws -> UInt32 {
+        let line = try #require(source.split(separator: "\n").first {
+            $0.contains("static let \(name) = dynamic(")
+        })
+        let key = dark ? "dark: 0x" : "light: 0x"
+        let rest = try #require(line.split(separator: key).dropFirst().first)
+        let digits = rest.prefix { $0.isHexDigit }
+        return try #require(UInt32(digits, radix: 16))
     }
 
     private func catalogValue(_ key: String, in data: Data) throws -> String {

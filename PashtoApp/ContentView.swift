@@ -245,14 +245,22 @@ private struct LessonFinishedView: View {
     @State private var skipped = false
     @State private var skipToken = 0
     @State private var correctShown = 0
-    @State private var answeredShown = 0
     @State private var didFocusResult = false
 
     private var stats: LessonFinishStats { LessonFinishStats.measure(session) }
     private var praise: LessonPraise { LessonPraise.select(lessonID: session.lessonID) }
+    private var resultLayout: CelebrationResultLayout {
+        CelebrationCopy.resultLayout(
+            stats: stats,
+            reduceMotion: reduceMotion,
+            voiceOver: voiceOver,
+            skipped: skipped,
+            label: ApprovedCopy.correct
+        )
+    }
 
     /// Final correct count, praise, and pronunciation when this session shows it.
-    /// The answered total stays on screen and out of this label.
+    /// The answered total is only the denominator of the labelled fraction.
     private var resultSpeech: String {
         CelebrationCopy.accessibleResult(
             stats: stats,
@@ -309,19 +317,15 @@ private struct LessonFinishedView: View {
                     .foregroundStyle(Lapis.text)
                     Spacer(minLength: 0)
                 }
-                HStack(alignment: .top, spacing: 28) {
-                    Text(answeredShown, format: .number)
-                        .font(.largeTitle.weight(.bold).monospacedDigit())
-                    VStack(spacing: 2) {
-                        HStack(spacing: 0) {
-                            Text(correctShown, format: .number)
-                            Text(verbatim: "/\(stats.answered)")
-                        }
-                        .font(.largeTitle.weight(.bold).monospacedDigit())
-                        Text(verbatim: ApprovedCopy.correct)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Lapis.secondaryText)
+                VStack(spacing: 2) {
+                    HStack(spacing: 0) {
+                        Text(correctShown, format: .number)
+                        Text(verbatim: "/\(resultLayout.answeredTotal)")
                     }
+                    .font(.largeTitle.weight(.bold).monospacedDigit())
+                    Text(verbatim: resultLayout.label)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Lapis.secondaryText)
                 }
                 .foregroundStyle(Lapis.text)
                 .accessibilityHidden(true)
@@ -370,39 +374,25 @@ private struct LessonFinishedView: View {
             starShown = true
             girihShown = true
             correctShown = stats.correct
-            answeredShown = stats.answered
         }
         skipToken += 1
     }
 
     private func count() async {
-        let correct = CounterPlan.plan(
-            target: stats.correct,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver,
-            skipped: skipped
-        )
-        let answered = CounterPlan.plan(
-            target: stats.answered,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver,
-            skipped: skipped
-        )
+        let layout = resultLayout
+        let correct = layout.correctPlan
         correctShown = correct.start
-        answeredShown = answered.start
-        guard correct.animates || answered.animates else { return }
-        let steps = max(correct.end, answered.end)
+        guard correct.animates else { return }
+        let steps = max(correct.end, layout.answeredTotal)
         guard steps > 0 else { return }
         let slice = CelebrationMotion.countUp / Double(steps)
         for step in 1...steps {
             try? await Task.sleep(for: .seconds(slice))
             if Task.isCancelled || skipped { break }
-            if correct.animates { correctShown = min(step, correct.end) }
-            if answered.animates { answeredShown = min(step, answered.end) }
+            correctShown = min(step, correct.end)
         }
         if !Task.isCancelled {
             correctShown = correct.end
-            answeredShown = answered.end
         }
     }
 }
@@ -551,7 +541,7 @@ private struct CoursePathList: View {
                             if mark(lesson.id) == .now {
                                 Text(verbatim: ApprovedCopy.now)
                                     .font(.subheadline.weight(.bold))
-                                    .foregroundStyle(Lapis.badge)
+                                    .foregroundStyle(Lapis.text)
                             } else if mark(lesson.id) == .locked {
                                 Text(verbatim: ApprovedCopy.locked)
                                     .font(.subheadline.weight(.bold))
