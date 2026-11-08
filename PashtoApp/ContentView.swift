@@ -93,7 +93,6 @@ struct ContentView: View {
                 HStack(alignment: .center, spacing: 16) {
                     DailyGoalRing(
                         shown: goalShown,
-                        done: goalDone,
                         total: goalTotal,
                         animates: animatesHomeMotion
                     )
@@ -105,6 +104,12 @@ struct ContentView: View {
                         animates: animatesHomeMotion
                     )
                 }
+                Text(verbatim: dailyGoalSpeech(done: goalShown))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Lapis.text)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(verbatim: dailyGoalSpeech(done: goalDone)))
                 Text("Pashto")
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(Lapis.text)
@@ -206,13 +211,27 @@ struct ContentView: View {
         guard pendingHomeMotion?.id == motion.id else { return }
         consumeHomeMotion()
     }
+
+    /// New words against the stored limit. `done` is the count this label names.
+    private func dailyGoalSpeech(done: Int) -> String {
+        CelebrationCopy.dailyGoalSpoken(
+            done: done,
+            goal: goalTotal,
+            title: ApprovedCopy.dailyGoal,
+            one: ApprovedCopy.wordOne,
+            other: ApprovedCopy.wordOther,
+            toGo: ApprovedCopy.toGo,
+            goalReached: ApprovedCopy.goalReached
+        )
+    }
 }
 
 /// Saffron octagram, girih behind it, and the first-try numbers.
 ///
 /// The pieces start together and finish within the girih's 0.8 s. A tap skips
 /// to the end. Continue stays outside that tap and is never disabled.
-/// Titles, praise, and captions that are not already in the catalog are omitted.
+/// VoiceOver focuses the result once. That label is the final text, so the
+/// count-up is not read and a second announcement is not posted.
 private struct LessonFinishedView: View {
     var session: LessonSession
     var onContinue: () -> Void
@@ -220,14 +239,39 @@ private struct LessonFinishedView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @Environment(\.colorScheme) private var colorScheme
+    @AccessibilityFocusState private var resultFocused: Bool
     @State private var starShown = false
     @State private var girihShown = false
     @State private var skipped = false
     @State private var skipToken = 0
     @State private var correctShown = 0
-    @State private var answeredShown = 0
+    @State private var didFocusResult = false
 
     private var stats: LessonFinishStats { LessonFinishStats.measure(session) }
+    private var praise: LessonPraise { LessonPraise.select(lessonID: session.lessonID) }
+    private var resultLayout: CelebrationResultLayout {
+        CelebrationCopy.resultLayout(
+            stats: stats,
+            reduceMotion: reduceMotion,
+            voiceOver: voiceOver,
+            skipped: skipped,
+            label: ApprovedCopy.correct
+        )
+    }
+
+    /// Final correct count, praise, and pronunciation when this session shows it.
+    /// The answered total is only the denominator of the labelled fraction.
+    private var resultSpeech: String {
+        CelebrationCopy.accessibleResult(
+            stats: stats,
+            praise: praise,
+            showsPronunciation: session.showsPronunciation,
+            reduceMotion: reduceMotion,
+            voiceOver: voiceOver,
+            title: ApprovedCopy.lessonComplete,
+            correct: ApprovedCopy.correct
+        )
+    }
 
     var body: some View {
         LapisScreen {
@@ -258,14 +302,31 @@ private struct LessonFinishedView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                 .accessibilityHidden(true)
 
-                HStack(spacing: 28) {
-                    Text(answeredShown, format: .number)
+                Text(verbatim: ApprovedCopy.lessonComplete)
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(Lapis.text)
+                    .frame(maxWidth: .infinity)
+                HStack {
+                    Spacer(minLength: 0)
+                    PashtoLine(
+                        text: praise.pashto,
+                        pronunciation: session.showsPronunciation ? praise.pronunciation : nil,
+                        arabic: true
+                    )
+                    .font(.title.weight(.semibold))
+                    .foregroundStyle(Lapis.text)
+                    Spacer(minLength: 0)
+                }
+                VStack(spacing: 2) {
                     HStack(spacing: 0) {
                         Text(correctShown, format: .number)
-                        Text(verbatim: "/\(stats.answered)")
+                        Text(verbatim: "/\(resultLayout.answeredTotal)")
                     }
+                    .font(.largeTitle.weight(.bold).monospacedDigit())
+                    Text(verbatim: resultLayout.label)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Lapis.secondaryText)
                 }
-                .font(.largeTitle.weight(.bold).monospacedDigit())
                 .foregroundStyle(Lapis.text)
                 .accessibilityHidden(true)
             }
@@ -275,7 +336,8 @@ private struct LessonFinishedView: View {
             .contentShape(Rectangle())
             .onTapGesture(perform: skip)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(verbatim: "\(stats.correct)/\(stats.answered)"))
+            .accessibilityLabel(Text(verbatim: resultSpeech))
+            .accessibilityFocused($resultFocused)
         } footer: {
             Button(action: onContinue) {
                 Text("quiz.continue.button")
@@ -284,6 +346,11 @@ private struct LessonFinishedView: View {
         }
         .onAppear(perform: play)
         .task(id: skipToken) { await count() }
+        .task {
+            guard !didFocusResult else { return }
+            didFocusResult = true
+            resultFocused = true
+        }
     }
 
     private func play() {
@@ -307,39 +374,25 @@ private struct LessonFinishedView: View {
             starShown = true
             girihShown = true
             correctShown = stats.correct
-            answeredShown = stats.answered
         }
         skipToken += 1
     }
 
     private func count() async {
-        let correct = CounterPlan.plan(
-            target: stats.correct,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver,
-            skipped: skipped
-        )
-        let answered = CounterPlan.plan(
-            target: stats.answered,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver,
-            skipped: skipped
-        )
+        let layout = resultLayout
+        let correct = layout.correctPlan
         correctShown = correct.start
-        answeredShown = answered.start
-        guard correct.animates || answered.animates else { return }
-        let steps = max(correct.end, answered.end)
+        guard correct.animates else { return }
+        let steps = max(correct.end, layout.answeredTotal)
         guard steps > 0 else { return }
         let slice = CelebrationMotion.countUp / Double(steps)
         for step in 1...steps {
             try? await Task.sleep(for: .seconds(slice))
             if Task.isCancelled || skipped { break }
-            if correct.animates { correctShown = min(step, correct.end) }
-            if answered.animates { answeredShown = min(step, answered.end) }
+            correctShown = min(step, correct.end)
         }
         if !Task.isCancelled {
             correctShown = correct.end
-            answeredShown = answered.end
         }
     }
 }
@@ -348,9 +401,10 @@ private struct LessonFinishedView: View {
 ///
 /// The fraction is the stored count over the stored limit. Reduce Motion and
 /// VoiceOver show the end at once. The check appears when the count reaches the limit.
+/// The ring is not an accessibility element. The sentence under it is, and that
+/// sentence names the final new-word count rather than each step.
 private struct DailyGoalRing: View {
     var shown: Int
-    var done: Int
     var total: Int
     var animates: Bool
 
@@ -359,16 +413,6 @@ private struct DailyGoalRing: View {
     }
 
     private var showsCheck: Bool { total > 0 && shown >= total }
-
-    private var spoken: String {
-        GoalRingPlan.plan(
-            from: shown,
-            to: done,
-            goal: total,
-            reduceMotion: true,
-            voiceOver: true
-        ).spoken
-    }
 
     var body: some View {
         VStack(spacing: 4) {
@@ -402,8 +446,7 @@ private struct DailyGoalRing: View {
             .font(.headline.weight(.bold).monospacedDigit())
             .foregroundStyle(Lapis.text)
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(verbatim: spoken))
+        .accessibilityHidden(true)
     }
 }
 
@@ -423,14 +466,20 @@ private struct StreakMark: View {
                 .frame(width: 28, height: 28)
                 .modifier(StreakStarPulse(token: pulse))
                 .accessibilityHidden(true)
-            Text(shown, format: .number)
-                .font(.title2.weight(.bold).monospacedDigit())
-                .foregroundStyle(Lapis.text)
-                .contentTransition(.numericText())
-                .animation(animates ? .easeOut(duration: CelebrationMotion.streakPulse) : nil, value: shown)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(shown, format: .number)
+                    .font(.title2.weight(.bold).monospacedDigit())
+                    .foregroundStyle(Lapis.text)
+                    .contentTransition(.numericText())
+                    .animation(animates ? .easeOut(duration: CelebrationMotion.streakPulse) : nil, value: shown)
+                    .accessibilityHidden(true)
+                Text(verbatim: ApprovedCopy.dayStreak)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Lapis.secondaryText)
+            }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(verbatim: "\(StreakRoll.plan(from: shown, to: count, reduceMotion: true, voiceOver: true).spoken)"))
+        .accessibilityLabel(Text(verbatim: CelebrationCopy.streakSpoken(count, label: ApprovedCopy.dayStreak)))
     }
 }
 
@@ -459,11 +508,15 @@ private struct CoursePathList: View {
     var finished: Set<LessonID>
     /// The lesson whose connector stays empty until the fill animation runs.
     var waitingLessonID: LessonID?
+    /// Lessons that cannot be opened. The home list passes none.
+    var locked: Set<LessonID> = []
     var animates: Bool
     var startLesson: (LessonID) -> Void
 
+    private var order: [LessonID] { lessons.map(\.id) }
+
     private var nextID: LessonID? {
-        CoursePathMotion.next(in: lessons.map(\.id), finished: finished)
+        CoursePathMotion.next(in: order, finished: finished)
     }
 
     var body: some View {
@@ -479,18 +532,43 @@ private struct CoursePathList: View {
                                 pathConnector(filled: segmentFilled(lesson.id))
                             }
                         }
-                        Text(verbatim: lesson.title)
-                            .font(.title3.weight(.semibold))
-                            .foregroundStyle(Lapis.text)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 10)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(verbatim: lesson.title)
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(Lapis.text)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            if mark(lesson.id) == .now {
+                                Text(verbatim: ApprovedCopy.now)
+                                    .font(.subheadline.weight(.bold))
+                                    .foregroundStyle(Lapis.text)
+                            } else if mark(lesson.id) == .locked {
+                                Text(verbatim: ApprovedCopy.locked)
+                                    .font(.subheadline.weight(.bold))
+                                    .foregroundStyle(Lapis.secondaryText)
+                            }
+                        }
+                        .padding(.top, 10)
                     }
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(lesson.id.rawValue)
+                .accessibilityLabel(Text(verbatim: pathLabel(lesson)))
             }
         }
+    }
+
+    private func mark(_ id: LessonID) -> CoursePathCopy.Mark {
+        CoursePathCopy.mark(id: id, order: order, finished: finished, locked: locked)
+    }
+
+    private func pathLabel(_ lesson: ReleasedLesson) -> String {
+        CoursePathCopy.accessibilityLabel(
+            title: lesson.title,
+            mark: mark(lesson.id),
+            now: ApprovedCopy.now,
+            locked: ApprovedCopy.locked
+        )
     }
 
     private func pathNode(_ lesson: ReleasedLesson) -> some View {
@@ -587,6 +665,20 @@ private struct PathNodeHalo: View {
         guard pulses else { return }
         withAnimation(Motion.pathPulse) { pulse = true }
     }
+}
+
+/// Catalog strings for the celebration. The English matches `CelebrationCopy`.
+private enum ApprovedCopy {
+    static var lessonComplete: String { String(localized: "celebration.lessonComplete") }
+    static var correct: String { String(localized: "celebration.correct") }
+    static var dayStreak: String { String(localized: "celebration.dayStreak") }
+    static var dailyGoal: String { String(localized: "celebration.dailyGoal") }
+    static var toGo: String { String(localized: "celebration.toGo") }
+    static var goalReached: String { String(localized: "celebration.goalReached") }
+    static var wordOne: String { String(localized: "celebration.word.one") }
+    static var wordOther: String { String(localized: "celebration.word.other") }
+    static var now: String { String(localized: "path.now") }
+    static var locked: String { String(localized: "path.locked") }
 }
 
 #Preview {
