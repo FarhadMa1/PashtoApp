@@ -112,8 +112,19 @@ struct RootLessonSessionTests {
     }
 
     @Test func bundledCourseLessonsArePlayableOrHidden() throws {
-        let bundle = try JSONDecoder().decode(ContentBundle.self, from: Data(contentsOf: bundledCourseURL()))
-        let released = ["u-sounds", "u-greetings", "u-introductions", "u-family"].map(unitID)
+        let content = try Data(contentsOf: bundledCourseURL())
+        let release = try Data(contentsOf: bundledCourseURL()
+            .deletingLastPathComponent()
+            .appendingPathComponent(BundledCourseLoader.releaseUnitsFileName))
+        let loaded = BundledCourseLoader.load(content: content, releaseUnits: release)
+        guard case .ready(let course) = loaded else {
+            Issue.record("The bundled course did not decode")
+            return
+        }
+        let approved = ["u-sounds", "u-greetings", "u-introductions", "u-family"].map(unitID)
+        #expect(course.releasedUnitIDs == approved)
+        let bundle = course.bundle
+        let released = course.releasedUnitIDs
         let settings = [(true, false), (true, true), (false, false), (false, true)]
         for (showsPronunciation, voiceOver) in settings {
             let offered = RootLessonSession.lessons(
@@ -123,6 +134,7 @@ struct RootLessonSessionTests {
                 voiceOver: voiceOver
             )
             let offeredIDs = Set(offered.map(\.id))
+            #expect(offered.allSatisfy { released.contains($0.unitID) })
             #expect(!offeredIDs.contains(lessonID("l-sounds-1")))
             var rng = SplitMix64(seed: 1)
             for unit in bundle.units where released.contains(unit.id) {
