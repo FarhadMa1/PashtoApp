@@ -343,3 +343,21 @@ public enum PairMergePlan {
         }
     }
 }
+
+/// The haptic for a graded answer, for every task kind.
+///
+/// A choice plays it when the option is tapped. Match and word order play it
+/// when Continue grades the answer. Both call this so the two paths stay one.
+public enum AnswerHaptic: Equatable, Sendable {
+    case success
+    case error
+
+    public static func kind(for result: GradeResult) -> AnswerHaptic {
+        switch result {
+        case .correct:
+            .success
+        case .incorrect:
+            .error
+        }
+    }
+}

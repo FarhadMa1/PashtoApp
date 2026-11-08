@@ -13,7 +13,8 @@ public final class PairMergeClock {
 
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var generation = 0
-    @ObservationIgnored nonisolated(unsafe) private let sleep: @Sendable (TimeInterval) async -> Void
+    /// Waits for one gap. Sendable and immutable, so a nonisolated init can store it without sharing mutable state.
+    @ObservationIgnored nonisolated private let sleep: @Sendable (TimeInterval) async -> Void
 
     public struct Beat: Equatable, Sendable {
         public var time: TimeInterval
@@ -28,6 +29,9 @@ public final class PairMergeClock {
     }
 
     /// `sleep` waits for one gap. The default waits on the system clock.
+    ///
+    /// Nonisolated so a view can build the clock while its storage is created.
+    /// The closure is Sendable and does not touch the clock.
     nonisolated public init(sleep: (@Sendable (TimeInterval) async -> Void)? = nil) {
         self.sleep = sleep ?? { seconds in
             let milliseconds = Int((seconds * 1000).rounded())

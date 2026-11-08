@@ -94,6 +94,86 @@ struct OpenLessonTests {
         #expect(firstTry.firstTryCorrect == 1)
     }
 
+    @Test func theLastAnswerIsStoredBeforeTheCelebrationIsDismissed() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 18).today
+        try await seed(store, lesson: "l-salam", tasks: [choice("e-salam"), choice("e-manana")], on: day)
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-salam", progress: try await store.load(), on: day, seed: 1)
+        try submit(&session, correct: true)
+        await saved(lesson, session, on: day, to: store)
+        let halfway = try await store.load()
+        #expect(halfway.activeSession?.lesson?.answers.count == 1)
+        #expect(halfway.lessonProgress.isEmpty)
+
+        try submit(&session, correct: true)
+        #expect(session.isComplete)
+        lesson.showFinishedSession(session)
+        #expect(lesson.session?.current == nil)
+        #expect(lesson.session?.isComplete == true)
+
+        let stored = try await lesson.finishLesson(session, on: day, in: course, to: store)
+        #expect(stored.activeSession == nil)
+        #expect(stored.completedSessions.map(\.questionCount) == [2])
+        #expect(stored.lessonProgress.map(\.lessonID) == [lessonID("l-salam")])
+        #expect(lesson.session?.isComplete == true)
+
+        lesson.endLesson()
+        let afterContinue = try await store.load()
+        #expect(afterContinue.activeSession == nil)
+        #expect(afterContinue.completedSessions.map(\.completedDay) == [day])
+        #expect(afterContinue.lessonProgress.map(\.lessonID) == [lessonID("l-salam")])
+        #expect(afterContinue.streak.lastActiveDay == day)
+    }
+
+    @Test func aFinishAt2359CountsOnThatDayWhenContinueIsTheNextDay() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let answerDay = clock(day: 2, hour: 23, minute: 59).today
+        let continueDay = clock(day: 3, hour: 0, minute: 1).today
+        #expect(continueDay == answerDay.adding(days: 1))
+
+        try await seed(store, lesson: "l-salam", tasks: [choice("e-salam")], on: answerDay)
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-salam", progress: try await store.load(), on: answerDay, seed: 1)
+        try submit(&session, correct: true)
+        #expect(session.isComplete)
+        let stored = try await lesson.finishLesson(session, on: answerDay, in: course, to: store)
+        #expect(stored.streak.lastActiveDay == answerDay)
+        #expect(stored.streak.current == 1)
+        #expect(stored.completedSessions.map(\.completedDay) == [answerDay])
+        #expect(stored.lessonProgress.first?.firstCompletedDay == answerDay)
+        #expect(stored.cards.allSatisfy { $0.createdDay == answerDay })
+        #expect(stored.streak.lastActiveDay != continueDay)
+
+        lesson.endLesson()
+        let afterContinue = try await store.load()
+        #expect(afterContinue.streak.lastActiveDay == answerDay)
+        #expect(afterContinue.completedSessions.map(\.completedDay) == [answerDay])
+        #expect(afterContinue.cards.allSatisfy { $0.createdDay == answerDay })
+        #expect(afterContinue.lessonProgress.first?.firstCompletedDay == answerDay)
+    }
+
+    @Test func leavingOnTheCelebrationLeavesTheLessonFinished() async throws {
+        let store = InMemoryProgressStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 21).today
+        try await seed(store, lesson: "l-salam", tasks: [choice("e-salam")], on: day)
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-salam", progress: try await store.load(), on: day, seed: 1)
+        try submit(&session, correct: true)
+        let stored = try await lesson.finishLesson(session, on: day, in: course, to: store)
+        #expect(lesson.session != nil)
+        #expect(stored.activeSession == nil)
+        #expect(stored.lessonProgress.map(\.lessonID) == [lessonID("l-salam")])
+
+        let relaunch = OpenLesson()
+        let progress = try await store.load()
+        #expect(relaunch.session == nil)
+        #expect(progress.activeSession == nil)
+        #expect(progress.lessonProgress.map(\.lessonID) == [lessonID("l-salam")])
+        #expect(progress.streak.current == 1)
+        #expect(progress.completedSessions.map(\.completedDay) == [day])
+    }
+
     @Test func aWrongAnswerIsKeptAndTheRepeatDoesNotRaiseTheScore() async throws {
         let store = InMemoryProgressStore(contentVersion: "test")
         let day = clock(day: 2, hour: 12).today
@@ -248,6 +328,45 @@ struct OpenLessonTests {
         #expect(lesson.canRetryFailedFinish == false)
         lesson.endLesson()
         #expect(lesson.session == nil)
+    }
+
+    @Test func aFailedFinishDoesNotLetAnOlderSnapshotReplaceTheSession() async throws {
+        let store = HookedStore(contentVersion: "test")
+        let day = clock(day: 2, hour: 11).today
+        let lesson = OpenLesson()
+        var session = try start(lesson, "l-home", progress: try await store.load(), on: day, seed: 1)
+        try submit(&session, correct: true)
+        await store.failNextSave()
+        await saved(lesson, session, on: day, to: store)
+        #expect(lesson.hasUnsavedAnswers)
+        #expect(try await store.load().activeSession == nil)
+        let partial = session.answers.count
+
+        try answerAll(&session, correct: true)
+        #expect(session.isComplete)
+        let complete = session.answers.count
+        #expect(complete > partial)
+
+        await store.failNextCommit()
+        await #expect(throws: ProgressStoreContractError.self) {
+            try await lesson.finishLesson(session, on: day, in: course, to: store)
+        }
+        let held = try await store.load()
+        #expect(held.activeSession?.lesson?.answers.count == complete)
+        #expect(held.lessonProgress.isEmpty)
+        #expect(lesson.hasUnsavedAnswers == false)
+        #expect(lesson.canRetryFailedFinish)
+        let writesBeforeRetry = await store.savedAnswerCounts
+
+        lesson.retryUnsavedAnswers(to: store)
+        await lesson.waitUntilSavesFinish()
+
+        let after = try await store.load()
+        #expect(after.activeSession?.lesson?.answers.count == complete)
+        #expect(after.activeSession?.lesson?.answers.count != partial)
+        #expect(await store.savedAnswerCounts == writesBeforeRetry)
+        #expect(lesson.canRetryFailedFinish)
+        #expect(lesson.session?.answers.count == complete)
     }
 
     @Test func aRetryDuringFinishDoesNotRestoreTheLesson() async throws {

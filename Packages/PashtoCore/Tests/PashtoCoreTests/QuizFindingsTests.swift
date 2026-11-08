@@ -407,12 +407,67 @@ struct QuizFindingsTests {
         #expect(lessonBar.map(\.name) == [
             "lesson bar fill on track, light",
             "lesson bar fill on track, dark",
+            "lesson bar outline on the page, light",
+            "lesson bar outline on the page, dark",
         ])
-        #expect(lessonBar.map(\.foreground) == [QuizResultPalette.lessonBarFillLight, QuizResultPalette.lessonBarFillDark])
-        #expect(lessonBar.map(\.background) == [QuizResultPalette.lessonBarTrackLight, QuizResultPalette.lessonBarTrackDark])
+        #expect(lessonBar.map(\.foreground) == [
+            QuizResultPalette.lessonBarFillLight,
+            QuizResultPalette.lessonBarFillDark,
+            QuizResultPalette.lessonBarOutlineLight,
+            QuizResultPalette.lessonBarOutlineDark,
+        ])
+        #expect(lessonBar.map(\.background) == [
+            QuizResultPalette.lessonBarTrackLight,
+            QuizResultPalette.lessonBarTrackDark,
+            QuizResultPalette.pageLight,
+            QuizResultPalette.pageDark,
+        ])
         #expect(QuizResultPalette.lessonBarFillLight == QuizResultPalette.ringLight)
         #expect(QuizResultPalette.lessonBarFillDark == QuizResultPalette.ringDark)
         #expect(QuizResultPalette.lessonBarFillLight != 0xE8A33D)
+        #expect(QuizResultPalette.lessonBarOutlineLight == 0x1E3A8A)
+        #expect(QuizResultPalette.lessonBarOutlineDark == 0x93B4F5)
+        #expect(QuizResultPalette.pageLight == 0xFAF7F0)
+        #expect(QuizResultPalette.pageDark == 0x0F172A)
+        #expect(QuizResultPalette.muted == 0x7C8799)
+        #expect(QuizResultPalette.cardSurfaceDark == 0x1E293B)
+        let muted = QuizResultPalette.markPairs.filter { $0.name.hasPrefix("muted track") }
+        #expect(muted.map(\.name) == [
+            "muted track on the page, light",
+            "muted track on the page, dark",
+            "muted track on the card, light",
+            "muted track on the card, dark",
+        ])
+        #expect(muted.map(\.foreground) == Array(repeating: QuizResultPalette.muted, count: 4))
+        #expect(muted.map(\.background) == [
+            QuizResultPalette.pageLight,
+            QuizResultPalette.pageDark,
+            QuizResultPalette.white,
+            QuizResultPalette.cardSurfaceDark,
+        ])
+        let star = QuizResultPalette.markPairs.filter { $0.name == "achievement star outline on the page, light" }
+        #expect(star.map(\.foreground) == [QuizResultPalette.ringLight])
+        #expect(star.map(\.background) == [QuizResultPalette.pageLight])
+        #expect(QuizResultPalette.ringLight == 0xB97D22)
+        #expect(QuizResultPalette.badgeLight == 0x1E3A8A)
+        #expect(QuizResultPalette.badgeDark == 0x4666D2)
+        #expect(QuizResultPalette.badgeInk == 0xFAF7F0)
+        let badgeOnPage = QuizResultPalette.markPairs.filter { $0.name.hasPrefix("badge on the page") }
+        #expect(badgeOnPage.map(\.name) == [
+            "badge on the page, light",
+            "badge on the page, dark",
+        ])
+        #expect(badgeOnPage.map(\.foreground) == [QuizResultPalette.badgeLight, QuizResultPalette.badgeDark])
+        #expect(badgeOnPage.map(\.background) == [QuizResultPalette.pageLight, QuizResultPalette.pageDark])
+        #expect(badgeOnPage.map(\.minimumRatio) == [3, 3])
+        let badgeInk = QuizResultPalette.textPairs.filter { $0.name.hasPrefix("badge ink") }
+        #expect(badgeInk.map(\.name) == [
+            "badge ink on the badge, light",
+            "badge ink on the badge, dark",
+        ])
+        #expect(badgeInk.map(\.foreground) == [QuizResultPalette.badgeInk, QuizResultPalette.badgeInk])
+        #expect(badgeInk.map(\.background) == [QuizResultPalette.badgeLight, QuizResultPalette.badgeDark])
+        #expect(badgeInk.map(\.minimumRatio) == [4.5, 4.5])
     }
 
     @Test func feedbackUsesASymbolAndTheExistingWords() {

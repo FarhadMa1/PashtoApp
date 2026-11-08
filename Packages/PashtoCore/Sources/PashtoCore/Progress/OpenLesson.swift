@@ -13,7 +13,10 @@ import Observation
 /// is. The next answer, and a retry while the app is in the background, writes
 /// the whole session. A failed finish keeps that session too and can be retried.
 /// Saves are ordered: a later answer cannot be overwritten by an earlier one,
-/// including one that is already being written. A retry still waiting when the
+/// including one that is already being written. A finish takes a newer
+/// generation before it writes, and that generation stays even when the
+/// commit fails. An older answer, including a retry still waiting, cannot
+/// replace the session the finish stored. A retry still waiting when the
 /// finish commits is dropped, so the finished lesson is not saved again as the
 /// one in progress.
 ///
@@ -29,6 +32,10 @@ public final class OpenLesson {
     private var tail: Task<Void, Never>?
     @ObservationIgnored
     private var latestGeneration = 0
+    /// The generation of `lastAnswerSnapshot`. A retry uses this and does not
+    /// take a newer one, so a finish that already wrote stays ahead of it.
+    @ObservationIgnored
+    private var answerGeneration = 0
     @ObservationIgnored
     private var unsavedAnswers = false
     @ObservationIgnored
@@ -161,7 +168,17 @@ public final class OpenLesson {
     /// the session on screen and keeps the retry for the next attempt.
     public func retryUnsavedAnswers(to store: any ProgressStore) {
         guard unsavedAnswers, let snapshot = lastAnswerSnapshot else { return }
-        enqueue(snapshot, to: store)
+        schedule(snapshot, generation: answerGeneration, to: store)
+    }
+
+    /// Puts the finished session on screen before the save returns.
+    ///
+    /// The last question is no longer current, so leaving the celebration
+    /// cannot ask it again. A different lesson is left as it was. The save
+    /// still writes `session`.
+    public func showFinishedSession(_ session: LessonSession) {
+        guard attempt?.lessonID == session.lessonID else { return }
+        launch.replaceSession(session)
     }
 
     /// Writes a finished lesson: the active session, then one commit.
@@ -227,10 +244,12 @@ public final class OpenLesson {
             return try await store.load()
         }
         let answeredOn = session.answers.isEmpty ? nil : today
+        let generation = supersedeAnswerSaves()
         return try await saves.finish(
             attempt: attempt,
             session: session,
             answeredOn: answeredOn,
+            generation: generation,
             in: content,
             to: store
         )
@@ -293,12 +312,26 @@ public final class OpenLesson {
     private func enqueue(_ snapshot: ActiveSessionSnapshot, to store: any ProgressStore) {
         latestGeneration += 1
         let generation = latestGeneration
+        answerGeneration = generation
         unsavedAnswers = true
         lastAnswerSnapshot = snapshot
+        schedule(snapshot, generation: generation, to: store)
+    }
+
+    /// A retry keeps the generation the answer was captured with.
+    ///
+    /// It does not take a new one. After a finish has moved `latestGeneration`
+    /// on, this write is no longer the latest and it is dropped, including
+    /// when that finish's commit failed after the newer session was stored.
+    private func schedule(
+        _ snapshot: ActiveSessionSnapshot,
+        generation: Int,
+        to store: any ProgressStore
+    ) {
         chain {
             guard generation == self.latestGeneration else { return }
             do {
-                try await self.saves.save(snapshot, to: store)
+                try await self.saves.save(snapshot, generation: generation, to: store)
                 if generation == self.latestGeneration {
                     self.unsavedAnswers = false
                 }
@@ -310,15 +343,28 @@ public final class OpenLesson {
         }
     }
 
+    /// The finish is now the newest save. An older answer cannot land after it.
+    ///
+    /// The generation stays on failure. The commit may throw after the active
+    /// session was stored, and a retry of the previous answer must not replace
+    /// that session.
+    private func supersedeAnswerSaves() -> Int {
+        latestGeneration += 1
+        unsavedAnswers = false
+        return latestGeneration
+    }
+
     private func writeFinished(
         _ pending: PendingFinish,
         in content: ContentBundle,
         to store: any ProgressStore
     ) async throws -> ProgressSnapshot {
-        try await saves.finish(
+        let generation = supersedeAnswerSaves()
+        return try await saves.finish(
             attempt: pending.attempt,
             session: pending.session,
             answeredOn: pending.session.answers.isEmpty ? nil : pending.day,
+            generation: generation,
             in: content,
             to: store
         )
@@ -383,22 +429,39 @@ private actor LessonSaveQueue {
     private var locked = false
     private var waiters: [CheckedContinuation<Void, Never>] = []
 
-    func save(_ session: ActiveSessionSnapshot, to store: any ProgressStore) async throws {
+    /// The newest generation that has been stored as the active session.
+    ///
+    /// A write with an older generation is not stored. A failed finish still
+    /// records its generation once the newer session is in the store, so the
+    /// older snapshot cannot replace it afterwards.
+    private var appliedGeneration = 0
+
+    func save(
+        _ session: ActiveSessionSnapshot,
+        generation: Int,
+        to store: any ProgressStore
+    ) async throws {
         await acquire()
         defer { release() }
+        guard generation >= appliedGeneration else { return }
         try await store.saveActiveSession(session)
+        appliedGeneration = generation
     }
 
     func finish(
         attempt: LessonAttempt,
         session: LessonSession,
         answeredOn: LocalDay?,
+        generation: Int,
         in content: ContentBundle,
         to store: any ProgressStore
     ) async throws -> ProgressSnapshot {
         await acquire()
         defer { release() }
-        try await store.saveActiveSession(attempt.activeSnapshot(session, answeredOn: answeredOn))
+        if generation >= appliedGeneration {
+            try await store.saveActiveSession(attempt.activeSnapshot(session, answeredOn: answeredOn))
+            appliedGeneration = generation
+        }
         return try await attempt.save(session, answeredOn: answeredOn, in: content, to: store)
     }
 
