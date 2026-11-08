@@ -78,6 +78,10 @@ final class AppModel {
     private var homeMotion = HomeMotionCue()
     /// The finish the home has not played yet. Nil after it is consumed, and nil on a relaunch.
     private(set) var pendingHomeMotion: PendingHomeMotion?
+    /// Rescue and freeze events still waiting. The day on each one is already stored.
+    private var streakMotion = StreakMotionCue()
+    /// What the home has not claimed. Empty after the claim, and empty on a relaunch.
+    private(set) var pendingStreakEvents: [StreakEventID] = []
     /// Why the storage error is showing. Nil on every other screen.
     ///
     /// Start over is offered only when the progress store could not be opened.
@@ -378,6 +382,7 @@ final class AppModel {
         let day = clock.today
         let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
         let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
+        let beforeStreakState = snapshot?.streak ?? .initial
         let lessonID = session.lessonID
         openLesson.showFinishedSession(session)
         Task {
@@ -392,6 +397,7 @@ final class AppModel {
                 showHomeMotion(
                     beforeStreak: beforeStreak,
                     beforeGoal: beforeGoal,
+                    beforeStreakState: beforeStreakState,
                     lesson: lessonID,
                     saved: saved
                 )
@@ -418,6 +424,7 @@ final class AppModel {
         let day = clock.today
         let beforeStreak = snapshot.map { displayedStreakCount($0.streak, on: day) } ?? 0
         let beforeGoal = snapshot.map { newItemsShown(on: day, in: $0.cards) } ?? 0
+        let beforeStreakState = snapshot?.streak ?? .initial
         let lessonID = openLesson.session?.lessonID
         do {
             let saved = try await openLesson.retryFailedFinish(in: course, to: store)
@@ -425,6 +432,7 @@ final class AppModel {
                 showHomeMotion(
                     beforeStreak: beforeStreak,
                     beforeGoal: beforeGoal,
+                    beforeStreakState: beforeStreakState,
                     lesson: lessonID,
                     saved: saved
                 )
@@ -446,6 +454,7 @@ final class AppModel {
     private func showHomeMotion(
         beforeStreak: Int,
         beforeGoal: Int,
+        beforeStreakState: StreakState,
         lesson: LessonID,
         saved: ProgressSnapshot
     ) {
@@ -459,6 +468,15 @@ final class AppModel {
             )
         )
         pendingHomeMotion = homeMotion.pending
+        streakMotion.stage(StreakMotion.events(before: beforeStreakState, after: saved.streak))
+        pendingStreakEvents = streakMotion.pending
+    }
+
+    /// The home takes one kind of event. The same day is not returned again.
+    func claimStreakEvents(_ kind: StreakEventID.Kind) -> [StreakEventID] {
+        let claimed = streakMotion.claim(kind)
+        pendingStreakEvents = streakMotion.pending
+        return claimed
     }
 
     /// Drops the home animation after the home has played it.

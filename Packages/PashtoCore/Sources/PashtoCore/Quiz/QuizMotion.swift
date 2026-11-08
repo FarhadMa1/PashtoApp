@@ -37,6 +37,9 @@ public enum QuizMotion {
     public static let popSpringDamping: Double = 0.72
     /// Fade used wherever Reduce Motion removes a move.
     public static let reduceMotionFade: TimeInterval = 0.2
+    /// Next question entering from the right. The card that leaves fades.
+    public static let questionSpring: TimeInterval = 0.28
+    public static let questionSpringDamping: Double = 0.86
 
     public static let pairGoneScale: Double = 0.6
 
@@ -214,6 +217,48 @@ public enum CardFlip: Equatable, Sendable {
 
     public static func style(reduceMotion: Bool) -> CardFlip {
         reduceMotion ? .fade : .rotation
+    }
+}
+
+/// Identity of the question on screen.
+///
+/// It changes only when the session moves to another question. Revealing an
+/// answer is not part of it, so the card does not slide when the learner
+/// answers. A repeat is a new identity because `answerCount` has grown.
+public struct QuestionIdentity: Hashable, Sendable {
+    public var answerCount: Int
+    public var isRepeat: Bool
+
+    public init(answerCount: Int, isRepeat: Bool) {
+        self.answerCount = answerCount
+        self.isRepeat = isRepeat
+    }
+}
+
+/// How the next question replaces the one on screen.
+///
+/// The new card slides in from the right. The card leaving fades. Reduce
+/// Motion crossfades both. The transition does not disable Continue or the
+/// next answer.
+public enum QuestionChange: Equatable, Sendable {
+    case slideFromRight
+    case crossfade
+
+    /// Continue and the next answer stay available while the cards move.
+    public static let blocksInput = false
+
+    public static func style(reduceMotion: Bool) -> QuestionChange {
+        reduceMotion ? .crossfade : .slideFromRight
+    }
+
+    /// Spring response for the slide, or the short fade for Reduce Motion.
+    public static func duration(reduceMotion: Bool) -> TimeInterval {
+        switch style(reduceMotion: reduceMotion) {
+        case .slideFromRight:
+            QuizMotion.questionSpring
+        case .crossfade:
+            QuizMotion.reduceMotionFade
+        }
     }
 }
 

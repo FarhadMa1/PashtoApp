@@ -54,6 +54,8 @@ struct RootView: View {
                 finishedLessonIDs: model.finishedLessonIDs,
                 pendingHomeMotion: model.pendingHomeMotion,
                 consumeHomeMotion: { model.consumePendingHomeMotion() },
+                pendingStreakEvents: model.pendingStreakEvents,
+                claimStreakEvents: { model.claimStreakEvents($0) },
                 startLesson: { lesson in
                     Task { await model.startLesson(lesson, voiceOver: voiceOverEnabled) }
                 },
