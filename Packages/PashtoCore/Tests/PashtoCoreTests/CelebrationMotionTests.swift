@@ -222,6 +222,79 @@ struct CelebrationMotionTests {
         #expect(relaunch.advance(afterRenderingFrom: motion.id, animated: true) == .none)
     }
 
+    @Test func theSecondFinishedLessonStartsOnItsOwnFromValues() {
+        let firstLesson = lessonID("l-a")
+        let secondLesson = lessonID("l-b")
+        let first = PendingHomeMotion(
+            id: UUID(uuidString: "EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE")!,
+            streakFrom: 1,
+            goalFrom: 4,
+            lessonID: firstLesson
+        )
+        let second = PendingHomeMotion(
+            id: UUID(uuidString: "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")!,
+            streakFrom: 2,
+            goalFrom: 5,
+            lessonID: secondLesson
+        )
+        var playback = HomeMotionPlayback()
+
+        #expect(playback.displayedStreak(live: 2, pending: first, reduceMotion: false, voiceOver: false) == 1)
+        #expect(playback.displayedGoal(live: 5, pending: first, reduceMotion: false, voiceOver: false) == 4)
+        #expect(playback.waitingLessonID(pending: first, reduceMotion: false, voiceOver: false) == firstLesson)
+
+        let opening = playback.prepare(first, reduceMotion: false, voiceOver: false)
+        #expect(opening == .holdFrom(first))
+        let moving = playback.advance(afterRenderingFrom: first.id, animated: true)
+        #expect(moving == .animateToFinal(first))
+        #expect(playback.stage == .atFinal(first))
+        #expect(playback.displayedStreak(live: 2, pending: nil, reduceMotion: false, voiceOver: false) == 2)
+        #expect(playback.displayedGoal(live: 5, pending: nil, reduceMotion: false, voiceOver: false) == 5)
+
+        #expect(playback.displayedStreak(live: 3, pending: second, reduceMotion: false, voiceOver: false) == 2)
+        #expect(playback.displayedGoal(live: 9, pending: second, reduceMotion: false, voiceOver: false) == 5)
+        #expect(playback.waitingLessonID(pending: second, reduceMotion: false, voiceOver: false) == secondLesson)
+        #expect(playback.stage == .atFinal(first))
+        #expect(playback.displayedStreak(live: 3, pending: second, reduceMotion: true, voiceOver: false) == 3)
+        #expect(playback.displayedGoal(live: 9, pending: second, reduceMotion: true, voiceOver: false) == 9)
+        #expect(playback.waitingLessonID(pending: second, reduceMotion: true, voiceOver: false) == nil)
+        #expect(playback.displayedStreak(live: 3, pending: second, reduceMotion: false, voiceOver: true) == 3)
+        #expect(playback.displayedGoal(live: 9, pending: second, reduceMotion: false, voiceOver: true) == 9)
+        #expect(playback.waitingLessonID(pending: second, reduceMotion: false, voiceOver: true) == nil)
+
+        var reduced = playback
+        let jumped = reduced.prepare(second, reduceMotion: true, voiceOver: false)
+        #expect(jumped == .jumpToFinal(second))
+        #expect(jumped.consumesCue)
+        #expect(reduced.animates == false)
+        #expect(reduced.displayedStreak(live: 3, pending: second, reduceMotion: true, voiceOver: false) == 3)
+        #expect(reduced.displayedGoal(live: 9, pending: second, reduceMotion: true, voiceOver: false) == 9)
+        #expect(reduced.waitingLessonID(pending: second, reduceMotion: true, voiceOver: false) == nil)
+        var spoken = playback
+        let read = spoken.prepare(second, reduceMotion: false, voiceOver: true)
+        #expect(read == .jumpToFinal(second))
+        #expect(spoken.displayedStreak(live: 3, pending: second, reduceMotion: false, voiceOver: true) == 3)
+        #expect(spoken.displayedGoal(live: 9, pending: second, reduceMotion: false, voiceOver: true) == 9)
+        #expect(spoken.waitingLessonID(pending: second, reduceMotion: false, voiceOver: true) == nil)
+
+        let secondOpening = playback.prepare(second, reduceMotion: false, voiceOver: false)
+        #expect(secondOpening == .holdFrom(second))
+        #expect(secondOpening.consumesCue == false)
+        #expect(playback.displayedStreak(live: 3, pending: second, reduceMotion: false, voiceOver: false) == 2)
+        #expect(playback.displayedGoal(live: 9, pending: second, reduceMotion: false, voiceOver: false) == 5)
+        let secondMove = playback.advance(afterRenderingFrom: second.id, animated: true)
+        #expect(secondMove == .animateToFinal(second))
+        #expect(playback.displayedStreak(live: 3, pending: second, reduceMotion: false, voiceOver: false) == 3)
+        #expect(playback.displayedGoal(live: 9, pending: second, reduceMotion: false, voiceOver: false) == 9)
+        #expect(playback.waitingLessonID(pending: second, reduceMotion: false, voiceOver: false) == nil)
+
+        let replay = playback.prepare(second, reduceMotion: false, voiceOver: false)
+        #expect(replay == .none)
+        #expect(playback.displayedStreak(live: 3, pending: second, reduceMotion: false, voiceOver: false) == 3)
+        #expect(playback.displayedGoal(live: 9, pending: second, reduceMotion: false, voiceOver: false) == 9)
+        #expect(playback.waitingLessonID(pending: second, reduceMotion: false, voiceOver: false) == nil)
+    }
+
     @Test func reduceMotionAndVoiceOverShowTheFinalHomeValuesBeforeTheCueIsConsumed() {
         let motion = PendingHomeMotion(
             id: UUID(uuidString: "DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD")!,

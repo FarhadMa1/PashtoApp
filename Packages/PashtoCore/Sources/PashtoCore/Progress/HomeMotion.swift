@@ -127,9 +127,11 @@ public struct HomeMotionPlayback: Equatable, Sendable {
 
     /// The streak number on screen.
     ///
-    /// Reduce Motion and VoiceOver use `live`. So does a cue that has reached
-    /// its final step. Until then the from-value is what is shown, including
-    /// on the first frame before `prepare`.
+    /// Reduce Motion and VoiceOver use `live`. A cue that has reached its
+    /// final step uses `live` only for that same cue. A different cue, including
+    /// one that arrives while the previous finish is still `.atFinal`, shows
+    /// its own from-value on the first frame, before `prepare`. A cue that
+    /// already played stays on `live`.
     public func displayedStreak(
         live: Int,
         pending: PendingHomeMotion?,
@@ -151,20 +153,37 @@ public struct HomeMotionPlayback: Equatable, Sendable {
 
     /// The lesson whose path segment is still empty.
     ///
-    /// Nil once the live path is shown, and nil for Reduce Motion and VoiceOver.
+    /// Nil once that cue's live path is shown, and nil for Reduce Motion and
+    /// VoiceOver. A new cue keeps its segment empty from the first frame, even
+    /// while `stage` still names the previous finish.
     public func waitingLessonID(
         pending: PendingHomeMotion?,
         reduceMotion: Bool,
         voiceOver: Bool
     ) -> LessonID? {
         if reduceMotion || voiceOver { return nil }
+        if let pending, isFresh(pending) { return pending.lessonID }
         switch stage {
         case .idle:
-            return pending?.lessonID
+            return nil
         case .atFrom(let motion):
             return motion.lessonID
         case .atFinal:
             return nil
+        }
+    }
+
+    /// True when `pending` is not the cue already on screen.
+    ///
+    /// The finished stage belongs to one id. The next finish is a different
+    /// id and has not been drawn yet, so the home must not reuse that stage.
+    private func isFresh(_ pending: PendingHomeMotion) -> Bool {
+        if playedID == pending.id { return false }
+        switch stage {
+        case .idle:
+            return true
+        case .atFrom(let motion), .atFinal(let motion):
+            return motion.id != pending.id
         }
     }
 
@@ -176,9 +195,10 @@ public struct HomeMotionPlayback: Equatable, Sendable {
         voiceOver: Bool
     ) -> Int {
         if reduceMotion || voiceOver { return live }
+        if let pending, isFresh(pending) { return pending[keyPath: keyPath] }
         switch stage {
         case .idle:
-            return pending.map { $0[keyPath: keyPath] } ?? live
+            return live
         case .atFrom(let motion):
             return motion[keyPath: keyPath]
         case .atFinal:

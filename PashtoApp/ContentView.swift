@@ -157,9 +157,9 @@ struct ContentView: View {
     /// Reduce Motion and VoiceOver do not animate. Everyone else does.
     ///
     /// The modifiers stay attached while the from-values are on screen, so the
-    /// later change to the live counts has an animation to use. The snap back
-    /// to a new from-value is made with animations disabled. Clearing the cue
-    /// does not change the values those modifiers watch.
+    /// later change to the live counts has an animation to use. A new cue
+    /// already shows its own from-values on the first frame, before this task
+    /// runs. Clearing the cue does not change the values those modifiers watch.
     private var animatesHomeMotion: Bool {
         !reduceMotion && !voiceOver
     }
