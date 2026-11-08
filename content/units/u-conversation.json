@@ -1,0 +1,345 @@
+{
+  "id": "u-conversation",
+  "track": "main",
+  "title": "Putting it together",
+  "items": [
+    {
+      "id": "e-zha-ba",
+      "kind": "word",
+      "pashto": "ژبه",
+      "translit": "žába",
+      "pronunciation": "ZHA-ba",
+      "en": "language",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. zh is one sound, like s in measure.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ang-lee-see",
+      "kind": "word",
+      "pashto": "انګلیسي",
+      "translit": "anglisí",
+      "pronunciation": "ang-lee-SEE",
+      "en": "English (language)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-kha-ba-rey",
+      "kind": "word",
+      "pashto": "خبرې",
+      "translit": "xabaré",
+      "pronunciation": "kha-ba-REY",
+      "en": "speech",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه په پښتو خبرې کوم",
+      "translit": "zə pə pəx̌tó xabaré kawə́m",
+      "pronunciation": "za pa pakh-TO kha-ba-REY ka-WAM",
+      "en": "I speak Pashto",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه په انګلیسي خبرې کوم",
+      "translit": "zə pə anglisí xabaré kawə́m",
+      "pronunciation": "za pa ang-lee-SEE kha-ba-REY ka-WAM",
+      "en": "I speak English",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-na-po-he-gam",
+      "kind": "phrase",
+      "pashto": "زه نه پوهېږم",
+      "translit": "zə na pohéǧəm",
+      "pronunciation": "za na po-HE-gam",
+      "en": "I do not understand",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ږ is pronounced g in the selected Kabul pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-byaa-wa-waa-yaast",
+      "kind": "phrase",
+      "pashto": "بیا ووایاست",
+      "translit": "byā wawā́yāst",
+      "pronunciation": "byaa wa-WAA-yaast",
+      "en": "please say it again (polite)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-wro-wro",
+      "kind": "phrase",
+      "pashto": "ورو ورو",
+      "translit": "wro wro",
+      "pronunciation": "wro wro",
+      "en": "slowly",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-wro-wro-kha-ba-rey-wa-kray",
+      "kind": "phrase",
+      "pashto": "ورو ورو خبرې وکړئ",
+      "translit": "wro wro xabaré wə́kṛəy",
+      "pronunciation": "wro wro kha-ba-REY WA-kray",
+      "en": "please speak slowly",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-chaay-na-ghwaa-ram",
+      "kind": "phrase",
+      "pashto": "زه چای نه غواړم",
+      "translit": "zə čāy na ɣwāṛə́m",
+      "pronunciation": "za chaay na ghwaa-RAM",
+      "en": "I do not want tea",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-kah-wa-ghwaa-ram",
+      "kind": "phrase",
+      "pashto": "زه قهوه غواړم",
+      "translit": "zə kahwá ɣwāṛə́m",
+      "pronunciation": "za kah-WA ghwaa-RAM",
+      "en": "I would like coffee",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h. In قهوه, say k as in the approved kah-WA; do not replace it with q.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-sa-baa-baa-zaar-ta-dzam",
+      "kind": "phrase",
+      "pashto": "زه سبا بازار ته ځم",
+      "translit": "zə sabā́ bāzā́r tə dzəm",
+      "pronunciation": "za sa-BAA baa-ZAAR ta dzam",
+      "en": "I am going to the market tomorrow",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-conversation-1",
+      "title": "Languages",
+      "items": [
+        {
+          "item": "e-zha-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ang-lee-see",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kha-ba-rey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-2",
+      "title": "Understanding each other",
+      "items": [
+        {
+          "item": "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-na-po-he-gam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-byaa-wa-waa-yaast",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wro-wro",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-conversation-1",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-za-na-po-he-gam"
+            },
+            {
+              "speaker": "A",
+              "item": "e-byaa-wa-waa-yaast"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-3",
+      "title": "Putting sentences together",
+      "items": [
+        {
+          "item": "e-wro-wro-kha-ba-rey-wa-kray",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-chaay-na-ghwaa-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-kah-wa-ghwaa-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-sa-baa-baa-zaar-ta-dzam",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-conversation-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-tsa-ghwaa-rey"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-kah-wa-ghwaa-ram"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

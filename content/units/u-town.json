@@ -1,0 +1,493 @@
+{
+  "id": "u-town",
+  "track": "main",
+  "title": "Around town",
+  "items": [
+    {
+      "id": "e-khaar",
+      "kind": "word",
+      "pashto": "ښار",
+      "translit": "x̌ār",
+      "pronunciation": "khaar",
+      "en": "city",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-baa-zaar",
+      "kind": "word",
+      "pashto": "بازار",
+      "translit": "bāzā́r",
+      "pronunciation": "baa-ZAAR",
+      "en": "market",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-doo-kaan",
+      "kind": "word",
+      "pashto": "دوکان",
+      "translit": "dukā́n",
+      "pronunciation": "doo-KAAN",
+      "en": "shop",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-rogh-toon",
+      "kind": "word",
+      "pashto": "روغتون",
+      "translit": "roɣtún",
+      "pronunciation": "rogh-TOON",
+      "en": "hospital",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-cher-ta",
+      "kind": "word",
+      "pashto": "چېرته",
+      "translit": "čérta",
+      "pronunciation": "CHER-ta",
+      "en": "where",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-tak-see",
+      "kind": "word",
+      "pashto": "ټکسي",
+      "translit": "ṭaksí",
+      "pronunciation": "tak-SEE",
+      "en": "taxi",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-bas",
+      "kind": "word",
+      "pashto": "بس",
+      "translit": "bas",
+      "pronunciation": "bas",
+      "en": "bus",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-sa-rak",
+      "kind": "word",
+      "pashto": "سړک",
+      "translit": "saṛák",
+      "pronunciation": "sa-RAK",
+      "en": "road",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-chap",
+      "kind": "word",
+      "pashto": "چپ",
+      "translit": "čap",
+      "pronunciation": "chap",
+      "en": "left",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-khee",
+      "kind": "word",
+      "pashto": "ښي",
+      "translit": "x̌i",
+      "pronunciation": "khee",
+      "en": "right",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-dal-ta",
+      "kind": "word",
+      "pashto": "دلته",
+      "translit": "dálta",
+      "pronunciation": "DAL-ta",
+      "en": "here",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-hal-ta",
+      "kind": "word",
+      "pashto": "هلته",
+      "translit": "hálta",
+      "pronunciation": "HAL-ta",
+      "en": "there",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-baa-zaar-cher-ta-day",
+      "kind": "phrase",
+      "pashto": "بازار چېرته دی؟",
+      "translit": "bāzā́r čérta day?",
+      "pronunciation": "baa-ZAAR CHER-ta day?",
+      "en": "where is the market?",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-rogh-toon-cher-ta-day",
+      "kind": "phrase",
+      "pashto": "روغتون چېرته دی؟",
+      "translit": "roɣtún čérta day?",
+      "pronunciation": "rogh-TOON CHER-ta day?",
+      "en": "where is the hospital?",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-baa-zaar-dal-ta-day",
+      "kind": "phrase",
+      "pashto": "بازار دلته دی",
+      "translit": "bāzā́r dálta day",
+      "pronunciation": "baa-ZAAR DAL-ta day",
+      "en": "the market is here",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-rogh-toon-hal-ta-day",
+      "kind": "phrase",
+      "pashto": "روغتون هلته دی",
+      "translit": "roɣtún hálta day",
+      "pronunciation": "rogh-TOON HAL-ta day",
+      "en": "the hospital is there",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-baa-zaar-ta-dzam",
+      "kind": "phrase",
+      "pashto": "زه بازار ته ځم",
+      "translit": "zə bāzā́r tə dzəm",
+      "pronunciation": "za baa-ZAAR ta dzam",
+      "en": "I am going to the market",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-kor-ta-dzam",
+      "kind": "phrase",
+      "pashto": "زه کور ته ځم",
+      "translit": "zə kor tə dzəm",
+      "pronunciation": "za kor ta dzam",
+      "en": "I am going home",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels. ځ is dz, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-town-1",
+      "title": "Places in town",
+      "items": [
+        {
+          "item": "e-khaar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-baa-zaar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-doo-kaan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-rogh-toon",
+          "role": "introduce"
+        },
+        {
+          "item": "e-cher-ta",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-town-2",
+      "title": "Transport and directions",
+      "items": [
+        {
+          "item": "e-tak-see",
+          "role": "introduce"
+        },
+        {
+          "item": "e-bas",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sa-rak",
+          "role": "introduce"
+        },
+        {
+          "item": "e-chap",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khee",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-town-3",
+      "title": "Asking where",
+      "items": [
+        {
+          "item": "e-dal-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hal-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-baa-zaar-cher-ta-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-rogh-toon-cher-ta-day",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-town-4",
+      "title": "Saying where and going places",
+      "items": [
+        {
+          "item": "e-baa-zaar-dal-ta-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-rogh-toon-hal-ta-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-baa-zaar-ta-dzam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-kor-ta-dzam",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-town-1",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-baa-zaar-cher-ta-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-baa-zaar-dal-ta-day"
+            }
+          ]
+        },
+        {
+          "id": "d-town-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-rogh-toon-cher-ta-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-rogh-toon-hal-ta-day"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

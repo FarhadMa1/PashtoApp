@@ -1,0 +1,285 @@
+{
+  "id": "u-numbers",
+  "track": "main",
+  "title": "Numbers 1–10",
+  "items": [
+    {
+      "id": "e-yaw",
+      "kind": "word",
+      "pashto": "یو",
+      "translit": "yaw",
+      "pronunciation": "yaw",
+      "en": "one",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-dwa",
+      "kind": "word",
+      "pashto": "دوه",
+      "translit": "dwa",
+      "pronunciation": "dwa",
+      "en": "two",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-drey",
+      "kind": "word",
+      "pashto": "درې",
+      "translit": "dre",
+      "pronunciation": "drey",
+      "en": "three",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-tsa-lor",
+      "kind": "word",
+      "pashto": "څلور",
+      "translit": "tsəlór",
+      "pronunciation": "tsa-LOR",
+      "en": "four",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-pin-dza",
+      "kind": "word",
+      "pashto": "پنځه",
+      "translit": "pindzá",
+      "pronunciation": "pin-DZA",
+      "en": "five",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-shpag",
+      "kind": "word",
+      "pashto": "شپږ",
+      "translit": "špaǧ",
+      "pronunciation": "shpag",
+      "en": "six",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels. ږ is pronounced g in the selected Kabul pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-o-wa",
+      "kind": "word",
+      "pashto": "اووه",
+      "translit": "owá",
+      "pronunciation": "o-WA",
+      "en": "seven",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-a-ta",
+      "kind": "word",
+      "pashto": "اته",
+      "translit": "atá",
+      "pronunciation": "a-TA",
+      "en": "eight",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-na-ha",
+      "kind": "word",
+      "pashto": "نهه",
+      "translit": "náha",
+      "pronunciation": "NA-ha",
+      "en": "nine",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-las",
+      "kind": "word",
+      "pashto": "لس",
+      "translit": "las",
+      "pronunciation": "las",
+      "en": "ten",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-o-mar",
+      "kind": "word",
+      "pashto": "عمر",
+      "translit": "omár",
+      "pronunciation": "o-MAR",
+      "en": "age",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. In عمر, there is no separate throat sound for ع; say o-MAR.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-numbers-1",
+      "title": "One to five",
+      "items": [
+        {
+          "item": "e-yaw",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dwa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-drey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tsa-lor",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pin-dza",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-2",
+      "title": "Six to ten and age",
+      "items": [
+        {
+          "item": "e-shpag",
+          "role": "introduce"
+        },
+        {
+          "item": "e-o-wa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-a-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-na-ha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-o-mar",
+          "role": "introduce"
+        }
+      ]
+    }
+  ]
+}

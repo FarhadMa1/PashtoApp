@@ -798,6 +798,23 @@ struct LessonSessionTests {
             "l-family-1",
             "l-family-2",
             "l-family-3",
+            "l-numbers-1",
+            "l-numbers-2",
+            "l-food-1",
+            "l-food-2",
+            "l-food-3",
+            "l-food-4",
+            "l-daily-life-1",
+            "l-daily-life-2",
+            "l-daily-life-3",
+            "l-daily-life-4",
+            "l-town-1",
+            "l-town-2",
+            "l-town-3",
+            "l-town-4",
+            "l-conversation-1",
+            "l-conversation-2",
+            "l-conversation-3",
         ])
 
         var seen: [LessonID] = []
