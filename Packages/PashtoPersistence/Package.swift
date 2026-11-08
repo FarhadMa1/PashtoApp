@@ -44,6 +44,9 @@ let package = Package(
                 .product(name: "PashtoCore", package: "PashtoCore"),
                 .product(name: "PashtoCoreTesting", package: "PashtoCore"),
             ],
+            resources: [
+                .copy("Fixtures/SchemaV1.store"),
+            ],
             linkerSettings: [
                 .linkedLibrary("sqlite3"),
             ]
