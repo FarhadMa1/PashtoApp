@@ -414,6 +414,25 @@ struct TheBasicsTests {
         #expect(browser.progress.settings.placementTakenDay == day)
         #expect(browser.progress.settings.dailyGoal == .serious)
     }
+
+    @Test func basicsDoneButtonLabelIsNotEmptyAndIsNotInTheCatalog() throws {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(contentsOf: root.appendingPathComponent("PashtoApp/Quiz/BasicsSheet.swift"), encoding: .utf8)
+        let doneButtons = source.components(separatedBy: "Button(\"Done\")").count - 1
+        #expect(doneButtons == 2)
+        #expect(source.components(separatedBy: ".confirmationAction").count - 1 == 2)
+        #expect(!source.contains("SystemDone"))
+        #expect(!source.contains("UIBarButtonItem"))
+        let label = "Done"
+        #expect(!label.isEmpty)
+        let catalog = try String(contentsOf: root.appendingPathComponent("PashtoApp/Localizable.xcstrings"), encoding: .utf8)
+        #expect(!catalog.contains("\"value\" : \"Done\""))
+    }
 }
 
 private func loadCourse() throws -> BundledCourse {

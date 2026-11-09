@@ -1,14 +1,5 @@
 import PashtoCore
 import SwiftUI
-import UIKit
-
-/// The system Done title. It is not an app string.
-@MainActor
-enum SystemDone {
-    static var title: String {
-        UIBarButtonItem(systemItem: .done).title ?? ""
-    }
-}
 
 private struct ShownBasicsCard: Identifiable {
     var card: StudyCard
@@ -28,8 +19,7 @@ struct BasicsSheet: View {
     @ScaledMetric(relativeTo: .body) private var rowMinHeight: CGFloat = 72
 
     var body: some View {
-        VStack(spacing: 0) {
-            sheetHeader
+        NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(cards.enumerated()), id: \.offset) { index, card in
@@ -46,6 +36,15 @@ struct BasicsSheet: View {
                 .padding(.bottom, 24)
             }
             .scrollBounceBehavior(.basedOnSize)
+            .background(Lapis.background.ignoresSafeArea())
+            .navigationTitle(ApprovedBasicsCopy.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                        .frame(minWidth: 44, minHeight: 44)
+                }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Lapis.background.ignoresSafeArea())
@@ -54,32 +53,6 @@ struct BasicsSheet: View {
             BasicsReferenceCard(card: shown.card) {
                 self.shown = nil
             }
-        }
-    }
-
-    private var sheetHeader: some View {
-        ZStack {
-            Text(verbatim: ApprovedBasicsCopy.title)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(Lapis.text)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.7)
-                .padding(.horizontal, 88)
-                .accessibilityAddTraits(.isHeader)
-            HStack {
-                Spacer(minLength: 0)
-                doneButton(ink: Lapis.primary, action: { dismiss() })
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.top, 18)
-        .padding(.bottom, 10)
-        .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(Lapis.muted.opacity(0.55))
-                .frame(height: 1)
-                .accessibilityHidden(true)
         }
     }
 
@@ -131,17 +104,6 @@ struct BasicsSheet: View {
         if card.meaning.isEmpty { return card.pronunciation }
         return "\(card.pronunciation). \(card.meaning)"
     }
-
-    private func doneButton(ink: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(verbatim: SystemDone.title)
-                .font(.body.weight(.semibold))
-                .foregroundStyle(ink)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(minHeight: 44)
-        }
-        .buttonStyle(.plain)
-    }
 }
 
 /// One learn card, using the lesson card stack. Done closes it.
@@ -154,52 +116,26 @@ struct BasicsReferenceCard: View {
     @AccessibilityFocusState private var pronunciationFocused: Bool
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            LapisScreen {
+        NavigationStack {
+            ScrollView {
                 face
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                     .padding(.bottom, 12)
-            } footer: {
-                Button(action: onDone) {
-                    Text(verbatim: SystemDone.title)
-                        .fixedSize(horizontal: false, vertical: true)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            .background(StudyPalette.page.ignoresSafeArea())
+            .navigationTitle(ApprovedBasicsCopy.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { onDone() }
+                        .frame(minWidth: 44, minHeight: 44)
                 }
-                .buttonStyle(StudyPrimaryButtonStyle())
             }
         }
         .background(StudyPalette.page.ignoresSafeArea())
         .onAppear { pronunciationFocused = true }
-    }
-
-    private var header: some View {
-        ZStack {
-            Text(verbatim: ApprovedBasicsCopy.title)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(StudyPalette.headerInk)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.7)
-                .padding(.horizontal, 88)
-                .accessibilityAddTraits(.isHeader)
-            HStack {
-                Spacer(minLength: 0)
-                Button(action: onDone) {
-                    Text(verbatim: SystemDone.title)
-                        .font(.body.weight(.semibold))
-                        .foregroundStyle(StudyPalette.headerInk)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(minHeight: 44)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.top, 12)
-        .padding(.bottom, 16)
-        .frame(maxWidth: .infinity)
-        .background(StudyPalette.header.ignoresSafeArea(edges: .top))
     }
 
     private var face: some View {
