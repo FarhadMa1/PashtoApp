@@ -1,6 +1,18 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "basics.button" : {
+      "comment" : "Home button and the title of the learn-card reference sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basics"
+          }
+        }
+      }
+    },
     "Pashto" : {
       "comment" : "Placeholder title on the root view. English is the only UI language for now.",
       "extractionState" : "manual",

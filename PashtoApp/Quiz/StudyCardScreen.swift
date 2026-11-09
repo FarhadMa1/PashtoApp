@@ -19,9 +19,6 @@ struct StudyCardScreen: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AccessibilityFocusState private var pronunciationFocused: Bool
-    @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = 39
-    @ScaledMetric(relativeTo: .title2) private var pashtoSize: CGFloat = 32
-    @ScaledMetric(relativeTo: .title3) private var meaningSize: CGFloat = 22
 
     var body: some View {
         VStack(spacing: 0) {
@@ -96,55 +93,11 @@ struct StudyCardScreen: View {
     private var card: some View {
         VStack(spacing: 18) {
             if let card = deck.card {
-                VStack(spacing: 10) {
-                    Text(verbatim: card.pronunciation)
-                        .font(.system(size: pronunciationSize, weight: .bold))
-                        .foregroundStyle(StudyPalette.pronunciation)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity)
-                        .environment(\.layoutDirection, .leftToRight)
-                        .accessibilityFocused($pronunciationFocused)
-                        .accessibilitySortPriority(50)
-                    Text(verbatim: card.pashto)
-                        .font(.system(size: pashtoSize, weight: .regular))
-                        .foregroundStyle(StudyPalette.pashto)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity)
-                        .environment(\.layoutDirection, .rightToLeft)
-                        .accessibilitySortPriority(40)
-                    if deck.meaningVisible {
-                        Text(verbatim: card.meaning)
-                            .font(.system(size: meaningSize, weight: .regular))
-                            .foregroundStyle(StudyPalette.meaning)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(maxWidth: .infinity)
-                            .environment(\.layoutDirection, .leftToRight)
-                            .accessibilitySortPriority(30)
-                        if let explanation = card.explanation {
-                            Text(verbatim: explanation)
-                                .font(.body)
-                                .foregroundStyle(StudyPalette.meaning)
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .frame(maxWidth: .infinity)
-                                .environment(\.layoutDirection, .leftToRight)
-                                .accessibilitySortPriority(25)
-                        }
-                        if let note = card.pronunciationNote {
-                            Text(verbatim: note)
-                                .font(.subheadline)
-                                .foregroundStyle(Lapis.secondaryText)
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .frame(maxWidth: .infinity)
-                                .environment(\.layoutDirection, .leftToRight)
-                                .accessibilitySortPriority(22)
-                        }
-                    }
-                }
+                StudyCardLines(
+                    card: card,
+                    showsMeaning: deck.meaningVisible,
+                    pronunciationFocused: $pronunciationFocused
+                )
                 .id(deck.index)
                 .transition(.opacity)
                 .animation(cardAnimation, value: deck.index)
@@ -200,8 +153,74 @@ struct StudyCardScreen: View {
     }
 }
 
+/// Pronunciation, Pashto, and English for one learn or phrases card.
+///
+/// The same stack is used by a lesson and by the reference card. Learn shows
+/// the meaning. A phrases card can hide it.
+struct StudyCardLines: View {
+    var card: StudyCard
+    var showsMeaning: Bool
+    var pronunciationFocused: AccessibilityFocusState<Bool>.Binding
+
+    @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = 39
+    @ScaledMetric(relativeTo: .title2) private var pashtoSize: CGFloat = 32
+    @ScaledMetric(relativeTo: .title3) private var meaningSize: CGFloat = 22
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Text(verbatim: card.pronunciation)
+                .font(.system(size: pronunciationSize, weight: .bold))
+                .foregroundStyle(StudyPalette.pronunciation)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .environment(\.layoutDirection, .leftToRight)
+                .accessibilityFocused(pronunciationFocused)
+                .accessibilitySortPriority(50)
+            Text(verbatim: card.pashto)
+                .font(.system(size: pashtoSize, weight: .regular))
+                .foregroundStyle(StudyPalette.pashto)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .environment(\.layoutDirection, .rightToLeft)
+                .accessibilitySortPriority(40)
+            if showsMeaning {
+                Text(verbatim: card.meaning)
+                    .font(.system(size: meaningSize, weight: .regular))
+                    .foregroundStyle(StudyPalette.meaning)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity)
+                    .environment(\.layoutDirection, .leftToRight)
+                    .accessibilitySortPriority(30)
+                if let explanation = card.explanation {
+                    Text(verbatim: explanation)
+                        .font(.body)
+                        .foregroundStyle(StudyPalette.meaning)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity)
+                        .environment(\.layoutDirection, .leftToRight)
+                        .accessibilitySortPriority(25)
+                }
+                if let note = card.pronunciationNote {
+                    Text(verbatim: note)
+                        .font(.subheadline)
+                        .foregroundStyle(Lapis.secondaryText)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity)
+                        .environment(\.layoutDirection, .leftToRight)
+                        .accessibilitySortPriority(22)
+                }
+            }
+        }
+    }
+}
+
 /// Direction B colors for the card screen. Light and dark are both specified.
-private enum StudyPalette {
+enum StudyPalette {
     static let page = dynamic(light: 0xEBEFF9, dark: 0x0F172A)
     static let header = dynamic(light: 0x1E3A8A, dark: 0x1E293B)
     static let headerInk = dynamic(light: 0xF8FAFC, dark: 0xF8FAFC)
@@ -238,7 +257,7 @@ private enum StudyCopy {
     static var showMeaning: String { String(localized: "today.showMeaning") }
 }
 
-private struct StudyPrimaryButtonStyle: ButtonStyle {
+struct StudyPrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body.weight(.heavy))
