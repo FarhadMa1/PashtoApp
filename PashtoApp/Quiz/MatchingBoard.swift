@@ -1,7 +1,7 @@
 import PashtoCore
 import SwiftUI
 
-/// Match columns. A correct pair glides together, becomes one green tile, then fades.
+/// Match columns, side by side. A correct pair glides together, becomes one green tile, then fades.
 ///
 /// A wrong pair shakes with the red frame and the cross, and that mark stays.
 /// Reduce Motion skips the glide and the shake and fades for 0.2 s instead.
@@ -17,20 +17,16 @@ struct MatchingBoard: View {
     var onRight: (ItemID) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .title3) private var pairPronunciationSize: CGFloat = 24
+    @ScaledMetric(relativeTo: .title3) private var pairPashtoSize: CGFloat = 29
     @State private var spots: [String: CGRect] = [:]
     @State private var clock = PairMergeClock()
 
     private let space = "matching-board"
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            ForEach(task.pairs, id: \.left.itemID) { pair in
-                leftTile(pair)
-            }
-            ForEach(task.rightColumn, id: \.itemID) { side in
-                rightTile(side)
-            }
-        }
+        columns
         .coordinateSpace(.named(space))
         .overlay {
             ZStack {
@@ -61,6 +57,39 @@ struct MatchingBoard: View {
         .onDisappear { clock.stop() }
     }
 
+    @ViewBuilder
+    private var columns: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 12) {
+                leftColumn
+                rightColumn
+            }
+        } else {
+            HStack(alignment: .top, spacing: 10) {
+                leftColumn
+                    .frame(maxWidth: .infinity, alignment: .top)
+                rightColumn
+                    .frame(maxWidth: .infinity, alignment: .top)
+            }
+        }
+    }
+
+    private var leftColumn: some View {
+        VStack(spacing: 12) {
+            ForEach(task.pairs, id: \.left.itemID) { pair in
+                leftTile(pair)
+            }
+        }
+    }
+
+    private var rightColumn: some View {
+        VStack(spacing: 12) {
+            ForEach(task.rightColumn, id: \.itemID) { side in
+                rightTile(side)
+            }
+        }
+    }
+
     private func leftTile(_ pair: MatchPair) -> some View {
         let linked = linkedSide(links[pair.left.itemID])
         let spoken = pronunciation(for: pair.left.text, itemID: pair.left.itemID)
@@ -68,27 +97,22 @@ struct MatchingBoard: View {
         let phase = step(for: pair.left.itemID, mark: mark)
         let overlay = hasMeetingPoint(pair)
         let visual = sourceMark(mark, step: phase, hasOverlay: overlay)
+        let selected = selectedLeft == pair.left.itemID
         return Button {
             guard !revealed else { return }
             onLeft(pair.left.itemID)
         } label: {
-            HStack(spacing: 10) {
-                VStack(alignment: .leading, spacing: 4) {
-                    line(pair.left.text, itemID: pair.left.itemID, mark: visual)
-                    if let linked {
-                        line(linked.text, itemID: linked.itemID, mark: visual)
-                            .font(.subheadline)
-                    }
-                }
-                Spacer(minLength: 0)
+            VStack(spacing: 6) {
                 markIcon(visual)
+                line(pair.left.text, itemID: pair.left.itemID, mark: visual)
+                if let linked {
+                    line(linked.text, itemID: linked.itemID, mark: visual)
+                        .font(.subheadline)
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(8)
-            .background(tileFill(visual))
-            .overlay(tileBorder(selected: selectedLeft == pair.left.itemID, mark: visual))
+            .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(plate(selected: selected, mark: visual))
         .foregroundStyle(Lapis.text)
         .disabled(revealed)
         .opacity(sourceOpacity(mark, step: phase, hasOverlay: overlay))
@@ -112,22 +136,13 @@ struct MatchingBoard: View {
         return Button {
             onRight(side.itemID)
         } label: {
-            HStack(spacing: 10) {
-                line(side.text, itemID: side.itemID, mark: visual)
-                Spacer(minLength: 0)
+            VStack(spacing: 6) {
                 markIcon(visual)
+                line(side.text, itemID: side.itemID, mark: visual)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 8)
-            .padding(.horizontal, visual == nil ? 0 : 8)
-            .background(tileFill(visual))
-            .overlay {
-                if visual != nil {
-                    tileBorder(selected: false, mark: visual)
-                }
-            }
+            .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(plate(selected: false, mark: visual))
         .foregroundStyle(Lapis.text)
         .disabled(revealed || selectedLeft == nil)
         .opacity(sourceOpacity(mark, step: phase, hasOverlay: overlay))
@@ -166,14 +181,14 @@ struct MatchingBoard: View {
             }
             .padding(8)
             .frame(width: meeting.size.width, height: meeting.size.height, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .background {
+                RoundedRectangle(cornerRadius: 17, style: .continuous)
                     .fill(Lapis.correctFill)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: 17, style: .continuous)
                     .strokeBorder(Lapis.correct, lineWidth: 2)
-            )
+            }
             .scaleEffect(overlayScale(phase))
             .opacity(overlayOpacity(phase))
             .position(meeting.center)
@@ -184,13 +199,33 @@ struct MatchingBoard: View {
     }
 
     private func line(_ text: String, itemID: ItemID, mark: QuizResultMark?) -> some View {
-        PashtoLine(
+        let spoken = pronunciation(for: text, itemID: itemID)
+        let arabic = QuizPresentation.containsArabicScript(text)
+        return PashtoLine(
             text: text,
-            pronunciation: pronunciation(for: text, itemID: itemID),
-            arabic: QuizPresentation.containsArabicScript(text),
-            textColor: mark == nil ? nil : Lapis.fillText,
-            pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation,
-            pronunciationLeads: true
+            pronunciation: spoken,
+            arabic: arabic,
+            pronunciationColor: mark == nil ? QuizChrome.primary : Lapis.fillPronunciation,
+            scriptColor: mark == nil ? QuizChrome.pashto : Lapis.fillText,
+            scriptFont: spoken == nil ? nil : .system(size: pairPashtoSize, weight: .regular),
+            centers: true,
+            pronunciationLeads: spoken != nil
+        )
+        .font(.system(size: spoken == nil ? 17 : pairPronunciationSize, weight: spoken == nil ? .semibold : .bold))
+        .foregroundStyle(mark == nil ? QuizChrome.ink : Lapis.fillText)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func plate(selected: Bool, mark: QuizResultMark?) -> QuizTactileButtonStyle {
+        let edge = border(selected: selected, mark: mark)
+        return QuizTactileButtonStyle(
+            fill: fill(mark),
+            edge: edge,
+            lipColor: edge,
+            expands: true,
+            alignment: .center,
+            lineWidth: selected && mark == nil ? 3 : 2
         )
     }
 
@@ -202,16 +237,6 @@ struct MatchingBoard: View {
                 .foregroundStyle(mark == .correct ? Lapis.correct : Lapis.destructive)
                 .accessibilityHidden(true)
         }
-    }
-
-    private func tileFill(_ mark: QuizResultMark?) -> some View {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(fill(mark))
-    }
-
-    private func tileBorder(selected: Bool, mark: QuizResultMark?) -> some View {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .strokeBorder(border(selected: selected, mark: mark), lineWidth: selected && mark == nil ? 3 : 2)
     }
 
     private func mergeEvents() -> [(id: ItemID, mark: QuizResultMark)] {
@@ -352,7 +377,7 @@ struct MatchingBoard: View {
         case .incorrect:
             Lapis.destructive
         case nil:
-            selected ? Lapis.ring : Lapis.secondaryText.opacity(0.35)
+            selected ? Lapis.ring : QuizChrome.primary
         }
     }
 
@@ -363,7 +388,7 @@ struct MatchingBoard: View {
         case .incorrect:
             Lapis.incorrectFill
         case nil:
-            .clear
+            QuizChrome.surface
         }
     }
 

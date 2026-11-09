@@ -88,33 +88,15 @@ struct ContentView: View {
     }
 
     private func quizSession(_ quiz: LessonSession) -> some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button(action: endSession) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.backward")
-                            .accessibilityHidden(true)
-                        Text("Pashto")
-                    }
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(Lapis.text)
-                }
-                .buttonStyle(.plain)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("Pashto"))
-                .accessibilityAddTraits(.isButton)
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-            QuizScreen(
-                session: quiz,
-                items: quizItems,
-                onAnswer: answerSession,
-                onFinish: { celebration = $0; finishSession($0) }
-            )
-        }
-        .background(Lapis.background.ignoresSafeArea())
+        QuizScreen(
+            session: quiz,
+            items: quizItems,
+            lessonTitle: lessons.first { $0.id == quiz.lessonID }?.title ?? "",
+            streakCount: streakCount,
+            onClose: endSession,
+            onAnswer: answerSession,
+            onFinish: { celebration = $0; finishSession($0) }
+        )
     }
 
     private var lessonList: some View {
@@ -1120,7 +1102,7 @@ private struct DailyWordSpin: ViewModifier, Animatable {
 }
 
 /// Catalog strings for the celebration. The English matches `CelebrationCopy`.
-private enum ApprovedCopy {
+enum ApprovedCopy {
     static var lessonComplete: String { String(localized: "celebration.lessonComplete") }
     static var correct: String { String(localized: "celebration.correct") }
     static var dayStreak: String { String(localized: "celebration.dayStreak") }

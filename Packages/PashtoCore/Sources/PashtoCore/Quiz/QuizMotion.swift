@@ -40,6 +40,9 @@ public enum QuizMotion {
     /// Next question entering from the right. The card that leaves fades.
     public static let questionSpring: TimeInterval = 0.28
     public static let questionSpringDamping: Double = 0.86
+    /// Design B result sheet, in with the grade. It does not block Continue.
+    /// Reduce Motion uses `reduceMotionFade` instead of this move.
+    public static let resultSheet: TimeInterval = 0.25
 
     public static let pairGoneScale: Double = 0.6
 

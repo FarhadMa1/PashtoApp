@@ -1,14 +1,22 @@
 import PashtoCore
 import SwiftUI
 
+/// Page track for learn cards. The quiz header uses the navy track and saffron fill.
+enum LessonBarChrome {
+    case page
+    case quizHeader
+}
+
 /// Lesson bar. It springs forward as a question is answered.
 ///
-/// The fill is the ring gold and the track is the page colour, so the fill clears 3:1.
-/// A 1 pt lapis outline sits on the track. Light `#1E3A8A` and dark `#93B4F5` both clear 3:1 on the page.
+/// The page chrome keeps the ring gold on the page colour, with a 1 pt lapis outline.
+/// The quiz header uses `#F2B85B` on `#1E3A8A`, with a cream outline. That fill is not text.
 /// At 100% the glow is saffron, and it is decorative. Reduce Motion jumps to the new width and skips the glow.
 /// The system progress view speaks the value, so this adds no catalog string.
+
 struct LessonProgressBar: View {
     var bar: LessonBar
+    var chrome: LessonBarChrome = .page
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var glowToken = 0
 
@@ -16,16 +24,16 @@ struct LessonProgressBar: View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Lapis.background)
+                    .fill(track)
                 Capsule()
-                    .fill(Lapis.ring)
+                    .fill(fill)
                     .frame(width: max(0, geo.size.width * CGFloat(bar.fraction)))
                     .modifier(SaffronGlow(token: glowToken))
             }
         }
-        .frame(height: 12)
+        .frame(height: chrome == .quizHeader ? 10 : 12)
         .overlay {
-            Capsule().strokeBorder(Lapis.primary, lineWidth: 1)
+            Capsule().strokeBorder(outline, lineWidth: 1)
         }
         .animation(Motion.progressAdvance(reduceMotion: reduceMotion), value: bar.fraction)
         .onChange(of: bar.showsGlow) { _, full in
@@ -35,6 +43,18 @@ struct LessonProgressBar: View {
         .accessibilityRepresentation {
             ProgressView(value: bar.fraction)
         }
+    }
+
+    private var track: Color {
+        chrome == .quizHeader ? QuizChrome.barTrack : Lapis.background
+    }
+
+    private var fill: Color {
+        chrome == .quizHeader ? QuizChrome.barFill : Lapis.ring
+    }
+
+    private var outline: Color {
+        chrome == .quizHeader ? QuizChrome.cream : Lapis.primary
     }
 }
 

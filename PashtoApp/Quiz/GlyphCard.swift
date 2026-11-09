@@ -14,7 +14,8 @@ struct GlyphCard: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var flipped = false
     @State private var shown: Bool
-    @ScaledMetric(relativeTo: .largeTitle) private var glyphSize: CGFloat = 56
+    @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = 38
+    @ScaledMetric(relativeTo: .title2) private var pashtoSize: CGFloat = 32
 
     init(model: GlyphCardModel, playsReveal: Bool = true) {
         self.model = model
@@ -54,34 +55,35 @@ struct GlyphCard: View {
             face(model.front, angle: flipped ? 180 : 0, shown: !flipped, spins: flipStyle == .rotation)
             face(model.back, angle: flipped ? 0 : -180, shown: flipped, spins: flipStyle == .rotation)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 20)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 8)
         .frame(maxWidth: .infinity)
-        .background {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .strokeBorder(Lapis.secondaryText.opacity(0.35), lineWidth: 1)
-        }
         .opacity(shown ? 1 : 0)
         .scaleEffect(shown ? 1 : CGFloat(GlyphReveal.style(reduceMotion: reduceMotion).startScale))
     }
 
     private func face(_ side: GlyphCardSide, angle: Double, shown: Bool, spins: Bool) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 9) {
             PashtoLine(
                 text: side.glyph,
                 pronunciation: side.pronunciation,
                 arabic: QuizPresentation.containsArabicScript(side.glyph),
+                pronunciationColor: QuizChrome.primary,
+                scriptColor: QuizChrome.pashto,
+                scriptFont: .system(size: pashtoSize, weight: .regular),
                 fitsWidth: prominent,
-                pronunciationLeads: true
+                centers: true,
+                pronunciationLeads: side.pronunciation != nil
             )
-            .font(prominent ? .system(size: glyphSize, weight: .medium) : .title2.weight(.semibold))
-            .foregroundStyle(Lapis.text)
+            .font(.system(size: pronunciationSize, weight: .bold))
+            .foregroundStyle(QuizChrome.primary)
             .frame(maxWidth: .infinity)
             if let meaning = side.meaning {
                 Text(meaning)
                     .font(.title3.weight(.semibold))
-                    .foregroundStyle(Lapis.text)
+                    .foregroundStyle(QuizChrome.ink)
                     .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                     .environment(\.layoutDirection, .leftToRight)
             }
         }

@@ -1,13 +1,14 @@
 import PashtoCore
 import SwiftUI
 
-/// One quiz question: the prompt, the choices, and the feedback after an answer.
+/// One quiz question in Design B.
 ///
 /// The stored pronunciation is the large line. Pashto is smaller beneath it,
 /// right to left. The pronunciation stays left to right. Scholarly
-/// transliteration is not shown. B1 and B3 keep pronunciation off the choices
-/// until the question has been answered. A same-sound choice draws its ring
-/// or dot after the answer.
+/// transliteration is not shown. Noto Naskh Arabic is not in the bundle, so
+/// Pashto uses the system Arabic font. Find-letter and first-letter choices
+/// keep pronunciation off until the question has been answered. A same-sound
+/// choice draws its ring or dot after the answer.
 struct QuizScreen: View {
     @State private var session: LessonSession
     @State private var pickedChoice: ItemID?
@@ -27,19 +28,34 @@ struct QuizScreen: View {
     @State private var changeToken = 0
     @State private var cardWidth: CGFloat = 0
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let itemsByID: [ItemID: ContentItem]
+    private let lessonTitle: String
+    private let streakCount: Int
+    private let onClose: () -> Void
     var onAnswer: (LessonSession) -> Void
     var onFinish: (LessonSession) -> Void
+
+    @ScaledMetric(relativeTo: .title) private var questionTitleSize: CGFloat = 28
+    @ScaledMetric(relativeTo: .title2) private var choicePronunciationSize: CGFloat = 25
+    @ScaledMetric(relativeTo: .title3) private var choicePashtoSize: CGFloat = 29
+    @ScaledMetric(relativeTo: .title2) private var wordPronunciationSize: CGFloat = 25
+    @ScaledMetric(relativeTo: .title3) private var wordPashtoSize: CGFloat = 29
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
         session: LessonSession,
         items: [ContentItem],
+        lessonTitle: String = "",
+        streakCount: Int = 0,
+        onClose: @escaping () -> Void = {},
         onAnswer: @escaping (LessonSession) -> Void = { _ in },
         onFinish: @escaping (LessonSession) -> Void = { _ in }
     ) {
         _session = State(initialValue: session)
+        self.lessonTitle = lessonTitle
+        self.streakCount = streakCount
+        self.onClose = onClose
         self.onAnswer = onAnswer
         self.onFinish = onFinish
         var map: [ItemID: ContentItem] = [:]
@@ -50,29 +66,135 @@ struct QuizScreen: View {
     }
 
     var body: some View {
-        LapisScreen {
-            VStack(alignment: .leading, spacing: 16) {
-                LessonProgressBar(bar: lessonBar)
+        VStack(spacing: 0) {
+            quizHeader
+            ScrollView {
                 questionStage
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+                    .padding(.bottom, 12)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 12)
-            .sensoryFeedback(.success, trigger: correctHaptics)
-            .sensoryFeedback(.error, trigger: wrongHaptics)
-            .onChange(of: result) { _, graded in
-                // One announcement for the result. Motion must not post another.
-                guard let graded else { return }
-                AccessibilityNotification.Announcement(QuizCopy.feedbackSpoken(correct: graded == .correct)).post()
-            }
-        } footer: {
-            Button(action: advance) {
-                Text("quiz.continue.button")
-            }
-            .buttonStyle(SaffronButtonStyle())
-            .disabled(!canContinue)
+            .scrollBounceBehavior(.basedOnSize)
+            quizFooter
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(QuizChrome.page.ignoresSafeArea())
+        .sensoryFeedback(.success, trigger: correctHaptics)
+        .sensoryFeedback(.error, trigger: wrongHaptics)
+        .onChange(of: result) { _, graded in
+            // One announcement for the result. Motion must not post another.
+            guard let graded else { return }
+            AccessibilityNotification.Announcement(QuizCopy.feedbackSpoken(correct: graded == .correct)).post()
+        }
+    }
+
+    private var quizHeader: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .center, spacing: 8) {
+                Button(action: onClose) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "chevron.backward")
+                            .accessibilityHidden(true)
+                        Text("Pashto")
+                    }
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(QuizChrome.cream)
+                }
+                .buttonStyle(.plain)
+                .frame(minHeight: 44)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Pashto"))
+                .accessibilityAddTraits(.isButton)
+                .accessibilitySortPriority(80)
+                if !lessonTitle.isEmpty {
+                    Text(verbatim: lessonTitle)
+                        .font(.headline.weight(.bold))
+                        .foregroundStyle(QuizChrome.cream)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.75)
+                        .accessibilitySortPriority(75)
+                }
+                Spacer(minLength: 8)
+                streakMark
+            }
+            HStack(spacing: 12) {
+                LessonProgressBar(bar: lessonBar, chrome: .quizHeader)
+                    .accessibilitySortPriority(60)
+                Text(verbatim: "\(lessonBar.answered) / \(lessonBar.total)")
+                    .font(.subheadline.weight(.bold).monospacedDigit())
+                    .foregroundStyle(QuizChrome.cream)
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            UnevenRoundedRectangle(
+                cornerRadii: RectangleCornerRadii(
+                    topLeading: 0,
+                    bottomLeading: 26,
+                    bottomTrailing: 26,
+                    topTrailing: 0
+                ),
+                style: .continuous
+            )
+            .fill(QuizChrome.badge)
+            .ignoresSafeArea(edges: .top)
+        }
+    }
+
+    private var streakMark: some View {
+        HStack(spacing: 4) {
+            Octagram()
+                .fill(QuizChrome.saffron)
+                .frame(width: 16, height: 16)
+                .accessibilityHidden(true)
+            Text(streakCount, format: .number)
+                .font(.subheadline.weight(.heavy))
+            Text(verbatim: ApprovedCopy.dayStreak)
+                .font(.caption2.weight(.semibold))
+                .fixedSize()
+        }
+        .foregroundStyle(QuizChrome.cream)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: CelebrationCopy.streakSpoken(streakCount, label: ApprovedCopy.dayStreak)))
+        .accessibilitySortPriority(70)
+    }
+
+    private var quizFooter: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            if revealed, let result {
+                feedback(result)
+                    .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+            }
+            Button(action: advance) {
+                HStack(spacing: 10) {
+                    Text("quiz.continue.button")
+                    if canContinue {
+                        Image(systemName: "arrow.right")
+                            .accessibilityHidden(true)
+                    }
+                }
+            }
+            .buttonStyle(QuizContinueButtonStyle(enabled: canContinue))
+            .disabled(!canContinue)
+            .accessibilitySortPriority(10)
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, revealed ? 16 : 8)
+        .padding(.bottom, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            if revealed, let result {
+                QuizResultSheet(result: result)
+                    .ignoresSafeArea(edges: .bottom)
+                    .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(reduceMotion ? Motion.fade : .easeOut(duration: QuizMotion.resultSheet), value: revealed)
     }
 
     private var questionStage: some View {
@@ -168,9 +290,6 @@ struct QuizScreen: View {
             case .orderWords(let order):
                 orderWords(order, card: card, interactive: interactive)
             }
-            if card.revealed, let result = card.result {
-                feedback(result)
-            }
         }
     }
 
@@ -183,16 +302,20 @@ struct QuizScreen: View {
             answered: card.revealed
         )
         return VStack(alignment: .leading, spacing: 16) {
+            taskTitle(quiz.kind)
             prompt(face.prompt, task: quiz, card: card)
             if let usage = face.usage {
                 Text(usage)
                     .font(.subheadline)
-                    .foregroundStyle(Lapis.secondaryText)
+                    .foregroundStyle(QuizChrome.pashto)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilitySortPriority(35)
             }
-            VStack(spacing: 10) {
-                ForEach(face.options, id: \.itemID) { option in
+            VStack(spacing: 12) {
+                ForEach(Array(face.options.enumerated()), id: \.element.itemID) { index, option in
                     choiceButton(
                         option,
+                        number: index + 1,
                         correctID: quiz.targetID,
                         mark: mark(for: option.itemID, correctID: quiz.targetID, card: card),
                         card: card,
@@ -218,40 +341,55 @@ struct QuizScreen: View {
                 playsReveal: card.playsReveal
             )
             .id(card.identity)
+            .accessibilitySortPriority(50)
         } else {
-            PashtoLine(
-                text: text,
-                pronunciation: prompt.pronunciation,
-                arabic: false,
-                pronunciationLeads: true
-            )
-            .font(.title2.weight(.semibold))
-            .foregroundStyle(Lapis.text)
+            Text(verbatim: text)
+                .font(.system(size: questionTitleSize, weight: .bold))
+                .foregroundStyle(QuizChrome.primary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .environment(\.layoutDirection, .leftToRight)
+                .accessibilitySortPriority(50)
+        }
+    }
+
+    @ViewBuilder
+    private func taskTitle(_ kind: TaskKind) -> some View {
+        if let title = QuizPromptTitle.title(for: kind) {
+            Text(verbatim: title)
+                .font(.system(size: questionTitleSize, weight: .heavy))
+                .foregroundStyle(QuizChrome.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityAddTraits(.isHeader)
+                .accessibilitySortPriority(55)
         }
     }
 
     private func choiceButton(
         _ option: QuizOptionFace,
+        number: Int,
         correctID: ItemID,
         mark: QuizResultMark?,
         card: QuestionCardState,
         interactive: Bool
     ) -> some View {
-        Button {
+        let colors = answerColors(mark)
+        return Button {
             pick(option.itemID)
         } label: {
             HStack(spacing: 10) {
-                PashtoLine(
-                    text: option.text,
-                    pronunciation: option.pronunciation,
-                    arabic: QuizPresentation.containsArabicScript(option.text),
-                    mark: option.highlight,
-                    reservesPronunciation: option.reservesPronunciation,
-                    textColor: mark == nil ? nil : Lapis.fillText,
-                    pronunciationColor: mark == nil ? Lapis.secondaryText : Lapis.fillPronunciation,
-                    pronunciationLeads: true
-                )
-                .font(.title3.weight(.semibold))
+                Text(verbatim: "\(number)")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(QuizChrome.pashto)
+                    .frame(minWidth: 24, minHeight: 24)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 7, style: .continuous)
+                            .strokeBorder(QuizChrome.muted, lineWidth: 1)
+                    }
+                    .accessibilityHidden(true)
+                choiceLabel(option, mark: mark)
                 Spacer(minLength: 0)
                 ZStack {
                     if let mark {
@@ -264,25 +402,59 @@ struct QuizScreen: View {
                 }
                 .animation(.easeOut(duration: QuizMotion.checkFade), value: mark)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(fill(for: mark))
-                    .animation(.easeOut(duration: QuizMotion.reduceMotionFade), value: mark)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(border(for: option, mark: mark), lineWidth: 2)
-                    .animation(.easeOut(duration: QuizMotion.reduceMotionFade), value: mark)
-            )
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(Lapis.text)
+        .buttonStyle(
+            QuizTactileButtonStyle(
+                fill: colors.fill,
+                edge: colors.edge,
+                lipColor: colors.edge
+            )
+        )
         .disabled(!interactive || card.revealed)
         .modifier(ChoiceMotion(mark: mark, moves: interactive && card.pickedChoice == option.itemID))
         .accessibilityLabel(QuizCopy.choiceLabel(option, mark: mark))
+        .accessibilitySortPriority(30)
         .id("\(card.identity.answerCount)-\(option.itemID.rawValue)")
+    }
+
+    @ViewBuilder
+    private func choiceLabel(_ option: QuizOptionFace, mark: QuizResultMark?) -> some View {
+        let arabic = QuizPresentation.containsArabicScript(option.text)
+        if arabic {
+            PashtoLine(
+                text: option.text,
+                pronunciation: option.pronunciation,
+                arabic: true,
+                mark: option.highlight,
+                reservesPronunciation: option.reservesPronunciation,
+                pronunciationColor: mark == nil ? QuizChrome.primary : Lapis.fillPronunciation,
+                scriptColor: option.pronunciation == nil
+                    ? (mark == nil ? QuizChrome.ink : Lapis.fillText)
+                    : (mark == nil ? QuizChrome.pashto : Lapis.fillText),
+                scriptFont: option.pronunciation == nil ? nil : .system(size: choicePashtoSize, weight: .regular),
+                pronunciationLeads: option.pronunciation != nil
+            )
+            .font(.system(size: option.pronunciation == nil ? 28 : choicePronunciationSize, weight: .bold))
+            .foregroundStyle(mark == nil ? QuizChrome.ink : Lapis.fillText)
+            .fixedSize(horizontal: false, vertical: true)
+        } else {
+            Text(verbatim: option.text)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(mark == nil ? QuizChrome.ink : Lapis.fillText)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func answerColors(_ mark: QuizResultMark?) -> (fill: Color, edge: Color) {
+        switch mark {
+        case .correct:
+            (Lapis.correctFill, Lapis.correct)
+        case .incorrect:
+            (Lapis.incorrectFill, Lapis.destructive)
+        case nil:
+            (QuizChrome.surface, QuizChrome.primary)
+        }
     }
 
     /// Correct stays marked after a wrong pick, so the right glyph is not only a color.
@@ -293,45 +465,29 @@ struct QuizScreen: View {
         return nil
     }
 
-    private func border(for option: QuizOptionFace, mark: QuizResultMark?) -> Color {
-        switch mark {
-        case .correct:
-            return Lapis.correct
-        case .incorrect:
-            return Lapis.destructive
-        case nil:
-            return pickedChoice == option.itemID ? Lapis.ring : Lapis.secondaryText.opacity(0.35)
-        }
-    }
-
-    private func fill(for mark: QuizResultMark?) -> Color {
-        switch mark {
-        case .correct:
-            return Lapis.correctFill
-        case .incorrect:
-            return Lapis.incorrectFill
-        case nil:
-            return .clear
-        }
-    }
-
     private func feedback(_ result: GradeResult) -> some View {
         let mark: QuizResultMark = result == .correct ? .correct : .incorrect
-        return HStack(spacing: 8) {
+        let icon = markColor(mark)
+        return HStack(spacing: 12) {
             Image(systemName: mark.symbolName)
                 .font(.headline.weight(.bold))
-                .foregroundStyle(markColor(mark))
+                .foregroundStyle(icon)
+                .frame(width: 34, height: 34)
+                .overlay {
+                    Circle().strokeBorder(icon, lineWidth: 2)
+                }
                 .accessibilityHidden(true)
             Text(feedbackKey(result))
-                .font(.headline)
+                .font(.title3.weight(.bold))
                 .foregroundStyle(result == .correct ? Lapis.correctText : Lapis.destructive)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(result == .correct ? Lapis.correctFill : Lapis.incorrectFill)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text(feedbackKey(result)))
         .accessibilityAddTraits(.isHeader)
+        .accessibilitySortPriority(20)
     }
 
     /// The check and the cross. Light green is not dark enough for text.
@@ -349,6 +505,13 @@ struct QuizScreen: View {
     }
 
     private func matchPairs(_ task: MatchPairsTask, card: QuestionCardState, interactive: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            taskTitle(.matchPairs)
+            matchBoard(task, card: card, interactive: interactive)
+        }
+    }
+
+    private func matchBoard(_ task: MatchPairsTask, card: QuestionCardState, interactive: Bool) -> some View {
         MatchingBoard(
             task: task,
             links: card.links,
@@ -376,64 +539,94 @@ struct QuizScreen: View {
     private func orderWords(_ task: OrderWordsTask, card: QuestionCardState, interactive: Bool) -> some View {
         let chosen = card.placed.compactMap { index in task.tiles.first { $0.index == index } }
         let pool = task.tiles.filter { !card.placed.contains($0.index) }
-        return VStack(alignment: .leading, spacing: 12) {
+        return VStack(alignment: .leading, spacing: 16) {
+            taskTitle(.orderWords)
             if !chosen.isEmpty || !task.fixedEnding.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 8) {
+                    QuizWordWrap(spacing: 8, rtl: true) {
                         ForEach(chosen, id: \.index) { tile in
-                            Button {
+                            wordButton(tile, showsPronunciation: card.showsPronunciation, expands: false) {
                                 guard interactive, !card.revealed else { return }
                                 placed = QuizDraft.place(placed, tile: tile.index)
-                            } label: {
-                                PashtoLine(
-                                    text: tile.text,
-                                    pronunciation: tilePronunciation(tile, showsPronunciation: card.showsPronunciation),
-                                    arabic: QuizPresentation.containsArabicScript(tile.text),
-                                    pronunciationLeads: true
-                                )
                             }
-                            .buttonStyle(.plain)
                             .disabled(!interactive || card.revealed)
-                            .accessibilityLabel(tileAccessibility(tile, showsPronunciation: card.showsPronunciation))
                         }
                         if !task.fixedEnding.isEmpty {
-                            Text(task.fixedEnding)
+                            Text(verbatim: task.fixedEnding)
+                                .font(.system(size: 32, weight: .regular))
+                                .foregroundStyle(QuizChrome.pashto)
+                                .frame(minWidth: 44, minHeight: 44)
+                                .environment(\.layoutDirection, .rightToLeft)
                         }
                     }
-                    .environment(\.layoutDirection, .rightToLeft)
                     if let pronunciation = QuizPresentation.sentencePronunciation(
                         item: itemsByID[task.targetID],
                         showsPronunciation: card.showsPronunciation,
                         answered: card.revealed
                     ) {
-                        Text(pronunciation)
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(Lapis.secondaryText)
+                        Text(verbatim: pronunciation)
+                            .font(.title3.weight(.bold))
+                            .foregroundStyle(QuizChrome.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .environment(\.layoutDirection, .leftToRight)
                     }
                 }
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(Lapis.text)
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(QuizChrome.tint)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .strokeBorder(QuizChrome.primary, lineWidth: 1)
+                        }
+                }
             }
             ForEach(pool, id: \.index) { tile in
-                Button {
+                wordButton(tile, showsPronunciation: card.showsPronunciation, expands: true) {
                     guard interactive, !card.revealed else { return }
                     placed = QuizDraft.place(placed, tile: tile.index)
-                } label: {
-                    PashtoLine(
-                        text: tile.text,
-                        pronunciation: tilePronunciation(tile, showsPronunciation: card.showsPronunciation),
-                        arabic: QuizPresentation.containsArabicScript(tile.text),
-                        pronunciationLeads: true
-                    )
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 8)
                 }
-                .buttonStyle(.plain)
-                .foregroundStyle(Lapis.text)
                 .disabled(!interactive || card.revealed)
-                .accessibilityLabel(tileAccessibility(tile, showsPronunciation: card.showsPronunciation))
             }
         }
+    }
+
+    private func wordButton(
+        _ tile: WordTile,
+        showsPronunciation: Bool,
+        expands: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
+        let spoken = tilePronunciation(tile, showsPronunciation: showsPronunciation)
+        let arabic = QuizPresentation.containsArabicScript(tile.text)
+        return Button(action: action) {
+            PashtoLine(
+                text: tile.text,
+                pronunciation: spoken,
+                arabic: arabic,
+                pronunciationColor: QuizChrome.primary,
+                scriptColor: QuizChrome.pashto,
+                scriptFont: spoken == nil ? nil : .system(size: wordPashtoSize, weight: .regular),
+                centers: true,
+                pronunciationLeads: spoken != nil
+            )
+            .font(.system(size: spoken == nil ? 28 : wordPronunciationSize, weight: .bold))
+            .foregroundStyle(QuizChrome.ink)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: expands ? .infinity : nil)
+        }
+        .buttonStyle(
+            QuizTactileButtonStyle(
+                fill: QuizChrome.surface,
+                edge: QuizChrome.primary,
+                lipColor: QuizChrome.primary,
+                expands: expands,
+                alignment: .center
+            )
+        )
+        .accessibilityLabel(tileAccessibility(tile, showsPronunciation: showsPronunciation))
+        .accessibilitySortPriority(30)
     }
 
     private func tilePronunciation(_ tile: WordTile, showsPronunciation: Bool) -> String? {
@@ -572,6 +765,10 @@ struct PashtoLine: View {
     var reservesPronunciation = false
     var textColor: Color? = nil
     var pronunciationColor: Color = Lapis.secondaryText
+    /// Pashto under a leading pronunciation. Nil keeps the colour the parent sets.
+    var scriptColor: Color? = nil
+    /// Pashto size when pronunciation leads. Nil keeps the smaller subheadline.
+    var scriptFont: Font? = nil
     /// Shrinks one long word so the 56 pt glyph stays inside the card at the largest type size.
     var fitsWidth = false
     /// Centers the word and the pronunciation under it. The quiz leaves this off.
@@ -595,10 +792,9 @@ struct PashtoLine: View {
         VStack(alignment: .leading, spacing: 2) {
             if pronunciationFirst {
                 pronunciationText(alignment: .leading)
-                script(alignment: .leading)
-                    .font(.subheadline.weight(.medium))
+                styledScript(alignment: .leading)
             } else {
-                script(alignment: .leading)
+                styledScript(alignment: .leading)
                 if let pronunciation {
                     pronunciationText(alignment: .leading)
                         .font(.subheadline.weight(.medium))
@@ -618,11 +814,10 @@ struct PashtoLine: View {
             if pronunciationFirst {
                 pronunciationText(alignment: .center)
                     .multilineTextAlignment(.center)
-                script(alignment: .center)
-                    .font(.subheadline.weight(.medium))
+                styledScript(alignment: .center)
                     .frame(maxWidth: .infinity)
             } else {
-                script(alignment: .center)
+                styledScript(alignment: .center)
                     .frame(maxWidth: .infinity)
                 if let pronunciation {
                     pronunciationText(alignment: .center)
@@ -636,18 +831,26 @@ struct PashtoLine: View {
     }
 
     @ViewBuilder
+    private func styledScript(alignment: TextAlignment) -> some View {
+        let line = script(alignment: alignment)
+        if let scriptFont {
+            line.font(scriptFont)
+        } else if pronunciationFirst {
+            line.font(.subheadline.weight(.medium))
+        } else {
+            line
+        }
+    }
+
+    @ViewBuilder
     private func pronunciationText(alignment: TextAlignment) -> some View {
         let line = Text(pronunciation ?? "")
             .multilineTextAlignment(alignment)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: alignment == .center ? .center : .leading)
             .environment(\.layoutDirection, .leftToRight)
-        if pronunciationFirst {
-            if let textColor {
-                line.foregroundStyle(textColor)
-            } else {
-                line
-            }
+        if let textColor, pronunciationFirst {
+            line.foregroundStyle(textColor)
         } else {
             line.foregroundStyle(pronunciationColor)
         }
@@ -670,6 +873,8 @@ struct PashtoLine: View {
             .modifier(FitSingleWord(text: text, enabled: fitsWidth))
         if let textColor {
             line.foregroundStyle(textColor)
+        } else if let scriptColor {
+            line.foregroundStyle(scriptColor)
         } else {
             line
         }
@@ -767,5 +972,111 @@ enum QuizCopy {
         case "quiz.letterHint.za.raDot": String(localized: "quiz.letterHint.za.raDot")
         default: nil
         }
+    }
+}
+
+/// Girih sheet behind Correct or Incorrect. It comes in with the grade and does not block Continue.
+private struct QuizResultSheet: View {
+    var result: GradeResult
+
+    private var fill: Color {
+        result == .correct ? Lapis.correctFill : Lapis.incorrectFill
+    }
+
+    private var edge: Color {
+        result == .correct ? Lapis.correct : Lapis.destructive
+    }
+
+    var body: some View {
+        shape
+            .fill(fill)
+            .overlay {
+                GirihPattern()
+                    .opacity(0.45)
+                    .clipShape(shape)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+            .overlay {
+                shape.strokeBorder(edge, lineWidth: 2)
+                    .accessibilityHidden(true)
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    private var shape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            cornerRadii: RectangleCornerRadii(
+                topLeading: 24,
+                bottomLeading: 0,
+                bottomTrailing: 0,
+                topTrailing: 24
+            ),
+            style: .continuous
+        )
+    }
+}
+
+/// Chosen word tiles, right to left, wrapping so a pronunciation is not clipped.
+private struct QuizWordWrap: Layout {
+    var spacing: CGFloat = 8
+    var rtl = false
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? .greatestFiniteMagnitude
+        let rows = rows(maxWidth: width, subviews: subviews)
+        let height = rows.map(\.height).reduce(0, +) + spacing * CGFloat(max(rows.count - 1, 0))
+        return CGSize(width: proposal.width ?? (rows.map(\.width).max() ?? 0), height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let rows = rows(maxWidth: bounds.width, subviews: subviews)
+        var y = bounds.minY
+        var index = 0
+        for row in rows {
+            var x = rtl ? bounds.maxX : bounds.minX
+            for size in row.sizes {
+                let originX = rtl ? x - size.width : x
+                subviews[index].place(
+                    at: CGPoint(x: originX, y: y),
+                    proposal: ProposedViewSize(width: size.width, height: size.height)
+                )
+                x += rtl ? -(size.width + spacing) : (size.width + spacing)
+                index += 1
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row {
+        var sizes: [CGSize]
+        var width: CGFloat
+        var height: CGFloat
+    }
+
+    private func rows(maxWidth: CGFloat, subviews: Subviews) -> [Row] {
+        var rows: [Row] = []
+        var sizes: [CGSize] = []
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            let next = width == 0 ? size.width : width + spacing + size.width
+            if width > 0, next > maxWidth {
+                rows.append(Row(sizes: sizes, width: width, height: height))
+                sizes = [size]
+                width = size.width
+                height = size.height
+            } else {
+                sizes.append(size)
+                width = next
+                height = max(height, size.height)
+            }
+        }
+        if !sizes.isEmpty {
+            rows.append(Row(sizes: sizes, width: width, height: height))
+        }
+        return rows
     }
 }
