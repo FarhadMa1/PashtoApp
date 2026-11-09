@@ -41,7 +41,9 @@ struct PlayableCourseTests {
     @Test func releasedQuizzesPlacementAndSkipCardsLeaveLettersOut() throws {
         let course = try loadCourse()
         let released = course.releasedUnitIDs
-        #expect(released.map(\.rawValue) == ["u-basics", "u-greetings", "u-introductions", "u-family"])
+        #expect(released.map(\.rawValue) == [
+            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+        ])
         var rng = SplitMix64(seed: 4)
         let placement = PlacementTestBuilder.build(in: course.bundle, releasedUnitIDs: released, using: &rng)
         #expect(placement.unitIDs.map(\.rawValue) == ["u-basics", "u-greetings", "u-introductions", "u-family"])

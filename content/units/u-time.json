@@ -1,0 +1,637 @@
+{
+  "id": "u-time",
+  "track": "main",
+  "title": "Time and days",
+  "items": [
+    {
+      "id": "e-wradz",
+      "kind": "word",
+      "pashto": "ورځ",
+      "translit": "wradz",
+      "pronunciation": "wradz",
+      "en": "day",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-sa-haar",
+      "kind": "word",
+      "pashto": "سهار",
+      "translit": "sahā́r",
+      "pronunciation": "sa-HAAR",
+      "en": "morning",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-maa-khaam",
+      "kind": "word",
+      "pashto": "ماښام",
+      "translit": "māx̌ā́m",
+      "pronunciation": "maa-KHAAM",
+      "en": "evening",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-shpa",
+      "kind": "word",
+      "pashto": "شپه",
+      "translit": "špa",
+      "pronunciation": "shpa",
+      "en": "night",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-os",
+      "kind": "word",
+      "pashto": "اوس",
+      "translit": "os",
+      "pronunciation": "os",
+      "en": "now",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-pa-roon",
+      "kind": "word",
+      "pashto": "پرون",
+      "translit": "parún",
+      "pronunciation": "pa-ROON",
+      "en": "yesterday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-shan-ba",
+      "kind": "word",
+      "pashto": "شنبه",
+      "translit": "šanbá",
+      "pronunciation": "shan-BA",
+      "en": "Saturday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-yak-shan-ba",
+      "kind": "word",
+      "pashto": "یکشنبه",
+      "translit": "yakšanbá",
+      "pronunciation": "yak-shan-BA",
+      "en": "Sunday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-do-shan-ba",
+      "kind": "word",
+      "pashto": "دوشنبه",
+      "translit": "došanbá",
+      "pronunciation": "do-shan-BA",
+      "en": "Monday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-se-shan-ba",
+      "kind": "word",
+      "pashto": "سه شنبه",
+      "translit": "sešanbá",
+      "pronunciation": "se-shan-BA",
+      "en": "Tuesday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-cha-haar-shan-ba",
+      "kind": "word",
+      "pashto": "چهارشنبه",
+      "translit": "čahāršanbá",
+      "pronunciation": "cha-haar-shan-BA",
+      "en": "Wednesday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-panj-shan-ba",
+      "kind": "word",
+      "pashto": "پنجشنبه",
+      "translit": "panjšanbá",
+      "pronunciation": "panj-shan-BA",
+      "en": "Thursday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-ju-ma",
+      "kind": "word",
+      "pashto": "جمعه",
+      "translit": "jumá",
+      "pronunciation": "ju-MA",
+      "en": "Friday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-nan-tsa-wradz-da",
+      "kind": "phrase",
+      "pashto": "نن څه ورځ ده؟",
+      "translit": "nan tsə wradz da?",
+      "pronunciation": "nan tsa wradz da?",
+      "en": "what day is it today?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-nan-ju-ma-da",
+      "kind": "phrase",
+      "pashto": "نن جمعه ده",
+      "translit": "nan jumá da",
+      "pronunciation": "nan ju-MA da",
+      "en": "today is Friday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-sa-baa-shan-ba-da",
+      "kind": "phrase",
+      "pashto": "سبا شنبه ده",
+      "translit": "sabā́ šanbá da",
+      "pronunciation": "sa-BAA shan-BA da",
+      "en": "tomorrow is Saturday",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-tso-ba-je-dee",
+      "kind": "phrase",
+      "pashto": "څو بجې دي؟",
+      "translit": "tso badžé di?",
+      "pronunciation": "tso ba-JE dee?",
+      "en": "what time is it?",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-sa-haar-mo-pa-khayr",
+      "kind": "phrase",
+      "pashto": "سهار مو په خیر",
+      "translit": "sahā́r mo pə xayr",
+      "pronunciation": "sa-HAAR mo pa KHAYR",
+      "en": "good morning",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-shpa-mo-pa-khayr",
+      "kind": "phrase",
+      "pashto": "شپه مو په خیر",
+      "translit": "špa mo pə xayr",
+      "pronunciation": "shpa mo pa KHAYR",
+      "en": "good night",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-za-os-dzam",
+      "kind": "phrase",
+      "pashto": "زه اوس ځم",
+      "translit": "zə os dzəm",
+      "pronunciation": "za os dzam",
+      "en": "I am going now",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-za-sa-haar-kaar-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه سهار کار کوم",
+      "translit": "zə sahā́r kār kawə́m",
+      "pronunciation": "za sa-HAAR kaar ka-WAM",
+      "en": "I work in the morning",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-time-learn-times",
+      "title": "Times of day",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-wradz",
+          "role": "present"
+        },
+        {
+          "item": "e-sa-haar",
+          "role": "present"
+        },
+        {
+          "item": "e-maa-khaam",
+          "role": "present"
+        },
+        {
+          "item": "e-shpa",
+          "role": "present"
+        },
+        {
+          "item": "e-os",
+          "role": "present"
+        },
+        {
+          "item": "e-pa-roon",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-time-learn-days",
+      "title": "Days of the week",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-shan-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-yak-shan-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-do-shan-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-se-shan-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-cha-haar-shan-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-panj-shan-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-ju-ma",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-time-phrases-day",
+      "title": "What day is it?",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-nan-tsa-wradz-da",
+          "role": "present"
+        },
+        {
+          "item": "e-nan-ju-ma-da",
+          "role": "present"
+        },
+        {
+          "item": "e-sa-baa-shan-ba-da",
+          "role": "present"
+        },
+        {
+          "item": "e-tso-ba-je-dee",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-time-phrases-morning",
+      "title": "Morning and night",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-sa-haar-mo-pa-khayr",
+          "role": "present"
+        },
+        {
+          "item": "e-shpa-mo-pa-khayr",
+          "role": "present"
+        },
+        {
+          "item": "e-za-os-dzam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-sa-haar-kaar-ka-wam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-time-1",
+      "title": "Practice: Times of day",
+      "items": [
+        {
+          "item": "e-wradz",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sa-haar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maa-khaam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shpa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-os",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pa-roon",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sa-haar-mo-pa-khayr",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shpa-mo-pa-khayr",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-os-dzam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-sa-haar-kaar-ka-wam",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-time-2",
+      "title": "Practice: Days of the week",
+      "items": [
+        {
+          "item": "e-shan-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-yak-shan-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-do-shan-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-se-shan-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-cha-haar-shan-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-panj-shan-ba",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ju-ma",
+          "role": "introduce"
+        },
+        {
+          "item": "e-nan-tsa-wradz-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-nan-ju-ma-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sa-baa-shan-ba-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tso-ba-je-dee",
+          "role": "introduce"
+        }
+      ]
+    }
+  ]
+}

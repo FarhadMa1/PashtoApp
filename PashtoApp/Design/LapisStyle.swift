@@ -72,14 +72,23 @@ enum Lapis {
         var hue: Color
         var track: Color
 
+        /// Basics lapis card.
+        static let lapis = MenuCard(
+            fill: dynamic(light: 0xDCE5FB, dark: 0x1B2A4A),
+            hue: dynamic(light: 0x1E3A8A, dark: 0x93B4F5),
+            track: dynamic(light: 0xA8B8E0, dark: 0x334155)
+        )
+        /// Greetings saffron card.
+        static let saffron = MenuCard(
+            fill: dynamic(light: 0xFBE3BC, dark: 0x3A2A12),
+            hue: dynamic(light: 0x8A5A12, dark: 0xF2B85B),
+            track: dynamic(light: 0xE0C080, dark: 0x5C4A28)
+        )
+
         static func resolve(_ unitID: UnitID) -> MenuCard {
             switch unitID.rawValue {
             case "u-greetings":
-                MenuCard(
-                    fill: dynamic(light: 0xFBE3BC, dark: 0x3A2A12),
-                    hue: dynamic(light: 0x8A5A12, dark: 0xF2B85B),
-                    track: dynamic(light: 0xE0C080, dark: 0x5C4A28)
-                )
+                saffron
             case "u-introductions":
                 MenuCard(
                     fill: dynamic(light: 0xCDEDE7, dark: 0x12352F),
@@ -92,12 +101,21 @@ enum Lapis {
                     hue: dynamic(light: 0x8E2F45, dark: 0xFDA4AF),
                     track: dynamic(light: 0xD4A0A8, dark: 0x5C3340)
                 )
-            default:
+            case "u-time":
+                // Light track is a quarter of the way from the fill toward the ink.
                 MenuCard(
-                    fill: dynamic(light: 0xDCE5FB, dark: 0x1B2A4A),
-                    hue: dynamic(light: 0x1E3A8A, dark: 0x93B4F5),
-                    track: dynamic(light: 0xA8B8E0, dark: 0x334155)
+                    fill: dynamic(light: 0xDDEBCF, dark: 0x1F3315),
+                    hue: dynamic(light: 0x3F5F1E, dark: 0xBEF264),
+                    track: dynamic(light: 0xB3C6A2, dark: 0x3A5229)
                 )
+            case "u-travel":
+                MenuCard(
+                    fill: dynamic(light: 0xE6DDF7, dark: 0x2A1E42),
+                    hue: dynamic(light: 0x5B2E91, dark: 0xC4B5FD),
+                    track: dynamic(light: 0xC1B1DF, dark: 0x4A3A6B)
+                )
+            default:
+                lapis
             }
         }
     }

@@ -541,6 +541,30 @@
         }
       }
     },
+    "menu.unit.time" : {
+      "comment" : "Main menu label for u-time. Stored as a word and shown in uppercase. The category title stays Time and days.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        }
+      }
+    },
+    "menu.unit.travel" : {
+      "comment" : "Main menu label for u-travel. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Travel"
+          }
+        }
+      }
+    },
     "module.section.learn" : {
       "comment" : "Course path section. Approved name for the card lessons that come before phrases.",
       "extractionState" : "manual",

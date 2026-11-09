@@ -28,10 +28,12 @@ public struct DistractorCandidate: Hashable, Sendable {
 /// meaning (`en` or `enAlt`), Pashto spelling, transliteration, or
 /// pronunciation are left out.
 ///
-/// A letter is only a candidate for another letter. Words, phrases, and dialog
-/// lines share one pool, so a phrase can be a distractor for a word and the
-/// reverse. Dialog lines are in that pool because they use the same fields and
-/// are not letters.
+/// A letter is only a candidate for another letter. A day name is only a
+/// candidate for another day name, including the two-word سه شنبه. A Travel
+/// or Time item is a candidate only for the same Pashto word count: one word,
+/// or more than one. `kind` does not decide that split. Earlier lessons keep
+/// the pool they already had, so a greeting can still use a phrase as a wrong
+/// option.
 ///
 /// Membership tests use `Set.contains`. The course order itself is the
 /// `units` array, so this type never walks a `Set` or `Dictionary`.
@@ -52,6 +54,7 @@ public enum Distractors {
             guard let source = distractorSource(of: introduction, target: targetIntro) else { continue }
             guard let item = course.itemsByID[introduction.itemID] else { continue }
             guard sameQuizPool(item.kind, stored.kind) else { continue }
+            guard sameAnswerPool(item, stored) else { continue }
             guard !excluded(item, target: stored, groups: context.bundle.nonDistractorGroups) else { continue }
             rows.append((introduction, source))
         }
@@ -190,9 +193,79 @@ private func tier(of introduction: Introduction, target: Introduction) -> Int {
     return 2
 }
 
-/// Letters stand alone. Every other kind shares the word and phrase pool.
+/// Letters stand alone. Day names and word-or-phrase shape are `sameAnswerPool`.
 func sameQuizPool(_ candidate: ContentKind, _ target: ContentKind) -> Bool {
     (candidate == .letter) == (target == .letter)
+}
+
+/// Day names are wrong options only for day names. Travel and Time items
+/// stay with their own shape: one Pashto word, or more than one. The two-word
+/// day سه شنبه stays in the day-name pool, so it still has the other day names.
+/// Items from earlier units are not split by shape.
+enum AnswerPool {
+    static let dayNames: Set<String> = [
+        "e-shan-ba",
+        "e-yak-shan-ba",
+        "e-do-shan-ba",
+        "e-se-shan-ba",
+        "e-cha-haar-shan-ba",
+        "e-panj-shan-ba",
+        "e-ju-ma",
+    ]
+
+    /// New Travel and Time items. Day names are listed here too; the day-name
+    /// check runs first and keeps سه شنبه with the other days.
+    static let shaped: Set<String> = [
+        "e-ha-waa-yee-da-gar",
+        "e-ho-tal",
+        "e-ti-kat",
+        "e-tash-naab",
+        "e-pay-se",
+        "e-graan",
+        "e-ar-zaan",
+        "e-mras-ta",
+        "e-ho-tal-cher-ta-day",
+        "e-tash-naab-cher-ta-day",
+        "e-za-ha-waa-yee-da-gar-ta-dzam",
+        "e-dal-ta-wu-dre-ga",
+        "e-za-ti-kat-ghwaa-ram",
+        "e-daa-pa-tso-day",
+        "e-der-graan-day",
+        "e-mras-ta-wu-kray",
+        "e-wradz",
+        "e-sa-haar",
+        "e-maa-khaam",
+        "e-shpa",
+        "e-os",
+        "e-pa-roon",
+        "e-shan-ba",
+        "e-yak-shan-ba",
+        "e-do-shan-ba",
+        "e-se-shan-ba",
+        "e-cha-haar-shan-ba",
+        "e-panj-shan-ba",
+        "e-ju-ma",
+        "e-nan-tsa-wradz-da",
+        "e-nan-ju-ma-da",
+        "e-sa-baa-shan-ba-da",
+        "e-tso-ba-je-dee",
+        "e-sa-haar-mo-pa-khayr",
+        "e-shpa-mo-pa-khayr",
+        "e-za-os-dzam",
+        "e-za-sa-haar-kaar-ka-wam",
+    ]
+}
+
+func sameAnswerPool(_ candidate: ContentItem, _ target: ContentItem) -> Bool {
+    let candidateDay = AnswerPool.dayNames.contains(candidate.id.rawValue)
+    let targetDay = AnswerPool.dayNames.contains(target.id.rawValue)
+    if candidateDay || targetDay {
+        return candidateDay && targetDay
+    }
+    if AnswerPool.shaped.contains(candidate.id.rawValue) || AnswerPool.shaped.contains(target.id.rawValue) {
+        return DialogResponse.replyShape(of: candidate) == DialogResponse.replyShape(of: target)
+    }
+    return true
 }
 
 private func excluded(_ candidate: ContentItem, target: ContentItem, groups: [[ItemID]]) -> Bool {

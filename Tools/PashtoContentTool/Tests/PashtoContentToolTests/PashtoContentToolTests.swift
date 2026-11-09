@@ -564,7 +564,7 @@ struct MergeTests {
             ReleaseUnitsFile.self,
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
-        #expect(file.units == ["u-basics", "u-greetings", "u-introductions", "u-family"])
+        #expect(file.units == ["u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time"])
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(!release.contains { $0.message.contains("does not include u-sounds") })
         #expect(!release.contains { $0.severity == .error })
@@ -599,10 +599,10 @@ struct MergeTests {
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
         let earlyIDs = ["u-sounds", "u-basics", "u-greetings", "u-introductions", "u-family"]
-        let releasedIDs = ["u-basics", "u-greetings", "u-introductions", "u-family"]
+        let releasedIDs = ["u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time"]
         #expect(releaseFile.units == releasedIDs)
         let futureIDs = ["u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation"]
-        #expect(bundle.units.map(\.id.rawValue) == earlyIDs + futureIDs)
+        #expect(bundle.units.map(\.id.rawValue) == earlyIDs + ["u-travel", "u-time"] + futureIDs)
 
         let earlyPashto = Set(bundle.items.compactMap { item -> String? in
             guard let unit = merged.itemUnits[item.id.rawValue], earlyIDs.contains(unit) else { return nil }

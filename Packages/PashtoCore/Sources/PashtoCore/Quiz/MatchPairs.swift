@@ -80,6 +80,7 @@ public enum MatchPairs {
         for introduction in course.introductions where introduction.itemID != anchor.id {
             guard let item = course.itemsByID[introduction.itemID] else { continue }
             guard sameQuizPool(item.kind, anchor.kind) else { continue }
+            guard sameAnswerPool(item, anchor) else { continue }
             guard isQuizSeen(item.id, in: context, course: course) else { continue }
             guard blankToNil(item.pashto) != nil, blankToNil(item.en) != nil else { continue }
             guard distractorSource(of: introduction, target: anchorIntro) != nil else { continue }

@@ -107,7 +107,8 @@ struct ModuleStructureTests {
         let bundle = course.bundle
         let practiceIDs = ["l-greetings-1", "l-greetings-2", "l-greetings-3",
                            "l-introductions-1", "l-introductions-2", "l-introductions-3",
-                           "l-family-1", "l-family-2", "l-family-3"].map(lessonID)
+                           "l-family-1", "l-family-2", "l-family-3",
+                           "l-travel-1", "l-travel-2", "l-time-1", "l-time-2"].map(lessonID)
         var cards: [ReviewCard] = []
         var seen = Set<ItemID>()
         for id in practiceIDs {

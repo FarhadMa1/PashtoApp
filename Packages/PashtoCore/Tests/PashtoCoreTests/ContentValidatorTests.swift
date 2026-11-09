@@ -139,6 +139,9 @@ struct ContentValidatorTests {
         #expect(mixed.count == 1)
         #expect(mixed.first?.message.contains("lowercase") == true)
 
+        let oneSyllable = validate(makeBundle(items: [makeItem(pashto: "ها", translit: "xayr", pronunciation: "KHAYR")]))
+        #expect(oneSyllable.isEmpty)
+
         let perfective = validate(makeBundle(items: [makeItem(translit: "zda kram", pronunciation: "ZDA kram")]))
         #expect(perfective.count == 1)
         #expect(perfective.first?.severity == .review)
