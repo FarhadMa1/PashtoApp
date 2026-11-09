@@ -41,6 +41,8 @@ struct ContentView: View {
     var studyStartPractice: () -> Void = {}
     var studySkip: () -> Void = {}
     var closeStudy: () -> Void = {}
+    /// Learn cards from the released basics unit. The sheet only reads this list.
+    var basicsCards: [StudyCard] = []
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
@@ -51,6 +53,7 @@ struct ContentView: View {
     @State private var goalHaptic = 0
     /// The freeze star card. Cleared when it finishes, when it is skipped, and when the home goes away.
     @State private var freezeCelebration = false
+    @State private var basicsOpen = false
 
     var body: some View {
         if let celebration {
@@ -115,6 +118,71 @@ struct ContentView: View {
     }
 
     private var lessonList: some View {
+        VStack(spacing: 0) {
+            homeHeader
+            lessonScroll
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Lapis.background.ignoresSafeArea())
+        .sheet(isPresented: $basicsOpen) {
+            BasicsSheet(cards: basicsCards)
+        }
+        .sensoryFeedback(.success, trigger: goalHaptic)
+        .onDisappear { freezeCelebration = false }
+        .task(id: pendingHomeMotion?.id) {
+            await playHomeMotion()
+        }
+    }
+
+    /// Stays on screen while the path scrolls, including through the middle of a unit.
+    private var homeHeader: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Text("Pashto")
+                .font(.title3.weight(.bold))
+                .foregroundStyle(Lapis.badgeInk)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .accessibilityAddTraits(.isHeader)
+            Spacer(minLength: 8)
+            Button {
+                basicsOpen = true
+            } label: {
+                Text(verbatim: ApprovedBasicsCopy.title)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(Lapis.badgeInk)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .frame(minHeight: 44)
+                    .overlay {
+                        Capsule(style: .continuous)
+                            .strokeBorder(Lapis.badgeInk, lineWidth: 1.5)
+                    }
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("basics-button")
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 16)
+        .frame(maxWidth: .infinity)
+        .background {
+            UnevenRoundedRectangle(
+                cornerRadii: RectangleCornerRadii(
+                    topLeading: 0,
+                    bottomLeading: 26,
+                    bottomTrailing: 26,
+                    topTrailing: 0
+                ),
+                style: .continuous
+            )
+            .fill(Lapis.badge)
+            .ignoresSafeArea(edges: .top)
+        }
+    }
+
+    private var lessonScroll: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(alignment: .center, spacing: 16) {
@@ -146,9 +214,6 @@ struct ContentView: View {
                 if let dailyWord {
                     DailyWordCard(word: dailyWord)
                 }
-                Text("Pashto")
-                    .font(.title2.weight(.semibold))
-                    .foregroundStyle(Lapis.text)
                 CoursePathList(
                     lessons: lessons,
                     finished: finishedLessonIDs,
@@ -159,13 +224,6 @@ struct ContentView: View {
             }
             .padding(20)
             .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Lapis.background.ignoresSafeArea())
-        .sensoryFeedback(.success, trigger: goalHaptic)
-        .onDisappear { freezeCelebration = false }
-        .task(id: pendingHomeMotion?.id) {
-            await playHomeMotion()
         }
     }
 

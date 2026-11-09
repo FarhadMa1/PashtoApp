@@ -24,6 +24,7 @@
 		8E78ED144AB73CD9F3E1A437 /* PashtoPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = BD251F923BB6C48D5AF2E09E /* PashtoPersistence */; };
 		980EAFAB2A22F95D11E40DB6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2382E97EED9CF787345C726 /* RootView.swift */; };
 		98F24341E577C90C0E7A4B37 /* LapisStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791E1EE79678E1A2816B03F /* LapisStyle.swift */; };
+		A5F8631E9ADE2DF35C0957FB /* BasicsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2A1E53AF04AB7B89EE8F79 /* BasicsSheet.swift */; };
 		C465E70F7E879ADE2B4505C5 /* ProgressStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */; };
 		C7FB99C8D9388789E64DC142 /* StorageErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21AAA7CC3D9B78DB7765A80 /* StorageErrorScreen.swift */; };
 		E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20749347E5913E3C376940D0 /* PashtoApp.swift */; };
@@ -56,6 +57,7 @@
 		DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScreen.swift; sourceTree = "<group>"; };
 		E2382E97EED9CF787345C726 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		E427EEE4D83973BBDF72044C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FE2A1E53AF04AB7B89EE8F79 /* BasicsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicsSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 		61BD7F05B60F669B0840E6DA /* Quiz */ = {
 			isa = PBXGroup;
 			children = (
+				FE2A1E53AF04AB7B89EE8F79 /* BasicsSheet.swift */,
 				3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */,
 				8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */,
 				51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */,
@@ -274,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				553568DE12A69B71500FA8A7 /* AppModel.swift in Sources */,
+				A5F8631E9ADE2DF35C0957FB /* BasicsSheet.swift in Sources */,
 				5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */,
 				3530111B87046DF5440D3C30 /* GlyphCard.swift in Sources */,
 				98F24341E577C90C0E7A4B37 /* LapisStyle.swift in Sources */,
