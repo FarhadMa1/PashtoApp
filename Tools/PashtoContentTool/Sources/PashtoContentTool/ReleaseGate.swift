@@ -82,6 +82,14 @@ public enum ReleaseGate {
 
         for unit in bundle.units {
             for lesson in unit.lessons {
+                if lesson.kind == .learn || lesson.kind == .phrases {
+                    issues.append(contentsOf: studyIssues(
+                        lesson,
+                        in: bundle,
+                        severity: releaseSeverity
+                    ))
+                    continue
+                }
                 // Lessons in the sounds unit are exempt from the size rule.
                 // Instead, every lesson in u-sounds must contain at least one soundExample.
                 if unit.id.rawValue == Self.soundsUnitID {
@@ -158,6 +166,74 @@ public enum ReleaseGate {
     }
 
     private static let soundsUnitID = "u-sounds"
+
+    /// Learn and phrases are cards, not quizzes. Practice keeps the size rule.
+    private static func studyIssues(
+        _ lesson: Lesson,
+        in bundle: ContentBundle,
+        severity: ValidationSeverity
+    ) -> [ValidationIssue] {
+        var issues: [ValidationIssue] = []
+        let lessonID = lesson.id.rawValue
+        let kindName = lesson.kind.rawValue
+        if !lesson.letters.isEmpty {
+            issues.append(IssueText.make(
+                severity,
+                id: lessonID,
+                field: "letters",
+                "\(lessonID) is a \(kindName) lesson and cannot list letters."
+            ))
+        }
+        if !lesson.dialogs.isEmpty {
+            issues.append(IssueText.make(
+                severity,
+                id: lessonID,
+                field: "dialogs",
+                "\(lessonID) is a \(kindName) lesson and cannot contain a quiz."
+            ))
+        }
+        let expected: ContentKind = lesson.kind == .learn ? .word : .phrase
+        if lesson.items.isEmpty || lesson.items.contains(where: { $0.role != .present }) {
+            issues.append(IssueText.make(
+                severity,
+                id: lessonID,
+                field: "items",
+                "\(lessonID) is a \(kindName) lesson and must list only card items."
+            ))
+        }
+        var itemsByID: [ItemID: ContentItem] = [:]
+        for item in bundle.items where itemsByID[item.id] == nil {
+            itemsByID[item.id] = item
+        }
+        for reference in lesson.items where reference.role == .present {
+            guard let item = itemsByID[reference.item] else { continue }
+            if item.kind == .letter || item.kind != expected {
+                issues.append(IssueText.make(
+                    severity,
+                    id: item.id.rawValue,
+                    field: "kind",
+                    "\(item.id.rawValue) on \(lessonID) is \(item.kind.rawValue). A \(kindName) card must be a \(expected.rawValue)."
+                ))
+            }
+        }
+        var rng = SystemRandomNumberGenerator()
+        let session = LessonSessionBuilder.build(
+            for: lesson.id,
+            in: bundle,
+            seenLessonIDs: [],
+            releasedUnitIDs: nil,
+            using: &rng
+        )
+        if !session.tasks.isEmpty {
+            issues.append(IssueText.make(
+                severity,
+                id: lessonID,
+                field: "quiz",
+                "\(lessonID) is a \(kindName) lesson and produced quiz questions."
+            ))
+        }
+        return issues
+    }
 
     /// Items that create cards. A `soundExample` does not.
     ///

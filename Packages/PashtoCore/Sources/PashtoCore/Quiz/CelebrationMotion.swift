@@ -216,8 +216,15 @@ public enum CoursePathMotion {
     }
 
     /// The first lesson in `order` that is not finished.
-    public static func next(in order: [LessonID], finished: Set<LessonID>) -> LessonID? {
-        order.first { !finished.contains($0) }
+    ///
+    /// `skipping` is for lessons that stay open and never count, so the marker
+    /// does not sit on a learn or phrases card.
+    public static func next(
+        in order: [LessonID],
+        finished: Set<LessonID>,
+        skipping: Set<LessonID> = []
+    ) -> LessonID? {
+        order.first { !finished.contains($0) && !skipping.contains($0) }
     }
 }
 

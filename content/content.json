@@ -3556,6 +3556,108 @@
       "lessons" : [
         {
           "dialogs" : [
+
+          ],
+          "id" : "l-greetings-learn",
+          "items" : [
+            {
+              "item" : "e-xa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-manana",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ho",
+              "role" : "present"
+            },
+            {
+              "item" : "e-na",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Greetings and politeness"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-greetings-phrases",
+          "items" : [
+            {
+              "item" : "e-salam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-assalamu-alaykum",
+              "role" : "present"
+            },
+            {
+              "item" : "e-walaykum-salam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-stare-ma-she",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xwar-ma-she",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xa-raghlast",
+              "role" : "present"
+            },
+            {
+              "item" : "e-tsanga-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-taso-tsanga-yast",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-xa-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-dera-manana",
+              "role" : "present"
+            },
+            {
+              "item" : "e-dera-xa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-baxana-ghwaram",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mehrabani-wakray",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xoday-paman",
+              "role" : "present"
+            },
+            {
+              "item" : "e-pa-maxa-de-xa",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Greetings and politeness"
+        },
+        {
+          "dialogs" : [
             {
               "id" : "d-greetings-1",
               "turns" : [
@@ -3719,6 +3821,112 @@
       "lessons" : [
         {
           "dialogs" : [
+
+          ],
+          "id" : "l-introductions-learn",
+          "items" : [
+            {
+              "item" : "e-za",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ta",
+              "role" : "present"
+            },
+            {
+              "item" : "e-taso",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha",
+              "role" : "present"
+            },
+            {
+              "item" : "e-num",
+              "role" : "present"
+            },
+            {
+              "item" : "e-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-yast",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Introducing yourself"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-introductions-phrases",
+          "items" : [
+            {
+              "item" : "e-zma-num-ahmad-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-sta-num-tsa-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-staso-num-tsa-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ta-da-kum-dzay-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-la-narwe-tsaxa-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghan-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghana-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-xowunkay-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-pashto-zda-kawam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-staso-pa-lido-xoshala-shwam",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Introducing yourself"
+        },
+        {
+          "dialogs" : [
             {
               "id" : "d-introductions-1",
               "turns" : [
@@ -3867,6 +4075,124 @@
     {
       "id" : "u-family",
       "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-learn",
+          "items" : [
+            {
+              "item" : "e-mor",
+              "role" : "present"
+            },
+            {
+              "item" : "e-plar",
+              "role" : "present"
+            },
+            {
+              "item" : "e-wror",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xor",
+              "role" : "present"
+            },
+            {
+              "item" : "e-zoy",
+              "role" : "present"
+            },
+            {
+              "item" : "e-lur",
+              "role" : "present"
+            },
+            {
+              "item" : "e-koraney",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-zma",
+              "role" : "present"
+            },
+            {
+              "item" : "e-sta",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Family"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-phrases",
+          "items" : [
+            {
+              "item" : "e-daa-tsok-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-tsok-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-plar-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-mor-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-xor-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-sta-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ho-zma-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-na-zma-zoy-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mor-de-tsanga-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-xa-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-plar-de-tsanga-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-xa-day",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Family"
+        },
         {
           "dialogs" : [
             {

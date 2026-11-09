@@ -90,8 +90,9 @@ public struct PathProgress: Hashable, Sendable {
 ///    again, with the lesson after it.
 /// 5. No lesson remains and nothing is due. The path is course finished.
 ///
-/// The next lesson is the first lesson of `content.units`, in that order,
-/// whose id is not in `progress.finishedLessonIDs`.
+/// The next lesson is the first practice lesson of `content.units`, in that
+/// order, whose id is not in `progress.finishedLessonIDs`. Learn and phrases
+/// stay available and do not take that place.
 ///
 /// `progress.newItemsShownToday` is how many items were introduced on
 /// `today`. A new civil day is a new `today` and the count for that day.
@@ -131,9 +132,10 @@ public func pathState(
 ///
 /// Units and lessons stay in the order stored on the bundle. Ids are not
 /// sorted. The finished set is only a membership test.
+/// The next practice lesson. Learn and phrases stay on the path and do not block it.
 private func nextLesson(in content: ContentBundle, finished: Set<LessonID>) -> LessonID? {
     for unit in content.units {
-        for lesson in unit.lessons where !finished.contains(lesson.id) {
+        for lesson in unit.lessons where lesson.countsForProgress && !finished.contains(lesson.id) {
             return lesson.id
         }
     }

@@ -3,6 +3,18 @@ public enum LessonItemRole: String, Codable, Hashable, Sendable {
     case introduce
     /// Shows an item as an example of a sound. Does not create a review card.
     case soundExample
+    /// Shown on a learn or phrases card. Does not introduce the item and does not create a review card.
+    case present
+}
+
+/// Where a lesson sits in a unit.
+///
+/// Missing JSON decodes as `practice`, so units 4–8 and older files stay quizzes.
+/// Learn and phrases are cards. They are not stored as progress.
+public enum LessonKind: String, Codable, Hashable, Sendable {
+    case learn
+    case phrases
+    case practice
 }
 
 /// A lesson's reference to a `ContentItem`.
@@ -99,19 +111,26 @@ public struct Lesson: Codable, Hashable, Sendable {
     public let items: [LessonItemRef]
     public let letters: [ItemID]
     public let dialogs: [Dialog]
+    /// `practice` when the file has no `kind`. Learn and phrases are encoded.
+    public let kind: LessonKind
+
+    /// True only for the quiz. Learn and phrases do not count toward progress.
+    public var countsForProgress: Bool { kind == .practice }
 
     public init(
         id: LessonID,
         title: String,
         items: [LessonItemRef],
         letters: [ItemID] = [],
-        dialogs: [Dialog] = []
+        dialogs: [Dialog] = [],
+        kind: LessonKind = .practice
     ) {
         self.id = id
         self.title = title
         self.items = items
         self.letters = letters
         self.dialogs = dialogs
+        self.kind = kind
     }
 
     public init(from decoder: Decoder) throws {
@@ -121,6 +140,7 @@ public struct Lesson: Codable, Hashable, Sendable {
         items = try StrictJSON.decode([LessonItemRef].self, forKey: CodingKeys.items, from: container)
         letters = try StrictJSON.decodeIfPresent([ItemID].self, forKey: CodingKeys.letters, from: container) ?? []
         dialogs = try StrictJSON.decodeIfPresent([Dialog].self, forKey: CodingKeys.dialogs, from: container) ?? []
+        kind = try StrictJSON.decodeIfPresent(LessonKind.self, forKey: CodingKeys.kind, from: container) ?? .practice
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -130,6 +150,9 @@ public struct Lesson: Codable, Hashable, Sendable {
         try container.encode(letters, forKey: .letters)
         try container.encode(items, forKey: .items)
         try container.encode(dialogs, forKey: .dialogs)
+        if kind != .practice {
+            try container.encode(kind, forKey: .kind)
+        }
     }
 
     enum CodingKeys: String, CodingKey, CaseIterable {
@@ -138,5 +161,6 @@ public struct Lesson: Codable, Hashable, Sendable {
         case letters
         case items
         case dialogs
+        case kind
     }
 }

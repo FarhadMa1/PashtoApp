@@ -771,6 +771,112 @@
   ],
   "lessons": [
     {
+      "id": "l-family-learn",
+      "title": "Family",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-mor",
+          "role": "present"
+        },
+        {
+          "item": "e-plar",
+          "role": "present"
+        },
+        {
+          "item": "e-wror",
+          "role": "present"
+        },
+        {
+          "item": "e-xor",
+          "role": "present"
+        },
+        {
+          "item": "e-zoy",
+          "role": "present"
+        },
+        {
+          "item": "e-lur",
+          "role": "present"
+        },
+        {
+          "item": "e-koraney",
+          "role": "present"
+        },
+        {
+          "item": "e-daa",
+          "role": "present"
+        },
+        {
+          "item": "e-zma",
+          "role": "present"
+        },
+        {
+          "item": "e-sta",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-family-phrases",
+      "title": "Family",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-daa-tsok-day",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-tsok-da",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zma-plar-day",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zma-mor-da",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zma-wror-day",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zma-xor-da",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-sta-wror-day",
+          "role": "present"
+        },
+        {
+          "item": "e-ho-zma-wror-day",
+          "role": "present"
+        },
+        {
+          "item": "e-na-zma-zoy-day",
+          "role": "present"
+        },
+        {
+          "item": "e-mor-de-tsanga-da",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-xa-da",
+          "role": "present"
+        },
+        {
+          "item": "e-plar-de-tsanga-day",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-xa-day",
+          "role": "present"
+        }
+      ]
+    },
+    {
       "id": "l-family-1",
       "title": "Family members",
       "letters": [

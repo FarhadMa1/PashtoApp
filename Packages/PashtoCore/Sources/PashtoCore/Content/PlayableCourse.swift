@@ -75,7 +75,8 @@ public enum PlayableCourse {
                 title: lesson.title,
                 items: lesson.items,
                 letters: [],
-                dialogs: lesson.dialogs
+                dialogs: lesson.dialogs,
+                kind: lesson.kind
             )
         }
         return CourseUnit(id: unit.id, track: unit.track, title: unit.title, lessons: lessons)

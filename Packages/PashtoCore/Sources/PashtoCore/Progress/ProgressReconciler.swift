@@ -144,6 +144,11 @@ public enum ProgressReconciler {
         if snapshot.completedSessions.contains(where: { $0.sessionID == session.sessionID }) {
             return .discard
         }
+        if let lessonID = session.lessonID,
+           let found = StudyCourse.lesson(lessonID, in: content),
+           !found.lesson.countsForProgress {
+            return .discard
+        }
         if mustCommit(session) {
             guard let commit = sessionCommit(
                 for: session,

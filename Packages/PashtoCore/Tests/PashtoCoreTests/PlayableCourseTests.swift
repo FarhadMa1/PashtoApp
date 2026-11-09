@@ -22,10 +22,15 @@ struct PlayableCourseTests {
             #expect(unit.lessons.allSatisfy { $0.letters.isEmpty })
             for lesson in unit.lessons {
                 let cards = reviewCards(introducedIn: lesson, on: day)
-                #expect(!cards.isEmpty)
-                #expect(cards.allSatisfy { card in
-                    playable.items.first { $0.id == card.itemID }?.kind != .letter
-                })
+                if lesson.countsForProgress {
+                    #expect(!cards.isEmpty)
+                    #expect(cards.allSatisfy { card in
+                        playable.items.first { $0.id == card.itemID }?.kind != .letter
+                    })
+                } else {
+                    #expect(cards.isEmpty)
+                    #expect(lesson.dialogs.isEmpty)
+                }
             }
         }
         let future = playable.units.filter { !PlayableCourse.scriptHiddenUnitIDs.contains($0.id.rawValue) && $0.id.rawValue != "u-sounds" }
@@ -61,7 +66,7 @@ struct PlayableCourseTests {
         #expect(playableNewItemsShown(on: day, in: [letter, word], knownItemIDs: known) == 1)
 
         let lessons = RootLessonSession.lessons(in: course.bundle, releasedUnitIDs: released)
-        #expect(lessons.map(\.id.rawValue).first == "l-greetings-1")
+        #expect(lessons.map(\.id.rawValue).first == "l-greetings-learn")
         #expect(!lessons.contains { $0.id.rawValue == "l-sounds-1" })
         for lesson in lessons {
             for showsPronunciation in [true, false] {
@@ -75,10 +80,14 @@ struct PlayableCourseTests {
                     showsPronunciation: showsPronunciation,
                     using: &generator
                 )
-                #expect(!session.tasks.isEmpty)
-                #expect(session.tasks.allSatisfy { !PlayableCourse.retiredQuizKinds.contains($0.kind) })
-                #expect(taskItemIDs(session.tasks).allSatisfy { !isLetter($0, in: course.bundle) })
-                try expectUniquePronunciations(session, in: course.bundle)
+                if lesson.kind == .practice {
+                    #expect(!session.tasks.isEmpty)
+                    #expect(session.tasks.allSatisfy { !PlayableCourse.retiredQuizKinds.contains($0.kind) })
+                    #expect(taskItemIDs(session.tasks).allSatisfy { !isLetter($0, in: course.bundle) })
+                    try expectUniquePronunciations(session, in: course.bundle)
+                } else {
+                    #expect(session.tasks.isEmpty)
+                }
             }
         }
     }
