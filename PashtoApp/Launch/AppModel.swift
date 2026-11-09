@@ -108,11 +108,17 @@ final class AppModel {
         startedReview != nil
     }
 
-    /// Learn cards from the released basics unit, in lesson order.
-    /// Reading this does not load or save progress.
-    var basicsCards: [StudyCard] {
-        guard let course else { return [] }
-        return BasicsCatalog.learnCards(in: course, releasedUnitIDs: releasedUnitIDs)
+    /// Released units for the home, in course order. Practice progress ignores learn and phrases.
+    var mainMenu: MainMenu {
+        guard let course else {
+            return MainMenu(categories: [], continueTarget: nil)
+        }
+        return MainMenu.make(
+            in: course,
+            releasedUnitIDs: releasedUnitIDs,
+            finishedLessonIDs: finishedLessonIDs,
+            listedLessons: releasedLessons
+        )
     }
 
     /// Counted days the home shows. A gap the freezes cannot cover is 0.

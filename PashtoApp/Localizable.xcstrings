@@ -1,18 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "basics.button" : {
-      "comment" : "Home button and the title of the learn-card reference sheet.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basics"
-          }
-        }
-      }
-    },
     "Pashto" : {
       "comment" : "Placeholder title on the root view. English is the only UI language for now.",
       "extractionState" : "manual",
@@ -501,6 +489,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show meaning"
+          }
+        }
+      }
+    },
+    "menu.unit.basics" : {
+      "comment" : "Main menu label for u-basics. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basics"
+          }
+        }
+      }
+    },
+    "menu.unit.family" : {
+      "comment" : "Main menu label for u-family. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Family"
+          }
+        }
+      }
+    },
+    "menu.unit.greetings" : {
+      "comment" : "Main menu label for u-greetings. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greetings"
+          }
+        }
+      }
+    },
+    "menu.unit.introduction" : {
+      "comment" : "Main menu label for u-introductions. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduction"
           }
         }
       }

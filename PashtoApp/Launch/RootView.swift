@@ -48,6 +48,7 @@ struct RootView: View {
                 quiz: model.activeLesson,
                 quizItems: model.lessonItems,
                 lessons: model.releasedLessons,
+                menu: model.mainMenu,
                 streakCount: model.streakCount,
                 goalDone: model.goalDone,
                 goalTotal: model.goalTotal,
@@ -75,8 +76,7 @@ struct RootView: View {
                 studySkip: {
                     Task { await model.studySkip(voiceOver: voiceOverEnabled) }
                 },
-                closeStudy: { model.closeStudy() },
-                basicsCards: model.basicsCards
+                closeStudy: { model.closeStudy() }
             )
         }
     }
