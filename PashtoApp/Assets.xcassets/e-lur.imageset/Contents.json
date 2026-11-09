@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "e-lur.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

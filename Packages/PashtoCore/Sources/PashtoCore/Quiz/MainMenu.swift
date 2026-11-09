@@ -24,6 +24,8 @@ public enum MainMenuLabels {
         Entry(unitID: requiredUnit("u-greetings"), catalogKey: "menu.unit.greetings", english: "Greetings"),
         Entry(unitID: requiredUnit("u-introductions"), catalogKey: "menu.unit.introduction", english: "Introduction"),
         Entry(unitID: requiredUnit("u-family"), catalogKey: "menu.unit.family", english: "Family"),
+        Entry(unitID: requiredUnit("u-travel"), catalogKey: "menu.unit.travel", english: "Travel"),
+        Entry(unitID: requiredUnit("u-time"), catalogKey: "menu.unit.time", english: "Time"),
     ]
 
     public static func entry(for unitID: UnitID) -> Entry? {

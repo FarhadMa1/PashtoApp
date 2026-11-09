@@ -9,13 +9,15 @@ struct MainMenuTests {
         #expect(mapped == course.releasedUnitIDs)
         #expect(Set(mapped) == Set(course.releasedUnitIDs))
         #expect(MainMenuLabels.entries.map(\.english) == [
-            "Basics", "Greetings", "Introduction", "Family",
+            "Basics", "Greetings", "Introduction", "Family", "Travel", "Time",
         ])
         #expect(MainMenuLabels.entries.map(\.catalogKey) == [
             "menu.unit.basics",
             "menu.unit.greetings",
             "menu.unit.introduction",
             "menu.unit.family",
+            "menu.unit.travel",
+            "menu.unit.time",
         ])
         let bundleIDs = Set(course.bundle.units.map(\.id))
         #expect(bundleIDs.count > course.releasedUnitIDs.count)
@@ -72,14 +74,16 @@ struct MainMenuTests {
             listedLessons: listed
         )
         #expect(fresh.categories.map(\.id) == course.releasedUnitIDs)
-        #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0])
-        #expect(fresh.categories.map(\.practiceTotal) == [1, 3, 3, 3])
-        #expect(fresh.categories.map(\.label) == ["Basics", "Greetings", "Introduction", "Family"])
+        #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0, 0, 0])
+        #expect(fresh.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2])
+        #expect(fresh.categories.map(\.label) == ["Basics", "Greetings", "Introduction", "Family", "Travel", "Time"])
         #expect(fresh.categories.map(\.title) == [
             "The basics",
             "Greetings and politeness",
             "Introducing yourself",
             "Family",
+            "Travel",
+            "Time and days",
         ])
         #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
         #expect(fresh.continueTarget?.unitLabel == "Basics")
@@ -95,8 +99,8 @@ struct MainMenuTests {
             finishedLessonIDs: finished,
             listedLessons: listed
         )
-        #expect(menu.categories.map(\.practiceCompleted) == [0, 2, 0, 1])
-        #expect(menu.categories.map(\.practiceTotal) == [1, 3, 3, 3])
+        #expect(menu.categories.map(\.practiceCompleted) == [0, 2, 0, 1, 0, 0])
+        #expect(menu.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2])
         #expect(menu.categories[0].fraction == 0)
         #expect(menu.categories[1].fraction == 2.0 / 3.0)
         #expect(menu.categories[1].isComplete == false)
@@ -204,6 +208,8 @@ struct MainMenuTests {
             "menu.unit.greetings": "Greetings",
             "menu.unit.introduction": "Introduction",
             "menu.unit.family": "Family",
+            "menu.unit.travel": "Travel",
+            "menu.unit.time": "Time",
         ]
         for (key, english) in added {
             #expect(try catalogValue(key, in: strings) == english)

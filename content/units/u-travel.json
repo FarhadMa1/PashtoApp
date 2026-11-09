@@ -1,0 +1,505 @@
+{
+  "id": "u-travel",
+  "track": "main",
+  "title": "Travel",
+  "items": [
+    {
+      "id": "e-ha-waa-yee-da-gar",
+      "kind": "word",
+      "pashto": "هوایي ډګر",
+      "translit": "hawāyí ḍagár",
+      "pronunciation": "ha-waa-YEE da-GAR",
+      "en": "airport",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-ho-tal",
+      "kind": "word",
+      "pashto": "هوټل",
+      "translit": "hoṭál",
+      "pronunciation": "ho-TAL",
+      "en": "hotel",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-ti-kat",
+      "kind": "word",
+      "pashto": "ټکټ",
+      "translit": "ṭikáṭ",
+      "pronunciation": "ti-KAT",
+      "en": "ticket",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-tash-naab",
+      "kind": "word",
+      "pashto": "تشناب",
+      "translit": "tašnā́b",
+      "pronunciation": "tash-NAAB",
+      "en": "toilet, bathroom",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-pay-se",
+      "kind": "word",
+      "pashto": "پیسې",
+      "translit": "paysé",
+      "pronunciation": "pay-SE",
+      "en": "money",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-graan",
+      "kind": "word",
+      "pashto": "ګران",
+      "translit": "grān",
+      "pronunciation": "graan",
+      "en": "expensive",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-ar-zaan",
+      "kind": "word",
+      "pashto": "ارزان",
+      "translit": "arzā́n",
+      "pronunciation": "ar-ZAAN",
+      "en": "cheap",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-mras-ta",
+      "kind": "word",
+      "pashto": "مرسته",
+      "translit": "mrásta",
+      "pronunciation": "MRAS-ta",
+      "en": "help",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-ho-tal-cher-ta-day",
+      "kind": "phrase",
+      "pashto": "هوټل چېرته دی؟",
+      "translit": "hoṭál čérta day?",
+      "pronunciation": "ho-TAL CHER-ta day?",
+      "en": "where is the hotel?",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-tash-naab-cher-ta-day",
+      "kind": "phrase",
+      "pashto": "تشناب چېرته دی؟",
+      "translit": "tašnā́b čérta day?",
+      "pronunciation": "tash-NAAB CHER-ta day?",
+      "en": "where is the toilet?",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-za-ha-waa-yee-da-gar-ta-dzam",
+      "kind": "phrase",
+      "pashto": "زه هوایي ډګر ته ځم",
+      "translit": "zə hawāyí ḍagár tə dzəm",
+      "pronunciation": "za ha-waa-YEE da-GAR ta dzam",
+      "en": "I am going to the airport",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back. ځ is dz, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-dal-ta-wu-dre-ga",
+      "kind": "phrase",
+      "pashto": "دلته ودرېږه",
+      "translit": "dálta wdréǧa",
+      "pronunciation": "DAL-ta wu-DRE-ga",
+      "en": "stop here",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ږ is pronounced g in the selected Kabul pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-za-ti-kat-ghwaa-ram",
+      "kind": "phrase",
+      "pashto": "زه ټکټ غواړم",
+      "translit": "zə ṭikáṭ ɣwāṛə́m",
+      "pronunciation": "za ti-KAT ghwaa-RAM",
+      "en": "I would like a ticket",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h. ړ is a quick r with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-daa-pa-tso-day",
+      "kind": "phrase",
+      "pashto": "دا په څو دی؟",
+      "translit": "dā pə tso day?",
+      "pronunciation": "daa pa tso day?",
+      "en": "how much is this?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-der-graan-day",
+      "kind": "phrase",
+      "pashto": "ډېر ګران دی",
+      "translit": "ḍer grān day",
+      "pronunciation": "der graan day",
+      "en": "it's too expensive",
+      "usage": null,
+      "pronunciationNote": "ḍ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-mras-ta-wu-kray",
+      "kind": "phrase",
+      "pashto": "مرسته وکړئ!",
+      "translit": "mrásta wkṛəy!",
+      "pronunciation": "MRAS-ta wu-KRAY!",
+      "en": "help, please!",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-travel-learn-around",
+      "title": "Getting around",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-ha-waa-yee-da-gar",
+          "role": "present"
+        },
+        {
+          "item": "e-ho-tal",
+          "role": "present"
+        },
+        {
+          "item": "e-ti-kat",
+          "role": "present"
+        },
+        {
+          "item": "e-tash-naab",
+          "role": "present"
+        },
+        {
+          "item": "e-tak-see",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-travel-learn-money",
+      "title": "Money and help",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-pay-se",
+          "role": "present"
+        },
+        {
+          "item": "e-graan",
+          "role": "present"
+        },
+        {
+          "item": "e-ar-zaan",
+          "role": "present"
+        },
+        {
+          "item": "e-mras-ta",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-travel-phrases-where",
+      "title": "Where is …?",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-ho-tal-cher-ta-day",
+          "role": "present"
+        },
+        {
+          "item": "e-tash-naab-cher-ta-day",
+          "role": "present"
+        },
+        {
+          "item": "e-za-ha-waa-yee-da-gar-ta-dzam",
+          "role": "present"
+        },
+        {
+          "item": "e-dal-ta-wu-dre-ga",
+          "role": "present"
+        },
+        {
+          "item": "e-baa-zaar-cher-ta-day",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-travel-phrases-buying",
+      "title": "Buying and help",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-za-ti-kat-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-pa-tso-day",
+          "role": "present"
+        },
+        {
+          "item": "e-der-graan-day",
+          "role": "present"
+        },
+        {
+          "item": "e-mras-ta-wu-kray",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-travel-1",
+      "title": "Practice: Getting around",
+      "items": [
+        {
+          "item": "e-ha-waa-yee-da-gar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ho-tal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ti-kat",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tash-naab",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ho-tal-cher-ta-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tash-naab-cher-ta-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-ha-waa-yee-da-gar-ta-dzam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dal-ta-wu-dre-ga",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-travel-2",
+      "title": "Practice: Buying and help",
+      "items": [
+        {
+          "item": "e-pay-se",
+          "role": "introduce"
+        },
+        {
+          "item": "e-graan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ar-zaan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mras-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-ti-kat-ghwaa-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-pa-tso-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-der-graan-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mras-ta-wu-kray",
+          "role": "introduce"
+        }
+      ]
+    }
+  ]
+}

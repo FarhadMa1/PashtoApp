@@ -19,7 +19,9 @@ struct TheBasicsTests {
         let course = try loadCourse()
         let bundle = course.bundle
         #expect(bundle.units.map(\.id.rawValue).prefix(2) == ["u-sounds", "u-basics"])
-        #expect(course.releasedUnitIDs.map(\.rawValue) == ["u-basics", "u-greetings", "u-introductions", "u-family"])
+        #expect(course.releasedUnitIDs.map(\.rawValue) == [
+            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+        ])
 
         let unit = try #require(bundle.units.first { $0.id.rawValue == "u-basics" })
         #expect(unit.title == "The basics")

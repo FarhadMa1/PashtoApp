@@ -1920,6 +1920,558 @@
       }
     },
     {
+      "en" : "airport",
+      "id" : "e-ha-waa-yee-da-gar",
+      "kind" : "word",
+      "pashto" : "هوایي ډګر",
+      "pronunciation" : "ha-waa-YEE da-GAR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "translit" : "hawāyí ḍagár",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "hotel",
+      "id" : "e-ho-tal",
+      "kind" : "word",
+      "pashto" : "هوټل",
+      "pronunciation" : "ho-TAL",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "translit" : "hoṭál",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "ticket",
+      "id" : "e-ti-kat",
+      "kind" : "word",
+      "pashto" : "ټکټ",
+      "pronunciation" : "ti-KAT",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "translit" : "ṭikáṭ",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "toilet, bathroom",
+      "id" : "e-tash-naab",
+      "kind" : "word",
+      "pashto" : "تشناب",
+      "pronunciation" : "tash-NAAB",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "tašnā́b",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "money",
+      "id" : "e-pay-se",
+      "kind" : "word",
+      "pashto" : "پیسې",
+      "pronunciation" : "pay-SE",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "paysé",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "expensive",
+      "id" : "e-graan",
+      "kind" : "word",
+      "pashto" : "ګران",
+      "pronunciation" : "graan",
+      "translit" : "grān",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "cheap",
+      "id" : "e-ar-zaan",
+      "kind" : "word",
+      "pashto" : "ارزان",
+      "pronunciation" : "ar-ZAAN",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "arzā́n",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "help",
+      "id" : "e-mras-ta",
+      "kind" : "word",
+      "pashto" : "مرسته",
+      "pronunciation" : "MRAS-ta",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "mrásta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "where is the hotel?",
+      "id" : "e-ho-tal-cher-ta-day",
+      "kind" : "phrase",
+      "pashto" : "هوټل چېرته دی؟",
+      "pronunciation" : "ho-TAL CHER-ta day?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "translit" : "hoṭál čérta day?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "where is the toilet?",
+      "id" : "e-tash-naab-cher-ta-day",
+      "kind" : "phrase",
+      "pashto" : "تشناب چېرته دی؟",
+      "pronunciation" : "tash-NAAB CHER-ta day?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "tašnā́b čérta day?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am going to the airport",
+      "id" : "e-za-ha-waa-yee-da-gar-ta-dzam",
+      "kind" : "phrase",
+      "pashto" : "زه هوایي ډګر ته ځم",
+      "pronunciation" : "za ha-waa-YEE da-GAR ta dzam",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back. ځ is dz, said together.",
+      "translit" : "zə hawāyí ḍagár tə dzəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "stop here",
+      "id" : "e-dal-ta-wu-dre-ga",
+      "kind" : "phrase",
+      "pashto" : "دلته ودرېږه",
+      "pronunciation" : "DAL-ta wu-DRE-ga",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ږ is pronounced g in the selected Kabul pronunciation.",
+      "translit" : "dálta wdréǧa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I would like a ticket",
+      "id" : "e-za-ti-kat-ghwaa-ram",
+      "kind" : "phrase",
+      "pashto" : "زه ټکټ غواړم",
+      "pronunciation" : "za ti-KAT ghwaa-RAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h. ړ is a quick r with the tongue tip curled back.",
+      "translit" : "zə ṭikáṭ ɣwāṛə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "how much is this?",
+      "id" : "e-daa-pa-tso-day",
+      "kind" : "phrase",
+      "pashto" : "دا په څو دی؟",
+      "pronunciation" : "daa pa tso day?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "translit" : "dā pə tso day?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "it's too expensive",
+      "id" : "e-der-graan-day",
+      "kind" : "phrase",
+      "pashto" : "ډېر ګران دی",
+      "pronunciation" : "der graan day",
+      "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
+      "translit" : "ḍer grān day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "help, please!",
+      "id" : "e-mras-ta-wu-kray",
+      "kind" : "phrase",
+      "pashto" : "مرسته وکړئ!",
+      "pronunciation" : "MRAS-ta wu-KRAY!",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "translit" : "mrásta wkṛəy!",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "day",
+      "id" : "e-wradz",
+      "kind" : "word",
+      "pashto" : "ورځ",
+      "pronunciation" : "wradz",
+      "pronunciationNote" : "ځ: dz as in kids.",
+      "translit" : "wradz",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "morning",
+      "id" : "e-sa-haar",
+      "kind" : "word",
+      "pashto" : "سهار",
+      "pronunciation" : "sa-HAAR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "sahā́r",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "evening",
+      "id" : "e-maa-khaam",
+      "kind" : "word",
+      "pashto" : "ماښام",
+      "pronunciation" : "maa-KHAAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "translit" : "māx̌ā́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "night",
+      "id" : "e-shpa",
+      "kind" : "word",
+      "pashto" : "شپه",
+      "pronunciation" : "shpa",
+      "translit" : "špa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "now",
+      "id" : "e-os",
+      "kind" : "word",
+      "pashto" : "اوس",
+      "pronunciation" : "os",
+      "translit" : "os",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "yesterday",
+      "id" : "e-pa-roon",
+      "kind" : "word",
+      "pashto" : "پرون",
+      "pronunciation" : "pa-ROON",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "parún",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Saturday",
+      "id" : "e-shan-ba",
+      "kind" : "word",
+      "pashto" : "شنبه",
+      "pronunciation" : "shan-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "šanbá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Sunday",
+      "id" : "e-yak-shan-ba",
+      "kind" : "word",
+      "pashto" : "یکشنبه",
+      "pronunciation" : "yak-shan-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "yakšanbá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Monday",
+      "id" : "e-do-shan-ba",
+      "kind" : "word",
+      "pashto" : "دوشنبه",
+      "pronunciation" : "do-shan-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "došanbá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Tuesday",
+      "id" : "e-se-shan-ba",
+      "kind" : "word",
+      "pashto" : "سه شنبه",
+      "pronunciation" : "se-shan-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "sešanbá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Wednesday",
+      "id" : "e-cha-haar-shan-ba",
+      "kind" : "word",
+      "pashto" : "چهارشنبه",
+      "pronunciation" : "cha-haar-shan-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "čahāršanbá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Thursday",
+      "id" : "e-panj-shan-ba",
+      "kind" : "word",
+      "pashto" : "پنجشنبه",
+      "pronunciation" : "panj-shan-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "panjšanbá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "Friday",
+      "id" : "e-ju-ma",
+      "kind" : "word",
+      "pashto" : "جمعه",
+      "pronunciation" : "ju-MA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "jumá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "what day is it today?",
+      "id" : "e-nan-tsa-wradz-da",
+      "kind" : "phrase",
+      "pashto" : "نن څه ورځ ده؟",
+      "pronunciation" : "nan tsa wradz da?",
+      "pronunciationNote" : "څ: ts as in cats. ځ: dz as in kids.",
+      "translit" : "nan tsə wradz da?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "today is Friday",
+      "id" : "e-nan-ju-ma-da",
+      "kind" : "phrase",
+      "pashto" : "نن جمعه ده",
+      "pronunciation" : "nan ju-MA da",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "nan jumá da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "tomorrow is Saturday",
+      "id" : "e-sa-baa-shan-ba-da",
+      "kind" : "phrase",
+      "pashto" : "سبا شنبه ده",
+      "pronunciation" : "sa-BAA shan-BA da",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "sabā́ šanbá da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "what time is it?",
+      "id" : "e-tso-ba-je-dee",
+      "kind" : "phrase",
+      "pashto" : "څو بجې دي؟",
+      "pronunciation" : "tso ba-JE dee?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "translit" : "tso badžé di?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "good morning",
+      "id" : "e-sa-haar-mo-pa-khayr",
+      "kind" : "phrase",
+      "pashto" : "سهار مو په خیر",
+      "pronunciation" : "sa-HAAR mo pa KHAYR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "translit" : "sahā́r mo pə xayr",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "good night",
+      "id" : "e-shpa-mo-pa-khayr",
+      "kind" : "phrase",
+      "pashto" : "شپه مو په خیر",
+      "pronunciation" : "shpa mo pa KHAYR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "translit" : "špa mo pə xayr",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am going now",
+      "id" : "e-za-os-dzam",
+      "kind" : "phrase",
+      "pashto" : "زه اوس ځم",
+      "pronunciation" : "za os dzam",
+      "pronunciationNote" : "ځ: dz as in kids.",
+      "translit" : "zə os dzəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I work in the morning",
+      "id" : "e-za-sa-haar-kaar-ka-wam",
+      "kind" : "phrase",
+      "pashto" : "زه سهار کار کوم",
+      "pronunciation" : "za sa-HAAR kaar ka-WAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "zə sahā́r kār kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
       "en" : "one",
       "id" : "e-yaw",
       "kind" : "word",
@@ -4917,6 +5469,476 @@
         }
       ],
       "title" : "Family",
+      "track" : "main"
+    },
+    {
+      "id" : "u-travel",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-travel-learn-around",
+          "items" : [
+            {
+              "item" : "e-ha-waa-yee-da-gar",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ho-tal",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ti-kat",
+              "role" : "present"
+            },
+            {
+              "item" : "e-tash-naab",
+              "role" : "present"
+            },
+            {
+              "item" : "e-tak-see",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Getting around"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-travel-learn-money",
+          "items" : [
+            {
+              "item" : "e-pay-se",
+              "role" : "present"
+            },
+            {
+              "item" : "e-graan",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ar-zaan",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mras-ta",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Money and help"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-travel-phrases-where",
+          "items" : [
+            {
+              "item" : "e-ho-tal-cher-ta-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-tash-naab-cher-ta-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-ha-waa-yee-da-gar-ta-dzam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-dal-ta-wu-dre-ga",
+              "role" : "present"
+            },
+            {
+              "item" : "e-baa-zaar-cher-ta-day",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Where is …?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-travel-phrases-buying",
+          "items" : [
+            {
+              "item" : "e-za-ti-kat-ghwaa-ram",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-pa-tso-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-der-graan-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mras-ta-wu-kray",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Buying and help"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-travel-1",
+          "items" : [
+            {
+              "item" : "e-ha-waa-yee-da-gar",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ho-tal",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ti-kat",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-tash-naab",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ho-tal-cher-ta-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-tash-naab-cher-ta-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-ha-waa-yee-da-gar-ta-dzam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-dal-ta-wu-dre-ga",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: Getting around"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-travel-2",
+          "items" : [
+            {
+              "item" : "e-pay-se",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-graan",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ar-zaan",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-mras-ta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-ti-kat-ghwaa-ram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-pa-tso-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-der-graan-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-mras-ta-wu-kray",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: Buying and help"
+        }
+      ],
+      "title" : "Travel",
+      "track" : "main"
+    },
+    {
+      "id" : "u-time",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-time-learn-times",
+          "items" : [
+            {
+              "item" : "e-wradz",
+              "role" : "present"
+            },
+            {
+              "item" : "e-sa-haar",
+              "role" : "present"
+            },
+            {
+              "item" : "e-maa-khaam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-shpa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-os",
+              "role" : "present"
+            },
+            {
+              "item" : "e-pa-roon",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Times of day"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-time-learn-days",
+          "items" : [
+            {
+              "item" : "e-shan-ba",
+              "role" : "present"
+            },
+            {
+              "item" : "e-yak-shan-ba",
+              "role" : "present"
+            },
+            {
+              "item" : "e-do-shan-ba",
+              "role" : "present"
+            },
+            {
+              "item" : "e-se-shan-ba",
+              "role" : "present"
+            },
+            {
+              "item" : "e-cha-haar-shan-ba",
+              "role" : "present"
+            },
+            {
+              "item" : "e-panj-shan-ba",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ju-ma",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Days of the week"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-time-phrases-day",
+          "items" : [
+            {
+              "item" : "e-nan-tsa-wradz-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-nan-ju-ma-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-sa-baa-shan-ba-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-tso-ba-je-dee",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "What day is it?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-time-phrases-morning",
+          "items" : [
+            {
+              "item" : "e-sa-haar-mo-pa-khayr",
+              "role" : "present"
+            },
+            {
+              "item" : "e-shpa-mo-pa-khayr",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-os-dzam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-sa-haar-kaar-ka-wam",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Morning and night"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-time-1",
+          "items" : [
+            {
+              "item" : "e-wradz",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-sa-haar",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-maa-khaam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-shpa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-os",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-pa-roon",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-sa-haar-mo-pa-khayr",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-shpa-mo-pa-khayr",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-os-dzam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-sa-haar-kaar-ka-wam",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: Times of day"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-time-2",
+          "items" : [
+            {
+              "item" : "e-shan-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-yak-shan-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-do-shan-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-se-shan-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-cha-haar-shan-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-panj-shan-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ju-ma",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-nan-tsa-wradz-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-nan-ju-ma-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-sa-baa-shan-ba-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-tso-ba-je-dee",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: Days of the week"
+        }
+      ],
+      "title" : "Time and days",
       "track" : "main"
     },
     {

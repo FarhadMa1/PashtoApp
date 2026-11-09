@@ -65,8 +65,10 @@ struct BundledCourseTests {
                     + lesson.dialogs.flatMap { $0.turns.map(\.item) }
             }
         })
+        let reusedOnTravelCards: Set<ItemID> = [itemID("e-tak-see"), itemID("e-baa-zaar-cher-ta-day")]
         let hiddenFromRelease = futureIntroduced.subtracting(releasedReferences)
-        #expect(hiddenFromRelease == futureIntroduced)
+        #expect(releasedReferences.isSuperset(of: reusedOnTravelCards))
+        #expect(hiddenFromRelease == futureIntroduced.subtracting(reusedOnTravelCards))
         #expect(limited.items.allSatisfy { !hiddenFromRelease.contains($0.id) })
 
         let day = LocalDay(year: 2026, month: 11, day: 8)
@@ -237,6 +239,8 @@ private let approvedReleaseUnitIDs = [
     "u-greetings",
     "u-introductions",
     "u-family",
+    "u-travel",
+    "u-time",
 ].map(unitID)
 
 private func loadBundledCourse() throws -> BundledCourseLoad {

@@ -93,6 +93,19 @@ struct StudyCardScreen: View {
     private var card: some View {
         VStack(spacing: 18) {
             if let card = deck.card {
+                if let picture = FamilyPictures.picture(
+                    for: card.itemID,
+                    english: card.meaning,
+                    lessonKind: deck.kind
+                ) {
+                    Image(picture.assetName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 200, maxHeight: 200)
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text(verbatim: picture.accessibilityLabel))
+                        .accessibilitySortPriority(55)
+                }
                 StudyCardLines(
                     card: card,
                     showsMeaning: deck.meaningVisible,
