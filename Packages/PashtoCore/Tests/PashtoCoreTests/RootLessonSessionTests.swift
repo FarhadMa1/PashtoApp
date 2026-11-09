@@ -121,7 +121,7 @@ struct RootLessonSessionTests {
             Issue.record("The bundled course did not decode")
             return
         }
-        let approved = ["u-greetings", "u-introductions", "u-family"].map(unitID)
+        let approved = ["u-basics", "u-greetings", "u-introductions", "u-family"].map(unitID)
         #expect(course.releasedUnitIDs == approved)
         let bundle = course.bundle
         let released = course.releasedUnitIDs

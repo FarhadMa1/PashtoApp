@@ -192,6 +192,8 @@ private func chooseDistractors(
             let picked = levelPool.remove(at: index)
             let key = Normalization.nfc(picked.text)
             guard !seenKeys.contains(key) else { continue }
+            if YouAreForms.clash(picked.item.id, reply.id) { continue }
+            if chosen.contains(where: { YouAreForms.clash(picked.item.id, $0.itemID) }) { continue }
             seenKeys.append(key)
             chosen.append(QuizOption(itemID: picked.item.id, text: picked.text))
         }

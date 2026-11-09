@@ -76,6 +76,7 @@ public enum Distractors {
 
 struct Introduction {
     var itemID: ItemID
+    var unitID: UnitID
     var unitIndex: Int
     var lessonIndex: Int
     var lessonID: LessonID
@@ -103,6 +104,7 @@ struct CourseOrder {
                     guard introduced.insert(reference.item).inserted else { continue }
                     introductions.append(Introduction(
                         itemID: reference.item,
+                        unitID: unit.id,
                         unitIndex: unitIndex,
                         lessonIndex: lessonIndex,
                         lessonID: lesson.id,
@@ -114,6 +116,7 @@ struct CourseOrder {
                     guard introduced.insert(letter).inserted else { continue }
                     introductions.append(Introduction(
                         itemID: letter,
+                        unitID: unit.id,
                         unitIndex: unitIndex,
                         lessonIndex: lessonIndex,
                         lessonID: lesson.id,
@@ -132,6 +135,11 @@ struct CourseOrder {
 }
 
 func distractorSource(of introduction: Introduction, target: Introduction) -> DistractorSource? {
+    // The basics is inserted before units that already shipped. Its new phrases
+    // stay inside that unit, so the quizzes in those units keep their pools.
+    if introduction.unitID.rawValue == "u-basics", target.unitID.rawValue != "u-basics" {
+        return nil
+    }
     if introduction.lessonID == target.lessonID {
         return .sameLesson
     }
@@ -211,6 +219,15 @@ func isQuizSeen(_ itemID: ItemID, in context: QuizContext, course: CourseOrder) 
     if !context.seenLessonIDs.contains(introduction.lessonID) { return false }
     if context.retiredItemIDs.contains(itemID) { return false }
     return true
+}
+
+/// The two “you are” lines. A question must not offer both.
+enum YouAreForms {
+    private static let pair: Set<String> = ["e-ta-ye", "e-taso-yast"]
+
+    static func clash(_ lhs: ItemID, _ rhs: ItemID) -> Bool {
+        lhs != rhs && pair.contains(lhs.rawValue) && pair.contains(rhs.rawValue)
+    }
 }
 
 func sharesGroup(_ lhs: ItemID, _ rhs: ItemID, _ groups: [[ItemID]]) -> Bool {

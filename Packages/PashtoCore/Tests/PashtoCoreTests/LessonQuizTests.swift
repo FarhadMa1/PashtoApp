@@ -143,7 +143,7 @@ struct OrderWordsTests {
             }
         }
 
-        #expect(tasks.count == 22)
+        #expect(tasks.count == 33)
         for task in tasks {
             let item = try #require(bundle.items.first { $0.id == task.targetID })
             #expect(item.acceptedOrders == nil)
@@ -789,18 +789,29 @@ struct LessonSessionTests {
         let lessons = bundle.units.flatMap(\.lessons)
         #expect(lessons.map(\.id.rawValue) == [
             "l-sounds-1",
+            "l-basics-learn-1",
+            "l-basics-learn-2",
+            "l-basics-phrases",
+            "l-basics-1",
             "l-greetings-learn",
-            "l-greetings-phrases",
+            "l-greetings-phrases-hello",
+            "l-greetings-phrases-how",
+            "l-greetings-phrases-goodbye",
             "l-greetings-1",
             "l-greetings-2",
             "l-greetings-3",
-            "l-introductions-learn",
-            "l-introductions-phrases",
+            "l-introductions-learn-names",
+            "l-introductions-learn-be",
+            "l-introductions-phrases-name",
+            "l-introductions-phrases-from",
             "l-introductions-1",
             "l-introductions-2",
             "l-introductions-3",
-            "l-family-learn",
-            "l-family-phrases",
+            "l-family-learn-members",
+            "l-family-learn-this",
+            "l-family-phrases-this",
+            "l-family-phrases-yours",
+            "l-family-phrases-how",
             "l-family-1",
             "l-family-2",
             "l-family-3",
@@ -921,7 +932,7 @@ struct LessonSessionTests {
                 }
             }
         }
-        #expect(orderCount == 22)
+        #expect(orderCount == 33)
         // Nine replies point at their prompts, so each yields a dialog
         // question. Five lessons can build a response match.
         #expect(dialogCount == 9)

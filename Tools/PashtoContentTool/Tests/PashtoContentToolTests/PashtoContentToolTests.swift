@@ -171,6 +171,7 @@ struct ReleaseGateTests {
                 unit("u-greetings", thinLesson),
                 unit("u-introductions", fatLesson),
                 unit("u-family", hiddenLesson),
+                unit("u-later", hiddenLesson),
                 unit("u-extra", outsideLesson),
             ],
             nonDistractorGroups: []
@@ -563,7 +564,7 @@ struct MergeTests {
             ReleaseUnitsFile.self,
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
-        #expect(file.units == ["u-greetings", "u-introductions", "u-family"])
+        #expect(file.units == ["u-basics", "u-greetings", "u-introductions", "u-family"])
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(!release.contains { $0.message.contains("does not include u-sounds") })
         #expect(!release.contains { $0.severity == .error })
@@ -597,8 +598,8 @@ struct MergeTests {
             ReleaseUnitsFile.self,
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
-        let earlyIDs = ["u-sounds", "u-greetings", "u-introductions", "u-family"]
-        let releasedIDs = ["u-greetings", "u-introductions", "u-family"]
+        let earlyIDs = ["u-sounds", "u-basics", "u-greetings", "u-introductions", "u-family"]
+        let releasedIDs = ["u-basics", "u-greetings", "u-introductions", "u-family"]
         #expect(releaseFile.units == releasedIDs)
         let futureIDs = ["u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation"]
         #expect(bundle.units.map(\.id.rawValue) == earlyIDs + futureIDs)

@@ -253,6 +253,8 @@ enum ChoiceBuilder {
                 let picked = pool.remove(at: index)
                 let key = answerKey(for: kind, text: picked.text)
                 guard !seenKeys.contains(key) else { continue }
+                if YouAreForms.clash(picked.item.id, target.id) { continue }
+                if distractors.contains(where: { YouAreForms.clash(picked.item.id, $0.itemID) }) { continue }
                 seenKeys.append(key)
                 distractors.append(QuizOption(itemID: picked.item.id, text: picked.text))
             }

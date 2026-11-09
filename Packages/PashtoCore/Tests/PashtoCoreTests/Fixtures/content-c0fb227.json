@@ -1,0 +1,5088 @@
+{
+  "contentVersion" : "2026.11.0",
+  "items" : [
+    {
+      "en" : "hello",
+      "id" : "e-salam",
+      "kind" : "phrase",
+      "pashto" : "سلام",
+      "pronunciation" : "sa-LAAM",
+      "translit" : "salā́m",
+      "usage" : "common greeting",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "peace be upon you",
+      "id" : "e-assalamu-alaykum",
+      "kind" : "phrase",
+      "pashto" : "السلام علیکم",
+      "pronunciation" : "as-sa-LAAM a-lay-KOOM",
+      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto; just say as-salā́m alaykúm.",
+      "translit" : "as-salā́m alaykúm",
+      "usage" : "formal greeting",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "and peace be upon you",
+      "id" : "e-walaykum-salam",
+      "kind" : "phrase",
+      "pashto" : "وعلیکم السلام",
+      "pronunciation" : "wa-a-lay-KOOM as-sa-LAAM",
+      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto.",
+      "responseTo" : "e-assalamu-alaykum",
+      "translit" : "wa-alaykúm as-salā́m",
+      "usage" : "reply to as-salām alaykum",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "hello",
+      "id" : "e-stare-ma-she",
+      "kind" : "phrase",
+      "pashto" : "ستړی مه شې",
+      "pronunciation" : "STA-ray ma shey",
+      "pronunciationNote" : "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "translit" : "stə́ṛay ma še",
+      "usage" : "lit. may you not be tired",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "reply to stəṛay ma še",
+      "id" : "e-xwar-ma-she",
+      "kind" : "phrase",
+      "pashto" : "خوار مه شې",
+      "pronunciation" : "khwaar ma shey",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "responseTo" : "e-stare-ma-she",
+      "translit" : "xwār ma še",
+      "usage" : "lit. may you not be poor",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "welcome",
+      "id" : "e-xa-raghlast",
+      "kind" : "phrase",
+      "pashto" : "ښه راغلاست",
+      "pronunciation" : "kha raagh-LAAST",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r.",
+      "translit" : "x̌a rāɣlā́st",
+      "usage" : "to one person",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-27",
+        "comment" : "Bekreftet av Farhad i gruppechatten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "how are you?",
+      "id" : "e-tsanga-ye",
+      "kind" : "phrase",
+      "pashto" : "څنګه یې؟",
+      "pronunciation" : "TSAN-ga ye?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "translit" : "tsə́nga ye?",
+      "usage" : "informal, to one person",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "how are you?",
+      "id" : "e-taso-tsanga-yast",
+      "kind" : "phrase",
+      "pashto" : "تاسو څنګه یاست؟",
+      "pronunciation" : "TAA-so TSAN-ga yaast?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "TAA-so",
+        "TSAN-ga",
+        "yaast"
+      ],
+      "tokens" : [
+        "تاسو",
+        "څنګه",
+        "یاست"
+      ],
+      "translit" : "tā́so tsə́nga yāst?",
+      "usage" : "polite or plural",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm fine",
+      "id" : "e-za-xa-yam",
+      "kind" : "phrase",
+      "pashto" : "زه ښه یم",
+      "pronunciation" : "za kha yam",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo" : "e-tsanga-ye",
+      "tokenPronunciations" : [
+        "za",
+        "kha",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "ښه",
+        "یم"
+      ],
+      "translit" : "zə x̌a yəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "good, fine",
+      "id" : "e-xa",
+      "kind" : "word",
+      "pashto" : "ښه",
+      "pronunciation" : "kha",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "translit" : "x̌a",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "thank you",
+      "id" : "e-manana",
+      "kind" : "word",
+      "pashto" : "مننه",
+      "pronunciation" : "ma-NA-na",
+      "translit" : "manə́na",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "thank you very much",
+      "id" : "e-dera-manana",
+      "kind" : "phrase",
+      "pashto" : "ډېره مننه",
+      "pronunciation" : "DE-ra ma-NA-na",
+      "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
+      "translit" : "ḍéra manə́na",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "very good",
+      "id" : "e-dera-xa",
+      "kind" : "phrase",
+      "pashto" : "ډېره ښه",
+      "pronunciation" : "DE-ra kha",
+      "pronunciationNote" : "ḍ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "translit" : "ḍéra x̌a",
+      "usage" : "praise, e.g. after a correct answer",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "yes",
+      "id" : "e-ho",
+      "kind" : "word",
+      "pashto" : "هو",
+      "pronunciation" : "ho",
+      "pronunciationNote" : "Kabul: ho, not ao. In everyday speech people also say یې (ye) for yes.",
+      "translit" : "ho",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "no",
+      "id" : "e-na",
+      "kind" : "word",
+      "pashto" : "نه",
+      "pronunciation" : "na",
+      "pronunciationNote" : "A short, clear a, like in cut.",
+      "translit" : "na",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "sorry, excuse me",
+      "id" : "e-baxana-ghwaram",
+      "kind" : "phrase",
+      "pashto" : "بښنه غواړم",
+      "pronunciation" : "ba-KHA-na ghwaa-RAM",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "translit" : "bax̌ə́na ɣwā́ṛəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "please",
+      "id" : "e-mehrabani-wakray",
+      "kind" : "phrase",
+      "pashto" : "مهرباني وکړئ",
+      "pronunciation" : "meh-ra-baa-NEE WA-kray",
+      "pronunciationNote" : "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "translit" : "mehrabāní wə́kṛəy",
+      "usage" : "polite",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-27",
+        "comment" : "Bekreftet av Farhad i gruppechatten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "goodbye",
+      "id" : "e-xoday-paman",
+      "kind" : "phrase",
+      "pashto" : "خدای پامان",
+      "pronunciation" : "kho-DAAY paa-MAAN",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "translit" : "xodā́y pāmā́n",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "have a good trip",
+      "id" : "e-pa-maxa-de-xa",
+      "kind" : "phrase",
+      "pashto" : "په مخه دې ښه",
+      "pronunciation" : "pa MA-kha dey kha",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "translit" : "pə mə́xa de x̌a",
+      "usage" : "said to someone leaving",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-27",
+        "comment" : "Bekreftet av Farhad i gruppechatten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter alif",
+      "forms" : {
+        "final" : "ـا",
+        "initial" : "ا",
+        "isolated" : "ا",
+        "medial" : "ـا"
+      },
+      "id" : "e-letter-alif",
+      "kind" : "letter",
+      "name" : "الف",
+      "pashto" : "ا",
+      "pronunciation" : "alif",
+      "sound" : "ā",
+      "translit" : "alif",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ba",
+      "forms" : {
+        "final" : "ـب",
+        "initial" : "بـ",
+        "isolated" : "ب",
+        "medial" : "ـبـ"
+      },
+      "id" : "e-letter-be",
+      "kind" : "letter",
+      "name" : "بې",
+      "pashto" : "ب",
+      "pronunciation" : "ba",
+      "sound" : "b",
+      "translit" : "ba",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter pa",
+      "forms" : {
+        "final" : "ـپ",
+        "initial" : "پـ",
+        "isolated" : "پ",
+        "medial" : "ـپـ"
+      },
+      "id" : "e-letter-pe",
+      "kind" : "letter",
+      "name" : "پې",
+      "pashto" : "پ",
+      "pronunciation" : "pa",
+      "sound" : "p",
+      "translit" : "pa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ta",
+      "forms" : {
+        "final" : "ـت",
+        "initial" : "تـ",
+        "isolated" : "ت",
+        "medial" : "ـتـ"
+      },
+      "id" : "e-letter-te",
+      "kind" : "letter",
+      "name" : "تې",
+      "pashto" : "ت",
+      "pronunciation" : "ta",
+      "sound" : "t",
+      "translit" : "ta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ta with a ring (curled-back t)",
+      "forms" : {
+        "final" : "ـټ",
+        "initial" : "ټـ",
+        "isolated" : "ټ",
+        "medial" : "ـټـ"
+      },
+      "id" : "e-letter-tte",
+      "kind" : "letter",
+      "name" : "ټې",
+      "pashto" : "ټ",
+      "pronunciation" : "ta",
+      "pronunciationNote" : "ṭ: t with the tongue tip curled back.",
+      "sound" : "ṭ",
+      "translit" : "ṭa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter sa",
+      "forms" : {
+        "final" : "ـث",
+        "initial" : "ثـ",
+        "isolated" : "ث",
+        "medial" : "ـثـ"
+      },
+      "id" : "e-letter-se",
+      "kind" : "letter",
+      "name" : "ثې",
+      "pashto" : "ث",
+      "pronunciation" : "sa",
+      "sound" : "s",
+      "translit" : "sa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I",
+      "id" : "e-za",
+      "kind" : "word",
+      "pashto" : "زه",
+      "pronunciation" : "za",
+      "pronunciationNote" : "The vowel in za is short and weak, like the a in about.",
+      "translit" : "zə",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "you",
+      "id" : "e-ta",
+      "kind" : "word",
+      "pashto" : "ته",
+      "pronunciation" : "ta",
+      "pronunciationNote" : "The t is soft and dental: the tongue touches the back of the upper front teeth. It is not the English th. Short, weak vowel, like the a in about.",
+      "translit" : "tə",
+      "usage" : "informal, to one person",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "you",
+      "id" : "e-taso",
+      "kind" : "word",
+      "pashto" : "تاسو",
+      "pronunciation" : "TAA-so",
+      "translit" : "tā́so",
+      "usage" : "polite or plural; use with elders and strangers",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "he, she, that",
+      "id" : "e-hagha",
+      "kind" : "word",
+      "pashto" : "هغه",
+      "pronunciation" : "ha-GHA",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "translit" : "haɣá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "name",
+      "id" : "e-num",
+      "kind" : "word",
+      "pashto" : "نوم",
+      "pronunciation" : "noom",
+      "translit" : "num",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "my name is Ahmad",
+      "id" : "e-zma-num-ahmad-day",
+      "kind" : "phrase",
+      "pashto" : "زما نوم احمد دی",
+      "pronunciation" : "zmaa noom AH-mad day",
+      "responseTo" : "e-staso-num-tsa-day",
+      "tokenPronunciations" : [
+        "zmaa",
+        "noom",
+        "AH-mad",
+        "day"
+      ],
+      "tokens" : [
+        "زما",
+        "نوم",
+        "احمد",
+        "دی"
+      ],
+      "translit" : "zmā num áhmad day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "what's your name?",
+      "id" : "e-sta-num-tsa-day",
+      "kind" : "phrase",
+      "pashto" : "ستا نوم څه دی؟",
+      "pronunciation" : "staa noom tsa day?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "staa",
+        "noom",
+        "tsa",
+        "day"
+      ],
+      "tokens" : [
+        "ستا",
+        "نوم",
+        "څه",
+        "دی"
+      ],
+      "translit" : "stā num tsə day?",
+      "usage" : "informal",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "what's your name?",
+      "id" : "e-staso-num-tsa-day",
+      "kind" : "phrase",
+      "pashto" : "ستاسو نوم څه دی؟",
+      "pronunciation" : "STAA-so noom tsa day?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "STAA-so",
+        "noom",
+        "tsa",
+        "day"
+      ],
+      "tokens" : [
+        "ستاسو",
+        "نوم",
+        "څه",
+        "دی"
+      ],
+      "translit" : "stā́so num tsə day?",
+      "usage" : "polite",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "where are you from?",
+      "id" : "e-ta-da-kum-dzay-ye",
+      "kind" : "phrase",
+      "pashto" : "ته د کوم ځای یې؟",
+      "pronunciation" : "ta da koom dzaay ye?",
+      "pronunciationNote" : "ځ: dz as in kids.",
+      "tokenPronunciations" : [
+        "ta",
+        "da",
+        "koom",
+        "dzaay",
+        "ye"
+      ],
+      "tokens" : [
+        "ته",
+        "د",
+        "کوم",
+        "ځای",
+        "یې"
+      ],
+      "translit" : "tə də kum dzāy ye?",
+      "usage" : "informal",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-27",
+        "comment" : "Bekreftet av Farhad i gruppechatten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm from Norway",
+      "id" : "e-za-la-narwe-tsaxa-yam",
+      "kind" : "phrase",
+      "pashto" : "زه له ناروې څخه یم",
+      "pronunciation" : "za la naar-WEY TSA-kha yam",
+      "pronunciationNote" : "څ: ts as in cats. خ: kh, like ch in Scottish loch.",
+      "responseTo" : "e-ta-da-kum-dzay-ye",
+      "tokenPronunciations" : [
+        "za",
+        "la",
+        "naar-WEY",
+        "TSA-kha",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "له",
+        "ناروې",
+        "څخه",
+        "یم"
+      ],
+      "translit" : "zə la nārwé tsə́xa yəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-27",
+        "comment" : "Bekreftet av Farhad i gruppechatten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm Afghan",
+      "id" : "e-za-afghan-yam",
+      "kind" : "phrase",
+      "pashto" : "زه افغان یم",
+      "pronunciation" : "za af-GHAAN yam",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "za",
+        "af-GHAAN",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "افغان",
+        "یم"
+      ],
+      "translit" : "zə afɣā́n yəm",
+      "usage" : "said by a man",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm Afghan",
+      "id" : "e-za-afghana-yam",
+      "kind" : "phrase",
+      "pashto" : "زه افغانه یم",
+      "pronunciation" : "za af-GHAA-na yam",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "za",
+        "af-GHAA-na",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "افغانه",
+        "یم"
+      ],
+      "translit" : "zə afɣā́na yəm",
+      "usage" : "said by a woman",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm a teacher",
+      "id" : "e-za-xowunkay-yam",
+      "kind" : "phrase",
+      "pashto" : "زه ښوونکی یم",
+      "pronunciation" : "za kho-WOON-kay yam",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "za",
+        "kho-WOON-kay",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "ښوونکی",
+        "یم"
+      ],
+      "translit" : "zə x̌owúnkay yəm",
+      "usage" : "said by a man",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm learning Pashto",
+      "id" : "e-za-pashto-zda-kawam",
+      "kind" : "phrase",
+      "pashto" : "زه پښتو زده کوم",
+      "pronunciation" : "za pakh-TO zda ka-WAM",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "za",
+        "pakh-TO",
+        "zda ka-WAM"
+      ],
+      "tokens" : [
+        "زه",
+        "پښتو",
+        "زده کوم"
+      ],
+      "translit" : "zə pəx̌tó zda kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "nice to meet you",
+      "id" : "e-staso-pa-lido-xoshala-shwam",
+      "kind" : "phrase",
+      "pashto" : "ستاسو په لیدو خوشحاله شوم",
+      "pronunciation" : "STAA-so pa lee-DO kho-SHAA-la shwam",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "translit" : "stā́so pə lidó xošā́la šwəm",
+      "usage" : "fixed expression",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-27",
+        "comment" : "Bekreftet av Farhad i gruppechatten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "am",
+      "id" : "e-yam",
+      "kind" : "word",
+      "pashto" : "یم",
+      "pronunciation" : "yam",
+      "translit" : "yəm",
+      "usage" : "with zə: I am",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "are",
+      "id" : "e-ye",
+      "kind" : "word",
+      "pashto" : "یې",
+      "pronunciation" : "ye",
+      "translit" : "ye",
+      "usage" : "with tə: you are (informal)",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "is",
+      "id" : "e-day",
+      "kind" : "word",
+      "pashto" : "دی",
+      "pronunciation" : "day",
+      "translit" : "day",
+      "usage" : "with a man or masculine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "is",
+      "id" : "e-da",
+      "kind" : "word",
+      "pashto" : "ده",
+      "pronunciation" : "da",
+      "translit" : "da",
+      "usage" : "with a woman or feminine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "are",
+      "id" : "e-yast",
+      "kind" : "word",
+      "pashto" : "یاست",
+      "pronunciation" : "yaast",
+      "translit" : "yāst",
+      "usage" : "with tāso: you are (polite or plural)",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter jeem",
+      "forms" : {
+        "final" : "ـج",
+        "initial" : "جـ",
+        "isolated" : "ج",
+        "medial" : "ـجـ"
+      },
+      "id" : "e-letter-jim",
+      "kind" : "letter",
+      "name" : "جیم",
+      "pashto" : "ج",
+      "pronunciation" : "jeem",
+      "sound" : "j",
+      "translit" : "jim",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter cha",
+      "forms" : {
+        "final" : "ـچ",
+        "initial" : "چـ",
+        "isolated" : "چ",
+        "medial" : "ـچـ"
+      },
+      "id" : "e-letter-che",
+      "kind" : "letter",
+      "name" : "چې",
+      "pashto" : "چ",
+      "pronunciation" : "cha",
+      "sound" : "č",
+      "translit" : "ča",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ha",
+      "forms" : {
+        "final" : "ـح",
+        "initial" : "حـ",
+        "isolated" : "ح",
+        "medial" : "ـحـ"
+      },
+      "id" : "e-letter-he",
+      "kind" : "letter",
+      "name" : "حې",
+      "pashto" : "ح",
+      "pronunciation" : "ha",
+      "sound" : "h",
+      "translit" : "ha",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter kha",
+      "forms" : {
+        "final" : "ـخ",
+        "initial" : "خـ",
+        "isolated" : "خ",
+        "medial" : "ـخـ"
+      },
+      "id" : "e-letter-xe",
+      "kind" : "letter",
+      "name" : "خې",
+      "pashto" : "خ",
+      "pronunciation" : "kha",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "sound" : "x",
+      "translit" : "xa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter tsa",
+      "forms" : {
+        "final" : "ـڅ",
+        "initial" : "څـ",
+        "isolated" : "څ",
+        "medial" : "ـڅـ"
+      },
+      "id" : "e-letter-tse",
+      "kind" : "letter",
+      "name" : "څې",
+      "pashto" : "څ",
+      "pronunciation" : "tsa",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "sound" : "ts",
+      "translit" : "tsa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter dza",
+      "forms" : {
+        "final" : "ـځ",
+        "initial" : "ځـ",
+        "isolated" : "ځ",
+        "medial" : "ـځـ"
+      },
+      "id" : "e-letter-dze",
+      "kind" : "letter",
+      "name" : "ځې",
+      "pashto" : "ځ",
+      "pronunciation" : "dza",
+      "pronunciationNote" : "ځ: dz as in kids.",
+      "sound" : "dz",
+      "translit" : "dza",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-10-28",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "mother",
+      "id" : "e-mor",
+      "kind" : "word",
+      "pashto" : "مور",
+      "pronunciation" : "mor",
+      "translit" : "mor",
+      "usage" : "feminine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "father",
+      "id" : "e-plar",
+      "kind" : "word",
+      "pashto" : "پلار",
+      "pronunciation" : "plaar",
+      "translit" : "plār",
+      "usage" : "masculine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "brother",
+      "id" : "e-wror",
+      "kind" : "word",
+      "pashto" : "ورور",
+      "pronunciation" : "wror",
+      "translit" : "wror",
+      "usage" : "masculine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "sister",
+      "id" : "e-xor",
+      "kind" : "word",
+      "pashto" : "خور",
+      "pronunciation" : "khor",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "translit" : "xor",
+      "usage" : "feminine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "son",
+      "id" : "e-zoy",
+      "kind" : "word",
+      "pashto" : "زوی",
+      "pronunciation" : "zoy",
+      "translit" : "zoy",
+      "usage" : "masculine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "daughter",
+      "id" : "e-lur",
+      "kind" : "word",
+      "pashto" : "لور",
+      "pronunciation" : "loor",
+      "translit" : "lur",
+      "usage" : "feminine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "who is this?",
+      "id" : "e-daa-tsok-day",
+      "kind" : "phrase",
+      "pashto" : "دا څوک دی؟",
+      "pronunciation" : "daa tsok day?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "daa",
+        "tsok",
+        "day"
+      ],
+      "tokens" : [
+        "دا",
+        "څوک",
+        "دی"
+      ],
+      "translit" : "dā tsok day?",
+      "usage" : "asking about a man or boy",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "who is this?",
+      "id" : "e-daa-tsok-da",
+      "kind" : "phrase",
+      "pashto" : "دا څوک ده؟",
+      "pronunciation" : "daa tsok da?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "daa",
+        "tsok",
+        "da"
+      ],
+      "tokens" : [
+        "دا",
+        "څوک",
+        "ده"
+      ],
+      "translit" : "dā tsok da?",
+      "usage" : "asking about a woman or girl",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this is my father",
+      "id" : "e-daa-zma-plar-day",
+      "kind" : "phrase",
+      "pashto" : "دا زما پلار دی",
+      "pronunciation" : "daa zmaa plaar day",
+      "responseTo" : "e-daa-tsok-day",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "plaar",
+        "day"
+      ],
+      "tokens" : [
+        "دا",
+        "زما",
+        "پلار",
+        "دی"
+      ],
+      "translit" : "dā zmā plār day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this is my mother",
+      "id" : "e-daa-zma-mor-da",
+      "kind" : "phrase",
+      "pashto" : "دا زما مور ده",
+      "pronunciation" : "daa zmaa mor da",
+      "responseTo" : "e-daa-tsok-da",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "mor",
+        "da"
+      ],
+      "tokens" : [
+        "دا",
+        "زما",
+        "مور",
+        "ده"
+      ],
+      "translit" : "dā zmā mor da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "family",
+      "id" : "e-koraney",
+      "kind" : "word",
+      "pashto" : "کورنۍ",
+      "pronunciation" : "ko-ra-NAY",
+      "translit" : "koranə́y",
+      "usage" : "feminine word",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this",
+      "id" : "e-daa",
+      "kind" : "word",
+      "pashto" : "دا",
+      "pronunciation" : "daa",
+      "translit" : "dā",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "my",
+      "id" : "e-zma",
+      "kind" : "word",
+      "pashto" : "زما",
+      "pronunciation" : "zmaa",
+      "translit" : "zmā",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this is my brother",
+      "id" : "e-daa-zma-wror-day",
+      "kind" : "phrase",
+      "pashto" : "دا زما ورور دی",
+      "pronunciation" : "daa zmaa wror day",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "wror",
+        "day"
+      ],
+      "tokens" : [
+        "دا",
+        "زما",
+        "ورور",
+        "دی"
+      ],
+      "translit" : "dā zmā wror day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this is my sister",
+      "id" : "e-daa-zma-xor-da",
+      "kind" : "phrase",
+      "pashto" : "دا زما خور ده",
+      "pronunciation" : "daa zmaa khor da",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "daa",
+        "zmaa",
+        "khor",
+        "da"
+      ],
+      "tokens" : [
+        "دا",
+        "زما",
+        "خور",
+        "ده"
+      ],
+      "translit" : "dā zmā xor da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "your",
+      "id" : "e-sta",
+      "kind" : "word",
+      "pashto" : "ستا",
+      "pronunciation" : "staa",
+      "translit" : "stā",
+      "usage" : "informal, to one person",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "is this your brother?",
+      "id" : "e-daa-sta-wror-day",
+      "kind" : "phrase",
+      "pashto" : "دا ستا ورور دی؟",
+      "pronunciation" : "daa staa wror day?",
+      "tokenPronunciations" : [
+        "daa",
+        "staa",
+        "wror",
+        "day"
+      ],
+      "tokens" : [
+        "دا",
+        "ستا",
+        "ورور",
+        "دی"
+      ],
+      "translit" : "dā stā wror day?",
+      "usage" : "informal",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "yes, he's my brother",
+      "id" : "e-ho-zma-wror-day",
+      "kind" : "phrase",
+      "pashto" : "هو، زما ورور دی",
+      "pronunciation" : "ho, zmaa wror day",
+      "pronunciationNote" : "In everyday speech people also say یې (ye) for yes.",
+      "responseTo" : "e-daa-sta-wror-day",
+      "translit" : "ho, zmā wror day",
+      "usage" : "answering yes",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "no, he's my son",
+      "id" : "e-na-zma-zoy-day",
+      "kind" : "phrase",
+      "pashto" : "نه، زما زوی دی",
+      "pronunciation" : "na, zmaa zoy day",
+      "responseTo" : "e-daa-sta-wror-day",
+      "translit" : "na, zmā zoy day",
+      "usage" : "answering no",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "how is your mother?",
+      "id" : "e-mor-de-tsanga-da",
+      "kind" : "phrase",
+      "pashto" : "مور دې څنګه ده؟",
+      "pronunciation" : "mor dey TSAN-ga da?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "mor",
+        "dey",
+        "TSAN-ga",
+        "da"
+      ],
+      "tokens" : [
+        "مور",
+        "دې",
+        "څنګه",
+        "ده"
+      ],
+      "translit" : "mor de tsə́nga da?",
+      "usage" : "informal; دې (de) means your and comes after the noun",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "she is fine",
+      "id" : "e-hagha-xa-da",
+      "kind" : "phrase",
+      "pashto" : "هغه ښه ده",
+      "pronunciation" : "ha-GHA kha da",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo" : "e-mor-de-tsanga-da",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "kha",
+        "da"
+      ],
+      "tokens" : [
+        "هغه",
+        "ښه",
+        "ده"
+      ],
+      "translit" : "haɣá x̌a da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "how is your father?",
+      "id" : "e-plar-de-tsanga-day",
+      "kind" : "phrase",
+      "pashto" : "پلار دې څنګه دی؟",
+      "pronunciation" : "plaar dey TSAN-ga day?",
+      "pronunciationNote" : "څ: ts as in cats.",
+      "tokenPronunciations" : [
+        "plaar",
+        "dey",
+        "TSAN-ga",
+        "day"
+      ],
+      "tokens" : [
+        "پلار",
+        "دې",
+        "څنګه",
+        "دی"
+      ],
+      "translit" : "plār de tsə́nga day?",
+      "usage" : "informal; دې (de) means your and comes after the noun",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "he is fine",
+      "id" : "e-hagha-xa-day",
+      "kind" : "phrase",
+      "pashto" : "هغه ښه دی",
+      "pronunciation" : "ha-GHA kha day",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo" : "e-plar-de-tsanga-day",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "kha",
+        "day"
+      ],
+      "tokens" : [
+        "هغه",
+        "ښه",
+        "دی"
+      ],
+      "translit" : "haɣá x̌a day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter da",
+      "forms" : {
+        "final" : "ـد",
+        "initial" : "د",
+        "isolated" : "د",
+        "medial" : "ـد"
+      },
+      "id" : "e-letter-dal",
+      "kind" : "letter",
+      "name" : "دال",
+      "pashto" : "د",
+      "pronunciation" : "da",
+      "sound" : "d",
+      "translit" : "da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter da with a ring (curled-back d)",
+      "forms" : {
+        "final" : "ـډ",
+        "initial" : "ډ",
+        "isolated" : "ډ",
+        "medial" : "ـډ"
+      },
+      "id" : "e-letter-ddal",
+      "kind" : "letter",
+      "name" : "ډال",
+      "pashto" : "ډ",
+      "pronunciation" : "da",
+      "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
+      "sound" : "ḍ",
+      "translit" : "ḍa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter za with a dot over the da shape (loanwords)",
+      "forms" : {
+        "final" : "ـذ",
+        "initial" : "ذ",
+        "isolated" : "ذ",
+        "medial" : "ـذ"
+      },
+      "id" : "e-letter-zal",
+      "kind" : "letter",
+      "name" : "ذال",
+      "pashto" : "ذ",
+      "pronunciation" : "za",
+      "sound" : "z",
+      "translit" : "za",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ra",
+      "forms" : {
+        "final" : "ـر",
+        "initial" : "ر",
+        "isolated" : "ر",
+        "medial" : "ـر"
+      },
+      "id" : "e-letter-re",
+      "kind" : "letter",
+      "name" : "رې",
+      "pashto" : "ر",
+      "pronunciation" : "ra",
+      "sound" : "r",
+      "translit" : "ra",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ra with a ring (curled-back r)",
+      "forms" : {
+        "final" : "ـړ",
+        "initial" : "ړ",
+        "isolated" : "ړ",
+        "medial" : "ـړ"
+      },
+      "id" : "e-letter-rre",
+      "kind" : "letter",
+      "name" : "ړې",
+      "pashto" : "ړ",
+      "pronunciation" : "ra",
+      "pronunciationNote" : "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "sound" : "ṛ",
+      "translit" : "ṛa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter za with a dot over the ra shape",
+      "forms" : {
+        "final" : "ـز",
+        "initial" : "ز",
+        "isolated" : "ز",
+        "medial" : "ـز"
+      },
+      "id" : "e-letter-ze",
+      "kind" : "letter",
+      "name" : "زې",
+      "pashto" : "ز",
+      "pronunciation" : "za",
+      "sound" : "z",
+      "translit" : "za",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter zha",
+      "forms" : {
+        "final" : "ـژ",
+        "initial" : "ژ",
+        "isolated" : "ژ",
+        "medial" : "ـژ"
+      },
+      "id" : "e-letter-zhe",
+      "kind" : "letter",
+      "name" : "ژې",
+      "pashto" : "ژ",
+      "pronunciation" : "zha",
+      "pronunciationNote" : "ژ: zh, like s in measure.",
+      "sound" : "ž",
+      "translit" : "ža",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the letter ga with two dots (Kabul g)",
+      "forms" : {
+        "final" : "ـږ",
+        "initial" : "ږ",
+        "isolated" : "ږ",
+        "medial" : "ـږ"
+      },
+      "id" : "e-letter-gye",
+      "kind" : "letter",
+      "name" : "ږې",
+      "pashto" : "ږ",
+      "pronunciation" : "ga",
+      "pronunciationNote" : "ږ: in Kabul close to g in go.",
+      "sound" : "ǧ",
+      "translit" : "ǧa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-01",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "one",
+      "id" : "e-yaw",
+      "kind" : "word",
+      "pashto" : "یو",
+      "pronunciation" : "yaw",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "yaw",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "two",
+      "id" : "e-dwa",
+      "kind" : "word",
+      "pashto" : "دوه",
+      "pronunciation" : "dwa",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "dwa",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "three",
+      "id" : "e-drey",
+      "kind" : "word",
+      "pashto" : "درې",
+      "pronunciation" : "drey",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "dre",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "four",
+      "id" : "e-tsa-lor",
+      "kind" : "word",
+      "pashto" : "څلور",
+      "pronunciation" : "tsa-LOR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "translit" : "tsəlór",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "five",
+      "id" : "e-pin-dza",
+      "kind" : "word",
+      "pashto" : "پنځه",
+      "pronunciation" : "pin-DZA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "translit" : "pindzá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "six",
+      "id" : "e-shpag",
+      "kind" : "word",
+      "pashto" : "شپږ",
+      "pronunciation" : "shpag",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ږ is pronounced g in the selected Kabul pronunciation.",
+      "translit" : "špaǧ",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "seven",
+      "id" : "e-o-wa",
+      "kind" : "word",
+      "pashto" : "اووه",
+      "pronunciation" : "o-WA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "owá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "eight",
+      "id" : "e-a-ta",
+      "kind" : "word",
+      "pashto" : "اته",
+      "pronunciation" : "a-TA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "atá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "nine",
+      "id" : "e-na-ha",
+      "kind" : "word",
+      "pashto" : "نهه",
+      "pronunciation" : "NA-ha",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "náha",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "ten",
+      "id" : "e-las",
+      "kind" : "word",
+      "pashto" : "لس",
+      "pronunciation" : "las",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "las",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "age",
+      "id" : "e-o-mar",
+      "kind" : "word",
+      "pashto" : "عمر",
+      "pronunciation" : "o-MAR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. In عمر, there is no separate throat sound for ع; say o-MAR.",
+      "translit" : "omár",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "water",
+      "id" : "e-o-ba",
+      "kind" : "word",
+      "pashto" : "اوبه",
+      "pronunciation" : "o-BA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "obá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "bread",
+      "id" : "e-do-day",
+      "kind" : "word",
+      "pashto" : "ډوډۍ",
+      "pronunciation" : "do-DAY",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "translit" : "ḍoḍə́y",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "rice",
+      "id" : "e-wri-jey",
+      "kind" : "word",
+      "pashto" : "وریجې",
+      "pronunciation" : "wri-JEY",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "wrijé",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "meat",
+      "id" : "e-gho-kha",
+      "kind" : "word",
+      "pashto" : "غوښه",
+      "pronunciation" : "GHO-kha",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "ɣóx̌a",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "apple",
+      "id" : "e-ma-na",
+      "kind" : "word",
+      "pashto" : "مڼه",
+      "pronunciation" : "ma-NA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ڼ is an n with the tongue tip curled back.",
+      "translit" : "maṇá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "tea",
+      "id" : "e-chaay",
+      "kind" : "word",
+      "pashto" : "چای",
+      "pronunciation" : "chaay",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "čāy",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "coffee",
+      "id" : "e-kah-wa",
+      "kind" : "word",
+      "pashto" : "قهوه",
+      "pronunciation" : "kah-WA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. In قهوه, say k as in the approved kah-WA; do not replace it with q.",
+      "translit" : "kahwá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "milk",
+      "id" : "e-shee-dey",
+      "kind" : "word",
+      "pashto" : "شیدې",
+      "pronunciation" : "shee-DEY",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "šidé",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I want",
+      "id" : "e-ghwaa-ram",
+      "kind" : "word",
+      "pashto" : "غواړم",
+      "pronunciation" : "ghwaa-RAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "ɣwāṛə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "there is",
+      "id" : "e-shta",
+      "kind" : "word",
+      "pashto" : "شته",
+      "pronunciation" : "shta",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "šta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "there is not",
+      "id" : "e-na-shta",
+      "kind" : "word",
+      "pashto" : "نشته",
+      "pronunciation" : "na-SHTA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "naštá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "what would you like? (informal)",
+      "id" : "e-tsa-ghwaa-rey",
+      "kind" : "phrase",
+      "pashto" : "څه غواړې؟",
+      "pronunciation" : "tsa ghwaa-REY?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. څ is ts, said together. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "tsə ɣwāṛé?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I would like water",
+      "id" : "e-za-o-ba-ghwaa-ram",
+      "kind" : "phrase",
+      "pashto" : "زه اوبه غواړم",
+      "pronunciation" : "za o-BA ghwaa-RAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "zə obá ɣwāṛə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I would like tea",
+      "id" : "e-za-chaay-ghwaa-ram",
+      "kind" : "phrase",
+      "pashto" : "زه چای غواړم",
+      "pronunciation" : "za chaay ghwaa-RAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "zə čāy ɣwāṛə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this is an apple",
+      "id" : "e-daa-ma-na-da",
+      "kind" : "phrase",
+      "pashto" : "دا مڼه ده",
+      "pronunciation" : "daa ma-NA da",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ڼ is an n with the tongue tip curled back.",
+      "translit" : "dā maṇá da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "this is bread",
+      "id" : "e-daa-do-day-da",
+      "kind" : "phrase",
+      "pashto" : "دا ډوډۍ ده",
+      "pronunciation" : "daa do-DAY da",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "translit" : "dā ḍoḍə́y da",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "is there tea?",
+      "id" : "e-chaay-shta",
+      "kind" : "phrase",
+      "pashto" : "چای شته؟",
+      "pronunciation" : "chaay shta?",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "čāy šta?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "yes, there is tea",
+      "id" : "e-ho-chaay-shta",
+      "kind" : "phrase",
+      "pashto" : "هو، چای شته",
+      "pronunciation" : "ho, chaay shta",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "ho, čāy šta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "no, there is no tea",
+      "id" : "e-na-chaay-na-shta",
+      "kind" : "phrase",
+      "pashto" : "نه، چای نشته",
+      "pronunciation" : "na, chaay na-SHTA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "na, čāy naštá",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "eleven",
+      "id" : "e-yaw-wo-las",
+      "kind" : "word",
+      "pashto" : "یوولس",
+      "pronunciation" : "yaw-WO-las",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "yawwólas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "twelve",
+      "id" : "e-dwo-las",
+      "kind" : "word",
+      "pashto" : "دولس",
+      "pronunciation" : "DWO-las",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "dwólas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "thirteen",
+      "id" : "e-dyaar-las",
+      "kind" : "word",
+      "pashto" : "دیارلس",
+      "pronunciation" : "dyaar-LAS",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "dyārlás",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "fourteen",
+      "id" : "e-tswaar-las",
+      "kind" : "word",
+      "pashto" : "څوارلس",
+      "pronunciation" : "tswaar-LAS",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "translit" : "tswārlás",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "fifteen",
+      "id" : "e-pin-dza-las",
+      "kind" : "word",
+      "pashto" : "پنځلس",
+      "pronunciation" : "pin-DZA-las",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "translit" : "pindzálas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "sixteen",
+      "id" : "e-shpaa-ras",
+      "kind" : "word",
+      "pashto" : "شپاړس",
+      "pronunciation" : "SHPAA-ras",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "translit" : "špā́ṛas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "seventeen",
+      "id" : "e-o-wa-las",
+      "kind" : "word",
+      "pashto" : "اوولس",
+      "pronunciation" : "o-WA-las",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "owálas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "eighteen",
+      "id" : "e-a-ta-las",
+      "kind" : "word",
+      "pashto" : "اتلس",
+      "pronunciation" : "a-TA-las",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "atálas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "nineteen",
+      "id" : "e-no-las",
+      "kind" : "word",
+      "pashto" : "نولس",
+      "pronunciation" : "NO-las",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "nólas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "twenty",
+      "id" : "e-shal",
+      "kind" : "word",
+      "pashto" : "شل",
+      "pronunciation" : "shal",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "šal",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "years old (male)",
+      "id" : "e-ka-lan",
+      "kind" : "word",
+      "pashto" : "کلن",
+      "pronunciation" : "ka-LAN",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "kalán",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "years old (female)",
+      "id" : "e-ka-la-na",
+      "kind" : "word",
+      "pashto" : "کلنه",
+      "pronunciation" : "ka-LA-na",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "kalána",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "today",
+      "id" : "e-nan",
+      "kind" : "word",
+      "pashto" : "نن",
+      "pronunciation" : "nan",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "nan",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "tomorrow",
+      "id" : "e-sa-baa",
+      "kind" : "word",
+      "pashto" : "سبا",
+      "pronunciation" : "sa-BAA",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "sabā́",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "work",
+      "id" : "e-kaar",
+      "kind" : "word",
+      "pashto" : "کار",
+      "pronunciation" : "kaar",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "kār",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "time",
+      "id" : "e-wakht",
+      "kind" : "word",
+      "pashto" : "وخت",
+      "pronunciation" : "wakht",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. kh is one sound, like ch in Scottish loch.",
+      "translit" : "waxt",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I work",
+      "id" : "e-za-kaar-ka-wam",
+      "kind" : "phrase",
+      "pashto" : "زه کار کوم",
+      "pronunciation" : "za kaar ka-WAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "zə kār kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I work today",
+      "id" : "e-za-nan-kaar-ka-wam",
+      "kind" : "phrase",
+      "pashto" : "زه نن کار کوم",
+      "pronunciation" : "za nan kaar ka-WAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "zə nan kār kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I work tomorrow",
+      "id" : "e-za-sa-baa-kaar-ka-wam",
+      "kind" : "phrase",
+      "pashto" : "زه سبا کار کوم",
+      "pronunciation" : "za sa-BAA kaar ka-WAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "zə sabā́ kār kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "how old are you?",
+      "id" : "e-o-mar-dey-tso-day",
+      "kind" : "phrase",
+      "pashto" : "عمر دې څو دی؟",
+      "pronunciation" : "o-MAR dey tso day?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together. In عمر, there is no separate throat sound for ع; say o-MAR.",
+      "translit" : "omár de tso day?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am twenty years old (male)",
+      "id" : "e-za-shal-ka-lan-yam",
+      "kind" : "phrase",
+      "pashto" : "زه شل کلن یم",
+      "pronunciation" : "za shal ka-LAN yam",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "zə šal kalán yəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am twenty years old (female)",
+      "id" : "e-za-shal-ka-la-na-yam",
+      "kind" : "phrase",
+      "pashto" : "زه شل کلنه یم",
+      "pronunciation" : "za shal ka-LA-na yam",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "zə šal kalána yəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "city",
+      "id" : "e-khaar",
+      "kind" : "word",
+      "pashto" : "ښار",
+      "pronunciation" : "khaar",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "translit" : "x̌ār",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "market",
+      "id" : "e-baa-zaar",
+      "kind" : "word",
+      "pashto" : "بازار",
+      "pronunciation" : "baa-ZAAR",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "bāzā́r",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "shop",
+      "id" : "e-doo-kaan",
+      "kind" : "word",
+      "pashto" : "دوکان",
+      "pronunciation" : "doo-KAAN",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "dukā́n",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "hospital",
+      "id" : "e-rogh-toon",
+      "kind" : "word",
+      "pashto" : "روغتون",
+      "pronunciation" : "rogh-TOON",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "roɣtún",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "where",
+      "id" : "e-cher-ta",
+      "kind" : "word",
+      "pashto" : "چېرته",
+      "pronunciation" : "CHER-ta",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "čérta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "taxi",
+      "id" : "e-tak-see",
+      "kind" : "word",
+      "pashto" : "ټکسي",
+      "pronunciation" : "tak-SEE",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "translit" : "ṭaksí",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "bus",
+      "id" : "e-bas",
+      "kind" : "word",
+      "pashto" : "بس",
+      "pronunciation" : "bas",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "bas",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "road",
+      "id" : "e-sa-rak",
+      "kind" : "word",
+      "pashto" : "سړک",
+      "pronunciation" : "sa-RAK",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "translit" : "saṛák",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "left",
+      "id" : "e-chap",
+      "kind" : "word",
+      "pashto" : "چپ",
+      "pronunciation" : "chap",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "čap",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "right",
+      "id" : "e-khee",
+      "kind" : "word",
+      "pashto" : "ښي",
+      "pronunciation" : "khee",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "translit" : "x̌i",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "here",
+      "id" : "e-dal-ta",
+      "kind" : "word",
+      "pashto" : "دلته",
+      "pronunciation" : "DAL-ta",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "dálta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "there",
+      "id" : "e-hal-ta",
+      "kind" : "word",
+      "pashto" : "هلته",
+      "pronunciation" : "HAL-ta",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "hálta",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "where is the market?",
+      "id" : "e-baa-zaar-cher-ta-day",
+      "kind" : "phrase",
+      "pashto" : "بازار چېرته دی؟",
+      "pronunciation" : "baa-ZAAR CHER-ta day?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "bāzā́r čérta day?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "where is the hospital?",
+      "id" : "e-rogh-toon-cher-ta-day",
+      "kind" : "phrase",
+      "pashto" : "روغتون چېرته دی؟",
+      "pronunciation" : "rogh-TOON CHER-ta day?",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "roɣtún čérta day?",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the market is here",
+      "id" : "e-baa-zaar-dal-ta-day",
+      "kind" : "phrase",
+      "pashto" : "بازار دلته دی",
+      "pronunciation" : "baa-ZAAR DAL-ta day",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "bāzā́r dálta day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "the hospital is there",
+      "id" : "e-rogh-toon-hal-ta-day",
+      "kind" : "phrase",
+      "pashto" : "روغتون هلته دی",
+      "pronunciation" : "rogh-TOON HAL-ta day",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "roɣtún hálta day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am going to the market",
+      "id" : "e-za-baa-zaar-ta-dzam",
+      "kind" : "phrase",
+      "pashto" : "زه بازار ته ځم",
+      "pronunciation" : "za baa-ZAAR ta dzam",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "translit" : "zə bāzā́r tə dzəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am going home",
+      "id" : "e-za-kor-ta-dzam",
+      "kind" : "phrase",
+      "pashto" : "زه کور ته ځم",
+      "pronunciation" : "za kor ta dzam",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ځ is dz, said together.",
+      "translit" : "zə kor tə dzəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "language",
+      "id" : "e-zha-ba",
+      "kind" : "word",
+      "pashto" : "ژبه",
+      "pronunciation" : "ZHA-ba",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. zh is one sound, like s in measure.",
+      "translit" : "žába",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "English (language)",
+      "id" : "e-ang-lee-see",
+      "kind" : "word",
+      "pashto" : "انګلیسي",
+      "pronunciation" : "ang-lee-SEE",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "anglisí",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "speech",
+      "id" : "e-kha-ba-rey",
+      "kind" : "word",
+      "pashto" : "خبرې",
+      "pronunciation" : "kha-ba-REY",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "translit" : "xabaré",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I speak Pashto",
+      "id" : "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
+      "kind" : "phrase",
+      "pashto" : "زه په پښتو خبرې کوم",
+      "pronunciation" : "za pa pakh-TO kha-ba-REY ka-WAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch. kh is one sound, like ch in Scottish loch.",
+      "translit" : "zə pə pəx̌tó xabaré kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I speak English",
+      "id" : "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
+      "kind" : "phrase",
+      "pashto" : "زه په انګلیسي خبرې کوم",
+      "pronunciation" : "za pa ang-lee-SEE kha-ba-REY ka-WAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "translit" : "zə pə anglisí xabaré kawə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I do not understand",
+      "id" : "e-za-na-po-he-gam",
+      "kind" : "phrase",
+      "pashto" : "زه نه پوهېږم",
+      "pronunciation" : "za na po-HE-gam",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ږ is pronounced g in the selected Kabul pronunciation.",
+      "translit" : "zə na pohéǧəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "please say it again (polite)",
+      "id" : "e-byaa-wa-waa-yaast",
+      "kind" : "phrase",
+      "pashto" : "بیا ووایاست",
+      "pronunciation" : "byaa wa-WAA-yaast",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "translit" : "byā wawā́yāst",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "slowly",
+      "id" : "e-wro-wro",
+      "kind" : "phrase",
+      "pashto" : "ورو ورو",
+      "pronunciation" : "wro wro",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
+      "translit" : "wro wro",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "please speak slowly",
+      "id" : "e-wro-wro-kha-ba-rey-wa-kray",
+      "kind" : "phrase",
+      "pashto" : "ورو ورو خبرې وکړئ",
+      "pronunciation" : "wro wro kha-ba-REY WA-kray",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. kh is one sound, like ch in Scottish loch.",
+      "translit" : "wro wro xabaré wə́kṛəy",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I do not want tea",
+      "id" : "e-za-chaay-na-ghwaa-ram",
+      "kind" : "phrase",
+      "pashto" : "زه چای نه غواړم",
+      "pronunciation" : "za chaay na ghwaa-RAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "translit" : "zə čāy na ɣwāṛə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I would like coffee",
+      "id" : "e-za-kah-wa-ghwaa-ram",
+      "kind" : "phrase",
+      "pashto" : "زه قهوه غواړم",
+      "pronunciation" : "za kah-WA ghwaa-RAM",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h. In قهوه, say k as in the approved kah-WA; do not replace it with q.",
+      "translit" : "zə kahwá ɣwāṛə́m",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am going to the market tomorrow",
+      "id" : "e-za-sa-baa-baa-zaar-ta-dzam",
+      "kind" : "phrase",
+      "pashto" : "زه سبا بازار ته ځم",
+      "pronunciation" : "za sa-BAA baa-ZAAR ta dzam",
+      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "translit" : "zə sabā́ bāzā́r tə dzəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-08",
+        "comment" : "Bekreftet av Farhad via ordlisten.",
+        "status" : "verified"
+      }
+    }
+  ],
+  "nonDistractorGroups" : [
+    [
+      "e-salam",
+      "e-assalamu-alaykum",
+      "e-stare-ma-she"
+    ],
+    [
+      "e-assalamu-alaykum",
+      "e-xa-raghlast"
+    ],
+    [
+      "e-stare-ma-she",
+      "e-walaykum-salam",
+      "e-xa-raghlast",
+      "e-manana"
+    ],
+    [
+      "e-tsanga-ye",
+      "e-xa",
+      "e-dera-xa",
+      "e-manana",
+      "e-taso-tsanga-yast"
+    ],
+    [
+      "e-staso-num-tsa-day",
+      "e-sta-num-tsa-day"
+    ],
+    [
+      "e-ta-da-kum-dzay-ye",
+      "e-za-afghan-yam",
+      "e-za-afghana-yam"
+    ],
+    [
+      "e-manana",
+      "e-dera-manana"
+    ],
+    [
+      "e-xoday-paman",
+      "e-pa-maxa-de-xa"
+    ],
+    [
+      "e-xa",
+      "e-za-xa-yam",
+      "e-dera-xa"
+    ],
+    [
+      "e-letter-te",
+      "e-letter-tte"
+    ],
+    [
+      "e-letter-xe",
+      "e-letter-tse"
+    ],
+    [
+      "e-tsanga-ye",
+      "e-dera-manana"
+    ],
+    [
+      "e-stare-ma-she",
+      "e-dera-manana"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-dera-manana"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-dera-manana"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-daa-zma-wror-day"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-plar"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-wror"
+    ],
+    [
+      "e-daa-tsok-day",
+      "e-zoy"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-daa-zma-xor-da"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-mor"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-xor"
+    ],
+    [
+      "e-daa-tsok-da",
+      "e-lur"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-wror-day"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-ho"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-na"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-plar-day"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-mor-da"
+    ],
+    [
+      "e-daa-sta-wror-day",
+      "e-daa-zma-xor-da"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-xa"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-dera-xa"
+    ],
+    [
+      "e-mor-de-tsanga-da",
+      "e-manana"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-xa"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-dera-xa"
+    ],
+    [
+      "e-plar-de-tsanga-day",
+      "e-manana"
+    ],
+    [
+      "e-letter-dal",
+      "e-letter-ddal"
+    ],
+    [
+      "e-letter-re",
+      "e-letter-rre"
+    ],
+    [
+      "e-letter-zal",
+      "e-letter-ze"
+    ]
+  ],
+  "romanization" : {
+    "difficultCharacters" : [
+      "ټ",
+      "ډ",
+      "ړ",
+      "ڼ",
+      "ښ",
+      "ږ",
+      "څ",
+      "ځ",
+      "خ",
+      "غ",
+      "ژ",
+      "ق",
+      "ع"
+    ],
+    "table" : [
+      {
+        "ascii" : "aa",
+        "description" : "Long a, as in father. At the start of a word it can also carry a short vowel.",
+        "letter" : "ا",
+        "pronunciation" : "aa",
+        "translit" : "ā"
+      },
+      {
+        "ascii" : "b",
+        "description" : "As English b.",
+        "letter" : "ب",
+        "pronunciation" : "b",
+        "translit" : "b"
+      },
+      {
+        "ascii" : "p",
+        "description" : "As English p.",
+        "letter" : "پ",
+        "pronunciation" : "p",
+        "translit" : "p"
+      },
+      {
+        "ascii" : "t",
+        "description" : "Soft dental t: the tongue touches the back of the upper front teeth. Not English th.",
+        "letter" : "ت",
+        "pronunciation" : "t",
+        "translit" : "t"
+      },
+      {
+        "ascii" : "t",
+        "description" : "Retroflex t: the tongue tip curls back to the roof of the mouth.",
+        "letter" : "ټ",
+        "pronunciation" : "t",
+        "translit" : "ṭ"
+      },
+      {
+        "ascii" : "s",
+        "description" : "As s. Only in Arabic loanwords.",
+        "letter" : "ث",
+        "pronunciation" : "s",
+        "translit" : "s"
+      },
+      {
+        "ascii" : "j",
+        "description" : "As English j in jam.",
+        "letter" : "ج",
+        "pronunciation" : "j",
+        "translit" : "j"
+      },
+      {
+        "ascii" : "ch",
+        "description" : "As English ch in church.",
+        "letter" : "چ",
+        "pronunciation" : "ch",
+        "translit" : "č"
+      },
+      {
+        "ascii" : "h",
+        "description" : "As h. Only in Arabic loanwords.",
+        "letter" : "ح",
+        "pronunciation" : "h",
+        "translit" : "h"
+      },
+      {
+        "ascii" : "kh",
+        "description" : "As ch in Scottish loch.",
+        "letter" : "خ",
+        "pronunciation" : "kh",
+        "translit" : "x"
+      },
+      {
+        "ascii" : "ts",
+        "description" : "As ts in cats.",
+        "letter" : "څ",
+        "pronunciation" : "ts",
+        "translit" : "ts"
+      },
+      {
+        "ascii" : "dz",
+        "description" : "As ds in kids.",
+        "letter" : "ځ",
+        "pronunciation" : "dz",
+        "translit" : "dz"
+      },
+      {
+        "ascii" : "d",
+        "description" : "Soft dental d.",
+        "letter" : "د",
+        "pronunciation" : "d",
+        "translit" : "d"
+      },
+      {
+        "ascii" : "d",
+        "description" : "Retroflex d: the tongue tip curls back.",
+        "letter" : "ډ",
+        "pronunciation" : "d",
+        "translit" : "ḍ"
+      },
+      {
+        "ascii" : "z",
+        "description" : "As z. Only in Arabic loanwords.",
+        "letter" : "ذ",
+        "pronunciation" : "z",
+        "translit" : "z"
+      },
+      {
+        "ascii" : "r",
+        "description" : "Tapped r, as in Spanish pero.",
+        "letter" : "ر",
+        "pronunciation" : "r",
+        "translit" : "r"
+      },
+      {
+        "ascii" : "r",
+        "description" : "Retroflex flap: the tongue tip curls back and flicks forward. Between r and d.",
+        "letter" : "ړ",
+        "pronunciation" : "r",
+        "translit" : "ṛ"
+      },
+      {
+        "ascii" : "z",
+        "description" : "As English z.",
+        "letter" : "ز",
+        "pronunciation" : "z",
+        "translit" : "z"
+      },
+      {
+        "ascii" : "zh",
+        "description" : "As s in measure.",
+        "letter" : "ژ",
+        "pronunciation" : "zh",
+        "translit" : "ž"
+      },
+      {
+        "ascii" : "g",
+        "description" : "Kabul: close to g in go. In other dialects zh or a soft g.",
+        "letter" : "ږ",
+        "pronunciation" : "g",
+        "translit" : "ǧ"
+      },
+      {
+        "ascii" : "s",
+        "description" : "As English s.",
+        "letter" : "س",
+        "pronunciation" : "s",
+        "translit" : "s"
+      },
+      {
+        "ascii" : "sh",
+        "description" : "As English sh.",
+        "letter" : "ش",
+        "pronunciation" : "sh",
+        "translit" : "š"
+      },
+      {
+        "ascii" : "kh",
+        "description" : "Kabul: close to kh, as ch in loch. In other dialects sh or a soft kh.",
+        "letter" : "ښ",
+        "pronunciation" : "kh",
+        "translit" : "x̌"
+      },
+      {
+        "ascii" : "s",
+        "description" : "As s. Only in Arabic loanwords.",
+        "letter" : "ص",
+        "pronunciation" : "s",
+        "translit" : "s"
+      },
+      {
+        "ascii" : "z",
+        "description" : "As z. Only in Arabic loanwords.",
+        "letter" : "ض",
+        "pronunciation" : "z",
+        "translit" : "z"
+      },
+      {
+        "ascii" : "t",
+        "description" : "As t. Only in Arabic loanwords.",
+        "letter" : "ط",
+        "pronunciation" : "t",
+        "translit" : "t"
+      },
+      {
+        "ascii" : "z",
+        "description" : "As z. Only in Arabic loanwords.",
+        "letter" : "ظ",
+        "pronunciation" : "z",
+        "translit" : "z"
+      },
+      {
+        "ascii" : "'",
+        "description" : "Usually silent or a short catch in the voice. Only in Arabic loanwords.",
+        "letter" : "ع",
+        "pronunciation" : "'",
+        "translit" : "ʿ"
+      },
+      {
+        "ascii" : "gh",
+        "description" : "Voiced kh, like a French r at the back of the throat.",
+        "letter" : "غ",
+        "pronunciation" : "gh",
+        "translit" : "ɣ"
+      },
+      {
+        "ascii" : "f",
+        "description" : "As English f.",
+        "letter" : "ف",
+        "pronunciation" : "f",
+        "translit" : "f"
+      },
+      {
+        "ascii" : "q",
+        "description" : "A k made deep in the throat. In Kabul it is often said as k.",
+        "letter" : "ق",
+        "pronunciation" : "q",
+        "translit" : "q"
+      },
+      {
+        "ascii" : "k",
+        "description" : "As English k.",
+        "letter" : "ک",
+        "pronunciation" : "k",
+        "translit" : "k"
+      },
+      {
+        "ascii" : "g",
+        "description" : "As g in go.",
+        "letter" : "ګ",
+        "pronunciation" : "g",
+        "translit" : "g"
+      },
+      {
+        "ascii" : "l",
+        "description" : "As English l.",
+        "letter" : "ل",
+        "pronunciation" : "l",
+        "translit" : "l"
+      },
+      {
+        "ascii" : "m",
+        "description" : "As English m.",
+        "letter" : "م",
+        "pronunciation" : "m",
+        "translit" : "m"
+      },
+      {
+        "ascii" : "n",
+        "description" : "As English n.",
+        "letter" : "ن",
+        "pronunciation" : "n",
+        "translit" : "n"
+      },
+      {
+        "ascii" : "n",
+        "description" : "Retroflex n: the tongue tip curls back.",
+        "letter" : "ڼ",
+        "pronunciation" : "n",
+        "translit" : "ṇ"
+      },
+      {
+        "ascii" : "w",
+        "description" : "As English w, when it is a consonant.",
+        "letter" : "و",
+        "pronunciation" : "w",
+        "translit" : "w"
+      },
+      {
+        "ascii" : "o",
+        "description" : "Vowel o, as in go but shorter.",
+        "letter" : "و",
+        "pronunciation" : "o",
+        "translit" : "o"
+      },
+      {
+        "ascii" : "u",
+        "description" : "Vowel u, as in food.",
+        "letter" : "و",
+        "pronunciation" : "oo",
+        "translit" : "u"
+      },
+      {
+        "ascii" : "h",
+        "description" : "As English h.",
+        "letter" : "ه",
+        "pronunciation" : "h",
+        "translit" : "h"
+      },
+      {
+        "ascii" : "a",
+        "description" : "At the end of a word after a consonant: a.",
+        "letter" : "ه",
+        "pronunciation" : "a",
+        "translit" : "a"
+      },
+      {
+        "ascii" : "y",
+        "description" : "As English y, when it is a consonant.",
+        "letter" : "ی",
+        "pronunciation" : "y",
+        "translit" : "y"
+      },
+      {
+        "ascii" : "i",
+        "description" : "Vowel i inside a word, as in see.",
+        "letter" : "ی",
+        "pronunciation" : "ee",
+        "translit" : "i"
+      },
+      {
+        "ascii" : "ay",
+        "description" : "At the end of many masculine words: ay, as in day.",
+        "letter" : "ی",
+        "pronunciation" : "ay",
+        "translit" : "ay"
+      },
+      {
+        "ascii" : "i",
+        "description" : "Final ي: i, as in see.",
+        "letter" : "ي",
+        "pronunciation" : "ee",
+        "translit" : "i"
+      },
+      {
+        "ascii" : "e",
+        "description" : "Vowel e, as in bed but longer.",
+        "letter" : "ې",
+        "pronunciation" : "e",
+        "translit" : "e"
+      },
+      {
+        "ascii" : "ay",
+        "description" : "Final ۍ in feminine words: əy.",
+        "letter" : "ۍ",
+        "pronunciation" : "ay",
+        "translit" : "əy"
+      },
+      {
+        "ascii" : "ay",
+        "description" : "Final ئ in verbs and plurals: əy.",
+        "letter" : "ئ",
+        "pronunciation" : "ay",
+        "translit" : "əy"
+      },
+      {
+        "ascii" : "a",
+        "description" : "Short a (zwar), as u in cut.",
+        "letter" : "َ",
+        "pronunciation" : "a",
+        "translit" : "a"
+      },
+      {
+        "ascii" : "i",
+        "description" : "Short i (zer), as in sit.",
+        "letter" : "ِ",
+        "pronunciation" : "i",
+        "translit" : "i"
+      },
+      {
+        "ascii" : "u",
+        "description" : "Short u (pesh), as in put.",
+        "letter" : "ُ",
+        "pronunciation" : "u",
+        "translit" : "u"
+      },
+      {
+        "ascii" : "a",
+        "description" : "Weak vowel ə (zwarakay), as a in about. Usually not written.",
+        "letter" : "ٗ",
+        "pronunciation" : "a",
+        "translit" : "ə"
+      }
+    ],
+    "unstressedWords" : [
+      "ma",
+      "še",
+      "de",
+      "da",
+      "day",
+      "ye",
+      "yəm",
+      "yāst",
+      "na",
+      "ho",
+      "pə",
+      "la",
+      "də",
+      "tsə",
+      "zə",
+      "tə"
+    ]
+  },
+  "schemaVersion" : 1,
+  "units" : [
+    {
+      "id" : "u-sounds",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-sounds-1",
+          "items" : [
+            {
+              "item" : "e-dera-manana",
+              "role" : "soundExample",
+              "sound" : "ḍ"
+            },
+            {
+              "item" : "e-stare-ma-she",
+              "role" : "soundExample",
+              "sound" : "ṛ"
+            },
+            {
+              "item" : "e-tsanga-ye",
+              "role" : "soundExample",
+              "sound" : "ts"
+            },
+            {
+              "item" : "e-ta-da-kum-dzay-ye",
+              "role" : "soundExample",
+              "sound" : "dz"
+            },
+            {
+              "item" : "e-xoday-paman",
+              "role" : "soundExample",
+              "sound" : "x"
+            },
+            {
+              "item" : "e-hagha",
+              "role" : "soundExample",
+              "sound" : "ɣ"
+            },
+            {
+              "item" : "e-xa",
+              "role" : "soundExample",
+              "sound" : "x̌"
+            },
+            {
+              "item" : "e-za",
+              "role" : "soundExample",
+              "sound" : "ə"
+            },
+            {
+              "item" : "e-na",
+              "role" : "soundExample",
+              "sound" : "a"
+            },
+            {
+              "item" : "e-shpag",
+              "role" : "soundExample",
+              "sound" : "ǧ"
+            },
+            {
+              "item" : "e-o-mar",
+              "role" : "soundExample",
+              "sound" : "ʿ"
+            },
+            {
+              "item" : "e-ma-na",
+              "role" : "soundExample",
+              "sound" : "ṇ"
+            },
+            {
+              "item" : "e-kah-wa",
+              "role" : "soundExample",
+              "sound" : "q"
+            },
+            {
+              "item" : "e-tak-see",
+              "role" : "soundExample",
+              "sound" : "ṭ"
+            },
+            {
+              "item" : "e-zha-ba",
+              "role" : "soundExample",
+              "sound" : "ž"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "New sounds"
+        }
+      ],
+      "title" : "Welcome and sounds",
+      "track" : "main"
+    },
+    {
+      "id" : "u-greetings",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-greetings-learn",
+          "items" : [
+            {
+              "item" : "e-xa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-manana",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ho",
+              "role" : "present"
+            },
+            {
+              "item" : "e-na",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Greetings and politeness"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-greetings-phrases",
+          "items" : [
+            {
+              "item" : "e-salam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-assalamu-alaykum",
+              "role" : "present"
+            },
+            {
+              "item" : "e-walaykum-salam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-stare-ma-she",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xwar-ma-she",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xa-raghlast",
+              "role" : "present"
+            },
+            {
+              "item" : "e-tsanga-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-taso-tsanga-yast",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-xa-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-dera-manana",
+              "role" : "present"
+            },
+            {
+              "item" : "e-dera-xa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-baxana-ghwaram",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mehrabani-wakray",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xoday-paman",
+              "role" : "present"
+            },
+            {
+              "item" : "e-pa-maxa-de-xa",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Greetings and politeness"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-greetings-1",
+              "turns" : [
+                {
+                  "item" : "e-assalamu-alaykum",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-walaykum-salam",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-greetings-2",
+              "turns" : [
+                {
+                  "item" : "e-stare-ma-she",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-xwar-ma-she",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-greetings-1",
+          "items" : [
+            {
+              "item" : "e-salam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-assalamu-alaykum",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-walaykum-salam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-stare-ma-she",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-xwar-ma-she",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-xa-raghlast",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-alif",
+            "e-letter-be"
+          ],
+          "title" : "Saying hello"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-greetings-3",
+              "turns" : [
+                {
+                  "item" : "e-tsanga-ye",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-xa-yam",
+                  "speaker" : "B"
+                },
+                {
+                  "item" : "e-manana",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-greetings-2",
+          "items" : [
+            {
+              "item" : "e-tsanga-ye",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-taso-tsanga-yast",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-xa-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-xa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-manana",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-dera-manana",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-pe",
+            "e-letter-te"
+          ],
+          "title" : "How are you?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-greetings-3",
+          "items" : [
+            {
+              "item" : "e-dera-xa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ho",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-na",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-baxana-ghwaram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-mehrabani-wakray",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-xoday-paman",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-pa-maxa-de-xa",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-tte",
+            "e-letter-se"
+          ],
+          "title" : "Polite words and goodbye"
+        }
+      ],
+      "title" : "Greetings and politeness",
+      "track" : "main"
+    },
+    {
+      "id" : "u-introductions",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-introductions-learn",
+          "items" : [
+            {
+              "item" : "e-za",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ta",
+              "role" : "present"
+            },
+            {
+              "item" : "e-taso",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha",
+              "role" : "present"
+            },
+            {
+              "item" : "e-num",
+              "role" : "present"
+            },
+            {
+              "item" : "e-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-yast",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Introducing yourself"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-introductions-phrases",
+          "items" : [
+            {
+              "item" : "e-zma-num-ahmad-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-sta-num-tsa-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-staso-num-tsa-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ta-da-kum-dzay-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-la-narwe-tsaxa-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghan-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghana-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-xowunkay-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-pashto-zda-kawam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-staso-pa-lido-xoshala-shwam",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Introducing yourself"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-introductions-1",
+              "turns" : [
+                {
+                  "item" : "e-staso-num-tsa-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-zma-num-ahmad-day",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-introductions-1",
+          "items" : [
+            {
+              "item" : "e-za",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-taso",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hagha",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-num",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-zma-num-ahmad-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-sta-num-tsa-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-staso-num-tsa-day",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-jim",
+            "e-letter-che"
+          ],
+          "title" : "I, you and names"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-introductions-2",
+              "turns" : [
+                {
+                  "item" : "e-ta-da-kum-dzay-ye",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-la-narwe-tsaxa-yam",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-introductions-2",
+          "items" : [
+            {
+              "item" : "e-ta-da-kum-dzay-ye",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-la-narwe-tsaxa-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-afghan-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-afghana-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-xowunkay-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-pashto-zda-kawam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-staso-pa-lido-xoshala-shwam",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-he",
+            "e-letter-xe"
+          ],
+          "title" : "Where are you from?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-introductions-3",
+          "items" : [
+            {
+              "item" : "e-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ye",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-yast",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-tse",
+            "e-letter-dze"
+          ],
+          "title" : "To be"
+        }
+      ],
+      "title" : "Introducing yourself",
+      "track" : "main"
+    },
+    {
+      "id" : "u-family",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-learn",
+          "items" : [
+            {
+              "item" : "e-mor",
+              "role" : "present"
+            },
+            {
+              "item" : "e-plar",
+              "role" : "present"
+            },
+            {
+              "item" : "e-wror",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xor",
+              "role" : "present"
+            },
+            {
+              "item" : "e-zoy",
+              "role" : "present"
+            },
+            {
+              "item" : "e-lur",
+              "role" : "present"
+            },
+            {
+              "item" : "e-koraney",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-zma",
+              "role" : "present"
+            },
+            {
+              "item" : "e-sta",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Family"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-phrases",
+          "items" : [
+            {
+              "item" : "e-daa-tsok-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-tsok-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-plar-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-mor-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-xor-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-sta-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ho-zma-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-na-zma-zoy-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mor-de-tsanga-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-xa-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-plar-de-tsanga-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-xa-day",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Family"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-family-1",
+              "turns" : [
+                {
+                  "item" : "e-daa-tsok-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-daa-zma-plar-day",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-family-2",
+              "turns" : [
+                {
+                  "item" : "e-daa-tsok-da",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-daa-zma-mor-da",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-family-1",
+          "items" : [
+            {
+              "item" : "e-mor",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-plar",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-wror",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-xor",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-zoy",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-lur",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-tsok-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-tsok-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-zma-plar-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-zma-mor-da",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-dal",
+            "e-letter-ddal",
+            "e-letter-zal"
+          ],
+          "title" : "Family members"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-2",
+          "items" : [
+            {
+              "item" : "e-koraney",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-zma",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-zma-wror-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-zma-xor-da",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-re",
+            "e-letter-rre",
+            "e-letter-ze"
+          ],
+          "title" : "This is my …"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-family-3",
+              "turns" : [
+                {
+                  "item" : "e-daa-sta-wror-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-ho-zma-wror-day",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-family-4",
+              "turns" : [
+                {
+                  "item" : "e-mor-de-tsanga-da",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-hagha-xa-da",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-family-5",
+              "turns" : [
+                {
+                  "item" : "e-plar-de-tsanga-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-hagha-xa-day",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-family-3",
+          "items" : [
+            {
+              "item" : "e-sta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-sta-wror-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ho-zma-wror-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-na-zma-zoy-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-mor-de-tsanga-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hagha-xa-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-plar-de-tsanga-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hagha-xa-day",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+            "e-letter-zhe",
+            "e-letter-gye"
+          ],
+          "title" : "Is this your …?"
+        }
+      ],
+      "title" : "Family",
+      "track" : "main"
+    },
+    {
+      "id" : "u-numbers",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-numbers-1",
+          "items" : [
+            {
+              "item" : "e-yaw",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-dwa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-drey",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-tsa-lor",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-pin-dza",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "One to five"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-numbers-2",
+          "items" : [
+            {
+              "item" : "e-shpag",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-o-wa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-a-ta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-na-ha",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-o-mar",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Six to ten and age"
+        }
+      ],
+      "title" : "Numbers 1–10",
+      "track" : "main"
+    },
+    {
+      "id" : "u-food",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-food-1",
+          "items" : [
+            {
+              "item" : "e-o-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-do-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-wri-jey",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-gho-kha",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ma-na",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Food and water"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-food-2",
+          "items" : [
+            {
+              "item" : "e-chaay",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-kah-wa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-shee-dey",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ghwaa-ram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-shta",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Drinks and asking for things"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-food-1",
+              "turns" : [
+                {
+                  "item" : "e-tsa-ghwaa-rey",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-o-ba-ghwaa-ram",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-food-2",
+              "turns" : [
+                {
+                  "item" : "e-tsa-ghwaa-rey",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-chaay-ghwaa-ram",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-food-3",
+          "items" : [
+            {
+              "item" : "e-na-shta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-tsa-ghwaa-rey",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-o-ba-ghwaa-ram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-chaay-ghwaa-ram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-ma-na-da",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Saying what you want"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-food-3",
+              "turns" : [
+                {
+                  "item" : "e-chaay-shta",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-ho-chaay-shta",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-food-4",
+          "items" : [
+            {
+              "item" : "e-daa-do-day-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-chaay-shta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ho-chaay-shta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-na-chaay-na-shta",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Asking what is available"
+        }
+      ],
+      "title" : "Food and drink",
+      "track" : "main"
+    },
+    {
+      "id" : "u-daily-life",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-daily-life-1",
+          "items" : [
+            {
+              "item" : "e-yaw-wo-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-dwo-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-dyaar-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-tswaar-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-pin-dza-las",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Eleven to fifteen"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-daily-life-2",
+          "items" : [
+            {
+              "item" : "e-shpaa-ras",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-o-wa-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-a-ta-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-no-las",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-shal",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Sixteen to twenty"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-daily-life-1",
+              "turns" : [
+                {
+                  "item" : "e-sta-num-tsa-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-zma-num-ahmad-day",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-daily-life-3",
+          "items" : [
+            {
+              "item" : "e-ka-lan",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ka-la-na",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-nan",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-sa-baa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-kaar",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-wakht",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Age and daily words"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-daily-life-2",
+              "turns" : [
+                {
+                  "item" : "e-o-mar-dey-tso-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-shal-ka-lan-yam",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-daily-life-3",
+              "turns" : [
+                {
+                  "item" : "e-o-mar-dey-tso-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-shal-ka-la-na-yam",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-daily-life-4",
+          "items" : [
+            {
+              "item" : "e-za-kaar-ka-wam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-nan-kaar-ka-wam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-sa-baa-kaar-ka-wam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-o-mar-dey-tso-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-shal-ka-lan-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-shal-ka-la-na-yam",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Work and age"
+        }
+      ],
+      "title" : "Numbers 11–20 and daily life",
+      "track" : "main"
+    },
+    {
+      "id" : "u-town",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-town-1",
+          "items" : [
+            {
+              "item" : "e-khaar",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-baa-zaar",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-doo-kaan",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-rogh-toon",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-cher-ta",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Places in town"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-town-2",
+          "items" : [
+            {
+              "item" : "e-tak-see",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-bas",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-sa-rak",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-chap",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-khee",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Transport and directions"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-town-3",
+          "items" : [
+            {
+              "item" : "e-dal-ta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hal-ta",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-baa-zaar-cher-ta-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-rogh-toon-cher-ta-day",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Asking where"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-town-1",
+              "turns" : [
+                {
+                  "item" : "e-baa-zaar-cher-ta-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-baa-zaar-dal-ta-day",
+                  "speaker" : "B"
+                }
+              ]
+            },
+            {
+              "id" : "d-town-2",
+              "turns" : [
+                {
+                  "item" : "e-rogh-toon-cher-ta-day",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-rogh-toon-hal-ta-day",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-town-4",
+          "items" : [
+            {
+              "item" : "e-baa-zaar-dal-ta-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-rogh-toon-hal-ta-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-baa-zaar-ta-dzam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-kor-ta-dzam",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Saying where and going places"
+        }
+      ],
+      "title" : "Around town",
+      "track" : "main"
+    },
+    {
+      "id" : "u-conversation",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-conversation-1",
+          "items" : [
+            {
+              "item" : "e-zha-ba",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ang-lee-see",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-kha-ba-rey",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Languages"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-conversation-1",
+              "turns" : [
+                {
+                  "item" : "e-za-na-po-he-gam",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-byaa-wa-waa-yaast",
+                  "speaker" : "A"
+                }
+              ]
+            }
+          ],
+          "id" : "l-conversation-2",
+          "items" : [
+            {
+              "item" : "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-na-po-he-gam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-byaa-wa-waa-yaast",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-wro-wro",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Understanding each other"
+        },
+        {
+          "dialogs" : [
+            {
+              "id" : "d-conversation-2",
+              "turns" : [
+                {
+                  "item" : "e-tsa-ghwaa-rey",
+                  "speaker" : "A"
+                },
+                {
+                  "item" : "e-za-kah-wa-ghwaa-ram",
+                  "speaker" : "B"
+                }
+              ]
+            }
+          ],
+          "id" : "l-conversation-3",
+          "items" : [
+            {
+              "item" : "e-wro-wro-kha-ba-rey-wa-kray",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-chaay-na-ghwaa-ram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-kah-wa-ghwaa-ram",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-sa-baa-baa-zaar-ta-dzam",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Putting sentences together"
+        }
+      ],
+      "title" : "Putting it together",
+      "track" : "main"
+    }
+  ],
+  "variant" : "af-kabul"
+}

@@ -645,8 +645,8 @@
   ],
   "lessons": [
     {
-      "id": "l-introductions-learn",
-      "title": "Introducing yourself",
+      "id": "l-introductions-learn-names",
+      "title": "I, you and names",
       "kind": "learn",
       "items": [
         {
@@ -668,7 +668,14 @@
         {
           "item": "e-num",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-introductions-learn-be",
+      "title": "To be",
+      "kind": "learn",
+      "items": [
         {
           "item": "e-yam",
           "role": "present"
@@ -692,8 +699,8 @@
       ]
     },
     {
-      "id": "l-introductions-phrases",
-      "title": "Introducing yourself",
+      "id": "l-introductions-phrases-name",
+      "title": "What's your name?",
       "kind": "phrases",
       "items": [
         {
@@ -707,7 +714,14 @@
         {
           "item": "e-staso-num-tsa-day",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-introductions-phrases-from",
+      "title": "Where are you from?",
+      "kind": "phrases",
+      "items": [
         {
           "item": "e-ta-da-kum-dzay-ye",
           "role": "present"
@@ -740,7 +754,7 @@
     },
     {
       "id": "l-introductions-1",
-      "title": "I, you and names",
+      "title": "Practice: I, you and names",
       "letters": [
         "e-letter-jim",
         "e-letter-che"
@@ -797,7 +811,7 @@
     },
     {
       "id": "l-introductions-2",
-      "title": "Where are you from?",
+      "title": "Practice: Where are you from?",
       "letters": [
         "e-letter-he",
         "e-letter-xe"
@@ -850,7 +864,7 @@
     },
     {
       "id": "l-introductions-3",
-      "title": "To be",
+      "title": "Practice: To be",
       "letters": [
         "e-letter-tse",
         "e-letter-dze"

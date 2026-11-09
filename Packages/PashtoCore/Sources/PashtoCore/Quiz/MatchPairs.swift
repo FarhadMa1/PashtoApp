@@ -274,6 +274,7 @@ private func draw<T>(
 
 private func formsConflict(_ lhs: ContentItem, _ rhs: ContentItem) -> Bool {
     if lhs.id == rhs.id { return true }
+    if YouAreForms.clash(lhs.id, rhs.id) { return true }
     if Normalization.nfc(lhs.pashto) == Normalization.nfc(rhs.pashto) { return true }
     if Normalization.comparisonKey(lhs.pronunciation) == Normalization.comparisonKey(rhs.pronunciation) {
         return true

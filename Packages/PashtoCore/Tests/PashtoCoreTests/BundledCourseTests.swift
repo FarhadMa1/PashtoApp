@@ -34,7 +34,7 @@ struct BundledCourseTests {
             releasedUnitIDs: course.releasedUnitIDs,
             using: &rng
         )
-        #expect(placement.unitIDs.map(\.rawValue) == ["u-greetings", "u-introductions", "u-family"])
+        #expect(placement.unitIDs.map(\.rawValue) == ["u-basics", "u-greetings", "u-introductions", "u-family"])
         #expect(!placement.unitIDs.contains(unitID("u-sounds")))
 
         let lessons = RootLessonSession.lessons(
@@ -100,7 +100,7 @@ struct BundledCourseTests {
 
     @Test func placementAndReleasedLessonsUseTheReleaseList() {
         let course = bundleWithAnUnreleasedUnit()
-        let released = approvedReleaseUnitIDs
+        let released = ["u-greetings", "u-introductions", "u-family"].map(unitID)
         let fromList = ReleasedCourse.limiting(course.bundle, to: released)
         #expect(fromList.units.map(\.id) == released)
         #expect(course.bundle.units.contains { $0.id == unitID("u-hidden") })
@@ -122,7 +122,7 @@ struct BundledCourseTests {
             releasedUnitIDs: course.bundle.units.map(\.id),
             using: &bundlePlacement
         )
-        #expect(fromWholeBundle.unitIDs.map(\.rawValue) == ["u-greetings", "u-hidden", "u-introductions"])
+        #expect(fromWholeBundle.unitIDs.map(\.rawValue) == ["u-greetings", "u-hidden", "u-introductions", "u-family"])
 
         let lessons = RootLessonSession.lessons(in: course.bundle, releasedUnitIDs: released)
         #expect(lessons.map(\.id) == [
@@ -233,6 +233,7 @@ struct BundledCourseTests {
 }
 
 private let approvedReleaseUnitIDs = [
+    "u-basics",
     "u-greetings",
     "u-introductions",
     "u-family",

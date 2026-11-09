@@ -44,7 +44,7 @@ public struct RootLessonSession: Equatable, Sendable {
     /// settings, so the home does not offer a quiz that does nothing.
     /// `l-sounds-1` is that case: every item is a `soundExample`, and a sound
     /// example is not introduced. Learn and phrases lessons stay on the list.
-    /// Their row title is the unit title.
+    /// The row title is the lesson title.
     public static func lessons(
         in bundle: ContentBundle,
         releasedUnitIDs: [UnitID],
@@ -66,11 +66,8 @@ public struct RootLessonSession: Equatable, Sendable {
                         showsPronunciation: showsPronunciation,
                         voiceOver: voiceOver
                     ) else { continue }
-                    lessons.append(ReleasedLesson(id: lesson.id, title: lesson.title, unitID: unit.id, kind: lesson.kind))
-                } else {
-                    let title = unit.title
-                    lessons.append(ReleasedLesson(id: lesson.id, title: title, unitID: unit.id, kind: lesson.kind))
                 }
+                lessons.append(ReleasedLesson(id: lesson.id, title: lesson.title, unitID: unit.id, kind: lesson.kind))
             }
         }
         return lessons

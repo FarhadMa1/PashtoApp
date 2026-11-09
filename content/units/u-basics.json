@@ -1,0 +1,455 @@
+{
+  "id": "u-basics",
+  "track": "main",
+  "title": "The basics",
+  "items": [
+    {
+      "id": "e-za-yam",
+      "kind": "phrase",
+      "pashto": "زه یم",
+      "translit": "zə yəm",
+      "pronunciation": "za yam",
+      "en": "I am",
+      "usage": "In Pashto, the verb comes last.",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "یم"
+      ],
+      "tokenPronunciations": [
+        "za",
+        "yam"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-ta-ye",
+      "kind": "phrase",
+      "pashto": "ته یې",
+      "translit": "tə ye",
+      "pronunciation": "ta ye",
+      "en": "you are (informal, to one person)",
+      "usage": "Use ta ye with friends and family, and TAA-so yaast to be polite or to talk to more than one person.",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "ته",
+        "یې"
+      ],
+      "tokenPronunciations": [
+        "ta",
+        "ye"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-taso-yast",
+      "kind": "phrase",
+      "pashto": "تاسو یاست",
+      "translit": "tā́so yāst",
+      "pronunciation": "TAA-so yaast",
+      "en": "you are (polite/plural)",
+      "usage": "Use ta ye with friends and family, and TAA-so yaast to be polite or to talk to more than one person.",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "تاسو",
+        "یاست"
+      ],
+      "tokenPronunciations": [
+        "TAA-so",
+        "yaast"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-hagha-day",
+      "kind": "phrase",
+      "pashto": "هغه دی",
+      "translit": "haɣá day",
+      "pronunciation": "ha-GHA day",
+      "en": "he is",
+      "usage": "Hagha means he, she and they. Only the verb shows which: day (he), da (she), dee (they).\nPashto has no word for \"it\". Say daa (this) with day or da, depending on the word.",
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": [
+        "هغه",
+        "دی"
+      ],
+      "tokenPronunciations": [
+        "ha-GHA",
+        "day"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-hagha-da",
+      "kind": "phrase",
+      "pashto": "هغه ده",
+      "translit": "haɣá da",
+      "pronunciation": "ha-GHA da",
+      "en": "she is",
+      "usage": "Hagha means he, she and they. Only the verb shows which: day (he), da (she), dee (they).\nPashto has no word for \"it\". Say daa (this) with day or da, depending on the word.",
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": [
+        "هغه",
+        "ده"
+      ],
+      "tokenPronunciations": [
+        "ha-GHA",
+        "da"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "kind": "phrase",
+      "usage": null,
+      "responseTo": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      },
+      "id": "e-mung-yu",
+      "pashto": "موږ یو",
+      "translit": "muǧ yu",
+      "pronunciation": "mung yoo",
+      "en": "we are",
+      "pronunciationNote": "ږ is pronounced g in the selected Kabul pronunciation; موږ is said mung. یو here means ‘are’, not ‘one’.",
+      "tokens": [
+        "موږ",
+        "یو"
+      ],
+      "tokenPronunciations": [
+        "mung",
+        "yoo"
+      ]
+    },
+    {
+      "kind": "phrase",
+      "usage": null,
+      "responseTo": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      },
+      "id": "e-hagha-dee",
+      "pashto": "هغه دي",
+      "translit": "haɣá di",
+      "pronunciation": "ha-GHA dee",
+      "en": "they are",
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "tokens": [
+        "هغه",
+        "دي"
+      ],
+      "tokenPronunciations": [
+        "ha-GHA",
+        "dee"
+      ]
+    },
+    {
+      "id": "e-za-na-yam",
+      "kind": "phrase",
+      "pashto": "زه نه یم",
+      "translit": "zə na yəm",
+      "pronunciation": "za na yam",
+      "en": "I am not",
+      "usage": "Put na right before the verb: za na yam.",
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "نه",
+        "یم"
+      ],
+      "tokenPronunciations": [
+        "za",
+        "na",
+        "yam"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-za-afghan-na-yam",
+      "kind": "phrase",
+      "pashto": "زه افغان نه یم",
+      "translit": "zə afɣā́n na yəm",
+      "pronunciation": "za af-GHAAN na yam",
+      "en": "I'm not Afghan",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": [
+        "زه",
+        "افغان",
+        "نه",
+        "یم"
+      ],
+      "tokenPronunciations": [
+        "za",
+        "af-GHAAN",
+        "na",
+        "yam"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-taso-xa-yast",
+      "kind": "phrase",
+      "pashto": "تاسو ښه یاست",
+      "translit": "tā́so x̌a yāst",
+      "pronunciation": "TAA-so kha yaast",
+      "en": "You are fine (polite)",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "تاسو",
+        "ښه",
+        "یاست"
+      ],
+      "tokenPronunciations": [
+        "TAA-so",
+        "kha",
+        "yaast"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    },
+    {
+      "id": "e-daa-khaar-day",
+      "kind": "phrase",
+      "pashto": "دا ښار دی",
+      "translit": "dā x̌ār day",
+      "pronunciation": "daa khaar day",
+      "en": "It is a city",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": [
+        "دا",
+        "ښار",
+        "دی"
+      ],
+      "tokenPronunciations": [
+        "daa",
+        "khaar",
+        "day"
+      ],
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-09",
+        "comment": "Bekreftet av Farhad 9. november 2026."
+      }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-basics-learn-1",
+      "title": "I am, you are, he/she is",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-za-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-ta-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-taso-yast",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-day",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-da",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-basics-learn-2",
+      "title": "We are, they are, I am not",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-mung-yu",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-dee",
+          "role": "present"
+        },
+        {
+          "item": "e-za-na-yam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-basics-phrases",
+      "title": "About me and others",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-za-xa-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-afghan-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-afghana-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-afghan-na-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-taso-xa-yast",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-xa-day",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-xa-da",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zma-wror-day",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-khaar-day",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-basics-1",
+      "title": "Practice: The basics",
+      "items": [
+        {
+          "item": "e-za-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ta-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-taso-yast",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagha-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagha-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mung-yu",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagha-dee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-na-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-afghan-na-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-taso-xa-yast",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-khaar-day",
+          "role": "introduce"
+        }
+      ]
+    }
+  ]
+}

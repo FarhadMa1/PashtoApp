@@ -41,10 +41,10 @@ struct PlayableCourseTests {
     @Test func releasedQuizzesPlacementAndSkipCardsLeaveLettersOut() throws {
         let course = try loadCourse()
         let released = course.releasedUnitIDs
-        #expect(released.map(\.rawValue) == ["u-greetings", "u-introductions", "u-family"])
+        #expect(released.map(\.rawValue) == ["u-basics", "u-greetings", "u-introductions", "u-family"])
         var rng = SplitMix64(seed: 4)
         let placement = PlacementTestBuilder.build(in: course.bundle, releasedUnitIDs: released, using: &rng)
-        #expect(placement.unitIDs.map(\.rawValue) == ["u-greetings", "u-introductions", "u-family"])
+        #expect(placement.unitIDs.map(\.rawValue) == ["u-basics", "u-greetings", "u-introductions", "u-family"])
         for unit in placement.units {
             #expect(unit.tasks.count == 5)
             #expect(unit.tasks.allSatisfy { !PlayableCourse.retiredQuizKinds.contains($0.kind) })
@@ -66,7 +66,7 @@ struct PlayableCourseTests {
         #expect(playableNewItemsShown(on: day, in: [letter, word], knownItemIDs: known) == 1)
 
         let lessons = RootLessonSession.lessons(in: course.bundle, releasedUnitIDs: released)
-        #expect(lessons.map(\.id.rawValue).first == "l-greetings-learn")
+        #expect(lessons.map(\.id.rawValue).first == "l-basics-learn-1")
         #expect(!lessons.contains { $0.id.rawValue == "l-sounds-1" })
         for lesson in lessons {
             for showsPronunciation in [true, false] {
