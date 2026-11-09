@@ -117,7 +117,8 @@ final class AppModel {
             in: course,
             releasedUnitIDs: releasedUnitIDs,
             finishedLessonIDs: finishedLessonIDs,
-            listedLessons: releasedLessons
+            listedLessons: releasedLessons,
+            showsPronunciation: snapshot?.settings.showTransliteration ?? UserSettings.initial.showTransliteration
         )
     }
 

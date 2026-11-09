@@ -59,6 +59,8 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
     public var practiceTotal: Int
     /// Lessons the home can open, in course order.
     public var lessons: [MainMenuLesson]
+    /// Pictured words under the lesson groups. Empty for every unit except Family.
+    public var wordList: [FamilyWordList.Row]
 
     public init(
         id: UnitID,
@@ -67,7 +69,8 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
         label: String,
         practiceCompleted: Int,
         practiceTotal: Int,
-        lessons: [MainMenuLesson]
+        lessons: [MainMenuLesson],
+        wordList: [FamilyWordList.Row] = []
     ) {
         self.id = id
         self.title = title
@@ -76,6 +79,7 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
         self.practiceCompleted = practiceCompleted
         self.practiceTotal = practiceTotal
         self.lessons = lessons
+        self.wordList = wordList
     }
 
     /// Completed practice lessons over the practice lessons in the unit. Empty is 0.
@@ -142,12 +146,19 @@ public struct MainMenu: Equatable, Sendable {
         in bundle: ContentBundle,
         releasedUnitIDs: [UnitID],
         finishedLessonIDs: Set<LessonID>,
-        listedLessons: [ReleasedLesson]
+        listedLessons: [ReleasedLesson],
+        showsPronunciation: Bool = true
     ) -> MainMenu {
         let released = Set(releasedUnitIDs)
         let units = bundle.units.filter { released.contains($0.id) }
         let categories = units.map { unit in
-            category(unit, finishedLessonIDs: finishedLessonIDs, listedLessons: listedLessons)
+            category(
+                unit,
+                in: bundle,
+                finishedLessonIDs: finishedLessonIDs,
+                listedLessons: listedLessons,
+                showsPronunciation: showsPronunciation
+            )
         }
         return MainMenu(
             categories: categories,
@@ -161,8 +172,10 @@ public struct MainMenu: Equatable, Sendable {
 
     private static func category(
         _ unit: CourseUnit,
+        in bundle: ContentBundle,
         finishedLessonIDs: Set<LessonID>,
-        listedLessons: [ReleasedLesson]
+        listedLessons: [ReleasedLesson],
+        showsPronunciation: Bool
     ) -> MainMenuCategory {
         let practice = practiceLessons(in: unit)
         let completed = practice.filter { finishedLessonIDs.contains($0.id) }.count
@@ -182,7 +195,12 @@ public struct MainMenu: Equatable, Sendable {
             label: entry?.english ?? unit.title,
             practiceCompleted: completed,
             practiceTotal: practice.count,
-            lessons: lessons
+            lessons: lessons,
+            wordList: FamilyWordList.rows(
+                for: unit.id,
+                in: bundle,
+                showsPronunciation: showsPronunciation
+            )
         )
     }
 

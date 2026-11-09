@@ -335,6 +335,9 @@ struct ContentView: View {
                 ForEach(categoryKinds, id: \.self) { kind in
                     categorySection(kind, in: category)
                 }
+                if !category.wordList.isEmpty {
+                    FamilyWordListView(rows: category.wordList)
+                }
             }
             .padding(.horizontal, 16)
             .padding(.top, 16)
@@ -556,6 +559,111 @@ struct ContentView: View {
             toGo: ApprovedCopy.toGo,
             goalReached: ApprovedCopy.goalReached
         )
+    }
+}
+
+/// Pictured words under the lesson groups. Display only: no tap, no quiz, no progress.
+///
+/// Light and dark use the same lapis colors as the rest of the page. At the
+/// largest type size the row stacks so the Pashto wraps instead of truncating.
+private struct FamilyWordListView: View {
+    var rows: [FamilyWordList.Row]
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+                FamilyWordRowView(row: row)
+                if index < rows.count - 1 {
+                    Rectangle()
+                        .fill(Lapis.muted.opacity(0.45))
+                        .frame(height: 1)
+                        .accessibilityHidden(true)
+                }
+            }
+        }
+    }
+}
+
+/// One pictured word. VoiceOver reads the English word and the pronunciation.
+///
+/// The picture's own label is the English word. The row is one element, so
+/// VoiceOver does not also read the Pashto. The row is not a button.
+private struct FamilyWordRowView: View {
+    var row: FamilyWordList.Row
+
+    @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 48
+
+    var body: some View {
+        ViewThatFits(in: .horizontal) {
+            sideBySide
+            stacked
+        }
+        .padding(.vertical, 8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: row.accessibilityLabel))
+        .accessibilityIdentifier(row.itemID.rawValue)
+    }
+
+    private var sideBySide: some View {
+        HStack(alignment: .center, spacing: 12) {
+            picture
+            words
+            Spacer(minLength: 12)
+            pashto
+        }
+    }
+
+    /// Used when the side-by-side row no longer fits. Pashto keeps the full width and wraps.
+    private var stacked: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .center, spacing: 12) {
+                picture
+                words
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            pashto
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private var picture: some View {
+        Image(row.assetName)
+            .resizable()
+            .scaledToFit()
+            .frame(width: tileSide, height: tileSide)
+            .clipShape(RoundedRectangle(cornerRadius: tileSide * 0.22, style: .continuous))
+            .accessibilityLabel(Text(verbatim: row.english))
+    }
+
+    private var words: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            if let pronunciation = row.pronunciation {
+                Text(verbatim: pronunciation)
+                    .font(.body.weight(.bold))
+                    .foregroundStyle(Lapis.primary)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .environment(\.layoutDirection, .leftToRight)
+            }
+            Text(verbatim: row.english)
+                .font(.subheadline)
+                .foregroundStyle(Lapis.secondaryText)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .environment(\.layoutDirection, .leftToRight)
+        }
+    }
+
+    /// Pashto stays right aligned. The system Arabic font is the one the quiz uses.
+    /// No line limit, so a long word wraps at the largest Dynamic Type size.
+    private var pashto: some View {
+        Text(verbatim: row.pashto)
+            .font(.body)
+            .foregroundStyle(Lapis.secondaryText)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .environment(\.layoutDirection, .rightToLeft)
+            .accessibilityHidden(true)
     }
 }
 
