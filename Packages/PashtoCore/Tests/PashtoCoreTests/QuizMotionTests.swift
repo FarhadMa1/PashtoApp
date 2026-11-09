@@ -17,6 +17,7 @@ struct QuizMotionTests {
             QuizMotion.pairFadeOut,
             QuizMotion.reduceMotionFade,
             QuizMotion.questionSpring,
+            QuizMotion.resultSheet,
         ]
         for duration in feedback {
             #expect(duration >= 0.15)
@@ -34,6 +35,7 @@ struct QuizMotionTests {
         #expect(QuizMotion.checkFade == 0.2)
         #expect(QuizMotion.questionSpring == 0.28)
         #expect(QuizMotion.questionSpringDamping == 0.86)
+        #expect(QuizMotion.resultSheet == 0.25)
     }
 
     @Test func nextQuestionSlidesFromTheRightAndDoesNotBlockInput() {

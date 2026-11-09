@@ -137,6 +137,142 @@ struct SaffronButtonStyle: ButtonStyle {
     }
 }
 
+/// Design B colours for the quiz. Saffron is the streak mark only, never quiz text.
+enum QuizChrome {
+    static let page = Lapis.background
+    static let ink = Lapis.text
+    static let surface = dynamic(light: QuizDesignPalette.surfaceLight, dark: QuizDesignPalette.surfaceDark)
+    static let pashto = dynamic(light: QuizDesignPalette.pashtoLight, dark: QuizDesignPalette.pashtoDark)
+    static let primary = dynamic(light: QuizDesignPalette.pronunciationLight, dark: QuizDesignPalette.pronunciationDark)
+    static let tint = dynamic(light: QuizDesignPalette.tintLight, dark: QuizDesignPalette.tintDark)
+    static let badge = Lapis.badge
+    static let cream = Lapis.badgeInk
+    static let muted = Lapis.muted
+    static let barTrack = color(QuizDesignPalette.barTrack)
+    static let barFill = color(QuizDesignPalette.barFill)
+    static let buttonLip = color(QuizDesignPalette.buttonLipLight)
+    /// Decorative streak mark. It is not a text colour.
+    static let saffron = color(QuizDesignPalette.saffronAccent)
+
+    private static func color(_ hex: UInt32) -> Color {
+        Color(uiColor: ui(hex))
+    }
+
+    private static func dynamic(light: UInt32, dark: UInt32) -> Color {
+        Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark ? ui(dark) : ui(light)
+        })
+    }
+
+    private static func ui(_ hex: UInt32) -> UIColor {
+        UIColor(
+            red: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1
+        )
+    }
+}
+
+/// Full-width answer face. The lower edge is the tactile lip from Design B.
+struct QuizTactilePlate: View {
+    var fill: Color
+    var edge: Color
+    var lipColor: Color
+    var pressed = false
+    var lineWidth: CGFloat = 2
+    var corner: CGFloat = 17
+
+    private var lip: CGFloat { lineWidth >= 3 ? 4 : 3 }
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: corner, style: .continuous)
+                .fill(lipColor)
+                .offset(y: lip)
+            RoundedRectangle(cornerRadius: corner, style: .continuous)
+                .fill(fill)
+                .overlay {
+                    RoundedRectangle(cornerRadius: corner, style: .continuous)
+                        .strokeBorder(edge, lineWidth: lineWidth)
+                }
+                .offset(y: pressed ? 2 : 0)
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+/// Answer, word, and pair buttons. The label stays at least 44 pt tall.
+struct QuizTactileButtonStyle: ButtonStyle {
+    var fill: Color
+    var edge: Color
+    var lipColor: Color
+    var expands = true
+    var alignment: Alignment = .leading
+    var lineWidth: CGFloat = 2
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .frame(
+                maxWidth: expands ? .infinity : nil,
+                minHeight: 44,
+                alignment: alignment
+            )
+            .background {
+                QuizTactilePlate(
+                    fill: fill,
+                    edge: edge,
+                    lipColor: lipColor,
+                    pressed: configuration.isPressed,
+                    lineWidth: lineWidth
+                )
+            }
+            .padding(.bottom, 3)
+    }
+}
+
+/// Quiz Continue. Cream on the badge. Saffron is not the button.
+struct QuizContinueButtonStyle: ButtonStyle {
+    var enabled: Bool
+    @Environment(\.colorScheme) private var colorScheme
+
+    func makeBody(configuration: Configuration) -> some View {
+        let fill = enabled ? QuizChrome.badge : QuizChrome.surface
+        let ink = enabled ? QuizChrome.cream : QuizChrome.pashto
+        let edge: Color
+        let lip: Color
+        if enabled, colorScheme == .dark {
+            edge = QuizChrome.primary
+            lip = QuizChrome.primary
+        } else if enabled {
+            edge = QuizChrome.badge
+            lip = QuizChrome.buttonLip
+        } else {
+            edge = QuizChrome.muted
+            lip = QuizChrome.muted
+        }
+        return configuration.label
+            .font(.body.weight(.heavy))
+            .foregroundStyle(ink)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .background {
+                QuizTactilePlate(
+                    fill: fill,
+                    edge: edge,
+                    lipColor: lip,
+                    pressed: configuration.isPressed && enabled
+                )
+            }
+            .padding(.bottom, 4)
+            .opacity(configuration.isPressed && enabled ? 0.92 : 1)
+    }
+}
+
 /// Two rounded squares, one turned 45 degrees. The approved badge.
 struct Octagram: InsettableShape {
     var insetAmount: CGFloat = 0
