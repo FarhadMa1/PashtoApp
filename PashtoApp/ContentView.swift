@@ -6,8 +6,9 @@ import SwiftUI
 /// `reviewStarted` is true after Welcome back's Start review. A lesson quiz
 /// is shown when the caller has already built one. The session carries the
 /// pronunciation setting it started with. Units that are not in
-/// `release-units.json` are not part of that session. Tapping a released
-/// lesson starts one. The last answer saves the lesson and shows the
+/// `release-units.json` are not part of that session. The home lists those
+/// units in course order. A row opens the unit, and a lesson there starts
+/// one. The last answer saves the lesson and shows the
 /// celebration. Continue only closes that celebration. Leaving early returns
 /// here without it.
 /// An empty release list keeps the placeholder.
@@ -17,6 +18,8 @@ struct ContentView: View {
     var quizItems: [ContentItem] = []
     /// Lessons from the release list. Empty keeps the placeholder below.
     var lessons: [ReleasedLesson] = []
+    /// Released units in course order, with practice progress. Empty follows `lessons`.
+    var menu: MainMenu = MainMenu(categories: [], continueTarget: nil)
     var streakCount: Int = 0
     var goalDone: Int = 0
     var goalTotal: Int = 10
@@ -41,11 +44,10 @@ struct ContentView: View {
     var studyStartPractice: () -> Void = {}
     var studySkip: () -> Void = {}
     var closeStudy: () -> Void = {}
-    /// Learn cards from the released basics unit. The sheet only reads this list.
-    var basicsCards: [StudyCard] = []
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var celebration: LessonSession?
     /// From-values first, then the live counts. Consuming the cue does not change these.
     @State private var playback = HomeMotionPlayback()
@@ -53,7 +55,8 @@ struct ContentView: View {
     @State private var goalHaptic = 0
     /// The freeze star card. Cleared when it finishes, when it is skipped, and when the home goes away.
     @State private var freezeCelebration = false
-    @State private var basicsOpen = false
+    /// The open category. Kept here so a lesson does not forget which unit was open.
+    @State private var categoryPath: [UnitID] = []
 
     var body: some View {
         if let celebration {
@@ -100,14 +103,19 @@ struct ContentView: View {
     }
 
     private var lessonList: some View {
-        VStack(spacing: 0) {
-            homeHeader
-            lessonScroll
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Lapis.background.ignoresSafeArea())
-        .sheet(isPresented: $basicsOpen) {
-            BasicsSheet(cards: basicsCards)
+        NavigationStack(path: $categoryPath) {
+            VStack(spacing: 0) {
+                homeHeader
+                lessonScroll
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Lapis.background.ignoresSafeArea())
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(for: UnitID.self) { unitID in
+                if let category = menu.categories.first(where: { $0.id == unitID }) {
+                    categoryPage(category)
+                }
+            }
         }
         .sensoryFeedback(.success, trigger: goalHaptic)
         .onDisappear { freezeCelebration = false }
@@ -116,96 +124,351 @@ struct ContentView: View {
         }
     }
 
-    /// Stays on screen while the path scrolls, including through the middle of a unit.
+    /// Pashto, the day streak, and the daily goal. The goal sentence is spoken, not a second line.
     private var homeHeader: some View {
-        HStack(alignment: .center, spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Pashto")
-                .font(.title3.weight(.bold))
-                .foregroundStyle(Lapis.badgeInk)
+                .font(.title2.weight(.bold))
+                .foregroundStyle(Lapis.primary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
                 .accessibilityAddTraits(.isHeader)
-            Spacer(minLength: 8)
-            Button {
-                basicsOpen = true
-            } label: {
-                Text(verbatim: ApprovedBasicsCopy.title)
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(Lapis.badgeInk)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                    .frame(minHeight: 44)
-                    .overlay {
-                        Capsule(style: .continuous)
-                            .strokeBorder(Lapis.badgeInk, lineWidth: 1.5)
-                    }
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("basics-button")
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 16)
-        .frame(maxWidth: .infinity)
-        .background {
-            UnevenRoundedRectangle(
-                cornerRadii: RectangleCornerRadii(
-                    topLeading: 0,
-                    bottomLeading: 26,
-                    bottomTrailing: 26,
-                    topTrailing: 0
-                ),
-                style: .continuous
-            )
-            .fill(Lapis.badge)
-            .ignoresSafeArea(edges: .top)
-        }
-    }
-
-    private var lessonScroll: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                HStack(alignment: .center, spacing: 16) {
+            HStack(alignment: .center, spacing: 12) {
+                StreakMark(
+                    shown: streakShown,
+                    count: streakCount,
+                    pulse: streakPulse,
+                    animates: animatesHomeMotion,
+                    pendingEvents: pendingStreakEvents,
+                    claimEvents: claimStreakEvents,
+                    onFreezeEarned: { freezeCelebration = true }
+                )
+                Spacer(minLength: 8)
+                HStack(spacing: 8) {
                     DailyGoalRing(
                         shown: goalShown,
                         total: goalTotal,
                         animates: animatesHomeMotion
                     )
-                    Spacer(minLength: 8)
-                    StreakMark(
-                        shown: streakShown,
-                        count: streakCount,
-                        pulse: streakPulse,
-                        animates: animatesHomeMotion,
-                        pendingEvents: pendingStreakEvents,
-                        claimEvents: claimStreakEvents,
-                        onFreezeEarned: { freezeCelebration = true }
-                    )
+                    Text(verbatim: ApprovedCopy.dailyGoal)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Lapis.text)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                        .multilineTextAlignment(.leading)
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(verbatim: dailyGoalSpeech(done: goalDone)))
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(QuizChrome.surface.ignoresSafeArea(edges: .top))
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(Lapis.muted.opacity(0.45))
+                .frame(height: 1)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private var lessonScroll: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
                 if freezeCelebration {
                     FreezeEarnedCelebration(count: streakCount, onDismiss: { freezeCelebration = false })
                 }
-                Text(verbatim: dailyGoalSpeech(done: goalShown))
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Lapis.text)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(Text(verbatim: dailyGoalSpeech(done: goalDone)))
                 if let dailyWord {
                     DailyWordCard(word: dailyWord)
                 }
-                CoursePathList(
-                    lessons: lessons,
-                    finished: finishedLessonIDs,
-                    waitingLessonID: pathWaitingID,
-                    animates: animatesHomeMotion,
-                    startLesson: startLesson
-                )
+                if let target = menu.continueTarget {
+                    continueStrip(target)
+                }
+                ForEach(menu.categories) { category in
+                    categoryRow(category)
+                }
             }
-            .padding(20)
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
+            .padding(.bottom, 24)
             .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private func continueStrip(_ target: MainMenuContinue) -> some View {
+        Button {
+            startLesson(target.lessonID)
+        } label: {
+            HStack(alignment: .center, spacing: 12) {
+                Image(systemName: "play.fill")
+                    .font(.body.weight(.bold))
+                    .foregroundStyle(Lapis.primary)
+                    .frame(width: 40, height: 40)
+                    .background {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(QuizChrome.tint)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .strokeBorder(Lapis.primary, lineWidth: 1)
+                            }
+                    }
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(verbatim: String(localized: "quiz.continue.button"))
+                        .textCase(.uppercase)
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(Lapis.secondaryText)
+                        .lineLimit(1)
+                    Text(verbatim: continueTitle(target))
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(Lapis.text)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Image(systemName: "arrow.right")
+                    .font(.body.weight(.bold))
+                    .foregroundStyle(Lapis.primary)
+                    .accessibilityHidden(true)
+            }
+        }
+        .buttonStyle(SurfaceCardButtonStyle())
+        .accessibilityIdentifier("continue-lesson")
+    }
+
+    private func categoryRow(_ category: MainMenuCategory) -> some View {
+        let colors = Lapis.MenuCard.resolve(category.id)
+        let stacks = dynamicTypeSize >= .xxxLarge
+        return Button {
+            categoryPath.append(category.id)
+        } label: {
+            Group {
+                if stacks {
+                    VStack(alignment: .leading, spacing: 8) {
+                        categoryLabel(category, hue: colors.hue)
+                        practiceRing(category, colors: colors)
+                    }
+                } else {
+                    HStack(alignment: .center, spacing: 12) {
+                        categoryLabel(category, hue: colors.hue)
+                        practiceRing(category, colors: colors)
+                    }
+                }
+            }
+        }
+        .buttonStyle(MenuHueButtonStyle(fill: colors.fill, hue: colors.hue))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: menuWord(category)))
+        .accessibilityValue(Text(category.fraction, format: .percent.precision(.fractionLength(0))))
+        .accessibilityAddTraits(.isButton)
+        .accessibilityIdentifier(category.id.rawValue)
+    }
+
+    private func categoryLabel(_ category: MainMenuCategory, hue: Color) -> some View {
+        Text(verbatim: menuWord(category))
+            .textCase(.uppercase)
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(hue)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .allowsTightening(true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func continueTitle(_ target: MainMenuContinue) -> String {
+        let label: String
+        if let category = menu.categories.first(where: { $0.id == target.unitID }) {
+            label = menuWord(category)
+        } else {
+            label = target.unitLabel
+        }
+        return "\(label) · \(target.lessonTitle)"
+    }
+
+    /// The stored word. Uppercase is only the drawing, so VoiceOver reads the word.
+    private func menuWord(_ category: MainMenuCategory) -> String {
+        switch category.catalogKey {
+        case "menu.unit.basics": String(localized: "menu.unit.basics")
+        case "menu.unit.greetings": String(localized: "menu.unit.greetings")
+        case "menu.unit.introduction": String(localized: "menu.unit.introduction")
+        case "menu.unit.family": String(localized: "menu.unit.family")
+        default: category.label
+        }
+    }
+
+    private func practiceRing(_ category: MainMenuCategory, colors: Lapis.MenuCard) -> some View {
+        let fraction = category.fraction
+        let complete = category.isComplete
+        return ZStack {
+            Circle()
+                .stroke(colors.track, lineWidth: 4.5)
+            Circle()
+                .trim(from: 0, to: fraction)
+                .stroke(
+                    complete ? Lapis.menuCheck : colors.hue,
+                    style: StrokeStyle(lineWidth: 4.5, lineCap: .round)
+                )
+                .rotationEffect(.degrees(-90))
+            if complete {
+                Image(systemName: "checkmark")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Lapis.menuCheck)
+            } else {
+                Text(verbatim: "\(category.practiceCompleted)/\(category.practiceTotal)")
+                    .font(.caption2.weight(.heavy).monospacedDigit())
+                    .foregroundStyle(colors.hue)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+        }
+        .frame(width: 48, height: 48)
+        .accessibilityHidden(true)
+    }
+
+    private func categoryPage(_ category: MainMenuCategory) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                ForEach(categoryKinds, id: \.self) { kind in
+                    categorySection(kind, in: category)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 24)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .background(Lapis.background.ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Lapis.badge, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VStack(spacing: 2) {
+                    Text(verbatim: category.title)
+                        .font(.headline.weight(.bold))
+                        .foregroundStyle(Lapis.badgeInk)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                        .multilineTextAlignment(.center)
+                    if category.practiceTotal > 0 {
+                        Text(verbatim: "\(category.practiceCompleted)/\(category.practiceTotal)")
+                            .font(.caption.weight(.semibold).monospacedDigit())
+                            .foregroundStyle(Lapis.badgeInk)
+                            .accessibilityLabel(Text(category.fraction, format: .percent.precision(.fractionLength(0))))
+                    }
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isHeader)
+            }
+        }
+    }
+
+    private var categoryKinds: [LessonKind] { [.learn, .phrases, .practice] }
+
+    @ViewBuilder
+    private func categorySection(_ kind: LessonKind, in category: MainMenuCategory) -> some View {
+        let rows = category.lessons.filter { $0.kind == kind }
+        if !rows.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                sectionHeading(kind, category: category)
+                ForEach(rows) { lesson in
+                    categoryLesson(lesson)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func sectionHeading(_ kind: LessonKind, category: MainMenuCategory) -> some View {
+        if kind == .practice, category.practiceTotal > 0 {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(verbatim: sectionTitle(kind))
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(Lapis.secondaryText)
+                Text(verbatim: "\(category.practiceCompleted)/\(category.practiceTotal)")
+                    .font(.subheadline.weight(.semibold).monospacedDigit())
+                    .foregroundStyle(Lapis.secondaryText)
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityAddTraits(.isHeader)
+            .accessibilityLabel(Text(verbatim: sectionTitle(kind)))
+            .accessibilityValue(Text(category.fraction, format: .percent.precision(.fractionLength(0))))
+        } else {
+            Text(verbatim: sectionTitle(kind))
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(Lapis.secondaryText)
+                .accessibilityAddTraits(.isHeader)
+        }
+    }
+
+    private func categoryLesson(_ lesson: MainMenuLesson) -> some View {
+        let mark = lessonMark(lesson.id)
+        return Button {
+            startLesson(lesson.id)
+        } label: {
+            HStack(alignment: .center, spacing: 12) {
+                Text(verbatim: lesson.title)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Lapis.text)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if lesson.kind == .practice, lesson.isComplete {
+                    Image(systemName: "checkmark")
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(Lapis.menuCheck)
+                        .accessibilityHidden(true)
+                }
+                if mark == .now {
+                    Text(verbatim: ApprovedCopy.now)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Lapis.text)
+                } else if mark == .locked {
+                    Text(verbatim: ApprovedCopy.locked)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Lapis.secondaryText)
+                }
+                Image(systemName: "chevron.forward")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Lapis.primary)
+                    .accessibilityHidden(true)
+            }
+        }
+        .buttonStyle(SurfaceCardButtonStyle(minHeight: 72))
+        .accessibilityLabel(Text(verbatim: lessonAccessibility(lesson, mark: mark)))
+        .accessibilityIdentifier(lesson.id.rawValue)
+    }
+
+    private func lessonMark(_ id: LessonID) -> CoursePathCopy.Mark {
+        let order = menu.categories.flatMap { $0.lessons.map(\.id) }
+        let skipping = Set(menu.categories.flatMap { category in
+            category.lessons.filter { $0.kind != .practice }.map(\.id)
+        })
+        return CoursePathCopy.mark(
+            id: id,
+            order: order,
+            finished: finishedLessonIDs,
+            locked: [],
+            skipping: skipping
+        )
+    }
+
+    private func lessonAccessibility(_ lesson: MainMenuLesson, mark: CoursePathCopy.Mark) -> String {
+        CoursePathCopy.accessibilityLabel(
+            title: lesson.title,
+            mark: mark,
+            now: ApprovedCopy.now,
+            locked: ApprovedCopy.locked
+        )
+    }
+
+    private func sectionTitle(_ kind: LessonKind) -> String {
+        switch kind {
+        case .learn: ApprovedCopy.learn
+        case .phrases: ApprovedCopy.phrases
+        case .practice: ApprovedCopy.practice
         }
     }
 
@@ -221,15 +484,6 @@ struct ContentView: View {
     private var goalShown: Int {
         playback.displayedGoal(
             live: goalDone,
-            pending: pendingHomeMotion,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver
-        )
-    }
-
-    /// The finished lesson whose path segment has not filled yet.
-    private var pathWaitingID: LessonID? {
-        playback.waitingLessonID(
             pending: pendingHomeMotion,
             reduceMotion: reduceMotion,
             voiceOver: voiceOver
@@ -750,207 +1004,6 @@ private struct StreakStarPulse: ViewModifier {
                 CubicKeyframe(1.0, duration: CelebrationMotion.streakPulse * 0.40)
             }
         }
-    }
-}
-
-/// Lessons in course order, with a fill between a finished lesson and the next.
-///
-/// Every row stays tappable. The next lesson pulses, or shows a still ring when Reduce Motion is on.
-private struct CoursePathList: View {
-    var lessons: [ReleasedLesson]
-    var finished: Set<LessonID>
-    /// The lesson whose connector stays empty until the fill animation runs.
-    var waitingLessonID: LessonID?
-    /// Lessons that cannot be opened. The home list passes none.
-    var locked: Set<LessonID> = []
-    var animates: Bool
-    var startLesson: (LessonID) -> Void
-
-    private var order: [LessonID] { lessons.map(\.id) }
-
-    private var skipping: Set<LessonID> {
-        Set(lessons.filter { $0.kind != .practice }.map(\.id))
-    }
-
-    private var nextID: LessonID? {
-        CoursePathMotion.next(in: order, finished: finished, skipping: skipping)
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach(Array(lessons.enumerated()), id: \.element.id) { index, lesson in
-                if showsSection(at: index) {
-                    Text(verbatim: sectionTitle(lesson.kind))
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(Lapis.secondaryText)
-                        .padding(.top, index == 0 ? 0 : 16)
-                        .padding(.bottom, 6)
-                        .accessibilityAddTraits(.isHeader)
-                }
-                Button {
-                    startLesson(lesson.id)
-                } label: {
-                    HStack(alignment: .top, spacing: 12) {
-                        VStack(spacing: 0) {
-                            pathNode(lesson)
-                            if index < lessons.count - 1 {
-                                pathConnector(filled: segmentFilled(lesson.id))
-                            }
-                        }
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(verbatim: lesson.title)
-                                .font(.title3.weight(.semibold))
-                                .foregroundStyle(Lapis.text)
-                                .multilineTextAlignment(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            if mark(lesson.id) == .now {
-                                Text(verbatim: ApprovedCopy.now)
-                                    .font(.subheadline.weight(.bold))
-                                    .foregroundStyle(Lapis.text)
-                            } else if mark(lesson.id) == .locked {
-                                Text(verbatim: ApprovedCopy.locked)
-                                    .font(.subheadline.weight(.bold))
-                                    .foregroundStyle(Lapis.secondaryText)
-                            }
-                        }
-                        .padding(.top, 10)
-                    }
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier(lesson.id.rawValue)
-                .accessibilityLabel(Text(verbatim: pathLabel(lesson)))
-            }
-        }
-    }
-
-    private func showsSection(at index: Int) -> Bool {
-        guard lessons.indices.contains(index) else { return false }
-        if index == 0 { return true }
-        let previous = lessons[index - 1]
-        let lesson = lessons[index]
-        return previous.kind != lesson.kind || previous.unitID != lesson.unitID
-    }
-
-    private func sectionTitle(_ kind: LessonKind) -> String {
-        switch kind {
-        case .learn: ApprovedCopy.learn
-        case .phrases: ApprovedCopy.phrases
-        case .practice: ApprovedCopy.practice
-        }
-    }
-
-    private func mark(_ id: LessonID) -> CoursePathCopy.Mark {
-        CoursePathCopy.mark(
-            id: id,
-            order: order,
-            finished: finished,
-            locked: locked,
-            skipping: skipping
-        )
-    }
-
-    private func pathLabel(_ lesson: ReleasedLesson) -> String {
-        CoursePathCopy.accessibilityLabel(
-            title: lesson.title,
-            mark: mark(lesson.id),
-            now: ApprovedCopy.now,
-            locked: ApprovedCopy.locked
-        )
-    }
-
-    private func pathNode(_ lesson: ReleasedLesson) -> some View {
-        ZStack {
-            PathNodeHalo(active: lesson.id == nextID)
-            nodeShape(lesson.id)
-            nodeMark(lesson.id)
-        }
-        .frame(width: 44, height: 44)
-    }
-
-    @ViewBuilder
-    private func nodeMark(_ id: LessonID) -> some View {
-        if finished.contains(id) {
-            Image(systemName: "checkmark")
-                .font(.caption.weight(.bold))
-                .foregroundStyle(Lapis.saffronInk)
-                .accessibilityHidden(true)
-        }
-    }
-
-    @ViewBuilder
-    private func nodeShape(_ id: LessonID) -> some View {
-        if finished.contains(id) {
-            Octagram()
-                .fill(Lapis.ring)
-                .frame(width: 36, height: 36)
-        } else if id == nextID {
-            Octagram()
-                .fill(Lapis.badge)
-                .frame(width: 36, height: 36)
-        } else {
-            Octagram()
-                .strokeBorder(Lapis.muted, lineWidth: 2)
-                .frame(width: 36, height: 36)
-        }
-    }
-
-    private func pathConnector(filled: Bool) -> some View {
-        ZStack(alignment: .top) {
-            Capsule()
-                .fill(Lapis.muted)
-            Capsule()
-                .fill(Lapis.ring)
-                .frame(height: filled ? 28 : 0)
-                .animation(animates ? Motion.pathFill : nil, value: filled)
-        }
-        .frame(width: 4, height: 28)
-        .accessibilityHidden(true)
-    }
-
-    private func segmentFilled(_ id: LessonID) -> Bool {
-        guard finished.contains(id) else { return false }
-        return id != waitingLessonID
-    }
-}
-
-/// The 1.6 s pulse on the next lesson. Reduce Motion draws a still ring instead.
-///
-/// Turning Reduce Motion off starts the pulse again. A pulse that already
-/// finished at opacity 0 would otherwise stay invisible.
-private struct PathNodeHalo: View {
-    var active: Bool
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var pulse = false
-
-    var body: some View {
-        let style = CoursePathMotion.NodeStyle.style(reduceMotion: reduceMotion)
-        ZStack {
-            if active, style == .pulse {
-                Circle()
-                    .stroke(Lapis.badge, lineWidth: 3)
-                    .scaleEffect(pulse ? 1.45 : 0.9)
-                    .opacity(pulse ? 0 : 0.55)
-            } else if active, style == .ring {
-                Circle()
-                    .strokeBorder(Lapis.badge, lineWidth: 3)
-                    .padding(-3)
-            }
-        }
-        .frame(width: 36, height: 36)
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
-        .onAppear(perform: restartPulse)
-        .onChange(of: reduceMotion) { _, _ in restartPulse() }
-        .onChange(of: active) { _, _ in restartPulse() }
-    }
-
-    private func restartPulse() {
-        let pulses = active && CoursePathMotion.NodeStyle.style(reduceMotion: reduceMotion) == .pulse
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) { pulse = false }
-        guard pulses else { return }
-        withAnimation(Motion.pathPulse) { pulse = true }
     }
 }
 

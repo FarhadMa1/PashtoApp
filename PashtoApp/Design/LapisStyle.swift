@@ -61,6 +61,47 @@ enum Lapis {
     static let girih = color(0xFAF7F0).opacity(0.13)
     static let heroShadow = color(0x1E3A8A).opacity(0.35)
 
+    /// Completed practice ring and check. Light `#166534` clears 4.5:1 on each card fill.
+    static let menuCheck = dynamic(light: 0x166534, dark: 0x4ADE80)
+    /// Continue strip lip. Light `#07122F` on white. Dark uses the primary hue.
+    static let continueLip = dynamic(light: 0x07122F, dark: 0x93B4F5)
+
+    /// Fill, hue, and ring track for one home card. Hue is the border, lip, text, and ring.
+    struct MenuCard {
+        var fill: Color
+        var hue: Color
+        var track: Color
+
+        static func resolve(_ unitID: UnitID) -> MenuCard {
+            switch unitID.rawValue {
+            case "u-greetings":
+                MenuCard(
+                    fill: dynamic(light: 0xFBE3BC, dark: 0x3A2A12),
+                    hue: dynamic(light: 0x8A5A12, dark: 0xF2B85B),
+                    track: dynamic(light: 0xE0C080, dark: 0x5C4A28)
+                )
+            case "u-introductions":
+                MenuCard(
+                    fill: dynamic(light: 0xCDEDE7, dark: 0x12352F),
+                    hue: dynamic(light: 0x0F5E55, dark: 0x5EEAD4),
+                    track: dynamic(light: 0x7DB5AB, dark: 0x2A4A44)
+                )
+            case "u-family":
+                MenuCard(
+                    fill: dynamic(light: 0xF6D6DC, dark: 0x3A1A24),
+                    hue: dynamic(light: 0x8E2F45, dark: 0xFDA4AF),
+                    track: dynamic(light: 0xD4A0A8, dark: 0x5C3340)
+                )
+            default:
+                MenuCard(
+                    fill: dynamic(light: 0xDCE5FB, dark: 0x1B2A4A),
+                    hue: dynamic(light: 0x1E3A8A, dark: 0x93B4F5),
+                    track: dynamic(light: 0xA8B8E0, dark: 0x334155)
+                )
+            }
+        }
+    }
+
     static var heroGradient: LinearGradient {
         LinearGradient(
             stops: [
@@ -230,6 +271,55 @@ struct QuizTactileButtonStyle: ButtonStyle {
                 )
             }
             .padding(.bottom, 3)
+    }
+}
+
+/// Home category card. The lip and the border are the card's own hue.
+struct MenuHueButtonStyle: ButtonStyle {
+    var fill: Color
+    var hue: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 18)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity, minHeight: 88, alignment: .leading)
+            .contentShape(Rectangle())
+            .background {
+                QuizTactilePlate(
+                    fill: fill,
+                    edge: hue,
+                    lipColor: hue,
+                    pressed: configuration.isPressed,
+                    lineWidth: 2,
+                    corner: 18
+                )
+            }
+            .padding(.bottom, 5)
+    }
+}
+
+/// Continue strip and a category lesson. White face, lapis edge, dark lip.
+struct SurfaceCardButtonStyle: ButtonStyle {
+    var minHeight: CGFloat = 58
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, minHeight: max(minHeight, 44), alignment: .leading)
+            .contentShape(Rectangle())
+            .background {
+                QuizTactilePlate(
+                    fill: QuizChrome.surface,
+                    edge: Lapis.primary,
+                    lipColor: Lapis.continueLip,
+                    pressed: configuration.isPressed,
+                    lineWidth: 2,
+                    corner: 16
+                )
+            }
+            .padding(.bottom, 5)
     }
 }
 
