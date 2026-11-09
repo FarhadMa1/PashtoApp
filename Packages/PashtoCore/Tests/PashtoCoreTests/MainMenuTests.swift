@@ -232,6 +232,36 @@ struct MainMenuTests {
         let sheet = repositoryRoot().appendingPathComponent("PashtoApp/Quiz/BasicsSheet.swift")
         #expect(!FileManager.default.fileExists(atPath: sheet.path))
     }
+
+    @Test func eachMenuUnitHasItsOwnPalette() throws {
+        let source = try String(
+            contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/Design/LapisStyle.swift"),
+            encoding: .utf8
+        )
+        let parsed = try menuPalettes(in: source)
+        let expected: [String: MenuPalette] = [
+            "u-basics": MenuPalette(
+                fillLight: 0xDCE5FB, fillDark: 0x1B2A4A, hueLight: 0x1E3A8A, hueDark: 0x93B4F5, trackLight: 0xA8B8E0, trackDark: 0x334155
+            ),
+            "u-greetings": MenuPalette(
+                fillLight: 0xFBE3BC, fillDark: 0x3A2A12, hueLight: 0x8A5A12, hueDark: 0xF2B85B, trackLight: 0xE0C080, trackDark: 0x5C4A28
+            ),
+            "u-introductions": MenuPalette(
+                fillLight: 0xCDEDE7, fillDark: 0x12352F, hueLight: 0x0F5E55, hueDark: 0x5EEAD4, trackLight: 0x7DB5AB, trackDark: 0x2A4A44
+            ),
+            "u-family": MenuPalette(
+                fillLight: 0xF6D6DC, fillDark: 0x3A1A24, hueLight: 0x8E2F45, hueDark: 0xFDA4AF, trackLight: 0xD4A0A8, trackDark: 0x5C3340
+            ),
+            "u-travel": MenuPalette(
+                fillLight: 0xE6DDF7, fillDark: 0x2A1E42, hueLight: 0x5B2E91, hueDark: 0xC4B5FD, trackLight: 0xC1B1DF, trackDark: 0x4A3A6B
+            ),
+            "u-time": MenuPalette(
+                fillLight: 0xDDEBCF, fillDark: 0x1F3315, hueLight: 0x3F5F1E, hueDark: 0xBEF264, trackLight: 0xB3C6A2, trackDark: 0x3A5229
+            ),
+        ]
+        #expect(parsed == expected)
+        #expect(Set(parsed.values).count == 6)
+    }
 }
 
 private let menuCatalogKeysBeforeThisChange = [
@@ -348,4 +378,70 @@ private func releasedRows(_ unit: CourseUnit) -> [ReleasedLesson] {
 
 private enum MainMenuTestError: Error {
     case missing
+}
+
+private struct MenuPalette: Equatable, Hashable {
+    var fillLight: UInt32
+    var fillDark: UInt32
+    var hueLight: UInt32
+    var hueDark: UInt32
+    var trackLight: UInt32
+    var trackDark: UInt32
+}
+
+private func menuPalettes(in source: String) throws -> [String: MenuPalette] {
+    let resolve = try #require(source.range(of: "static func resolve(_ unitID: UnitID) -> MenuCard {"))
+    let body = source[resolve.upperBound...]
+    let names = ["u-greetings", "u-introductions", "u-family", "u-time", "u-travel", "default"]
+    var blocks: [String: String] = [:]
+    for (index, name) in names.enumerated() {
+        let marker = name == "default" ? "default:" : "case \"\(name)\":"
+        guard let start = body.range(of: marker) else { continue }
+        let rest = body[start.upperBound...]
+        let end = names[(index + 1)...].compactMap { next -> String.Index? in
+            let token = next == "default" ? "default:" : "case \"\(next)\":"
+            return rest.range(of: token)?.lowerBound
+        }.min() ?? rest.endIndex
+        blocks[name] = String(rest[..<end])
+    }
+    var parsed: [String: MenuPalette] = [:]
+    for (name, block) in blocks {
+        let card: String
+        if let literal = block.range(of: "MenuCard(") {
+            card = String(block[literal.lowerBound...])
+        } else {
+            let token = block.split(whereSeparator: { $0.isWhitespace || $0 == "\n" }).first.map(String.init) ?? ""
+            let declaration = "static let \(token) = MenuCard("
+            guard let found = source.range(of: declaration) else { continue }
+            card = String(source[found.upperBound...])
+        }
+        let pairs = dynamicPairs(in: card).prefix(3)
+        guard pairs.count == 3 else { continue }
+        let key = name == "default" ? "u-basics" : name
+        parsed[key] = MenuPalette(
+            fillLight: pairs[0].0, fillDark: pairs[0].1,
+            hueLight: pairs[1].0, hueDark: pairs[1].1,
+            trackLight: pairs[2].0, trackDark: pairs[2].1
+        )
+    }
+    return parsed
+}
+
+private func dynamicPairs(in source: String) -> [(UInt32, UInt32)] {
+    var pairs: [(UInt32, UInt32)] = []
+    var rest = Substring(source)
+    let light = "light: 0x"
+    let dark = "dark: 0x"
+    while let lightRange = rest.range(of: light) {
+        rest = rest[lightRange.upperBound...]
+        let lightHex = rest.prefix { $0.isHexDigit }
+        guard let darkRange = rest.range(of: dark) else { break }
+        rest = rest[darkRange.upperBound...]
+        let darkHex = rest.prefix { $0.isHexDigit }
+        if let lightValue = UInt32(lightHex, radix: 16), let darkValue = UInt32(darkHex, radix: 16) {
+            pairs.append((lightValue, darkValue))
+        }
+        if pairs.count == 3 { break }
+    }
+    return pairs
 }

@@ -72,13 +72,13 @@ enum Lapis {
         var hue: Color
         var track: Color
 
-        /// Basics lapis card. Travel reuses it until Travel has its own palette.
+        /// Basics lapis card.
         static let lapis = MenuCard(
             fill: dynamic(light: 0xDCE5FB, dark: 0x1B2A4A),
             hue: dynamic(light: 0x1E3A8A, dark: 0x93B4F5),
             track: dynamic(light: 0xA8B8E0, dark: 0x334155)
         )
-        /// Greetings saffron card. Time reuses it until Time has its own palette.
+        /// Greetings saffron card.
         static let saffron = MenuCard(
             fill: dynamic(light: 0xFBE3BC, dark: 0x3A2A12),
             hue: dynamic(light: 0x8A5A12, dark: 0xF2B85B),
@@ -102,9 +102,18 @@ enum Lapis {
                     track: dynamic(light: 0xD4A0A8, dark: 0x5C3340)
                 )
             case "u-time":
-                saffron
+                // Light track is a quarter of the way from the fill toward the ink.
+                MenuCard(
+                    fill: dynamic(light: 0xDDEBCF, dark: 0x1F3315),
+                    hue: dynamic(light: 0x3F5F1E, dark: 0xBEF264),
+                    track: dynamic(light: 0xB3C6A2, dark: 0x3A5229)
+                )
             case "u-travel":
-                lapis
+                MenuCard(
+                    fill: dynamic(light: 0xE6DDF7, dark: 0x2A1E42),
+                    hue: dynamic(light: 0x5B2E91, dark: 0xC4B5FD),
+                    track: dynamic(light: 0xC1B1DF, dark: 0x4A3A6B)
+                )
             default:
                 lapis
             }
