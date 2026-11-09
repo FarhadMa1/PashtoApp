@@ -81,7 +81,7 @@ struct MainMenuTests {
             "Introducing yourself",
             "Family",
         ])
-        #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-1"))
+        #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
         #expect(fresh.continueTarget?.unitLabel == "Basics")
 
         let nonPractice = Set(listed.filter { $0.kind != .practice }.map(\.id))
@@ -104,7 +104,7 @@ struct MainMenuTests {
         let greetingsPractice = menu.categories[1].lessons.filter { $0.kind == .practice }
         #expect(greetingsPractice.map(\.isComplete) == [true, true, false])
         #expect(menu.categories[1].lessons.filter { $0.kind != .practice }.allSatisfy { !$0.isComplete })
-        #expect(menu.continueTarget?.lessonID == lessonID("l-basics-1"))
+        #expect(menu.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
 
         let basicsDone = finished.union([lessonID("l-basics-1")])
         let afterBasics = MainMenu.make(
@@ -138,6 +138,59 @@ struct MainMenuTests {
         #expect(familyOnly.categories[0].practiceCompleted == 1)
         #expect(familyOnly.categories[0].practiceTotal == 3)
         #expect(familyOnly.continueTarget?.lessonID == lessonID("l-family-2"))
+    }
+
+    @Test func continueFollowsTheFirstUnitThatStillHasPractice() throws {
+        let course = try loadReleasedCourse()
+        let listed = RootLessonSession.lessons(
+            in: course.bundle,
+            releasedUnitIDs: course.releasedUnitIDs
+        )
+        func menu(_ finished: Set<LessonID>) -> MainMenu {
+            MainMenu.make(
+                in: course.bundle,
+                releasedUnitIDs: course.releasedUnitIDs,
+                finishedLessonIDs: finished,
+                listedLessons: listed
+            )
+        }
+
+        let fresh = menu([])
+        #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
+        #expect(fresh.continueTarget?.unitID == unitID("u-basics"))
+        #expect(fresh.continueTarget?.unitLabel == "Basics")
+
+        let partial = menu([lessonID("l-basics-1"), lessonID("l-greetings-1")])
+        #expect(partial.continueTarget?.lessonID == lessonID("l-greetings-2"))
+        #expect(partial.continueTarget?.unitID == unitID("u-greetings"))
+        #expect(partial.continueTarget?.unitLabel == "Greetings")
+
+        let nextUnit = menu([lessonID("l-basics-1")])
+        #expect(nextUnit.continueTarget?.lessonID == lessonID("l-greetings-learn"))
+        #expect(nextUnit.continueTarget?.unitID == unitID("u-greetings"))
+        #expect(nextUnit.continueTarget?.unitLabel == "Greetings")
+
+        let allPractice = Set(listed.filter { $0.kind == .practice }.map(\.id))
+        #expect(menu(allPractice).continueTarget == nil)
+
+        let phrasesThenPractice = unit("u-numbers", title: "Numbers 1–10", lessons: [
+            lesson("l-numbers-phrases", "Counts", .phrases),
+            lesson("l-numbers-1", "One to five", .practice),
+        ])
+        let noLearn = MainMenu.make(
+            in: ContentBundle(
+                contentVersion: "test",
+                variant: ContentBundle.kabulVariant,
+                romanization: Romanization(table: [], difficultCharacters: [], unstressedWords: []),
+                items: [],
+                units: [phrasesThenPractice],
+                nonDistractorGroups: []
+            ),
+            releasedUnitIDs: [phrasesThenPractice.id],
+            finishedLessonIDs: [],
+            listedLessons: releasedRows(phrasesThenPractice)
+        )
+        #expect(noLearn.continueTarget?.lessonID == lessonID("l-numbers-phrases"))
     }
 
     @Test func catalogAddsOnlyTheFourMenuLabelsAndDropsTheBasicsButton() throws {

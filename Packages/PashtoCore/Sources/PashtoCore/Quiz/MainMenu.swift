@@ -123,8 +123,10 @@ public struct MainMenuContinue: Equatable, Sendable {
 /// Membership comes from `releasedUnitIDs` (the ids in `release-units.json`).
 /// Order is the course order of those units. A unit that is only in the bundle
 /// is left out. Practice progress counts practice lessons in the unit.
-/// Continue uses the same next-lesson rule as the course path: the first
-/// unfinished lesson in course order, skipping learn and phrases.
+/// Continue uses the first of these units that still has Practice left.
+/// None finished there opens its first Learn lesson, or its first lesson
+/// when it has none. Some finished opens the next unfinished Practice
+/// lesson. When every unit's Practice is done, Continue is absent.
 public struct MainMenu: Equatable, Sendable {
     public var categories: [MainMenuCategory]
     public var continueTarget: MainMenuContinue?
@@ -147,12 +149,12 @@ public struct MainMenu: Equatable, Sendable {
         }
         return MainMenu(
             categories: categories,
-            continueTarget: continueTarget(
-                listedLessons: listedLessons.filter { released.contains($0.unitID) },
-                finishedLessonIDs: finishedLessonIDs,
-                titles: Dictionary(uniqueKeysWithValues: units.map { ($0.id, $0.title) })
-            )
+            continueTarget: continueTarget(units: units, finishedLessonIDs: finishedLessonIDs)
         )
+    }
+
+    private static func practiceLessons(in unit: CourseUnit) -> [Lesson] {
+        unit.lessons.filter { $0.kind == .practice }
     }
 
     private static func category(
@@ -160,7 +162,7 @@ public struct MainMenu: Equatable, Sendable {
         finishedLessonIDs: Set<LessonID>,
         listedLessons: [ReleasedLesson]
     ) -> MainMenuCategory {
-        let practice = unit.lessons.filter { $0.kind == .practice }
+        let practice = practiceLessons(in: unit)
         let completed = practice.filter { finishedLessonIDs.contains($0.id) }.count
         let entry = MainMenuLabels.entry(for: unit.id)
         let lessons = listedLessons.filter { $0.unitID == unit.id }.map { lesson in
@@ -182,25 +184,31 @@ public struct MainMenu: Equatable, Sendable {
         )
     }
 
+    /// The first released unit that still has Practice left, then the lesson Continue opens.
     private static func continueTarget(
-        listedLessons: [ReleasedLesson],
-        finishedLessonIDs: Set<LessonID>,
-        titles: [UnitID: String]
+        units: [CourseUnit],
+        finishedLessonIDs: Set<LessonID>
     ) -> MainMenuContinue? {
-        let skipping = Set(listedLessons.filter { $0.kind != .practice }.map(\.id))
-        guard let next = CoursePathMotion.next(
-            in: listedLessons.map(\.id),
-            finished: finishedLessonIDs,
-            skipping: skipping
-        ), let lesson = listedLessons.first(where: { $0.id == next }) else {
+        guard let unit = units.first(where: {
+            let practice = practiceLessons(in: $0)
+            return !practice.isEmpty && practice.contains { !finishedLessonIDs.contains($0.id) }
+        }) else {
             return nil
         }
-        let title = titles[lesson.unitID] ?? ""
+        let practice = practiceLessons(in: unit)
+        let completed = practice.filter { finishedLessonIDs.contains($0.id) }.count
+        let chosen: Lesson?
+        if completed == 0 {
+            chosen = unit.lessons.first { $0.kind == .learn } ?? unit.lessons.first
+        } else {
+            chosen = practice.first { !finishedLessonIDs.contains($0.id) }
+        }
+        guard let chosen else { return nil }
         return MainMenuContinue(
-            lessonID: lesson.id,
-            lessonTitle: lesson.title,
-            unitID: lesson.unitID,
-            unitLabel: MainMenuLabels.word(for: lesson.unitID, title: title)
+            lessonID: chosen.id,
+            lessonTitle: chosen.title,
+            unitID: unit.id,
+            unitLabel: MainMenuLabels.word(for: unit.id, title: unit.title)
         )
     }
 }
