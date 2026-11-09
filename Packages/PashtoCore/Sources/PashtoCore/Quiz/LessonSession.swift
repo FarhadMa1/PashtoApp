@@ -220,6 +220,13 @@ public enum LessonSessionBuilder {
         } else {
             course = bundle
         }
+        if let found = StudyCourse.lesson(lessonID, in: course), !found.lesson.countsForProgress {
+            return LessonSession(
+                lessonID: lessonID,
+                showsPronunciation: showsPronunciation,
+                tasks: []
+            )
+        }
         var seen = seenLessonIDs
         if !seen.contains(lessonID) {
             seen.append(lessonID)

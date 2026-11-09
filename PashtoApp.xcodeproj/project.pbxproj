@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0BA7E5FCB0CDADC718983062 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */; };
+		102C4C95B75514AFA77EE9C8 /* StudyCardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */; };
 		1B85723CDA5A6E0699CC804F /* content.json in Resources */ = {isa = PBXBuildFile; fileRef = 2E7E47B640D712A33D52EC82 /* content.json */; };
 		21A05073FF4D4CB0BA403D07 /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87592241A3F002CDC42374F0 /* Motion.swift */; };
 		27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */; };
@@ -42,6 +43,7 @@
 		652503DE42EB750727E88CEF /* release-units.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "release-units.json"; sourceTree = "<group>"; };
 		67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStoreLocation.swift; sourceTree = "<group>"; };
 		6791E1EE79678E1A2816B03F /* LapisStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapisStyle.swift; sourceTree = "<group>"; };
+		6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCardScreen.swift; sourceTree = "<group>"; };
 		76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8118EC685984C6F8EEC84F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		87592241A3F002CDC42374F0 /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */,
 				51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */,
 				DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */,
+				6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */,
 			);
 			path = Quiz;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */,
 				980EAFAB2A22F95D11E40DB6 /* RootView.swift in Sources */,
 				C7FB99C8D9388789E64DC142 /* StorageErrorScreen.swift in Sources */,
+				102C4C95B75514AFA77EE9C8 /* StudyCardScreen.swift in Sources */,
 				7C3CF5EEC47EF612EE538B95 /* UpdateNeededScreen.swift in Sources */,
 				FB3AF14F0E0EB18EDCB270C8 /* WelcomeBackScreen.swift in Sources */,
 			);

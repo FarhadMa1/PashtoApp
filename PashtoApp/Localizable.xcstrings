@@ -493,6 +493,90 @@
         }
       }
     },
+    "module.section.learn" : {
+      "comment" : "Course path section. Approved name for the card lessons that come before phrases.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn"
+          }
+        }
+      }
+    },
+    "module.section.phrases" : {
+      "comment" : "Course path section and phrases card heading. Not a category name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phrases"
+          }
+        }
+      }
+    },
+    "module.section.practice" : {
+      "comment" : "Course path section for the quiz lessons.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice"
+          }
+        }
+      }
+    },
+    "study.newWords" : {
+      "comment" : "Learn card heading.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New words"
+          }
+        }
+      }
+    },
+    "study.next" : {
+      "comment" : "Moves to the next learn or phrases card.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "study.startPractice" : {
+      "comment" : "Last phrases card. Opens the unit's first practice lesson.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start practice"
+          }
+        }
+      }
+    },
+    "study.skipToPractice" : {
+      "comment" : "Leaves the cards and opens the unit's first practice lesson.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip to practice"
+          }
+        }
+      }
+    },
     "path.locked" : {
       "comment" : "Course path. A lesson the caller has marked locked. Not used for a finished lesson, and not quiz Correct.",
       "extractionState" : "manual",

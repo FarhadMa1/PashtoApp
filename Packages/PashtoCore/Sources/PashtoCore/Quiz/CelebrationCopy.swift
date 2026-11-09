@@ -197,10 +197,11 @@ public enum CoursePathCopy {
         id: LessonID,
         order: [LessonID],
         finished: Set<LessonID>,
-        locked: Set<LessonID>
+        locked: Set<LessonID>,
+        skipping: Set<LessonID> = []
     ) -> Mark {
         if finished.contains(id) { return .plain }
-        if CoursePathMotion.next(in: order, finished: finished) == id { return .now }
+        if CoursePathMotion.next(in: order, finished: finished, skipping: skipping) == id { return .now }
         if locked.contains(id) { return .locked }
         return .plain
     }

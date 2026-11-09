@@ -57,12 +57,25 @@ struct RootView: View {
                 pendingStreakEvents: model.pendingStreakEvents,
                 claimStreakEvents: { model.claimStreakEvents($0) },
                 startLesson: { lesson in
-                    Task { await model.startLesson(lesson, voiceOver: voiceOverEnabled) }
+                    Task { await model.openHomeLesson(lesson, voiceOver: voiceOverEnabled) }
                 },
                 endSession: { model.endLesson() },
                 answerSession: { model.saveAnswer($0) },
                 finishSession: { model.finishLesson($0) },
-                dailyWord: model.dailyWord
+                dailyWord: model.dailyWord,
+                study: model.studyDeck,
+                studyNext: { model.studyNext() },
+                studyShowMeaning: { model.studyShowMeaning() },
+                studyOpenNextLesson: {
+                    Task { await model.studyOpenNextLesson(voiceOver: voiceOverEnabled) }
+                },
+                studyStartPractice: {
+                    Task { await model.studyStartPractice(voiceOver: voiceOverEnabled) }
+                },
+                studySkip: {
+                    Task { await model.studySkip(voiceOver: voiceOverEnabled) }
+                },
+                closeStudy: { model.closeStudy() }
             )
         }
     }

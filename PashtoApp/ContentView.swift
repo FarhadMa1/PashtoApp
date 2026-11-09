@@ -32,6 +32,15 @@ struct ContentView: View {
     var finishSession: (LessonSession) -> Void = { _ in }
     /// Learned word for the local date. Nil omits the card. There is no empty-state line.
     var dailyWord: DailyWord? = nil
+    /// Learn or phrases cards. Nil keeps the quiz or the home. Closing it does not end a quiz.
+    var study: StudyDeck? = nil
+    var studyNext: () -> StudyStep = { .ignored }
+    var studyShowMeaning: () -> StudyStep = { .ignored }
+    /// Last learn card. Opens the next lesson. The label stays Next.
+    var studyOpenNextLesson: () -> Void = {}
+    var studyStartPractice: () -> Void = {}
+    var studySkip: () -> Void = {}
+    var closeStudy: () -> Void = {}
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
@@ -48,6 +57,17 @@ struct ContentView: View {
             LessonFinishedView(session: celebration) {
                 self.celebration = nil
             }
+            .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
+        } else if let study {
+            StudyCardScreen(
+                deck: study,
+                onNext: studyNext,
+                onShowMeaning: studyShowMeaning,
+                onOpenNextLesson: studyOpenNextLesson,
+                onStartPractice: studyStartPractice,
+                onSkip: studySkip,
+                onBack: closeStudy
+            )
             .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         } else if let quiz, !quiz.tasks.isEmpty {
             quizSession(quiz)
@@ -708,13 +728,25 @@ private struct CoursePathList: View {
 
     private var order: [LessonID] { lessons.map(\.id) }
 
+    private var skipping: Set<LessonID> {
+        Set(lessons.filter { $0.kind != .practice }.map(\.id))
+    }
+
     private var nextID: LessonID? {
-        CoursePathMotion.next(in: order, finished: finished)
+        CoursePathMotion.next(in: order, finished: finished, skipping: skipping)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(lessons.enumerated()), id: \.element.id) { index, lesson in
+                if showsSection(at: index) {
+                    Text(verbatim: sectionTitle(lesson.kind))
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Lapis.secondaryText)
+                        .padding(.top, index == 0 ? 0 : 16)
+                        .padding(.bottom, 6)
+                        .accessibilityAddTraits(.isHeader)
+                }
                 Button {
                     startLesson(lesson.id)
                 } label: {
@@ -751,8 +783,30 @@ private struct CoursePathList: View {
         }
     }
 
+    private func showsSection(at index: Int) -> Bool {
+        guard lessons.indices.contains(index) else { return false }
+        if index == 0 { return true }
+        let previous = lessons[index - 1]
+        let lesson = lessons[index]
+        return previous.kind != lesson.kind || previous.unitID != lesson.unitID
+    }
+
+    private func sectionTitle(_ kind: LessonKind) -> String {
+        switch kind {
+        case .learn: ApprovedCopy.learn
+        case .phrases: ApprovedCopy.phrases
+        case .practice: ApprovedCopy.practice
+        }
+    }
+
     private func mark(_ id: LessonID) -> CoursePathCopy.Mark {
-        CoursePathCopy.mark(id: id, order: order, finished: finished, locked: locked)
+        CoursePathCopy.mark(
+            id: id,
+            order: order,
+            finished: finished,
+            locked: locked,
+            skipping: skipping
+        )
     }
 
     private func pathLabel(_ lesson: ReleasedLesson) -> String {
@@ -1022,6 +1076,9 @@ private enum ApprovedCopy {
     static var wordOther: String { String(localized: "celebration.word.other") }
     static var now: String { String(localized: "path.now") }
     static var locked: String { String(localized: "path.locked") }
+    static var learn: String { String(localized: "module.section.learn") }
+    static var phrases: String { String(localized: "module.section.phrases") }
+    static var practice: String { String(localized: "module.section.practice") }
 }
 
 #Preview {

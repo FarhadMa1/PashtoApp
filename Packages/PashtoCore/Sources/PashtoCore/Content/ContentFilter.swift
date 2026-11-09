@@ -44,7 +44,8 @@ public enum ContentFilter {
             title: lesson.title,
             items: lesson.items.filter { !hidden.contains($0.item) },
             letters: lesson.letters.filter { !hidden.contains($0) },
-            dialogs: dialogs
+            dialogs: dialogs,
+            kind: lesson.kind
         )
     }
 }

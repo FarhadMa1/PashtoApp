@@ -789,12 +789,18 @@ struct LessonSessionTests {
         let lessons = bundle.units.flatMap(\.lessons)
         #expect(lessons.map(\.id.rawValue) == [
             "l-sounds-1",
+            "l-greetings-learn",
+            "l-greetings-phrases",
             "l-greetings-1",
             "l-greetings-2",
             "l-greetings-3",
+            "l-introductions-learn",
+            "l-introductions-phrases",
             "l-introductions-1",
             "l-introductions-2",
             "l-introductions-3",
+            "l-family-learn",
+            "l-family-phrases",
             "l-family-1",
             "l-family-2",
             "l-family-3",

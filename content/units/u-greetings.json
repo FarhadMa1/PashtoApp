@@ -548,6 +548,96 @@
   ],
   "lessons": [
     {
+      "id": "l-greetings-learn",
+      "title": "Greetings and politeness",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-xa",
+          "role": "present"
+        },
+        {
+          "item": "e-manana",
+          "role": "present"
+        },
+        {
+          "item": "e-ho",
+          "role": "present"
+        },
+        {
+          "item": "e-na",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-greetings-phrases",
+      "title": "Greetings and politeness",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-salam",
+          "role": "present"
+        },
+        {
+          "item": "e-assalamu-alaykum",
+          "role": "present"
+        },
+        {
+          "item": "e-walaykum-salam",
+          "role": "present"
+        },
+        {
+          "item": "e-stare-ma-she",
+          "role": "present"
+        },
+        {
+          "item": "e-xwar-ma-she",
+          "role": "present"
+        },
+        {
+          "item": "e-xa-raghlast",
+          "role": "present"
+        },
+        {
+          "item": "e-tsanga-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-taso-tsanga-yast",
+          "role": "present"
+        },
+        {
+          "item": "e-za-xa-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-dera-manana",
+          "role": "present"
+        },
+        {
+          "item": "e-dera-xa",
+          "role": "present"
+        },
+        {
+          "item": "e-baxana-ghwaram",
+          "role": "present"
+        },
+        {
+          "item": "e-mehrabani-wakray",
+          "role": "present"
+        },
+        {
+          "item": "e-xoday-paman",
+          "role": "present"
+        },
+        {
+          "item": "e-pa-maxa-de-xa",
+          "role": "present"
+        }
+      ]
+    },
+    {
       "id": "l-greetings-1",
       "title": "Saying hello",
       "letters": [

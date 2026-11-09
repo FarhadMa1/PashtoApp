@@ -79,6 +79,9 @@ public final class OpenLesson {
         on today: LocalDay,
         using rng: inout some RandomNumberGenerator
     ) {
+        if let found = StudyCourse.lesson(lessonID, in: bundle), !found.lesson.countsForProgress {
+            return
+        }
         if let pending = lastAnswerSnapshot,
            unsavedAnswers,
            pending.lessonID == lessonID,

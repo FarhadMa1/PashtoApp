@@ -3,11 +3,13 @@ public struct ReleasedLesson: Hashable, Sendable, Identifiable {
     public let id: LessonID
     public let title: String
     public let unitID: UnitID
+    public let kind: LessonKind
 
-    public init(id: LessonID, title: String, unitID: UnitID) {
+    public init(id: LessonID, title: String, unitID: UnitID, kind: LessonKind = .practice) {
         self.id = id
         self.title = title
         self.unitID = unitID
+        self.kind = kind
     }
 }
 
@@ -34,14 +36,15 @@ public struct RootLessonSession: Equatable, Sendable {
         return !session.tasks.isEmpty
     }
 
-    /// Lessons in released units that can open a quiz, in course order.
+    /// Lessons in released units, in course order.
     ///
     /// A unit that is not listed is skipped. An empty list returns nothing,
-    /// which is the home's existing empty state. A lesson is also skipped when
-    /// `LessonSessionBuilder` would give it no questions under these settings,
-    /// so the home does not offer a button that does nothing. `l-sounds-1` is
-    /// that case: every item is a `soundExample`, and a sound example is not
-    /// introduced.
+    /// which is the home's existing empty state. A practice lesson is skipped
+    /// when `LessonSessionBuilder` would give it no questions under these
+    /// settings, so the home does not offer a quiz that does nothing.
+    /// `l-sounds-1` is that case: every item is a `soundExample`, and a sound
+    /// example is not introduced. Learn and phrases lessons stay on the list.
+    /// Their row title is the unit title.
     public static func lessons(
         in bundle: ContentBundle,
         releasedUnitIDs: [UnitID],
@@ -54,15 +57,20 @@ public struct RootLessonSession: Equatable, Sendable {
         var lessons: [ReleasedLesson] = []
         for unit in course.units where listed.contains(unit.id) {
             for lesson in unit.lessons {
-                guard hasQuestions(
-                    lesson.id,
-                    in: bundle,
-                    seenLessonIDs: seenLessonIDs,
-                    releasedUnitIDs: releasedUnitIDs,
-                    showsPronunciation: showsPronunciation,
-                    voiceOver: voiceOver
-                ) else { continue }
-                lessons.append(ReleasedLesson(id: lesson.id, title: lesson.title, unitID: unit.id))
+                if lesson.countsForProgress {
+                    guard hasQuestions(
+                        lesson.id,
+                        in: bundle,
+                        seenLessonIDs: seenLessonIDs,
+                        releasedUnitIDs: releasedUnitIDs,
+                        showsPronunciation: showsPronunciation,
+                        voiceOver: voiceOver
+                    ) else { continue }
+                    lessons.append(ReleasedLesson(id: lesson.id, title: lesson.title, unitID: unit.id, kind: lesson.kind))
+                } else {
+                    let title = unit.title
+                    lessons.append(ReleasedLesson(id: lesson.id, title: title, unitID: unit.id, kind: lesson.kind))
+                }
             }
         }
         return lessons

@@ -57,6 +57,11 @@ final class AppModel {
     private var home = ReleasedLessonList()
     /// The lesson on screen. Its session id is what a finish is allowed to close.
     private var openLesson = OpenLesson()
+    /// Learn or phrases cards. Not written to the store. Closing it leaves any quiz.
+    private(set) var studyDeck: StudyDeck?
+    /// Bumps when the deck is replaced so a waiting settle cannot unlock the new one early.
+    @ObservationIgnored
+    private var studySettleToken = UUID()
     private let appStoreID: String
     private var storeURL: URL?
     private let clock: DayClock<DateProviderBox>
@@ -331,6 +336,109 @@ final class AppModel {
     func voiceOverChanged(to enabled: Bool) {
         home.setVoiceOver(enabled)
         publishLessons()
+    }
+
+    /// Opens a card lesson or a quiz from a home row.
+    ///
+    /// Learn and phrases stay in memory. They do not load or save progress, and
+    /// they do not replace a quiz that is already open.
+    func openHomeLesson(_ lessonID: LessonID, voiceOver: Bool) async {
+        guard phase == .ready, let course else { return }
+        if let found = StudyCourse.lesson(lessonID, in: course), !found.lesson.countsForProgress {
+            guard let deck = StudyCourse.deck(for: lessonID, in: course) else { return }
+            replaceStudy(deck)
+            return
+        }
+        replaceStudy(nil)
+        await startLesson(lessonID, voiceOver: voiceOver)
+    }
+
+    /// One card forward. A second tap before the first settles is ignored.
+    func studyNext() -> StudyStep {
+        guard var deck = studyDeck else { return .ignored }
+        let step = deck.next()
+        studyDeck = deck
+        if step == .advanced {
+            scheduleStudySettle()
+        }
+        return step
+    }
+
+    /// Reveals the English on a phrases card. A second tap does not reveal it again.
+    func studyShowMeaning() -> StudyStep {
+        guard var deck = studyDeck else { return .ignored }
+        let step = deck.showMeaning()
+        studyDeck = deck
+        if step == .revealedMeaning {
+            scheduleStudySettle()
+        }
+        return step
+    }
+
+    /// Last learn card. The button still reads Next. Opens the next lesson.
+    func studyOpenNextLesson(voiceOver: Bool) async {
+        guard let course, var deck = studyDeck else { return }
+        let target = StudyCourse.nextLesson(after: deck.lessonID, in: course)
+        let step = deck.openNextLesson(target)
+        studyDeck = deck
+        guard case .open(let lessonID) = step else { return }
+        await openStudyTarget(lessonID, voiceOver: voiceOver)
+    }
+
+    /// Last phrases card. Opens the unit's first practice lesson.
+    func studyStartPractice(voiceOver: Bool) async {
+        guard let course, var deck = studyDeck else { return }
+        let target = StudyCourse.firstPracticeLesson(for: deck.lessonID, in: course)
+        let step = deck.startPractice(opening: target)
+        studyDeck = deck
+        guard case .open(let lessonID) = step else { return }
+        await openStudyTarget(lessonID, voiceOver: voiceOver)
+    }
+
+    /// Opens the unit's first practice lesson.
+    func studySkip(voiceOver: Bool) async {
+        guard let course, var deck = studyDeck else { return }
+        let target = StudyCourse.firstPracticeLesson(for: deck.lessonID, in: course)
+        let step = deck.skipToPractice(target)
+        studyDeck = deck
+        guard case .open(let lessonID) = step else { return }
+        await openStudyTarget(lessonID, voiceOver: voiceOver)
+    }
+
+    /// Leaves the cards. A quiz that was already open stays open.
+    func closeStudy() {
+        replaceStudy(nil)
+    }
+
+    /// Opens the lesson a card button named. A card lesson replaces the deck.
+    /// A practice lesson uses the quiz opener and does not write the cards.
+    private func openStudyTarget(_ lessonID: LessonID, voiceOver: Bool) async {
+        guard let course, let found = StudyCourse.lesson(lessonID, in: course) else { return }
+        if !found.lesson.countsForProgress {
+            guard var deck = StudyCourse.deck(for: lessonID, in: course) else { return }
+            deck.hold()
+            replaceStudy(deck)
+            scheduleStudySettle()
+            return
+        }
+        replaceStudy(nil)
+        await startLesson(lessonID, voiceOver: voiceOver)
+    }
+
+    private func replaceStudy(_ deck: StudyDeck?) {
+        studySettleToken = UUID()
+        studyDeck = deck
+    }
+
+    private func scheduleStudySettle() {
+        let token = UUID()
+        studySettleToken = token
+        Task {
+            try? await Task.sleep(nanoseconds: 250_000_000)
+            guard studySettleToken == token, var deck = studyDeck else { return }
+            deck.settle()
+            studyDeck = deck
+        }
     }
 
     /// Opens a quiz for one released lesson. An unlisted lesson does not start.

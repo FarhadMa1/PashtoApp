@@ -53,7 +53,7 @@ public func placementCommit(
     for score in skipped {
         guard let unit = playable.units.first(where: { $0.id == score.unitID }) else { continue }
         let percent = scorePercent(correct: score.correct, questions: score.questions)
-        for lesson in unit.lessons where knownLessons.insert(lesson.id).inserted {
+        for lesson in unit.lessons where lesson.countsForProgress && knownLessons.insert(lesson.id).inserted {
             lessons.append(LessonProgress(
                 lessonID: lesson.id,
                 source: .placement,

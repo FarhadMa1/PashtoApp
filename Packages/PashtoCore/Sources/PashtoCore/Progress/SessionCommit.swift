@@ -103,6 +103,7 @@ public func sessionCommit(
     lessonProgress existingProgress: LessonProgress?,
     streak state: StreakState
 ) -> SessionCommit? {
+    guard lesson.countsForProgress else { return nil }
     guard active.kind == .lesson, active.lessonID == lesson.id else { return nil }
     guard let session = active.lesson, session.isComplete, session.lessonID == lesson.id else { return nil }
 

@@ -645,6 +645,100 @@
   ],
   "lessons": [
     {
+      "id": "l-introductions-learn",
+      "title": "Introducing yourself",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-za",
+          "role": "present"
+        },
+        {
+          "item": "e-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-taso",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha",
+          "role": "present"
+        },
+        {
+          "item": "e-num",
+          "role": "present"
+        },
+        {
+          "item": "e-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-day",
+          "role": "present"
+        },
+        {
+          "item": "e-da",
+          "role": "present"
+        },
+        {
+          "item": "e-yast",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-introductions-phrases",
+      "title": "Introducing yourself",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-zma-num-ahmad-day",
+          "role": "present"
+        },
+        {
+          "item": "e-sta-num-tsa-day",
+          "role": "present"
+        },
+        {
+          "item": "e-staso-num-tsa-day",
+          "role": "present"
+        },
+        {
+          "item": "e-ta-da-kum-dzay-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-za-la-narwe-tsaxa-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-afghan-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-afghana-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-xowunkay-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-pashto-zda-kawam",
+          "role": "present"
+        },
+        {
+          "item": "e-staso-pa-lido-xoshala-shwam",
+          "role": "present"
+        }
+      ]
+    },
+    {
       "id": "l-introductions-1",
       "title": "I, you and names",
       "letters": [

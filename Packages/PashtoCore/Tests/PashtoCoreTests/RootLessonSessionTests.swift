@@ -148,7 +148,10 @@ struct RootLessonSessionTests {
                         voiceOver: voiceOver,
                         using: &rng
                     )
-                    if session.tasks.isEmpty {
+                    if lesson.kind != .practice {
+                        #expect(session.tasks.isEmpty)
+                        #expect(offeredIDs.contains(lesson.id))
+                    } else if session.tasks.isEmpty {
                         #expect(!offeredIDs.contains(lesson.id))
                     } else {
                         #expect(offeredIDs.contains(lesson.id))
