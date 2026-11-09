@@ -554,7 +554,7 @@
       }
     },
     "study.startPractice" : {
-      "comment" : "Last learn or phrases card. Opens the next lesson in the unit.",
+      "comment" : "Last phrases card. Opens the unit's first practice lesson.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

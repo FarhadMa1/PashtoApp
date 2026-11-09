@@ -29,8 +29,9 @@ public enum StudyStep: Equatable, Sendable {
 
 /// The cards for one learn or phrases lesson. Nothing here is saved.
 ///
-/// `next` moves one card. On the last card, `startPractice` opens the next
-/// lesson in the unit. `skipToPractice` opens that unit's first practice lesson.
+/// `next` moves one card. On the last learn card, `openNextLesson` opens the
+/// next lesson. `startPractice` is only the last phrases card, and it opens
+/// the unit's first practice lesson. `skipToPractice` does that from any card.
 /// A second tap before `settle` does not move another card and does not open
 /// another lesson. `showMeaning` reveals the English once.
 public struct StudyDeck: Equatable, Sendable {
@@ -56,6 +57,9 @@ public struct StudyDeck: Equatable, Sendable {
     public var count: Int { cards.count }
 
     public var isLast: Bool { !cards.isEmpty && index == cards.count - 1 }
+
+    /// The primary button reads Start practice only on the last phrases card.
+    public var offersStartPractice: Bool { kind == .phrases && isLast }
 
     public var card: StudyCard? {
         cards.indices.contains(index) ? cards[index] : nil
@@ -86,9 +90,16 @@ public struct StudyDeck: Equatable, Sendable {
         return .revealedMeaning
     }
 
-    /// Last card only. `target` is the next lesson in the unit.
+    /// Last learn card. `target` is the next lesson, which is the phrases lesson.
+    public mutating func openNextLesson(_ target: LessonID?) -> StudyStep {
+        guard kind == .learn, isLast, let target else { return .ignored }
+        guard lock() else { return .ignored }
+        return .open(target)
+    }
+
+    /// Last phrases card only. `target` is the unit's first practice lesson.
     public mutating func startPractice(opening target: LessonID?) -> StudyStep {
-        guard isLast, let target else { return .ignored }
+        guard kind == .phrases, isLast, let target else { return .ignored }
         guard lock() else { return .ignored }
         return .open(target)
     }

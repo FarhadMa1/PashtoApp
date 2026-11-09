@@ -36,6 +36,8 @@ struct ContentView: View {
     var study: StudyDeck? = nil
     var studyNext: () -> StudyStep = { .ignored }
     var studyShowMeaning: () -> StudyStep = { .ignored }
+    /// Last learn card. Opens the next lesson. The label stays Next.
+    var studyOpenNextLesson: () -> Void = {}
     var studyStartPractice: () -> Void = {}
     var studySkip: () -> Void = {}
     var closeStudy: () -> Void = {}
@@ -61,6 +63,7 @@ struct ContentView: View {
                 deck: study,
                 onNext: studyNext,
                 onShowMeaning: studyShowMeaning,
+                onOpenNextLesson: studyOpenNextLesson,
                 onStartPractice: studyStartPractice,
                 onSkip: studySkip,
                 onBack: closeStudy

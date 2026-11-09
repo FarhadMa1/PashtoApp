@@ -209,6 +209,19 @@ struct ModuleStructureTests {
         #expect(deck.index == 1)
         deck.settle()
         #expect(deck.showMeaning() == .ignored)
+        var learnLast = learn
+        while !learnLast.isLast {
+            learnLast.settle()
+            #expect(learnLast.next() == .advanced)
+        }
+        learnLast.settle()
+        let phrasesID = StudyCourse.nextLesson(after: learnLast.lessonID, in: bundle)
+        #expect(phrasesID == lessonID("l-greetings-phrases"))
+        #expect(learnLast.offersStartPractice == false)
+        #expect(learnLast.startPractice(opening: lessonID("l-greetings-1")) == .ignored)
+        #expect(learnLast.index == learnLast.count - 1)
+        #expect(learnLast.openNextLesson(phrasesID) == .open(lessonID("l-greetings-phrases")))
+        #expect(learnLast.openNextLesson(phrasesID) == .ignored)
 
         var phrases = try #require(StudyCourse.deck(for: lessonID("l-greetings-phrases"), in: bundle))
         #expect(phrases.meaningVisible == false)
@@ -234,6 +247,8 @@ struct ModuleStructureTests {
         #expect(practice == lessonID("l-greetings-1"))
         #expect(StudyCourse.nextLesson(after: lessonID("l-greetings-learn"), in: bundle) == lessonID("l-greetings-phrases"))
         #expect(StudyCourse.nextLesson(after: lessonID("l-greetings-phrases"), in: bundle) == lessonID("l-greetings-1"))
+        #expect(last.offersStartPractice)
+        #expect(last.openNextLesson(lessonID("l-greetings-1")) == .ignored)
         #expect(last.startPractice(opening: practice) == .open(lessonID("l-greetings-1")))
         #expect(last.startPractice(opening: practice) == .ignored)
         last.settle()

@@ -11,6 +11,8 @@ struct StudyCardScreen: View {
     var deck: StudyDeck
     var onNext: () -> StudyStep
     var onShowMeaning: () -> StudyStep
+    /// Last learn card. Opens the next lesson. The button still reads Next.
+    var onOpenNextLesson: () -> Void
     var onStartPractice: () -> Void
     var onSkip: () -> Void
     var onBack: () -> Void
@@ -31,7 +33,7 @@ struct StudyCardScreen: View {
                     .padding(.bottom, 12)
             } footer: {
                 Button(action: primaryTap) {
-                    Text(verbatim: deck.isLast ? StudyCopy.startPractice : StudyCopy.next)
+                    Text(verbatim: deck.offersStartPractice ? StudyCopy.startPractice : StudyCopy.next)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .buttonStyle(StudyPrimaryButtonStyle())
@@ -162,8 +164,10 @@ struct StudyCardScreen: View {
     }
 
     private func primaryTap() {
-        if deck.isLast {
+        if deck.offersStartPractice {
             onStartPractice()
+        } else if deck.isLast {
+            onOpenNextLesson()
         } else {
             _ = onNext()
         }

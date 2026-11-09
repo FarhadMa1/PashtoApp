@@ -375,10 +375,20 @@ final class AppModel {
         return step
     }
 
-    /// Last card. Opens the next lesson in the unit.
-    func studyStartPractice(voiceOver: Bool) async {
+    /// Last learn card. The button still reads Next. Opens the next lesson.
+    func studyOpenNextLesson(voiceOver: Bool) async {
         guard let course, var deck = studyDeck else { return }
         let target = StudyCourse.nextLesson(after: deck.lessonID, in: course)
+        let step = deck.openNextLesson(target)
+        studyDeck = deck
+        guard case .open(let lessonID) = step else { return }
+        await openStudyTarget(lessonID, voiceOver: voiceOver)
+    }
+
+    /// Last phrases card. Opens the unit's first practice lesson.
+    func studyStartPractice(voiceOver: Bool) async {
+        guard let course, var deck = studyDeck else { return }
+        let target = StudyCourse.firstPracticeLesson(for: deck.lessonID, in: course)
         let step = deck.startPractice(opening: target)
         studyDeck = deck
         guard case .open(let lessonID) = step else { return }

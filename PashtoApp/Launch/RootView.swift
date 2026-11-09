@@ -66,6 +66,9 @@ struct RootView: View {
                 study: model.studyDeck,
                 studyNext: { model.studyNext() },
                 studyShowMeaning: { model.studyShowMeaning() },
+                studyOpenNextLesson: {
+                    Task { await model.studyOpenNextLesson(voiceOver: voiceOverEnabled) }
+                },
                 studyStartPractice: {
                     Task { await model.studyStartPractice(voiceOver: voiceOverEnabled) }
                 },
