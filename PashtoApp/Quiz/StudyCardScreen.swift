@@ -65,7 +65,7 @@ struct StudyCardScreen: View {
                 .accessibilityAddTraits(.isButton)
                 .accessibilitySortPriority(70)
                 Spacer(minLength: 8)
-                Text(verbatim: deck.kind == .learn ? StudyCopy.newWords : StudyCopy.phrases)
+                Text(verbatim: deck.title)
                     .font(.headline.weight(.bold))
                     .foregroundStyle(StudyPalette.headerInk)
                     .accessibilityHidden(true)
@@ -123,6 +123,26 @@ struct StudyCardScreen: View {
                             .frame(maxWidth: .infinity)
                             .environment(\.layoutDirection, .leftToRight)
                             .accessibilitySortPriority(30)
+                        if let explanation = card.explanation {
+                            Text(verbatim: explanation)
+                                .font(.body)
+                                .foregroundStyle(StudyPalette.meaning)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity)
+                                .environment(\.layoutDirection, .leftToRight)
+                                .accessibilitySortPriority(25)
+                        }
+                        if let note = card.pronunciationNote {
+                            Text(verbatim: note)
+                                .font(.subheadline)
+                                .foregroundStyle(Lapis.secondaryText)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity)
+                                .environment(\.layoutDirection, .leftToRight)
+                                .accessibilitySortPriority(22)
+                        }
                     }
                 }
                 .id(deck.index)

@@ -9,8 +9,9 @@ import Foundation
 /// The content tool owns those gates.
 /// A `soundExample` must point at an item introduced in exactly one later unit.
 /// Letters are introduced through `letters`. U+0640 is allowed only in letter `forms`.
-/// A learn or phrases lesson only shows cards: approved words or phrases that a
-/// practice lesson in the same unit already introduces. It has no letters and no quiz.
+/// A learn or phrases lesson only shows cards. Learn shows a word or a phrase.
+/// Phrases shows a phrase. The item is introduced by exactly one practice lesson
+/// in the course. The lesson has no letters and no quiz.
 public enum ContentValidator {
     public static func validate(_ bundle: ContentBundle, mode: ValidationMode) -> [ValidationIssue] {
         validate(bundle, mode: mode, stress: PashtoStressRule())
@@ -228,8 +229,8 @@ public enum ContentValidator {
         return report.issues
     }
 
-    /// Learn lists words. Phrases lists phrases. Both only show items a practice
-    /// lesson in the same unit introduces. Neither has letters or a dialog.
+    /// Learn lists words or phrases. Phrases lists phrases. Both only show items
+    /// exactly one practice lesson introduces. Neither has letters or a dialog.
     private static func checkStudyLessons(
         _ bundle: ContentBundle,
         introductions: [String: [String]],
@@ -237,7 +238,6 @@ public enum ContentValidator {
         report: inout Report
     ) {
         for unit in bundle.units {
-            let practiceLessons = Set(unit.lessons.filter(\.countsForProgress).map(\.id.rawValue))
             for lesson in unit.lessons where lesson.kind == .learn || lesson.kind == .phrases {
                 let lessonID = lesson.id.rawValue
                 let kindName = lesson.kind.rawValue
@@ -257,27 +257,28 @@ public enum ContentValidator {
                         "\(lessonID) is a \(kindName) lesson and has no cards."
                     )
                 }
-                let expected: ContentKind = lesson.kind == .learn ? .word : .phrase
+                let allowed: Set<ContentKind> = lesson.kind == .learn ? [.word, .phrase] : [.phrase]
+                let expected = lesson.kind == .learn ? "word or phrase" : "phrase"
                 for ref in lesson.items where ref.role == .present {
                     let itemID = ref.item.rawValue
                     if ref.sound != nil {
                         report.add(.error, id: itemID, field: "sound", "\(itemID) on \(lessonID) is a card, not a sound example.")
                     }
-                    if let item = itemsByID[itemID], item.kind != expected || item.kind == .letter {
+                    if let item = itemsByID[itemID], !allowed.contains(item.kind) {
                         report.add(
                             .error,
                             id: itemID,
                             field: "kind",
-                            "\(itemID) on \(lessonID) is \(item.kind.rawValue). A \(kindName) card must be a \(expected.rawValue)."
+                            "\(itemID) on \(lessonID) is \(item.kind.rawValue). A \(kindName) card must be a \(expected)."
                         )
                     }
-                    let inUnit = (introductions[itemID] ?? []).filter { practiceLessons.contains($0) }
-                    if inUnit.count != 1 {
+                    let practiceIntroductions = introductions[itemID] ?? []
+                    if practiceIntroductions.count != 1 {
                         report.add(
                             .error,
                             id: itemID,
                             field: "role",
-                            "\(itemID) on \(lessonID) must be introduced by one practice lesson in \(unit.id.rawValue)."
+                            "\(itemID) on \(lessonID) must be introduced by exactly one practice lesson."
                         )
                     }
                 }

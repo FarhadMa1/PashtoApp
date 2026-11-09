@@ -549,7 +549,7 @@
   "lessons": [
     {
       "id": "l-greetings-learn",
-      "title": "Greetings and politeness",
+      "title": "Key words",
       "kind": "learn",
       "items": [
         {
@@ -571,8 +571,8 @@
       ]
     },
     {
-      "id": "l-greetings-phrases",
-      "title": "Greetings and politeness",
+      "id": "l-greetings-phrases-hello",
+      "title": "Saying hello",
       "kind": "phrases",
       "items": [
         {
@@ -598,7 +598,14 @@
         {
           "item": "e-xa-raghlast",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-greetings-phrases-how",
+      "title": "How are you?",
+      "kind": "phrases",
+      "items": [
         {
           "item": "e-tsanga-ye",
           "role": "present"
@@ -614,7 +621,14 @@
         {
           "item": "e-dera-manana",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-greetings-phrases-goodbye",
+      "title": "Polite words and goodbye",
+      "kind": "phrases",
+      "items": [
         {
           "item": "e-dera-xa",
           "role": "present"
@@ -639,7 +653,7 @@
     },
     {
       "id": "l-greetings-1",
-      "title": "Saying hello",
+      "title": "Practice: Saying hello",
       "letters": [
         "e-letter-alif",
         "e-letter-be"
@@ -701,7 +715,7 @@
     },
     {
       "id": "l-greetings-2",
-      "title": "How are you?",
+      "title": "Practice: How are you?",
       "letters": [
         "e-letter-pe",
         "e-letter-te"
@@ -754,7 +768,7 @@
     },
     {
       "id": "l-greetings-3",
-      "title": "Polite words and goodbye",
+      "title": "Practice: Polite words and goodbye",
       "letters": [
         "e-letter-tte",
         "e-letter-se"

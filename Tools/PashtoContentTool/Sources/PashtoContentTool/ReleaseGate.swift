@@ -192,7 +192,8 @@ public enum ReleaseGate {
                 "\(lessonID) is a \(kindName) lesson and cannot contain a quiz."
             ))
         }
-        let expected: ContentKind = lesson.kind == .learn ? .word : .phrase
+        let allowed: Set<ContentKind> = lesson.kind == .learn ? [.word, .phrase] : [.phrase]
+        let expected = lesson.kind == .learn ? "word or phrase" : "phrase"
         if lesson.items.isEmpty || lesson.items.contains(where: { $0.role != .present }) {
             issues.append(IssueText.make(
                 severity,
@@ -207,12 +208,12 @@ public enum ReleaseGate {
         }
         for reference in lesson.items where reference.role == .present {
             guard let item = itemsByID[reference.item] else { continue }
-            if item.kind == .letter || item.kind != expected {
+            if !allowed.contains(item.kind) {
                 issues.append(IssueText.make(
                     severity,
                     id: item.id.rawValue,
                     field: "kind",
-                    "\(item.id.rawValue) on \(lessonID) is \(item.kind.rawValue). A \(kindName) card must be a \(expected.rawValue)."
+                    "\(item.id.rawValue) on \(lessonID) is \(item.kind.rawValue). A \(kindName) card must be a \(expected)."
                 ))
             }
         }

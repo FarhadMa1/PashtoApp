@@ -2,6 +2,271 @@
   "contentVersion" : "2026.11.0",
   "items" : [
     {
+      "en" : "I am",
+      "id" : "e-za-yam",
+      "kind" : "phrase",
+      "pashto" : "زه یم",
+      "pronunciation" : "za yam",
+      "tokenPronunciations" : [
+        "za",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "یم"
+      ],
+      "translit" : "zə yəm",
+      "usage" : "In Pashto, the verb comes last.",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "you are (informal, to one person)",
+      "id" : "e-ta-ye",
+      "kind" : "phrase",
+      "pashto" : "ته یې",
+      "pronunciation" : "ta ye",
+      "tokenPronunciations" : [
+        "ta",
+        "ye"
+      ],
+      "tokens" : [
+        "ته",
+        "یې"
+      ],
+      "translit" : "tə ye",
+      "usage" : "Use ta ye with friends and family, and TAA-so yaast to be polite or to talk to more than one person.",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "you are (polite/plural)",
+      "id" : "e-taso-yast",
+      "kind" : "phrase",
+      "pashto" : "تاسو یاست",
+      "pronunciation" : "TAA-so yaast",
+      "tokenPronunciations" : [
+        "TAA-so",
+        "yaast"
+      ],
+      "tokens" : [
+        "تاسو",
+        "یاست"
+      ],
+      "translit" : "tā́so yāst",
+      "usage" : "Use ta ye with friends and family, and TAA-so yaast to be polite or to talk to more than one person.",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "he is",
+      "id" : "e-hagha-day",
+      "kind" : "phrase",
+      "pashto" : "هغه دی",
+      "pronunciation" : "ha-GHA day",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "day"
+      ],
+      "tokens" : [
+        "هغه",
+        "دی"
+      ],
+      "translit" : "haɣá day",
+      "usage" : "Hagha means he, she and they. Only the verb shows which: day (he), da (she), dee (they).\nPashto has no word for \"it\". Say daa (this) with day or da, depending on the word.",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "she is",
+      "id" : "e-hagha-da",
+      "kind" : "phrase",
+      "pashto" : "هغه ده",
+      "pronunciation" : "ha-GHA da",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "da"
+      ],
+      "tokens" : [
+        "هغه",
+        "ده"
+      ],
+      "translit" : "haɣá da",
+      "usage" : "Hagha means he, she and they. Only the verb shows which: day (he), da (she), dee (they).\nPashto has no word for \"it\". Say daa (this) with day or da, depending on the word.",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "we are",
+      "id" : "e-mung-yu",
+      "kind" : "phrase",
+      "pashto" : "موږ یو",
+      "pronunciation" : "mung yoo",
+      "pronunciationNote" : "ږ is pronounced g in the selected Kabul pronunciation; موږ is said mung. یو here means ‘are’, not ‘one’.",
+      "tokenPronunciations" : [
+        "mung",
+        "yoo"
+      ],
+      "tokens" : [
+        "موږ",
+        "یو"
+      ],
+      "translit" : "muǧ yu",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "they are",
+      "id" : "e-hagha-dee",
+      "kind" : "phrase",
+      "pashto" : "هغه دي",
+      "pronunciation" : "ha-GHA dee",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "ha-GHA",
+        "dee"
+      ],
+      "tokens" : [
+        "هغه",
+        "دي"
+      ],
+      "translit" : "haɣá di",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I am not",
+      "id" : "e-za-na-yam",
+      "kind" : "phrase",
+      "pashto" : "زه نه یم",
+      "pronunciation" : "za na yam",
+      "tokenPronunciations" : [
+        "za",
+        "na",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "نه",
+        "یم"
+      ],
+      "translit" : "zə na yəm",
+      "usage" : "Put na right before the verb: za na yam.",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "I'm not Afghan",
+      "id" : "e-za-afghan-na-yam",
+      "kind" : "phrase",
+      "pashto" : "زه افغان نه یم",
+      "pronunciation" : "za af-GHAAN na yam",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
+      "tokenPronunciations" : [
+        "za",
+        "af-GHAAN",
+        "na",
+        "yam"
+      ],
+      "tokens" : [
+        "زه",
+        "افغان",
+        "نه",
+        "یم"
+      ],
+      "translit" : "zə afɣā́n na yəm",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "You are fine (polite)",
+      "id" : "e-taso-xa-yast",
+      "kind" : "phrase",
+      "pashto" : "تاسو ښه یاست",
+      "pronunciation" : "TAA-so kha yaast",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "TAA-so",
+        "kha",
+        "yaast"
+      ],
+      "tokens" : [
+        "تاسو",
+        "ښه",
+        "یاست"
+      ],
+      "translit" : "tā́so x̌a yāst",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
+      "en" : "It is a city",
+      "id" : "e-daa-khaar-day",
+      "kind" : "phrase",
+      "pashto" : "دا ښار دی",
+      "pronunciation" : "daa khaar day",
+      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "tokenPronunciations" : [
+        "daa",
+        "khaar",
+        "day"
+      ],
+      "tokens" : [
+        "دا",
+        "ښار",
+        "دی"
+      ],
+      "translit" : "dā x̌ār day",
+      "verification" : {
+        "checkedBy" : "Farhad",
+        "checkedOn" : "2026-11-09",
+        "comment" : "Bekreftet av Farhad 9. november 2026.",
+        "status" : "verified"
+      }
+    },
+    {
       "en" : "hello",
       "id" : "e-salam",
       "kind" : "phrase",
@@ -3552,6 +3817,176 @@
       "track" : "main"
     },
     {
+      "id" : "u-basics",
+      "lessons" : [
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-learn-1",
+          "items" : [
+            {
+              "item" : "e-za-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ta-ye",
+              "role" : "present"
+            },
+            {
+              "item" : "e-taso-yast",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-da",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "I am, you are, he/she is"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-learn-2",
+          "items" : [
+            {
+              "item" : "e-mung-yu",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-dee",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-na-yam",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "We are, they are, I am not"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-phrases",
+          "items" : [
+            {
+              "item" : "e-za-xa-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghan-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghana-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-afghan-na-yam",
+              "role" : "present"
+            },
+            {
+              "item" : "e-taso-xa-yast",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-xa-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-hagha-xa-da",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-zma-wror-day",
+              "role" : "present"
+            },
+            {
+              "item" : "e-daa-khaar-day",
+              "role" : "present"
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "About me and others"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-1",
+          "items" : [
+            {
+              "item" : "e-za-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ta-ye",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-taso-yast",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hagha-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hagha-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-mung-yu",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-hagha-dee",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-na-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-za-afghan-na-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-taso-xa-yast",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-daa-khaar-day",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: The basics"
+        }
+      ],
+      "title" : "The basics",
+      "track" : "main"
+    },
+    {
       "id" : "u-greetings",
       "lessons" : [
         {
@@ -3581,13 +4016,13 @@
           "letters" : [
 
           ],
-          "title" : "Greetings and politeness"
+          "title" : "Key words"
         },
         {
           "dialogs" : [
 
           ],
-          "id" : "l-greetings-phrases",
+          "id" : "l-greetings-phrases-hello",
           "items" : [
             {
               "item" : "e-salam",
@@ -3612,7 +4047,20 @@
             {
               "item" : "e-xa-raghlast",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Saying hello"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-greetings-phrases-how",
+          "items" : [
             {
               "item" : "e-tsanga-ye",
               "role" : "present"
@@ -3628,7 +4076,20 @@
             {
               "item" : "e-dera-manana",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "How are you?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-greetings-phrases-goodbye",
+          "items" : [
             {
               "item" : "e-dera-xa",
               "role" : "present"
@@ -3654,7 +4115,7 @@
           "letters" : [
 
           ],
-          "title" : "Greetings and politeness"
+          "title" : "Polite words and goodbye"
         },
         {
           "dialogs" : [
@@ -3716,7 +4177,7 @@
             "e-letter-alif",
             "e-letter-be"
           ],
-          "title" : "Saying hello"
+          "title" : "Practice: Saying hello"
         },
         {
           "dialogs" : [
@@ -3769,7 +4230,7 @@
             "e-letter-pe",
             "e-letter-te"
           ],
-          "title" : "How are you?"
+          "title" : "Practice: How are you?"
         },
         {
           "dialogs" : [
@@ -3810,7 +4271,7 @@
             "e-letter-tte",
             "e-letter-se"
           ],
-          "title" : "Polite words and goodbye"
+          "title" : "Practice: Polite words and goodbye"
         }
       ],
       "title" : "Greetings and politeness",
@@ -3823,7 +4284,7 @@
           "dialogs" : [
 
           ],
-          "id" : "l-introductions-learn",
+          "id" : "l-introductions-learn-names",
           "items" : [
             {
               "item" : "e-za",
@@ -3844,7 +4305,20 @@
             {
               "item" : "e-num",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "I, you and names"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-introductions-learn-be",
+          "items" : [
             {
               "item" : "e-yam",
               "role" : "present"
@@ -3870,13 +4344,13 @@
           "letters" : [
 
           ],
-          "title" : "Introducing yourself"
+          "title" : "To be"
         },
         {
           "dialogs" : [
 
           ],
-          "id" : "l-introductions-phrases",
+          "id" : "l-introductions-phrases-name",
           "items" : [
             {
               "item" : "e-zma-num-ahmad-day",
@@ -3889,7 +4363,20 @@
             {
               "item" : "e-staso-num-tsa-day",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "What's your name?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-introductions-phrases-from",
+          "items" : [
             {
               "item" : "e-ta-da-kum-dzay-ye",
               "role" : "present"
@@ -3923,7 +4410,7 @@
           "letters" : [
 
           ],
-          "title" : "Introducing yourself"
+          "title" : "Where are you from?"
         },
         {
           "dialogs" : [
@@ -3980,7 +4467,7 @@
             "e-letter-jim",
             "e-letter-che"
           ],
-          "title" : "I, you and names"
+          "title" : "Practice: I, you and names"
         },
         {
           "dialogs" : [
@@ -4033,7 +4520,7 @@
             "e-letter-he",
             "e-letter-xe"
           ],
-          "title" : "Where are you from?"
+          "title" : "Practice: Where are you from?"
         },
         {
           "dialogs" : [
@@ -4066,7 +4553,7 @@
             "e-letter-tse",
             "e-letter-dze"
           ],
-          "title" : "To be"
+          "title" : "Practice: To be"
         }
       ],
       "title" : "Introducing yourself",
@@ -4079,7 +4566,7 @@
           "dialogs" : [
 
           ],
-          "id" : "l-family-learn",
+          "id" : "l-family-learn-members",
           "items" : [
             {
               "item" : "e-mor",
@@ -4108,7 +4595,20 @@
             {
               "item" : "e-koraney",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Family members"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-learn-this",
+          "items" : [
             {
               "item" : "e-daa",
               "role" : "present"
@@ -4126,13 +4626,13 @@
           "letters" : [
 
           ],
-          "title" : "Family"
+          "title" : "This, my and your"
         },
         {
           "dialogs" : [
 
           ],
-          "id" : "l-family-phrases",
+          "id" : "l-family-phrases-this",
           "items" : [
             {
               "item" : "e-daa-tsok-day",
@@ -4157,7 +4657,20 @@
             {
               "item" : "e-daa-zma-xor-da",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "This is my …"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-phrases-yours",
+          "items" : [
             {
               "item" : "e-daa-sta-wror-day",
               "role" : "present"
@@ -4169,7 +4682,20 @@
             {
               "item" : "e-na-zma-zoy-day",
               "role" : "present"
-            },
+            }
+          ],
+          "kind" : "phrases",
+          "letters" : [
+
+          ],
+          "title" : "Is this your …?"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-family-phrases-how",
+          "items" : [
             {
               "item" : "e-mor-de-tsanga-da",
               "role" : "present"
@@ -4191,7 +4717,7 @@
           "letters" : [
 
           ],
-          "title" : "Family"
+          "title" : "How is your family?"
         },
         {
           "dialogs" : [
@@ -4270,7 +4796,7 @@
             "e-letter-ddal",
             "e-letter-zal"
           ],
-          "title" : "Family members"
+          "title" : "Practice: Family members"
         },
         {
           "dialogs" : [
@@ -4304,7 +4830,7 @@
             "e-letter-rre",
             "e-letter-ze"
           ],
-          "title" : "This is my …"
+          "title" : "Practice: This is my …"
         },
         {
           "dialogs" : [
@@ -4387,7 +4913,7 @@
             "e-letter-zhe",
             "e-letter-gye"
           ],
-          "title" : "Is this your …?"
+          "title" : "Practice: Is this your …?"
         }
       ],
       "title" : "Family",

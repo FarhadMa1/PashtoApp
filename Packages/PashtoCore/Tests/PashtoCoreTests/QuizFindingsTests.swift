@@ -253,7 +253,7 @@ struct QuizFindingsTests {
     @Test func everyOrderingTileMatchesTheApprovedPronunciation() throws {
         let bundle = try loadRepositoryContent()
         let table = approvedTilePronunciations
-        #expect(table.count == 35)
+        #expect(table.count == 40)
         var seen: Set<String> = []
         var orderingSentences = 0
         for item in bundle.items {
@@ -270,7 +270,7 @@ struct QuizFindingsTests {
                 seen.insert(token)
             }
         }
-        #expect(orderingSentences == 22)
+        #expect(orderingSentences == 33)
         #expect(seen == Set(table.keys))
 
         let released = try releasedOrderingItems(in: bundle)
@@ -314,7 +314,7 @@ struct QuizFindingsTests {
                 }
             }
         }
-        #expect(orderCount == 22)
+        #expect(orderCount == 33)
 
         var hiddenRNG = SplitMix64(seed: 1)
         let hidden = LessonSessionBuilder.build(
@@ -655,6 +655,11 @@ private let approvedTilePronunciations: [String: String] = [
     "څخه": "TSA-kha",
     "پښتو": "pakh-TO",
     "زده کوم": "zda ka-WAM",
+    "نه": "na",
+    "ښار": "khaar",
+    "موږ": "mung",
+    "یو": "yoo",
+    "دي": "dee",
 ]
 
 private func letter(_ id: String, _ pashto: String, _ en: String) -> ContentItem {

@@ -771,8 +771,8 @@
   ],
   "lessons": [
     {
-      "id": "l-family-learn",
-      "title": "Family",
+      "id": "l-family-learn-members",
+      "title": "Family members",
       "kind": "learn",
       "items": [
         {
@@ -802,7 +802,14 @@
         {
           "item": "e-koraney",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-family-learn-this",
+      "title": "This, my and your",
+      "kind": "learn",
+      "items": [
         {
           "item": "e-daa",
           "role": "present"
@@ -818,8 +825,8 @@
       ]
     },
     {
-      "id": "l-family-phrases",
-      "title": "Family",
+      "id": "l-family-phrases-this",
+      "title": "This is my …",
       "kind": "phrases",
       "items": [
         {
@@ -845,7 +852,14 @@
         {
           "item": "e-daa-zma-xor-da",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-family-phrases-yours",
+      "title": "Is this your …?",
+      "kind": "phrases",
+      "items": [
         {
           "item": "e-daa-sta-wror-day",
           "role": "present"
@@ -857,7 +871,14 @@
         {
           "item": "e-na-zma-zoy-day",
           "role": "present"
-        },
+        }
+      ]
+    },
+    {
+      "id": "l-family-phrases-how",
+      "title": "How is your family?",
+      "kind": "phrases",
+      "items": [
         {
           "item": "e-mor-de-tsanga-da",
           "role": "present"
@@ -878,7 +899,7 @@
     },
     {
       "id": "l-family-1",
-      "title": "Family members",
+      "title": "Practice: Family members",
       "letters": [
         "e-letter-dal",
         "e-letter-ddal",
@@ -957,7 +978,7 @@
     },
     {
       "id": "l-family-2",
-      "title": "This is my …",
+      "title": "Practice: This is my …",
       "letters": [
         "e-letter-re",
         "e-letter-rre",
@@ -988,7 +1009,7 @@
     },
     {
       "id": "l-family-3",
-      "title": "Is this your …?",
+      "title": "Practice: Is this your …?",
       "letters": [
         "e-letter-zhe",
         "e-letter-gye"
