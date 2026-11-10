@@ -316,28 +316,67 @@ private enum StudyCopy {
 }
 
 /// Plays one bundled clip at a time. Nothing starts until `play` is called.
+///
+/// The session stays up while a clip is playing. It is released when that clip
+/// ends, when the file cannot be read, or when `stop` runs, so other audio can
+/// resume. A callback from an older player does not release the session a newer
+/// clip is using.
 @MainActor
-final class GreetingsClipPlayer {
+final class GreetingsClipPlayer: NSObject, AVAudioPlayerDelegate {
     private var player: AVAudioPlayer?
 
     func play(_ url: URL) {
-        stop()
+        haltPlayer()
+        let session = AVAudioSession.sharedInstance()
         do {
-            let session = AVAudioSession.sharedInstance()
             try session.setCategory(.playback, mode: .spokenAudio)
             try session.setActive(true)
-            let player = try AVAudioPlayer(contentsOf: url)
-            self.player = player
-            player.prepareToPlay()
-            player.play()
+            let next = try AVAudioPlayer(contentsOf: url)
+            next.delegate = self
+            player = next
+            next.prepareToPlay()
+            next.play()
         } catch {
             player = nil
+            deactivate()
         }
     }
 
     func stop() {
-        player?.stop()
+        haltPlayer()
+        deactivate()
+    }
+
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        let finished = ObjectIdentifier(player)
+        Task { @MainActor in
+            self.releaseIfCurrent(finished)
+        }
+    }
+
+    nonisolated func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        let finished = ObjectIdentifier(player)
+        Task { @MainActor in
+            self.releaseIfCurrent(finished)
+        }
+    }
+
+    /// Drops the current player without releasing the session.
+    private func haltPlayer() {
+        let current = player
         player = nil
+        current?.delegate = nil
+        current?.stop()
+    }
+
+    private func releaseIfCurrent(_ finished: ObjectIdentifier) {
+        guard let player, ObjectIdentifier(player) == finished else { return }
+        self.player = nil
+        deactivate()
+    }
+
+    private func deactivate() {
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
 }
 
