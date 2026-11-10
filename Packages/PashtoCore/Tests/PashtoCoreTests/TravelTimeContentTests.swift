@@ -146,7 +146,14 @@ struct TravelTimeContentTests {
             #expect(picture.accessibilityLabel == item?.en)
             return card.itemID.rawValue
         }
-        #expect(pictured == FamilyPictures.itemIDs)
+        #expect(pictured == [
+            "e-mor", "e-plar", "e-wror", "e-xor", "e-zoy", "e-lur", "e-koraney",
+        ])
+        #expect(FamilyPictures.itemIDs == [
+            "e-mor", "e-plar", "e-wror", "e-xor", "e-zoy", "e-lur", "e-koraney",
+            "e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab", "e-pay-se",
+            "e-wradz", "e-sa-haar", "e-maa-khaam", "e-shpa",
+        ])
 
         for id in FamilyPictures.itemIDs {
             let itemID = itemID(id)
@@ -195,6 +202,87 @@ struct TravelTimeContentTests {
             encoding: .utf8
         )
         #expect(!taskSource.contains("assetName"))
+    }
+
+    @Test func travelAndTimePicturesResolveOnlyOnLearnCards() throws {
+        let bundle = try loadCourse().bundle
+        let pictured = [
+            "l-travel-learn-around": ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab"],
+            "l-travel-learn-money": ["e-pay-se"],
+            "l-time-learn-times": ["e-wradz", "e-sa-haar", "e-maa-khaam", "e-shpa"],
+            "l-time-learn-days": [String](),
+        ]
+        for (lesson, expected) in pictured {
+            let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))
+            #expect(deck.kind == .learn)
+            let shown = deck.cards.compactMap { card -> String? in
+                guard let picture = FamilyPictures.picture(
+                    for: card.itemID,
+                    english: card.meaning,
+                    lessonKind: deck.kind
+                ) else {
+                    return nil
+                }
+                #expect(picture.assetName == card.itemID.rawValue)
+                #expect(picture.accessibilityLabel == card.meaning)
+                return card.itemID.rawValue
+            }
+            #expect(shown == expected)
+        }
+
+        let nine = [
+            "e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab", "e-pay-se",
+            "e-wradz", "e-sa-haar", "e-maa-khaam", "e-shpa",
+        ]
+        for id in nine {
+            let item = itemID(id)
+            let english = bundle.items.first { $0.id.rawValue == id }?.en
+            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn)?.assetName == id)
+            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn)?.accessibilityLabel == english)
+            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .phrases) == nil)
+            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .practice) == nil)
+            let imageset = repositoryRoot()
+                .appendingPathComponent("PashtoApp/Assets.xcassets")
+                .appendingPathComponent("\(id).imageset")
+            let names = try FileManager.default.contentsOfDirectory(atPath: imageset.path).sorted()
+            #expect(names == ["Contents.json", "\(id).png"])
+        }
+        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn) == nil)
+        #expect(!FileManager.default.fileExists(atPath: repositoryRoot()
+            .appendingPathComponent("PashtoApp/Assets.xcassets/e-tak-see.imageset").path))
+
+        for lesson in ["l-travel-phrases-where", "l-travel-phrases-buying", "l-time-phrases-day", "l-time-phrases-morning"] {
+            let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))
+            #expect(deck.cards.allSatisfy {
+                FamilyPictures.picture(for: $0.itemID, english: $0.meaning, lessonKind: deck.kind) == nil
+            })
+        }
+
+        let seen = bundle.units.flatMap(\.lessons).map(\.id)
+        for lesson in ["l-travel-1", "l-travel-2", "l-time-1", "l-time-2"] {
+            var rng = SplitMix64(seed: 7)
+            let practice = LessonSessionBuilder.build(
+                for: lessonID(lesson),
+                in: bundle,
+                seenLessonIDs: seen,
+                releasedUnitIDs: nil,
+                using: &rng
+            )
+            #expect(!practice.tasks.isEmpty)
+            for id in askedIDs(practice.tasks) {
+                #expect(FamilyPictures.picture(for: id, english: "airport", lessonKind: .practice) == nil)
+            }
+        }
+
+        let quiz = try String(
+            contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/Quiz/QuizScreen.swift"),
+            encoding: .utf8
+        )
+        #expect(!quiz.contains("FamilyPictures"))
+        #expect(!quiz.contains("FamilyWordList"))
+        for id in nine {
+            #expect(!quiz.contains(id))
+        }
     }
 
     @Test func dayNamesAndPhrasesStayInTheirOwnWrongOptionPools() throws {

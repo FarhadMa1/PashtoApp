@@ -3,7 +3,7 @@ import Testing
 @testable import PashtoCore
 
 struct FamilyWordListTests {
-    private let pictured = [
+    private let family = [
         "e-mor",
         "e-plar",
         "e-wror",
@@ -12,45 +12,66 @@ struct FamilyWordListTests {
         "e-lur",
         "e-koraney",
     ]
+    private let travel = [
+        "e-ha-waa-yee-da-gar",
+        "e-ho-tal",
+        "e-ti-kat",
+        "e-tash-naab",
+        "e-pay-se",
+    ]
+    private let time = [
+        "e-wradz",
+        "e-sa-haar",
+        "e-maa-khaam",
+        "e-shpa",
+    ]
 
-    @Test func familyListsTheSevenPicturedLearnWordsAndOtherUnitsListNone() throws {
+    @Test func familyTravelAndTimeListOnlyTheirPicturedLearnWords() throws {
         let course = try loadCourse()
         let bundle = course.bundle
         let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id, $0) })
+        let expected = [
+            "u-family": family,
+            "u-travel": travel,
+            "u-time": time,
+        ]
 
         for showsPronunciation in [true, false] {
-            let rows = FamilyWordList.rows(
-                for: unitID("u-family"),
-                in: bundle,
-                showsPronunciation: showsPronunciation
-            )
-            #expect(rows.map(\.itemID.rawValue) == pictured)
-            #expect(rows.map(\.assetName) == pictured)
-            #expect(rows.contains { row in
-                guard let item = items[row.itemID] else { return false }
-                return row.pronunciation != item.translit
-            })
-            for row in rows {
-                let item = try #require(items[row.itemID])
-                #expect(row.assetName == item.id.rawValue)
-                #expect(row.english == item.en)
-                #expect(row.pronunciation == item.pronunciation)
-                #expect(row.pashto == item.pashto)
-                #expect(row.accessibilityLabel == "\(item.en ?? ""), \(item.pronunciation)")
-                #expect(!row.accessibilityLabel.contains(item.pashto))
-                if item.translit != item.pronunciation {
-                    #expect(row.pronunciation != item.translit)
-                    #expect(!row.accessibilityLabel.contains(item.translit))
+            for (unit, pictured) in expected {
+                let rows = FamilyWordList.rows(
+                    for: unitID(unit),
+                    in: bundle,
+                    showsPronunciation: showsPronunciation
+                )
+                #expect(rows.map(\.itemID.rawValue) == pictured)
+                #expect(rows.map(\.assetName) == pictured)
+                #expect(!rows.map(\.itemID.rawValue).contains("e-tak-see"))
+                #expect(rows.contains { row in
+                    guard let item = items[row.itemID] else { return false }
+                    return row.pronunciation != item.translit
+                })
+                for row in rows {
+                    let item = try #require(items[row.itemID])
+                    #expect(row.assetName == item.id.rawValue)
+                    #expect(row.english == item.en)
+                    #expect(row.pronunciation == item.pronunciation)
+                    #expect(row.pashto == item.pashto)
+                    #expect(row.accessibilityLabel == "\(item.en ?? ""), \(item.pronunciation)")
+                    #expect(!row.accessibilityLabel.contains(item.pashto))
+                    if item.translit != item.pronunciation {
+                        #expect(row.pronunciation != item.translit)
+                        #expect(!row.accessibilityLabel.contains(item.translit))
+                    }
+                    let asset = repositoryRoot()
+                        .appendingPathComponent("PashtoApp/Assets.xcassets")
+                        .appendingPathComponent("\(row.assetName).imageset")
+                        .appendingPathComponent("\(row.assetName).png")
+                    #expect(FileManager.default.fileExists(atPath: asset.path))
                 }
-                let asset = repositoryRoot()
-                    .appendingPathComponent("PashtoApp/Assets.xcassets")
-                    .appendingPathComponent("\(row.assetName).imageset")
-                    .appendingPathComponent("\(row.assetName).png")
-                #expect(FileManager.default.fileExists(atPath: asset.path))
             }
         }
 
-        for unit in bundle.units where unit.id.rawValue != "u-family" {
+        for unit in bundle.units where expected[unit.id.rawValue] == nil {
             #expect(FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: true).isEmpty)
             #expect(FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: false).isEmpty)
         }
@@ -64,7 +85,7 @@ struct FamilyWordListTests {
             showsPronunciation: false
         )
         for category in menu.categories {
-            if category.id.rawValue == "u-family" {
+            if let pictured = expected[category.id.rawValue] {
                 #expect(category.wordList.map(\.itemID.rawValue) == pictured)
                 #expect(category.wordList.map(\.assetName) == pictured)
                 #expect(category.wordList.map(\.pronunciation) == pictured.map { items[itemID($0)]?.pronunciation })
