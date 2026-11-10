@@ -136,24 +136,39 @@ struct QuizScreen: View {
     }
 
     /// Back and the progress only. The lesson title and the streak stay in VoiceOver.
+    ///
+    /// A clear color in the background is not an accessibility element, so VoiceOver
+    /// never lands on it. These are text elements with the same labels, drawn clear.
     private var accessibilityQuizTitle: some View {
         quizBackButton(oneLine: true)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                ZStack {
+            .overlay {
+                ZStack(alignment: .leading) {
                     if !lessonTitle.isEmpty {
-                        Color.clear
-                            .accessibilityLabel(Text(verbatim: lessonTitle))
-                            .accessibilitySortPriority(75)
+                        spokenLabel(lessonTitle, sortPriority: 75)
                     }
-                    Color.clear
-                        .accessibilityLabel(
-                            Text(verbatim: CelebrationCopy.streakSpoken(streakCount, label: ApprovedCopy.dayStreak))
-                        )
-                        .accessibilitySortPriority(70)
+                    spokenLabel(
+                        CelebrationCopy.streakSpoken(streakCount, label: ApprovedCopy.dayStreak),
+                        sortPriority: 70
+                    )
                 }
                 .allowsHitTesting(false)
             }
+    }
+
+    /// One VoiceOver element. It fills the back-button row and does not paint.
+    private func spokenLabel(_ label: String, sortPriority: Double) -> some View {
+        Text(verbatim: label)
+            .font(.headline)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+            .foregroundStyle(.clear)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: label))
+            .accessibilityAddTraits(.isStaticText)
+            .accessibilitySortPriority(sortPriority)
+            .allowsHitTesting(false)
     }
 
     private func quizBackButton(oneLine: Bool) -> some View {
