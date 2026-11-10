@@ -1,10 +1,11 @@
 import Foundation
 
-/// Pictured family words shown under the lesson groups on the Family page.
+/// Pictured words shown under the lesson groups.
 ///
-/// The order is the unit's learn cards. A row uses the same picture as that
-/// learn card, so a phrase or a practice question never adds one. Every other
-/// unit is empty. Pronunciation comes from `ContentItem.pronunciation` through
+/// Family, Travel, and Time share this list. The order is the unit's learn
+/// cards. A row uses the same picture as that learn card, so a phrase or a
+/// practice question never adds one. A unit with no pictured learn card is
+/// empty. Pronunciation comes from `ContentItem.pronunciation` through
 /// the same rule as the other screens. That rule never reads `translit`.
 /// `showsPronunciation` is the stored `showTransliteration` setting, and it
 /// does not hide the line. VoiceOver reads the English word and that
@@ -43,13 +44,12 @@ public enum FamilyWordList {
         }
     }
 
-    /// Learn-card order. Family is the only unit with rows.
+    /// Learn-card order. A unit with no pictured learn card returns an empty list.
     public static func rows(
         for unitID: UnitID,
         in bundle: ContentBundle,
         showsPronunciation: Bool
     ) -> [Row] {
-        guard unitID.rawValue == "u-family" else { return [] }
         guard let unit = bundle.units.first(where: { $0.id == unitID }) else { return [] }
         var itemsByID: [ItemID: ContentItem] = [:]
         for item in bundle.items where itemsByID[item.id] == nil {

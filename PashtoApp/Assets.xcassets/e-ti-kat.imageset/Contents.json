@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "e-ti-kat.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

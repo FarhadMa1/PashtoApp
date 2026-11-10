@@ -59,7 +59,7 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
     public var practiceTotal: Int
     /// Lessons the home can open, in course order.
     public var lessons: [MainMenuLesson]
-    /// Pictured words under the lesson groups. Empty for every unit except Family.
+    /// Pictured words under the lesson groups. Empty when the unit has no pictured learn card.
     public var wordList: [FamilyWordList.Row]
 
     public init(
