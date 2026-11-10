@@ -1,3 +1,4 @@
+import AVFoundation
 import PashtoCore
 import SwiftUI
 import UIKit
@@ -19,6 +20,8 @@ struct StudyCardScreen: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AccessibilityFocusState private var pronunciationFocused: Bool
+    /// Plays only from the speaker button. A card change stops the previous clip.
+    @State private var clipPlayer = GreetingsClipPlayer()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -39,7 +42,14 @@ struct StudyCardScreen: View {
         }
         .background(StudyPalette.page.ignoresSafeArea())
         .onChange(of: deck.index) { _, _ in
+            clipPlayer.stop()
             pronunciationFocused = true
+        }
+        .onChange(of: deck.lessonID) { _, _ in
+            clipPlayer.stop()
+        }
+        .onDisappear {
+            clipPlayer.stop()
         }
     }
 
@@ -114,6 +124,9 @@ struct StudyCardScreen: View {
                 .id(deck.index)
                 .transition(.opacity)
                 .animation(cardAnimation, value: deck.index)
+                if let url = greetingsClipURL(for: card) {
+                    playButton(url)
+                }
             }
             if deck.kind == .phrases, deck.meaningVisible == false {
                 Button(action: revealMeaning) {
@@ -157,6 +170,38 @@ struct StudyCardScreen: View {
         } else {
             _ = onNext()
         }
+    }
+
+    /// Greetings learn and phrases cards only. A missing file draws nothing.
+    /// The quiz never reaches this screen.
+    private func greetingsClipURL(for card: StudyCard) -> URL? {
+        guard deck.kind == .learn || deck.kind == .phrases else { return nil }
+        guard deck.unitID.rawValue == GreetingsAudio.unitID else { return nil }
+        guard let directory = Bundle.main.resourceURL else { return nil }
+        return GreetingsAudio.url(for: card.itemID, in: directory)
+    }
+
+    /// Outline speaker in the card primary color, for light and dark.
+    /// The label is spoken. The icon has no other text.
+    private func playButton(_ url: URL) -> some View {
+        Button {
+            clipPlayer.play(url)
+        } label: {
+            Image(systemName: "speaker.wave.2")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(StudyPalette.pronunciation)
+                .padding(.vertical, 12)
+                .padding(.horizontal, 20)
+                .background {
+                    Capsule(style: .continuous)
+                        .stroke(StudyPalette.pronunciation, lineWidth: 2)
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: "Play"))
+        .accessibilityAddTraits(.isButton)
+        .accessibilitySortPriority(21)
     }
 
     private func revealMeaning() {
@@ -268,6 +313,32 @@ private enum StudyCopy {
     static var startPractice: String { String(localized: "study.startPractice") }
     static var skipToPractice: String { String(localized: "study.skipToPractice") }
     static var showMeaning: String { String(localized: "today.showMeaning") }
+}
+
+/// Plays one bundled clip at a time. Nothing starts until `play` is called.
+@MainActor
+final class GreetingsClipPlayer {
+    private var player: AVAudioPlayer?
+
+    func play(_ url: URL) {
+        stop()
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, mode: .spokenAudio)
+            try session.setActive(true)
+            let player = try AVAudioPlayer(contentsOf: url)
+            self.player = player
+            player.prepareToPlay()
+            player.play()
+        } catch {
+            player = nil
+        }
+    }
+
+    func stop() {
+        player?.stop()
+        player = nil
+    }
 }
 
 struct StudyPrimaryButtonStyle: ButtonStyle {
