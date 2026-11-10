@@ -83,13 +83,38 @@ targets:
           - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/release-units.json
         outputFiles:
           - $(DERIVED_FILE_DIR)/course-files-check.stamp
+  # Drives the app for the screenshot workflow. Not installed for learners.
+  PashtoAppScreenshots:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: PashtoAppScreenshots
+    dependencies:
+      - target: PashtoApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mangallabs.pashto.screenshots
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: PashtoApp
+        TARGETED_DEVICE_FAMILY: "1"
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
 schemes:
   PashtoApp:
     build:
       targets:
         PashtoApp: all
+        # Test-only, so `xcodebuild build` of this scheme still builds the app.
+        PashtoAppScreenshots: [test]
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - PashtoAppScreenshots
     archive:
       config: Release
     profile:
