@@ -242,8 +242,9 @@ enum ChoiceBuilder {
         } else {
             shapeSplit = false
         }
-        // A released word or phrase needs three wrong answers of that shape.
-        // Two is still enough for a unit that is not in the release list.
+        // A word or phrase in a released unit after Greetings needs three wrong
+        // answers of that shape. Greetings, Basics, and a unit that is not in
+        // the release list still accept two.
         let minimumDistractors = shapeSplit ? 3 : 2
 
         let ranked = Distractors.candidates(for: target, in: context)
@@ -270,9 +271,10 @@ enum ChoiceBuilder {
                 distractors.append(QuizOption(itemID: picked.item.id, text: picked.text))
             }
         }
-        // Released units skip the question when fewer than three same-shape
-        // wrong answers remain after earlier released units are included.
-        // Other units still accept two. `u-basics` never fills another unit.
+        // Units after Greetings skip the question when fewer than three
+        // same-shape wrong answers remain after earlier released units are
+        // included. Greetings is not skipped for shape. `u-basics` never
+        // fills another unit.
         guard distractors.count >= minimumDistractors else { return nil }
 
         var options = [QuizOption(itemID: target.id, text: correctText)]

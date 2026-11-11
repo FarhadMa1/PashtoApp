@@ -29,12 +29,13 @@ public struct DistractorCandidate: Hashable, Sendable {
 /// pronunciation are left out.
 ///
 /// A letter is only a candidate for another letter. A day name is only a
-/// candidate for another day name, including the two-word سه شنبه. An item
-/// introduced in a unit from `releasedUnitIDs` is a candidate only for the
+/// candidate for another day name, including the two-word سه شنبه. From the
+/// first released unit after Greetings, an item is a candidate only for the
 /// same Pashto word count: one word, or more than one. `kind` does not decide
-/// that split. Travel and Time items keep the split when that list is empty.
-/// A phrase does not take a word, and a word does not take a phrase. Units
-/// that are not in the list stay on one shared pool.
+/// that split. Greetings, and every unit before it, stay on one shared pool.
+/// Travel and Time items keep the split when that list is empty. A phrase
+/// does not take a word, and a word does not take a phrase, once the split
+/// applies. Units that are not in the list stay on one shared pool.
 ///
 /// Membership tests use `Set.contains`. The course order itself is the
 /// `units` array, so this type never walks a `Set` or `Dictionary`.
@@ -200,11 +201,11 @@ func sameQuizPool(_ candidate: ContentKind, _ target: ContentKind) -> Bool {
     (candidate == .letter) == (target == .letter)
 }
 
-/// Day names are wrong options only for day names. Released units, and the
-/// Travel and Time ids below, stay with their own shape: one Pashto word, or
-/// more than one. The two-word day سه شنبه stays in the day-name pool, so it
-/// still has the other day names. `u-basics` is never a distractor source for
-/// another unit. That rule lives in `distractorSource`.
+/// Day names are wrong options only for day names. Released units after
+/// Greetings, and the Travel and Time ids below, stay with their own shape:
+/// one Pashto word, or more than one. The two-word day سه شنبه stays in the
+/// day-name pool, so it still has the other day names. `u-basics` is never a
+/// distractor source for another unit. That rule lives in `distractorSource`.
 enum AnswerPool {
     static let dayNames: Set<String> = [
         "e-shan-ba",
@@ -259,9 +260,18 @@ enum AnswerPool {
     ]
 }
 
-/// True when `unitID` is in the release list the caller supplied.
+/// True when this released unit keeps a word with words and a phrase with phrases.
+///
+/// The split starts at the first unit after `u-greetings` in the caller's
+/// release list. Greetings itself, and anything before it, keeps one shared
+/// pool. A list that does not contain Greetings splits every unit it names.
+/// Travel and Time ids in `AnswerPool.shaped` still split when the list is empty.
 func answerShapesAreSplit(_ unitID: UnitID, releasedUnitIDs: [UnitID]) -> Bool {
-    releasedUnitIDs.contains(unitID)
+    guard let index = releasedUnitIDs.firstIndex(of: unitID) else { return false }
+    guard let greetings = releasedUnitIDs.firstIndex(where: { $0.rawValue == "u-greetings" }) else {
+        return true
+    }
+    return index > greetings
 }
 
 /// Day names match only day names. When `splitByShape` is true, or either id

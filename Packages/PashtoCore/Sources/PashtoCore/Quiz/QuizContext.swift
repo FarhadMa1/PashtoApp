@@ -14,8 +14,9 @@ public struct QuizContext: Sendable {
     public let retiredItemIDs: [ItemID]
     /// Units from `release-units.json`, in that file's order.
     ///
-    /// An item introduced in one of these units takes wrong answers of the
-    /// same Pashto word count. Empty means only the Travel and Time ids in
+    /// From the first unit after Greetings, an item takes wrong answers of the
+    /// same Pashto word count. Greetings, and anything before it, keeps one
+    /// shared pool. Empty means only the Travel and Time ids in
     /// `AnswerPool.shaped` are split that way. This value does not read the
     /// file. The caller passes the list.
     public let releasedUnitIDs: [UnitID]

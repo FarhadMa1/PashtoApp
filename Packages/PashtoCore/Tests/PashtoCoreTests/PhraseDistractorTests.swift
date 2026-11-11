@@ -2,21 +2,19 @@ import Foundation
 import Testing
 @testable import PashtoCore
 
-/// Released practice lessons keep a word with words and a phrase with phrases.
+/// Released practice lessons after Greetings keep a word with words and a phrase with phrases.
 ///
 /// The release list is `release-units.json`, not every unit in the bundle.
-/// `u-basics` stays out of every other unit's wrong answers. A question whose
-/// same-shape pool is still under three after earlier released units is skipped.
+/// Greetings stays on the mixed pool from main `1ad227c`. `u-basics` stays out
+/// of every other unit's wrong answers. A question whose same-shape pool is
+/// still under three after earlier released units is skipped.
 struct PhraseDistractorTests {
     /// Practice-lesson sizes, seed 1, lessons seen through that lesson, cap 20.
-    ///
-    /// These match main `1ad227c` except `l-greetings-1` (was 11) and
-    /// `l-greetings-2` (was 17). Those two lose meaning questions whose
-    /// same-shape pool stays under three. `u-basics` is not used to fill them.
+    /// These are the counts on main `1ad227c`.
     private static let questionCounts: [String: Int] = [
         "l-basics-1": 20,
-        "l-greetings-1": 3,
-        "l-greetings-2": 13,
+        "l-greetings-1": 11,
+        "l-greetings-2": 17,
         "l-greetings-3": 15,
         "l-introductions-1": 20,
         "l-introductions-2": 20,
@@ -30,21 +28,7 @@ struct PhraseDistractorTests {
         "l-time-2": 20,
     ]
 
-    /// Items in units before Travel with fewer than three same-shape distractors.
-    /// Each one is skipped instead of mixing in the other shape.
-    private static let skippedBeforeTravel: [String: [String]] = [
-        "u-greetings": [
-            "e-assalamu-alaykum",
-            "e-manana",
-            "e-salam",
-            "e-stare-ma-she",
-            "e-walaykum-salam",
-            "e-xa",
-            "e-xa-raghlast",
-        ],
-    ]
-
-    @Test func releasedPracticeLessonsDoNotMixShapesAndStayNonEmpty() throws {
+    @Test func releasedPracticeLessonsMatchMainAndSplitAfterGreetings() throws {
         let course = try loadReleasedCourseForDistractors()
         let released = course.releasedUnitIDs
         let travelIndex = try #require(released.firstIndex { $0.rawValue == "u-travel" })
@@ -58,7 +42,6 @@ struct PhraseDistractorTests {
 
         var seen: [LessonID] = []
         var practiceLessons = 0
-        var skipped: [String: [String]] = [:]
         for unit in limited.units {
             for lesson in unit.lessons {
                 seen.append(lesson.id)
@@ -80,15 +63,27 @@ struct PhraseDistractorTests {
                     seenLessonIDs: seen,
                     releasedUnitIDs: released
                 )
-                if beforeTravel.contains(unit.id.rawValue) {
+                if unit.id.rawValue == "u-greetings" {
+                    try expectGreetingsStaysOnTheMixedPool(
+                        lesson: lesson,
+                        session: session,
+                        context: context,
+                        itemsByID: itemsByID
+                    )
+                }
+                if answerShapesAreSplit(unit.id, releasedUnitIDs: released) {
                     let missing = try expectSameShapeOrSkipped(
                         lesson: lesson,
                         context: context,
                         itemsByID: itemsByID
                     )
-                    if !missing.isEmpty {
-                        skipped[unit.id.rawValue, default: []].append(contentsOf: missing)
+                    if beforeTravel.contains(unit.id.rawValue) {
+                        #expect(missing.isEmpty, "\(unit.id.rawValue) skipped \(missing)")
                     }
+                    try expectChoiceShapes(
+                        session: session,
+                        itemsByID: itemsByID
+                    )
                 }
                 try expectNoBasicsLeak(
                     session: session,
@@ -96,17 +91,9 @@ struct PhraseDistractorTests {
                     courseOrder: courseOrder,
                     itemsByID: itemsByID
                 )
-                try expectChoiceShapes(
-                    session: session,
-                    itemsByID: itemsByID
-                )
             }
         }
         #expect(practiceLessons == Self.questionCounts.count)
-        for (unit, ids) in skipped {
-            skipped[unit] = ids.sorted()
-        }
-        #expect(skipped == Self.skippedBeforeTravel)
     }
 
     @Test func aShortPhrasePoolTakesEarlierReleasedUnitsAndNotBasics() throws {
@@ -156,6 +143,35 @@ struct PhraseDistractorTests {
                 #expect(source?.unitID.rawValue != "u-basics")
             }
         }
+    }
+}
+
+private func expectGreetingsStaysOnTheMixedPool(
+    lesson: Lesson,
+    session: LessonSession,
+    context: QuizContext,
+    itemsByID: [ItemID: ContentItem]
+) throws {
+    let introduced = Distractors.introducedItems(in: lesson.id, bundle: context.bundle)
+        .filter { $0.kind != .letter }
+    let shapes = Set(introduced.map { DialogResponse.replyShape(of: $0) })
+    if shapes.count > 1 {
+        var mixed = false
+        for task in session.tasks {
+            guard case .choice(let quiz) = task.payload else { continue }
+            let optionShapes = Set(quiz.options.compactMap { itemsByID[$0.itemID] }.map { DialogResponse.replyShape(of: $0) })
+            if optionShapes.count > 1 { mixed = true }
+        }
+        #expect(mixed, "\(lesson.id.rawValue) no longer mixes a word and a phrase")
+    }
+    for item in introduced {
+        let pool = Distractors.candidates(for: item, in: context)
+        guard pool.count >= 2 else { continue }
+        var rng = SplitMix64(seed: 1)
+        let pashto = PashtoToEnglishChoice().makeTask(for: item, in: context, using: &rng)
+        var englishRNG = SplitMix64(seed: 2)
+        let english = EnglishToPashtoChoice().makeTask(for: item, in: context, using: &englishRNG)
+        #expect(pashto != nil || english != nil, "\(item.id.rawValue) was skipped in \(lesson.id.rawValue)")
     }
 }
 
