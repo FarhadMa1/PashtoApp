@@ -109,6 +109,74 @@ struct UnitsFourToEightTests {
         ) == nil)
     }
 
+    @Test func newUnitsDoNotRenderPronunciationNotes() throws {
+        let bundle = try loadCourse().bundle
+        let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id, $0) })
+        let newUnits = bundle.units.filter { newUnitIDs.contains($0.id.rawValue) }
+        var presented = Set<ItemID>()
+        var rendered = Set<ItemID>()
+        for unit in newUnits {
+            for lesson in unit.lessons {
+                for reference in lesson.items where reference.role == .present {
+                    presented.insert(reference.item)
+                }
+                guard lesson.kind == .learn || lesson.kind == .phrases else { continue }
+                let deck = try #require(StudyCourse.deck(for: lesson.id, in: bundle))
+                #expect(deck.unitID == unit.id)
+                for card in deck.cards {
+                    rendered.insert(card.itemID)
+                    #expect(card.pronunciationNote == nil)
+                    let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    #expect(!stored.isEmpty)
+                }
+            }
+            for showsPronunciation in [true, false] {
+                let rows = FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: showsPronunciation)
+                for row in rows {
+                    let stored = try #require(items[row.itemID]?.pronunciationNote)
+                    #expect(!row.accessibilityLabel.contains(stored))
+                    #expect(row.english != stored)
+                    #expect(row.pronunciation != stored)
+                    #expect(!row.pashto.contains(stored))
+                }
+            }
+        }
+        #expect(presented.count == 82)
+        #expect(rendered == presented)
+
+        let around = try #require(StudyCourse.deck(for: lessonID("l-travel-learn-around"), in: bundle))
+        let travelTaxi = try #require(around.cards.first { $0.itemID.rawValue == "e-tak-see" })
+        let taxiNote = try #require(items[travelTaxi.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines))
+        #expect(travelTaxi.pronunciationNote == taxiNote)
+        let town = try #require(StudyCourse.deck(for: lessonID("l-town-learn-transport"), in: bundle))
+        #expect(town.cards.first { $0.itemID.rawValue == "e-tak-see" }?.pronunciationNote == nil)
+
+        for lesson in ["l-basics-learn-2", "l-travel-learn-money", "l-time-learn-times"] {
+            let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))
+            #expect(deck.cards.contains { card in
+                let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines)
+                return stored?.isEmpty == false && card.pronunciationNote == stored
+            })
+        }
+
+        let screen = try String(
+            contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/Quiz/StudyCardScreen.swift"),
+            encoding: .utf8
+        )
+        let quiz = try String(
+            contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/Quiz/QuizScreen.swift"),
+            encoding: .utf8
+        )
+        let home = try String(
+            contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/ContentView.swift"),
+            encoding: .utf8
+        )
+        #expect(screen.contains("card.pronunciationNote"))
+        #expect(!screen.contains("item.pronunciationNote"))
+        #expect(!quiz.contains("pronunciationNote"))
+        #expect(!home.contains("pronunciationNote"))
+    }
+
     @Test func userFacingTextHasNoNorwegianAndNoBundledAudio() throws {
         let course = try loadCourse()
         let labels = MainMenuLabels.entries.filter { newUnitIDs.contains($0.unitID.rawValue) }.map(\.english)
