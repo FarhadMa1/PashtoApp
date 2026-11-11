@@ -234,7 +234,8 @@ public enum LessonSessionBuilder {
         let context = QuizContext(
             bundle: course,
             seenLessonIDs: seen,
-            retiredItemIDs: retiredItemIDs
+            retiredItemIDs: retiredItemIDs,
+            releasedUnitIDs: releasedUnitIDs ?? []
         )
         let policy = QuizPolicy(showsPronunciation: showsPronunciation, voiceOver: voiceOver)
         let targets = Distractors.introducedItems(in: lessonID, bundle: course)

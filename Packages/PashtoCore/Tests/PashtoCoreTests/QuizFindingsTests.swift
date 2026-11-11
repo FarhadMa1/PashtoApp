@@ -568,6 +568,8 @@ private func contrastItems() -> [ContentItem] {
         word("e-door", "در", "door"),
         word("e-fever", "تب", "fever"),
         word("e-on", "بر", "on"),
+        // A fourth word leaves three same-shape distractors once this unit is released.
+        word("e-name", "نوم", "name"),
         letter("e-dal", "د", "the letter da"),
         letter("e-ddal", "ډ", "the letter da with a ring"),
         letter("e-te", "ت", "the letter ta"),

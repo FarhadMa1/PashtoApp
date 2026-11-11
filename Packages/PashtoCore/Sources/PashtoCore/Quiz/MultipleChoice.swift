@@ -235,6 +235,17 @@ enum ChoiceBuilder {
         guard let prompt = prompt(for: kind, item: target) else { return nil }
         guard let correctText = answer(for: kind, item: target) else { return nil }
 
+        let courseOrder = CourseOrder(context.bundle)
+        let shapeSplit: Bool
+        if let introduction = courseOrder.introduction(of: target.id) {
+            shapeSplit = answerShapesAreSplit(introduction.unitID, releasedUnitIDs: context.releasedUnitIDs)
+        } else {
+            shapeSplit = false
+        }
+        // A released word or phrase needs three wrong answers of that shape.
+        // Two is still enough for a unit that is not in the release list.
+        let minimumDistractors = shapeSplit ? 3 : 2
+
         let ranked = Distractors.candidates(for: target, in: context)
         var distractors: [QuizOption] = []
         var seenKeys = [answerKey(for: kind, text: correctText)]
@@ -259,8 +270,10 @@ enum ChoiceBuilder {
                 distractors.append(QuizOption(itemID: picked.item.id, text: picked.text))
             }
         }
-        // 0, 1, or 2 eligible items of this pool: fewer than two distractors.
-        guard distractors.count >= 2 else { return nil }
+        // Released units skip the question when fewer than three same-shape
+        // wrong answers remain after earlier released units are included.
+        // Other units still accept two. `u-basics` never fills another unit.
+        guard distractors.count >= minimumDistractors else { return nil }
 
         var options = [QuizOption(itemID: target.id, text: correctText)]
         options.append(contentsOf: distractors)

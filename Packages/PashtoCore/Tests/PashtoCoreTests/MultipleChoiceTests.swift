@@ -204,28 +204,49 @@ struct MultipleChoiceTests {
 
     @Test func distractorsStayInTheSameKindAndTooFewReturnsNil() {
         let words = (1...4).map { word("e-w\($0)", "w\($0)", "word \($0)") }
-        let phrase = word("e-phrase", "ph", "a phrase", kind: .phrase)
+        let phrase = word("e-phrase", "one two", "a phrase", kind: .phrase)
         let letters = (1...2).map { word("e-l\($0)", "l\($0)", "letter \($0)", kind: .letter) }
         let current = lesson("l-mix", introduce: words + [phrase], letters: letters)
+        let mixedUnit = unit("u-mix", lessons: [current])
         let content = bundle(
-            units: [unit("u-mix", lessons: [current])],
+            units: [mixedUnit],
             items: words + [phrase] + letters
         )
-        let context = QuizContext(bundle: content, seenLessonIDs: [current.id])
+        let context = QuizContext(
+            bundle: content,
+            seenLessonIDs: [current.id],
+            releasedUnitIDs: [mixedUnit.id]
+        )
         var rng = SplitMix64(seed: 1)
 
         let wordQuestion = PashtoToEnglishChoice().makeTask(for: words[0], in: context, using: &rng)
         let wordIDs = wordQuestion?.options.map(\.itemID.rawValue) ?? []
         #expect(wordQuestion != nil)
         #expect(wordIDs.contains("e-w1"))
-        #expect(wordIDs.allSatisfy { $0 == "e-phrase" || $0.hasPrefix("e-w") })
+        #expect(wordIDs.allSatisfy { $0.hasPrefix("e-w") })
+        #expect(wordQuestion?.options.count == 4)
 
         var phraseRNG = SplitMix64(seed: 4)
-        let phraseQuestion = EnglishToPashtoChoice().makeTask(for: phrase, in: context, using: &phraseRNG)
+        // One phrase has no phrase distractors, so the question is skipped.
+        #expect(EnglishToPashtoChoice().makeTask(for: phrase, in: context, using: &phraseRNG) == nil)
+
+        let phrases = (1...4).map { word("e-p\($0)", "phrase \($0)", "phrase \($0)", kind: .phrase) }
+        let strayWord = word("e-stray", "stray", "stray word")
+        let phraseLesson = lesson("l-phrases", introduce: phrases + [strayWord])
+        let phraseUnit = unit("u-phrases", lessons: [phraseLesson])
+        let phraseBundle = bundle(units: [phraseUnit], items: phrases + [strayWord])
+        let phraseContext = QuizContext(
+            bundle: phraseBundle,
+            seenLessonIDs: [phraseLesson.id],
+            releasedUnitIDs: [phraseUnit.id]
+        )
+        var phraseOnly = SplitMix64(seed: 4)
+        let phraseQuestion = EnglishToPashtoChoice().makeTask(for: phrases[0], in: phraseContext, using: &phraseOnly)
         let phraseIDs = phraseQuestion?.options.map(\.itemID.rawValue) ?? []
         #expect(phraseQuestion != nil)
-        #expect(phraseIDs.contains("e-phrase"))
-        #expect(phraseIDs.allSatisfy { $0 == "e-phrase" || $0.hasPrefix("e-w") })
+        #expect(phraseIDs.contains("e-p1"))
+        #expect(phraseIDs.allSatisfy { $0.hasPrefix("e-p") })
+        #expect(!phraseIDs.contains("e-stray"))
 
         #expect(PashtoToEnglishChoice().makeTask(for: letters[0], in: context, using: &rng) == nil)
         #expect(TransliterationChoice().makeTask(for: letters[0], in: context, using: &rng) == nil)
