@@ -399,8 +399,10 @@ struct DailyWordTests {
 
         #expect(quiz.contains("if session.isComplete {\n            onFinish(session)"))
         #expect(quiz.contains("onAnswer(session)"))
-        #expect(screen.contains("onFinish: { celebration = $0; finishSession($0) }"))
-        #expect(screen.contains("LessonFinishedView(session: celebration) {\n                self.celebration = nil\n            }"))
+        #expect(screen.contains("presentCelebration(for: session)"))
+        #expect(screen.contains("finishSession(session)"))
+        #expect(screen.contains("CategoryCelebrationScreen(offer: celebration)"))
+        #expect(screen.contains("celebrationOffer(session.lessonID)"))
         #expect(model.contains("Called when the last answer is given. Continue does not call this"))
         #expect(model.contains("showsPronunciation: progress.settings.showTransliteration"))
         #expect(model.contains("showsPronunciation: snapshot.settings.showTransliteration"))

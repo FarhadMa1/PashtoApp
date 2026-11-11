@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy the twelve screenshot PNGs into one flat directory.
+"""Copy the screenshot PNGs into one flat directory.
 
 Reads an xcresulttool attachment manifest when one is present, and also
 picks up PNGs that the test wrote under their final names.
@@ -13,7 +13,7 @@ import os
 import shutil
 import sys
 
-SCREENS = ("home", "family", "learn", "quiz")
+SCREENS = ("home", "family", "learn", "quiz", "celebration")
 VARIANTS = ("light", "dark", "xl")
 EXPECTED = [f"{screen}-{variant}.png" for screen in SCREENS for variant in VARIANTS]
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"

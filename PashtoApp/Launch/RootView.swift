@@ -76,7 +76,8 @@ struct RootView: View {
                 studySkip: {
                     Task { await model.studySkip(voiceOver: voiceOverEnabled) }
                 },
-                closeStudy: { model.closeStudy() }
+                closeStudy: { model.closeStudy() },
+                celebrationOffer: { model.categoryCelebrationOffer(for: $0) }
             )
         }
     }

@@ -63,6 +63,18 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(waitForQuiz(app), "quiz did not appear. buttons: \(buttonDump(app))")
         settle(1.2)
         shot("quiz-\(variant)")
+
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotCelebration"]
+        app.launch()
+        let praise = app.staticTexts["DE-ra kha"]
+        XCTAssertTrue(
+            praise.waitForExistence(timeout: 20),
+            "celebration did not appear. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.buttons["Continue"].waitForExistence(timeout: 5))
+        settle(0.6)
+        shot("celebration-\(variant)")
     }
 
     private func launchArguments(for variant: String) -> [String] {
