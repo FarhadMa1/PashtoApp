@@ -86,33 +86,22 @@ struct StudyCardScreen: View {
         }
     }
 
-    /// Back and the progress only. The lesson title stays in VoiceOver.
+    /// Back on its own row, then the lesson title at full width.
     ///
-    /// A clear color in the background is not an accessibility element, so VoiceOver
-    /// never lands on it. This is the same title, drawn clear.
+    /// The title wraps between words. Nothing is drawn over the back button.
+    /// VoiceOver reads the visible title.
     private var accessibilityTitle: some View {
-        studyBackButton(oneLine: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .overlay {
-                if !deck.title.isEmpty {
-                    spokenLessonTitle
-                }
-            }
-    }
-
-    /// One VoiceOver element. It fills the back-button row and does not paint.
-    private var spokenLessonTitle: some View {
-        Text(verbatim: deck.title)
-            .font(.headline)
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
-            .foregroundStyle(.clear)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(verbatim: deck.title))
-            .accessibilityAddTraits(.isStaticText)
-            .accessibilitySortPriority(65)
-            .allowsHitTesting(false)
+        VStack(alignment: .leading, spacing: 12) {
+            studyBackButton(oneLine: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(verbatim: deck.title)
+                .font(.headline.weight(.bold))
+                .foregroundStyle(StudyPalette.headerInk)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilitySortPriority(65)
+        }
     }
 
     private func studyBackButton(oneLine: Bool) -> some View {
