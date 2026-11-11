@@ -1,8 +1,8 @@
 import XCTest
 
-/// Opens the home, a Numbers learn card, the Family screens, a quiz, and the
-/// celebration. The workflow runs this once per variant: light, dark, and the
-/// largest accessibility text size.
+/// Opens the home, the lower Home rows, a Numbers learn card, the Family
+/// screens, a quiz, and the celebration. The workflow runs this once per
+/// variant: light, dark, and the largest accessibility text size.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -37,6 +37,10 @@ final class ScreenshotTests: XCTestCase {
         )
         settle()
         shot("home-\(variant)")
+
+        revealNewCategories(in: app)
+        settle()
+        shot("home-new-categories-\(variant)")
 
         tap("u-numbers", in: app)
         tap("l-numbers-learn-one-to-five", in: app)
@@ -111,6 +115,50 @@ final class ScreenshotTests: XCTestCase {
             arguments.append("-PashtoScreenshotLight")
         }
         return arguments
+    }
+
+    /// Scrolls until Numbers, Food, Town, and Conversation are on screen together.
+    /// The first Home shot stays at the top, before this scroll.
+    private func revealNewCategories(in app: XCUIApplication) {
+        let rows = ["u-numbers", "u-food", "u-town", "u-conversation"].map {
+            app.descendants(matching: .any)[$0]
+        }
+        for row in rows {
+            XCTAssertTrue(row.waitForExistence(timeout: 15), "new category row is missing. buttons: \(buttonDump(app))")
+        }
+        for _ in 0..<24 {
+            if newCategoriesAreVisible(rows, in: app) { return }
+            let numbers = rows[0].frame
+            let conversation = rows[3].frame
+            if conversation == .zero || conversation.maxY > app.frame.maxY - 8 {
+                drag(in: app, from: 0.72, to: 0.48)
+            } else if numbers.minY < 8 || !rows[0].isHittable {
+                drag(in: app, from: 0.42, to: 0.62)
+            } else {
+                drag(in: app, from: 0.68, to: 0.50)
+            }
+        }
+        XCTAssertTrue(
+            newCategoriesAreVisible(rows, in: app),
+            "new categories are not all on screen. buttons: \(buttonDump(app))"
+        )
+    }
+
+    private func newCategoriesAreVisible(_ rows: [XCUIElement], in app: XCUIApplication) -> Bool {
+        let frames = rows.map(\.frame)
+        guard frames.allSatisfy({ $0.width > 1 && $0.height > 1 && app.frame.contains($0) }) else {
+            return false
+        }
+        guard zip(frames, frames.dropFirst()).allSatisfy({ $0.minY < $1.minY }) else {
+            return false
+        }
+        return rows.allSatisfy(\.isHittable)
+    }
+
+    private func drag(in app: XCUIApplication, from startY: CGFloat, to endY: CGFloat) {
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+        start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication) {
