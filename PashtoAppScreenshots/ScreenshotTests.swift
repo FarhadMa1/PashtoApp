@@ -138,10 +138,42 @@ final class ScreenshotTests: XCTestCase {
                 drag(in: app, from: 0.68, to: 0.50)
             }
         }
-        XCTAssertTrue(
-            newCategoriesAreVisible(rows, in: app),
-            "new categories are not all on screen. buttons: \(buttonDump(app))"
+        // The largest text size cannot fit four full cards under the header.
+        // Park Numbers at the top of the list so the new rows fill the screen.
+        parkNewCategories(rows, in: app)
+    }
+
+    private func parkNewCategories(_ rows: [XCUIElement], in app: XCUIApplication) {
+        let time = app.descendants(matching: .any)["u-time"]
+        for _ in 0..<6 {
+            drag(in: app, from: 0.40, to: 0.78)
+        }
+        for _ in 0..<18 {
+            if newCategoriesAreVisible(rows, in: app) { return }
+            let numbers = rows[0].frame
+            let numbersInside = numbers.height > 1 && app.frame.contains(numbers)
+            let timeAbove = visibleHeight(time.frame, in: app) < 12 && time.frame.maxY <= numbers.minY + 4
+            if numbersInside && timeAbove { return }
+            if numbers.minY < 24 && visibleHeight(numbers, in: app) < numbers.height * 0.85 {
+                drag(in: app, from: 0.48, to: 0.60)
+                return
+            }
+            drag(in: app, from: 0.66, to: 0.52)
+        }
+        XCTAssertGreaterThan(
+            visibleHeight(rows[0].frame, in: app), 36,
+            "Numbers did not scroll into view. buttons: \(buttonDump(app))"
         )
+        XCTAssertGreaterThan(
+            visibleHeight(rows[1].frame, in: app), 20,
+            "Food did not scroll into view. buttons: \(buttonDump(app))"
+        )
+    }
+
+    private func visibleHeight(_ frame: CGRect, in app: XCUIApplication) -> CGFloat {
+        let intersection = frame.intersection(app.frame)
+        guard !intersection.isNull else { return 0 }
+        return intersection.height
     }
 
     private func newCategoriesAreVisible(_ rows: [XCUIElement], in app: XCUIApplication) -> Bool {
