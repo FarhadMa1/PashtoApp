@@ -1411,6 +1411,12 @@ struct CategoryCelebrationScreen: View {
         }
     }
 
+    /// Stored pronunciation, drawn so the syllable hyphen is not a line break.
+    /// VoiceOver keeps the content string.
+    private var drawnPronunciation: String {
+        CategoryCelebration.praise.pronunciation.replacingOccurrences(of: "-", with: "\u{2011}")
+    }
+
     private var praiseCopy: some View {
         VStack(spacing: 18) {
             Text(verbatim: offer.unitName)
@@ -1423,15 +1429,16 @@ struct CategoryCelebrationScreen: View {
                 .minimumScaleFactor(0.6)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity)
-            Text(verbatim: CategoryCelebration.praise.pronunciation)
+            Text(verbatim: drawnPronunciation)
                 .font(.system(size: praiseSize, weight: .heavy))
                 .foregroundStyle(CelebrationPalette.pronunciation)
                 .multilineTextAlignment(.center)
-                .lineLimit(3)
+                .lineLimit(2)
                 .minimumScaleFactor(0.5)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity)
                 .environment(\.layoutDirection, .leftToRight)
+                .accessibilityLabel(Text(verbatim: CategoryCelebration.praise.pronunciation))
                 .accessibilityFocused($praiseFocused)
             Text(verbatim: CategoryCelebration.praise.pashto)
                 .font(.system(size: pashtoSize, weight: .semibold))
