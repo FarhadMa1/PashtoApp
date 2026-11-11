@@ -7,28 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		096B70D54E3354D984E154E3 /* e-xa-raghlast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EE29101395AC9D1702069D48 /* e-xa-raghlast.m4a */; };
 		0BA7E5FCB0CDADC718983062 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */; };
 		102C4C95B75514AFA77EE9C8 /* StudyCardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */; };
+		112CADD0C0A549B672A33061 /* e-dera-xa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 846523C50CF2F0FC6624D6C5 /* e-dera-xa.m4a */; };
+		11E73CB8D1483A23F59F942C /* e-assalamu-alaykum.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */; };
+		1725025E881BCF43ECB020A2 /* e-manana.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 65419D23C784426B9B23C73E /* e-manana.m4a */; };
 		1B85723CDA5A6E0699CC804F /* content.json in Resources */ = {isa = PBXBuildFile; fileRef = 2E7E47B640D712A33D52EC82 /* content.json */; };
+		20E8B5B23086C90D848A135A /* e-pa-maxa-de-xa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2E3B32F55091A5C9F56EF56F /* e-pa-maxa-de-xa.m4a */; };
 		21A05073FF4D4CB0BA403D07 /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87592241A3F002CDC42374F0 /* Motion.swift */; };
 		27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */; };
+		290AFFCE73D6A06588C917C3 /* e-walaykum-salam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */; };
 		2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */ = {isa = PBXBuildFile; fileRef = 652503DE42EB750727E88CEF /* release-units.json */; };
 		3530111B87046DF5440D3C30 /* GlyphCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */; };
 		4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */; };
 		4478F73538EE2286163AB2AA /* MatchingBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */; };
+		507F41FB8183F2D12EBBAE6B /* e-za-xa-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1F2921815B465BF7C67B6260 /* e-za-xa-yam.m4a */; };
 		553568DE12A69B71500FA8A7 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9032BBBE0603F628A79CF3 /* AppModel.swift */; };
 		5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427EEE4D83973BBDF72044C /* ContentView.swift */; };
 		644132CFDE88EAAFBC17B121 /* LessonProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */; };
 		64C0628E4E44E51E937B45A9 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0505CC533954900598FD2EE0 /* ScreenshotTests.swift */; };
 		68E02FABA91DAA33FCA7EF30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB198D583572EA4F7E128283 /* Assets.xcassets */; };
+		723449F0906ECDFB12648328 /* e-taso-tsanga-yast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */; };
 		7C3CF5EEC47EF612EE538B95 /* UpdateNeededScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */; };
+		8D2ADE11DB7BFBC91B9791C4 /* e-mehrabani-wakray.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */; };
 		8E78ED144AB73CD9F3E1A437 /* PashtoPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = BD251F923BB6C48D5AF2E09E /* PashtoPersistence */; };
+		928EE95138D58268F755DBD7 /* e-xa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9AB5D1D030F585B371D5FDB8 /* e-xa.m4a */; };
 		980EAFAB2A22F95D11E40DB6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2382E97EED9CF787345C726 /* RootView.swift */; };
 		98F24341E577C90C0E7A4B37 /* LapisStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791E1EE79678E1A2816B03F /* LapisStyle.swift */; };
+		99E8A559E2D8BAE449B486E9 /* e-xwar-ma-she.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */; };
+		9AFF94A423C19F998CD2F428 /* e-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F0CD0E123D3AD965E07A54CD /* e-na.m4a */; };
+		9D20A2B24783201D03D5BDDF /* e-baxana-ghwaram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */; };
+		B6A00D3DA986FA9FAADF25B2 /* e-salam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB1399B47DD716ED2E20B5C4 /* e-salam.m4a */; };
 		C465E70F7E879ADE2B4505C5 /* ProgressStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */; };
+		C7F90B4AAB29675E52AFE58E /* e-xoday-paman.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B1387294DBB3F01F49957DC5 /* e-xoday-paman.m4a */; };
 		C7FB99C8D9388789E64DC142 /* StorageErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21AAA7CC3D9B78DB7765A80 /* StorageErrorScreen.swift */; };
+		CCF75C560B54AF4E01E115EF /* e-tsanga-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CCAECD6AA12960DD6901428E /* e-tsanga-ye.m4a */; };
 		E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20749347E5913E3C376940D0 /* PashtoApp.swift */; };
+		E520FAD0CF89519C47ECA535 /* e-stare-ma-she.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */; };
+		EDED515A7D4127982E2F7E38 /* e-dera-manana.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A4A51C8511BF186A7DBF0F5C /* e-dera-manana.m4a */; };
 		F3E1543DABC4E3A24A86D2CA /* PashtoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 76088B5BA2092E9464066602 /* PashtoCore */; };
+		FA7282962D28A1AE9122E0EA /* e-ho.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5E4FADA001A54E1B52DCAC1A /* e-ho.m4a */; };
 		FB3AF14F0E0EB18EDCB270C8 /* WelcomeBackScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,30 +64,49 @@
 /* Begin PBXFileReference section */
 		03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNeededScreen.swift; sourceTree = "<group>"; };
 		0505CC533954900598FD2EE0 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
+		0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */ = {isa = PBXFileReference; path = "e-mehrabani-wakray.m4a"; sourceTree = "<group>"; };
+		0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */ = {isa = PBXFileReference; path = "e-walaykum-salam.m4a"; sourceTree = "<group>"; };
+		13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */ = {isa = PBXFileReference; path = "e-stare-ma-she.m4a"; sourceTree = "<group>"; };
+		1F2921815B465BF7C67B6260 /* e-za-xa-yam.m4a */ = {isa = PBXFileReference; path = "e-za-xa-yam.m4a"; sourceTree = "<group>"; };
 		20749347E5913E3C376940D0 /* PashtoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PashtoApp.swift; sourceTree = "<group>"; };
+		2E3B32F55091A5C9F56EF56F /* e-pa-maxa-de-xa.m4a */ = {isa = PBXFileReference; path = "e-pa-maxa-de-xa.m4a"; sourceTree = "<group>"; };
 		2E7E47B640D712A33D52EC82 /* content.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = content.json; sourceTree = "<group>"; };
 		3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphCard.swift; sourceTree = "<group>"; };
 		3E2DD5B8D6DE03B23DB286AB /* PashtoCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoCore; path = Packages/PashtoCore; sourceTree = SOURCE_ROOT; };
 		43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeBackScreen.swift; sourceTree = "<group>"; };
 		4838E5BC35837852962E32B7 /* PashtoAppScreenshots.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PashtoAppScreenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingBoard.swift; sourceTree = "<group>"; };
+		5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */ = {isa = PBXFileReference; path = "e-xwar-ma-she.m4a"; sourceTree = "<group>"; };
+		5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */ = {isa = PBXFileReference; path = "e-assalamu-alaykum.m4a"; sourceTree = "<group>"; };
+		5E4FADA001A54E1B52DCAC1A /* e-ho.m4a */ = {isa = PBXFileReference; path = "e-ho.m4a"; sourceTree = "<group>"; };
 		5E9032BBBE0603F628A79CF3 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		652503DE42EB750727E88CEF /* release-units.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "release-units.json"; sourceTree = "<group>"; };
+		65419D23C784426B9B23C73E /* e-manana.m4a */ = {isa = PBXFileReference; path = "e-manana.m4a"; sourceTree = "<group>"; };
 		67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStoreLocation.swift; sourceTree = "<group>"; };
 		6791E1EE79678E1A2816B03F /* LapisStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapisStyle.swift; sourceTree = "<group>"; };
 		6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCardScreen.swift; sourceTree = "<group>"; };
 		76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8118EC685984C6F8EEC84F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */ = {isa = PBXFileReference; path = "e-baxana-ghwaram.m4a"; sourceTree = "<group>"; };
+		846523C50CF2F0FC6624D6C5 /* e-dera-xa.m4a */ = {isa = PBXFileReference; path = "e-dera-xa.m4a"; sourceTree = "<group>"; };
 		87592241A3F002CDC42374F0 /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
 		8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonProgressBar.swift; sourceTree = "<group>"; };
+		9AB5D1D030F585B371D5FDB8 /* e-xa.m4a */ = {isa = PBXFileReference; path = "e-xa.m4a"; sourceTree = "<group>"; };
+		A4A51C8511BF186A7DBF0F5C /* e-dera-manana.m4a */ = {isa = PBXFileReference; path = "e-dera-manana.m4a"; sourceTree = "<group>"; };
 		A9F7FCFA89751587AB46DDDE /* PashtoPersistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoPersistence; path = Packages/PashtoPersistence; sourceTree = SOURCE_ROOT; };
+		B1387294DBB3F01F49957DC5 /* e-xoday-paman.m4a */ = {isa = PBXFileReference; path = "e-xoday-paman.m4a"; sourceTree = "<group>"; };
 		BB198D583572EA4F7E128283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		CCAECD6AA12960DD6901428E /* e-tsanga-ye.m4a */ = {isa = PBXFileReference; path = "e-tsanga-ye.m4a"; sourceTree = "<group>"; };
 		D1020344AFA863654DE80D5B /* PashtoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PashtoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21AAA7CC3D9B78DB7765A80 /* StorageErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageErrorScreen.swift; sourceTree = "<group>"; };
 		DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScreen.swift; sourceTree = "<group>"; };
 		E2382E97EED9CF787345C726 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		E427EEE4D83973BBDF72044C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		EE29101395AC9D1702069D48 /* e-xa-raghlast.m4a */ = {isa = PBXFileReference; path = "e-xa-raghlast.m4a"; sourceTree = "<group>"; };
+		F0CD0E123D3AD965E07A54CD /* e-na.m4a */ = {isa = PBXFileReference; path = "e-na.m4a"; sourceTree = "<group>"; };
+		FB1399B47DD716ED2E20B5C4 /* e-salam.m4a */ = {isa = PBXFileReference; path = "e-salam.m4a"; sourceTree = "<group>"; };
+		FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */ = {isa = PBXFileReference; path = "e-taso-tsanga-yast.m4a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +125,7 @@
 		007E8EAC4F4F99D80978E848 /* PashtoApp */ = {
 			isa = PBXGroup;
 			children = (
+				66BF9CB3CD9559B6CFEF6401 /* Audio */,
 				B64D964EA5936C6764CC75B9 /* Design */,
 				3E52D96AC7FB87F8A935F871 /* Launch */,
 				61BD7F05B60F669B0840E6DA /* Quiz */,
@@ -140,6 +179,32 @@
 				6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */,
 			);
 			path = Quiz;
+			sourceTree = "<group>";
+		};
+		66BF9CB3CD9559B6CFEF6401 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */,
+				8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */,
+				A4A51C8511BF186A7DBF0F5C /* e-dera-manana.m4a */,
+				846523C50CF2F0FC6624D6C5 /* e-dera-xa.m4a */,
+				5E4FADA001A54E1B52DCAC1A /* e-ho.m4a */,
+				65419D23C784426B9B23C73E /* e-manana.m4a */,
+				0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */,
+				F0CD0E123D3AD965E07A54CD /* e-na.m4a */,
+				2E3B32F55091A5C9F56EF56F /* e-pa-maxa-de-xa.m4a */,
+				FB1399B47DD716ED2E20B5C4 /* e-salam.m4a */,
+				13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */,
+				FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */,
+				CCAECD6AA12960DD6901428E /* e-tsanga-ye.m4a */,
+				0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */,
+				EE29101395AC9D1702069D48 /* e-xa-raghlast.m4a */,
+				9AB5D1D030F585B371D5FDB8 /* e-xa.m4a */,
+				B1387294DBB3F01F49957DC5 /* e-xoday-paman.m4a */,
+				5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */,
+				1F2921815B465BF7C67B6260 /* e-za-xa-yam.m4a */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		7FCAD59CCEC979B50B7B0BCF /* content */ = {
@@ -282,6 +347,25 @@
 				0BA7E5FCB0CDADC718983062 /* Localizable.xcstrings in Resources */,
 				27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */,
 				1B85723CDA5A6E0699CC804F /* content.json in Resources */,
+				11E73CB8D1483A23F59F942C /* e-assalamu-alaykum.m4a in Resources */,
+				9D20A2B24783201D03D5BDDF /* e-baxana-ghwaram.m4a in Resources */,
+				EDED515A7D4127982E2F7E38 /* e-dera-manana.m4a in Resources */,
+				112CADD0C0A549B672A33061 /* e-dera-xa.m4a in Resources */,
+				FA7282962D28A1AE9122E0EA /* e-ho.m4a in Resources */,
+				1725025E881BCF43ECB020A2 /* e-manana.m4a in Resources */,
+				8D2ADE11DB7BFBC91B9791C4 /* e-mehrabani-wakray.m4a in Resources */,
+				9AFF94A423C19F998CD2F428 /* e-na.m4a in Resources */,
+				20E8B5B23086C90D848A135A /* e-pa-maxa-de-xa.m4a in Resources */,
+				B6A00D3DA986FA9FAADF25B2 /* e-salam.m4a in Resources */,
+				E520FAD0CF89519C47ECA535 /* e-stare-ma-she.m4a in Resources */,
+				723449F0906ECDFB12648328 /* e-taso-tsanga-yast.m4a in Resources */,
+				CCF75C560B54AF4E01E115EF /* e-tsanga-ye.m4a in Resources */,
+				290AFFCE73D6A06588C917C3 /* e-walaykum-salam.m4a in Resources */,
+				096B70D54E3354D984E154E3 /* e-xa-raghlast.m4a in Resources */,
+				928EE95138D58268F755DBD7 /* e-xa.m4a in Resources */,
+				C7F90B4AAB29675E52AFE58E /* e-xoday-paman.m4a in Resources */,
+				99E8A559E2D8BAE449B486E9 /* e-xwar-ma-she.m4a in Resources */,
+				507F41FB8183F2D12EBBAE6B /* e-za-xa-yam.m4a in Resources */,
 				2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
