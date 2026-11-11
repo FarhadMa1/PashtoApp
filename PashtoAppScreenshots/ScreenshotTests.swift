@@ -1,8 +1,9 @@
 import XCTest
 
-/// Opens the home, the lower Home rows, a Numbers learn card, the Family
-/// screens, a quiz, and the celebration. The workflow runs this once per
-/// variant: light, dark, and the largest accessibility text size.
+/// Opens the home, the lower Home rows, a Numbers learn list and its cards,
+/// the Greetings learn list, the Family screens, a quiz, and the celebration.
+/// The workflow runs this once per variant: light, dark, and the largest
+/// accessibility text size.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -45,6 +46,16 @@ final class ScreenshotTests: XCTestCase {
         tap("u-numbers", in: app)
         tap("l-numbers-learn-one-to-five", in: app)
         XCTAssertTrue(
+            app.buttons["Practice lesson →"].waitForExistence(timeout: 15),
+            "Numbers learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers list has no pronunciation")
+        XCTAssertTrue(app.staticTexts["0 of 5 words"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["Play"].exists, "Numbers has no bundled clip")
+        let numbersCards = app.buttons["Flashcards"]
+        XCTAssertTrue(numbersCards.waitForExistence(timeout: 5), "Numbers list has no flashcards")
+        numbersCards.tap()
+        XCTAssertTrue(
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
             "Numbers learn card did not open. buttons: \(buttonDump(app))"
         )
@@ -63,6 +74,21 @@ final class ScreenshotTests: XCTestCase {
             "home did not return. buttons: \(buttonDump(app))"
         )
 
+        tap("u-greetings", in: app)
+        tap("l-greetings-learn", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson →"].waitForExistence(timeout: 15),
+            "Greetings learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Greetings list has no Play button")
+        XCTAssertTrue(app.staticTexts["kha"].waitForExistence(timeout: 5), "Greetings list has no pronunciation")
+        XCTAssertTrue(app.staticTexts["0 of 4 words"].waitForExistence(timeout: 5))
+        settle(1.0)
+        shot("learn-list-\(variant)")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        popToHome(app, basics: basics)
+
         tap("u-family", in: app)
         let mother = app.descendants(matching: .any)["e-mor"]
         XCTAssertTrue(mother.waitForExistence(timeout: 15), "Family word list did not load. buttons: \(buttonDump(app))")
@@ -72,6 +98,12 @@ final class ScreenshotTests: XCTestCase {
 
         tap("l-family-learn-members", in: app)
         XCTAssertTrue(
+            app.buttons["Practice lesson →"].waitForExistence(timeout: 15),
+            "Family learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.buttons["Flashcards"].waitForExistence(timeout: 5))
+        app.buttons["Flashcards"].tap()
+        XCTAssertTrue(
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
             "Learn card did not open. buttons: \(buttonDump(app))"
         )
@@ -80,6 +112,11 @@ final class ScreenshotTests: XCTestCase {
         shot("learn-\(variant)")
 
         XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        XCTAssertTrue(
+            app.buttons["Practice lesson →"].waitForExistence(timeout: 10),
+            "Family learn list did not return. buttons: \(buttonDump(app))"
+        )
         app.buttons["Pashto"].tap()
 
         let practice = app.descendants(matching: .any)["l-family-1"]
@@ -172,6 +209,22 @@ final class ScreenshotTests: XCTestCase {
             return false
         }
         return rows.allSatisfy(\.isHittable)
+    }
+
+    /// Leaves a category page for the home. The back control is the navigation chevron.
+    private func popToHome(_ app: XCUIApplication, basics: XCUIElement) {
+        let back = app.navigationBars.buttons.firstMatch
+        if back.waitForExistence(timeout: 5) {
+            back.tap()
+        }
+        if basics.waitForExistence(timeout: 8) { return }
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.01, dy: 0.5))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
+        start.press(forDuration: 0.05, thenDragTo: end)
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 15),
+            "home did not return from the category. buttons: \(buttonDump(app))"
+        )
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication) {

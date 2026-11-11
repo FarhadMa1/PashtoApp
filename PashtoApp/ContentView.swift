@@ -36,8 +36,16 @@ struct ContentView: View {
     var finishSession: (LessonSession) -> Void = { _ in }
     /// Learned word for the local date. Nil omits the card. There is no empty-state line.
     var dailyWord: DailyWord? = nil
-    /// Learn or phrases cards. Nil keeps the quiz or the home. Closing it does not end a quiz.
+    /// Learn or phrases cards. Nil keeps the quiz, the learn list, or the home. Closing it does not end a quiz.
     var study: StudyDeck? = nil
+    /// Learn words. Nil keeps the cards, the quiz, or the home. Opening it does not finish the lesson.
+    var learnList: LearnList? = nil
+    var favouriteItemIDs: Set<ItemID> = []
+    var toggleFavourite: (ItemID) -> Void = { _ in }
+    var openFlashcards: () -> Void = {}
+    var closeFlashcards: () -> Void = {}
+    var closeLearnList: () -> Void = {}
+    var startListedPractice: () -> Void = {}
     var studyNext: () -> StudyStep = { .ignored }
     var studyShowMeaning: () -> StudyStep = { .ignored }
     /// Last learn card. Opens the next lesson. The label stays Next.
@@ -75,7 +83,23 @@ struct ContentView: View {
                 onOpenNextLesson: studyOpenNextLesson,
                 onStartPractice: studyStartPractice,
                 onSkip: studySkip,
-                onBack: closeStudy
+                onBack: {
+                    if learnList != nil {
+                        closeFlashcards()
+                    } else {
+                        closeStudy()
+                    }
+                }
+            )
+            .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
+        } else if let learnList {
+            LearnListScreen(
+                list: learnList,
+                savedItemIDs: favouriteItemIDs,
+                onToggleFavourite: toggleFavourite,
+                onPractice: startListedPractice,
+                onFlashcards: openFlashcards,
+                onBack: closeLearnList
             )
             .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         } else if let quiz, !quiz.tasks.isEmpty {

@@ -33,7 +33,7 @@ struct GreetingsAudioTests {
         #expect(!quiz.contains("GreetingsClipPlayer"))
         #expect(study.contains("deck.unitID.rawValue == GreetingsAudio.unitID"))
         #expect(study.contains("GreetingsAudio.url"))
-        #expect(study.components(separatedBy: "clipPlayer.play").count == 2)
+        #expect(study.components(separatedBy: "clipPlayer.play").count == 3)
         #expect(study.contains("accessibilityLabel(Text(verbatim: \"Play\"))"))
     }
 

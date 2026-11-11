@@ -359,11 +359,18 @@ struct ModuleStructureTests {
         #expect(ModuleCopy.next == "Next")
         #expect(ModuleCopy.startPractice == "Start practice")
         #expect(ModuleCopy.skipToPractice == "Skip to practice")
+        #expect(ModuleCopy.practiceLesson == "Practice lesson →")
+        #expect(ModuleCopy.flashcards == "Flashcards")
+        #expect(ModuleCopy.save == "Save")
+        #expect(ModuleCopy.saved == "Saved")
+        #expect(ModuleCopy.play == "Play")
+        #expect(ModuleCopy.wordsCount(completed: 3, total: 7) == "3 of 7 words")
         #expect(DailyWordCopy.showMeaning == "Show meaning")
         let catalog = try String(contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/Localizable.xcstrings"), encoding: .utf8)
-        for word in [ModuleCopy.learn, ModuleCopy.phrases, ModuleCopy.practice, ModuleCopy.newWords, ModuleCopy.next, ModuleCopy.startPractice, ModuleCopy.skipToPractice, DailyWordCopy.showMeaning] {
+        for word in [ModuleCopy.learn, ModuleCopy.phrases, ModuleCopy.practice, ModuleCopy.newWords, ModuleCopy.next, ModuleCopy.startPractice, ModuleCopy.skipToPractice, ModuleCopy.practiceLesson, ModuleCopy.flashcards, ModuleCopy.save, ModuleCopy.saved, ModuleCopy.play, DailyWordCopy.showMeaning] {
             #expect(catalog.contains("\"value\" : \"\(word)\""))
         }
+        #expect(catalog.contains("\"value\" : \"%lld of %lld words\""))
         #expect(!catalog.contains("The basics"))
     }
 

@@ -59,6 +59,10 @@ final class AppModel {
     private var openLesson = OpenLesson()
     /// Learn or phrases cards. Not written to the store. Closing it leaves any quiz.
     private(set) var studyDeck: StudyDeck?
+    /// The learn lesson on screen. Not written as progress. Nil for phrases and the quiz.
+    private(set) var learnList: LearnList?
+    /// Words saved from a learn row. Stored beside progress, not as a finished lesson.
+    private(set) var favouriteItemIDs: Set<ItemID> = []
     /// Bumps when the deck is replaced so a waiting settle cannot unlock the new one early.
     @ObservationIgnored
     private var studySettleToken = UUID()
@@ -249,6 +253,7 @@ final class AppModel {
             self.progressStore = store
             self.snapshot = snapshot
             celebratedUnitIDs = CategoryCelebrationStore.load(beside: url)
+            favouriteItemIDs = FavouriteWordStore.load(beside: url)
             storageErrorReason = nil
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
@@ -256,6 +261,7 @@ final class AppModel {
             progressStore = nil
             snapshot = nil
             celebratedUnitIDs = []
+            favouriteItemIDs = []
             let screen = progressScreen(for: progressOpenFailure(for: error))
             storageErrorReason = screen == .storageError ? .progressUnreadable : nil
             phase = phase(for: screen)
@@ -316,6 +322,8 @@ final class AppModel {
             self.snapshot = snapshot
             CategoryCelebrationStore.reset(beside: url)
             celebratedUnitIDs = []
+            FavouriteWordStore.reset(beside: url)
+            favouriteItemIDs = []
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
@@ -365,12 +373,52 @@ final class AppModel {
     func openHomeLesson(_ lessonID: LessonID, voiceOver: Bool) async {
         guard phase == .ready, let course else { return }
         if let found = StudyCourse.lesson(lessonID, in: course), !found.lesson.countsForProgress {
+            if found.lesson.kind == .learn, showLearnList(lessonID) {
+                return
+            }
             guard let deck = StudyCourse.deck(for: lessonID, in: course) else { return }
+            learnList = nil
             replaceStudy(deck)
             return
         }
+        learnList = nil
         replaceStudy(nil)
         await startLesson(lessonID, voiceOver: voiceOver)
+    }
+
+    /// Opens the card view for the learn list that is already on screen.
+    func openLearnFlashcards() {
+        guard let course, let list = learnList else { return }
+        guard var deck = StudyCourse.deck(for: list.lessonID, in: course) else { return }
+        deck.hold()
+        replaceStudy(deck)
+        scheduleStudySettle()
+    }
+
+    /// Leaves the cards and keeps the learn list.
+    func closeLearnFlashcards() {
+        replaceStudy(nil)
+    }
+
+    /// Leaves the learn list. A quiz that was already open stays open.
+    func closeLearnList() {
+        learnList = nil
+        replaceStudy(nil)
+    }
+
+    /// Opens the unit's first practice lesson. The list is not stored as progress.
+    func startListedPractice(voiceOver: Bool) async {
+        guard let target = learnList?.practiceLessonID else { return }
+        learnList = nil
+        replaceStudy(nil)
+        await startLesson(target, voiceOver: voiceOver)
+    }
+
+    /// Saves or removes one favourite. Finished lessons stay as they were.
+    func toggleFavourite(_ id: ItemID) {
+        favouriteItemIDs = FavouriteWordStore.toggle(id, in: favouriteItemIDs)
+        guard let url = try? resolvedURL() else { return }
+        try? FavouriteWordStore.save(favouriteItemIDs, beside: url)
     }
 
     /// One card forward. A second tap before the first settles is ignored.
@@ -434,15 +482,44 @@ final class AppModel {
     /// A practice lesson uses the quiz opener and does not write the cards.
     private func openStudyTarget(_ lessonID: LessonID, voiceOver: Bool) async {
         guard let course, let found = StudyCourse.lesson(lessonID, in: course) else { return }
+        if found.lesson.kind == .learn, showLearnList(lessonID) {
+            return
+        }
         if !found.lesson.countsForProgress {
+            learnList = nil
             guard var deck = StudyCourse.deck(for: lessonID, in: course) else { return }
             deck.hold()
             replaceStudy(deck)
             scheduleStudySettle()
             return
         }
+        learnList = nil
         replaceStudy(nil)
         await startLesson(lessonID, voiceOver: voiceOver)
+    }
+
+    /// Shows the learn list and leaves any cards. Returns false when the lesson is not a learn list.
+    private func showLearnList(_ lessonID: LessonID) -> Bool {
+        guard let course else { return false }
+        guard let list = LearnList.make(
+            for: lessonID,
+            in: course,
+            finishedLessonIDs: finishedLessonIDs,
+            audioItemIDs: bundledAudioItemIDs()
+        ) else { return false }
+        learnList = list
+        replaceStudy(nil)
+        return true
+    }
+
+    /// Item ids that have a bundled clip. A missing file is left out.
+    private func bundledAudioItemIDs() -> Set<ItemID> {
+        guard let course, let directory = Bundle.main.resourceURL else { return [] }
+        var ids: Set<ItemID> = []
+        for item in course.items where GreetingsAudio.url(for: item.id, in: directory) != nil {
+            ids.insert(item.id)
+        }
+        return ids
     }
 
     private func replaceStudy(_ deck: StudyDeck?) {
