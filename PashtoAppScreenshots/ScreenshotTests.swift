@@ -126,10 +126,13 @@ final class ScreenshotTests: XCTestCase {
         for row in rows {
             XCTAssertTrue(row.waitForExistence(timeout: 15), "new category row is missing. buttons: \(buttonDump(app))")
         }
-        for _ in 0..<24 {
+        for _ in 0..<12 {
             if newCategoriesAreVisible(rows, in: app) { return }
             let numbers = rows[0].frame
             let conversation = rows[3].frame
+            let conversationIn = conversation.height > 1 && app.frame.contains(conversation)
+            let numbersIn = numbers.height > 1 && app.frame.contains(numbers)
+            if conversationIn && !numbersIn { break }
             if conversation == .zero || conversation.maxY > app.frame.maxY - 8 {
                 drag(in: app, from: 0.72, to: 0.48)
             } else if numbers.minY < 8 || !rows[0].isHittable {
@@ -138,42 +141,36 @@ final class ScreenshotTests: XCTestCase {
                 drag(in: app, from: 0.68, to: 0.50)
             }
         }
-        // The largest text size cannot fit four full cards under the header.
-        // Park Numbers at the top of the list so the new rows fill the screen.
-        parkNewCategories(rows, in: app)
+        if newCategoriesAreVisible(rows, in: app) { return }
+        // The largest text size cannot fit four full cards. Keep Numbers tappable
+        // at the top of the list and show as many of the next rows as fit.
+        placeNumbersFirst(rows, in: app)
     }
 
-    private func parkNewCategories(_ rows: [XCUIElement], in app: XCUIApplication) {
-        let time = app.descendants(matching: .any)["u-time"]
-        for _ in 0..<6 {
-            drag(in: app, from: 0.40, to: 0.78)
+    private func placeNumbersFirst(_ rows: [XCUIElement], in app: XCUIApplication) {
+        let numbers = rows[0]
+        for _ in 0..<30 {
+            if numbers.isHittable { break }
+            moveToward(numbers, in: app)
         }
-        for _ in 0..<18 {
-            if newCategoriesAreVisible(rows, in: app) { return }
-            let numbers = rows[0].frame
-            let numbersInside = numbers.height > 1 && app.frame.contains(numbers)
-            let timeAbove = visibleHeight(time.frame, in: app) < 12 && time.frame.maxY <= numbers.minY + 4
-            if numbersInside && timeAbove { return }
-            if numbers.minY < 24 && visibleHeight(numbers, in: app) < numbers.height * 0.85 {
-                drag(in: app, from: 0.48, to: 0.60)
-                return
-            }
-            drag(in: app, from: 0.66, to: 0.52)
+        XCTAssertTrue(numbers.isHittable, "Numbers did not scroll into view. buttons: \(buttonDump(app))")
+        for _ in 0..<8 {
+            if rows.allSatisfy(\.isHittable) { return }
+            drag(in: app, from: 0.62, to: 0.50)
+            if numbers.isHittable { continue }
+            drag(in: app, from: 0.48, to: 0.64)
+            break
         }
-        XCTAssertGreaterThan(
-            visibleHeight(rows[0].frame, in: app), 36,
-            "Numbers did not scroll into view. buttons: \(buttonDump(app))"
-        )
-        XCTAssertGreaterThan(
-            visibleHeight(rows[1].frame, in: app), 20,
-            "Food did not scroll into view. buttons: \(buttonDump(app))"
-        )
+        XCTAssertTrue(numbers.isHittable, "Numbers left the screen. buttons: \(buttonDump(app))")
     }
 
-    private func visibleHeight(_ frame: CGRect, in app: XCUIApplication) -> CGFloat {
-        let intersection = frame.intersection(app.frame)
-        guard !intersection.isNull else { return 0 }
-        return intersection.height
+    private func moveToward(_ element: XCUIElement, in app: XCUIApplication) {
+        let frame = element.frame
+        if frame == .zero || frame.midY >= app.frame.midY {
+            drag(in: app, from: 0.72, to: 0.46)
+        } else {
+            drag(in: app, from: 0.40, to: 0.70)
+        }
     }
 
     private func newCategoriesAreVisible(_ rows: [XCUIElement], in app: XCUIApplication) -> Bool {
