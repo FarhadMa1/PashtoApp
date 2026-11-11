@@ -52,6 +52,8 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers list has no pronunciation")
         XCTAssertTrue(app.staticTexts["0 of 5 words"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["Play"].exists, "Numbers has no bundled clip")
+        settle(1.0)
+        shot("learn-list-numbers-\(variant)")
         let numbersCards = app.buttons["Flashcards"]
         XCTAssertTrue(numbersCards.waitForExistence(timeout: 5), "Numbers list has no flashcards")
         numbersCards.tap()
