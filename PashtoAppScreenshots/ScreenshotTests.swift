@@ -136,6 +136,14 @@ final class ScreenshotTests: XCTestCase {
             nudgeScroll(scroll, revealingLower: true)
             if numbersWasHittable && !rows[0].isHittable {
                 nudgeScroll(scroll, revealingLower: false)
+                XCTAssertTrue(
+                    rows[0].exists,
+                    "Numbers row is missing after scrolling back. buttons: \(buttonDump(app))"
+                )
+                XCTAssertTrue(
+                    rows[0].isHittable,
+                    "Numbers is not on screen after scrolling back. frame \(rows[0].frame) scroll \(scroll.frame). buttons: \(buttonDump(app))"
+                )
                 return
             }
         }
