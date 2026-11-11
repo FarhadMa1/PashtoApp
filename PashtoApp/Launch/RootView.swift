@@ -63,7 +63,6 @@ struct RootView: View {
                 endSession: { model.endLesson() },
                 answerSession: { model.saveAnswer($0) },
                 finishSession: { model.finishLesson($0) },
-                celebrationOffer: { model.categoryCelebrationOffer(for: $0) },
                 dailyWord: model.dailyWord,
                 study: model.studyDeck,
                 studyNext: { model.studyNext() },
@@ -77,7 +76,8 @@ struct RootView: View {
                 studySkip: {
                     Task { await model.studySkip(voiceOver: voiceOverEnabled) }
                 },
-                closeStudy: { model.closeStudy() }
+                closeStudy: { model.closeStudy() },
+                celebrationOffer: { model.categoryCelebrationOffer(for: $0) }
             )
         }
     }
