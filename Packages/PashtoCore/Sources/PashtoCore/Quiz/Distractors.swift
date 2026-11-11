@@ -29,11 +29,13 @@ public struct DistractorCandidate: Hashable, Sendable {
 /// pronunciation are left out.
 ///
 /// A letter is only a candidate for another letter. A day name is only a
-/// candidate for another day name, including the two-word سه شنبه. A Travel
-/// or Time item is a candidate only for the same Pashto word count: one word,
-/// or more than one. `kind` does not decide that split. Earlier lessons keep
-/// the pool they already had, so a greeting can still use a phrase as a wrong
-/// option.
+/// candidate for another day name, including the two-word سه شنبه. From the
+/// first released unit after Greetings, an item is a candidate only for the
+/// same Pashto word count: one word, or more than one. `kind` does not decide
+/// that split. Greetings, and every unit before it, stay on one shared pool.
+/// Travel and Time items keep the split when that list is empty. A phrase
+/// does not take a word, and a word does not take a phrase, once the split
+/// applies. Units that are not in the list stay on one shared pool.
 ///
 /// Membership tests use `Set.contains`. The course order itself is the
 /// `units` array, so this type never walks a `Set` or `Dictionary`.
@@ -46,6 +48,7 @@ public enum Distractors {
         let retired = Set(context.retiredItemIDs)
         guard seenLessons.contains(targetIntro.lessonID), !retired.contains(target.id) else { return [] }
 
+        let splitShapes = answerShapesAreSplit(targetIntro.unitID, releasedUnitIDs: context.releasedUnitIDs)
         var rows: [(introduction: Introduction, source: DistractorSource)] = []
         for introduction in course.introductions {
             guard introduction.itemID != target.id else { continue }
@@ -54,7 +57,7 @@ public enum Distractors {
             guard let source = distractorSource(of: introduction, target: targetIntro) else { continue }
             guard let item = course.itemsByID[introduction.itemID] else { continue }
             guard sameQuizPool(item.kind, stored.kind) else { continue }
-            guard sameAnswerPool(item, stored) else { continue }
+            guard sameAnswerPool(item, stored, splitByShape: splitShapes) else { continue }
             guard !excluded(item, target: stored, groups: context.bundle.nonDistractorGroups) else { continue }
             rows.append((introduction, source))
         }
@@ -198,10 +201,11 @@ func sameQuizPool(_ candidate: ContentKind, _ target: ContentKind) -> Bool {
     (candidate == .letter) == (target == .letter)
 }
 
-/// Day names are wrong options only for day names. Travel and Time items
-/// stay with their own shape: one Pashto word, or more than one. The two-word
-/// day سه شنبه stays in the day-name pool, so it still has the other day names.
-/// Items from earlier units are not split by shape.
+/// Day names are wrong options only for day names. Released units after
+/// Greetings, and the Travel and Time ids below, stay with their own shape:
+/// one Pashto word, or more than one. The two-word day سه شنبه stays in the
+/// day-name pool, so it still has the other day names. `u-basics` is never a
+/// distractor source for another unit. That rule lives in `distractorSource`.
 enum AnswerPool {
     static let dayNames: Set<String> = [
         "e-shan-ba",
@@ -256,13 +260,31 @@ enum AnswerPool {
     ]
 }
 
-func sameAnswerPool(_ candidate: ContentItem, _ target: ContentItem) -> Bool {
+/// True when this released unit keeps a word with words and a phrase with phrases.
+///
+/// The split starts at the first unit after `u-greetings` in the caller's
+/// release list. Greetings itself, and anything before it, keeps one shared
+/// pool. A list that does not contain Greetings splits every unit it names.
+/// Travel and Time ids in `AnswerPool.shaped` still split when the list is empty.
+func answerShapesAreSplit(_ unitID: UnitID, releasedUnitIDs: [UnitID]) -> Bool {
+    guard let index = releasedUnitIDs.firstIndex(of: unitID) else { return false }
+    guard let greetings = releasedUnitIDs.firstIndex(where: { $0.rawValue == "u-greetings" }) else {
+        return true
+    }
+    return index > greetings
+}
+
+/// Day names match only day names. When `splitByShape` is true, or either id
+/// is in `AnswerPool.shaped`, the Pashto word count must match.
+func sameAnswerPool(_ candidate: ContentItem, _ target: ContentItem, splitByShape: Bool = false) -> Bool {
     let candidateDay = AnswerPool.dayNames.contains(candidate.id.rawValue)
     let targetDay = AnswerPool.dayNames.contains(target.id.rawValue)
     if candidateDay || targetDay {
         return candidateDay && targetDay
     }
-    if AnswerPool.shaped.contains(candidate.id.rawValue) || AnswerPool.shaped.contains(target.id.rawValue) {
+    if splitByShape
+        || AnswerPool.shaped.contains(candidate.id.rawValue)
+        || AnswerPool.shaped.contains(target.id.rawValue) {
         return DialogResponse.replyShape(of: candidate) == DialogResponse.replyShape(of: target)
     }
     return true

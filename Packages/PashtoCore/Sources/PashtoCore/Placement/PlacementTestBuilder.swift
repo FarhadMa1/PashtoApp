@@ -37,9 +37,11 @@ public struct PlacementTest: Hashable, Sendable {
 /// not skipped, and nothing after it is asked. The same `rng` and the same
 /// seed build the same test.
 ///
-/// Distractors come from the unit under test. A letter is only a distractor
-/// for another letter. The other kinds use the pool the lesson generators
-/// already use. Items from an earlier or a later unit are not used.
+/// Distractors come from the unit under test. `releasedUnitIDs` is passed
+/// into that pool, so a unit after Greetings keeps a word with words and a
+/// phrase with phrases. Greetings stays on one shared pool. A letter is only
+/// a distractor for another letter. Items from an earlier or a later unit
+/// are not used.
 public enum PlacementTestBuilder {
     public static func build(
         in bundle: ContentBundle,
@@ -56,7 +58,13 @@ public enum PlacementTestBuilder {
         var units: [PlacementUnitQuestions] = []
         for unit in window {
             guard released.contains(unit.id) else { break }
-            guard let tasks = questions(for: unit, in: playable, count: policy.questionsPerUnit, using: &rng) else {
+            guard let tasks = questions(
+                for: unit,
+                in: playable,
+                releasedUnitIDs: releasedUnitIDs,
+                count: policy.questionsPerUnit,
+                using: &rng
+            ) else {
                 break
             }
             units.append(PlacementUnitQuestions(unitID: unit.id, tasks: tasks))
@@ -110,6 +118,7 @@ public enum PlacementTestBuilder {
             let produced = availableTasks(
                 for: unit,
                 in: playable,
+                releasedUnitIDs: releasedUnitIDs,
                 count: policy.questionsPerUnit,
                 using: &rng
             ) ?? []
@@ -132,10 +141,17 @@ public enum PlacementTestBuilder {
     private static func questions(
         for unit: CourseUnit,
         in bundle: ContentBundle,
+        releasedUnitIDs: [UnitID],
         count: Int,
         using rng: inout some RandomNumberGenerator
     ) -> [SessionTask]? {
-        guard let available = availableTasks(for: unit, in: bundle, count: count, using: &rng) else {
+        guard let available = availableTasks(
+            for: unit,
+            in: bundle,
+            releasedUnitIDs: releasedUnitIDs,
+            count: count,
+            using: &rng
+        ) else {
             return nil
         }
         guard available.count >= count else { return nil }
@@ -149,6 +165,7 @@ public enum PlacementTestBuilder {
     private static func availableTasks(
         for unit: CourseUnit,
         in bundle: ContentBundle,
+        releasedUnitIDs: [UnitID],
         count: Int,
         using rng: inout some RandomNumberGenerator
     ) -> [SessionTask]? {
@@ -160,7 +177,8 @@ public enum PlacementTestBuilder {
         }
         let context = QuizContext(
             bundle: bundle,
-            seenLessonIDs: unit.lessons.map(\.id)
+            seenLessonIDs: unit.lessons.map(\.id),
+            releasedUnitIDs: releasedUnitIDs
         )
         let draft = LessonSessionBuilder.draft(for: targets, in: context, using: &rng)
         var onePerItem: [SessionTask] = []

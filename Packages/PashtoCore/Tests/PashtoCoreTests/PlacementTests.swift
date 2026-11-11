@@ -154,6 +154,67 @@ struct PlacementTests {
         #expect(!finished.contains(lessonID("l-family-1")))
     }
 
+    @Test func placementPassesTheReleaseListAndSplitsAfterGreetings() throws {
+        let sounds = placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])])
+        let greetingsWords = words(1...4)
+        let greetingsPhrase = makeItem(
+            "e-greet-phrase",
+            pashto: "one two",
+            translit: "one-two",
+            pronunciation: "one-two",
+            en: "greeting phrase"
+        )
+        let introWords = words(11...14)
+        let introPhrase = makeItem(
+            "e-intro-phrase",
+            pashto: "three four",
+            translit: "three-four",
+            pronunciation: "three-four",
+            en: "introduction phrase"
+        )
+        let greetings = placedUnit(
+            "u-greetings",
+            lessons: [placedLesson("l-greetings-1", items: greetingsWords + [greetingsPhrase])]
+        )
+        let introductions = placedUnit(
+            "u-introductions",
+            lessons: [placedLesson("l-introductions-1", items: introWords + [introPhrase])]
+        )
+        let bundle = makeBundle(
+            items: [placedWord(90), greetingsPhrase, introPhrase] + greetingsWords + introWords,
+            units: [sounds, greetings, introductions]
+        )
+        let released = [unitID("u-sounds"), unitID("u-greetings"), unitID("u-introductions")]
+        var rng = SplitMix64(seed: 3)
+        let test = PlacementTestBuilder.build(in: bundle, releasedUnitIDs: released, using: &rng)
+        #expect(test.unitIDs.map(\.rawValue) == ["u-greetings", "u-introductions"])
+
+        let items = Dictionary(bundle.items.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let greetingsTasks = try #require(test.units.first { $0.unitID.rawValue == "u-greetings" })
+        let greetingsChoices = greetingsTasks.tasks.compactMap { task -> QuizTask? in
+            guard case .choice(let quiz) = task.payload, quiz.targetID == greetingsPhrase.id else { return nil }
+            return quiz
+        }
+        #expect(!greetingsChoices.isEmpty)
+        #expect(greetingsChoices.contains { quiz in
+            quiz.options.contains { option in
+                guard option.itemID != greetingsPhrase.id, let item = items[option.itemID] else { return false }
+                return DialogResponse.replyShape(of: item) == .word
+            }
+        })
+
+        let introTasks = try #require(test.units.first { $0.unitID.rawValue == "u-introductions" })
+        let introIDs = Set(introTasks.tasks.flatMap(itemIDs(in:)))
+        #expect(!introIDs.contains(introPhrase.id))
+        for task in introTasks.tasks {
+            guard case .choice(let quiz) = task.payload else { continue }
+            #expect(quiz.options.allSatisfy { option in
+                guard let item = items[option.itemID] else { return false }
+                return DialogResponse.replyShape(of: item) == .word
+            })
+        }
+    }
+
     @Test func distractorsStayInTheTestedUnitAndKeepTheSameType() {
         let sounds = placedUnit("u-sounds", lessons: [placedLesson("l-sounds", items: [], examples: [placedWord(90)])])
         let earlyItems = words(1...6)
