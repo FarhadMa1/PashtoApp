@@ -26,6 +26,7 @@
 		553568DE12A69B71500FA8A7 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9032BBBE0603F628A79CF3 /* AppModel.swift */; };
 		5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427EEE4D83973BBDF72044C /* ContentView.swift */; };
 		644132CFDE88EAAFBC17B121 /* LessonProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */; };
+		64C0628E4E44E51E937B45A9 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0505CC533954900598FD2EE0 /* ScreenshotTests.swift */; };
 		68E02FABA91DAA33FCA7EF30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB198D583572EA4F7E128283 /* Assets.xcassets */; };
 		723449F0906ECDFB12648328 /* e-taso-tsanga-yast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */; };
 		7C3CF5EEC47EF612EE538B95 /* UpdateNeededScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */; };
@@ -50,8 +51,19 @@
 		FB3AF14F0E0EB18EDCB270C8 /* WelcomeBackScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		50A9C88F80F7EC5D7A11119F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1B72A14CCE2EFE46102CDD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E3CF52B0E8CD677834DD9EAB;
+			remoteInfo = PashtoApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNeededScreen.swift; sourceTree = "<group>"; };
+		0505CC533954900598FD2EE0 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
 		0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */ = {isa = PBXFileReference; path = "e-mehrabani-wakray.m4a"; sourceTree = "<group>"; };
 		0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */ = {isa = PBXFileReference; path = "e-walaykum-salam.m4a"; sourceTree = "<group>"; };
 		13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */ = {isa = PBXFileReference; path = "e-stare-ma-she.m4a"; sourceTree = "<group>"; };
@@ -62,6 +74,7 @@
 		3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphCard.swift; sourceTree = "<group>"; };
 		3E2DD5B8D6DE03B23DB286AB /* PashtoCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoCore; path = Packages/PashtoCore; sourceTree = SOURCE_ROOT; };
 		43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeBackScreen.swift; sourceTree = "<group>"; };
+		4838E5BC35837852962E32B7 /* PashtoAppScreenshots.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PashtoAppScreenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingBoard.swift; sourceTree = "<group>"; };
 		5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */ = {isa = PBXFileReference; path = "e-xwar-ma-she.m4a"; sourceTree = "<group>"; };
 		5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */ = {isa = PBXFileReference; path = "e-assalamu-alaykum.m4a"; sourceTree = "<group>"; };
@@ -133,8 +146,17 @@
 				7FCAD59CCEC979B50B7B0BCF /* content */,
 				FA1C6AE9AB1A71993012A458 /* Packages */,
 				007E8EAC4F4F99D80978E848 /* PashtoApp */,
+				34E015422103D4408BB18222 /* PashtoAppScreenshots */,
 				E0C51D041284535332ADA6E2 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		34E015422103D4408BB18222 /* PashtoAppScreenshots */ = {
+			isa = PBXGroup;
+			children = (
+				0505CC533954900598FD2EE0 /* ScreenshotTests.swift */,
+			);
+			path = PashtoAppScreenshots;
 			sourceTree = "<group>";
 		};
 		3E52D96AC7FB87F8A935F871 /* Launch */ = {
@@ -217,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				D1020344AFA863654DE80D5B /* PashtoApp.app */,
+				4838E5BC35837852962E32B7 /* PashtoAppScreenshots.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -233,6 +256,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		25E8F1D1FD7D5DE13683DC93 /* PashtoAppScreenshots */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54ACE7475DD3058ADE66202A /* Build configuration list for PBXNativeTarget "PashtoAppScreenshots" */;
+			buildPhases = (
+				F7DCBF3C63A6390A4C4C91E9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF5EA634C504332959DEB7FC /* PBXTargetDependency */,
+			);
+			name = PashtoAppScreenshots;
+			packageProductDependencies = (
+			);
+			productName = PashtoAppScreenshots;
+			productReference = 4838E5BC35837852962E32B7 /* PashtoAppScreenshots.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		E3CF52B0E8CD677834DD9EAB /* PashtoApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B4484EBE0485C1685EFF002 /* Build configuration list for PBXNativeTarget "PashtoApp" */;
@@ -264,6 +305,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
+					25E8F1D1FD7D5DE13683DC93 = {
+						ProvisioningStyle = Automatic;
+						TestTargetID = E3CF52B0E8CD677834DD9EAB;
+					};
 					E3CF52B0E8CD677834DD9EAB = {
 						ProvisioningStyle = Automatic;
 					};
@@ -288,6 +333,7 @@
 			projectRoot = "";
 			targets = (
 				E3CF52B0E8CD677834DD9EAB /* PashtoApp */,
+				25E8F1D1FD7D5DE13683DC93 /* PashtoAppScreenshots */,
 			);
 		};
 /* End PBXProject section */
@@ -375,7 +421,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F7DCBF3C63A6390A4C4C91E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64C0628E4E44E51E937B45A9 /* ScreenshotTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF5EA634C504332959DEB7FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E3CF52B0E8CD677834DD9EAB /* PashtoApp */;
+			targetProxy = 50A9C88F80F7EC5D7A11119F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		35D8A68B9F09FD0365383862 /* Debug */ = {
@@ -399,6 +461,27 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		6122DCC1A26757DC4972F67A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mangallabs.pashto.screenshots;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = PashtoApp;
 			};
 			name = Debug;
 		};
@@ -472,6 +555,27 @@
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
+		};
+		AEBA7DD78F88FB99A402C62F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mangallabs.pashto.screenshots;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = PashtoApp;
+			};
+			name = Release;
 		};
 		C0BAA6AC10CE7E509BD887E9 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -578,6 +682,15 @@
 			buildConfigurations = (
 				35D8A68B9F09FD0365383862 /* Debug */,
 				C0BAA6AC10CE7E509BD887E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		54ACE7475DD3058ADE66202A /* Build configuration list for PBXNativeTarget "PashtoAppScreenshots" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6122DCC1A26757DC4972F67A /* Debug */,
+				AEBA7DD78F88FB99A402C62F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

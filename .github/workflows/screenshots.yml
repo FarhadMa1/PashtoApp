@@ -1,0 +1,199 @@
+name: Screenshots
+
+# Captures the home, the Family word list, a Learn card, and a quiz question
+# on an iPhone simulator. Light, dark, and the largest accessibility text size.
+# The app a learner launches is unchanged.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: screenshots-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  screenshots:
+    name: iOS screenshots
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 26.3
+        # maxim-lobanov/setup-xcode v1.7.0
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90
+        with:
+          xcode-version: "26.3"
+
+      - name: Generate the Xcode project
+        run: |
+          brew install xcodegen
+          version="$(xcodegen --version)"
+          if [ "$version" != "Version: 2.46.0" ]; then
+            echo "::error::Expected XcodeGen 2.46.0, found ${version}. The committed project was generated with that version."
+            exit 1
+          fi
+          xcodegen generate
+          git diff --exit-code -- PashtoApp.xcodeproj
+
+      - name: Boot an iPhone simulator
+        id: simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          picked="$(python3 - << 'PY'
+          import json, subprocess, sys
+          raw = subprocess.check_output(["xcrun", "simctl", "list", "devices", "available", "-j"])
+          data = json.loads(raw)
+          candidates = []
+          for runtime, devices in data.get("devices", {}).items():
+              if "iOS" not in runtime:
+                  continue
+              version = runtime.rsplit("iOS-", 1)[-1].replace("-", ".")
+              parts = tuple(int(piece) if piece.isdigit() else 0 for piece in version.split("."))
+              for device in devices:
+                  if not device.get("isAvailable", True):
+                      continue
+                  name = device.get("name", "")
+                  if not name.startswith("iPhone"):
+                      continue
+                  penalty = 0
+                  if "SE" in name:
+                      penalty += 5
+                  if "Pro Max" in name or "Plus" in name:
+                      penalty += 2
+                  elif "Pro" in name or "mini" in name:
+                      penalty += 1
+                  candidates.append((parts, -penalty, name, device["udid"], version))
+          if not candidates:
+              sys.exit("no available iPhone simulator")
+          candidates.sort(reverse=True)
+          _parts, _penalty, name, udid, version = candidates[0]
+          print(f"{udid}\t{name}\t{version}")
+          PY
+          )"
+          UDID="${picked%%$'\t'*}"
+          rest="${picked#*$'\t'}"
+          NAME="${rest%%$'\t'*}"
+          VERSION="${rest#*$'\t'}"
+          echo "Using ${NAME} (${VERSION}) ${UDID}"
+          echo "UDID=${UDID}" >> "$GITHUB_ENV"
+          echo "DEVICE_NAME=${NAME} (${VERSION})" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 --cellularMode active --cellularBars 4 || true
+
+      - name: Capture screenshots
+        id: capture
+        shell: bash
+        run: |
+          set -euo pipefail
+          derived="${RUNNER_TEMP}/PashtoDerived"
+          results="${RUNNER_TEMP}/screenshot-results"
+          mkdir -p "$results" "$GITHUB_WORKSPACE/simulator-shots"
+          status=0
+          run_variant() {
+            local variant="$1" test="$2" appearance="$3" size="$4"
+            echo "::group::${variant}"
+            if ! xcrun simctl ui "$UDID" appearance "$appearance"; then
+              xcrun simctl help ui || true
+              status=1
+              echo "::endgroup::"
+              return
+            fi
+            if ! xcrun simctl ui "$UDID" content_size "$size"; then
+              xcrun simctl help ui || true
+              status=1
+              echo "::endgroup::"
+              return
+            fi
+            xcrun simctl uninstall "$UDID" com.mangallabs.pashto || true
+            sleep 2
+            set +e
+            xcodebuild test \
+              -project PashtoApp.xcodeproj \
+              -scheme PashtoApp \
+              -destination "platform=iOS Simulator,id=${UDID}" \
+              -derivedDataPath "$derived" \
+              -resultBundlePath "${results}/${variant}.xcresult" \
+              -only-testing:"PashtoAppScreenshots/ScreenshotTests/${test}" \
+              -parallel-testing-enabled NO \
+              -testLanguage en \
+              -testRegion en_US \
+              -test-timeouts-enabled YES \
+              -default-test-execution-time-allowance 180 \
+              -maximum-test-execution-time-allowance 240 \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY=""
+            local code=$?
+            set -e
+            if [ "$code" -ne 0 ]; then
+              echo "::error::${variant} UI test exited ${code}"
+              status=1
+            fi
+            if [ -d "$HOME/Library/Developer/CoreSimulator/Devices/${UDID}" ]; then
+              find "$HOME/Library/Developer/CoreSimulator/Devices/${UDID}" \
+                -path '*pashto-screenshots*' -name '*.png' -print -exec cp -f {} "$GITHUB_WORKSPACE/simulator-shots/" \; || true
+            fi
+            echo "::endgroup::"
+          }
+          run_variant light testLight light large
+          run_variant dark testDark dark large
+          run_variant xl testXL light accessibility-extra-extra-extra-large
+          echo "RESULTS=${results}" >> "$GITHUB_ENV"
+          exit "$status"
+
+      - name: Export screenshots
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          staging="${RUNNER_TEMP}/attachment-export"
+          mkdir -p "$staging" screenshots
+          shopt -s nullglob
+          for bundle in "${RESULTS:-$RUNNER_TEMP/screenshot-results}"/*.xcresult; do
+            name="$(basename "$bundle" .xcresult)"
+            dest="${staging}/${name}"
+            mkdir -p "$dest"
+            xcrun xcresulttool export attachments --path "$bundle" --output-path "$dest" \
+              || echo "::warning::Could not export attachments from ${name}.xcresult"
+          done
+          set +e
+          python3 scripts/export-screenshots.py \
+            --output screenshots \
+            --scan "${GITHUB_WORKSPACE}/simulator-shots" \
+            --scan "$staging" \
+            --manifest-root "$staging"
+          code=$?
+          set -e
+          {
+            echo "### iOS screenshots"
+            echo
+            echo "Simulator: ${DEVICE_NAME:-unknown}"
+            echo
+            echo "| File | Bytes |"
+            echo "| --- | ---: |"
+            found=0
+            for file in screenshots/*.png; do
+              found=1
+              bytes="$(stat -f %z "$file")"
+              echo "| $(basename "$file") | ${bytes} |"
+            done
+            if [ "$found" -eq 0 ]; then
+              echo "No PNG files were exported."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$code"
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/*.png
+          if-no-files-found: error

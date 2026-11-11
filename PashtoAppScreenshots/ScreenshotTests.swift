@@ -1,0 +1,142 @@
+import XCTest
+
+/// Opens four screens and keeps a PNG of each. The workflow runs this once
+/// per variant: light, dark, and the largest accessibility text size.
+@MainActor
+final class ScreenshotTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
+
+    func testLight() {
+        capture(variant: "light")
+    }
+
+    func testDark() {
+        capture(variant: "dark")
+    }
+
+    func testXL() {
+        capture(variant: "xl")
+    }
+
+    private func capture(variant: String) {
+        let app = XCUIApplication()
+        app.launchArguments = launchArguments(for: variant)
+        app.launch()
+
+        let basics = app.descendants(matching: .any)["u-basics"]
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not load. buttons: \(buttonDump(app))"
+        )
+        settle()
+        shot("home-\(variant)")
+
+        tap("u-family", in: app)
+        let mother = app.descendants(matching: .any)["e-mor"]
+        XCTAssertTrue(mother.waitForExistence(timeout: 15), "Family word list did not load. buttons: \(buttonDump(app))")
+        reveal(mother, in: app)
+        settle()
+        shot("family-\(variant)")
+
+        tap("l-family-learn-members", in: app)
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 15),
+            "Learn card did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["mor"].waitForExistence(timeout: 5), "Learn card has no pronunciation")
+        settle(1.0)
+        shot("learn-\(variant)")
+
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+
+        let practice = app.descendants(matching: .any)["l-family-1"]
+        XCTAssertTrue(practice.waitForExistence(timeout: 15), "Family page did not return. buttons: \(buttonDump(app))")
+        reveal(practice, in: app)
+        practice.tap()
+        XCTAssertTrue(waitForQuiz(app), "quiz did not appear. buttons: \(buttonDump(app))")
+        settle(1.2)
+        shot("quiz-\(variant)")
+    }
+
+    private func launchArguments(for variant: String) -> [String] {
+        var arguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        switch variant {
+        case "dark":
+            arguments.append("-PashtoScreenshotDark")
+        case "xl":
+            arguments.append("-PashtoScreenshotLight")
+            arguments.append("-PashtoScreenshotXL")
+        default:
+            arguments.append("-PashtoScreenshotLight")
+        }
+        return arguments
+    }
+
+    private func tap(_ identifier: String, in app: XCUIApplication) {
+        let element = app.descendants(matching: .any)[identifier]
+        reveal(element, in: app)
+        element.tap()
+    }
+
+    private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
+        XCTAssertTrue(element.waitForExistence(timeout: 15), "missing control. buttons: \(buttonDump(app))")
+        for _ in 0..<16 {
+            if element.isHittable { return }
+            let frame = element.frame
+            if frame == .zero || frame.midY >= app.frame.midY {
+                app.swipeUp(velocity: .slow)
+            } else {
+                app.swipeDown(velocity: .slow)
+            }
+        }
+        XCTAssertTrue(element.isHittable, "control is off screen. buttons: \(buttonDump(app))")
+    }
+
+    /// A quiz question is on screen when the practice row is gone and a quiz
+    /// title or the Continue button is showing.
+    private func waitForQuiz(_ app: XCUIApplication) -> Bool {
+        let practice = app.descendants(matching: .any)["l-family-1"]
+        let titles = ["Choose the meaning", "Put the words in order", "Match the pairs"]
+        let deadline = Date().addingTimeInterval(30)
+        while Date() < deadline {
+            let titled = titles.contains { app.staticTexts[$0].exists }
+            if titled || (app.buttons["Continue"].exists && !practice.exists) {
+                return true
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+        return false
+    }
+
+    private func settle(_ seconds: TimeInterval = 0.8) {
+        let settled = expectation(description: "settle")
+        settled.isInverted = true
+        wait(for: [settled], timeout: seconds)
+    }
+
+    private func shot(_ name: String) {
+        let screenshot = XCUIScreen.main.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot)
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+
+        let folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("pashto-screenshots", isDirectory: true)
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        try? screenshot.pngRepresentation.write(to: folder.appendingPathComponent("\(name).png"))
+    }
+
+    private func buttonDump(_ app: XCUIApplication) -> String {
+        app.buttons.allElementsBoundByIndex.prefix(25).map { button in
+            button.identifier.isEmpty ? button.label : "\(button.identifier) (\(button.label))"
+        }.joined(separator: ", ")
+    }
+}
