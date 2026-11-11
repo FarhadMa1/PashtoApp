@@ -184,33 +184,76 @@ struct ContentView: View {
         }
     }
 
+    /// Play, the lesson, and the arrow. One button, same two spoken lines.
+    ///
+    /// Regular sizes keep the row. At accessibility sizes the play square
+    /// grows until the words no longer fit beside it, and `ViewThatFits`
+    /// puts the square above them so both lines use the width.
     private func continueStrip(_ target: MainMenuContinue) -> some View {
         Button {
             startLesson(target.lessonID)
         } label: {
-            HStack(alignment: .center, spacing: 12) {
-                ContinuePlayMark()
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(verbatim: String(localized: "quiz.continue.button"))
-                        .textCase(.uppercase)
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(Lapis.secondaryText)
-                        .lineLimit(1)
-                    Text(verbatim: continueTitle(target))
-                        .font(.body.weight(.semibold))
-                        .foregroundStyle(Lapis.text)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
+            if dynamicTypeSize.isAccessibilitySize {
+                ViewThatFits(in: .horizontal) {
+                    continueRow(target, oneLine: true)
+                    continueStacked(target)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                Image(systemName: "arrow.right")
-                    .font(.body.weight(.bold))
-                    .foregroundStyle(Lapis.primary)
-                    .accessibilityHidden(true)
+            } else {
+                continueRow(target, oneLine: false)
             }
         }
         .buttonStyle(SurfaceCardButtonStyle())
         .accessibilityIdentifier("continue-lesson")
+    }
+
+    /// Side by side. `oneLine` stops the words wrapping, so `ViewThatFits`
+    /// can see that the row is wider than the card.
+    private func continueRow(_ target: MainMenuContinue, oneLine: Bool) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            ContinuePlayMark()
+            if oneLine {
+                continueWords(target)
+                    .fixedSize(horizontal: true, vertical: false)
+                Spacer(minLength: 12)
+            } else {
+                continueWords(target)
+            }
+            continueArrow
+        }
+    }
+
+    /// Play square above the words. The arrow stays on the text row.
+    private func continueStacked(_ target: MainMenuContinue) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ContinuePlayMark()
+            HStack(alignment: .center, spacing: 12) {
+                continueWords(target)
+                continueArrow
+            }
+        }
+    }
+
+    private func continueWords(_ target: MainMenuContinue) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(verbatim: String(localized: "quiz.continue.button"))
+                .textCase(.uppercase)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(Lapis.secondaryText)
+                .lineLimit(1)
+            Text(verbatim: continueTitle(target))
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Lapis.text)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var continueArrow: some View {
+        Image(systemName: "arrow.right")
+            .font(.body.weight(.bold))
+            .foregroundStyle(Lapis.primary)
+            .accessibilityHidden(true)
     }
 
     private func categoryRow(_ category: MainMenuCategory) -> some View {

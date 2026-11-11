@@ -19,6 +19,7 @@ struct StudyCardScreen: View {
     var onBack: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AccessibilityFocusState private var pronunciationFocused: Bool
     /// Plays only from the speaker button. A card change stops the previous clip.
     @State private var clipPlayer = GreetingsClipPlayer()
@@ -55,27 +56,10 @@ struct StudyCardScreen: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .center, spacing: 12) {
-                Button(action: onBack) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.backward")
-                            .accessibilityHidden(true)
-                        Text("Pashto")
-                    }
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(StudyPalette.headerInk)
-                }
-                .buttonStyle(.plain)
-                .frame(minHeight: 44)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("Pashto"))
-                .accessibilityAddTraits(.isButton)
-                .accessibilitySortPriority(70)
-                Spacer(minLength: 8)
-                Text(verbatim: deck.title)
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(StudyPalette.headerInk)
-                    .accessibilityHidden(true)
+            if dynamicTypeSize.isAccessibilitySize {
+                accessibilityTitle
+            } else {
+                standardTitle
             }
             LessonProgressBar(bar: LessonBar(answered: deck.index, total: max(deck.count, 1)))
                 .accessibilitySortPriority(60)
@@ -98,6 +82,60 @@ struct StudyCardScreen: View {
         .padding(.bottom, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(StudyPalette.header)
+    }
+
+    /// Back and the lesson title on one row. Regular sizes keep this row.
+    private var standardTitle: some View {
+        HStack(alignment: .center, spacing: 12) {
+            studyBackButton(oneLine: false)
+            Spacer(minLength: 8)
+            Text(verbatim: deck.title)
+                .font(.headline.weight(.bold))
+                .foregroundStyle(StudyPalette.headerInk)
+                .accessibilityHidden(true)
+        }
+    }
+
+    /// Back on its own row, then the lesson title at full width.
+    ///
+    /// The title wraps between words. Nothing is drawn over the back button.
+    /// VoiceOver reads the visible title.
+    private var accessibilityTitle: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            studyBackButton(oneLine: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(verbatim: deck.title)
+                .font(.headline.weight(.bold))
+                .foregroundStyle(StudyPalette.headerInk)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilitySortPriority(65)
+        }
+    }
+
+    private func studyBackButton(oneLine: Bool) -> some View {
+        Button(action: onBack) {
+            HStack(spacing: 6) {
+                Image(systemName: "chevron.backward")
+                    .accessibilityHidden(true)
+                if oneLine {
+                    Text("Pashto")
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                } else {
+                    Text("Pashto")
+                }
+            }
+            .font(.body.weight(.semibold))
+            .foregroundStyle(StudyPalette.headerInk)
+        }
+        .buttonStyle(.plain)
+        .frame(minHeight: 44)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Pashto"))
+        .accessibilityAddTraits(.isButton)
+        .accessibilitySortPriority(70)
     }
 
     private var card: some View {
