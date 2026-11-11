@@ -118,7 +118,9 @@ final class ScreenshotTests: XCTestCase {
     }
 
     /// Scrolls until Numbers, Food, Town, and Conversation are on screen together.
-    /// The first Home shot stays at the top, before this scroll.
+    /// The first Home shot stays at the top, before this scroll. At the largest
+    /// text size the four cards do not fit, so the scroll stops with Numbers
+    /// still tappable and as many of the next rows as the list can show.
     private func revealNewCategories(in app: XCUIApplication) {
         let rows = ["u-numbers", "u-food", "u-town", "u-conversation"].map {
             app.descendants(matching: .any)[$0]
@@ -126,51 +128,31 @@ final class ScreenshotTests: XCTestCase {
         for row in rows {
             XCTAssertTrue(row.waitForExistence(timeout: 15), "new category row is missing. buttons: \(buttonDump(app))")
         }
-        for _ in 0..<12 {
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "home list is missing. buttons: \(buttonDump(app))")
+        for _ in 0..<28 {
             if newCategoriesAreVisible(rows, in: app) { return }
-            let numbers = rows[0].frame
-            let conversation = rows[3].frame
-            let conversationIn = conversation.height > 1 && app.frame.contains(conversation)
-            let numbersIn = numbers.height > 1 && app.frame.contains(numbers)
-            if conversationIn && !numbersIn { break }
-            if conversation == .zero || conversation.maxY > app.frame.maxY - 8 {
-                drag(in: app, from: 0.72, to: 0.48)
-            } else if numbers.minY < 8 || !rows[0].isHittable {
-                drag(in: app, from: 0.42, to: 0.62)
-            } else {
-                drag(in: app, from: 0.68, to: 0.50)
+            let numbersWasHittable = rows[0].isHittable
+            nudgeScroll(scroll, revealingLower: true)
+            if numbersWasHittable && !rows[0].isHittable {
+                nudgeScroll(scroll, revealingLower: false)
+                return
             }
         }
-        if newCategoriesAreVisible(rows, in: app) { return }
-        // The largest text size cannot fit four full cards. Keep Numbers tappable
-        // at the top of the list and show as many of the next rows as fit.
-        placeNumbersFirst(rows, in: app)
+        XCTAssertTrue(
+            rows[0].isHittable,
+            "Numbers did not scroll into view. frame \(rows[0].frame) scroll \(scroll.frame) app \(app.frame). buttons: \(buttonDump(app))"
+        )
     }
 
-    private func placeNumbersFirst(_ rows: [XCUIElement], in app: XCUIApplication) {
-        let numbers = rows[0]
-        for _ in 0..<30 {
-            if numbers.isHittable { break }
-            moveToward(numbers, in: app)
-        }
-        XCTAssertTrue(numbers.isHittable, "Numbers did not scroll into view. buttons: \(buttonDump(app))")
-        for _ in 0..<8 {
-            if rows.allSatisfy(\.isHittable) { return }
-            drag(in: app, from: 0.62, to: 0.50)
-            if numbers.isHittable { continue }
-            drag(in: app, from: 0.48, to: 0.64)
-            break
-        }
-        XCTAssertTrue(numbers.isHittable, "Numbers left the screen. buttons: \(buttonDump(app))")
-    }
-
-    private func moveToward(_ element: XCUIElement, in app: XCUIApplication) {
-        let frame = element.frame
-        if frame == .zero || frame.midY >= app.frame.midY {
-            drag(in: app, from: 0.72, to: 0.46)
-        } else {
-            drag(in: app, from: 0.40, to: 0.70)
-        }
+    /// A short drag inside the home list. The header is outside that list, so a
+    /// drag on the whole window misses the list when the header is tall.
+    private func nudgeScroll(_ scroll: XCUIElement, revealingLower: Bool) {
+        let startY: CGFloat = revealingLower ? 0.82 : 0.38
+        let endY: CGFloat = revealingLower ? 0.58 : 0.62
+        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+        start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     private func newCategoriesAreVisible(_ rows: [XCUIElement], in app: XCUIApplication) -> Bool {
@@ -182,12 +164,6 @@ final class ScreenshotTests: XCTestCase {
             return false
         }
         return rows.allSatisfy(\.isHittable)
-    }
-
-    private func drag(in app: XCUIApplication, from startY: CGFloat, to endY: CGFloat) {
-        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
-        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
-        start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication) {
