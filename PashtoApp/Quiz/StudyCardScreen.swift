@@ -18,6 +18,7 @@ struct StudyCardScreen: View {
     var onBack: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AccessibilityFocusState private var pronunciationFocused: Bool
 
     var body: some View {
@@ -50,13 +51,20 @@ struct StudyCardScreen: View {
                     HStack(spacing: 6) {
                         Image(systemName: "chevron.backward")
                             .accessibilityHidden(true)
-                        Text("Pashto")
+                        if dynamicTypeSize.isAccessibilitySize {
+                            Text("Pashto")
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        } else {
+                            Text("Pashto")
+                        }
                     }
                     .font(.body.weight(.semibold))
                     .foregroundStyle(StudyPalette.headerInk)
                 }
                 .buttonStyle(.plain)
                 .frame(minHeight: 44)
+                .layoutPriority(dynamicTypeSize.isAccessibilitySize ? 1 : 0)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Pashto"))
                 .accessibilityAddTraits(.isButton)
