@@ -226,10 +226,9 @@ struct MainMenuTests {
             "menu.unit.town": "Town",
             "menu.unit.conversation": "Conversation",
             "learn.list.practiceLesson": "Practice lesson →",
+            "learn.list.practiceLessonSpoken": "Practice lesson",
             "learn.list.flashcards": "Flashcards",
             "learn.list.words": "%lld of %lld words",
-            "learn.list.save": "Save",
-            "learn.list.saved": "Saved",
             "learn.list.play": "Play",
         ]
         for (key, english) in added {
@@ -252,6 +251,19 @@ struct MainMenuTests {
         #expect(!sources.contains("basicsCards"))
         let sheet = repositoryRoot().appendingPathComponent("PashtoApp/Quiz/BasicsSheet.swift")
         #expect(!FileManager.default.fileExists(atPath: sheet.path))
+    }
+
+    @Test func theHomeDrawsTheStoredCategoryName() throws {
+        let source = try String(
+            contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/ContentView.swift"),
+            encoding: .utf8
+        )
+        let label = try #require(source.range(of: "private func categoryLabel"))
+        let next = try #require(source.range(of: "\n    private func ", range: label.upperBound..<source.endIndex))
+        let row = String(source[label.lowerBound..<next.lowerBound])
+        #expect(row.contains("menuWord(category)"))
+        #expect(!row.contains("textCase"))
+        #expect(!row.contains(".uppercased()"))
     }
 
     @Test func eachMenuUnitHasItsOwnPalette() throws {

@@ -214,40 +214,6 @@ struct LearnListTests {
         #expect(sounds.lessons.allSatisfy { $0.kind == .practice })
     }
 
-    @Test func favouritesPersistBesideTheStoreAndDoNotFinishALesson() throws {
-        let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("learn-list-\(UUID().uuidString)", isDirectory: true)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
-        let store = directory.appendingPathComponent("Progress.store")
-        #expect(FavouriteWordStore.load(beside: store).isEmpty)
-
-        let mother = try #require(ItemID(rawValue: "e-mor"))
-        let father = try #require(ItemID(rawValue: "e-plar"))
-        var saved = FavouriteWordStore.toggle(mother, in: [])
-        let finished: Set<LessonID> = [lessonID("l-family-1")]
-        let before = finished
-        saved = FavouriteWordStore.toggle(father, in: saved)
-        #expect(finished == before)
-        try FavouriteWordStore.save(saved, beside: store)
-        #expect(FavouriteWordStore.load(beside: store) == [mother, father])
-
-        let file = FavouriteWordStore.fileURL(beside: store)
-        let text = try String(contentsOf: file, encoding: .utf8)
-        #expect(text.contains("\"e-mor\""))
-        #expect(text.contains("\"e-plar\""))
-
-        saved = FavouriteWordStore.toggle(mother, in: saved)
-        try FavouriteWordStore.save(saved, beside: store)
-        #expect(FavouriteWordStore.load(beside: store) == [father])
-
-        try Data("not json".utf8).write(to: file)
-        #expect(FavouriteWordStore.load(beside: store).isEmpty)
-        FavouriteWordStore.reset(beside: store)
-        #expect(!FileManager.default.fileExists(atPath: file.path))
-        #expect(finished == before)
-    }
-
     @Test func theListScreenDrawsStoredPronunciationWithoutClippingPashto() throws {
         let screen = try String(
             contentsOf: repositoryRoot().appendingPathComponent("PashtoApp/Quiz/StudyCardScreen.swift"),
@@ -265,8 +231,11 @@ struct LearnListTests {
         #expect(!body.contains("frame(height:"))
         #expect(body.contains("lineSpacing"))
         #expect(body.contains("ModuleCopy.practiceLesson"))
+        #expect(body.contains("accessibilityLabel(Text(verbatim: ModuleCopy.practiceLessonSpoken))"))
         #expect(body.contains("ModuleCopy.flashcards"))
         #expect(body.contains("clipPlayer.play"))
+        #expect(!body.contains("bookmark"))
+        #expect(!body.contains("FavouriteWord"))
         #expect(!body.contains("onAppear"))
         let markers = ["æ", "ø", "å", "Æ", "Ø", "Å", "Bekreftet"]
         for marker in markers where body.contains(marker) {

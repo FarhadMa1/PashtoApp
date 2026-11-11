@@ -686,13 +686,25 @@
       }
     },
     "learn.list.practiceLesson" : {
-      "comment" : "Learn list. Opens the unit's first practice lesson.",
+      "comment" : "Learn list. Opens the unit's first practice lesson. The arrow is visible only.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Practice lesson →"
+          }
+        }
+      }
+    },
+    "learn.list.practiceLessonSpoken" : {
+      "comment" : "Spoken name of the practice button. VoiceOver does not read the arrow.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice lesson"
           }
         }
       }
@@ -717,30 +729,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld of %lld words"
-          }
-        }
-      }
-    },
-    "learn.list.save" : {
-      "comment" : "Learn list bookmark. Spoken when the word is not saved.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save"
-          }
-        }
-      }
-    },
-    "learn.list.saved" : {
-      "comment" : "Learn list bookmark. Spoken when the word is saved.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Saved"
           }
         }
       }

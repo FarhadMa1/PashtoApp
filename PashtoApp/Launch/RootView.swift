@@ -66,8 +66,6 @@ struct RootView: View {
                 dailyWord: model.dailyWord,
                 study: model.studyDeck,
                 learnList: model.learnList,
-                favouriteItemIDs: model.favouriteItemIDs,
-                toggleFavourite: { model.toggleFavourite($0) },
                 openFlashcards: { model.openLearnFlashcards() },
                 closeFlashcards: { model.closeLearnFlashcards() },
                 closeLearnList: { model.closeLearnList() },

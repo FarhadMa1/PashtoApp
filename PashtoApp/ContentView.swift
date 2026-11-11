@@ -40,8 +40,6 @@ struct ContentView: View {
     var study: StudyDeck? = nil
     /// Learn words. Nil keeps the cards, the quiz, or the home. Opening it does not finish the lesson.
     var learnList: LearnList? = nil
-    var favouriteItemIDs: Set<ItemID> = []
-    var toggleFavourite: (ItemID) -> Void = { _ in }
     var openFlashcards: () -> Void = {}
     var closeFlashcards: () -> Void = {}
     var closeLearnList: () -> Void = {}
@@ -95,8 +93,6 @@ struct ContentView: View {
         } else if let learnList {
             LearnListScreen(
                 list: learnList,
-                savedItemIDs: favouriteItemIDs,
-                onToggleFavourite: toggleFavourite,
                 onPractice: startListedPractice,
                 onFlashcards: openFlashcards,
                 onBack: closeLearnList
@@ -322,7 +318,6 @@ struct ContentView: View {
 
     private func categoryLabel(_ category: MainMenuCategory, hue: Color) -> some View {
         Text(verbatim: menuWord(category))
-            .textCase(.uppercase)
             .font(.title3.weight(.semibold))
             .foregroundStyle(hue)
             .lineLimit(1)
@@ -341,7 +336,7 @@ struct ContentView: View {
         return "\(label) · \(target.lessonTitle)"
     }
 
-    /// The stored word. Uppercase is only the drawing, so VoiceOver reads the word.
+    /// The stored category name. The row and VoiceOver use the same word.
     private func menuWord(_ category: MainMenuCategory) -> String {
         switch category.catalogKey {
         case "menu.unit.basics": String(localized: "menu.unit.basics")
@@ -1375,7 +1370,6 @@ struct CategoryCelebrationScreen: View {
             Spacer()
             HStack(alignment: .center, spacing: 12) {
                 Text(verbatim: offer.unitName)
-                    .textCase(.uppercase)
                     .font(.system(size: cardLabelSize, weight: .heavy))
                     .tracking(cardLabelSize * 0.06)
                     .foregroundStyle(palette.hue)
@@ -1448,7 +1442,6 @@ struct CategoryCelebrationScreen: View {
     private var praiseCopy: some View {
         VStack(spacing: 18) {
             Text(verbatim: offer.unitName)
-                .textCase(.uppercase)
                 .font(.system(size: unitLabelSize, weight: .heavy))
                 .tracking(unitLabelSize * 0.08)
                 .foregroundStyle(palette.hue)

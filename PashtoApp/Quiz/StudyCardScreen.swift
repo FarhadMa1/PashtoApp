@@ -427,8 +427,6 @@ final class GreetingsClipPlayer: NSObject, AVAudioPlayerDelegate {
 /// open the card view. Looking at the list does not finish the lesson.
 struct LearnListScreen: View {
     var list: LearnList
-    var savedItemIDs: Set<ItemID>
-    var onToggleFavourite: (ItemID) -> Void
     var onPractice: () -> Void
     var onFlashcards: () -> Void
     var onBack: () -> Void
@@ -586,11 +584,8 @@ struct LearnListScreen: View {
                     .padding(.vertical, pashtoPadding)
                     .fixedSize(horizontal: false, vertical: true)
                     .environment(\.layoutDirection, .rightToLeft)
-                HStack(spacing: 4) {
-                    if row.showsPlayButton, let url = clipURL(for: row.itemID) {
-                        playButton(url)
-                    }
-                    bookmark(row)
+                if row.showsPlayButton, let url = clipURL(for: row.itemID) {
+                    playButton(url)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -614,22 +609,6 @@ struct LearnListScreen: View {
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: ModuleCopy.play))
-        .accessibilityAddTraits(.isButton)
-    }
-
-    private func bookmark(_ row: LearnListRow) -> some View {
-        let saved = savedItemIDs.contains(row.itemID)
-        return Button {
-            onToggleFavourite(row.itemID)
-        } label: {
-            Image(systemName: saved ? "bookmark.fill" : "bookmark")
-                .font(.body.weight(.semibold))
-                .foregroundStyle(saved ? hue : Lapis.secondaryText)
-                .frame(minWidth: 44, minHeight: 44)
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(verbatim: saved ? ModuleCopy.saved : ModuleCopy.save))
         .accessibilityAddTraits(.isButton)
     }
 
@@ -671,6 +650,7 @@ struct LearnListScreen: View {
         }
         .buttonStyle(.plain)
         .frame(minHeight: 44)
+        .accessibilityLabel(Text(verbatim: ModuleCopy.practiceLessonSpoken))
     }
 
     private var flashcardsButton: some View {

@@ -61,8 +61,6 @@ final class AppModel {
     private(set) var studyDeck: StudyDeck?
     /// The learn lesson on screen. Not written as progress. Nil for phrases and the quiz.
     private(set) var learnList: LearnList?
-    /// Words saved from a learn row. Stored beside progress, not as a finished lesson.
-    private(set) var favouriteItemIDs: Set<ItemID> = []
     /// Bumps when the deck is replaced so a waiting settle cannot unlock the new one early.
     @ObservationIgnored
     private var studySettleToken = UUID()
@@ -253,7 +251,6 @@ final class AppModel {
             self.progressStore = store
             self.snapshot = snapshot
             celebratedUnitIDs = CategoryCelebrationStore.load(beside: url)
-            favouriteItemIDs = FavouriteWordStore.load(beside: url)
             storageErrorReason = nil
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
@@ -261,7 +258,6 @@ final class AppModel {
             progressStore = nil
             snapshot = nil
             celebratedUnitIDs = []
-            favouriteItemIDs = []
             let screen = progressScreen(for: progressOpenFailure(for: error))
             storageErrorReason = screen == .storageError ? .progressUnreadable : nil
             phase = phase(for: screen)
@@ -322,8 +318,6 @@ final class AppModel {
             self.snapshot = snapshot
             CategoryCelebrationStore.reset(beside: url)
             celebratedUnitIDs = []
-            FavouriteWordStore.reset(beside: url)
-            favouriteItemIDs = []
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
@@ -412,13 +406,6 @@ final class AppModel {
         learnList = nil
         replaceStudy(nil)
         await startLesson(target, voiceOver: voiceOver)
-    }
-
-    /// Saves or removes one favourite. Finished lessons stay as they were.
-    func toggleFavourite(_ id: ItemID) {
-        favouriteItemIDs = FavouriteWordStore.toggle(id, in: favouriteItemIDs)
-        guard let url = try? resolvedURL() else { return }
-        try? FavouriteWordStore.save(favouriteItemIDs, beside: url)
     }
 
     /// One card forward. A second tap before the first settles is ignored.

@@ -46,7 +46,7 @@ final class ScreenshotTests: XCTestCase {
         tap("u-numbers", in: app)
         tap("l-numbers-learn-one-to-five", in: app)
         XCTAssertTrue(
-            app.buttons["Practice lesson →"].waitForExistence(timeout: 15),
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Numbers learn list did not open. buttons: \(buttonDump(app))"
         )
         XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers list has no pronunciation")
@@ -77,7 +77,7 @@ final class ScreenshotTests: XCTestCase {
         tap("u-greetings", in: app)
         tap("l-greetings-learn", in: app)
         XCTAssertTrue(
-            app.buttons["Practice lesson →"].waitForExistence(timeout: 15),
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Greetings learn list did not open. buttons: \(buttonDump(app))"
         )
         XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Greetings list has no Play button")
@@ -98,7 +98,7 @@ final class ScreenshotTests: XCTestCase {
 
         tap("l-family-learn-members", in: app)
         XCTAssertTrue(
-            app.buttons["Practice lesson →"].waitForExistence(timeout: 15),
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Family learn list did not open. buttons: \(buttonDump(app))"
         )
         XCTAssertTrue(app.buttons["Flashcards"].waitForExistence(timeout: 5))
@@ -114,7 +114,7 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
         app.buttons["Pashto"].tap()
         XCTAssertTrue(
-            app.buttons["Practice lesson →"].waitForExistence(timeout: 10),
+            app.buttons["Practice lesson"].waitForExistence(timeout: 10),
             "Family learn list did not return. buttons: \(buttonDump(app))"
         )
         app.buttons["Pashto"].tap()
