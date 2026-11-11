@@ -192,7 +192,7 @@ struct QuizDesignBTests {
         #expect(quiz.contains("onAnswer(session)"))
         #expect(board.contains("QuizChrome.primary"))
         #expect(board.contains("dynamicTypeSize.isAccessibilitySize"))
-        #expect(home.contains("onFinish: { celebration = $0; finishSession($0) }"))
+        #expect(home.contains("onFinish: { session in\n                presentCelebration(for: session)\n                finishSession(session)\n            }"))
         #expect(home.contains("streakCount: streakCount"))
         let study = try String(contentsOf: root.appendingPathComponent("PashtoApp/Quiz/StudyCardScreen.swift"), encoding: .utf8)
         #expect(study.contains("StudyPrimaryButtonStyle()"))

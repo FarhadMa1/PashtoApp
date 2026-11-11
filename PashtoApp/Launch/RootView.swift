@@ -63,6 +63,7 @@ struct RootView: View {
                 endSession: { model.endLesson() },
                 answerSession: { model.saveAnswer($0) },
                 finishSession: { model.finishLesson($0) },
+                celebrationOffer: { model.categoryCelebrationOffer(for: $0) },
                 dailyWord: model.dailyWord,
                 study: model.studyDeck,
                 studyNext: { model.studyNext() },

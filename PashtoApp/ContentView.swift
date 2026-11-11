@@ -1,5 +1,6 @@
 import PashtoCore
 import SwiftUI
+import UIKit
 
 /// Root once progress has loaded.
 ///
@@ -8,9 +9,9 @@ import SwiftUI
 /// pronunciation setting it started with. Units that are not in
 /// `release-units.json` are not part of that session. The home lists those
 /// units in course order. A row opens the unit, and a lesson there starts
-/// one. The last answer saves the lesson and shows the
-/// celebration. Continue only closes that celebration. Leaving early returns
-/// here without it.
+/// one. The last answer saves the lesson. The celebration is shown only the
+/// first time a category's last Practice lesson is finished. Continue closes
+/// it. Leaving early returns here without it.
 /// An empty release list keeps the placeholder.
 struct ContentView: View {
     var reviewStarted: Bool = false
@@ -44,11 +45,13 @@ struct ContentView: View {
     var studyStartPractice: () -> Void = {}
     var studySkip: () -> Void = {}
     var closeStudy: () -> Void = {}
+    /// Nil unless this finish is the first completion of the category's last Practice lesson.
+    var celebrationOffer: (LessonID) -> CategoryCelebrationOffer? = { _ in nil }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var celebration: LessonSession?
+    @State private var celebration: CategoryCelebrationOffer?
     /// From-values first, then the live counts. Consuming the cue does not change these.
     @State private var playback = HomeMotionPlayback()
     @State private var streakPulse = 0
@@ -60,7 +63,7 @@ struct ContentView: View {
 
     var body: some View {
         if let celebration {
-            LessonFinishedView(session: celebration) {
+            CategoryCelebrationScreen(offer: celebration) {
                 self.celebration = nil
             }
             .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
@@ -90,6 +93,12 @@ struct ContentView: View {
         }
     }
 
+    /// The girih celebration, only for a category's first finished last Practice lesson.
+    private func presentCelebration(for session: LessonSession) {
+        guard celebration == nil, let offer = celebrationOffer(session.lessonID) else { return }
+        celebration = offer
+    }
+
     private func quizSession(_ quiz: LessonSession) -> some View {
         QuizScreen(
             session: quiz,
@@ -98,7 +107,10 @@ struct ContentView: View {
             streakCount: streakCount,
             onClose: endSession,
             onAnswer: answerSession,
-            onFinish: { celebration = $0; finishSession($0) }
+            onFinish: { session in
+                presentCelebration(for: session)
+                finishSession(session)
+            }
         )
     }
 
@@ -685,177 +697,6 @@ private struct FamilyWordRowView: View {
     }
 }
 
-/// Saffron octagram, girih behind it, and the first-try numbers.
-///
-/// The pieces start together and finish within the girih's 0.8 s. A tap skips
-/// to the end. Continue stays outside that tap and is never disabled.
-/// VoiceOver focuses the result once. That label is the final text, so the
-/// count-up is not read and a second announcement is not posted.
-private struct LessonFinishedView: View {
-    var session: LessonSession
-    var onContinue: () -> Void
-
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
-    @Environment(\.colorScheme) private var colorScheme
-    @AccessibilityFocusState private var resultFocused: Bool
-    @State private var starShown = false
-    @State private var girihShown = false
-    @State private var skipped = false
-    @State private var skipToken = 0
-    @State private var correctShown = 0
-    @State private var didFocusResult = false
-
-    private var stats: LessonFinishStats { LessonFinishStats.measure(session) }
-    private var praise: LessonPraise { LessonPraise.select(lessonID: session.lessonID) }
-    private var resultLayout: CelebrationResultLayout {
-        CelebrationCopy.resultLayout(
-            stats: stats,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver,
-            skipped: skipped,
-            label: ApprovedCopy.correct
-        )
-    }
-
-    /// Final correct count, praise, and pronunciation when this session shows it.
-    /// The answered total is only the denominator of the labelled fraction.
-    private var resultSpeech: String {
-        CelebrationCopy.accessibleResult(
-            stats: stats,
-            praise: praise,
-            showsPronunciation: true,
-            reduceMotion: reduceMotion,
-            voiceOver: voiceOver,
-            title: ApprovedCopy.lessonComplete,
-            correct: ApprovedCopy.correct
-        )
-    }
-
-    var body: some View {
-        LapisScreen {
-            VStack(spacing: 20) {
-                ZStack {
-                    GirihPattern()
-                        .opacity(girihShown ? 1 : 0)
-                    Octagram()
-                        .fill(Lapis.saffron)
-                        .frame(width: 104, height: 104)
-                        .overlay {
-                            if colorScheme == .light {
-                                Octagram().strokeBorder(Lapis.ring, lineWidth: 1)
-                            }
-                        }
-                        .overlay {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 36, weight: .bold))
-                                .foregroundStyle(Lapis.saffronInk)
-                        }
-                        .scaleEffect(reduceMotion ? 1 : (starShown ? 1 : 0.3))
-                        .rotationEffect(.degrees(reduceMotion ? 0 : (starShown ? 0 : -45)))
-                        .opacity(starShown ? 1 : 0)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 240)
-                .background(Lapis.heroGradient)
-                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                .accessibilityHidden(true)
-
-                Text(verbatim: ApprovedCopy.lessonComplete)
-                    .font(.title2.weight(.semibold))
-                    .foregroundStyle(Lapis.text)
-                    .frame(maxWidth: .infinity)
-                HStack {
-                    Spacer(minLength: 0)
-                    PashtoLine(
-                        text: praise.pashto,
-                        pronunciation: praise.pronunciation,
-                        arabic: true
-                    )
-                    .font(.title.weight(.semibold))
-                    .foregroundStyle(Lapis.text)
-                    Spacer(minLength: 0)
-                }
-                VStack(spacing: 2) {
-                    HStack(spacing: 0) {
-                        Text(correctShown, format: .number)
-                        Text(verbatim: "/\(resultLayout.answeredTotal)")
-                    }
-                    .font(.largeTitle.weight(.bold).monospacedDigit())
-                    Text(verbatim: resultLayout.label)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Lapis.secondaryText)
-                }
-                .foregroundStyle(Lapis.text)
-                .accessibilityHidden(true)
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-            .frame(maxWidth: .infinity, minHeight: 420, alignment: .top)
-            .contentShape(Rectangle())
-            .onTapGesture(perform: skip)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(verbatim: resultSpeech))
-            .accessibilityFocused($resultFocused)
-        } footer: {
-            Button(action: onContinue) {
-                Text("quiz.continue.button")
-            }
-            .buttonStyle(SaffronButtonStyle())
-        }
-        .onAppear(perform: play)
-        .task(id: skipToken) { await count() }
-        .task {
-            guard !didFocusResult else { return }
-            didFocusResult = true
-            resultFocused = true
-        }
-    }
-
-    private func play() {
-        let girih = GirihEntrance.style(reduceMotion: reduceMotion)
-        if girih == .still {
-            girihShown = true
-        } else if let animation = Motion.girihAnimation(reduceMotion: reduceMotion) {
-            withAnimation(animation) { girihShown = true }
-        }
-        withAnimation(Motion.lessonStarAnimation(reduceMotion: reduceMotion)) {
-            starShown = true
-        }
-    }
-
-    private func skip() {
-        guard !skipped else { return }
-        skipped = true
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-            starShown = true
-            girihShown = true
-            correctShown = stats.correct
-        }
-        skipToken += 1
-    }
-
-    private func count() async {
-        let layout = resultLayout
-        let correct = layout.correctPlan
-        correctShown = correct.start
-        guard correct.animates else { return }
-        let steps = max(correct.end, layout.answeredTotal)
-        guard steps > 0 else { return }
-        let slice = CelebrationMotion.countUp / Double(steps)
-        for step in 1...steps {
-            try? await Task.sleep(for: .seconds(slice))
-            if Task.isCancelled || skipped { break }
-            correctShown = min(step, correct.end)
-        }
-        if !Task.isCancelled {
-            correctShown = correct.end
-        }
-    }
-}
-
 /// New items today, drawn as a ring around the lapis octagram.
 ///
 /// The fraction is the stored count over the stored limit. Reduce Motion and
@@ -1389,6 +1230,385 @@ enum ApprovedCopy {
     static var learn: String { String(localized: "module.section.learn") }
     static var phrases: String { String(localized: "module.section.phrases") }
     static var practice: String { String(localized: "module.section.practice") }
+}
+
+/// Lesson-complete celebration.
+///
+/// The unit ring fills, then unfolds into a 16-point girih star. The praise
+/// and Continue stay. Reduce Motion, and a settled screenshot, open on that
+/// last frame and do not animate. The pronunciation clip plays only from Play.
+struct CategoryCelebrationScreen: View {
+    var offer: CategoryCelebrationOffer
+    /// Opens on the settled frame. Screenshot capture uses this.
+    var startsSettled: Bool = false
+    var onContinue: () -> Void
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+    @AccessibilityFocusState private var praiseFocused: Bool
+    @State private var phase: CategoryCelebrationPhase = .ring
+    @State private var morph: CGFloat = 0
+    @State private var starSide: CGFloat = CGFloat(CategoryCelebrationStar.ringSide)
+    @State private var ringShown: Double
+    /// Plays only from the speaker button. Nothing starts when the screen appears.
+    @State private var clipPlayer = GreetingsClipPlayer()
+
+    @ScaledMetric(relativeTo: .title3) private var cardLabelSize: CGFloat = 20
+    @ScaledMetric(relativeTo: .body) private var unitLabelSize: CGFloat = 18
+    @ScaledMetric(relativeTo: .largeTitle) private var praiseSize: CGFloat = 48
+    @ScaledMetric(relativeTo: .title2) private var pashtoSize: CGFloat = 30
+
+    init(
+        offer: CategoryCelebrationOffer,
+        startsSettled: Bool = false,
+        onContinue: @escaping () -> Void
+    ) {
+        self.offer = offer
+        self.startsSettled = startsSettled
+        self.onContinue = onContinue
+        _ringShown = State(initialValue: startsSettled ? offer.ringTo : offer.ringFrom)
+        if startsSettled {
+            _phase = State(initialValue: .praise)
+            _morph = State(initialValue: 1)
+            _starSide = State(initialValue: CGFloat(CategoryCelebrationStar.praiseSide))
+        }
+    }
+
+    private var palette: Lapis.MenuCard { Lapis.MenuCard.resolve(offer.unitID) }
+
+    private var shownPhase: CategoryCelebrationPhase {
+        if startsSettled { return .praise }
+        if CategoryCelebrationPlayback.opening(reduceMotion: reduceMotion) == .praise {
+            return .praise
+        }
+        return phase
+    }
+
+    private var shownMorph: CGFloat {
+        if startsSettled || reduceMotion { return 1 }
+        return morph
+    }
+
+    private var shownStarSide: CGFloat {
+        if startsSettled || reduceMotion {
+            return CGFloat(CategoryCelebrationStar.praiseSide)
+        }
+        return starSide
+    }
+
+    var body: some View {
+        ZStack {
+            backdrop
+            if shownPhase == .ring {
+                ringStage
+            } else {
+                praiseStage
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Lapis.background.ignoresSafeArea())
+        .transaction { transaction in
+            if reduceMotion || startsSettled {
+                transaction.disablesAnimations = true
+            }
+        }
+        .task { await play() }
+        .onDisappear { clipPlayer.stop() }
+        .accessibilityIdentifier("celebration")
+    }
+
+    private var backdrop: some View {
+        ZStack {
+            Lapis.background
+            if shownPhase != .ring {
+                GeometryReader { proxy in
+                    RadialGradient(
+                        stops: [
+                            .init(color: palette.fill, location: 0),
+                            .init(
+                                color: Lapis.background,
+                                location: colorScheme == .dark ? 0.62 : 0.60
+                            ),
+                        ],
+                        center: UnitPoint(x: 0.5, y: 0.42),
+                        startRadius: 0,
+                        endRadius: max(proxy.size.width, proxy.size.height)
+                    )
+                }
+            }
+        }
+        .ignoresSafeArea()
+        .accessibilityHidden(true)
+    }
+
+    /// The unit card. The ring fills from the progress already stored.
+    private var ringStage: some View {
+        VStack {
+            Spacer()
+            HStack(alignment: .center, spacing: 12) {
+                Text(verbatim: offer.unitName)
+                    .textCase(.uppercase)
+                    .font(.system(size: cardLabelSize, weight: .heavy))
+                    .tracking(cardLabelSize * 0.06)
+                    .foregroundStyle(palette.hue)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.7)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                progressRing
+            }
+            .padding(.horizontal, 22)
+            .frame(maxWidth: .infinity, minHeight: 88)
+            .background {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(palette.hue)
+                    .offset(y: 5)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(palette.fill)
+            }
+            .padding(.bottom, 5)
+            Spacer()
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private var progressRing: some View {
+        ZStack {
+            Circle()
+                .stroke(palette.hue.opacity(0.25), lineWidth: 6)
+            Circle()
+                .trim(from: 0, to: max(0, min(1, ringShown)))
+                .stroke(palette.hue, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+        }
+        .padding(5)
+        .frame(width: 44, height: 44)
+        .accessibilityHidden(true)
+    }
+
+    private var praiseStage: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    Spacer(minLength: 0)
+                    VStack(spacing: 18) {
+                        GirihStarStack(morph: shownMorph, hue: palette.hue, fill: palette.fill)
+                            .frame(width: shownStarSide, height: shownStarSide)
+                            .accessibilityHidden(true)
+                        if shownPhase == .praise {
+                            praiseCopy
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    Spacer(minLength: 0)
+                }
+                .frame(maxWidth: .infinity, minHeight: proxy.size.height)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+        }
+    }
+
+    private var praiseCopy: some View {
+        VStack(spacing: 18) {
+            Text(verbatim: offer.unitName)
+                .textCase(.uppercase)
+                .font(.system(size: unitLabelSize, weight: .heavy))
+                .tracking(unitLabelSize * 0.08)
+                .foregroundStyle(palette.hue)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.6)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+            Text(verbatim: CategoryCelebration.praise.pronunciation)
+                .font(.system(size: praiseSize, weight: .heavy))
+                .foregroundStyle(CelebrationPalette.pronunciation)
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+                .minimumScaleFactor(0.5)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .environment(\.layoutDirection, .leftToRight)
+                .accessibilityFocused($praiseFocused)
+            Text(verbatim: CategoryCelebration.praise.pashto)
+                .font(.system(size: pashtoSize, weight: .semibold))
+                .foregroundStyle(palette.hue)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity)
+                .environment(\.layoutDirection, .rightToLeft)
+            if let url = clipURL {
+                playButton(url)
+            }
+            Button(action: onContinue) {
+                Text("quiz.continue.button")
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .buttonStyle(CelebrationContinueStyle())
+            .frame(maxWidth: 320)
+            .padding(.top, 12)
+        }
+    }
+
+    /// The bundled clip for this phrase, when the file is in the app.
+    private var clipURL: URL? {
+        guard let directory = Bundle.main.resourceURL else { return nil }
+        return GreetingsAudio.url(for: CategoryCelebration.praiseItemID, in: directory)
+    }
+
+    /// Outline speaker. The label is spoken. The icon has no other text.
+    private func playButton(_ url: URL) -> some View {
+        Button {
+            clipPlayer.play(url)
+        } label: {
+            Image(systemName: "speaker.wave.2")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(palette.hue)
+                .padding(.vertical, 12)
+                .padding(.horizontal, 20)
+                .background {
+                    Capsule(style: .continuous)
+                        .stroke(palette.hue, lineWidth: 2)
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: "Play"))
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private func play() async {
+        if startsSettled || reduceMotion {
+            praiseFocused = true
+            return
+        }
+        phase = .ring
+        morph = 0
+        starSide = CGFloat(CategoryCelebrationStar.ringSide)
+        ringShown = offer.ringFrom
+        withAnimation(.easeOut(duration: CategoryCelebrationPlayback.ringFill)) {
+            ringShown = offer.ringTo
+        }
+        try? await Task.sleep(for: .seconds(CategoryCelebrationPlayback.ringFill))
+        guard !Task.isCancelled else { return }
+        withAnimation(.easeOut(duration: CategoryCelebrationPlayback.unfold)) {
+            phase = .unfold
+            morph = 1
+            starSide = CGFloat(CategoryCelebrationStar.unfoldSide)
+        }
+        try? await Task.sleep(for: .seconds(CategoryCelebrationPlayback.unfold))
+        guard !Task.isCancelled else { return }
+        withAnimation(.easeOut(duration: 0.2)) {
+            phase = .praise
+            starSide = CGFloat(CategoryCelebrationStar.praiseSide)
+        }
+        praiseFocused = true
+    }
+}
+
+/// Outer, middle, and saffron center. `morph` 0 is a circle and 1 is the star.
+private struct GirihStarStack: View {
+    var morph: CGFloat
+    var hue: Color
+    var fill: Color
+
+    var body: some View {
+        let layers = CategoryCelebrationStar.layers
+        ZStack {
+            GirihStarShape(outer: layers[0].outer, inner: layers[0].inner, morph: morph)
+                .fill(hue)
+            GirihStarShape(outer: layers[1].outer, inner: layers[1].inner, morph: morph)
+                .fill(fill)
+            GirihStarShape(outer: layers[2].outer, inner: layers[2].inner, morph: morph)
+                .fill(Lapis.saffron)
+        }
+    }
+}
+
+private struct GirihStarShape: Shape {
+    var outer: Double
+    var inner: Double
+    var morph: CGFloat
+
+    var animatableData: CGFloat {
+        get { morph }
+        set { morph = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let points = CategoryCelebrationStar.points(
+            outer: outer,
+            inner: inner,
+            morph: Double(morph)
+        )
+        guard let first = points.first else { return Path() }
+        let scale = min(rect.width, rect.height) / CategoryCelebrationStar.viewBox
+        func place(_ vertex: CategoryCelebrationStar.Vertex) -> CGPoint {
+            CGPoint(
+                x: rect.midX + vertex.x * scale,
+                y: rect.midY + vertex.y * scale
+            )
+        }
+        var path = Path()
+        path.move(to: place(first))
+        for vertex in points.dropFirst() {
+            path.addLine(to: place(vertex))
+        }
+        path.closeSubpath()
+        return path
+    }
+}
+
+/// Navy Continue. Dark mode uses the light blue face from the sketch.
+private struct CelebrationContinueStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.title3.weight(.heavy))
+            .foregroundStyle(CelebrationPalette.buttonInk)
+            .multilineTextAlignment(.center)
+            .lineLimit(2)
+            .minimumScaleFactor(0.5)
+            .frame(maxWidth: .infinity, minHeight: 60)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(CelebrationPalette.buttonLip)
+                    .offset(y: 5)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(CelebrationPalette.buttonFill)
+                    .offset(y: configuration.isPressed ? 2 : 0)
+            }
+            .padding(.bottom, 5)
+            .opacity(configuration.isPressed ? 0.92 : 1)
+    }
+}
+
+private enum CelebrationPalette {
+    static let pronunciation = dynamic(light: 0x1E293B, dark: 0xF8FAFC)
+    static let buttonFill = dynamic(light: 0x1E3A8A, dark: 0x93B4F5)
+    static let buttonInk = dynamic(light: 0xFFFFFF, dark: 0x0F172A)
+    static let buttonLip = dynamic(light: 0x0F1F4D, dark: 0x4A6BD6)
+
+    private static func dynamic(light: UInt32, dark: UInt32) -> Color {
+        Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark ? ui(dark) : ui(light)
+        })
+    }
+
+    private static func ui(_ hex: UInt32) -> UIColor {
+        UIColor(
+            red: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1
+        )
+    }
 }
 
 #Preview {

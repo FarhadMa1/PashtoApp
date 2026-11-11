@@ -105,8 +105,8 @@ struct FamilyWordListTests {
             encoding: .utf8
         )
         let page = try section("private func categoryPage", until: "private var categoryKinds", in: screen)
-        let row = try section("private struct FamilyWordRowView", until: "private struct LessonFinishedView", in: screen)
-        let pashto = try section("private var pashto", until: "private struct LessonFinishedView", in: screen)
+        let row = try section("private struct FamilyWordRowView", until: "private struct DailyGoalRing", in: screen)
+        let pashto = try section("private var pashto", until: "private struct DailyGoalRing", in: screen)
 
         #expect(page.contains("categorySection(kind, in: category)"))
         #expect(page.contains("FamilyWordListView(rows: category.wordList)"))

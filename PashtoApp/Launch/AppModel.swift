@@ -87,6 +87,8 @@ final class AppModel {
     private var streakMotion = StreakMotionCue()
     /// What the home has not claimed. Empty after the claim, and empty on a relaunch.
     private(set) var pendingStreakEvents: [StreakEventID] = []
+    /// Categories whose celebration has already been shown. Loaded with progress.
+    private var celebratedUnitIDs: Set<UnitID> = []
     /// Why the storage error is showing. Nil on every other screen.
     ///
     /// Start over is offered only when the progress store could not be opened.
@@ -246,12 +248,14 @@ final class AppModel {
             self.container = container
             self.progressStore = store
             self.snapshot = snapshot
+            celebratedUnitIDs = CategoryCelebrationStore.load(beside: url)
             storageErrorReason = nil
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
             progressStore = nil
             snapshot = nil
+            celebratedUnitIDs = []
             let screen = progressScreen(for: progressOpenFailure(for: error))
             storageErrorReason = screen == .storageError ? .progressUnreadable : nil
             phase = phase(for: screen)
@@ -310,6 +314,8 @@ final class AppModel {
             self.container = restarted.container
             self.progressStore = store
             self.snapshot = snapshot
+            CategoryCelebrationStore.reset(beside: url)
+            celebratedUnitIDs = []
             phase = phase(for: progressScreen(streak: snapshot.streak, on: clock.today))
         } catch {
             container = nil
@@ -548,7 +554,11 @@ final class AppModel {
                     lesson: lessonID,
                     saved: saved
                 )
+                let celebratedUnit = categoryCelebrationOffer(for: lessonID)?.unitID
                 snapshot = saved
+                if let celebratedUnit {
+                    writeCategoryCelebration(celebratedUnit)
+                }
                 openLesson.endLessonIfStill(finished)
                 storageErrorReason = nil
                 phase = phase(for: progressScreen(streak: saved.streak, on: day))
@@ -556,6 +566,34 @@ final class AppModel {
                 storageErrorReason = .lessonSaveFailed
                 phase = phase(for: screenAfterFailedLessonSave())
             }
+        }
+    }
+
+    /// The celebration for this lesson, or nil when this finish should not show one.
+    ///
+    /// Read before the finished lesson is stored. A repeat and every lesson that
+    /// is not the category's last Practice lesson return nil.
+    func categoryCelebrationOffer(for lessonID: LessonID) -> CategoryCelebrationOffer? {
+        guard let course else { return nil }
+        return CategoryCelebration.offer(
+            finishing: lessonID,
+            in: course.units,
+            finishedBefore: finishedLessonIDs,
+            celebratedUnits: celebratedUnitIDs
+        )
+    }
+
+    /// Records that this category's celebration has been shown.
+    private func writeCategoryCelebration(_ unitID: UnitID) {
+        guard let url = storeURL else { return }
+        var ids = celebratedUnitIDs
+        ids.insert(unitID)
+        do {
+            try CategoryCelebrationStore.save(ids, beside: url)
+            celebratedUnitIDs = ids
+        } catch {
+            // The finished lesson still blocks a repeat. The file can be written
+            // the next time a category celebration is earned.
         }
     }
 
@@ -584,7 +622,11 @@ final class AppModel {
                     saved: saved
                 )
             }
+            let celebratedUnit = lessonID.flatMap { categoryCelebrationOffer(for: $0)?.unitID }
             snapshot = saved
+            if let celebratedUnit {
+                writeCategoryCelebration(celebratedUnit)
+            }
             openLesson.endLessonIfStill(finished)
             storageErrorReason = nil
             phase = phase(for: progressScreen(streak: saved.streak, on: day))

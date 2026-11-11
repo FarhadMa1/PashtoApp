@@ -135,7 +135,7 @@ public enum RescueMark {
 /// under the streak row. It is not drawn in the 28pt icon, so the count stays
 /// clear. The snowflake badge is smaller than that icon and stays inside it.
 public enum FreezeCelebrationLayout {
-    /// The lesson-finish star in `LessonFinishedView`.
+    /// The lesson-finish star. Larger than the streak icon.
     public static let lessonStarSide: Double = 104
     public static let starSide: Double = 128
     public static let cardHeight: Double = 220
