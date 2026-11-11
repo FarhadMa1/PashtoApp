@@ -76,9 +76,37 @@ struct UnitsFourToEightTests {
             #expect(introductions == ["u-town"])
             #expect(Set(presentations) == ["u-travel", "u-town"])
         }
-        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn)?.accessibilityLabel == "taxi")
-        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .practice) == nil)
-        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .phrases) == nil)
+        let around = try #require(StudyCourse.deck(for: lessonID("l-travel-learn-around"), in: bundle))
+        #expect(around.title == "Getting around")
+        let travelTaxi = try #require(around.cards.first { $0.itemID.rawValue == "e-tak-see" })
+        #expect(FamilyPictures.picture(
+            for: travelTaxi.itemID,
+            english: travelTaxi.meaning,
+            lessonKind: around.kind,
+            unitID: around.unitID
+        ) == nil)
+        let transport = try #require(StudyCourse.deck(for: lessonID("l-town-learn-transport"), in: bundle))
+        let townTaxi = try #require(transport.cards.first { $0.itemID.rawValue == "e-tak-see" })
+        let townPicture = FamilyPictures.picture(
+            for: townTaxi.itemID,
+            english: townTaxi.meaning,
+            lessonKind: transport.kind,
+            unitID: transport.unitID
+        )
+        #expect(townPicture?.assetName == "e-tak-see")
+        #expect(townPicture?.accessibilityLabel == "taxi")
+        #expect(FamilyPictures.picture(
+            for: townTaxi.itemID,
+            english: "taxi",
+            lessonKind: .practice,
+            unitID: transport.unitID
+        ) == nil)
+        #expect(FamilyPictures.picture(
+            for: townTaxi.itemID,
+            english: "taxi",
+            lessonKind: .phrases,
+            unitID: transport.unitID
+        ) == nil)
     }
 
     @Test func userFacingTextHasNoNorwegianAndNoBundledAudio() throws {

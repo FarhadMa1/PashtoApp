@@ -167,7 +167,12 @@ struct TravelTimeContentTests {
         for id in FamilyPictures.itemIDs {
             let itemID = itemID(id)
             let english = bundle.items.first { $0.id.rawValue == id }?.en
-            #expect(FamilyPictures.picture(for: itemID, english: english, lessonKind: .learn)?.accessibilityLabel == english)
+            let unit = FamilyPictures.limitedToUnit[id].map(unitID)
+            #expect(FamilyPictures.picture(for: itemID, english: english, lessonKind: .learn, unitID: unit)?.accessibilityLabel == english)
+            if FamilyPictures.limitedToUnit[id] != nil {
+                #expect(FamilyPictures.picture(for: itemID, english: english, lessonKind: .learn) == nil)
+                #expect(FamilyPictures.picture(for: itemID, english: english, lessonKind: .learn, unitID: unitID("u-travel")) == nil)
+            }
             #expect(FamilyPictures.picture(for: itemID, english: english, lessonKind: .phrases) == nil)
             #expect(FamilyPictures.picture(for: itemID, english: english, lessonKind: .practice) == nil)
             let asset = repositoryRoot()
@@ -176,7 +181,8 @@ struct TravelTimeContentTests {
                 .appendingPathComponent("\(id).png")
             #expect(FileManager.default.fileExists(atPath: asset.path))
         }
-        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn)?.accessibilityLabel == "taxi")
+        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn) == nil)
+        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn, unitID: unitID("u-town"))?.accessibilityLabel == "taxi")
 
         let phrases = try #require(StudyCourse.deck(for: lessonID("l-family-phrases-this"), in: bundle))
         #expect(phrases.cards.allSatisfy {
@@ -216,7 +222,7 @@ struct TravelTimeContentTests {
     @Test func travelAndTimePicturesResolveOnlyOnLearnCards() throws {
         let bundle = try loadCourse().bundle
         let pictured = [
-            "l-travel-learn-around": ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab", "e-tak-see"],
+            "l-travel-learn-around": ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab"],
             "l-travel-learn-money": ["e-pay-se"],
             "l-time-learn-times": ["e-wradz", "e-sa-haar", "e-maa-khaam", "e-shpa"],
             "l-time-learn-days": [String](),
@@ -228,7 +234,8 @@ struct TravelTimeContentTests {
                 guard let picture = FamilyPictures.picture(
                     for: card.itemID,
                     english: card.meaning,
-                    lessonKind: deck.kind
+                    lessonKind: deck.kind,
+                    unitID: deck.unitID
                 ) else {
                     return nil
                 }
@@ -246,8 +253,13 @@ struct TravelTimeContentTests {
         for id in picturedIDs {
             let item = itemID(id)
             let english = bundle.items.first { $0.id.rawValue == id }?.en
-            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn)?.assetName == id)
-            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn)?.accessibilityLabel == english)
+            let unit = FamilyPictures.limitedToUnit[id].map(unitID)
+            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn, unitID: unit)?.assetName == id)
+            #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn, unitID: unit)?.accessibilityLabel == english)
+            if FamilyPictures.limitedToUnit[id] != nil {
+                #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn) == nil)
+                #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .learn, unitID: unitID("u-travel")) == nil)
+            }
             #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .phrases) == nil)
             #expect(FamilyPictures.picture(for: item, english: english, lessonKind: .practice) == nil)
             let imageset = repositoryRoot()
@@ -256,7 +268,15 @@ struct TravelTimeContentTests {
             let names = try FileManager.default.contentsOfDirectory(atPath: imageset.path).sorted()
             #expect(names == ["Contents.json", "\(id).png"])
         }
-        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn)?.assetName == "e-tak-see")
+        let around = try #require(StudyCourse.deck(for: lessonID("l-travel-learn-around"), in: bundle))
+        let travelTaxi = try #require(around.cards.first { $0.itemID.rawValue == "e-tak-see" })
+        #expect(FamilyPictures.picture(
+            for: travelTaxi.itemID,
+            english: travelTaxi.meaning,
+            lessonKind: around.kind,
+            unitID: around.unitID
+        ) == nil)
+        #expect(FamilyPictures.picture(for: itemID("e-tak-see"), english: "taxi", lessonKind: .learn, unitID: unitID("u-town"))?.assetName == "e-tak-see")
         #expect(FileManager.default.fileExists(atPath: repositoryRoot()
             .appendingPathComponent("PashtoApp/Assets.xcassets/e-tak-see.imageset/e-tak-see.png").path))
 

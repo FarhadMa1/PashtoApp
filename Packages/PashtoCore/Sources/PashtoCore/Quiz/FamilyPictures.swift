@@ -5,7 +5,8 @@ import Foundation
 /// Family, Travel, Time, and the taxi on Town. The asset name is the item id.
 /// The accessibility label is that item's English word, so the catalog does
 /// not gain a new string. Practice and phrases return nil: a picture in a
-/// quiz would show the answer.
+/// quiz would show the answer. The taxi picture is Town only, so the same
+/// item on Travel's Getting around card has no image.
 public enum FamilyPictures {
     public struct Picture: Equatable, Sendable {
         public var assetName: String
@@ -37,10 +38,25 @@ public enum FamilyPictures {
         "e-shpa",
     ]
 
+    /// Item ids whose picture is shown only inside this unit.
+    /// The taxi asset stays shared; Travel does not use it.
+    public static let limitedToUnit: [String: String] = [
+        "e-tak-see": "u-town",
+    ]
+
     /// Nil unless `lessonKind` is learn and `itemID` is pictured.
-    public static func picture(for itemID: ItemID, english: String?, lessonKind: LessonKind) -> Picture? {
+    /// A unit-limited item also needs that unit.
+    public static func picture(
+        for itemID: ItemID,
+        english: String?,
+        lessonKind: LessonKind,
+        unitID: UnitID? = nil
+    ) -> Picture? {
         guard lessonKind == .learn else { return nil }
         guard itemIDs.contains(itemID.rawValue) else { return nil }
+        if let onlyUnit = limitedToUnit[itemID.rawValue], unitID?.rawValue != onlyUnit {
+            return nil
+        }
         let label = english?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         guard !label.isEmpty else { return nil }
         return Picture(assetName: itemID.rawValue, accessibilityLabel: label)

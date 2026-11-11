@@ -17,7 +17,6 @@ struct FamilyWordListTests {
         "e-ho-tal",
         "e-ti-kat",
         "e-tash-naab",
-        "e-tak-see",
         "e-pay-se",
     ]
     private let town = [
