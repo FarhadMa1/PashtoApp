@@ -217,8 +217,9 @@ enum AnswerPool {
         "e-ju-ma",
     ]
 
-    /// New Travel and Time items. Day names are listed here too; the day-name
-    /// check runs first and keeps سه شنبه with the other days.
+    /// Travel, Time, and units 4–8. Day names are listed here too; the day-name
+    /// check runs first and keeps سه شنبه with the other days. An empty release
+    /// list still splits these ids by Pashto word count.
     static let shaped: Set<String> = [
         "e-ha-waa-yee-da-gar",
         "e-ho-tal",
@@ -257,6 +258,88 @@ enum AnswerPool {
         "e-shpa-mo-pa-khayr",
         "e-za-os-dzam",
         "e-za-sa-haar-kaar-ka-wam",
+        "e-yaw",
+        "e-dwa",
+        "e-drey",
+        "e-tsa-lor",
+        "e-pin-dza",
+        "e-shpag",
+        "e-o-wa",
+        "e-a-ta",
+        "e-na-ha",
+        "e-las",
+        "e-o-mar",
+        "e-yaw-wo-las",
+        "e-dwo-las",
+        "e-dyaar-las",
+        "e-tswaar-las",
+        "e-pin-dza-las",
+        "e-shpaa-ras",
+        "e-o-wa-las",
+        "e-a-ta-las",
+        "e-no-las",
+        "e-shal",
+        "e-ka-lan",
+        "e-ka-la-na",
+        "e-o-mar-dey-tso-day",
+        "e-za-shal-ka-lan-yam",
+        "e-za-shal-ka-la-na-yam",
+        "e-o-ba",
+        "e-do-day",
+        "e-wri-jey",
+        "e-gho-kha",
+        "e-ma-na",
+        "e-daa-ma-na-da",
+        "e-daa-do-day-da",
+        "e-za-o-ba-ghwaa-ram",
+        "e-chaay",
+        "e-kah-wa",
+        "e-shee-dey",
+        "e-ghwaa-ram",
+        "e-shta",
+        "e-na-shta",
+        "e-tsa-ghwaa-rey",
+        "e-za-chaay-ghwaa-ram",
+        "e-chaay-shta",
+        "e-ho-chaay-shta",
+        "e-na-chaay-na-shta",
+        "e-khaar",
+        "e-baa-zaar",
+        "e-doo-kaan",
+        "e-rogh-toon",
+        "e-cher-ta",
+        "e-baa-zaar-cher-ta-day",
+        "e-rogh-toon-cher-ta-day",
+        "e-baa-zaar-dal-ta-day",
+        "e-rogh-toon-hal-ta-day",
+        "e-tak-see",
+        "e-bas",
+        "e-sa-rak",
+        "e-chap",
+        "e-khee",
+        "e-dal-ta",
+        "e-hal-ta",
+        "e-za-baa-zaar-ta-dzam",
+        "e-za-kor-ta-dzam",
+        "e-nan",
+        "e-sa-baa",
+        "e-kaar",
+        "e-wakht",
+        "e-za-kaar-ka-wam",
+        "e-za-nan-kaar-ka-wam",
+        "e-za-sa-baa-kaar-ka-wam",
+        "e-zha-ba",
+        "e-ang-lee-see",
+        "e-kha-ba-rey",
+        "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
+        "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
+        "e-za-na-po-he-gam",
+        "e-byaa-wa-waa-yaast",
+        "e-wro-wro",
+        "e-wro-wro-kha-ba-rey-wa-kray",
+        "e-za-chaay-na-ghwaa-ram",
+        "e-za-kah-wa-ghwaa-ram",
+        "e-za-sa-baa-baa-zaar-ta-dzam",
     ]
 }
 
@@ -265,7 +348,7 @@ enum AnswerPool {
 /// The split starts at the first unit after `u-greetings` in the caller's
 /// release list. Greetings itself, and anything before it, keeps one shared
 /// pool. A list that does not contain Greetings splits every unit it names.
-/// Travel and Time ids in `AnswerPool.shaped` still split when the list is empty.
+/// Ids in `AnswerPool.shaped` still split when the list is empty.
 func answerShapesAreSplit(_ unitID: UnitID, releasedUnitIDs: [UnitID]) -> Bool {
     guard let index = releasedUnitIDs.firstIndex(of: unitID) else { return false }
     guard let greetings = releasedUnitIDs.firstIndex(where: { $0.rawValue == "u-greetings" }) else {

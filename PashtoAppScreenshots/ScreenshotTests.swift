@@ -1,7 +1,8 @@
 import XCTest
 
-/// Opens four screens and keeps a PNG of each. The workflow runs this once
-/// per variant: light, dark, and the largest accessibility text size.
+/// Opens the home, a Numbers learn card, the Family screens, a quiz, and the
+/// celebration. The workflow runs this once per variant: light, dark, and the
+/// largest accessibility text size.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -36,6 +37,27 @@ final class ScreenshotTests: XCTestCase {
         )
         settle()
         shot("home-\(variant)")
+
+        tap("u-numbers", in: app)
+        tap("l-numbers-learn-one-to-five", in: app)
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 15),
+            "Numbers learn card did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers card has no pronunciation")
+        settle(1.0)
+        shot("numbers-learn-\(variant)")
+
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant)
+        app.launch()
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not return. buttons: \(buttonDump(app))"
+        )
 
         tap("u-family", in: app)
         let mother = app.descendants(matching: .any)["e-mor"]

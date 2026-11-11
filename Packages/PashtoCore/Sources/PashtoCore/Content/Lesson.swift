@@ -9,7 +9,7 @@ public enum LessonItemRole: String, Codable, Hashable, Sendable {
 
 /// Where a lesson sits in a unit.
 ///
-/// Missing JSON decodes as `practice`, so units 4–8 and older files stay quizzes.
+/// Missing JSON decodes as `practice`, so a lesson with no kind stays a quiz.
 /// Learn and phrases are cards. They are not stored as progress.
 public enum LessonKind: String, Codable, Hashable, Sendable {
     case learn

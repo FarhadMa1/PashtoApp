@@ -45,58 +45,24 @@ struct BundledCourseTests {
         #expect(lessons.allSatisfy { course.releasedUnitIDs.contains($0.unitID) })
         #expect(!lessons.contains { $0.id == lessonID("l-sounds-1") })
 
-        let future = [
-            "u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation",
-        ].map(unitID)
-        #expect(course.bundle.units.map(\.id) == [unitID("u-sounds")] + course.releasedUnitIDs + future)
-        let futureLessons = course.bundle.units.filter { future.contains($0.id) }.flatMap(\.lessons)
-        #expect(futureLessons.count == 17)
-        #expect(Set(lessons.map(\.id)).isDisjoint(with: Set(futureLessons.map(\.id))))
-        #expect(futureLessons.allSatisfy { $0.letters.isEmpty })
+        #expect(course.bundle.units.map(\.id) == [unitID("u-sounds")] + course.releasedUnitIDs)
+        #expect(!course.bundle.units.contains { $0.id.rawValue == "u-daily-life" })
+        let newUnits = ["u-numbers", "u-food", "u-town", "u-conversation"].map(unitID)
+        let newLessons = course.bundle.units.filter { newUnits.contains($0.id) }.flatMap(\.lessons)
+        #expect(newLessons.allSatisfy { $0.letters.isEmpty })
+        #expect(Set(lessons.map(\.id)).isSuperset(of: Set(newLessons.map(\.id))))
 
-        let limited = ReleasedCourse.limiting(course.bundle, to: course.releasedUnitIDs)
-        let futureIntroduced = Set(futureLessons.flatMap { lesson in
-            lesson.items.filter { $0.role == .introduce }.map(\.item)
-        })
-        let releasedReferences = Set(limited.units.flatMap { unit in
-            unit.lessons.flatMap { lesson in
-                lesson.items.map(\.item)
-                    + lesson.letters
-                    + lesson.dialogs.flatMap { $0.turns.map(\.item) }
-            }
-        })
-        let reusedOnTravelCards: Set<ItemID> = [itemID("e-tak-see"), itemID("e-baa-zaar-cher-ta-day")]
-        let hiddenFromRelease = futureIntroduced.subtracting(releasedReferences)
-        #expect(releasedReferences.isSuperset(of: reusedOnTravelCards))
-        #expect(hiddenFromRelease == futureIntroduced.subtracting(reusedOnTravelCards))
-        #expect(limited.items.allSatisfy { !hiddenFromRelease.contains($0.id) })
-
-        let day = LocalDay(year: 2026, month: 11, day: 8)
-        let cards = futureIntroduced.map { ReviewCard.introduced(itemID: $0, on: day) }
-        for offset in 0..<40 {
-            let word = DailyWordSelection.select(
-                cards: cards,
-                in: course.bundle,
-                releasedUnitIDs: course.releasedUnitIDs,
-                on: LocalDay(year: 2026, month: 11, day: 1 + (offset % 28)),
-                showsPronunciation: true
-            )
-            if let word {
-                #expect(!hiddenFromRelease.contains(word.itemID))
-                #expect(releasedReferences.contains(word.itemID))
+        func unitIDs(for item: String, role: LessonItemRole) -> [String] {
+            course.bundle.units.flatMap { unit in
+                unit.lessons.flatMap { lesson in
+                    lesson.items.filter { $0.role == role && $0.item.rawValue == item }.map { _ in unit.id.rawValue }
+                }
             }
         }
-
-        var quiz = RootLessonSession()
-        for lesson in lessons {
-            var rng = SplitMix64(seed: 3)
-            quiz.start(
-                lessonID: lesson.id,
-                in: course.bundle,
-                releasedUnitIDs: course.releasedUnitIDs,
-                using: &rng
-            )
-            #expect(quiz.items.allSatisfy { !hiddenFromRelease.contains($0.id) })
+        for shared in ["e-tak-see", "e-baa-zaar-cher-ta-day"] {
+            #expect(course.bundle.items.filter { $0.id.rawValue == shared }.count == 1)
+            #expect(unitIDs(for: shared, role: .introduce) == ["u-town"])
+            #expect(Set(unitIDs(for: shared, role: .present)) == ["u-travel", "u-town"])
         }
     }
 
@@ -241,6 +207,10 @@ private let approvedReleaseUnitIDs = [
     "u-family",
     "u-travel",
     "u-time",
+    "u-numbers",
+    "u-food",
+    "u-town",
+    "u-conversation",
 ].map(unitID)
 
 private func loadBundledCourse() throws -> BundledCourseLoad {

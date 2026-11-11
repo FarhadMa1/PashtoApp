@@ -21,6 +21,7 @@ struct TheBasicsTests {
         #expect(bundle.units.map(\.id.rawValue).prefix(2) == ["u-sounds", "u-basics"])
         #expect(course.releasedUnitIDs.map(\.rawValue) == [
             "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+            "u-numbers", "u-food", "u-town", "u-conversation",
         ])
 
         let unit = try #require(bundle.units.first { $0.id.rawValue == "u-basics" })

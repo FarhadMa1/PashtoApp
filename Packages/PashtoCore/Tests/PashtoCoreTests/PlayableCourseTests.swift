@@ -43,6 +43,7 @@ struct PlayableCourseTests {
         let released = course.releasedUnitIDs
         #expect(released.map(\.rawValue) == [
             "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+            "u-numbers", "u-food", "u-town", "u-conversation",
         ])
         var rng = SplitMix64(seed: 4)
         let placement = PlacementTestBuilder.build(in: course.bundle, releasedUnitIDs: released, using: &rng)

@@ -2,10 +2,10 @@ import Foundation
 
 /// Pictures for the learn cards that have one.
 ///
-/// Family, Travel, and Time. The asset name is the item id. The accessibility
-/// label is that item's English word, so the catalog does not gain a new
-/// string. Practice and phrases return nil: a picture in a quiz would show
-/// the answer. Taxi has no picture.
+/// Family, Travel, Time, and the taxi on Town. The asset name is the item id.
+/// The accessibility label is that item's English word, so the catalog does
+/// not gain a new string. Practice and phrases return nil: a picture in a
+/// quiz would show the answer.
 public enum FamilyPictures {
     public struct Picture: Equatable, Sendable {
         public var assetName: String
@@ -29,6 +29,7 @@ public enum FamilyPictures {
         "e-ho-tal",
         "e-ti-kat",
         "e-tash-naab",
+        "e-tak-see",
         "e-pay-se",
         "e-wradz",
         "e-sa-haar",

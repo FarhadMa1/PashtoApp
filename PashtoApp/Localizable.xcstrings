@@ -505,6 +505,18 @@
         }
       }
     },
+    "menu.unit.conversation" : {
+      "comment" : "Main menu label for u-conversation. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversation"
+          }
+        }
+      }
+    },
     "menu.unit.family" : {
       "comment" : "Main menu label for u-family. Stored as a word and shown in uppercase.",
       "extractionState" : "manual",
@@ -513,6 +525,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Family"
+          }
+        }
+      }
+    },
+    "menu.unit.food" : {
+      "comment" : "Main menu label for u-food. Stored as a word and shown in uppercase. The category title stays Food and drink.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Food"
           }
         }
       }
@@ -541,6 +565,18 @@
         }
       }
     },
+    "menu.unit.numbers" : {
+      "comment" : "Main menu label for u-numbers. Stored as a word and shown in uppercase.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Numbers"
+          }
+        }
+      }
+    },
     "menu.unit.time" : {
       "comment" : "Main menu label for u-time. Stored as a word and shown in uppercase. The category title stays Time and days.",
       "extractionState" : "manual",
@@ -549,6 +585,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Time"
+          }
+        }
+      }
+    },
+    "menu.unit.town" : {
+      "comment" : "Main menu label for u-town. Stored as a word and shown in uppercase. The category title stays Around town.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Town"
           }
         }
       }

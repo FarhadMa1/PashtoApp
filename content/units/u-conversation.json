@@ -4,6 +4,146 @@
   "title": "Putting it together",
   "items": [
     {
+      "id": "e-nan",
+      "kind": "word",
+      "pashto": "نن",
+      "translit": "nan",
+      "pronunciation": "nan",
+      "en": "today",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-sa-baa",
+      "kind": "word",
+      "pashto": "سبا",
+      "translit": "sabā́",
+      "pronunciation": "sa-BAA",
+      "en": "tomorrow",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-kaar",
+      "kind": "word",
+      "pashto": "کار",
+      "translit": "kār",
+      "pronunciation": "kaar",
+      "en": "work",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-wakht",
+      "kind": "word",
+      "pashto": "وخت",
+      "translit": "waxt",
+      "pronunciation": "wakht",
+      "en": "time",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels. kh is one sound, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-kaar-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه کار کوم",
+      "translit": "zə kār kawə́m",
+      "pronunciation": "za kaar ka-WAM",
+      "en": "I work",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-nan-kaar-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه نن کار کوم",
+      "translit": "zə nan kār kawə́m",
+      "pronunciation": "za nan kaar ka-WAM",
+      "en": "I work today",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-sa-baa-kaar-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه سبا کار کوم",
+      "translit": "zə sabā́ kār kawə́m",
+      "pronunciation": "za sa-BAA kaar ka-WAM",
+      "en": "I work tomorrow",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
       "id": "e-zha-ba",
       "kind": "word",
       "pashto": "ژبه",
@@ -246,8 +386,153 @@
   ],
   "lessons": [
     {
-      "id": "l-conversation-1",
+      "id": "l-conversation-learn-today",
+      "title": "Today and work",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-nan",
+          "role": "present"
+        },
+        {
+          "item": "e-sa-baa",
+          "role": "present"
+        },
+        {
+          "item": "e-kaar",
+          "role": "present"
+        },
+        {
+          "item": "e-wakht",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-learn-languages",
       "title": "Languages",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-zha-ba",
+          "role": "present"
+        },
+        {
+          "item": "e-ang-lee-see",
+          "role": "present"
+        },
+        {
+          "item": "e-kha-ba-rey",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-phrases-work",
+      "title": "I work",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-za-kaar-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-nan-kaar-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-sa-baa-kaar-ka-wam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-phrases-understanding",
+      "title": "Understanding each other",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-na-po-he-gam",
+          "role": "present"
+        },
+        {
+          "item": "e-byaa-wa-waa-yaast",
+          "role": "present"
+        },
+        {
+          "item": "e-wro-wro",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-phrases-sentences",
+      "title": "Putting sentences together",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-wro-wro-kha-ba-rey-wa-kray",
+          "role": "present"
+        },
+        {
+          "item": "e-za-chaay-na-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-za-kah-wa-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-za-sa-baa-baa-zaar-ta-dzam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-1",
+      "title": "Practice: Today and work",
+      "items": [
+        {
+          "item": "e-nan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sa-baa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kaar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wakht",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-kaar-ka-wam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-nan-kaar-ka-wam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-sa-baa-kaar-ka-wam",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-conversation-2",
+      "title": "Practice: Understanding each other",
       "items": [
         {
           "item": "e-zha-ba",
@@ -264,13 +549,7 @@
         {
           "item": "e-za-pa-pakh-to-kha-ba-rey-ka-wam",
           "role": "introduce"
-        }
-      ]
-    },
-    {
-      "id": "l-conversation-2",
-      "title": "Understanding each other",
-      "items": [
+        },
         {
           "item": "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam",
           "role": "introduce"
@@ -306,7 +585,7 @@
     },
     {
       "id": "l-conversation-3",
-      "title": "Putting sentences together",
+      "title": "Practice: Putting sentences together",
       "items": [
         {
           "item": "e-wro-wro-kha-ba-rey-wa-kray",

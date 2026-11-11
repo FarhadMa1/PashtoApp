@@ -10,6 +10,7 @@ struct MainMenuTests {
         #expect(Set(mapped) == Set(course.releasedUnitIDs))
         #expect(MainMenuLabels.entries.map(\.english) == [
             "Basics", "Greetings", "Introduction", "Family", "Travel", "Time",
+            "Numbers", "Food", "Town", "Conversation",
         ])
         #expect(MainMenuLabels.entries.map(\.catalogKey) == [
             "menu.unit.basics",
@@ -18,12 +19,15 @@ struct MainMenuTests {
             "menu.unit.family",
             "menu.unit.travel",
             "menu.unit.time",
+            "menu.unit.numbers",
+            "menu.unit.food",
+            "menu.unit.town",
+            "menu.unit.conversation",
         ])
         let bundleIDs = Set(course.bundle.units.map(\.id))
-        #expect(bundleIDs.count > course.releasedUnitIDs.count)
-        #expect(Set(mapped).isSubset(of: bundleIDs))
+        #expect(bundleIDs.subtracting(Set(mapped)) == [unitID("u-sounds")])
         #expect(!mapped.map(\.rawValue).contains("u-sounds"))
-        #expect(!mapped.map(\.rawValue).contains("u-numbers"))
+        #expect(mapped.map(\.rawValue).contains("u-numbers"))
     }
 
     @Test func rowsUseTheReleaseListInCourseOrder() throws {
@@ -74,9 +78,12 @@ struct MainMenuTests {
             listedLessons: listed
         )
         #expect(fresh.categories.map(\.id) == course.releasedUnitIDs)
-        #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0, 0, 0])
-        #expect(fresh.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2])
-        #expect(fresh.categories.map(\.label) == ["Basics", "Greetings", "Introduction", "Family", "Travel", "Time"])
+        #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        #expect(fresh.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2, 3, 2, 2, 3])
+        #expect(fresh.categories.map(\.label) == [
+            "Basics", "Greetings", "Introduction", "Family", "Travel", "Time",
+            "Numbers", "Food", "Town", "Conversation",
+        ])
         #expect(fresh.categories.map(\.title) == [
             "The basics",
             "Greetings and politeness",
@@ -84,6 +91,10 @@ struct MainMenuTests {
             "Family",
             "Travel",
             "Time and days",
+            "Numbers",
+            "Food and drink",
+            "Around town",
+            "Putting it together",
         ])
         #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
         #expect(fresh.continueTarget?.unitLabel == "Basics")
@@ -99,8 +110,8 @@ struct MainMenuTests {
             finishedLessonIDs: finished,
             listedLessons: listed
         )
-        #expect(menu.categories.map(\.practiceCompleted) == [0, 2, 0, 1, 0, 0])
-        #expect(menu.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2])
+        #expect(menu.categories.map(\.practiceCompleted) == [0, 2, 0, 1, 0, 0, 0, 0, 0, 0])
+        #expect(menu.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2, 3, 2, 2, 3])
         #expect(menu.categories[0].fraction == 0)
         #expect(menu.categories[1].fraction == 2.0 / 3.0)
         #expect(menu.categories[1].isComplete == false)
@@ -210,6 +221,10 @@ struct MainMenuTests {
             "menu.unit.family": "Family",
             "menu.unit.travel": "Travel",
             "menu.unit.time": "Time",
+            "menu.unit.numbers": "Numbers",
+            "menu.unit.food": "Food",
+            "menu.unit.town": "Town",
+            "menu.unit.conversation": "Conversation",
         ]
         for (key, english) in added {
             #expect(try catalogValue(key, in: strings) == english)
@@ -258,9 +273,21 @@ struct MainMenuTests {
             "u-time": MenuPalette(
                 fillLight: 0xDDEBCF, fillDark: 0x1F3315, hueLight: 0x3F5F1E, hueDark: 0xBEF264, trackLight: 0xB3C6A2, trackDark: 0x3A5229
             ),
+            "u-numbers": MenuPalette(
+                fillLight: 0xD4ECF7, fillDark: 0x0F2A3A, hueLight: 0x0B5674, hueDark: 0x7DD3FC, trackLight: 0xA2C6D6, trackDark: 0x2A546A
+            ),
+            "u-food": MenuPalette(
+                fillLight: 0xFADDC9, fillDark: 0x3A1F12, hueLight: 0x9A3A10, hueDark: 0xFDBA74, trackLight: 0xE2B49B, trackDark: 0x6B462A
+            ),
+            "u-town": MenuPalette(
+                fillLight: 0xDEE4EE, fillDark: 0x1A2433, hueLight: 0x2E4560, hueDark: 0xBCCDE3, trackLight: 0xB2BCCA, trackDark: 0x424E5F
+            ),
+            "u-conversation": MenuPalette(
+                fillLight: 0xF5DAF0, fillDark: 0x36173A, hueLight: 0x86198F, hueDark: 0xF0ABFC, trackLight: 0xD9AAD8, trackDark: 0x643C6A
+            ),
         ]
         #expect(parsed == expected)
-        #expect(Set(parsed.values).count == 6)
+        #expect(Set(parsed.values).count == 10)
     }
 }
 
@@ -392,7 +419,10 @@ private struct MenuPalette: Equatable, Hashable {
 private func menuPalettes(in source: String) throws -> [String: MenuPalette] {
     let resolve = try #require(source.range(of: "static func resolve(_ unitID: UnitID) -> MenuCard {"))
     let body = source[resolve.upperBound...]
-    let names = ["u-greetings", "u-introductions", "u-family", "u-time", "u-travel", "default"]
+    let names = [
+        "u-greetings", "u-introductions", "u-family", "u-time", "u-travel",
+        "u-numbers", "u-food", "u-town", "u-conversation", "default",
+    ]
     var blocks: [String: String] = [:]
     for (index, name) in names.enumerated() {
         let marker = name == "default" ? "default:" : "case \"\(name)\":"

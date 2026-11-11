@@ -9,7 +9,6 @@
     "u-time",
     "u-numbers",
     "u-food",
-    "u-daily-life",
     "u-town",
     "u-conversation"
   ],
@@ -173,6 +172,10 @@
     [
       "e-letter-zal",
       "e-letter-ze"
+    ],
+    [
+      "e-za-shal-ka-lan-yam",
+      "e-za-shal-ka-la-na-yam"
     ]
   ],
   "romanization": {

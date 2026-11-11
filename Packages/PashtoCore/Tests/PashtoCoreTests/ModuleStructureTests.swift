@@ -86,19 +86,54 @@ struct ModuleStructureTests {
         }
     }
 
-    @Test func unitsFourThroughEightStayPracticeWithTheSameLessons() throws {
+    @Test func unitsFourThroughEightUseLearnPhrasesAndPractice() throws {
         let bundle = try loadCourse().bundle
-        let expected = [
-            "u-numbers": ["l-numbers-1", "l-numbers-2"],
-            "u-food": ["l-food-1", "l-food-2", "l-food-3", "l-food-4"],
-            "u-daily-life": ["l-daily-life-1", "l-daily-life-2", "l-daily-life-3", "l-daily-life-4"],
-            "u-town": ["l-town-1", "l-town-2", "l-town-3", "l-town-4"],
-            "u-conversation": ["l-conversation-1", "l-conversation-2", "l-conversation-3"],
+        let expected: [String: [(String, LessonKind)]] = [
+            "u-numbers": [
+                ("l-numbers-learn-one-to-five", .learn),
+                ("l-numbers-learn-six-to-ten", .learn),
+                ("l-numbers-learn-eleven-to-fifteen", .learn),
+                ("l-numbers-learn-sixteen-to-twenty", .learn),
+                ("l-numbers-learn-years-old", .learn),
+                ("l-numbers-phrases-how-old", .phrases),
+                ("l-numbers-1", .practice),
+                ("l-numbers-2", .practice),
+                ("l-numbers-3", .practice),
+            ],
+            "u-food": [
+                ("l-food-learn-food-and-water", .learn),
+                ("l-food-learn-drinks", .learn),
+                ("l-food-phrases-want", .phrases),
+                ("l-food-phrases-available", .phrases),
+                ("l-food-1", .practice),
+                ("l-food-2", .practice),
+            ],
+            "u-town": [
+                ("l-town-learn-places", .learn),
+                ("l-town-learn-transport", .learn),
+                ("l-town-phrases-where", .phrases),
+                ("l-town-phrases-going", .phrases),
+                ("l-town-1", .practice),
+                ("l-town-2", .practice),
+            ],
+            "u-conversation": [
+                ("l-conversation-learn-today", .learn),
+                ("l-conversation-learn-languages", .learn),
+                ("l-conversation-phrases-work", .phrases),
+                ("l-conversation-phrases-understanding", .phrases),
+                ("l-conversation-phrases-sentences", .phrases),
+                ("l-conversation-1", .practice),
+                ("l-conversation-2", .practice),
+                ("l-conversation-3", .practice),
+            ],
         ]
-        for (unitID, lessonIDs) in expected {
-            let unit = try #require(bundle.units.first { $0.id.rawValue == unitID })
-            #expect(unit.lessons.map(\.id.rawValue) == lessonIDs)
-            #expect(unit.lessons.allSatisfy { $0.kind == .practice })
+        #expect(!bundle.units.contains { $0.id.rawValue == "u-daily-life" })
+        for (id, lessons) in expected {
+            let unit = try #require(bundle.units.first { $0.id.rawValue == id })
+            #expect(unit.lessons.map(\.id.rawValue) == lessons.map(\.0))
+            #expect(unit.lessons.map(\.kind) == lessons.map(\.1))
+            #expect(unit.lessons.allSatisfy { $0.letters.isEmpty })
+            #expect(unit.lessons.allSatisfy { $0.kind == .practice ? $0.countsForProgress : !$0.countsForProgress })
         }
     }
 
@@ -201,7 +236,12 @@ struct ModuleStructureTests {
             in: bundle,
             takenOn: day
         )
-        #expect(Set(skipped.lessonProgress.map(\.lessonID)) == Set(practiceIDs + [lessonID("l-basics-1")]))
+        let releasedPractice = bundle.units
+            .filter { course.releasedUnitIDs.contains($0.id) }
+            .flatMap(\.lessons)
+            .filter { $0.kind == .practice }
+            .map(\.id)
+        #expect(Set(skipped.lessonProgress.map(\.lessonID)) == Set(releasedPractice))
         #expect(!skipped.lessonProgress.contains { $0.lessonID.rawValue.contains("learn") || $0.lessonID.rawValue.contains("phrases") })
 
         let released = ReleasedCourse.limiting(bundle, to: course.releasedUnitIDs)

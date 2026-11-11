@@ -114,6 +114,30 @@ enum Lapis {
                     hue: dynamic(light: 0x5B2E91, dark: 0xC4B5FD),
                     track: dynamic(light: 0xC1B1DF, dark: 0x4A3A6B)
                 )
+            case "u-numbers":
+                MenuCard(
+                    fill: dynamic(light: 0xD4ECF7, dark: 0x0F2A3A),
+                    hue: dynamic(light: 0x0B5674, dark: 0x7DD3FC),
+                    track: dynamic(light: 0xA2C6D6, dark: 0x2A546A)
+                )
+            case "u-food":
+                MenuCard(
+                    fill: dynamic(light: 0xFADDC9, dark: 0x3A1F12),
+                    hue: dynamic(light: 0x9A3A10, dark: 0xFDBA74),
+                    track: dynamic(light: 0xE2B49B, dark: 0x6B462A)
+                )
+            case "u-town":
+                MenuCard(
+                    fill: dynamic(light: 0xDEE4EE, dark: 0x1A2433),
+                    hue: dynamic(light: 0x2E4560, dark: 0xBCCDE3),
+                    track: dynamic(light: 0xB2BCCA, dark: 0x424E5F)
+                )
+            case "u-conversation":
+                MenuCard(
+                    fill: dynamic(light: 0xF5DAF0, dark: 0x36173A),
+                    hue: dynamic(light: 0x86198F, dark: 0xF0ABFC),
+                    track: dynamic(light: 0xD9AAD8, dark: 0x643C6A)
+                )
             default:
                 lapis
             }

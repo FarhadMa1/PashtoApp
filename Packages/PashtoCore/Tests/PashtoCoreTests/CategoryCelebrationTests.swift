@@ -92,11 +92,11 @@ struct CategoryCelebrationTests {
     }
 
     @Test func aUnitWithoutAMenuLabelUsesItsTitle() {
-        let custom = unit("u-town", title: "Around town", lessons: [
-            ("l-town-1", .practice),
+        let custom = unit("u-custom", title: "Around town", lessons: [
+            ("l-custom-1", .practice),
         ])
         let offer = CategoryCelebration.offer(
-            finishing: lessonID("l-town-1"),
+            finishing: lessonID("l-custom-1"),
             in: [custom],
             finishedBefore: [],
             celebratedUnits: []

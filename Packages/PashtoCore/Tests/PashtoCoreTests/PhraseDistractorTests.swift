@@ -26,6 +26,16 @@ struct PhraseDistractorTests {
         "l-travel-2": 17,
         "l-time-1": 20,
         "l-time-2": 20,
+        "l-numbers-1": 20,
+        "l-numbers-2": 20,
+        "l-numbers-3": 11,
+        "l-food-1": 17,
+        "l-food-2": 20,
+        "l-town-1": 19,
+        "l-town-2": 19,
+        "l-conversation-1": 15,
+        "l-conversation-2": 17,
+        "l-conversation-3": 9,
     ]
 
     @Test func releasedPracticeLessonsMatchMainAndSplitAfterGreetings() throws {
