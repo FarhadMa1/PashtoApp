@@ -42,6 +42,7 @@ struct QuizScreen: View {
     @ScaledMetric(relativeTo: .title2) private var wordPronunciationSize: CGFloat = 25
     @ScaledMetric(relativeTo: .title3) private var wordPashtoSize: CGFloat = 29
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     init(
         session: LessonSession,
@@ -91,41 +92,12 @@ struct QuizScreen: View {
 
     private var quizHeader: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .center, spacing: 8) {
-                Button(action: onClose) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.backward")
-                            .accessibilityHidden(true)
-                        Text("Pashto")
-                    }
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(QuizChrome.cream)
-                }
-                .buttonStyle(.plain)
-                .frame(minHeight: 44)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("Pashto"))
-                .accessibilityAddTraits(.isButton)
-                .accessibilitySortPriority(80)
-                if !lessonTitle.isEmpty {
-                    Text(verbatim: lessonTitle)
-                        .font(.headline.weight(.bold))
-                        .foregroundStyle(QuizChrome.cream)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.75)
-                        .accessibilitySortPriority(75)
-                }
-                Spacer(minLength: 8)
-                streakMark
+            if dynamicTypeSize.isAccessibilitySize {
+                accessibilityQuizTitle
+            } else {
+                standardQuizTitle
             }
-            HStack(spacing: 12) {
-                LessonProgressBar(bar: lessonBar, chrome: .quizHeader)
-                    .accessibilitySortPriority(60)
-                Text(verbatim: "\(lessonBar.answered) / \(lessonBar.total)")
-                    .font(.subheadline.weight(.bold).monospacedDigit())
-                    .foregroundStyle(QuizChrome.cream)
-                    .accessibilityHidden(true)
-            }
+            quizProgress
         }
         .padding(.horizontal, 20)
         .padding(.top, 8)
@@ -143,6 +115,96 @@ struct QuizScreen: View {
             )
             .fill(QuizChrome.badge)
             .ignoresSafeArea(edges: .top)
+        }
+    }
+
+    /// Back, lesson title, and streak on one row. Regular sizes keep this row.
+    private var standardQuizTitle: some View {
+        HStack(alignment: .center, spacing: 8) {
+            quizBackButton(oneLine: false)
+            if !lessonTitle.isEmpty {
+                Text(verbatim: lessonTitle)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(QuizChrome.cream)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.75)
+                    .accessibilitySortPriority(75)
+            }
+            Spacer(minLength: 8)
+            streakMark
+        }
+    }
+
+    /// Back and the progress only. The lesson title and the streak stay in VoiceOver.
+    ///
+    /// A clear color in the background is not an accessibility element, so VoiceOver
+    /// never lands on it. These are text elements with the same labels, drawn clear.
+    private var accessibilityQuizTitle: some View {
+        quizBackButton(oneLine: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .overlay {
+                ZStack(alignment: .leading) {
+                    if !lessonTitle.isEmpty {
+                        spokenLabel(lessonTitle, sortPriority: 75)
+                    }
+                    spokenLabel(
+                        CelebrationCopy.streakSpoken(streakCount, label: ApprovedCopy.dayStreak),
+                        sortPriority: 70
+                    )
+                }
+                .allowsHitTesting(false)
+            }
+    }
+
+    /// One VoiceOver element. It fills the back-button row and does not paint.
+    private func spokenLabel(_ label: String, sortPriority: Double) -> some View {
+        Text(verbatim: label)
+            .font(.headline)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+            .foregroundStyle(.clear)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: label))
+            .accessibilityAddTraits(.isStaticText)
+            .accessibilitySortPriority(sortPriority)
+            .allowsHitTesting(false)
+    }
+
+    private func quizBackButton(oneLine: Bool) -> some View {
+        Button(action: onClose) {
+            HStack(spacing: 6) {
+                Image(systemName: "chevron.backward")
+                    .accessibilityHidden(true)
+                if oneLine {
+                    Text("Pashto")
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                } else {
+                    Text("Pashto")
+                }
+            }
+            .font(.body.weight(.semibold))
+            .foregroundStyle(QuizChrome.cream)
+        }
+        .buttonStyle(.plain)
+        .frame(minHeight: 44)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Pashto"))
+        .accessibilityAddTraits(.isButton)
+        .accessibilitySortPriority(80)
+    }
+
+    private var quizProgress: some View {
+        HStack(spacing: 12) {
+            LessonProgressBar(bar: lessonBar, chrome: .quizHeader)
+                .accessibilitySortPriority(60)
+            Text(verbatim: "\(lessonBar.answered) / \(lessonBar.total)")
+                .font(.subheadline.weight(.bold).monospacedDigit())
+                .foregroundStyle(QuizChrome.cream)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+                .accessibilityHidden(true)
         }
     }
 

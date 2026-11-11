@@ -125,6 +125,7 @@ struct ContentView: View {
     }
 
     /// Pashto, the day streak, and the daily goal. The goal sentence is spoken, not a second line.
+    /// The streak and the goal share one row when that row fits, and stack with the streak on top when it does not.
     private var homeHeader: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Pashto")
@@ -133,33 +134,19 @@ struct ContentView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
                 .accessibilityAddTraits(.isHeader)
-            HStack(alignment: .center, spacing: 12) {
-                StreakMark(
-                    shown: streakShown,
-                    count: streakCount,
-                    pulse: streakPulse,
-                    animates: animatesHomeMotion,
-                    pendingEvents: pendingStreakEvents,
-                    claimEvents: claimStreakEvents,
-                    onFreezeEarned: { freezeCelebration = true }
-                )
-                Spacer(minLength: 8)
-                HStack(spacing: 8) {
-                    DailyGoalRing(
-                        shown: goalShown,
-                        total: goalTotal,
-                        animates: animatesHomeMotion
-                    )
-                    Text(verbatim: ApprovedCopy.dailyGoal)
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(Lapis.text)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.8)
-                        .multilineTextAlignment(.leading)
-                }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(verbatim: dailyGoalSpeech(done: goalDone)))
-            }
+            HomeStatusRow(
+                streakShown: streakShown,
+                streakCount: streakCount,
+                streakPulse: streakPulse,
+                animates: animatesHomeMotion,
+                pendingEvents: pendingStreakEvents,
+                claimEvents: claimStreakEvents,
+                onFreezeEarned: { freezeCelebration = true },
+                goalShown: goalShown,
+                goalTotal: goalTotal,
+                goalLabel: ApprovedCopy.dailyGoal,
+                goalSpeech: dailyGoalSpeech(done: goalDone)
+            )
         }
         .padding(.horizontal, 20)
         .padding(.top, 8)
@@ -202,19 +189,7 @@ struct ContentView: View {
             startLesson(target.lessonID)
         } label: {
             HStack(alignment: .center, spacing: 12) {
-                Image(systemName: "play.fill")
-                    .font(.body.weight(.bold))
-                    .foregroundStyle(Lapis.primary)
-                    .frame(width: 40, height: 40)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(QuizChrome.tint)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .strokeBorder(Lapis.primary, lineWidth: 1)
-                            }
-                    }
-                    .accessibilityHidden(true)
+                ContinuePlayMark()
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: String(localized: "quiz.continue.button"))
                         .textCase(.uppercase)
@@ -882,11 +857,118 @@ private struct DailyGoalRing: View {
                 Text(shown, format: .number)
                     .contentTransition(.numericText())
                     .animation(animates ? Motion.goalRing : nil, value: shown)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 Text(verbatim: "/\(max(total, 0))")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
             }
             .font(.headline.weight(.bold).monospacedDigit())
             .foregroundStyle(Lapis.text)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
         }
+        .accessibilityHidden(true)
+    }
+}
+
+/// Streak and daily goal. Side by side when the row fits, otherwise the streak above the goal.
+///
+/// The claim lives here, once, so the two `ViewThatFits` branches do not each take the rescue.
+private struct HomeStatusRow: View {
+    var streakShown: Int
+    var streakCount: Int
+    var streakPulse: Int
+    var animates: Bool
+    var pendingEvents: [StreakEventID]
+    var claimEvents: (StreakEventID.Kind) -> [StreakEventID]
+    var onFreezeEarned: () -> Void
+    var goalShown: Int
+    var goalTotal: Int
+    var goalLabel: String
+    var goalSpeech: String
+
+    @State private var showingSnowflake = false
+    @State private var rescueToken = 0
+
+    var body: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .center, spacing: 12) {
+                streakMark
+                Spacer(minLength: 8)
+                dailyGoal
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                streakMark
+                dailyGoal
+            }
+        }
+        .onAppear(perform: claimPending)
+        .onChange(of: pendingEvents) { _, _ in claimPending() }
+    }
+
+    private var streakMark: some View {
+        StreakMark(
+            shown: streakShown,
+            count: streakCount,
+            pulse: streakPulse,
+            animates: animates,
+            showingSnowflake: showingSnowflake,
+            rescueToken: rescueToken
+        )
+    }
+
+    private var dailyGoal: some View {
+        HStack(spacing: 8) {
+            DailyGoalRing(
+                shown: goalShown,
+                total: goalTotal,
+                animates: animates
+            )
+            Text(verbatim: goalLabel)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(Lapis.text)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+                .multilineTextAlignment(.leading)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: goalSpeech))
+    }
+
+    /// Claims each stored day once. A second call, and a later visit, get nothing.
+    private func claimPending() {
+        let rescues = claimEvents(.rescuedDay)
+        if !rescues.isEmpty {
+            showingSnowflake = true
+            rescueToken += 1
+        }
+        let earned = claimEvents(.freezeEarned)
+        if !earned.isEmpty {
+            onFreezeEarned()
+        }
+    }
+}
+
+/// The play glyph stays in the middle of its ring. Both use the body text style,
+/// so a larger Dynamic Type size grows the ring with the glyph.
+private struct ContinuePlayMark: View {
+    @ScaledMetric(relativeTo: .body) private var side: CGFloat = 40
+    @ScaledMetric(relativeTo: .body) private var corner: CGFloat = 12
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: corner, style: .continuous)
+                .fill(QuizChrome.tint)
+                .overlay {
+                    RoundedRectangle(cornerRadius: corner, style: .continuous)
+                        .strokeBorder(Lapis.primary, lineWidth: 1)
+                }
+            Image(systemName: "play.fill")
+                .font(.body.weight(.bold))
+                .foregroundStyle(Lapis.primary)
+        }
+        .frame(width: side, height: side)
         .accessibilityHidden(true)
     }
 }
@@ -902,14 +984,11 @@ private struct StreakMark: View {
     var count: Int
     var pulse: Int
     var animates: Bool
-    var pendingEvents: [StreakEventID]
-    var claimEvents: (StreakEventID.Kind) -> [StreakEventID]
-    var onFreezeEarned: () -> Void = {}
+    var showingSnowflake: Bool
+    var rescueToken: Int
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var showingSnowflake = false
     @State private var snowflakeOpacity = 0.0
-    @State private var rescueToken = 0
 
     private var iconSide: CGFloat { CGFloat(FreezeCelebrationLayout.streakIconSide) }
 
@@ -938,8 +1017,6 @@ private struct StreakMark: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: CelebrationCopy.streakSpoken(count, label: ApprovedCopy.dayStreak)))
-        .onAppear(perform: claimPending)
-        .onChange(of: pendingEvents) { _, _ in claimPending() }
         .task(id: rescueToken) { await playRescue() }
     }
 
@@ -958,19 +1035,6 @@ private struct StreakMark: View {
             .opacity(snowflakeOpacity)
             .allowsHitTesting(false)
             .accessibilityHidden(true)
-        }
-    }
-
-    /// Claims each stored day once. A second call, and a later visit, get nothing.
-    private func claimPending() {
-        let rescues = claimEvents(.rescuedDay)
-        if !rescues.isEmpty {
-            showingSnowflake = true
-            rescueToken += 1
-        }
-        let earned = claimEvents(.freezeEarned)
-        if !earned.isEmpty {
-            onFreezeEarned()
         }
     }
 
