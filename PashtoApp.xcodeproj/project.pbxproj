@@ -19,6 +19,7 @@
 		27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */; };
 		290AFFCE73D6A06588C917C3 /* e-walaykum-salam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */; };
 		2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */ = {isa = PBXBuildFile; fileRef = 652503DE42EB750727E88CEF /* release-units.json */; };
+		34530E6D82D36161371A9BEB /* PronunciationText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E981A13C47486F0067ACF42 /* PronunciationText.swift */; };
 		3530111B87046DF5440D3C30 /* GlyphCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */; };
 		4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */; };
 		4478F73538EE2286163AB2AA /* MatchingBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */; };
@@ -85,6 +86,7 @@
 		67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStoreLocation.swift; sourceTree = "<group>"; };
 		6791E1EE79678E1A2816B03F /* LapisStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapisStyle.swift; sourceTree = "<group>"; };
 		6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCardScreen.swift; sourceTree = "<group>"; };
+		6E981A13C47486F0067ACF42 /* PronunciationText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PronunciationText.swift; sourceTree = "<group>"; };
 		76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8118EC685984C6F8EEC84F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */ = {isa = PBXFileReference; path = "e-baxana-ghwaram.m4a"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */,
 				8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */,
 				51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */,
+				6E981A13C47486F0067ACF42 /* PronunciationText.swift */,
 				DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */,
 				6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */,
 			);
@@ -412,6 +415,7 @@
 				21A05073FF4D4CB0BA403D07 /* Motion.swift in Sources */,
 				E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */,
 				C465E70F7E879ADE2B4505C5 /* ProgressStoreLocation.swift in Sources */,
+				34530E6D82D36161371A9BEB /* PronunciationText.swift in Sources */,
 				4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */,
 				980EAFAB2A22F95D11E40DB6 /* RootView.swift in Sources */,
 				C7FB99C8D9388789E64DC142 /* StorageErrorScreen.swift in Sources */,

@@ -170,7 +170,7 @@ public enum StudyCourse {
             guard let item = itemsByID[reference.item] else { continue }
             let meaning = item.en?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             let explanation = item.usage?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let note = pronunciationNote(for: item, in: found.unit.id)
+            let note = PronunciationNotes.presented(item.pronunciationNote, in: found.unit.id)
             cards.append(StudyCard(
                 itemID: item.id,
                 pronunciation: item.pronunciation,
@@ -192,20 +192,6 @@ public enum StudyCourse {
             endsPhrases: endsPhrases,
             cards: cards
         )
-    }
-
-    /// Numbers, Food, Town, and Conversation. The note stays on the item.
-    /// These units do not copy it onto a card, so Learn, Phrases, lists, and
-    /// VoiceOver never show it. Earlier units, Travel, and Time still do.
-    private static let hidesPronunciationNote: Set<String> = [
-        "u-numbers", "u-food", "u-town", "u-conversation",
-    ]
-
-    private static func pronunciationNote(for item: ContentItem, in unitID: UnitID) -> String? {
-        guard !hidesPronunciationNote.contains(unitID.rawValue) else { return nil }
-        let note = item.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let note, !note.isEmpty else { return nil }
-        return note
     }
 
     /// The lesson after `lessonID` in its unit. Nil at the end of the unit.

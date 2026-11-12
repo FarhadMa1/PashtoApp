@@ -691,12 +691,14 @@ private struct FamilyWordRowView: View {
     private var words: some View {
         VStack(alignment: .leading, spacing: 2) {
             if let pronunciation = row.pronunciation {
-                Text(verbatim: pronunciation)
-                    .font(.body.weight(.bold))
-                    .foregroundStyle(Lapis.primary)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .environment(\.layoutDirection, .leftToRight)
+                PronunciationText(
+                    stored: pronunciation,
+                    textStyle: .body,
+                    color: Lapis.primary,
+                    alignment: .leading
+                )
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
             }
             Text(verbatim: row.english)
                 .font(.subheadline)
@@ -1255,6 +1257,26 @@ enum ApprovedCopy {
     static var practice: String { String(localized: "module.section.practice") }
 }
 
+/// Screenshot harness only. The home shows this card once a word has been learned.
+struct DailyWordScreenshotScreen: View {
+    private var word: DailyWord {
+        DailyWord(
+            itemID: ItemID(rawValue: "e-manana") ?? ItemID(rawValue: "e-xa")!,
+            pashto: "مننه",
+            pronunciation: "ma-NA-na",
+            meaning: "thank you"
+        )
+    }
+
+    var body: some View {
+        DailyWordCard(word: word)
+            .padding(16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background(Lapis.background.ignoresSafeArea())
+            .accessibilityIdentifier("word-of-the-day")
+    }
+}
+
 /// Lesson-complete celebration.
 ///
 /// The unit ring fills, then unfolds into a 16-point girih star. The praise
@@ -1433,12 +1455,6 @@ struct CategoryCelebrationScreen: View {
         }
     }
 
-    /// Stored pronunciation, drawn so the syllable hyphen is not a line break.
-    /// VoiceOver keeps the content string.
-    private var drawnPronunciation: String {
-        CategoryCelebration.praise.pronunciation.replacingOccurrences(of: "-", with: "\u{2011}")
-    }
-
     private var praiseCopy: some View {
         VStack(spacing: 18) {
             Text(verbatim: offer.unitName)
@@ -1450,17 +1466,18 @@ struct CategoryCelebrationScreen: View {
                 .minimumScaleFactor(0.6)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity)
-            Text(verbatim: drawnPronunciation)
-                .font(.system(size: praiseSize, weight: .heavy))
-                .foregroundStyle(CelebrationPalette.pronunciation)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.5)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
-                .environment(\.layoutDirection, .leftToRight)
-                .accessibilityLabel(Text(verbatim: CategoryCelebration.praise.pronunciation))
-                .accessibilityFocused($praiseFocused)
+            PronunciationText(
+                stored: CategoryCelebration.praise.pronunciation,
+                points: praiseSize,
+                color: CelebrationPalette.pronunciation,
+                alignment: .center
+            )
+            .multilineTextAlignment(.center)
+            .lineLimit(2)
+            .minimumScaleFactor(0.5)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity)
+            .accessibilityFocused($praiseFocused)
             Text(verbatim: CategoryCelebration.praise.pashto)
                 .font(.system(size: pashtoSize, weight: .semibold))
                 .foregroundStyle(palette.hue)

@@ -126,8 +126,14 @@ struct LearnListTests {
                 for row in list.rows {
                     let item = try #require(itemsByID[row.itemID])
                     #expect(row.pronunciation == item.pronunciation)
-                    #expect(LearnListPronunciation.stored(fromDisplayed: row.displayedPronunciation) == item.pronunciation)
-                    #expect(row.displayedPronunciation != item.translit || item.pronunciation == item.translit)
+                    #expect(row.displayedPronunciation == PronunciationDisplay.displayText(stored: item.pronunciation))
+                    #expect(
+                        row.displayedPronunciation
+                            == item.pronunciation
+                            .lowercased()
+                            .replacingOccurrences(of: "-", with: String(LearnListPronunciation.nonBreakingHyphen))
+                    )
+                    #expect(row.displayedPronunciation != item.translit || item.pronunciation.lowercased() == item.translit.lowercased())
                     if item.pronunciation != item.translit {
                         #expect(row.pronunciation != item.translit)
                     }
@@ -136,7 +142,7 @@ struct LearnListTests {
                         #expect(!row.displayedPronunciation.contains("-"))
                         #expect(row.displayedPronunciation.contains(LearnListPronunciation.nonBreakingHyphen))
                     } else {
-                        #expect(row.displayedPronunciation == item.pronunciation)
+                        #expect(row.displayedPronunciation == item.pronunciation.lowercased())
                     }
                 }
             }
@@ -156,8 +162,8 @@ struct LearnListTests {
         #expect(father.pronunciation != "Plar")
         let family = try #require(members.rows.first { $0.itemID.rawValue == "e-koraney" })
         #expect(family.pronunciation == "ko-ra-NAY")
-        #expect(family.displayedPronunciation == "ko\u{2011}ra\u{2011}NAY")
-        #expect(LearnListPronunciation.stored(fromDisplayed: family.displayedPronunciation) == "ko-ra-NAY")
+        #expect(family.displayedPronunciation == "ko\u{2011}ra\u{2011}nay")
+        #expect(LearnListPronunciation.stored(fromDisplayed: family.displayedPronunciation) == "ko-ra-nay")
     }
 
     @Test func taxiPictureIsTownOnlyOnTheList() throws {
@@ -221,8 +227,9 @@ struct LearnListTests {
         )
         let list = try #require(screen.range(of: "struct LearnListScreen"))
         let body = String(screen[list.lowerBound...])
-        #expect(body.contains("row.displayedPronunciation"))
+        #expect(body.contains("PronunciationText(stored: row.pronunciation"))
         #expect(body.contains("row.pronunciation"))
+        #expect(!body.contains("row.displayedPronunciation"))
         #expect(body.contains("row.picture"))
         #expect(!body.contains(".translit"))
         #expect(!body.contains("textCase"))

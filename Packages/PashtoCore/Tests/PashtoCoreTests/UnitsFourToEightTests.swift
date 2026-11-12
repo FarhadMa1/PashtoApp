@@ -147,11 +147,12 @@ struct UnitsFourToEightTests {
         let around = try #require(StudyCourse.deck(for: lessonID("l-travel-learn-around"), in: bundle))
         let travelTaxi = try #require(around.cards.first { $0.itemID.rawValue == "e-tak-see" })
         let taxiNote = try #require(items[travelTaxi.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines))
-        #expect(travelTaxi.pronunciationNote == taxiNote)
+        #expect(PronunciationNotes.mentionsCapitals(taxiNote))
+        #expect(travelTaxi.pronunciationNote == nil)
         let town = try #require(StudyCourse.deck(for: lessonID("l-town-learn-transport"), in: bundle))
         #expect(town.cards.first { $0.itemID.rawValue == "e-tak-see" }?.pronunciationNote == nil)
 
-        for lesson in ["l-basics-learn-2", "l-travel-learn-money", "l-time-learn-times"] {
+        for lesson in ["l-basics-learn-2", "l-time-learn-times"] {
             let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))
             #expect(deck.cards.contains { card in
                 let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines)
