@@ -673,8 +673,8 @@ struct QuizScreen: View {
                 pronunciationColor: QuizChrome.primary,
                 scriptColor: QuizChrome.pashto,
                 scriptFont: spoken == nil ? nil : .system(size: wordPashtoSize, weight: .regular),
-                pronunciationSize: spoken == nil ? nil : wordPronunciationSize,
                 centers: true,
+                pronunciationSize: spoken == nil ? nil : wordPronunciationSize,
                 pronunciationLeads: spoken != nil
             )
             .font(.system(size: spoken == nil ? 28 : wordPronunciationSize, weight: .bold))

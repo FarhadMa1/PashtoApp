@@ -136,6 +136,28 @@ public enum PronunciationDisplay {
     }
 }
 
+/// How a pronunciation fits the width it is given.
+///
+/// One scale covers the whole pronunciation. The widest word sets it, and
+/// every word uses that same scale, so a long word shrinks as one line
+/// instead of syllable by syllable. A pronunciation whose words already fit
+/// stays at 1 and may still wrap at spaces. Hyphens stay inside a word.
+/// A non-positive available width means the line has not been measured yet,
+/// so the pronunciation stays at full size for that pass.
+public enum PronunciationFit {
+    public static func scale(idealWidth: Double, availableWidth: Double) -> Double {
+        guard idealWidth > 0 else { return 1 }
+        guard availableWidth.isFinite, availableWidth > 0 else { return 1 }
+        return min(1, availableWidth / idealWidth)
+    }
+
+    /// Shared scale for one pronunciation. `tokenWidths` are the unscaled
+    /// widths of the whitespace-separated words, not the syllables.
+    public static func lineScale(tokenWidths: [Double], availableWidth: Double) -> Double {
+        scale(idealWidth: tokenWidths.max() ?? 0, availableWidth: availableWidth)
+    }
+}
+
 /// Which pronunciation notes reach the screen and VoiceOver.
 ///
 /// Numbers, Food, Town, and Conversation hide every note. A note that mentions

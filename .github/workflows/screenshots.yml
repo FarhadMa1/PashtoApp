@@ -6,6 +6,7 @@ name: Screenshots
 # on an iPhone simulator.
 # Light, dark, and the largest accessibility text size.
 # Light also captures the Greetings list with Bold Text.
+# XL also captures the Time days list, including cha-haar-shan-BA.
 # The app a learner launches is unchanged.
 on:
   pull_request:

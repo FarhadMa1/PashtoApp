@@ -39,6 +39,36 @@ struct PronunciationDisplayTests {
         #expect(PronunciationDisplay.boldTextStressedWeight == 800)
     }
 
+    @Test func aLongWordScalesDownToTheLineAndAShortWordStaysFullSize() {
+        let stored = "cha-haar-shan-BA"
+        let tokens = PronunciationDisplay.tokens(in: stored)
+        #expect(tokens.count == 1)
+        #expect(tokens[0].runs.map(\.text).joined() == "cha\(hyphen)haar\(hyphen)shan\(hyphen)ba")
+        #expect(tokens[0].runs.contains { $0.text == "ba" && $0.stressed })
+        #expect(PronunciationDisplay.spoken(stored) == stored)
+
+        let column = 140.0
+        let scale = PronunciationFit.lineScale(tokenWidths: [320], availableWidth: column)
+        #expect(scale < 1)
+        #expect(abs((320 * scale) - column) < 0.001)
+        #expect(320 * scale <= column)
+
+        let praise = PronunciationDisplay.tokens(in: "DE-ra kha")
+        #expect(praise.count == 2)
+        #expect(praise[0].runs.map(\.text).joined() == "de\(hyphen)ra")
+        #expect(praise[1].runs.map(\.text).joined() == "kha")
+        #expect(praise[0].runs.allSatisfy { !$0.text.contains("-") })
+        #expect(PronunciationFit.lineScale(tokenWidths: [70, 40], availableWidth: column) == 1)
+        let shared = PronunciationFit.lineScale(tokenWidths: [320, 40], availableWidth: column)
+        #expect(shared == scale)
+        #expect(40 * shared < 40)
+
+        #expect(PronunciationFit.lineScale(tokenWidths: [48], availableWidth: 180) == 1)
+        #expect(PronunciationFit.lineScale(tokenWidths: [48], availableWidth: 48) == 1)
+        #expect(PronunciationFit.lineScale(tokenWidths: [48], availableWidth: 0) == 1)
+        #expect(PronunciationFit.lineScale(tokenWidths: [], availableWidth: 40) == 1)
+    }
+
     @Test func aFullyUppercaseSyllableIsStressedAndPunctuationStays() {
         #expect(PronunciationDisplay.isStressedSyllable("TAL"))
         #expect(PronunciationDisplay.isStressedSyllable("NAY?"))
@@ -144,6 +174,12 @@ struct PronunciationDisplayTests {
         #expect(renderer.contains("boldTextUnderlineThickness"))
         #expect(renderer.contains("boldTextUnderlineOffset"))
         #expect(renderer.contains("underlined(boldText:"))
+        #expect(renderer.contains("PronunciationFit.lineScale"))
+        #expect(renderer.contains("typeSize: dynamicTypeSize"))
+        #expect(renderer.contains("width: ideal.width * scale"))
+        #expect(renderer.contains("scaleEffect(scale"))
+        #expect(!renderer.contains("_ = dynamicTypeSize"))
+        #expect(!renderer.contains("fixedSize(horizontal: true"))
         #expect(!renderer.contains("strikethrough"))
         #expect(!renderer.contains(".italic"))
 
@@ -338,6 +374,61 @@ struct PronunciationDisplayTests {
         #expect(word.pronunciation == "ma-NA-na")
         #expect(DailyWordSpeech.front(pashto: word.pashto, pronunciation: word.pronunciation) == "\(word.pashto), ma-NA-na")
         #expect(!DailyWordSpeech.front(pashto: word.pashto, pronunciation: word.pronunciation).contains("bold"))
+    }
+
+    @Test func pashtoLineKeepsInitializerArgumentOrder() throws {
+        let labels = [
+            "text:", "pronunciation:", "arabic:", "mark:", "reservesPronunciation:",
+            "textColor:", "pronunciationColor:", "scriptColor:", "scriptFont:",
+            "fitsWidth:", "centers:", "pronunciationSize:", "pronunciationLeads:",
+        ]
+        let files = [
+            "PashtoApp/Quiz/QuizScreen.swift",
+            "PashtoApp/Quiz/MatchingBoard.swift",
+            "PashtoApp/Quiz/GlyphCard.swift",
+            "PashtoApp/ContentView.swift",
+        ]
+        for relative in files {
+            let text = try source(relative)
+            let calls = pashtoLineCalls(in: text)
+            #expect(!calls.isEmpty)
+            for call in calls {
+                var position = call.startIndex
+                for label in labels {
+                    guard let found = call.range(of: label) else { continue }
+                    #expect(found.lowerBound >= position)
+                    position = found.upperBound
+                }
+            }
+        }
+    }
+
+    private func pashtoLineCalls(in source: String) -> [String] {
+        var calls: [String] = []
+        var rest = source[...]
+        while let start = rest.range(of: "PashtoLine(") {
+            var depth = 0
+            var index = start.lowerBound
+            var closed = false
+            while index < rest.endIndex {
+                let character = rest[index]
+                if character == "(" {
+                    depth += 1
+                } else if character == ")" {
+                    depth -= 1
+                    if depth == 0 {
+                        let end = rest.index(after: index)
+                        calls.append(String(rest[start.lowerBound..<end]))
+                        rest = rest[end...]
+                        closed = true
+                        break
+                    }
+                }
+                index = rest.index(after: index)
+            }
+            if !closed { break }
+        }
+        return calls
     }
 
     private var hyphen: String { String(PronunciationDisplay.nonBreakingHyphen) }

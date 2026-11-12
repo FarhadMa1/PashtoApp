@@ -172,6 +172,32 @@ final class ScreenshotTests: XCTestCase {
         settle(0.6)
         shot("word-of-the-day-\(variant)")
 
+        if variant == "xl" {
+            app.terminate()
+            app.launchArguments = launchArguments(for: variant)
+            app.launch()
+            if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+                app.buttons["Start review"].tap()
+            }
+            XCTAssertTrue(
+                basics.waitForExistence(timeout: 30),
+                "home did not load for the Time list. buttons: \(buttonDump(app))"
+            )
+            tap("u-time", in: app)
+            tap("l-time-learn-days", in: app)
+            XCTAssertTrue(
+                app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+                "Time days list did not open. buttons: \(buttonDump(app))"
+            )
+            XCTAssertTrue(
+                app.staticTexts["cha-haar-shan-BA"].waitForExistence(timeout: 5),
+                "Time days list has no long pronunciation"
+            )
+            revealLabel("cha-haar-shan-BA", in: app)
+            settle(1.0)
+            shot("learn-list-time-xl")
+        }
+
         guard variant == "light" else { return }
         app.terminate()
         app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotBoldText"]
