@@ -564,7 +564,10 @@ struct MergeTests {
             ReleaseUnitsFile.self,
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
-        #expect(file.units == ["u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time"])
+        #expect(file.units == [
+            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+            "u-numbers", "u-food", "u-town", "u-conversation",
+        ])
         let release = ContentCheck.issues(root: root, mode: .release)
         #expect(!release.contains { $0.message.contains("does not include u-sounds") })
         #expect(!release.contains { $0.severity == .error })
@@ -599,26 +602,34 @@ struct MergeTests {
             from: Data(contentsOf: ContentRoot(url: root).releaseUnitsFile)
         )
         let earlyIDs = ["u-sounds", "u-basics", "u-greetings", "u-introductions", "u-family"]
-        let releasedIDs = ["u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time"]
+        let releasedIDs = [
+            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+            "u-numbers", "u-food", "u-town", "u-conversation",
+        ]
         #expect(releaseFile.units == releasedIDs)
-        let futureIDs = ["u-numbers", "u-food", "u-daily-life", "u-town", "u-conversation"]
-        #expect(bundle.units.map(\.id.rawValue) == earlyIDs + ["u-travel", "u-time"] + futureIDs)
+        let laterIDs = ["u-numbers", "u-food", "u-town", "u-conversation"]
+        #expect(bundle.units.map(\.id.rawValue) == earlyIDs + ["u-travel", "u-time"] + laterIDs)
 
         let earlyPashto = Set(bundle.items.compactMap { item -> String? in
             guard let unit = merged.itemUnits[item.id.rawValue], earlyIDs.contains(unit) else { return nil }
             guard item.kind == .word || item.kind == .phrase else { return nil }
             return item.pashto
         })
-        let futureUnits = bundle.units.filter { futureIDs.contains($0.id.rawValue) }
-        #expect(futureUnits.flatMap(\.lessons).count == 17)
-        #expect(futureUnits.allSatisfy { $0.lessons.allSatisfy(\.letters.isEmpty) })
-        #expect(!futureUnits.contains { $0.lessons.contains { $0.id.rawValue.contains("letter") } })
+        let laterUnits = bundle.units.filter { laterIDs.contains($0.id.rawValue) }
+        #expect(laterUnits.flatMap(\.lessons).count == 29)
+        #expect(laterUnits.allSatisfy { $0.lessons.allSatisfy(\.letters.isEmpty) })
+        #expect(!laterUnits.contains { $0.lessons.contains { $0.id.rawValue.contains("letter") } })
 
         var introducedPashto: [String] = []
-        for unit in futureUnits {
+        for unit in laterUnits {
             for lesson in unit.lessons {
+                if lesson.kind == .learn || lesson.kind == .phrases {
+                    #expect(lesson.items.allSatisfy { $0.role == .present })
+                    #expect(!lesson.items.isEmpty)
+                    continue
+                }
                 let introduced = lesson.items.filter { $0.role == .introduce }
-                #expect((4...6).contains(introduced.count), "\(lesson.id.rawValue) has \(introduced.count) new cards")
+                #expect(introduced.count >= 4, "\(lesson.id.rawValue) has \(introduced.count) new cards")
                 #expect(lesson.items.allSatisfy { $0.role == .introduce })
                 for reference in introduced {
                     let item = try #require(bundle.items.first { $0.id == reference.item })

@@ -144,7 +144,8 @@ struct StudyCardScreen: View {
                 if let picture = FamilyPictures.picture(
                     for: card.itemID,
                     english: card.meaning,
-                    lessonKind: deck.kind
+                    lessonKind: deck.kind,
+                    unitID: deck.unitID
                 ) {
                     Image(picture.assetName)
                         .resizable()

@@ -3,7 +3,7 @@
 /// Source files keep every sound example and every letter. Units 1–3 do not
 /// introduce those letters, so letter tasks, letter cards, and letter
 /// distractors are not built from them. `u-sounds` stays in the files and is
-/// omitted from the release list. Unreleased units 4–8 are left as they are.
+/// omitted from the release list. Units 4–8 keep their letters arrays empty.
 public enum PlayableCourse {
     /// Greetings, introductions, and family. Their `letters` arrays stay in
     /// the source and are not part of the playable course.

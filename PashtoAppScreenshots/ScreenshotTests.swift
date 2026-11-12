@@ -1,7 +1,8 @@
 import XCTest
 
-/// Opens four screens and keeps a PNG of each. The workflow runs this once
-/// per variant: light, dark, and the largest accessibility text size.
+/// Opens the home, the lower Home rows, a Numbers learn card, the Family
+/// screens, a quiz, and the celebration. The workflow runs this once per
+/// variant: light, dark, and the largest accessibility text size.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -36,6 +37,31 @@ final class ScreenshotTests: XCTestCase {
         )
         settle()
         shot("home-\(variant)")
+
+        revealNewCategories(in: app)
+        settle()
+        shot("home-new-categories-\(variant)")
+
+        tap("u-numbers", in: app)
+        tap("l-numbers-learn-one-to-five", in: app)
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 15),
+            "Numbers learn card did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers card has no pronunciation")
+        settle(1.0)
+        shot("numbers-learn-\(variant)")
+
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant)
+        app.launch()
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not return. buttons: \(buttonDump(app))"
+        )
 
         tap("u-family", in: app)
         let mother = app.descendants(matching: .any)["e-mor"]
@@ -89,6 +115,63 @@ final class ScreenshotTests: XCTestCase {
             arguments.append("-PashtoScreenshotLight")
         }
         return arguments
+    }
+
+    /// Scrolls until Numbers, Food, Town, and Conversation are on screen together.
+    /// The first Home shot stays at the top, before this scroll. At the largest
+    /// text size the four cards do not fit, so the scroll stops with Numbers
+    /// still tappable and as many of the next rows as the list can show.
+    private func revealNewCategories(in app: XCUIApplication) {
+        let rows = ["u-numbers", "u-food", "u-town", "u-conversation"].map {
+            app.descendants(matching: .any)[$0]
+        }
+        for row in rows {
+            XCTAssertTrue(row.waitForExistence(timeout: 15), "new category row is missing. buttons: \(buttonDump(app))")
+        }
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "home list is missing. buttons: \(buttonDump(app))")
+        for _ in 0..<28 {
+            if newCategoriesAreVisible(rows, in: app) { return }
+            let numbersWasHittable = rows[0].isHittable
+            nudgeScroll(scroll, revealingLower: true)
+            if numbersWasHittable && !rows[0].isHittable {
+                nudgeScroll(scroll, revealingLower: false)
+                XCTAssertTrue(
+                    rows[0].exists,
+                    "Numbers row is missing after scrolling back. buttons: \(buttonDump(app))"
+                )
+                XCTAssertTrue(
+                    rows[0].isHittable,
+                    "Numbers is not on screen after scrolling back. frame \(rows[0].frame) scroll \(scroll.frame). buttons: \(buttonDump(app))"
+                )
+                return
+            }
+        }
+        XCTAssertTrue(
+            rows[0].isHittable,
+            "Numbers did not scroll into view. frame \(rows[0].frame) scroll \(scroll.frame) app \(app.frame). buttons: \(buttonDump(app))"
+        )
+    }
+
+    /// A short drag inside the home list. The header is outside that list, so a
+    /// drag on the whole window misses the list when the header is tall.
+    private func nudgeScroll(_ scroll: XCUIElement, revealingLower: Bool) {
+        let startY: CGFloat = revealingLower ? 0.82 : 0.38
+        let endY: CGFloat = revealingLower ? 0.58 : 0.62
+        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+        start.press(forDuration: 0.05, thenDragTo: end)
+    }
+
+    private func newCategoriesAreVisible(_ rows: [XCUIElement], in app: XCUIApplication) -> Bool {
+        let frames = rows.map(\.frame)
+        guard frames.allSatisfy({ $0.width > 1 && $0.height > 1 && app.frame.contains($0) }) else {
+            return false
+        }
+        guard zip(frames, frames.dropFirst()).allSatisfy({ $0.minY < $1.minY }) else {
+            return false
+        }
+        return rows.allSatisfy(\.isHittable)
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication) {

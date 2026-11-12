@@ -65,7 +65,8 @@ public enum FamilyWordList {
                 guard let picture = FamilyPictures.picture(
                     for: item.id,
                     english: english,
-                    lessonKind: .learn
+                    lessonKind: .learn,
+                    unitID: unitID
                 ) else {
                     continue
                 }

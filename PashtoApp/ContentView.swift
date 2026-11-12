@@ -326,6 +326,10 @@ struct ContentView: View {
         case "menu.unit.family": String(localized: "menu.unit.family")
         case "menu.unit.travel": String(localized: "menu.unit.travel")
         case "menu.unit.time": String(localized: "menu.unit.time")
+        case "menu.unit.numbers": String(localized: "menu.unit.numbers")
+        case "menu.unit.food": String(localized: "menu.unit.food")
+        case "menu.unit.town": String(localized: "menu.unit.town")
+        case "menu.unit.conversation": String(localized: "menu.unit.conversation")
         default: category.label
         }
     }

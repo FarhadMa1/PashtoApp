@@ -19,6 +19,9 @@ struct FamilyWordListTests {
         "e-tash-naab",
         "e-pay-se",
     ]
+    private let town = [
+        "e-tak-see",
+    ]
     private let time = [
         "e-wradz",
         "e-sa-haar",
@@ -34,6 +37,7 @@ struct FamilyWordListTests {
             "u-family": family,
             "u-travel": travel,
             "u-time": time,
+            "u-town": town,
         ]
 
         for showsPronunciation in [true, false] {
@@ -45,7 +49,6 @@ struct FamilyWordListTests {
                 )
                 #expect(rows.map(\.itemID.rawValue) == pictured)
                 #expect(rows.map(\.assetName) == pictured)
-                #expect(!rows.map(\.itemID.rawValue).contains("e-tak-see"))
                 #expect(rows.contains { row in
                     guard let item = items[row.itemID] else { return false }
                     return row.pronunciation != item.translit

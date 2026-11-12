@@ -13,7 +13,7 @@ import os
 import shutil
 import sys
 
-SCREENS = ("home", "family", "learn", "quiz", "celebration")
+SCREENS = ("home", "home-new-categories", "numbers-learn", "family", "learn", "quiz", "celebration")
 VARIANTS = ("light", "dark", "xl")
 EXPECTED = [f"{screen}-{variant}.png" for screen in SCREENS for variant in VARIANTS]
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"

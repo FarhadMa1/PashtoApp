@@ -1,7 +1,7 @@
 {
   "id": "u-numbers",
   "track": "main",
-  "title": "Numbers 1–10",
+  "title": "Numbers",
   "items": [
     {
       "id": "e-yaw",
@@ -222,12 +222,458 @@
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
       }
+    },
+    {
+      "id": "e-yaw-wo-las",
+      "kind": "word",
+      "pashto": "یوولس",
+      "translit": "yawwólas",
+      "pronunciation": "yaw-WO-las",
+      "en": "eleven",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-dwo-las",
+      "kind": "word",
+      "pashto": "دولس",
+      "translit": "dwólas",
+      "pronunciation": "DWO-las",
+      "en": "twelve",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-dyaar-las",
+      "kind": "word",
+      "pashto": "دیارلس",
+      "translit": "dyārlás",
+      "pronunciation": "dyaar-LAS",
+      "en": "thirteen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-tswaar-las",
+      "kind": "word",
+      "pashto": "څوارلس",
+      "translit": "tswārlás",
+      "pronunciation": "tswaar-LAS",
+      "en": "fourteen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-pin-dza-las",
+      "kind": "word",
+      "pashto": "پنځلس",
+      "translit": "pindzálas",
+      "pronunciation": "pin-DZA-las",
+      "en": "fifteen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-shpaa-ras",
+      "kind": "word",
+      "pashto": "شپاړس",
+      "translit": "špā́ṛas",
+      "pronunciation": "SHPAA-ras",
+      "en": "sixteen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-o-wa-las",
+      "kind": "word",
+      "pashto": "اوولس",
+      "translit": "owálas",
+      "pronunciation": "o-WA-las",
+      "en": "seventeen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-a-ta-las",
+      "kind": "word",
+      "pashto": "اتلس",
+      "translit": "atálas",
+      "pronunciation": "a-TA-las",
+      "en": "eighteen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-no-las",
+      "kind": "word",
+      "pashto": "نولس",
+      "translit": "nólas",
+      "pronunciation": "NO-las",
+      "en": "nineteen",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-shal",
+      "kind": "word",
+      "pashto": "شل",
+      "translit": "šal",
+      "pronunciation": "shal",
+      "en": "twenty",
+      "usage": null,
+      "pronunciationNote": "Follow the simple pronunciation shown; do not add extra vowels.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ka-lan",
+      "kind": "word",
+      "pashto": "کلن",
+      "translit": "kalán",
+      "pronunciation": "ka-LAN",
+      "en": "years old (male)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-ka-la-na",
+      "kind": "word",
+      "pashto": "کلنه",
+      "translit": "kalána",
+      "pronunciation": "ka-LA-na",
+      "en": "years old (female)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-o-mar-dey-tso-day",
+      "kind": "phrase",
+      "pashto": "عمر دې څو دی؟",
+      "translit": "omár de tso day?",
+      "pronunciation": "o-MAR dey tso day?",
+      "en": "how old are you?",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together. In عمر, there is no separate throat sound for ع; say o-MAR.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-shal-ka-lan-yam",
+      "kind": "phrase",
+      "pashto": "زه شل کلن یم",
+      "translit": "zə šal kalán yəm",
+      "pronunciation": "za shal ka-LAN yam",
+      "en": "I am twenty years old (male)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
+    },
+    {
+      "id": "e-za-shal-ka-la-na-yam",
+      "kind": "phrase",
+      "pashto": "زه شل کلنه یم",
+      "translit": "zə šal kalána yəm",
+      "pronunciation": "za shal ka-LA-na yam",
+      "en": "I am twenty years old (female)",
+      "usage": null,
+      "pronunciationNote": "Stress the syllable shown in capitals in the simple pronunciation.",
+      "responseTo": null,
+      "tokens": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-08",
+        "comment": "Bekreftet av Farhad via ordlisten."
+      }
     }
   ],
   "lessons": [
     {
-      "id": "l-numbers-1",
+      "id": "l-numbers-learn-one-to-five",
       "title": "One to five",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-yaw",
+          "role": "present"
+        },
+        {
+          "item": "e-dwa",
+          "role": "present"
+        },
+        {
+          "item": "e-drey",
+          "role": "present"
+        },
+        {
+          "item": "e-tsa-lor",
+          "role": "present"
+        },
+        {
+          "item": "e-pin-dza",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-learn-six-to-ten",
+      "title": "Six to ten and age",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-shpag",
+          "role": "present"
+        },
+        {
+          "item": "e-o-wa",
+          "role": "present"
+        },
+        {
+          "item": "e-a-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-na-ha",
+          "role": "present"
+        },
+        {
+          "item": "e-las",
+          "role": "present"
+        },
+        {
+          "item": "e-o-mar",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-learn-eleven-to-fifteen",
+      "title": "Eleven to fifteen",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-yaw-wo-las",
+          "role": "present"
+        },
+        {
+          "item": "e-dwo-las",
+          "role": "present"
+        },
+        {
+          "item": "e-dyaar-las",
+          "role": "present"
+        },
+        {
+          "item": "e-tswaar-las",
+          "role": "present"
+        },
+        {
+          "item": "e-pin-dza-las",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-learn-sixteen-to-twenty",
+      "title": "Sixteen to twenty",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-shpaa-ras",
+          "role": "present"
+        },
+        {
+          "item": "e-o-wa-las",
+          "role": "present"
+        },
+        {
+          "item": "e-a-ta-las",
+          "role": "present"
+        },
+        {
+          "item": "e-no-las",
+          "role": "present"
+        },
+        {
+          "item": "e-shal",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-learn-years-old",
+      "title": "Years old",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-ka-lan",
+          "role": "present"
+        },
+        {
+          "item": "e-ka-la-na",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-phrases-how-old",
+      "title": "How old are you?",
+      "kind": "phrases",
+      "items": [
+        {
+          "item": "e-o-mar-dey-tso-day",
+          "role": "present"
+        },
+        {
+          "item": "e-za-shal-ka-lan-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-shal-ka-la-na-yam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-1",
+      "title": "Practice: One to ten",
       "items": [
         {
           "item": "e-yaw",
@@ -248,13 +694,7 @@
         {
           "item": "e-pin-dza",
           "role": "introduce"
-        }
-      ]
-    },
-    {
-      "id": "l-numbers-2",
-      "title": "Six to ten and age",
-      "items": [
+        },
         {
           "item": "e-shpag",
           "role": "introduce"
@@ -278,6 +718,106 @@
         {
           "item": "e-o-mar",
           "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-2",
+      "title": "Practice: Eleven to twenty",
+      "items": [
+        {
+          "item": "e-yaw-wo-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dwo-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dyaar-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tswaar-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pin-dza-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shpaa-ras",
+          "role": "introduce"
+        },
+        {
+          "item": "e-o-wa-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-a-ta-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-no-las",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shal",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-numbers-3",
+      "title": "Practice: How old are you?",
+      "items": [
+        {
+          "item": "e-ka-lan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ka-la-na",
+          "role": "introduce"
+        },
+        {
+          "item": "e-o-mar-dey-tso-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-shal-ka-lan-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-shal-ka-la-na-yam",
+          "role": "introduce"
+        }
+      ],
+      "dialogs": [
+        {
+          "id": "d-daily-life-2",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-o-mar-dey-tso-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-shal-ka-lan-yam"
+            }
+          ]
+        },
+        {
+          "id": "d-daily-life-3",
+          "turns": [
+            {
+              "speaker": "A",
+              "item": "e-o-mar-dey-tso-day"
+            },
+            {
+              "speaker": "B",
+              "item": "e-za-shal-ka-la-na-yam"
+            }
+          ]
         }
       ]
     }

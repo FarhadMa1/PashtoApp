@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "e-tak-see.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
