@@ -1,10 +1,11 @@
 name: Screenshots
 
 # Captures the home, the lower Home rows, a Numbers learn list and its card,
-# the Family word list, a Learn card, a Greetings learn list, a quiz question,
-# and the lesson-complete celebration
+# the Family word list, a Learn card, the Greetings and Travel learn lists,
+# a quiz question, the lesson-complete celebration, and the word of the day
 # on an iPhone simulator.
 # Light, dark, and the largest accessibility text size.
+# Light also captures the Greetings list with Bold Text.
 # The app a learner launches is unchanged.
 on:
   pull_request:

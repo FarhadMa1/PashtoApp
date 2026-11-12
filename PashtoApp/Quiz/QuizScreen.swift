@@ -494,6 +494,7 @@ struct QuizScreen: View {
                     ? (mark == nil ? QuizChrome.ink : Lapis.fillText)
                     : (mark == nil ? QuizChrome.pashto : Lapis.fillText),
                 scriptFont: option.pronunciation == nil ? nil : .system(size: choicePashtoSize, weight: .regular),
+                pronunciationSize: option.pronunciation == nil ? nil : choicePronunciationSize,
                 pronunciationLeads: option.pronunciation != nil
             )
             .font(.system(size: option.pronunciation == nil ? 28 : choicePronunciationSize, weight: .bold))
@@ -626,11 +627,13 @@ struct QuizScreen: View {
                         showsPronunciation: card.showsPronunciation,
                         answered: card.revealed
                     ) {
-                        Text(verbatim: pronunciation)
-                            .font(.title3.weight(.bold))
-                            .foregroundStyle(QuizChrome.primary)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .environment(\.layoutDirection, .leftToRight)
+                        PronunciationText(
+                            stored: pronunciation,
+                            textStyle: .title3,
+                            color: QuizChrome.primary,
+                            alignment: .leading
+                        )
+                        .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 .padding(16)
@@ -670,6 +673,7 @@ struct QuizScreen: View {
                 pronunciationColor: QuizChrome.primary,
                 scriptColor: QuizChrome.pashto,
                 scriptFont: spoken == nil ? nil : .system(size: wordPashtoSize, weight: .regular),
+                pronunciationSize: spoken == nil ? nil : wordPronunciationSize,
                 centers: true,
                 pronunciationLeads: spoken != nil
             )
@@ -835,6 +839,8 @@ struct PashtoLine: View {
     var fitsWidth = false
     /// Centers the word and the pronunciation under it. The quiz leaves this off.
     var centers = false
+    /// Point size of a leading pronunciation. Nil keeps the smaller subheadline.
+    var pronunciationSize: CGFloat? = nil
     /// Quiz prompts and answers. Pronunciation is the large line and Pashto is smaller beneath it.
     var pronunciationLeads = false
 
@@ -859,7 +865,6 @@ struct PashtoLine: View {
                 styledScript(alignment: .leading)
                 if let pronunciation {
                     pronunciationText(alignment: .leading)
-                        .font(.subheadline.weight(.medium))
                 } else if reservesPronunciation {
                     Text(" ")
                         .font(.subheadline.weight(.medium))
@@ -883,7 +888,6 @@ struct PashtoLine: View {
                     .frame(maxWidth: .infinity)
                 if let pronunciation {
                     pronunciationText(alignment: .center)
-                        .font(.subheadline.weight(.medium))
                         .multilineTextAlignment(.center)
                 }
             }
@@ -906,16 +910,19 @@ struct PashtoLine: View {
 
     @ViewBuilder
     private func pronunciationText(alignment: TextAlignment) -> some View {
-        let line = Text(pronunciation ?? "")
-            .multilineTextAlignment(alignment)
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: alignment == .center ? .center : .leading)
-            .environment(\.layoutDirection, .leftToRight)
-        if let textColor, pronunciationFirst {
-            line.foregroundStyle(textColor)
-        } else {
-            line.foregroundStyle(pronunciationColor)
+        let stored = pronunciation ?? ""
+        let ink = (textColor != nil && pronunciationFirst) ? textColor! : pronunciationColor
+        let line = Group {
+            if let pronunciationSize {
+                PronunciationText(stored: stored, points: pronunciationSize, color: ink, alignment: alignment)
+            } else {
+                PronunciationText(stored: stored, textStyle: .subheadline, color: ink, alignment: alignment)
+            }
         }
+        .multilineTextAlignment(alignment)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity, alignment: alignment == .center ? .center : .leading)
+        line
     }
 
     private func script(alignment: TextAlignment) -> some View {

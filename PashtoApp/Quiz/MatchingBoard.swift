@@ -208,6 +208,7 @@ struct MatchingBoard: View {
             pronunciationColor: mark == nil ? QuizChrome.primary : Lapis.fillPronunciation,
             scriptColor: mark == nil ? QuizChrome.pashto : Lapis.fillText,
             scriptFont: spoken == nil ? nil : .system(size: pairPashtoSize, weight: .regular),
+            pronunciationSize: spoken == nil ? nil : pairPronunciationSize,
             centers: true,
             pronunciationLeads: spoken != nil
         )

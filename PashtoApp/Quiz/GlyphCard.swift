@@ -72,6 +72,7 @@ struct GlyphCard: View {
                 scriptColor: QuizChrome.pashto,
                 scriptFont: .system(size: pashtoSize, weight: .regular),
                 fitsWidth: prominent,
+                pronunciationSize: side.pronunciation == nil ? nil : pronunciationSize,
                 centers: true,
                 pronunciationLeads: side.pronunciation != nil
             )

@@ -265,13 +265,10 @@ struct StudyCardLines: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text(verbatim: card.pronunciation)
-                .font(.system(size: pronunciationSize, weight: .bold))
-                .foregroundStyle(StudyPalette.pronunciation)
+            PronunciationText(stored: card.pronunciation, points: pronunciationSize, color: StudyPalette.pronunciation, alignment: .center)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity)
-                .environment(\.layoutDirection, .leftToRight)
                 .accessibilityFocused(pronunciationFocused)
                 .accessibilitySortPriority(50)
             Text(verbatim: card.pashto)
@@ -566,13 +563,9 @@ struct LearnListScreen: View {
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .environment(\.layoutDirection, .leftToRight)
-                Text(verbatim: row.displayedPronunciation)
-                    .font(.system(size: pronunciationSize, weight: .semibold))
-                    .foregroundStyle(hue)
+                PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: .leading)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
-                    .environment(\.layoutDirection, .leftToRight)
-                    .accessibilityLabel(Text(verbatim: row.pronunciation))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             VStack(alignment: .trailing, spacing: 4) {

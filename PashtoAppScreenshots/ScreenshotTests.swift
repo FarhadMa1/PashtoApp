@@ -1,9 +1,10 @@
 import XCTest
 
 /// Opens the home, the lower Home rows, a Numbers learn list and its cards,
-/// the Greetings learn list, the Family screens, a quiz, and the celebration.
-/// The workflow runs this once per variant: light, dark, and the largest
-/// accessibility text size.
+/// the Greetings and Travel learn lists, the Family screens, a quiz, the
+/// celebration, and the word of the day. Light also opens the Greetings list
+/// with Bold Text. The workflow runs this once per variant: light, dark, and
+/// the largest accessibility text size.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -84,9 +85,25 @@ final class ScreenshotTests: XCTestCase {
         )
         XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Greetings list has no Play button")
         XCTAssertTrue(app.staticTexts["kha"].waitForExistence(timeout: 5), "Greetings list has no pronunciation")
+        XCTAssertTrue(app.staticTexts["ma-NA-na"].waitForExistence(timeout: 5), "Greetings list has no stressed pronunciation")
         XCTAssertTrue(app.staticTexts["0 of 4 words"].waitForExistence(timeout: 5))
+        revealLabel("ma-NA-na", in: app)
         settle(1.0)
         shot("learn-list-\(variant)")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        popToHome(app, basics: basics)
+
+        tap("u-travel", in: app)
+        tap("l-travel-learn-around", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Travel learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["ho-TAL"].waitForExistence(timeout: 5), "Travel list has no stressed pronunciation")
+        revealLabel("ho-TAL", in: app)
+        settle(1.0)
+        shot("learn-list-travel-\(variant)")
         XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
         app.buttons["Pashto"].tap()
         popToHome(app, basics: basics)
@@ -140,6 +157,42 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.buttons["Continue"].waitForExistence(timeout: 5))
         settle(0.6)
         shot("celebration-\(variant)")
+
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotDailyWord"]
+        app.launch()
+        XCTAssertTrue(
+            app.staticTexts["Word of the day"].waitForExistence(timeout: 20),
+            "word of the day did not appear. buttons: \(buttonDump(app))"
+        )
+        let dailyPronunciation = app.staticTexts.matching(
+            NSPredicate(format: "label CONTAINS %@", "ma-NA-na")
+        ).firstMatch
+        XCTAssertTrue(dailyPronunciation.waitForExistence(timeout: 5), "word of the day has no pronunciation")
+        settle(0.6)
+        shot("word-of-the-day-\(variant)")
+
+        guard variant == "light" else { return }
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotBoldText"]
+        app.launch()
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not load for Bold Text. buttons: \(buttonDump(app))"
+        )
+        tap("u-greetings", in: app)
+        tap("l-greetings-learn", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Bold Text learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["ma-NA-na"].waitForExistence(timeout: 5), "Bold Text list has no stressed pronunciation")
+        revealLabel("ma-NA-na", in: app)
+        settle(1.0)
+        shot("learn-list-bold-light")
     }
 
     private func launchArguments(for variant: String) -> [String] {
@@ -233,6 +286,27 @@ final class ScreenshotTests: XCTestCase {
         let element = app.descendants(matching: .any)[identifier]
         reveal(element, in: app)
         element.tap()
+    }
+
+    /// Scrolls a pronunciation label into the window. The label is the stored
+    /// field, including capitals, because that is what VoiceOver reads.
+    private func revealLabel(_ label: String, in app: XCUIApplication) {
+        let element = app.staticTexts[label]
+        XCTAssertTrue(element.waitForExistence(timeout: 5), "missing \(label)")
+        let scroll = app.scrollViews.firstMatch
+        for _ in 0..<8 {
+            let frame = element.frame
+            if frame.width > 1, frame.minY > 64, frame.maxY < app.frame.maxY - 16 {
+                return
+            }
+            if scroll.exists {
+                nudgeScroll(scroll, revealingLower: frame == .zero || frame.midY >= app.frame.midY)
+            } else if frame == .zero || frame.midY >= app.frame.midY {
+                app.swipeUp(velocity: .slow)
+            } else {
+                app.swipeDown(velocity: .slow)
+            }
+        }
     }
 
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
