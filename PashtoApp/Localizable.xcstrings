@@ -685,6 +685,66 @@
         }
       }
     },
+    "learn.list.practiceLesson" : {
+      "comment" : "Learn list. Opens the unit's first practice lesson. The arrow is visible only.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice lesson →"
+          }
+        }
+      }
+    },
+    "learn.list.practiceLessonSpoken" : {
+      "comment" : "Spoken name of the practice button. VoiceOver does not read the arrow.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice lesson"
+          }
+        }
+      }
+    },
+    "learn.list.flashcards" : {
+      "comment" : "Learn list. Opens the card view for the same lesson.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flashcards"
+          }
+        }
+      }
+    },
+    "learn.list.words" : {
+      "comment" : "Learn list. Completed practice words over the words in the lesson.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld of %lld words"
+          }
+        }
+      }
+    },
+    "learn.list.play" : {
+      "comment" : "Learn list speaker. Spoken only. The clip plays after a tap.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play"
+          }
+        }
+      }
+    },
     "study.skipToPractice" : {
       "comment" : "Leaves the cards and opens the unit's first practice lesson.",
       "extractionState" : "manual",

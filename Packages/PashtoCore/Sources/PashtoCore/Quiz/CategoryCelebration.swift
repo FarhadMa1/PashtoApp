@@ -45,7 +45,7 @@ public enum CategoryCelebration {
 /// What the celebration draws for one category.
 public struct CategoryCelebrationOffer: Equatable, Sendable {
     public var unitID: UnitID
-    /// Stored unit word. The screen uppercases it when it draws.
+    /// The unit word the screen draws.
     public var unitName: String
     /// Progress ring before this lesson, from 0 to 1.
     public var ringFrom: Double

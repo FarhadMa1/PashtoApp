@@ -419,6 +419,262 @@ final class GreetingsClipPlayer: NSObject, AVAudioPlayerDelegate {
     }
 }
 
+/// Scrollable words for one learn lesson.
+///
+/// English sits above the stored pronunciation. Pashto stays on the right,
+/// with room for the dots and the tail. A speaker is drawn only when a clip
+/// exists, and it plays only after a tap. Practice opens the quiz. Flashcards
+/// open the card view. Looking at the list does not finish the lesson.
+struct LearnListScreen: View {
+    var list: LearnList
+    var onPractice: () -> Void
+    var onFlashcards: () -> Void
+    var onBack: () -> Void
+
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var clipPlayer = GreetingsClipPlayer()
+    @ScaledMetric(relativeTo: .body) private var englishSize: CGFloat = 18
+    @ScaledMetric(relativeTo: .title3) private var pronunciationSize: CGFloat = 21
+    @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = 19
+    @ScaledMetric(relativeTo: .body) private var pashtoLineSpacing: CGFloat = 8
+    @ScaledMetric(relativeTo: .body) private var pashtoPadding: CGFloat = 4
+    @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 48
+
+    private var hue: Color { Lapis.MenuCard.resolve(list.unitID).hue }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            header
+            ScrollView {
+                wordCard
+                    .padding(.horizontal, 20)
+                    .padding(.top, 16)
+                    .padding(.bottom, 12)
+            }
+            footer
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Lapis.background.ignoresSafeArea())
+        .onChange(of: list.lessonID) { _, _ in
+            clipPlayer.stop()
+        }
+        .onDisappear {
+            clipPlayer.stop()
+        }
+        .accessibilityIdentifier("learn-list")
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 8) {
+                    backButton
+                    titleBlock
+                }
+            } else {
+                ZStack {
+                    titleBlock
+                    HStack {
+                        backButton
+                        Spacer(minLength: 0)
+                    }
+                }
+            }
+            progressBar
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
+    }
+
+    private var backButton: some View {
+        Button(action: onBack) {
+            HStack(spacing: 6) {
+                Image(systemName: "chevron.backward")
+                    .accessibilityHidden(true)
+                Text("Pashto")
+            }
+            .font(.body.weight(.semibold))
+            .foregroundStyle(Lapis.text)
+        }
+        .buttonStyle(.plain)
+        .frame(minHeight: 44)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Pashto"))
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var titleBlock: some View {
+        Text(verbatim: list.title)
+            .font(.headline.weight(.semibold))
+            .foregroundStyle(Lapis.text)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity)
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    /// Practice words over the words in this lesson. An empty bar is zero completed.
+    private var progressBar: some View {
+        let fraction = list.wordCount > 0 ? CGFloat(list.completedCount) / CGFloat(list.wordCount) : 0
+        return GeometryReader { proxy in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Lapis.muted.opacity(0.35))
+                Capsule()
+                    .fill(hue)
+                    .frame(width: max(0, proxy.size.width * fraction))
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 4, maxHeight: 4)
+        .accessibilityHidden(true)
+    }
+
+    private var wordCard: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(list.rows.enumerated()), id: \.element.itemID) { index, row in
+                if index > 0 {
+                    Rectangle()
+                        .fill(Lapis.muted.opacity(0.35))
+                        .frame(maxWidth: .infinity, minHeight: 0.5, maxHeight: 0.5)
+                        .accessibilityHidden(true)
+                }
+                wordRow(row)
+            }
+        }
+        .background(QuizChrome.surface)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Lapis.muted.opacity(0.45), lineWidth: 0.5)
+        }
+    }
+
+    private func wordRow(_ row: LearnListRow) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            if let picture = row.picture {
+                Image(picture.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: tileSide, height: tileSide)
+                    .accessibilityHidden(true)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: row.english)
+                    .font(.system(size: englishSize, weight: .medium))
+                    .foregroundStyle(Lapis.text)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .environment(\.layoutDirection, .leftToRight)
+                Text(verbatim: row.displayedPronunciation)
+                    .font(.system(size: pronunciationSize, weight: .semibold))
+                    .foregroundStyle(hue)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .environment(\.layoutDirection, .leftToRight)
+                    .accessibilityLabel(Text(verbatim: row.pronunciation))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(verbatim: row.pashto)
+                    .font(.system(size: pashtoSize))
+                    .foregroundStyle(Lapis.secondaryText)
+                    .multilineTextAlignment(.trailing)
+                    .lineSpacing(pashtoLineSpacing)
+                    .padding(.vertical, pashtoPadding)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .environment(\.layoutDirection, .rightToLeft)
+                if row.showsPlayButton, let url = clipURL(for: row.itemID) {
+                    playButton(url)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .accessibilityIdentifier(row.itemID.rawValue)
+    }
+
+    /// Outline speaker. Nothing plays until this button is tapped.
+    private func playButton(_ url: URL) -> some View {
+        Button {
+            clipPlayer.play(url)
+        } label: {
+            Image(systemName: "speaker.wave.2")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(hue)
+                .frame(minWidth: 44, minHeight: 44)
+                .background(hue.opacity(0.16), in: Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: ModuleCopy.play))
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var footer: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    countText
+                    Spacer(minLength: 12)
+                    practiceButton
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    countText
+                    practiceButton
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            flashcardsButton
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 4)
+        .padding(.bottom, 12)
+    }
+
+    private var countText: some View {
+        Text(verbatim: list.countLabel)
+            .font(.subheadline)
+            .foregroundStyle(Lapis.secondaryText)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var practiceButton: some View {
+        Button(action: onPractice) {
+            Text(verbatim: ModuleCopy.practiceLesson)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(hue)
+                .multilineTextAlignment(.trailing)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .buttonStyle(.plain)
+        .frame(minHeight: 44)
+        .accessibilityLabel(Text(verbatim: ModuleCopy.practiceLessonSpoken))
+    }
+
+    private var flashcardsButton: some View {
+        Button(action: onFlashcards) {
+            Text(verbatim: ModuleCopy.flashcards)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(hue)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .padding(.vertical, 8)
+                .background {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(hue, lineWidth: 1)
+                }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func clipURL(for itemID: ItemID) -> URL? {
+        guard let directory = Bundle.main.resourceURL else { return nil }
+        return GreetingsAudio.url(for: itemID, in: directory)
+    }
+}
+
 struct StudyPrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

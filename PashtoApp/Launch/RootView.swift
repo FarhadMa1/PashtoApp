@@ -65,6 +65,13 @@ struct RootView: View {
                 finishSession: { model.finishLesson($0) },
                 dailyWord: model.dailyWord,
                 study: model.studyDeck,
+                learnList: model.learnList,
+                openFlashcards: { model.openLearnFlashcards() },
+                closeFlashcards: { model.closeLearnFlashcards() },
+                closeLearnList: { model.closeLearnList() },
+                startListedPractice: {
+                    Task { await model.startListedPractice(voiceOver: voiceOverEnabled) }
+                },
                 studyNext: { model.studyNext() },
                 studyShowMeaning: { model.studyShowMeaning() },
                 studyOpenNextLesson: {

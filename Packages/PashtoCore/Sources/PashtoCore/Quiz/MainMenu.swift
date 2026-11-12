@@ -2,14 +2,14 @@ import Foundation
 
 /// Short home labels for the released units.
 ///
-/// The English is the word VoiceOver reads. The home draws it in uppercase.
+/// The English is the word the home draws and VoiceOver reads.
 /// A unit that is not in this list can still appear on the home: the row then
 /// uses the unit's own title. The list is meant to match `release-units.json`.
 public enum MainMenuLabels {
     public struct Entry: Equatable, Sendable {
         public var unitID: UnitID
         public var catalogKey: String
-        /// Stored word. Not the uppercase drawing.
+        /// The word the home draws.
         public var english: String
 
         public init(unitID: UnitID, catalogKey: String, english: String) {
@@ -55,7 +55,7 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
     /// The unit's own title. The category page uses this, not the short label.
     public var title: String
     public var catalogKey: String
-    /// Stored word. The home uppercases it when it draws the row.
+    /// The word the home draws.
     public var label: String
     /// Practice lessons in this unit whose ids are finished. Learn and phrases never add to this.
     public var practiceCompleted: Int

@@ -36,8 +36,14 @@ struct ContentView: View {
     var finishSession: (LessonSession) -> Void = { _ in }
     /// Learned word for the local date. Nil omits the card. There is no empty-state line.
     var dailyWord: DailyWord? = nil
-    /// Learn or phrases cards. Nil keeps the quiz or the home. Closing it does not end a quiz.
+    /// Learn or phrases cards. Nil keeps the quiz, the learn list, or the home. Closing it does not end a quiz.
     var study: StudyDeck? = nil
+    /// Learn words. Nil keeps the cards, the quiz, or the home. Opening it does not finish the lesson.
+    var learnList: LearnList? = nil
+    var openFlashcards: () -> Void = {}
+    var closeFlashcards: () -> Void = {}
+    var closeLearnList: () -> Void = {}
+    var startListedPractice: () -> Void = {}
     var studyNext: () -> StudyStep = { .ignored }
     var studyShowMeaning: () -> StudyStep = { .ignored }
     /// Last learn card. Opens the next lesson. The label stays Next.
@@ -75,7 +81,21 @@ struct ContentView: View {
                 onOpenNextLesson: studyOpenNextLesson,
                 onStartPractice: studyStartPractice,
                 onSkip: studySkip,
-                onBack: closeStudy
+                onBack: {
+                    if learnList != nil {
+                        closeFlashcards()
+                    } else {
+                        closeStudy()
+                    }
+                }
+            )
+            .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
+        } else if let learnList {
+            LearnListScreen(
+                list: learnList,
+                onPractice: startListedPractice,
+                onFlashcards: openFlashcards,
+                onBack: closeLearnList
             )
             .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         } else if let quiz, !quiz.tasks.isEmpty {
@@ -298,7 +318,6 @@ struct ContentView: View {
 
     private func categoryLabel(_ category: MainMenuCategory, hue: Color) -> some View {
         Text(verbatim: menuWord(category))
-            .textCase(.uppercase)
             .font(.title3.weight(.semibold))
             .foregroundStyle(hue)
             .lineLimit(1)
@@ -317,7 +336,7 @@ struct ContentView: View {
         return "\(label) · \(target.lessonTitle)"
     }
 
-    /// The stored word. Uppercase is only the drawing, so VoiceOver reads the word.
+    /// The stored category name. The row and VoiceOver use the same word.
     private func menuWord(_ category: MainMenuCategory) -> String {
         switch category.catalogKey {
         case "menu.unit.basics": String(localized: "menu.unit.basics")
@@ -1351,7 +1370,6 @@ struct CategoryCelebrationScreen: View {
             Spacer()
             HStack(alignment: .center, spacing: 12) {
                 Text(verbatim: offer.unitName)
-                    .textCase(.uppercase)
                     .font(.system(size: cardLabelSize, weight: .heavy))
                     .tracking(cardLabelSize * 0.06)
                     .foregroundStyle(palette.hue)
@@ -1424,7 +1442,6 @@ struct CategoryCelebrationScreen: View {
     private var praiseCopy: some View {
         VStack(spacing: 18) {
             Text(verbatim: offer.unitName)
-                .textCase(.uppercase)
                 .font(.system(size: unitLabelSize, weight: .heavy))
                 .tracking(unitLabelSize * 0.08)
                 .foregroundStyle(palette.hue)

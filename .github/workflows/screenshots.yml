@@ -1,7 +1,8 @@
 name: Screenshots
 
-# Captures the home, the lower Home rows, a Numbers learn card, the Family
-# word list, a Learn card, a quiz question, and the lesson-complete celebration
+# Captures the home, the lower Home rows, a Numbers learn list and its card,
+# the Family word list, a Learn card, a Greetings learn list, a quiz question,
+# and the lesson-complete celebration
 # on an iPhone simulator.
 # Light, dark, and the largest accessibility text size.
 # The app a learner launches is unchanged.
@@ -113,27 +114,49 @@ jobs:
               echo "::endgroup::"
               return
             fi
-            xcrun simctl uninstall "$UDID" com.mangallabs.pashto || true
+            # The next variant starts while the previous runner is still
+            # installing or uninstalling. Wait that out, then try the launch once more.
+            xcrun simctl terminate "$UDID" com.mangallabs.pashto.screenshots.xctrunner >/dev/null 2>&1 || true
+            xcrun simctl uninstall "$UDID" com.mangallabs.pashto.screenshots.xctrunner >/dev/null 2>&1 || true
+            xcrun simctl uninstall "$UDID" com.mangallabs.pashto >/dev/null 2>&1 || true
+            local wait
+            for wait in 1 2 3 4 5 6 7 8; do
+              if ! xcrun simctl get_app_container "$UDID" com.mangallabs.pashto.screenshots.xctrunner >/dev/null 2>&1; then
+                break
+              fi
+              sleep 2
+            done
             sleep 2
-            set +e
-            xcodebuild test \
-              -project PashtoApp.xcodeproj \
-              -scheme PashtoApp \
-              -destination "platform=iOS Simulator,id=${UDID}" \
-              -derivedDataPath "$derived" \
-              -resultBundlePath "${results}/${variant}.xcresult" \
-              -only-testing:"PashtoAppScreenshots/ScreenshotTests/${test}" \
-              -parallel-testing-enabled NO \
-              -testLanguage en \
-              -testRegion en_US \
-              -test-timeouts-enabled YES \
-              -default-test-execution-time-allowance 180 \
-              -maximum-test-execution-time-allowance 240 \
-              CODE_SIGNING_ALLOWED=NO \
-              CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGN_IDENTITY=""
-            local code=$?
-            set -e
+            local attempt code=1
+            for attempt in 1 2; do
+              rm -rf "${results}/${variant}.xcresult"
+              set +e
+              xcodebuild test \
+                -project PashtoApp.xcodeproj \
+                -scheme PashtoApp \
+                -destination "platform=iOS Simulator,id=${UDID}" \
+                -derivedDataPath "$derived" \
+                -resultBundlePath "${results}/${variant}.xcresult" \
+                -only-testing:"PashtoAppScreenshots/ScreenshotTests/${test}" \
+                -parallel-testing-enabled NO \
+                -testLanguage en \
+                -testRegion en_US \
+                -test-timeouts-enabled YES \
+                -default-test-execution-time-allowance 180 \
+                -maximum-test-execution-time-allowance 240 \
+                CODE_SIGNING_ALLOWED=NO \
+                CODE_SIGNING_REQUIRED=NO \
+                CODE_SIGN_IDENTITY=""
+              code=$?
+              set -e
+              if [ "$code" -eq 0 ]; then
+                break
+              fi
+              echo "::warning::${variant} UI test exited ${code} on attempt ${attempt}"
+              xcrun simctl terminate "$UDID" com.mangallabs.pashto.screenshots.xctrunner >/dev/null 2>&1 || true
+              xcrun simctl uninstall "$UDID" com.mangallabs.pashto.screenshots.xctrunner >/dev/null 2>&1 || true
+              sleep 5
+            done
             if [ "$code" -ne 0 ]; then
               echo "::error::${variant} UI test exited ${code}"
               status=1
