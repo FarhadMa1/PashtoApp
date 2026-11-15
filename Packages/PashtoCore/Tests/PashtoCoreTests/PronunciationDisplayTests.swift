@@ -506,7 +506,7 @@ struct PronunciationDisplayTests {
         #expect(afterNote.contains("scrollNoteDown("))
         #expect(afterNote.contains("shot(\"notes-learn-xl-2\")"))
         #expect(body.contains("-uiTestNoteStaysAtTop"))
-        #expect(body.contains("Saying what you want"))
+        #expect(body.contains("Asking for food and drink"))
         #expect(body.contains("Skip to practice"))
         #expect(body.contains("tsa ghwaa-REY?"))
         #expect(!body.contains("forDuration: 0.2, thenDragTo"))

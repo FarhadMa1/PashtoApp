@@ -88,7 +88,7 @@ final class ScreenshotTests: XCTestCase {
                 "VoiceOver reads the direction marks: \(tip.label)"
             )
         }
-        let title = labeled("Saying what you want", in: app)
+        let title = labeled("Asking for food and drink", in: app)
         let phrase = storedPronunciation("tsa ghwaa-REY?", in: app)
         let pashto = labeled("څه غواړې؟", in: app)
         XCTAssertTrue(title.waitForExistence(timeout: 5), "note title is missing")
