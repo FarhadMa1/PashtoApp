@@ -180,22 +180,57 @@ enum Lapis {
 
 /// Cream page, scrolling text, and a footer that stays on screen at large type.
 struct LapisScreen<Content: View, Footer: View>: View {
+    var scrollIdentifier: String? = nil
+    /// When set, the list opens with this id at the top. Nil leaves the list alone.
+    var scrollToID: String? = nil
     @ViewBuilder var content: () -> Content
     @ViewBuilder var footer: () -> Footer
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                content()
-                    .frame(maxWidth: .infinity)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    content()
+                        .frame(maxWidth: .infinity)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+                .modifier(OptionalAccessibilityIdentifier(identifier: scrollIdentifier))
+                .task(id: scrollToID) {
+                    await reveal(scrollToID, with: proxy)
+                }
             }
-            .scrollBounceBehavior(.basedOnSize)
             footer()
                 .padding(.horizontal, 20)
                 .padding(.bottom, 12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Lapis.background.ignoresSafeArea())
+    }
+
+    /// Placement after layout. The first pass can run before the row exists.
+    /// A nil id does nothing, so a normal card does not move.
+    private func reveal(_ id: String?, with proxy: ScrollViewProxy) async {
+        guard let id else { return }
+        await Task.yield()
+        proxy.scrollTo(id, anchor: .top)
+        try? await Task.sleep(nanoseconds: 300_000_000)
+        proxy.scrollTo(id, anchor: .top)
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        proxy.scrollTo(id, anchor: .top)
+    }
+}
+
+/// Sets an accessibility identifier only when one was asked for.
+private struct OptionalAccessibilityIdentifier: ViewModifier {
+    var identifier: String?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let identifier {
+            content.accessibilityIdentifier(identifier)
+        } else {
+            content
+        }
     }
 }
 

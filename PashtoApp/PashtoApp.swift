@@ -21,8 +21,8 @@ struct PashtoApp: App {
     /// Screenshot CI passes `-PashtoScreenshotLight`, `-PashtoScreenshotDark`,
     /// and `-PashtoScreenshotXL`. `-PashtoScreenshotCelebration` opens the
     /// settled celebration. `-PashtoScreenshotDailyWord` opens the daily word.
-    /// `-PashtoScreenshotBoldText` turns on the Bold Text weight. A normal
-    /// launch has none of them.
+    /// `-PashtoScreenshotBoldText` turns on the Bold Text weight.
+    /// `-uiTestOpenItem` opens that study card. A normal launch has none of them.
     @ViewBuilder
     private var screenshotConfiguredRoot: some View {
         configured(screenshotRoot)
@@ -31,7 +31,9 @@ struct PashtoApp: App {
     @ViewBuilder
     private var screenshotRoot: some View {
         let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("-PashtoScreenshotCelebration"),
+        if let itemID = UITestLaunch.openItemID {
+            StudyItemScreenshotScreen(itemID: itemID)
+        } else if arguments.contains("-PashtoScreenshotCelebration"),
            let offer = celebrationPreview {
             CategoryCelebrationScreen(offer: offer, startsSettled: true, onContinue: {})
         } else if arguments.contains("-PashtoScreenshotDailyWord") {
@@ -170,5 +172,88 @@ extension TextSizeStep {
         case .accessibility4: .accessibility4
         case .accessibility5: .accessibility5
         }
+    }
+}
+
+/// `-uiTestOpenItem <id>`. Absent on a normal launch, and on the other screenshot launches.
+enum UITestLaunch {
+    static var openItemID: String? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let flag = arguments.firstIndex(of: "-uiTestOpenItem") else { return nil }
+        let next = arguments.index(after: flag)
+        guard next < arguments.endIndex else { return nil }
+        let value = arguments[next]
+        guard !value.isEmpty, !value.hasPrefix("-") else { return nil }
+        return value
+    }
+}
+
+/// Screenshot and UI-test harness. Opens one learn or phrases card and nothing else.
+///
+/// The meaning starts visible, so the pronunciation note is on the card.
+/// A normal launch never builds this screen.
+struct StudyItemScreenshotScreen: View {
+    var itemID: String
+    private var deck: StudyDeck?
+    private var missing: Bool
+
+    init(itemID: String) {
+        self.itemID = itemID
+        let opened = Self.deck(for: itemID)
+        deck = opened
+        missing = opened == nil
+    }
+
+    var body: some View {
+        if let deck {
+            StudyCardScreen(
+                deck: deck,
+                onNext: { .ignored },
+                onShowMeaning: { .ignored },
+                onOpenNextLesson: {},
+                onStartPractice: {},
+                onSkip: {},
+                onBack: {}
+            )
+        } else if missing {
+            Text(verbatim: "Missing \(itemID)")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .accessibilityIdentifier("study-item-missing")
+        }
+    }
+
+    /// The first lesson that presents `itemID`. The phrases meaning is shown.
+    private static func deck(for itemID: String) -> StudyDeck? {
+        guard let id = ItemID(rawValue: itemID), let bundle = course() else { return nil }
+        for unit in bundle.units {
+            for lesson in unit.lessons where lesson.kind == .learn || lesson.kind == .phrases {
+                let presents = lesson.items.contains { $0.role == .present && $0.item == id }
+                guard presents, var deck = StudyCourse.deck(for: lesson.id, in: bundle) else { continue }
+                while deck.card?.itemID != id {
+                    guard deck.next() == .advanced else { return nil }
+                    deck.settle()
+                }
+                if deck.kind == .phrases {
+                    guard deck.showMeaning() == .revealedMeaning else { return nil }
+                    deck.settle()
+                }
+                return deck
+            }
+        }
+        return nil
+    }
+
+    private static func course() -> ContentBundle? {
+        let content = bundled("content")
+        let releaseUnits = bundled("release-units")
+        guard case .ready(let course) = BundledCourseLoader.load(content: content, releaseUnits: releaseUnits) else {
+            return nil
+        }
+        return PlayableCourse.hidingScript(course.bundle)
+    }
+
+    private static func bundled(_ resource: String) -> Data? {
+        guard let url = Bundle.main.url(forResource: resource, withExtension: "json") else { return nil }
+        return try? Data(contentsOf: url)
     }
 }
