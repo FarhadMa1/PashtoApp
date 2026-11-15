@@ -84,7 +84,7 @@ struct PronunciationText: View {
         let pointSize = resolvedPointSize(typeSize)
         let space = spaceWidth(pointSize)
         let pieces = PronunciationPieces.pieces(in: stored)
-        PronunciationFlow(alignment: alignment, spacing: space, breaksInsideWords: true) {
+        return PronunciationFlow(alignment: alignment, spacing: space, breaksInsideWords: true) {
             ForEach(Array(pieces.enumerated()), id: \.offset) { _, piece in
                 pieceLabel(piece, pointSize: pointSize)
                     .layoutValue(key: StartsWordKey.self, value: piece.startsWord)
