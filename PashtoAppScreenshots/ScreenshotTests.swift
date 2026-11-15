@@ -314,10 +314,9 @@ final class ScreenshotTests: XCTestCase {
     }
 
     /// Brings the start of the note onto the card, or the end when
-    /// `showingBottom` is true. Stops if the list will not move.
+    /// `showingBottom` is true. A short drag, and it stops as soon as the
+    /// top is on the card, so the next drag does not carry the note past it.
     private func scrollNote(_ note: XCUIElement, in scroll: XCUIElement, showingBottom: Bool) {
-        var lastMaxY = note.frame.maxY
-        var stuck = 0
         for _ in 0..<16 {
             if showingBottom {
                 if noteBottomIsVisible(note, in: scroll) { return }
@@ -325,28 +324,21 @@ final class ScreenshotTests: XCTestCase {
                 return
             }
             let frame = note.frame
+            let window = scroll.frame
             let lower: Bool
             if showingBottom {
-                lower = frame == .zero || frame.maxY > scroll.frame.maxY
+                lower = frame == .zero || frame.maxY > window.maxY
             } else {
-                lower = frame == .zero || frame.midY >= scroll.frame.midY
+                lower = frame == .zero || frame.minY > window.maxY - 16
             }
-            nudgeScroll(scroll, revealingLower: lower)
-            let next = note.frame.maxY
-            if abs(next - lastMaxY) < 1 {
-                stuck += 1
-                if stuck >= 2 { return }
-            } else {
-                stuck = 0
-            }
-            lastMaxY = next
+            nudgeScroll(scroll, revealingLower: lower, portion: 0.12)
         }
     }
 
     private func noteTopIsVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
         let frame = note.frame
         let window = scroll.frame
-        return frame.width > 1 && frame.height > 1 && frame.minY >= window.minY - 8 && frame.minY < window.midY
+        return frame.width > 1 && frame.height > 1 && frame.minY >= window.minY - 8 && frame.minY <= window.maxY - 16
     }
 
     private func noteBottomIsVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
@@ -466,9 +458,12 @@ final class ScreenshotTests: XCTestCase {
 
     /// A short drag inside the home list. The header is outside that list, so a
     /// drag on the whole window misses the list when the header is tall.
-    private func nudgeScroll(_ scroll: XCUIElement, revealingLower: Bool) {
+    /// `portion` is how far the drag travels. The note uses a shorter one so
+    /// its top cannot jump from the bottom of the card to above it.
+    private func nudgeScroll(_ scroll: XCUIElement, revealingLower: Bool, portion: CGFloat = 0.24) {
+        let travel = min(max(portion, 0.08), 0.4)
         let startY: CGFloat = revealingLower ? 0.82 : 0.38
-        let endY: CGFloat = revealingLower ? 0.58 : 0.62
+        let endY = revealingLower ? startY - travel : startY + travel
         let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
         let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
         start.press(forDuration: 0.05, thenDragTo: end)
