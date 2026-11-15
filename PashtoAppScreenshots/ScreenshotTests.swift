@@ -337,6 +337,8 @@ final class ScreenshotTests: XCTestCase {
         )
         settle(1.0)
         shot("phrases-tab-\(variant)")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
         popToHome(app, basics: basics)
 
         tap("u-cat-14", in: app)
