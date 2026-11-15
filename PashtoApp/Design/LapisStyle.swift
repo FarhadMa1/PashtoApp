@@ -7,6 +7,8 @@ enum Lapis {
     static let background = dynamic(light: 0xFAF7F0, dark: 0x0F172A)
     static let text = dynamic(light: 0x111827, dark: 0xF1F5F9)
     static let secondaryText = dynamic(light: 0x6B7280, dark: 0x94A3B8)
+    /// Word-list Pashto. Light `#68736D` is about 4.7:1 on the card and is not lightened.
+    static let wordListPashto = dynamic(light: 0x68736D, dark: 0xC5D1CB)
     /// Unfilled goal track, path connector, and not-yet-reached node outline. `#7C8799` in both modes.
     static let muted = dynamic(light: QuizResultPalette.muted, dark: QuizResultPalette.muted)
     static let saffron = dynamic(light: 0xE8A33D, dark: 0xF2B85B)

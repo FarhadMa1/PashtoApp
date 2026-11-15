@@ -25,6 +25,10 @@ SCREENS = (
     "quiz",
     "celebration",
     "word-of-the-day",
+    "tabs",
+    "profile",
+    "speak",
+    "reset",
 )
 VARIANTS = ("light", "dark", "xl")
 # Bold Text is the light Greetings list. The long Time word is XL only.

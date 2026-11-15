@@ -3,8 +3,8 @@ import XCTest
 /// Opens the home, the lower Home rows, a Numbers learn list and its cards,
 /// the Greetings and Travel learn lists, the Family screens, a quiz, the
 /// celebration, and the word of the day. Light also opens the Greetings list
-/// with Bold Text. XL is two tests, lists and then the quiz, so each stays
-/// under the runner's per-test limit. The Time days list is part of XL lists.
+/// with Bold Text. XL is four tests, so each stays under the runner's limit.
+/// The Time days list is part of XL lists. The shell is tabs, Speak, Profile, and reset.
 /// The pronunciation note is its own XL test.
 @MainActor
 final class ScreenshotTests: XCTestCase {
@@ -12,7 +12,7 @@ final class ScreenshotTests: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         // The workflow default is 180 seconds, and the allowance is fixed
-        // before the test body runs. The two XL tests request 400.
+        // before the test body runs. Each XL test requests 400.
         if name.contains("testXL") {
             executionTimeAllowance = 400
         }
@@ -106,6 +106,20 @@ final class ScreenshotTests: XCTestCase {
         }
     }
 
+    func testLightShell() {
+        captureShell(variant: "light")
+    }
+
+    func testDarkShell() {
+        captureShell(variant: "dark")
+    }
+
+    /// Tabs, Speak, Profile, and the reset dialog at the largest text size.
+    func testXLShell() {
+        executionTimeAllowance = 400
+        captureShell(variant: "xl")
+    }
+
     private func capture(variant: String) {
         let app = XCUIApplication()
         let basics = showHome(app, variant: variant, failure: "home did not load. buttons: \(buttonDump(app))")
@@ -158,6 +172,7 @@ final class ScreenshotTests: XCTestCase {
         shot("learn-list-numbers-\(variant)")
         let numbersCards = app.buttons["Flashcards"]
         XCTAssertTrue(numbersCards.waitForExistence(timeout: 5), "Numbers list has no flashcards")
+        reveal(numbersCards, in: app)
         numbersCards.tap()
         XCTAssertTrue(
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
@@ -220,8 +235,10 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Family learn list did not open. buttons: \(buttonDump(app))"
         )
-        XCTAssertTrue(app.buttons["Flashcards"].waitForExistence(timeout: 5))
-        app.buttons["Flashcards"].tap()
+        let cards = app.buttons["Flashcards"]
+        XCTAssertTrue(cards.waitForExistence(timeout: 5))
+        reveal(cards, in: app)
+        cards.tap()
         XCTAssertTrue(
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
             "Learn card did not open. buttons: \(buttonDump(app))"
@@ -348,13 +365,84 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Time days list did not open. buttons: \(buttonDump(app))"
         )
+        let longWord = storedPronunciation("cha-haar-shan-BA", in: app)
         XCTAssertTrue(
-            storedPronunciation("cha-haar-shan-BA", in: app).waitForExistence(timeout: 5),
+            longWord.waitForExistence(timeout: 5),
             "Time days list has no long pronunciation"
         )
+        let shortWord = storedPronunciation("shan-BA", in: app)
+        XCTAssertTrue(shortWord.waitForExistence(timeout: 5), "Time days list has no short pronunciation")
+        revealLabel("shan-BA", in: app)
+        let shortHeight = shortWord.frame.height
         revealLabel("cha-haar-shan-BA", in: app)
+        let longFrame = longWord.frame
+        XCTAssertGreaterThan(shortHeight, 1, "shan-BA was not measured")
+        XCTAssertGreaterThan(longFrame.width, 1)
+        XCTAssertGreaterThan(longFrame.height, 1)
+        XCTAssertLessThan(
+            longFrame.height,
+            shortHeight * 1.75,
+            "cha-haar-shan-BA wrapped or was clipped. frame \(longFrame) short \(shortHeight)"
+        )
+        XCTAssertGreaterThanOrEqual(longFrame.minX, app.frame.minX - 1)
+        XCTAssertLessThanOrEqual(longFrame.maxX, app.frame.maxX + 1)
+        XCTAssertGreaterThanOrEqual(longFrame.minY, -1)
+        XCTAssertLessThanOrEqual(longFrame.maxY, app.frame.maxY + 1)
         settle(1.0)
         shot("learn-list-time-xl")
+    }
+
+    /// Home with the tab bar, Speak's empty state, Profile, and the reset dialog.
+    private func captureShell(variant: String) {
+        let app = XCUIApplication()
+        _ = showHome(app, variant: variant, failure: "home did not load. buttons: \(buttonDump(app))")
+        settle()
+        shot("tabs-\(variant)")
+
+        let speak = tabButton("Speak", in: app)
+        XCTAssertTrue(speak.waitForExistence(timeout: 5), "Speak tab is missing. buttons: \(buttonDump(app))")
+        speak.tap()
+        XCTAssertTrue(
+            app.staticTexts["Coming soon"].waitForExistence(timeout: 8),
+            "Speak empty state did not appear. buttons: \(buttonDump(app))"
+        )
+        XCTAssertFalse(app.buttons["Coming soon"].exists, "Speak empty state has a button")
+        XCTAssertEqual(app.textFields.count, 0, "Speak shows a text field")
+        settle(0.6)
+        shot("speak-\(variant)")
+
+        let profile = tabButton("Profile", in: app)
+        XCTAssertTrue(profile.waitForExistence(timeout: 5), "Profile tab is missing")
+        profile.tap()
+        XCTAssertTrue(app.staticTexts["Kabul"].waitForExistence(timeout: 8), "Profile did not show Kabul")
+        XCTAssertTrue(app.staticTexts["More dialects coming later"].exists)
+        XCTAssertTrue(app.staticTexts["Asks before anything is deleted."].exists)
+        XCTAssertTrue(app.staticTexts["Only applies where audio exists."].exists)
+        XCTAssertFalse(app.buttons["Kabul"].exists, "Dialect is a picker")
+        settle(0.6)
+        shot("profile-\(variant)")
+
+        let reset = app.buttons["Reset progress"]
+        XCTAssertTrue(reset.waitForExistence(timeout: 5), "Reset progress is missing")
+        reveal(reset, in: app)
+        reset.tap()
+        let cancel = app.buttons["Cancel"]
+        let confirm = app.buttons["Start over"]
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5), "Reset dialog has no Cancel. buttons: \(buttonDump(app))")
+        XCTAssertTrue(confirm.waitForExistence(timeout: 5), "Reset dialog has no Start over")
+        settle(0.4)
+        shot("reset-\(variant)")
+        cancel.tap()
+        settle(0.8)
+        XCTAssertTrue(reset.waitForExistence(timeout: 5), "Cancel left Profile")
+        XCTAssertFalse(confirm.exists, "Cancel left the dialog open")
+    }
+
+    /// The tab control. A large text size can draw it outside `tabBars`.
+    private func tabButton(_ name: String, in app: XCUIApplication) -> XCUIElement {
+        let inBar = app.tabBars.buttons[name]
+        if inBar.waitForExistence(timeout: 3) { return inBar }
+        return app.buttons[name]
     }
 
     private func captureBoldText(_ app: XCUIApplication, variant: String, basics: XCUIElement) {

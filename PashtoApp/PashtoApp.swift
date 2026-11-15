@@ -61,11 +61,16 @@ struct PashtoApp: App {
         let light = arguments.contains("-PashtoScreenshotLight")
         let extraLarge = arguments.contains("-PashtoScreenshotXL")
         let bold = arguments.contains("-PashtoScreenshotBoldText")
+        let themed = screenshotTheme(
+            content.modifier(ProfileChrome()),
+            dark: dark,
+            light: light,
+            extraLarge: extraLarge
+        )
         if bold {
-            screenshotTheme(content, dark: dark, light: light, extraLarge: extraLarge)
-                .environment(\.legibilityWeight, .bold)
+            themed.environment(\.legibilityWeight, .bold)
         } else {
-            screenshotTheme(content, dark: dark, light: light, extraLarge: extraLarge)
+            themed
         }
     }
 
@@ -95,6 +100,77 @@ struct PashtoApp: App {
                 .dynamicTypeSize(.accessibility5)
         } else {
             content
+        }
+    }
+}
+
+/// Applies Profile appearance and the text-size offset.
+///
+/// System appearance leaves the surrounding scheme alone, so screenshot runs
+/// still choose light or dark. The offset starts from that surrounding text
+/// size and never replaces it with a fixed size.
+private struct ProfileChrome: ViewModifier {
+    @AppStorage(ProfileSettingsStore.appearanceKey) private var appearanceRaw = AppearanceChoice.system.rawValue
+    @AppStorage(ProfileSettingsStore.textSizeOffsetKey) private var textSizeOffset = 0
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    func body(content: Content) -> some View {
+        let step = TextSizeOffset.shifted(TextSizeStep(dynamicTypeSize), by: textSizeOffset)
+        content
+            .dynamicTypeSize(step.dynamicTypeSize)
+            .modifier(AppearanceScheme(choice: AppearanceChoice.resolved(appearanceRaw)))
+    }
+}
+
+private struct AppearanceScheme: ViewModifier {
+    var choice: AppearanceChoice
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        switch choice {
+        case .system:
+            content
+        case .light:
+            content.preferredColorScheme(.light)
+        case .dark:
+            content.preferredColorScheme(.dark)
+        }
+    }
+}
+
+extension TextSizeStep {
+    init(_ size: DynamicTypeSize) {
+        switch size {
+        case .xSmall: self = .xSmall
+        case .small: self = .small
+        case .medium: self = .medium
+        case .large: self = .large
+        case .xLarge: self = .xLarge
+        case .xxLarge: self = .xxLarge
+        case .xxxLarge: self = .xxxLarge
+        case .accessibility1: self = .accessibility1
+        case .accessibility2: self = .accessibility2
+        case .accessibility3: self = .accessibility3
+        case .accessibility4: self = .accessibility4
+        case .accessibility5: self = .accessibility5
+        @unknown default: self = .large
+        }
+    }
+
+    var dynamicTypeSize: DynamicTypeSize {
+        switch self {
+        case .xSmall: .xSmall
+        case .small: .small
+        case .medium: .medium
+        case .large: .large
+        case .xLarge: .xLarge
+        case .xxLarge: .xxLarge
+        case .xxxLarge: .xxxLarge
+        case .accessibility1: .accessibility1
+        case .accessibility2: .accessibility2
+        case .accessibility3: .accessibility3
+        case .accessibility4: .accessibility4
+        case .accessibility5: .accessibility5
         }
     }
 }

@@ -637,8 +637,20 @@
         }
       }
     },
+    "module.section.quiz" : {
+      "comment" : "Course path section for the quiz lessons. The Practice tab keeps the name Practice.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz"
+          }
+        }
+      }
+    },
     "module.section.practice" : {
-      "comment" : "Course path section for the quiz lessons.",
+      "comment" : "Kept for the Practice name. The category section uses module.section.quiz.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

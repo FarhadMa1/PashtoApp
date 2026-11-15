@@ -23,6 +23,9 @@ struct StudyCardScreen: View {
     @AccessibilityFocusState private var pronunciationFocused: Bool
     /// Plays only from the speaker button. A card change stops the previous clip.
     @State private var clipPlayer = GreetingsClipPlayer()
+    @AppStorage(ProfileSettingsStore.audioSpeedKey) private var audioSpeedRaw = AudioSpeed.normal.rawValue
+
+    private var greetingsRate: Float { GreetingsPlaybackRate.rate(for: audioSpeedRaw) }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -234,7 +237,7 @@ struct StudyCardScreen: View {
     /// The label is spoken. The icon has no other text.
     private func playButton(_ url: URL) -> some View {
         Button {
-            clipPlayer.play(url)
+            clipPlayer.play(url, rate: greetingsRate)
         } label: {
             Image(systemName: "speaker.wave.2")
                 .font(.body.weight(.semibold))
@@ -421,13 +424,15 @@ private enum StudyCopy {
 final class GreetingsClipPlayer: NSObject, AVAudioPlayerDelegate {
     private var player: AVAudioPlayer?
 
-    func play(_ url: URL) {
+    func play(_ url: URL, rate: Float) {
         haltPlayer()
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setCategory(.playback, mode: .spokenAudio)
             try session.setActive(true)
             let next = try AVAudioPlayer(contentsOf: url)
+            next.enableRate = true
+            next.rate = rate
             next.delegate = self
             player = next
             next.prepareToPlay()
@@ -476,12 +481,200 @@ final class GreetingsClipPlayer: NSObject, AVAudioPlayerDelegate {
     }
 }
 
+/// The stored audio-speed choice, as a player rate.
+enum GreetingsPlaybackRate {
+    static func rate(for raw: String) -> Float {
+        Float(AudioSpeed.resolved(raw).playbackRate)
+    }
+}
+
+/// English or Pashto that wraps at spaces and shrinks a long word onto one line.
+///
+/// Word joiners stop a break at a hyphen or inside a letter. The spoken label
+/// is the original string. Vertical padding leaves room for Pashto dots and tails.
+struct FittingWords: View {
+    var text: String
+    var size: CGFloat
+    var weight: Font.Weight
+    var color: Color
+    var alignment: TextAlignment
+    var direction: LayoutDirection
+    var lineSpacing: CGFloat = 0
+    var verticalPadding: CGFloat = 0
+
+    @State private var availableWidth: CGFloat = 0
+
+    private var words: [String] {
+        text.split(separator: " ", omittingEmptySubsequences: false).map(String.init).filter { !$0.isEmpty }
+    }
+
+    private var scale: CGFloat {
+        let widest = words.map { FittingWordMeasure.width($0, size: size, weight: weight) }.max() ?? 0
+        guard widest > 0, availableWidth > 0 else { return 1 }
+        return min(1, availableWidth / widest)
+    }
+
+    var body: some View {
+        let shown = scale
+        FittingWordFlow(
+            alignment: alignment,
+            spacing: FittingWordMeasure.space(size: size * shown, weight: weight),
+            lineSpacing: lineSpacing,
+            rightToLeft: direction == .rightToLeft
+        ) {
+            ForEach(Array(words.enumerated()), id: \.offset) { _, word in
+                Text(verbatim: WordBreakPolicy.display(word))
+                    .font(.system(size: size * shown, weight: weight))
+                    .foregroundStyle(color)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: true)
+                    .padding(.vertical, verticalPadding)
+                    .accessibilityHidden(true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: frameAlignment)
+        .background {
+            GeometryReader { geo in
+                Color.clear.preference(key: FittingWidthKey.self, value: geo.size.width)
+            }
+        }
+        .onPreferenceChange(FittingWidthKey.self) { width in
+            if abs(width - availableWidth) > 0.5 {
+                availableWidth = width
+            }
+        }
+        .environment(\.layoutDirection, direction)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: text))
+    }
+
+    private var frameAlignment: Alignment {
+        switch alignment {
+        case .center: .center
+        case .trailing: .trailing
+        default: .leading
+        }
+    }
+}
+
+private enum FittingWordMeasure {
+    static func width(_ word: String, size: CGFloat, weight: Font.Weight) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: size, weight: uiWeight(weight))
+        return ceil((word as NSString).size(withAttributes: [.font: font]).width)
+    }
+
+    static func space(size: CGFloat, weight: Font.Weight) -> CGFloat {
+        width(" ", size: size, weight: weight)
+    }
+
+    private static func uiWeight(_ weight: Font.Weight) -> UIFont.Weight {
+        switch weight {
+        case .medium: .medium
+        case .semibold: .semibold
+        case .bold: .bold
+        case .heavy: .heavy
+        default: .regular
+        }
+    }
+}
+
+private struct FittingWidthKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+/// Wraps words at spaces. A word is already one line.
+private struct FittingWordFlow: Layout {
+    var alignment: TextAlignment
+    var spacing: CGFloat
+    var lineSpacing: CGFloat
+    var rightToLeft: Bool
+
+    private struct Line {
+        var indexes: [Int] = []
+        var sizes: [CGSize] = []
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+    }
+
+    nonisolated func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) -> CGSize {
+        let lines = wrap(proposal: proposal, subviews: subviews)
+        let gaps = CGFloat(max(lines.count - 1, 0)) * lineSpacing
+        let height = lines.reduce(CGFloat(0)) { $0 + $1.height } + gaps
+        if let width = proposal.width, width.isFinite {
+            return CGSize(width: width, height: height)
+        }
+        return CGSize(width: lines.map(\.width).max() ?? 0, height: height)
+    }
+
+    nonisolated func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) {
+        let lines = wrap(proposal: ProposedViewSize(width: bounds.width, height: nil), subviews: subviews)
+        var y = bounds.minY
+        for (lineIndex, line) in lines.enumerated() {
+            var x: CGFloat
+            if rightToLeft {
+                x = bounds.maxX
+            } else {
+                let extra = bounds.width - line.width
+                switch alignment {
+                case .center:
+                    x = bounds.minX + max(0, extra) / 2
+                case .trailing:
+                    x = bounds.minX + max(0, extra)
+                default:
+                    x = bounds.minX
+                }
+            }
+            for (offset, index) in line.indexes.enumerated() {
+                if offset > 0 { x += rightToLeft ? -spacing : spacing }
+                let size = line.sizes[offset]
+                if rightToLeft { x -= size.width }
+                subviews[index].place(
+                    at: CGPoint(x: x, y: y),
+                    anchor: .topLeading,
+                    proposal: ProposedViewSize(width: size.width, height: size.height)
+                )
+                if !rightToLeft { x += size.width }
+            }
+            y += line.height
+            if lineIndex < lines.count - 1 { y += lineSpacing }
+        }
+    }
+
+    private nonisolated func wrap(proposal: ProposedViewSize, subviews: Subviews) -> [Line] {
+        let limit = proposal.width ?? .infinity
+        var lines: [Line] = []
+        var current = Line()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.unspecified)
+            let gap: CGFloat = current.indexes.isEmpty ? 0 : spacing
+            let next = current.width + gap + size.width
+            if !current.indexes.isEmpty, next > limit {
+                lines.append(current)
+                current = Line(indexes: [index], sizes: [size], width: size.width, height: size.height)
+            } else {
+                current.indexes.append(index)
+                current.sizes.append(size)
+                current.width = current.indexes.count == 1 ? size.width : next
+                current.height = max(current.height, size.height)
+            }
+        }
+        if !current.indexes.isEmpty || lines.isEmpty {
+            lines.append(current)
+        }
+        return lines
+    }
+}
+
 /// Scrollable words for one learn lesson.
 ///
-/// English sits above the stored pronunciation. Pashto stays on the right,
-/// with room for the dots and the tail. A speaker is drawn only when a clip
-/// exists, and it plays only after a tap. Practice opens the quiz. Flashcards
-/// open the card view. Looking at the list does not finish the lesson.
+/// Pronunciation is on top, then English, then Pashto in small grey.
+/// Pashto keeps room for the dots and the tail. A speaker is drawn only when
+/// a clip exists, and it plays only after a tap. Practice opens the quiz.
+/// Flashcards open the card view. Looking at the list does not finish the lesson.
+/// At the largest text sizes the word count and Practice lesson scroll with the list.
 struct LearnListScreen: View {
     var list: LearnList
     var onPractice: () -> Void
@@ -490,9 +683,13 @@ struct LearnListScreen: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var clipPlayer = GreetingsClipPlayer()
+    @AppStorage(ProfileSettingsStore.audioSpeedKey) private var audioSpeedRaw = AudioSpeed.normal.rawValue
     @ScaledMetric(relativeTo: .body) private var englishSize: CGFloat = 18
-    @ScaledMetric(relativeTo: .title3) private var pronunciationSize: CGFloat = 21
-    @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = 19
+    /// Variant B at 24 pt, inside the 22–26 pt size. Dynamic Type still scales it.
+    @ScaledMetric(relativeTo: .body) private var pronunciationSize: CGFloat = 24
+    @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = 16
+
+    private var greetingsRate: Float { GreetingsPlaybackRate.rate(for: audioSpeedRaw) }
     @ScaledMetric(relativeTo: .body) private var pashtoLineSpacing: CGFloat = 8
     @ScaledMetric(relativeTo: .body) private var pashtoPadding: CGFloat = 4
     @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 48
@@ -507,8 +704,13 @@ struct LearnListScreen: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
                     .padding(.bottom, 12)
+                if dynamicTypeSize.isAccessibilitySize {
+                    footer
+                }
             }
-            footer
+            if !dynamicTypeSize.isAccessibilitySize {
+                footer
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Lapis.background.ignoresSafeArea())
@@ -608,7 +810,7 @@ struct LearnListScreen: View {
     }
 
     private func wordRow(_ row: LearnListRow) -> some View {
-        HStack(alignment: .top, spacing: 12) {
+        VStack(alignment: .leading, spacing: 6) {
             if let picture = row.picture {
                 Image(picture.assetName)
                     .resizable()
@@ -616,33 +818,32 @@ struct LearnListScreen: View {
                     .frame(width: tileSide, height: tileSide)
                     .accessibilityHidden(true)
             }
-            VStack(alignment: .leading, spacing: 2) {
-                Text(verbatim: row.english)
-                    .font(.system(size: englishSize, weight: .medium))
-                    .foregroundStyle(Lapis.text)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .environment(\.layoutDirection, .leftToRight)
-                PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
+            PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: .leading)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+            FittingWords(
+                text: row.english,
+                size: englishSize,
+                weight: .medium,
+                color: Lapis.text,
+                alignment: .leading,
+                direction: .leftToRight
+            )
+            FittingWords(
+                text: row.pashto,
+                size: pashtoSize,
+                weight: .regular,
+                color: Lapis.wordListPashto,
+                alignment: .leading,
+                direction: .rightToLeft,
+                lineSpacing: pashtoLineSpacing,
+                verticalPadding: pashtoPadding
+            )
+            if row.showsPlayButton, let url = clipURL(for: row.itemID) {
+                playButton(url)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(verbatim: row.pashto)
-                    .font(.system(size: pashtoSize))
-                    .foregroundStyle(Lapis.secondaryText)
-                    .multilineTextAlignment(.trailing)
-                    .lineSpacing(pashtoLineSpacing)
-                    .padding(.vertical, pashtoPadding)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .environment(\.layoutDirection, .rightToLeft)
-                if row.showsPlayButton, let url = clipURL(for: row.itemID) {
-                    playButton(url)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .trailing)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .accessibilityIdentifier(row.itemID.rawValue)
@@ -651,7 +852,7 @@ struct LearnListScreen: View {
     /// Outline speaker. Nothing plays until this button is tapped.
     private func playButton(_ url: URL) -> some View {
         Button {
-            clipPlayer.play(url)
+            clipPlayer.play(url, rate: greetingsRate)
         } label: {
             Image(systemName: "speaker.wave.2")
                 .font(.body.weight(.semibold))

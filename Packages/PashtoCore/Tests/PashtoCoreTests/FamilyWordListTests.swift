@@ -111,9 +111,9 @@ struct FamilyWordListTests {
         let row = try section("private struct FamilyWordRowView", until: "private struct DailyGoalRing", in: screen)
         let pashto = try section("private var pashto", until: "private struct DailyGoalRing", in: screen)
 
-        #expect(page.contains("categorySection(kind, in: category)"))
+        #expect(page.contains("categorySection(kind, in: category, rowsAreIdentifiable: rowsAreIdentifiable)"))
         #expect(page.contains("FamilyWordListView(rows: category.wordList)"))
-        let sectionIndex = try #require(page.range(of: "categorySection(kind, in: category)"))
+        let sectionIndex = try #require(page.range(of: "categorySection(kind, in: category, rowsAreIdentifiable: rowsAreIdentifiable)"))
         let listIndex = try #require(page.range(of: "FamilyWordListView(rows: category.wordList)"))
         #expect(sectionIndex.lowerBound < listIndex.lowerBound)
         #expect(!row.contains("Button"))

@@ -53,6 +53,8 @@ struct ContentView: View {
     var closeStudy: () -> Void = {}
     /// Nil unless this finish is the first completion of the category's last Practice lesson.
     var celebrationOffer: (LessonID) -> CategoryCelebrationOffer? = { _ in nil }
+    /// Clears learner progress. Profile choices stay in @AppStorage.
+    var resetProgress: () async -> Void = {}
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
@@ -64,15 +66,97 @@ struct ContentView: View {
     @State private var goalHaptic = 0
     /// The freeze star card. Cleared when it finishes, when it is skipped, and when the home goes away.
     @State private var freezeCelebration = false
-    /// The open category. Kept here so a lesson does not forget which unit was open.
-    @State private var categoryPath: [UnitID] = []
+    /// Which tab is showing. Each tab keeps its own category path.
+    @State private var tab = AppTab.home
+    /// The open category on Home. A lesson does not clear it.
+    @State private var homePath: [UnitID] = []
+    /// The open category on Learn. Independent of Home.
+    @State private var learnPath: [UnitID] = []
+
+    private var showingLesson: Bool {
+        if celebration != nil || study != nil || learnList != nil { return true }
+        if let quiz, !quiz.tasks.isEmpty { return true }
+        return false
+    }
 
     var body: some View {
+        Group {
+            if lessons.isEmpty && !showingLesson {
+                Text("Pashto")
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Lapis.background.ignoresSafeArea())
+            } else {
+                tabs
+            }
+        }
+        .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
+    }
+
+    private var tabs: some View {
+        TabView(selection: $tab) {
+            tabRoot(.home) {
+                courseNavigation(path: $homePath, showsDashboard: true, rowsAreIdentifiable: tab == .home)
+            }
+            .tabItem { tabLabel(TabCopy.home, symbol: "house") }
+            .tag(AppTab.home)
+
+            tabRoot(.learn) {
+                courseNavigation(path: $learnPath, showsDashboard: false, rowsAreIdentifiable: tab == .learn)
+            }
+            .tabItem { tabLabel(TabCopy.learn, symbol: "book") }
+            .tag(AppTab.learn)
+
+            tabRoot(.speak) {
+                SpeakComingSoon()
+            }
+            .tabItem { tabLabel(TabCopy.speak, symbol: "waveform") }
+            .tag(AppTab.speak)
+
+            tabRoot(.practice) {
+                practiceRoot
+            }
+            .tabItem { tabLabel(TabCopy.practice, symbol: "checkmark.circle") }
+            .tag(AppTab.practice)
+
+            tabRoot(.profile) {
+                ProfileSettingsScreen(onReset: resetProgress)
+            }
+            .tabItem { tabLabel(TabCopy.profile, symbol: "person.crop.circle") }
+            .tag(AppTab.profile)
+        }
+        .tint(Lapis.primary)
+    }
+
+    /// The lesson covers the tab that opened it. The other tabs keep their paths.
+    private func tabRoot<Content: View>(_ owner: AppTab, @ViewBuilder content: () -> Content) -> some View {
+        let covered = showingLesson && tab == owner
+        return ZStack {
+            content()
+                .opacity(covered ? 0 : 1)
+                .accessibilityHidden(covered)
+                .allowsHitTesting(!covered)
+            if covered {
+                lessonOverlay
+            }
+        }
+        .toolbar(showingLesson ? .hidden : .visible, for: .tabBar)
+    }
+
+    private func tabLabel(_ title: String, symbol: String) -> some View {
+        Label {
+            Text(verbatim: title)
+        } icon: {
+            Image(systemName: symbol)
+        }
+    }
+
+    @ViewBuilder
+    private var lessonOverlay: some View {
         if let celebration {
             CategoryCelebrationScreen(offer: celebration) {
                 self.celebration = nil
             }
-            .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         } else if let study {
             StudyCardScreen(
                 deck: study,
@@ -89,7 +173,6 @@ struct ContentView: View {
                     }
                 }
             )
-            .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         } else if let learnList {
             LearnListScreen(
                 list: learnList,
@@ -97,19 +180,8 @@ struct ContentView: View {
                 onFlashcards: openFlashcards,
                 onBack: closeLearnList
             )
-            .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         } else if let quiz, !quiz.tasks.isEmpty {
             quizSession(quiz)
-                .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
-        } else if lessons.isEmpty {
-            Text("Pashto")
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Lapis.background.ignoresSafeArea())
-                .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
-        } else {
-            lessonList
-                .accessibilityIdentifier(reviewStarted ? "short-review" : "ready")
         }
     }
 
@@ -134,26 +206,83 @@ struct ContentView: View {
         )
     }
 
-    private var lessonList: some View {
-        NavigationStack(path: $categoryPath) {
+    private func courseNavigation(
+        path: Binding<[UnitID]>,
+        showsDashboard: Bool,
+        rowsAreIdentifiable: Bool
+    ) -> some View {
+        NavigationStack(path: path) {
             VStack(spacing: 0) {
-                homeHeader
-                lessonScroll
+                if showsDashboard {
+                    homeHeader
+                } else {
+                    screenTitle(TabCopy.learn)
+                }
+                lessonScroll(path: path, showsDashboard: showsDashboard, rowsAreIdentifiable: rowsAreIdentifiable)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Lapis.background.ignoresSafeArea())
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: UnitID.self) { unitID in
                 if let category = menu.categories.first(where: { $0.id == unitID }) {
-                    categoryPage(category)
+                    categoryPage(category, rowsAreIdentifiable: rowsAreIdentifiable)
                 }
             }
         }
-        .sensoryFeedback(.success, trigger: goalHaptic)
+        .sensoryFeedback(.success, trigger: showsDashboard ? goalHaptic : 0)
         .onDisappear { freezeCelebration = false }
-        .task(id: pendingHomeMotion?.id) {
+        .task(id: showsDashboard ? pendingHomeMotion?.id : nil) {
+            guard showsDashboard else { return }
             await playHomeMotion()
         }
+    }
+
+    private func screenTitle(_ title: String) -> some View {
+        Text(verbatim: title)
+            .font(.title2.weight(.bold))
+            .foregroundStyle(Lapis.primary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            .accessibilityAddTraits(.isHeader)
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            .padding(.bottom, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(QuizChrome.surface.ignoresSafeArea(edges: .top))
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(Lapis.muted.opacity(0.45))
+                    .frame(height: 1)
+                    .accessibilityHidden(true)
+            }
+    }
+
+    private var practiceRoot: some View {
+        VStack(spacing: 0) {
+            screenTitle(TabCopy.practice)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    ForEach(menu.categories) { category in
+                        let rows = category.lessons.filter { $0.kind == .practice }
+                        if !rows.isEmpty {
+                            Text(verbatim: menuWord(category))
+                                .font(.subheadline.weight(.bold))
+                                .foregroundStyle(Lapis.secondaryText)
+                                .accessibilityAddTraits(.isHeader)
+                            ForEach(rows) { lesson in
+                                categoryLesson(lesson, identifiable: tab == .practice)
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 24)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Lapis.background.ignoresSafeArea())
     }
 
     /// Pashto, the day streak, and the daily goal. The goal sentence is spoken, not a second line.
@@ -193,20 +322,26 @@ struct ContentView: View {
         }
     }
 
-    private var lessonScroll: some View {
+    private func lessonScroll(
+        path: Binding<[UnitID]>,
+        showsDashboard: Bool,
+        rowsAreIdentifiable: Bool
+    ) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                if freezeCelebration {
-                    FreezeEarnedCelebration(count: streakCount, onDismiss: { freezeCelebration = false })
-                }
-                if let dailyWord {
-                    DailyWordCard(word: dailyWord)
-                }
-                if let target = menu.continueTarget {
-                    continueStrip(target)
+                if showsDashboard {
+                    if freezeCelebration {
+                        FreezeEarnedCelebration(count: streakCount, onDismiss: { freezeCelebration = false })
+                    }
+                    if let dailyWord {
+                        DailyWordCard(word: dailyWord)
+                    }
+                    if let target = menu.continueTarget {
+                        continueStrip(target)
+                    }
                 }
                 ForEach(menu.categories) { category in
-                    categoryRow(category)
+                    categoryRow(category, path: path, rowsAreIdentifiable: rowsAreIdentifiable)
                 }
             }
             .padding(.horizontal, 16)
@@ -288,11 +423,15 @@ struct ContentView: View {
             .accessibilityHidden(true)
     }
 
-    private func categoryRow(_ category: MainMenuCategory) -> some View {
+    private func categoryRow(
+        _ category: MainMenuCategory,
+        path: Binding<[UnitID]>,
+        rowsAreIdentifiable: Bool
+    ) -> some View {
         let colors = Lapis.MenuCard.resolve(category.id)
         let stacks = dynamicTypeSize >= .xxxLarge
         return Button {
-            categoryPath.append(category.id)
+            path.wrappedValue.append(category.id)
         } label: {
             Group {
                 if stacks {
@@ -313,7 +452,7 @@ struct ContentView: View {
         .accessibilityLabel(Text(verbatim: menuWord(category)))
         .accessibilityValue(Text(category.fraction, format: .percent.precision(.fractionLength(0))))
         .accessibilityAddTraits(.isButton)
-        .accessibilityIdentifier(category.id.rawValue)
+        .accessibilityIdentifier(rowsAreIdentifiable ? category.id.rawValue : "")
     }
 
     private func categoryLabel(_ category: MainMenuCategory, hue: Color) -> some View {
@@ -382,11 +521,11 @@ struct ContentView: View {
         .accessibilityHidden(true)
     }
 
-    private func categoryPage(_ category: MainMenuCategory) -> some View {
+    private func categoryPage(_ category: MainMenuCategory, rowsAreIdentifiable: Bool) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 ForEach(categoryKinds, id: \.self) { kind in
-                    categorySection(kind, in: category)
+                    categorySection(kind, in: category, rowsAreIdentifiable: rowsAreIdentifiable)
                 }
                 if !category.wordList.isEmpty {
                     FamilyWordListView(rows: category.wordList)
@@ -427,13 +566,17 @@ struct ContentView: View {
     private var categoryKinds: [LessonKind] { [.learn, .phrases, .practice] }
 
     @ViewBuilder
-    private func categorySection(_ kind: LessonKind, in category: MainMenuCategory) -> some View {
+    private func categorySection(
+        _ kind: LessonKind,
+        in category: MainMenuCategory,
+        rowsAreIdentifiable: Bool
+    ) -> some View {
         let rows = category.lessons.filter { $0.kind == kind }
         if !rows.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 sectionHeading(kind, category: category)
                 ForEach(rows) { lesson in
-                    categoryLesson(lesson)
+                    categoryLesson(lesson, identifiable: rowsAreIdentifiable)
                 }
             }
         }
@@ -462,7 +605,7 @@ struct ContentView: View {
         }
     }
 
-    private func categoryLesson(_ lesson: MainMenuLesson) -> some View {
+    private func categoryLesson(_ lesson: MainMenuLesson, identifiable: Bool) -> some View {
         let mark = lessonMark(lesson.id)
         return Button {
             startLesson(lesson.id)
@@ -496,7 +639,7 @@ struct ContentView: View {
         }
         .buttonStyle(SurfaceCardButtonStyle(minHeight: 72))
         .accessibilityLabel(Text(verbatim: lessonAccessibility(lesson, mark: mark)))
-        .accessibilityIdentifier(lesson.id.rawValue)
+        .accessibilityIdentifier(identifiable ? lesson.id.rawValue : "")
     }
 
     private func lessonMark(_ id: LessonID) -> CoursePathCopy.Mark {
@@ -526,7 +669,7 @@ struct ContentView: View {
         switch kind {
         case .learn: ApprovedCopy.learn
         case .phrases: ApprovedCopy.phrases
-        case .practice: ApprovedCopy.practice
+        case .practice: ApprovedCopy.quiz
         }
     }
 
@@ -645,6 +788,11 @@ private struct FamilyWordRowView: View {
     var row: FamilyWordList.Row
 
     @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 48
+    @ScaledMetric(relativeTo: .body) private var pronunciationSize: CGFloat = 24
+    @ScaledMetric(relativeTo: .body) private var englishSize: CGFloat = 18
+    @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = 16
+    @ScaledMetric(relativeTo: .body) private var pashtoLineSpacing: CGFloat = 8
+    @ScaledMetric(relativeTo: .body) private var pashtoPadding: CGFloat = 4
 
     var body: some View {
         ViewThatFits(in: .horizontal) {
@@ -657,24 +805,20 @@ private struct FamilyWordRowView: View {
         .accessibilityIdentifier(row.itemID.rawValue)
     }
 
+    /// Pronunciation, English, then Pashto. The picture stays beside that stack when it fits.
     private var sideBySide: some View {
-        HStack(alignment: .center, spacing: 12) {
+        HStack(alignment: .top, spacing: 12) {
             picture
             words
-            Spacer(minLength: 12)
-            pashto
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    /// Used when the side-by-side row no longer fits. Pashto keeps the full width and wraps.
+    /// Used when the side-by-side row no longer fits. Pashto keeps the full width.
     private var stacked: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .center, spacing: 12) {
-                picture
-                words
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            pashto
+            picture
+            words
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -689,36 +833,42 @@ private struct FamilyWordRowView: View {
     }
 
     private var words: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 4) {
             if let pronunciation = row.pronunciation {
                 PronunciationText(
                     stored: pronunciation,
-                    textStyle: .body,
+                    points: pronunciationSize,
                     color: Lapis.primary,
                     alignment: .leading
                 )
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
             }
-            Text(verbatim: row.english)
-                .font(.subheadline)
-                .foregroundStyle(Lapis.secondaryText)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .environment(\.layoutDirection, .leftToRight)
+            FittingWords(
+                text: row.english,
+                size: englishSize,
+                weight: .regular,
+                color: Lapis.text,
+                alignment: .leading,
+                direction: .leftToRight
+            )
+            pashto
         }
     }
 
-    /// Pashto stays right aligned. The system Arabic font is the one the quiz uses.
-    /// No line limit, so a long word wraps at the largest Dynamic Type size.
+    /// Pashto is the bottom line. Padding keeps the dots and the tail inside the row.
     private var pashto: some View {
-        Text(verbatim: row.pashto)
-            .font(.body)
-            .foregroundStyle(Lapis.secondaryText)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .environment(\.layoutDirection, .rightToLeft)
-            .accessibilityHidden(true)
+        FittingWords(
+            text: row.pashto,
+            size: pashtoSize,
+            weight: .regular,
+            color: Lapis.wordListPashto,
+            alignment: .leading,
+            direction: .rightToLeft,
+            lineSpacing: pashtoLineSpacing,
+            verticalPadding: pashtoPadding
+        )
+        .accessibilityHidden(true)
     }
 }
 
@@ -1255,6 +1405,7 @@ enum ApprovedCopy {
     static var learn: String { String(localized: "module.section.learn") }
     static var phrases: String { String(localized: "module.section.phrases") }
     static var practice: String { String(localized: "module.section.practice") }
+    static var quiz: String { String(localized: "module.section.quiz") }
 }
 
 /// Screenshot harness only. The home shows this card once a word has been learned.
@@ -1297,6 +1448,7 @@ struct CategoryCelebrationScreen: View {
     @State private var ringShown: Double
     /// Plays only from the speaker button. Nothing starts when the screen appears.
     @State private var clipPlayer = GreetingsClipPlayer()
+    @AppStorage(ProfileSettingsStore.audioSpeedKey) private var audioSpeedRaw = AudioSpeed.normal.rawValue
 
     @ScaledMetric(relativeTo: .title3) private var cardLabelSize: CGFloat = 20
     @ScaledMetric(relativeTo: .body) private var unitLabelSize: CGFloat = 18
@@ -1509,7 +1661,7 @@ struct CategoryCelebrationScreen: View {
     /// Outline speaker. The label is spoken. The icon has no other text.
     private func playButton(_ url: URL) -> some View {
         Button {
-            clipPlayer.play(url)
+            clipPlayer.play(url, rate: GreetingsPlaybackRate.rate(for: audioSpeedRaw))
         } label: {
             Image(systemName: "speaker.wave.2")
                 .font(.body.weight(.semibold))
@@ -1658,4 +1810,185 @@ private enum CelebrationPalette {
 
 #Preview {
     ContentView()
+}
+
+enum AppTab: Hashable {
+    case home
+    case learn
+    case speak
+    case practice
+    case profile
+}
+
+/// Honest empty state. One decorative icon, the title, and the line. No buttons.
+struct SpeakComingSoon: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "bubble.left.and.bubble.right")
+                .font(.largeTitle)
+                .foregroundStyle(Lapis.secondaryText)
+                .accessibilityHidden(true)
+            Text(verbatim: TabCopy.speak)
+                .font(.title2.weight(.bold))
+                .foregroundStyle(Lapis.primary)
+                .accessibilityAddTraits(.isHeader)
+            Text(verbatim: SpeakCopy.comingSoon)
+                .font(.title3)
+                .foregroundStyle(Lapis.secondaryText)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Lapis.background.ignoresSafeArea())
+        .accessibilityIdentifier("speak-coming-soon")
+    }
+}
+
+/// Appearance, audio speed, text size, dialect, and reset.
+///
+/// Choices are `@AppStorage`. Reset asks first and does not change those choices.
+struct ProfileSettingsScreen: View {
+    var onReset: () async -> Void
+
+    @AppStorage(ProfileSettingsStore.appearanceKey) private var appearanceRaw = AppearanceChoice.system.rawValue
+    @AppStorage(ProfileSettingsStore.audioSpeedKey) private var audioSpeedRaw = AudioSpeed.normal.rawValue
+    @AppStorage(ProfileSettingsStore.textSizeOffsetKey) private var textSizeOffset = 0
+    @State private var confirmingReset = false
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 28) {
+                Text(verbatim: TabCopy.profile)
+                    .font(.title2.weight(.bold))
+                    .foregroundStyle(Lapis.primary)
+                    .accessibilityAddTraits(.isHeader)
+                choiceSection(ProfileCopy.appearance, options: [
+                    (AppearanceChoice.system.rawValue, ProfileCopy.system),
+                    (AppearanceChoice.light.rawValue, ProfileCopy.light),
+                    (AppearanceChoice.dark.rawValue, ProfileCopy.dark),
+                ], selection: $appearanceRaw)
+                VStack(alignment: .leading, spacing: 8) {
+                    choiceSection(ProfileCopy.audioSpeed, options: [
+                        (AudioSpeed.slower.rawValue, ProfileCopy.slower),
+                        (AudioSpeed.normal.rawValue, ProfileCopy.normal),
+                        (AudioSpeed.faster.rawValue, ProfileCopy.faster),
+                    ], selection: $audioSpeedRaw)
+                    Text(verbatim: ProfileCopy.audioNote)
+                        .font(.footnote)
+                        .foregroundStyle(Lapis.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                VStack(alignment: .leading, spacing: 8) {
+                    choiceSection(ProfileCopy.textSize, options: [
+                        (TextSizeOffset.minimum, ProfileCopy.smaller),
+                        (0, ProfileCopy.standard),
+                        (TextSizeOffset.maximum, ProfileCopy.larger),
+                    ], selection: $textSizeOffset)
+                    Text(verbatim: ProfileCopy.textSizeNote)
+                        .font(.footnote)
+                        .foregroundStyle(Lapis.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(verbatim: ProfileCopy.dialect)
+                        .font(.headline)
+                        .foregroundStyle(Lapis.text)
+                        .accessibilityAddTraits(.isHeader)
+                    Text(verbatim: ProfileCopy.kabul)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(Lapis.text)
+                    Text(verbatim: ProfileCopy.moreDialects)
+                        .font(.footnote)
+                        .foregroundStyle(Lapis.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    Button {
+                        confirmingReset = true
+                    } label: {
+                        Text(verbatim: ProgressResetCopy.button)
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(Lapis.destructive)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("reset-progress")
+                    .accessibilityLabel(Text(verbatim: ProgressResetCopy.button))
+                    .accessibilityHint(Text(verbatim: ProgressResetCopy.helper))
+                    Text(verbatim: ProgressResetCopy.helper)
+                        .font(.footnote)
+                        .foregroundStyle(Lapis.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .background(Lapis.background.ignoresSafeArea())
+        .accessibilityIdentifier("profile")
+        .alert(ProgressResetCopy.title, isPresented: $confirmingReset) {
+            Button(ProgressResetCopy.confirm, role: .destructive) {
+                Task { await onReset() }
+            }
+            .accessibilityLabel(Text(verbatim: ProgressResetCopy.confirm))
+            Button(ProgressResetCopy.cancel, role: .cancel) {}
+            .accessibilityLabel(Text(verbatim: ProgressResetCopy.cancel))
+        } message: {
+            Text(verbatim: ProgressResetCopy.message)
+        }
+    }
+
+    private func choiceSection(_ title: String, options: [(String, String)], selection: Binding<String>) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(verbatim: title)
+                .font(.headline)
+                .foregroundStyle(Lapis.text)
+                .accessibilityAddTraits(.isHeader)
+            ForEach(options, id: \.0) { option in
+                choiceButton(option.1, selected: selection.wrappedValue == option.0) {
+                    selection.wrappedValue = option.0
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private func choiceSection(_ title: String, options: [(Int, String)], selection: Binding<Int>) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(verbatim: title)
+                .font(.headline)
+                .foregroundStyle(Lapis.text)
+                .accessibilityAddTraits(.isHeader)
+            ForEach(options, id: \.0) { option in
+                choiceButton(option.1, selected: selection.wrappedValue == option.0) {
+                    selection.wrappedValue = option.0
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private func choiceButton(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Text(verbatim: title)
+                    .font(.body)
+                    .foregroundStyle(Lapis.text)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if selected {
+                    Image(systemName: "checkmark")
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(Lapis.primary)
+                        .accessibilityHidden(true)
+                }
+            }
+            .frame(minHeight: 44)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text(verbatim: title))
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
 }

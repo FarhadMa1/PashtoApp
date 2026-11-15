@@ -661,6 +661,35 @@ final class AppModel {
         }
     }
 
+    /// Clears cards, lessons, the streak, and placement. Settings and contentVersion stay.
+    ///
+    /// Profile appearance, audio speed, and text size are not in this store.
+    func resetProgress() async {
+        guard phase == .ready, let store = progressStore else { return }
+        openLesson.endLesson()
+        openLesson.discardPendingSaves()
+        await openLesson.waitUntilSavesFinish()
+        do {
+            try await store.resetAll()
+            let loaded = try await store.load()
+            snapshot = loaded
+            if let url = storeURL {
+                CategoryCelebrationStore.reset(beside: url)
+            }
+            celebratedUnitIDs = []
+            learnList = nil
+            replaceStudy(nil)
+            startedReview = nil
+            pendingHomeMotion = nil
+            homeMotion = HomeMotionCue()
+            pendingStreakEvents = []
+            streakMotion = StreakMotionCue()
+            phase = .ready
+        } catch {
+            return
+        }
+    }
+
     /// Leaving the quiz before the end. Answers already saved stay saved.
     func endLesson() {
         openLesson.endLesson()
