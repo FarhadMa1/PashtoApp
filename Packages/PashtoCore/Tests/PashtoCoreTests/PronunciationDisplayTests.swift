@@ -351,12 +351,66 @@ struct PronunciationDisplayTests {
 
         let screen = try source("PashtoApp/Quiz/StudyCardScreen.swift")
         #expect(screen.contains("if let note = card.pronunciationNote"))
-        #expect(screen.contains("PronunciationNotes.lines(in: note)"))
+        #expect(screen.contains("PronunciationNotes.tips(in: note)"))
         #expect(screen.contains("PronunciationNotes.displayLine"))
         #expect(screen.contains("PronunciationNotes.spoken(note)"))
         #expect(screen.contains(".accessibilityElement(children: .combine)"))
         #expect(screen.contains(".environment(\\.layoutDirection, .leftToRight)"))
         #expect(!screen.contains("Text(verbatim: note)"))
+    }
+
+    @Test func pronunciationNoteSplitsLetterTipsFromPlainText() throws {
+        let bundle = try loadCourse().bundle
+        let three = "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r."
+        let tips = PronunciationNotes.tips(in: three)
+        #expect(tips.map(\.letter) == ["څ:", "غ:", "ړ:"])
+        #expect(tips.map(\.text) == [
+            "ts as in cats.",
+            "gh, a voiced kh, close to French r.",
+            "tongue tip curled back and flicked forward, like a quick r.",
+        ])
+        #expect(tips.map(\.stored).joined(separator: " ") == three)
+
+        let one = "څ: ts as in cats."
+        let oneTip = try #require(PronunciationNotes.tips(in: one).first)
+        #expect(PronunciationNotes.tips(in: one).count == 1)
+        #expect(oneTip.letter == "څ:")
+        #expect(oneTip.text == "ts as in cats.")
+        #expect(oneTip.stored == one)
+
+        let plain = "The t is soft and dental: the tongue touches the back of the upper front teeth. It is not the English th. Short, weak vowel, like the a in about."
+        #expect(PronunciationNotes.tips(in: plain) == [PronunciationTip(letter: nil, text: plain)])
+        let ayn = "ع is not pronounced as a separate sound in Pashto."
+        #expect(PronunciationNotes.tips(in: ayn) == [PronunciationTip(letter: nil, text: ayn)])
+
+        let storedThree = try #require(bundle.items.first { $0.id.rawValue == "e-tsa-ghwaa-rey" }?.pronunciationNote)
+        #expect(PronunciationNotes.tips(in: storedThree) == tips)
+        let storedPlain = try #require(bundle.items.first { $0.id.rawValue == "e-ta" }?.pronunciationNote)
+        #expect(storedPlain == plain)
+        #expect(PronunciationNotes.tips(in: storedPlain).allSatisfy { $0.letter == nil })
+
+        var plainNotes = 0
+        var letters = Set<Character>()
+        for item in bundle.items {
+            guard let note = item.pronunciationNote else { continue }
+            let drawn = PronunciationNotes.tips(in: note)
+            #expect(!drawn.isEmpty, "\(item.id.rawValue)")
+            #expect(drawn.map(\.stored).joined(separator: " ") == note, "\(item.id.rawValue)")
+            if drawn.allSatisfy({ $0.letter == nil }) {
+                plainNotes += 1
+            }
+            for tip in drawn {
+                guard let letter = tip.letter else { continue }
+                #expect(letter.hasSuffix(":"), "\(item.id.rawValue)")
+                let mark = letter.dropLast()
+                #expect(mark.count == 1, "\(item.id.rawValue) \(letter)")
+                if let character = mark.first {
+                    letters.insert(character)
+                }
+            }
+        }
+        #expect(plainNotes == 10)
+        #expect(letters.count == 11)
     }
 
     @Test func quizCelebrationListsAndTheDailyWordKeepTheStoredPronunciation() throws {
