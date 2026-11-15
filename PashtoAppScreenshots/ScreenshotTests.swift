@@ -5,6 +5,7 @@ import XCTest
 /// celebration, and the word of the day. Light also opens the Greetings list
 /// with Bold Text. XL is two tests, lists and then the quiz, so each stays
 /// under the runner's per-test limit. The Time days list is part of XL lists.
+/// The quiz test also opens the longest unit 4–8 pronunciation note.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -37,7 +38,8 @@ final class ScreenshotTests: XCTestCase {
         captureTimeDays(app, basics: basics)
     }
 
-    /// Family, the learn card, the quiz, the celebration, and the word of the day.
+    /// Family, the learn card, the quiz, the celebration, the word of the day,
+    /// and the longest unit 4–8 pronunciation note.
     func testXLQuiz() {
         executionTimeAllowance = 400
         let app = XCUIApplication()
@@ -45,6 +47,7 @@ final class ScreenshotTests: XCTestCase {
         captureFamilyLearnAndQuiz(app, variant: "xl")
         captureCelebration(app, variant: "xl")
         captureDailyWord(app, variant: "xl")
+        captureLongNote(app)
     }
 
     private func capture(variant: String) {
@@ -219,6 +222,143 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(dailyPronunciation.waitForExistence(timeout: 5), "word of the day has no pronunciation")
         settle(0.6)
         shot("word-of-the-day-\(variant)")
+    }
+
+    /// The longest unit 4–8 note, on the first Food phrases card.
+    ///
+    /// Phrases hide the meaning until Show meaning, and the note is drawn
+    /// under it. Three sound tips at the largest text size can be taller
+    /// than the card, so the end is a second image only when the first
+    /// does not hold the whole note.
+    private func captureLongNote(_ app: XCUIApplication) {
+        app.terminate()
+        app.launchArguments = launchArguments(for: "xl")
+        app.launch()
+        let basics = app.descendants(matching: .any)["u-basics"]
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not load for the long note. buttons: \(buttonDump(app))"
+        )
+        openInList("u-food", in: app)
+        openInList("l-food-phrases-want", in: app)
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 15),
+            "Food phrases card did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(
+            storedPronunciation("tsa ghwaa-REY?", in: app).waitForExistence(timeout: 5),
+            "Food phrases card has no pronunciation"
+        )
+        let showMeaning = app.buttons["Show meaning"]
+        XCTAssertTrue(showMeaning.waitForExistence(timeout: 5), "Food phrases card has no Show meaning")
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "card has no list. buttons: \(buttonDump(app))")
+        revealInScroll(showMeaning, scroll: scroll, in: app)
+        showMeaning.tap()
+        let note = app.staticTexts.matching(
+            NSPredicate(
+                format: "label CONTAINS %@ AND label CONTAINS %@ AND label CONTAINS %@",
+                "ts as in cats",
+                "voiced kh",
+                "quick r"
+            )
+        ).firstMatch
+        XCTAssertTrue(note.waitForExistence(timeout: 8), "pronunciation note did not appear. buttons: \(buttonDump(app))")
+        scrollNote(note, in: scroll, showingBottom: false)
+        XCTAssertTrue(
+            noteIsFullyVisible(note, in: scroll) || noteTopIsVisible(note, in: scroll),
+            "start of the note is off the card. frame \(note.frame) scroll \(scroll.frame)"
+        )
+        settle(0.8)
+        shot("notes-learn-xl")
+        if !noteIsFullyVisible(note, in: scroll) {
+            scrollNote(note, in: scroll, showingBottom: true)
+            XCTAssertTrue(
+                noteBottomIsVisible(note, in: scroll),
+                "end of the note is off the card. frame \(note.frame) scroll \(scroll.frame)"
+            )
+            settle(0.6)
+            shot("notes-learn-xl-2")
+        }
+    }
+
+    /// Scrolls inside the list, then taps. A drag on the window misses the
+    /// list when the header is tall, which is the XL home and the XL unit page.
+    private func openInList(_ identifier: String, in app: XCUIApplication) {
+        let element = app.descendants(matching: .any)[identifier]
+        XCTAssertTrue(element.waitForExistence(timeout: 15), "missing \(identifier). buttons: \(buttonDump(app))")
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "list is missing. buttons: \(buttonDump(app))")
+        for _ in 0..<28 {
+            if element.isHittable { break }
+            let frame = element.frame
+            nudgeScroll(scroll, revealingLower: frame == .zero || frame.midY >= scroll.frame.midY)
+        }
+        XCTAssertTrue(
+            element.isHittable,
+            "\(identifier) is off screen. frame \(element.frame) scroll \(scroll.frame). buttons: \(buttonDump(app))"
+        )
+        element.tap()
+    }
+
+    private func revealInScroll(_ element: XCUIElement, scroll: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<16 {
+            if element.isHittable { return }
+            let frame = element.frame
+            nudgeScroll(scroll, revealingLower: frame == .zero || frame.midY >= scroll.frame.midY)
+        }
+        XCTAssertTrue(element.isHittable, "control is off the card. buttons: \(buttonDump(app))")
+    }
+
+    /// Brings the start of the note onto the card, or the end when
+    /// `showingBottom` is true. Stops if the list will not move.
+    private func scrollNote(_ note: XCUIElement, in scroll: XCUIElement, showingBottom: Bool) {
+        var lastMaxY = note.frame.maxY
+        var stuck = 0
+        for _ in 0..<16 {
+            if showingBottom {
+                if noteBottomIsVisible(note, in: scroll) { return }
+            } else if noteIsFullyVisible(note, in: scroll) || noteTopIsVisible(note, in: scroll) {
+                return
+            }
+            let frame = note.frame
+            let lower: Bool
+            if showingBottom {
+                lower = frame == .zero || frame.maxY > scroll.frame.maxY
+            } else {
+                lower = frame == .zero || frame.midY >= scroll.frame.midY
+            }
+            nudgeScroll(scroll, revealingLower: lower)
+            let next = note.frame.maxY
+            if abs(next - lastMaxY) < 1 {
+                stuck += 1
+                if stuck >= 2 { return }
+            } else {
+                stuck = 0
+            }
+            lastMaxY = next
+        }
+    }
+
+    private func noteTopIsVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
+        let frame = note.frame
+        let window = scroll.frame
+        return frame.width > 1 && frame.height > 1 && frame.minY >= window.minY - 8 && frame.minY < window.midY
+    }
+
+    private func noteBottomIsVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
+        let frame = note.frame
+        let window = scroll.frame
+        return frame.width > 1 && frame.height > 1 && frame.maxY <= window.maxY + 8 && frame.maxY > window.minY
+    }
+
+    private func noteIsFullyVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
+        let frame = note.frame
+        guard frame.width > 1, frame.height > 1 else { return false }
+        return scroll.frame.insetBy(dx: 0, dy: 8).contains(frame)
     }
 
     private func captureTimeDays(_ app: XCUIApplication, basics: XCUIElement) {
