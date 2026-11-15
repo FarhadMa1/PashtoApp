@@ -227,9 +227,10 @@ final class ScreenshotTests: XCTestCase {
     /// The longest unit 4–8 note, on the first Food phrases card.
     ///
     /// Phrases hide the meaning until Show meaning, and the note is drawn
-    /// under it. Three sound tips at the largest text size can be taller
-    /// than the card, so the end is a second image only when the first
-    /// does not hold the whole note.
+    /// under it. The first shot starts with the Pashto phrase whole, below
+    /// the header. The second starts on a whole note line that was also
+    /// fully visible at the bottom of the first, so the two shots overlap
+    /// on that line instead of cutting it.
     private func captureLongNote(_ app: XCUIApplication) {
         app.terminate()
         app.launchArguments = launchArguments(for: "xl")
@@ -258,31 +259,146 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(scroll.waitForExistence(timeout: 5), "card has no list. buttons: \(buttonDump(app))")
         revealInScroll(showMeaning, scroll: scroll, in: app)
         showMeaning.tap()
-        let note = app.staticTexts.matching(
-            NSPredicate(
-                format: "label CONTAINS %@ AND label CONTAINS %@ AND label CONTAINS %@",
-                "ts as in cats",
-                "voiced kh",
-                "quick r"
-            )
-        ).firstMatch
-        XCTAssertTrue(note.waitForExistence(timeout: 8), "pronunciation note did not appear. buttons: \(buttonDump(app))")
-        scrollNote(note, in: scroll, showingBottom: false)
+        let phrase = app.staticTexts["څه غواړې؟"]
+        XCTAssertTrue(phrase.waitForExistence(timeout: 8), "Pashto phrase did not appear. buttons: \(buttonDump(app))")
+        let firstLine = app.descendants(matching: .any)["pronunciation-note-0"]
+        XCTAssertTrue(firstLine.waitForExistence(timeout: 8), "pronunciation note did not appear. buttons: \(buttonDump(app))")
+        settle(0.4)
+        alignTop(phrase, in: scroll, padding: 2)
+        let pronunciation = storedPronunciation("tsa ghwaa-REY?", in: app)
+        hideBottomSliver(pronunciationNoteLines(in: app), in: scroll, keeping: phrase, pronunciation: pronunciation)
         XCTAssertTrue(
-            noteIsFullyVisible(note, in: scroll) || noteTopIsVisible(note, in: scroll),
-            "start of the note is off the card. frame \(note.frame) scroll \(scroll.frame)"
+            elementIsFullyVisible(phrase, in: scroll),
+            "Pashto phrase is clipped. frame \(phrase.frame) scroll \(scroll.frame)"
+        )
+        if pronunciation.exists, pronunciation.frame.height > 1 {
+            XCTAssertLessThanOrEqual(
+                pronunciation.frame.maxY,
+                scroll.frame.minY + 2,
+                "pronunciation covers the phrase. phrase \(phrase.frame) pronunciation \(pronunciation.frame) scroll \(scroll.frame)"
+            )
+        }
+        let lines = pronunciationNoteLines(in: app)
+        XCTAssertFalse(lines.isEmpty, "pronunciation note lines are missing")
+        XCTAssertTrue(
+            lines[0].label.contains("ts as in cats"),
+            "first tip is not the ts note: \(lines[0].label)"
+        )
+        guard let overlap = lines.last(where: { elementIsFullyVisible($0, in: scroll) }) else {
+            XCTFail("no whole note line in the first shot. frames \(lines.map { "\($0.label) \($0.frame)" }) scroll \(scroll.frame)")
+            return
+        }
+        XCTAssertGreaterThan(
+            overlap.frame.maxY,
+            scroll.frame.midY,
+            "note line is not in the lower part of the first shot. frame \(overlap.frame) label \(overlap.label) scroll \(scroll.frame)"
         )
         settle(0.8)
         shot("notes-learn-xl")
-        if !noteIsFullyVisible(note, in: scroll) {
-            scrollNote(note, in: scroll, showingBottom: true)
-            XCTAssertTrue(
-                noteBottomIsVisible(note, in: scroll),
-                "end of the note is off the card. frame \(note.frame) scroll \(scroll.frame)"
-            )
-            settle(0.6)
-            shot("notes-learn-xl-2")
+
+        alignTop(overlap, in: scroll, padding: 6)
+        XCTAssertTrue(
+            elementIsFullyVisible(overlap, in: scroll),
+            "shared line is clipped in the second shot. frame \(overlap.frame) label \(overlap.label) scroll \(scroll.frame)"
+        )
+        XCTAssertLessThan(
+            overlap.frame.minY,
+            scroll.frame.minY + 28,
+            "second shot does not start on the shared line. frame \(overlap.frame) label \(overlap.label) scroll \(scroll.frame)"
+        )
+        settle(0.6)
+        shot("notes-learn-xl-2")
+    }
+
+    /// Note lines in order. Each tip is its own element.
+    private func pronunciationNoteLines(in app: XCUIApplication) -> [XCUIElement] {
+        (0..<4).compactMap { index in
+            let line = app.descendants(matching: .any)["pronunciation-note-\(index)"]
+            return line.exists ? line : nil
         }
+    }
+
+    /// Puts `element`'s top edge just inside the scroll view. A missing frame
+    /// is treated as below the fold, then corrected on the next pass.
+    private func alignTop(_ element: XCUIElement, in scroll: XCUIElement, padding: CGFloat) {
+        for _ in 0..<12 {
+            let frame = element.frame
+            let window = scroll.frame
+            if frame.width < 1 || frame.height < 1 {
+                dragScroll(scroll, by: window.height * 0.3)
+                continue
+            }
+            let delta = frame.minY - (window.minY + padding)
+            let fully = frame.minY >= window.minY - 1 && frame.maxY <= window.maxY + 1
+            if fully, abs(delta) <= 4 {
+                return
+            }
+            if frame.height > window.height - padding * 2, frame.minY >= window.minY - 1, abs(delta) <= 4 {
+                return
+            }
+            let scaled = abs(delta) > 40 ? delta * 0.65 : delta
+            dragScroll(scroll, by: scaled)
+        }
+    }
+
+    /// Moves a thin clipped strip at the bottom off the card when that still
+    /// leaves the phrase fully visible and the pronunciation above the card.
+    private func hideBottomSliver(
+        _ lines: [XCUIElement],
+        in scroll: XCUIElement,
+        keeping phrase: XCUIElement,
+        pronunciation: XCUIElement
+    ) {
+        guard lines.contains(where: { elementIsFullyVisible($0, in: scroll) }) else { return }
+        guard let partial = lines.first(where: { isPartlyVisible($0, in: scroll) && !elementIsFullyVisible($0, in: scroll) }) else {
+            return
+        }
+        let window = scroll.frame
+        let visible = window.maxY - partial.frame.minY
+        guard visible > 0, visible < 16 else { return }
+        var room = phrase.frame.minY - window.minY
+        if pronunciation.exists, pronunciation.frame.height > 1 {
+            room = min(room, max(0, window.minY - pronunciation.frame.maxY))
+        }
+        let move = min(visible + 3, room)
+        guard move > 2 else { return }
+        dragScroll(scroll, by: -move)
+    }
+
+    /// `deltaY` above zero moves the finger up, so content below comes into view.
+    private func dragScroll(_ scroll: XCUIElement, by deltaY: CGFloat) {
+        let height = max(scroll.frame.height, 1)
+        let travel = min(abs(deltaY), height * 0.5)
+        guard travel >= 1.5 else { return }
+        let fraction = min(travel / height, 0.7)
+        let margin: CGFloat = 0.15
+        let used = min(fraction, 1 - 2 * margin)
+        let startY: CGFloat
+        let endY: CGFloat
+        if deltaY > 0 {
+            startY = margin + used
+            endY = margin
+        } else {
+            startY = margin
+            endY = margin + used
+        }
+        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+        start.press(forDuration: 0.35, thenDragTo: end)
+    }
+
+    private func elementIsFullyVisible(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
+        let frame = element.frame
+        let window = scroll.frame
+        guard frame.width > 1, frame.height > 1 else { return false }
+        return frame.minY >= window.minY - 1 && frame.maxY <= window.maxY + 1
+    }
+
+    private func isPartlyVisible(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
+        let frame = element.frame
+        let window = scroll.frame
+        guard frame.width > 1, frame.height > 1 else { return false }
+        return frame.maxY > window.minY && frame.minY < window.maxY
     }
 
     /// Scrolls inside the list, then taps. A drag on the window misses the
@@ -311,46 +427,6 @@ final class ScreenshotTests: XCTestCase {
             nudgeScroll(scroll, revealingLower: frame == .zero || frame.midY >= scroll.frame.midY)
         }
         XCTAssertTrue(element.isHittable, "control is off the card. buttons: \(buttonDump(app))")
-    }
-
-    /// Brings the start of the note onto the card, or the end when
-    /// `showingBottom` is true. A short drag, and it stops as soon as the
-    /// top is on the card, so the next drag does not carry the note past it.
-    private func scrollNote(_ note: XCUIElement, in scroll: XCUIElement, showingBottom: Bool) {
-        for _ in 0..<16 {
-            if showingBottom {
-                if noteBottomIsVisible(note, in: scroll) { return }
-            } else if noteIsFullyVisible(note, in: scroll) || noteTopIsVisible(note, in: scroll) {
-                return
-            }
-            let frame = note.frame
-            let window = scroll.frame
-            let lower: Bool
-            if showingBottom {
-                lower = frame == .zero || frame.maxY > window.maxY
-            } else {
-                lower = frame == .zero || frame.minY > window.maxY - 16
-            }
-            nudgeScroll(scroll, revealingLower: lower, portion: 0.12)
-        }
-    }
-
-    private func noteTopIsVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
-        let frame = note.frame
-        let window = scroll.frame
-        return frame.width > 1 && frame.height > 1 && frame.minY >= window.minY - 8 && frame.minY <= window.maxY - 16
-    }
-
-    private func noteBottomIsVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
-        let frame = note.frame
-        let window = scroll.frame
-        return frame.width > 1 && frame.height > 1 && frame.maxY <= window.maxY + 8 && frame.maxY > window.minY
-    }
-
-    private func noteIsFullyVisible(_ note: XCUIElement, in scroll: XCUIElement) -> Bool {
-        let frame = note.frame
-        guard frame.width > 1, frame.height > 1 else { return false }
-        return scroll.frame.insetBy(dx: 0, dy: 8).contains(frame)
     }
 
     private func captureTimeDays(_ app: XCUIApplication, basics: XCUIElement) {

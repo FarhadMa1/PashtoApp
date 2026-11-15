@@ -299,17 +299,40 @@ struct StudyCardLines: View {
                         .accessibilitySortPriority(25)
                 }
                 if let note = card.pronunciationNote {
-                    Text(verbatim: note)
-                        .font(.subheadline)
-                        .foregroundStyle(Lapis.secondaryText)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity)
-                        .environment(\.layoutDirection, .leftToRight)
+                    PronunciationNoteText(note: note)
                         .accessibilitySortPriority(22)
                 }
             }
         }
+    }
+}
+
+/// One pronunciation tip per line. The stored note is unchanged.
+///
+/// A line that starts with a Pashto letter would otherwise become a
+/// right-to-left paragraph. Each line is an LTR isolate, and the card
+/// direction is left to right. VoiceOver reads the line without those marks.
+/// A little horizontal room keeps the Pashto glyph, and its dots, inside the line.
+struct PronunciationNoteText: View {
+    var note: String
+
+    var body: some View {
+        VStack(alignment: .center, spacing: 4) {
+            ForEach(Array(PronunciationNotes.lines(in: note).enumerated()), id: \.offset) { index, line in
+                Text(verbatim: PronunciationNotes.displayLine(line))
+                    .font(.subheadline)
+                    .foregroundStyle(Lapis.secondaryText)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 2)
+                    .frame(maxWidth: .infinity)
+                    .environment(\.layoutDirection, .leftToRight)
+                    .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(line)))
+                    .accessibilityIdentifier("pronunciation-note-\(index)")
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .environment(\.layoutDirection, .leftToRight)
     }
 }
 
