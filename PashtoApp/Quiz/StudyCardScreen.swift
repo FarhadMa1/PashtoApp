@@ -140,7 +140,8 @@ struct StudyCardScreen: View {
         .background(StudyPalette.header)
     }
 
-    /// 30 pt bar and a 4 pt progress line. The title and Skip are not in this bar
+    /// Compact bar and a 4 pt progress line. The back control keeps its glyph
+    /// size and uses a 44 pt hit area. The title and Skip are not in this bar
     /// until the large title has scrolled away. The bar does not grow with text size.
     private var slimHeader: some View {
         VStack(spacing: 0) {
@@ -157,7 +158,6 @@ struct StudyCardScreen: View {
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, 16)
-            .frame(height: 30)
             slimProgress
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -178,6 +178,8 @@ struct StudyCardScreen: View {
             .foregroundStyle(StudyPalette.pronunciation)
         }
         .buttonStyle(.plain)
+        .frame(minWidth: 44, minHeight: 44)
+        .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text("Pashto"))
         .accessibilityAddTraits(.isButton)
