@@ -85,7 +85,10 @@ final class ScreenshotTests: XCTestCase {
         )
         XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Greetings list has no Play button")
         XCTAssertTrue(app.staticTexts["kha"].waitForExistence(timeout: 5), "Greetings list has no pronunciation")
-        XCTAssertTrue(app.staticTexts["ma-NA-na"].waitForExistence(timeout: 5), "Greetings list has no stressed pronunciation")
+        XCTAssertTrue(
+            storedPronunciation("ma-NA-na", in: app).waitForExistence(timeout: 5),
+            "Greetings list has no stressed pronunciation"
+        )
         XCTAssertTrue(app.staticTexts["0 of 4 words"].waitForExistence(timeout: 5))
         revealLabel("ma-NA-na", in: app)
         settle(1.0)
@@ -100,7 +103,10 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Travel learn list did not open. buttons: \(buttonDump(app))"
         )
-        XCTAssertTrue(app.staticTexts["ho-TAL"].waitForExistence(timeout: 5), "Travel list has no stressed pronunciation")
+        XCTAssertTrue(
+            storedPronunciation("ho-TAL", in: app).waitForExistence(timeout: 5),
+            "Travel list has no stressed pronunciation"
+        )
         revealLabel("ho-TAL", in: app)
         settle(1.0)
         shot("learn-list-travel-\(variant)")
@@ -126,7 +132,10 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
             "Learn card did not open. buttons: \(buttonDump(app))"
         )
-        XCTAssertTrue(app.staticTexts["mor"].waitForExistence(timeout: 5), "Learn card has no pronunciation")
+        XCTAssertTrue(
+            storedPronunciation("mor", in: app).waitForExistence(timeout: 5),
+            "Learn card has no pronunciation"
+        )
         settle(1.0)
         shot("learn-\(variant)")
 
@@ -149,7 +158,7 @@ final class ScreenshotTests: XCTestCase {
         app.terminate()
         app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotCelebration"]
         app.launch()
-        let praise = app.staticTexts["DE-ra kha"]
+        let praise = storedPronunciation("DE-ra kha", in: app)
         XCTAssertTrue(
             praise.waitForExistence(timeout: 20),
             "celebration did not appear. buttons: \(buttonDump(app))"
@@ -165,7 +174,7 @@ final class ScreenshotTests: XCTestCase {
             app.staticTexts["Word of the day"].waitForExistence(timeout: 20),
             "word of the day did not appear. buttons: \(buttonDump(app))"
         )
-        let dailyPronunciation = app.staticTexts.matching(
+        let dailyPronunciation = app.descendants(matching: .any).matching(
             NSPredicate(format: "label CONTAINS %@", "ma-NA-na")
         ).firstMatch
         XCTAssertTrue(dailyPronunciation.waitForExistence(timeout: 5), "word of the day has no pronunciation")
@@ -190,7 +199,7 @@ final class ScreenshotTests: XCTestCase {
                 "Time days list did not open. buttons: \(buttonDump(app))"
             )
             XCTAssertTrue(
-                app.staticTexts["cha-haar-shan-BA"].waitForExistence(timeout: 5),
+                storedPronunciation("cha-haar-shan-BA", in: app).waitForExistence(timeout: 5),
                 "Time days list has no long pronunciation"
             )
             revealLabel("cha-haar-shan-BA", in: app)
@@ -215,7 +224,10 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Bold Text learn list did not open. buttons: \(buttonDump(app))"
         )
-        XCTAssertTrue(app.staticTexts["ma-NA-na"].waitForExistence(timeout: 5), "Bold Text list has no stressed pronunciation")
+        XCTAssertTrue(
+            storedPronunciation("ma-NA-na", in: app).waitForExistence(timeout: 5),
+            "Bold Text list has no stressed pronunciation"
+        )
         revealLabel("ma-NA-na", in: app)
         settle(1.0)
         shot("learn-list-bold-light")
@@ -308,6 +320,15 @@ final class ScreenshotTests: XCTestCase {
         )
     }
 
+    /// The stored pronunciation. Syllables are drawn separately in lowercase,
+    /// so they are not one static text. VoiceOver's label is the stored field,
+    /// on whatever element type SwiftUI gives that line.
+    private func storedPronunciation(_ stored: String, in app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any).matching(
+            NSPredicate(format: "label == %@", stored)
+        ).firstMatch
+    }
+
     private func tap(_ identifier: String, in app: XCUIApplication) {
         let element = app.descendants(matching: .any)[identifier]
         reveal(element, in: app)
@@ -317,7 +338,7 @@ final class ScreenshotTests: XCTestCase {
     /// Scrolls a pronunciation label into the window. The label is the stored
     /// field, including capitals, because that is what VoiceOver reads.
     private func revealLabel(_ label: String, in app: XCUIApplication) {
-        let element = app.staticTexts[label]
+        let element = storedPronunciation(label, in: app)
         XCTAssertTrue(element.waitForExistence(timeout: 5), "missing \(label)")
         let scroll = app.scrollViews.firstMatch
         for _ in 0..<8 {
