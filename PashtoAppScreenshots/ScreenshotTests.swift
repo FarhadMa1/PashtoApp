@@ -228,9 +228,9 @@ final class ScreenshotTests: XCTestCase {
     ///
     /// Phrases hide the meaning until Show meaning, and the note is drawn
     /// under it. The first shot starts with the Pashto phrase whole, below
-    /// the header. The second starts on a whole note line that was also
-    /// fully visible at the bottom of the first, so the two shots overlap
-    /// on that line instead of cutting it.
+    /// the header. The pronunciation may still be just above that phrase.
+    /// The second shot starts at the top of the note, which is the first tip
+    /// and was also fully on screen at the bottom of the first shot.
     private func captureLongNote(_ app: XCUIApplication) {
         app.terminate()
         app.launchArguments = launchArguments(for: "xl")
@@ -261,130 +261,120 @@ final class ScreenshotTests: XCTestCase {
         showMeaning.tap()
         let phrase = app.staticTexts["څه غواړې؟"]
         XCTAssertTrue(phrase.waitForExistence(timeout: 8), "Pashto phrase did not appear. buttons: \(buttonDump(app))")
-        let firstLine = app.descendants(matching: .any)["pronunciation-note-0"]
-        XCTAssertTrue(firstLine.waitForExistence(timeout: 8), "pronunciation note did not appear. buttons: \(buttonDump(app))")
+        let note = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label CONTAINS %@ AND label CONTAINS %@", "ts as in cats", "quick r")
+        ).firstMatch
+        XCTAssertTrue(note.waitForExistence(timeout: 8), "pronunciation note did not appear. buttons: \(buttonDump(app))")
+        let spoken = note.label
+        XCTAssertFalse(
+            spoken.contains("\u{2066}") || spoken.contains("\u{2069}") || spoken.contains("\u{200E}"),
+            "VoiceOver reads the direction marks: \(spoken)"
+        )
+        let cats = spoken.range(of: "ts as in cats")
+        let french = spoken.range(of: "close to French r")
+        let flick = spoken.range(of: "quick r")
+        XCTAssertNotNil(cats)
+        XCTAssertNotNil(french)
+        XCTAssertNotNil(flick)
+        if let cats, let french, let flick {
+            XCTAssertLessThan(cats.lowerBound, french.lowerBound)
+            XCTAssertLessThan(french.lowerBound, flick.lowerBound)
+        }
         settle(0.4)
-        alignTop(phrase, in: scroll, padding: 2)
+        bringPhraseAndNote(phrase, note: note, in: scroll)
         let pronunciation = storedPronunciation("tsa ghwaa-REY?", in: app)
-        hideBottomSliver(pronunciationNoteLines(in: app), in: scroll, keeping: phrase, pronunciation: pronunciation)
         XCTAssertTrue(
             elementIsFullyVisible(phrase, in: scroll),
             "Pashto phrase is clipped. frame \(phrase.frame) scroll \(scroll.frame)"
         )
+        XCTAssertLessThanOrEqual(
+            phrase.frame.minY,
+            scroll.frame.minY + 80,
+            "Pashto phrase is not at the start of the card. frame \(phrase.frame) scroll \(scroll.frame)"
+        )
         if pronunciation.exists, pronunciation.frame.height > 1 {
-            XCTAssertLessThanOrEqual(
-                pronunciation.frame.maxY,
-                scroll.frame.minY + 2,
+            XCTAssertFalse(
+                pronunciation.frame.intersects(phrase.frame),
                 "pronunciation covers the phrase. phrase \(phrase.frame) pronunciation \(pronunciation.frame) scroll \(scroll.frame)"
             )
         }
-        let lines = pronunciationNoteLines(in: app)
-        XCTAssertFalse(lines.isEmpty, "pronunciation note lines are missing")
-        XCTAssertTrue(
-            lines[0].label.contains("ts as in cats"),
-            "first tip is not the ts note: \(lines[0].label)"
-        )
-        guard let overlap = lines.last(where: { elementIsFullyVisible($0, in: scroll) }) else {
-            XCTFail("no whole note line in the first shot. frames \(lines.map { "\($0.label) \($0.frame)" }) scroll \(scroll.frame)")
-            return
-        }
         XCTAssertGreaterThan(
-            overlap.frame.maxY,
+            note.frame.minY,
             scroll.frame.midY,
-            "note line is not in the lower part of the first shot. frame \(overlap.frame) label \(overlap.label) scroll \(scroll.frame)"
+            "note is not in the lower part of the first shot. frame \(note.frame) scroll \(scroll.frame)"
+        )
+        XCTAssertGreaterThan(
+            scroll.frame.maxY - note.frame.minY,
+            48,
+            "first tip is cut off the bottom of the first shot. frame \(note.frame) scroll \(scroll.frame)"
         )
         settle(0.8)
         shot("notes-learn-xl")
 
-        alignTop(overlap, in: scroll, padding: 6)
-        XCTAssertTrue(
-            elementIsFullyVisible(overlap, in: scroll),
-            "shared line is clipped in the second shot. frame \(overlap.frame) label \(overlap.label) scroll \(scroll.frame)"
+        bringTopNearTop(note, in: scroll, band: 40)
+        XCTAssertGreaterThanOrEqual(
+            note.frame.minY,
+            scroll.frame.minY - 2,
+            "second shot cuts the first tip. frame \(note.frame) scroll \(scroll.frame)"
         )
-        XCTAssertLessThan(
-            overlap.frame.minY,
-            scroll.frame.minY + 28,
-            "second shot does not start on the shared line. frame \(overlap.frame) label \(overlap.label) scroll \(scroll.frame)"
+        XCTAssertLessThanOrEqual(
+            note.frame.minY,
+            scroll.frame.minY + 48,
+            "second shot does not start on the shared tip. frame \(note.frame) scroll \(scroll.frame)"
         )
         settle(0.6)
         shot("notes-learn-xl-2")
     }
 
-    /// Note lines in order. Each tip is its own element.
-    private func pronunciationNoteLines(in app: XCUIApplication) -> [XCUIElement] {
-        (0..<4).compactMap { index in
-            let line = app.descendants(matching: .any)["pronunciation-note-\(index)"]
-            return line.exists ? line : nil
+    /// Moves the phrase toward the top until the first tip is also on screen.
+    /// Stops short of the header. A further nudge would hide the phrase, which
+    /// is the line the first shot has to start on.
+    private func bringPhraseAndNote(_ phrase: XCUIElement, note: XCUIElement, in scroll: XCUIElement) {
+        for _ in 0..<12 {
+            let phraseFrame = phrase.frame
+            let noteFrame = note.frame
+            let window = scroll.frame
+            let phraseWhole = elementIsFullyVisible(phrase, in: scroll)
+            let noteShown = noteFrame.height > 1
+                && noteFrame.minY > phraseFrame.maxY
+                && window.maxY - noteFrame.minY > 48
+            if phraseWhole, phraseFrame.minY <= window.minY + 72, noteShown {
+                return
+            }
+            if phraseFrame.height > 1, phraseFrame.minY < window.minY - 1 {
+                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
+                return
+            }
+            if phraseWhole, phraseFrame.minY <= window.minY + 16 {
+                return
+            }
+            nudgeScroll(scroll, revealingLower: true, portion: 0.08)
         }
     }
 
-    /// Puts `element`'s top edge just inside the scroll view. A missing frame
-    /// is treated as below the fold, then corrected on the next pass.
-    private func alignTop(_ element: XCUIElement, in scroll: XCUIElement, padding: CGFloat) {
-        for _ in 0..<12 {
+    /// Short nudges until the element's top is in `band` under the scroll top.
+    /// A tall element may extend past the bottom. One or two short nudges the
+    /// other way recover an overshoot, and then the loop stops.
+    private func bringTopNearTop(_ element: XCUIElement, in scroll: XCUIElement, band: CGFloat) {
+        var corrections = 0
+        for _ in 0..<14 {
             let frame = element.frame
             let window = scroll.frame
             if frame.width < 1 || frame.height < 1 {
-                dragScroll(scroll, by: window.height * 0.3)
+                nudgeScroll(scroll, revealingLower: true, portion: 0.08)
                 continue
             }
-            let delta = frame.minY - (window.minY + padding)
-            let fully = frame.minY >= window.minY - 1 && frame.maxY <= window.maxY + 1
-            if fully, abs(delta) <= 4 {
+            if frame.minY >= window.minY - 1, frame.minY <= window.minY + band {
                 return
             }
-            if frame.height > window.height - padding * 2, frame.minY >= window.minY - 1, abs(delta) <= 4 {
-                return
+            if frame.minY < window.minY - 1 {
+                guard corrections < 2 else { return }
+                corrections += 1
+                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
+                continue
             }
-            let scaled = abs(delta) > 40 ? delta * 0.65 : delta
-            dragScroll(scroll, by: scaled)
+            nudgeScroll(scroll, revealingLower: true, portion: 0.08)
         }
-    }
-
-    /// Moves a thin clipped strip at the bottom off the card when that still
-    /// leaves the phrase fully visible and the pronunciation above the card.
-    private func hideBottomSliver(
-        _ lines: [XCUIElement],
-        in scroll: XCUIElement,
-        keeping phrase: XCUIElement,
-        pronunciation: XCUIElement
-    ) {
-        guard lines.contains(where: { elementIsFullyVisible($0, in: scroll) }) else { return }
-        guard let partial = lines.first(where: { isPartlyVisible($0, in: scroll) && !elementIsFullyVisible($0, in: scroll) }) else {
-            return
-        }
-        let window = scroll.frame
-        let visible = window.maxY - partial.frame.minY
-        guard visible > 0, visible < 16 else { return }
-        var room = phrase.frame.minY - window.minY
-        if pronunciation.exists, pronunciation.frame.height > 1 {
-            room = min(room, max(0, window.minY - pronunciation.frame.maxY))
-        }
-        let move = min(visible + 3, room)
-        guard move > 2 else { return }
-        dragScroll(scroll, by: -move)
-    }
-
-    /// `deltaY` above zero moves the finger up, so content below comes into view.
-    private func dragScroll(_ scroll: XCUIElement, by deltaY: CGFloat) {
-        let height = max(scroll.frame.height, 1)
-        let travel = min(abs(deltaY), height * 0.5)
-        guard travel >= 1.5 else { return }
-        let fraction = min(travel / height, 0.7)
-        let margin: CGFloat = 0.15
-        let used = min(fraction, 1 - 2 * margin)
-        let startY: CGFloat
-        let endY: CGFloat
-        if deltaY > 0 {
-            startY = margin + used
-            endY = margin
-        } else {
-            startY = margin
-            endY = margin + used
-        }
-        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
-        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
-        start.press(forDuration: 0.35, thenDragTo: end)
     }
 
     private func elementIsFullyVisible(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
@@ -392,13 +382,6 @@ final class ScreenshotTests: XCTestCase {
         let window = scroll.frame
         guard frame.width > 1, frame.height > 1 else { return false }
         return frame.minY >= window.minY - 1 && frame.maxY <= window.maxY + 1
-    }
-
-    private func isPartlyVisible(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
-        let frame = element.frame
-        let window = scroll.frame
-        guard frame.width > 1, frame.height > 1 else { return false }
-        return frame.maxY > window.minY && frame.minY < window.maxY
     }
 
     /// Scrolls inside the list, then taps. A drag on the window misses the

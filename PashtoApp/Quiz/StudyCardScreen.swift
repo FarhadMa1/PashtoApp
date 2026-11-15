@@ -311,14 +311,15 @@ struct StudyCardLines: View {
 ///
 /// A line that starts with a Pashto letter would otherwise become a
 /// right-to-left paragraph. Each line is an LTR isolate, and the card
-/// direction is left to right. VoiceOver reads the line without those marks.
-/// A little horizontal room keeps the Pashto glyph, and its dots, inside the line.
+/// direction is left to right. A little horizontal room keeps the Pashto
+/// glyph, and its dots, inside the line. VoiceOver stops once on the whole
+/// note and reads the stored text, without the direction marks.
 struct PronunciationNoteText: View {
     var note: String
 
     var body: some View {
         VStack(alignment: .center, spacing: 4) {
-            ForEach(Array(PronunciationNotes.lines(in: note).enumerated()), id: \.offset) { index, line in
+            ForEach(Array(PronunciationNotes.lines(in: note).enumerated()), id: \.offset) { _, line in
                 Text(verbatim: PronunciationNotes.displayLine(line))
                     .font(.subheadline)
                     .foregroundStyle(Lapis.secondaryText)
@@ -327,12 +328,12 @@ struct PronunciationNoteText: View {
                     .padding(.horizontal, 2)
                     .frame(maxWidth: .infinity)
                     .environment(\.layoutDirection, .leftToRight)
-                    .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(line)))
-                    .accessibilityIdentifier("pronunciation-note-\(index)")
             }
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .environment(\.layoutDirection, .leftToRight)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(note)))
     }
 }
 

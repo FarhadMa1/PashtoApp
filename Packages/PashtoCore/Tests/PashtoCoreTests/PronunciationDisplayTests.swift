@@ -353,7 +353,8 @@ struct PronunciationDisplayTests {
         #expect(screen.contains("if let note = card.pronunciationNote"))
         #expect(screen.contains("PronunciationNotes.lines(in: note)"))
         #expect(screen.contains("PronunciationNotes.displayLine"))
-        #expect(screen.contains("PronunciationNotes.spoken"))
+        #expect(screen.contains("PronunciationNotes.spoken(note)"))
+        #expect(screen.contains(".accessibilityElement(children: .combine)"))
         #expect(screen.contains(".environment(\\.layoutDirection, .leftToRight)"))
         #expect(!screen.contains("Text(verbatim: note)"))
     }
