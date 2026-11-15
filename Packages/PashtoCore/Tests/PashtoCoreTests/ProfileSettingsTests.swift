@@ -159,6 +159,22 @@ struct WordBreakPolicyTests {
         #expect(!shown.contains("\u{2011}"))
     }
 
+    /// Omitting the flag joins Latin. Pashto, including a word with a space, stays put.
+    @Test func defaultJoinsLatinWordsAndLeavesPashtoUnchanged() {
+        let latin = "cha-haar shan-BA"
+        let joined = WordBreakPolicy.display(latin)
+        #expect(joined == WordBreakPolicy.display(latin, joinLatinWords: true))
+        #expect(joined.contains(WordBreakPolicy.wordJoiner))
+        let plain = WordBreakPolicy.display(latin, joinLatinWords: false)
+        #expect(plain == latin)
+        #expect(!plain.contains(WordBreakPolicy.wordJoiner))
+
+        let wednesday = "سه شنبه"
+        #expect(WordBreakPolicy.display(wednesday) == wednesday)
+        #expect(WordBreakPolicy.display(wednesday, joinLatinWords: true) == wednesday)
+        #expect(WordBreakPolicy.display(wednesday, joinLatinWords: false) == wednesday)
+    }
+
     /// Pashto is compared with the stored string itself. Stripping joiners
     /// would hide an inserted character that is not U+2060.
     @Test func pashtoDisplayEqualsTheBundledText() throws {
