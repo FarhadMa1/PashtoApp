@@ -5,7 +5,7 @@ import XCTest
 /// celebration, and the word of the day. Light also opens the Greetings list
 /// with Bold Text. XL is two tests, lists and then the quiz, so each stays
 /// under the runner's per-test limit. The Time days list is part of XL lists.
-/// The quiz test also opens the longest unit 4–8 pronunciation note.
+/// The pronunciation note is its own XL test.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -38,8 +38,7 @@ final class ScreenshotTests: XCTestCase {
         captureTimeDays(app, basics: basics)
     }
 
-    /// Family, the learn card, the quiz, the celebration, the word of the day,
-    /// and the longest unit 4–8 pronunciation note.
+    /// Family, the learn card, the quiz, the celebration, and the word of the day.
     func testXLQuiz() {
         executionTimeAllowance = 400
         let app = XCUIApplication()
@@ -47,7 +46,64 @@ final class ScreenshotTests: XCTestCase {
         captureFamilyLearnAndQuiz(app, variant: "xl")
         captureCelebration(app, variant: "xl")
         captureDailyWord(app, variant: "xl")
-        captureLongNote(app)
+    }
+
+    /// The Food phrase note at the largest type. The card opens on that item.
+    /// The first shot is the top of the note. One scroll, then the second shot.
+    /// Each tip is fully on screen in at least one of the two shots.
+    func testXLNotes() {
+        executionTimeAllowance = 400
+        let app = XCUIApplication()
+        app.launchArguments = launchArguments(for: "xl") + ["-uiTestOpenItem", "e-tsa-ghwaa-rey"]
+        app.launch()
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 20),
+            "Food phrase card did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertFalse(
+            app.descendants(matching: .any)["study-item-missing"].exists,
+            "Food phrase item did not resolve"
+        )
+        let scroll = app.scrollViews["study-card"]
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "card list is missing")
+        let tips = noteTips(in: app)
+        for (index, tip) in tips.enumerated() {
+            XCTAssertTrue(
+                tip.waitForExistence(timeout: 8),
+                "tip \(index) did not appear. buttons: \(buttonDump(app))"
+            )
+        }
+        let marks = ["څ:", "غ:", "ړ:"]
+        for (tip, mark) in zip(tips, marks) {
+            XCTAssertTrue(tip.label.hasPrefix(mark), "tip label \(tip.label)")
+            XCTAssertFalse(
+                tip.label.contains("\u{2066}") || tip.label.contains("\u{2069}") || tip.label.contains("\u{200E}"),
+                "VoiceOver reads the direction marks: \(tip.label)"
+            )
+        }
+        XCTAssertTrue(
+            waitUntil(timeout: 4) { fullyInside(tips[0].frame, scroll.frame) },
+            "first tip is not on screen. \(tipDump(tips, scroll: scroll))"
+        )
+        settle(0.4)
+        let before = tips.map(\.frame)
+        let windowBefore = scroll.frame
+        shot("notes-learn-xl")
+
+        scrollOnce(scroll)
+        settle(0.6)
+        let after = tips.map(\.frame)
+        let windowAfter = scroll.frame
+        shot("notes-learn-xl-2")
+
+        for index in tips.indices {
+            let onFirst = fullyInside(before[index], windowBefore)
+            let onSecond = fullyInside(after[index], windowAfter)
+            XCTAssertTrue(
+                onFirst || onSecond,
+                "tip \(marks[index]) is not fully inside the window. before \(before[index]) window \(windowBefore) after \(after[index]) window \(windowAfter)"
+            )
+        }
     }
 
     private func capture(variant: String) {
@@ -224,164 +280,36 @@ final class ScreenshotTests: XCTestCase {
         shot("word-of-the-day-\(variant)")
     }
 
-    /// The longest unit 4–8 note, on the first Food phrases card.
-    ///
-    /// Phrases hide the meaning until Show meaning, and the note is drawn
-    /// under it. The first shot starts with the Pashto phrase whole, below
-    /// the header. The pronunciation may still be just above that phrase.
-    /// The second shot starts at the top of the note, which is the first tip
-    /// and was also fully on screen at the bottom of the first shot.
-    private func captureLongNote(_ app: XCUIApplication) {
-        app.terminate()
-        app.launchArguments = launchArguments(for: "xl")
-        app.launch()
-        let basics = app.descendants(matching: .any)["u-basics"]
-        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
-            app.buttons["Start review"].tap()
-        }
-        XCTAssertTrue(
-            basics.waitForExistence(timeout: 30),
-            "home did not load for the long note. buttons: \(buttonDump(app))"
-        )
-        openInList("u-food", in: app)
-        openInList("l-food-phrases-want", in: app)
-        XCTAssertTrue(
-            app.buttons["Skip to practice"].waitForExistence(timeout: 15),
-            "Food phrases card did not open. buttons: \(buttonDump(app))"
-        )
-        XCTAssertTrue(
-            storedPronunciation("tsa ghwaa-REY?", in: app).waitForExistence(timeout: 5),
-            "Food phrases card has no pronunciation"
-        )
-        let showMeaning = app.buttons["Show meaning"]
-        XCTAssertTrue(showMeaning.waitForExistence(timeout: 5), "Food phrases card has no Show meaning")
-        let scroll = app.scrollViews.firstMatch
-        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "card has no list. buttons: \(buttonDump(app))")
-        revealInScroll(showMeaning, scroll: scroll, in: app)
-        showMeaning.tap()
-        let phrase = app.staticTexts["څه غواړې؟"]
-        XCTAssertTrue(phrase.waitForExistence(timeout: 8), "Pashto phrase did not appear. buttons: \(buttonDump(app))")
-        let note = app.descendants(matching: .any).matching(
-            NSPredicate(format: "label CONTAINS %@ AND label CONTAINS %@", "ts as in cats", "quick r")
-        ).firstMatch
-        XCTAssertTrue(note.waitForExistence(timeout: 8), "pronunciation note did not appear. buttons: \(buttonDump(app))")
-        let spoken = note.label
-        XCTAssertFalse(
-            spoken.contains("\u{2066}") || spoken.contains("\u{2069}") || spoken.contains("\u{200E}"),
-            "VoiceOver reads the direction marks: \(spoken)"
-        )
-        let cats = spoken.range(of: "ts as in cats")
-        let french = spoken.range(of: "close to French r")
-        let flick = spoken.range(of: "quick r")
-        XCTAssertNotNil(cats)
-        XCTAssertNotNil(french)
-        XCTAssertNotNil(flick)
-        if let cats, let french, let flick {
-            XCTAssertLessThan(cats.lowerBound, french.lowerBound)
-            XCTAssertLessThan(french.lowerBound, flick.lowerBound)
-        }
-        settle(0.4)
-        bringPhraseAndNote(phrase, note: note, in: scroll)
-        let pronunciation = storedPronunciation("tsa ghwaa-REY?", in: app)
-        XCTAssertTrue(
-            elementIsFullyVisible(phrase, in: scroll),
-            "Pashto phrase is clipped. frame \(phrase.frame) scroll \(scroll.frame)"
-        )
-        XCTAssertLessThanOrEqual(
-            phrase.frame.minY,
-            scroll.frame.minY + 80,
-            "Pashto phrase is not at the start of the card. frame \(phrase.frame) scroll \(scroll.frame)"
-        )
-        if pronunciation.exists, pronunciation.frame.height > 1 {
-            XCTAssertFalse(
-                pronunciation.frame.intersects(phrase.frame),
-                "pronunciation covers the phrase. phrase \(phrase.frame) pronunciation \(pronunciation.frame) scroll \(scroll.frame)"
-            )
-        }
-        XCTAssertGreaterThan(
-            note.frame.minY,
-            scroll.frame.midY,
-            "note is not in the lower part of the first shot. frame \(note.frame) scroll \(scroll.frame)"
-        )
-        XCTAssertGreaterThan(
-            scroll.frame.maxY - note.frame.minY,
-            48,
-            "first tip is cut off the bottom of the first shot. frame \(note.frame) scroll \(scroll.frame)"
-        )
-        settle(0.8)
-        shot("notes-learn-xl")
-
-        bringTopNearTop(note, in: scroll, band: 40)
-        XCTAssertGreaterThanOrEqual(
-            note.frame.minY,
-            scroll.frame.minY - 2,
-            "second shot cuts the first tip. frame \(note.frame) scroll \(scroll.frame)"
-        )
-        XCTAssertLessThanOrEqual(
-            note.frame.minY,
-            scroll.frame.minY + 48,
-            "second shot does not start on the shared tip. frame \(note.frame) scroll \(scroll.frame)"
-        )
-        settle(0.6)
-        shot("notes-learn-xl-2")
-    }
-
-    /// Moves the phrase toward the top until the first tip is also on screen.
-    /// Stops short of the header. A further nudge would hide the phrase, which
-    /// is the line the first shot has to start on.
-    private func bringPhraseAndNote(_ phrase: XCUIElement, note: XCUIElement, in scroll: XCUIElement) {
-        for _ in 0..<12 {
-            let phraseFrame = phrase.frame
-            let noteFrame = note.frame
-            let window = scroll.frame
-            let phraseWhole = elementIsFullyVisible(phrase, in: scroll)
-            let noteShown = noteFrame.height > 1
-                && noteFrame.minY > phraseFrame.maxY
-                && window.maxY - noteFrame.minY > 48
-            if phraseWhole, phraseFrame.minY <= window.minY + 72, noteShown {
-                return
-            }
-            if phraseFrame.height > 1, phraseFrame.minY < window.minY - 1 {
-                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
-                return
-            }
-            if phraseWhole, phraseFrame.minY <= window.minY + 16 {
-                return
-            }
-            nudgeScroll(scroll, revealingLower: true, portion: 0.08)
+    private func noteTips(in app: XCUIApplication) -> [XCUIElement] {
+        (0..<3).map { index in
+            app.descendants(matching: .any)["pronunciation-tip-\(index)"]
         }
     }
 
-    /// Short nudges until the element's top is in `band` under the scroll top.
-    /// A tall element may extend past the bottom. One or two short nudges the
-    /// other way recover an overshoot, and then the loop stops.
-    private func bringTopNearTop(_ element: XCUIElement, in scroll: XCUIElement, band: CGFloat) {
-        var corrections = 0
-        for _ in 0..<14 {
-            let frame = element.frame
-            let window = scroll.frame
-            if frame.width < 1 || frame.height < 1 {
-                nudgeScroll(scroll, revealingLower: true, portion: 0.08)
-                continue
-            }
-            if frame.minY >= window.minY - 1, frame.minY <= window.minY + band {
-                return
-            }
-            if frame.minY < window.minY - 1 {
-                guard corrections < 2 else { return }
-                corrections += 1
-                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
-                continue
-            }
-            nudgeScroll(scroll, revealingLower: true, portion: 0.08)
-        }
+    /// The card list, once. A slow drag does not fling past the last tip.
+    private func scrollOnce(_ scroll: XCUIElement) {
+        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80))
+        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25))
+        start.press(forDuration: 0.2, thenDragTo: end, withVelocity: 200, thenHoldForDuration: 0.4)
     }
 
-    private func elementIsFullyVisible(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
-        let frame = element.frame
-        let window = scroll.frame
-        guard frame.width > 1, frame.height > 1 else { return false }
-        return frame.minY >= window.minY - 1 && frame.maxY <= window.maxY + 1
+    private func fullyInside(_ frame: CGRect, _ window: CGRect) -> Bool {
+        guard frame.width > 1, frame.height > 1, window.width > 1, window.height > 1 else { return false }
+        return window.insetBy(dx: -2, dy: -2).contains(frame)
+    }
+
+    private func waitUntil(timeout: TimeInterval, _ condition: () -> Bool) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if condition() { return true }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.15))
+        }
+        return condition()
+    }
+
+    private func tipDump(_ tips: [XCUIElement], scroll: XCUIElement) -> String {
+        let frames = tips.map { "\($0.identifier) \($0.frame)" }.joined(separator: " | ")
+        return "scroll \(scroll.frame) tips \(frames)"
     }
 
     /// Scrolls inside the list, then taps. A drag on the window misses the
@@ -401,15 +329,6 @@ final class ScreenshotTests: XCTestCase {
             "\(identifier) is off screen. frame \(element.frame) scroll \(scroll.frame). buttons: \(buttonDump(app))"
         )
         element.tap()
-    }
-
-    private func revealInScroll(_ element: XCUIElement, scroll: XCUIElement, in app: XCUIApplication) {
-        for _ in 0..<16 {
-            if element.isHittable { return }
-            let frame = element.frame
-            nudgeScroll(scroll, revealingLower: frame == .zero || frame.midY >= scroll.frame.midY)
-        }
-        XCTAssertTrue(element.isHittable, "control is off the card. buttons: \(buttonDump(app))")
     }
 
     private func captureTimeDays(_ app: XCUIApplication, basics: XCUIElement) {

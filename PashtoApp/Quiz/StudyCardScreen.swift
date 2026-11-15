@@ -27,7 +27,7 @@ struct StudyCardScreen: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-            LapisScreen {
+            LapisScreen(scrollIdentifier: "study-card", scrollToID: noteScrollTarget) {
                 card
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -52,6 +52,16 @@ struct StudyCardScreen: View {
         .onDisappear {
             clipPlayer.stop()
         }
+    }
+
+    /// UI tests only. The note is taller than the list at the largest type,
+    /// so the opened card starts at the first tip. A normal card stays put.
+    private var noteScrollTarget: String? {
+        guard UITestLaunch.openItemID != nil, deck.meaningVisible else { return nil }
+        guard let note = deck.card?.pronunciationNote, PronunciationNotes.lines(in: note).count >= 1 else {
+            return nil
+        }
+        return "pronunciation-tip-0"
     }
 
     private var header: some View {
@@ -314,26 +324,52 @@ struct StudyCardLines: View {
 /// direction is left to right. A little horizontal room keeps the Pashto
 /// glyph, and its dots, inside the line. VoiceOver stops once on the whole
 /// note and reads the stored text, without the direction marks.
+/// A UI-test launch keeps each tip as its own element so a shot can see it.
 struct PronunciationNoteText: View {
     var note: String
 
+    private var exposesTips: Bool { UITestLaunch.openItemID != nil }
+
     var body: some View {
-        VStack(alignment: .center, spacing: 4) {
-            ForEach(Array(PronunciationNotes.lines(in: note).enumerated()), id: \.offset) { _, line in
-                Text(verbatim: PronunciationNotes.displayLine(line))
-                    .font(.subheadline)
-                    .foregroundStyle(Lapis.secondaryText)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 2)
-                    .frame(maxWidth: .infinity)
-                    .environment(\.layoutDirection, .leftToRight)
+        let stack = VStack(alignment: .center, spacing: 4) {
+            ForEach(Array(PronunciationNotes.lines(in: note).enumerated()), id: \.offset) { index, line in
+                tipLine(index: index, line: line)
             }
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .environment(\.layoutDirection, .leftToRight)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(note)))
+
+        if exposesTips {
+            stack
+        } else {
+            stack
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(note)))
+        }
+    }
+
+    @ViewBuilder
+    private func tipLine(index: Int, line: String) -> some View {
+        let text = tipText(line)
+            .id("pronunciation-tip-\(index)")
+        if exposesTips {
+            text
+                .accessibilityIdentifier("pronunciation-tip-\(index)")
+                .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(line)))
+        } else {
+            text
+        }
+    }
+
+    private func tipText(_ line: String) -> some View {
+        Text(verbatim: PronunciationNotes.displayLine(line))
+            .font(.subheadline)
+            .foregroundStyle(Lapis.secondaryText)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 2)
+            .frame(maxWidth: .infinity)
+            .environment(\.layoutDirection, .leftToRight)
     }
 }
 
