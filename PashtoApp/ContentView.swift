@@ -1820,10 +1820,14 @@ enum AppTab: Hashable {
     case profile
 }
 
-/// Honest empty state. No dialogues and no buttons.
+/// Honest empty state. One decorative icon, the title, and the line. No buttons.
 struct SpeakComingSoon: View {
     var body: some View {
         VStack(spacing: 12) {
+            Image(systemName: "bubble.left.and.bubble.right")
+                .font(.largeTitle)
+                .foregroundStyle(Lapis.secondaryText)
+                .accessibilityHidden(true)
             Text(verbatim: TabCopy.speak)
                 .font(.title2.weight(.bold))
                 .foregroundStyle(Lapis.primary)
