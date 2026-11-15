@@ -9,7 +9,7 @@
       "pashto": "ښار",
       "translit": "x̌ār",
       "pronunciation": "khaar",
-      "en": "city",
+      "en": "City",
       "usage": null,
       "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -21,7 +21,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-baa-zaar",
@@ -41,7 +44,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-doo-kaan",
@@ -61,7 +67,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-rogh-toon",
@@ -81,7 +90,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-cher-ta",
@@ -89,7 +101,7 @@
       "pashto": "چېرته",
       "translit": "čérta",
       "pronunciation": "CHER-ta",
-      "en": "where",
+      "en": "Where",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -101,7 +113,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-tak-see",
@@ -121,7 +136,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-bas",
@@ -141,7 +159,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-sa-rak",
@@ -161,7 +182,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-chap",
@@ -181,7 +205,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-khee",
@@ -201,7 +228,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-dal-ta",
@@ -221,7 +251,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-hal-ta",
@@ -241,7 +274,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-baa-zaar-cher-ta-day",
@@ -261,7 +297,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-rogh-toon-cher-ta-day",
@@ -281,7 +320,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-baa-zaar-dal-ta-day",
@@ -301,7 +343,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-rogh-toon-hal-ta-day",
@@ -321,7 +366,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-za-baa-zaar-ta-dzam",
@@ -341,7 +389,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-za-kor-ta-dzam",
@@ -361,7 +412,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     }
   ],
   "lessons": [
@@ -390,7 +444,8 @@
           "item": "e-cher-ta",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-town-learn-transport",
@@ -425,7 +480,8 @@
           "item": "e-hal-ta",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-town-phrases-where",
@@ -456,7 +512,8 @@
           "item": "e-za-kor-ta-dzam",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-town-1",
@@ -526,7 +583,8 @@
             }
           ]
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-town-2",
@@ -568,7 +626,8 @@
           "item": "e-za-kor-ta-dzam",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 14
     }
   ]
 }

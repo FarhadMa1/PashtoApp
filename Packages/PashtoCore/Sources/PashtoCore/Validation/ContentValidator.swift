@@ -331,7 +331,18 @@ public enum ContentValidator {
         // ق stays on the difficult-character list. The approved learner notes
         // have no ق sentence, so a word whose only difficult character is ق
         // does not need a pronunciation note. Any other difficult character does.
-        let needsNote = hits.contains { $0 != "ق" }
+        let needsNote = hits.contains { character in
+            if character == "ق" { return false }
+            // څ pronounced "chi" (chi-shay) is not the ts of cats.
+            if character == "څ", item.pronunciation.lowercased().contains("chi") { return false }
+            return true
+        }
+        if let verified = item.verified, verified != (item.verification.status == .verified) {
+            report.add(.error, id: id, field: "verified", "verified must match verification.status.")
+        }
+        if let quizKind = item.quizKind, quizKind != .word, quizKind != .phrase {
+            report.add(.error, id: id, field: "quizKind", "quizKind is word or phrase.")
+        }
         if needsNote, Text.isBlank(item.pronunciationNote) {
             report.add(
                 .error,

@@ -9,7 +9,7 @@
       "pashto": "اوبه",
       "translit": "obá",
       "pronunciation": "o-BA",
-      "en": "water",
+      "en": "Water",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -21,7 +21,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-do-day",
@@ -29,7 +32,7 @@
       "pashto": "ډوډۍ",
       "translit": "ḍoḍə́y",
       "pronunciation": "do-DAY",
-      "en": "bread",
+      "en": "Bread, food",
       "usage": null,
       "pronunciationNote": "ډ: d with the tongue tip curled back.",
       "responseTo": null,
@@ -41,7 +44,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-wri-jey",
@@ -49,7 +55,7 @@
       "pashto": "وریجې",
       "translit": "wrijé",
       "pronunciation": "wri-JEY",
-      "en": "rice",
+      "en": "Rice",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -61,7 +67,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-gho-kha",
@@ -69,7 +78,7 @@
       "pashto": "غوښه",
       "translit": "ɣóx̌a",
       "pronunciation": "GHO-kha",
-      "en": "meat",
+      "en": "Meat",
       "usage": null,
       "pronunciationNote": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -81,7 +90,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ma-na",
@@ -89,7 +101,7 @@
       "pashto": "مڼه",
       "translit": "maṇá",
       "pronunciation": "ma-NA",
-      "en": "apple",
+      "en": "Apple",
       "usage": null,
       "pronunciationNote": "ڼ: n with the tongue tip curled back.",
       "responseTo": null,
@@ -101,7 +113,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-chaay",
@@ -109,7 +124,7 @@
       "pashto": "چای",
       "translit": "čāy",
       "pronunciation": "chaay",
-      "en": "tea",
+      "en": "Tea",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -121,7 +136,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-kah-wa",
@@ -129,7 +147,7 @@
       "pashto": "قهوه",
       "translit": "kahwá",
       "pronunciation": "kah-WA",
-      "en": "coffee",
+      "en": "Coffee",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -141,7 +159,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-shee-dey",
@@ -149,7 +170,7 @@
       "pashto": "شیدې",
       "translit": "šidé",
       "pronunciation": "shee-DEY",
-      "en": "milk",
+      "en": "Milk",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -161,7 +182,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ghwaa-ram",
@@ -181,7 +205,9 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-shta",
@@ -201,7 +227,9 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-na-shta",
@@ -221,17 +249,19 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-tsa-ghwaa-rey",
       "kind": "phrase",
-      "pashto": "څه غواړې؟",
-      "translit": "tsə ɣwāṛé?",
-      "pronunciation": "tsa ghwaa-REY?",
-      "en": "what would you like? (informal)",
+      "pashto": "څه شی غواړې؟",
+      "translit": "chi-sháy ghwā-réy",
+      "pronunciation": "chi-shay ghwaa-REY?",
+      "en": "What would you like?",
       "usage": null,
-      "pronunciationNote": "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
       "tokens": null,
       "acceptedOrders": null,
@@ -241,7 +271,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-o-ba-ghwaa-ram",
@@ -249,7 +282,7 @@
       "pashto": "زه اوبه غواړم",
       "translit": "zə obá ɣwāṛə́m",
       "pronunciation": "za o-BA ghwaa-RAM",
-      "en": "I would like water",
+      "en": "I want some water.",
       "usage": null,
       "pronunciationNote": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
@@ -261,7 +294,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-chaay-ghwaa-ram",
@@ -269,7 +305,7 @@
       "pashto": "زه چای غواړم",
       "translit": "zə čāy ɣwāṛə́m",
       "pronunciation": "za chaay ghwaa-RAM",
-      "en": "I would like tea",
+      "en": "I would like tea.",
       "usage": null,
       "pronunciationNote": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
@@ -281,7 +317,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-ma-na-da",
@@ -289,7 +328,7 @@
       "pashto": "دا مڼه ده",
       "translit": "dā maṇá da",
       "pronunciation": "daa ma-NA da",
-      "en": "this is an apple",
+      "en": "This is an apple.",
       "usage": null,
       "pronunciationNote": "ڼ: n with the tongue tip curled back.",
       "responseTo": null,
@@ -301,7 +340,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-do-day-da",
@@ -309,7 +351,7 @@
       "pashto": "دا ډوډۍ ده",
       "translit": "dā ḍoḍə́y da",
       "pronunciation": "daa do-DAY da",
-      "en": "this is bread",
+      "en": "This is bread.",
       "usage": null,
       "pronunciationNote": "ډ: d with the tongue tip curled back.",
       "responseTo": null,
@@ -321,7 +363,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-chaay-shta",
@@ -329,7 +374,7 @@
       "pashto": "چای شته؟",
       "translit": "čāy šta?",
       "pronunciation": "chaay shta?",
-      "en": "is there tea?",
+      "en": "Is there tea?",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -341,7 +386,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ho-chaay-shta",
@@ -349,7 +397,7 @@
       "pashto": "هو، چای شته",
       "translit": "ho, čāy šta",
       "pronunciation": "ho, chaay shta",
-      "en": "yes, there is tea",
+      "en": "Yes, there is tea.",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -361,7 +409,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-na-chaay-na-shta",
@@ -369,7 +420,7 @@
       "pashto": "نه، چای نشته",
       "translit": "na, čāy naštá",
       "pronunciation": "na, chaay na-SHTA",
-      "en": "no, there is no tea",
+      "en": "No, there is no tea.",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -381,7 +432,946 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-joos",
+      "kind": "word",
+      "pashto": "جوس",
+      "translit": "jūs",
+      "pronunciation": "joos",
+      "en": "Juice",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-charga",
+      "kind": "word",
+      "pashto": "چرګه",
+      "translit": "char-gá",
+      "pronunciation": "char-GA",
+      "en": "Chicken",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kab",
+      "kind": "word",
+      "pashto": "کب",
+      "translit": "kab",
+      "pronunciation": "kab",
+      "en": "Fish",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-hagay",
+      "kind": "word",
+      "pashto": "هګۍ",
+      "translit": "ha-gáy",
+      "pronunciation": "ha-GAY",
+      "en": "Egg",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-pa-neer",
+      "kind": "word",
+      "pashto": "پنیر",
+      "translit": "pa-nī́r",
+      "pronunciation": "pa-NEER",
+      "en": "Cheese",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mas-te",
+      "kind": "word",
+      "pashto": "مستې",
+      "translit": "mas-té",
+      "pronunciation": "mas-TE",
+      "en": "Yogurt",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ka-chaa-loo",
+      "kind": "word",
+      "pashto": "کچالو",
+      "translit": "ka-chā-lū́",
+      "pronunciation": "ka-chaa-LOO",
+      "en": "Potato",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-roo-mee-baan-jaan",
+      "kind": "word",
+      "pashto": "رومي باڼجان",
+      "translit": "rū-mī́ bān-jā́n",
+      "pronunciation": "roo-MEE baan-JAAN",
+      "en": "Tomato",
+      "usage": null,
+      "pronunciationNote": "ڼ: n with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-pi-yaaz",
+      "kind": "word",
+      "pashto": "پیاز",
+      "translit": "pi-yā́z",
+      "pronunciation": "pi-YAAZ",
+      "en": "Onion",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ke-la",
+      "kind": "word",
+      "pashto": "کېله",
+      "translit": "ké-la",
+      "pronunciation": "KE-la",
+      "en": "Banana",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maal-ta",
+      "kind": "word",
+      "pashto": "مالټه",
+      "translit": "mā́l-ta",
+      "pronunciation": "MAAL-ta",
+      "en": "Orange",
+      "usage": null,
+      "pronunciationNote": "ټ: t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-boora",
+      "kind": "word",
+      "pashto": "بوره",
+      "translit": "bū́-ra",
+      "pronunciation": "BOO-ra",
+      "en": "Sugar",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maalga",
+      "kind": "word",
+      "pashto": "مالګه",
+      "translit": "mā́l-ga",
+      "pronunciation": "MAAL-ga",
+      "en": "Salt",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mirch",
+      "kind": "word",
+      "pashto": "مرچ",
+      "translit": "mirch",
+      "pronunciation": "mirch",
+      "en": "Pepper",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mewa",
+      "kind": "word",
+      "pashto": "مېوه",
+      "translit": "me-wá",
+      "pronunciation": "me-WA",
+      "en": "Fruit",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sabzee",
+      "kind": "word",
+      "pashto": "سبزي",
+      "translit": "sab-zī́",
+      "pronunciation": "sab-ZEE",
+      "en": "Vegetables",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kabaab",
+      "kind": "word",
+      "pashto": "کباب",
+      "translit": "ka-bā́b",
+      "pronunciation": "ka-BAAB",
+      "en": "Kebab",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kaabulee-palaw",
+      "kind": "word",
+      "pashto": "کابلي پلو",
+      "translit": "kā-bu-lī́ pa-láw",
+      "pronunciation": "kaa-bu-LEE pa-LAW",
+      "en": "Kabuli pulao",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-gaiz-ma-ray",
+      "kind": "word",
+      "pashto": "ګهیځ مړۍ",
+      "translit": "gayz ma-ráy",
+      "pronunciation": "gaiz ma-RAY",
+      "en": "Breakfast",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-da-ghar-me-do-day",
+      "kind": "word",
+      "pashto": "د غرمې ډوډۍ",
+      "translit": "da ghar-mé do-dáy",
+      "pronunciation": "da ghar-ME do-DAY",
+      "en": "Lunch",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ډ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-da-maa-khaam-do-day",
+      "kind": "word",
+      "pashto": "د ماښام ډوډۍ",
+      "translit": "da mā-khā́m do-dáy",
+      "pronunciation": "da maa-KHAAM do-DAY",
+      "en": "Dinner",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. ډ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-wugay-yam",
+      "kind": "phrase",
+      "pashto": "زه وږی یم",
+      "translit": "za wú-gay yam",
+      "pronunciation": "za WU-gay yam",
+      "en": "I'm hungry.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tugay-yam",
+      "kind": "phrase",
+      "pashto": "زه تږی یم",
+      "translit": "za tú-gay yam",
+      "pronunciation": "za TU-gay yam",
+      "en": "I'm thirsty.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-do-day-dey-khwa-ra-le-da",
+      "kind": "phrase",
+      "pashto": "ډوډۍ دې خوړلې ده؟",
+      "translit": "do-dáy dey khwa-ra-lé da",
+      "pronunciation": "do-DAY dey khwa-ra-LE da?",
+      "en": "Have you eaten?",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back. خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-chi-shay-khwa-ral-ghwaa-rey",
+      "kind": "phrase",
+      "pashto": "څه شی خوړل غواړې؟",
+      "translit": "chi-sháy khwa-rál ghwā-réy",
+      "pronunciation": "chi-shay khwa-RAL ghwaa-REY?",
+      "en": "What do you want to eat?",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r. غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-chaay-tsa-khey",
+      "kind": "phrase",
+      "pashto": "چای څښې؟",
+      "translit": "chāy tsa-ké",
+      "pronunciation": "chaay tsa-KE?",
+      "en": "Would you like tea?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khwandwar",
+      "kind": "phrase",
+      "pashto": "خوندور دی",
+      "translit": "khwand-wár day",
+      "pronunciation": "khwand-WAR day",
+      "en": "It's tasty.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-do-day-de-ra-khwand-wa-ra-da",
+      "kind": "phrase",
+      "pashto": "ډوډۍ ډېره خوندوره ده",
+      "translit": "do-dáy dé-ra khwand-wá-ra da",
+      "pronunciation": "do-DAY DE-ra khwand-WA-ra da",
+      "en": "The food is delicious.",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-mor-yam",
+      "kind": "phrase",
+      "pashto": "زه موړ یم",
+      "translit": "za mor yam",
+      "pronunciation": "za mor yam",
+      "en": "I'm full.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-bas-day",
+      "kind": "phrase",
+      "pashto": "مننه، بس دی",
+      "translit": "ma-ná-na bas day",
+      "pronunciation": "ma-NA-na, bas day",
+      "en": "Thanks, that's enough.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maa-laa-do-day-na-da-khwa-ra-le",
+      "kind": "phrase",
+      "pashto": "ما لا ډوډۍ نه ده خوړلې",
+      "translit": "mā lā do-dáy na da khwa-ra-lé",
+      "pronunciation": "maa laa do-DAY na da khwa-ra-LE",
+      "en": "I haven't eaten yet.",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back. خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro",
+      "kind": "phrase",
+      "pashto": "راځئ یوځای ډوډۍ وخورو",
+      "translit": "rā-dzáy yaw-dzā́y do-dáy wu-khú-ro",
+      "pronunciation": "raa-DZAY yaw-DZAAY do-DAY wu-KHU-ro",
+      "en": "Let's eat together.",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids. ډ: d with the tongue tip curled back. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra",
+      "kind": "phrase",
+      "pashto": "مهرباني وکړه، مالګه راکړه",
+      "translit": "meh-ra-bā-nī́ wú-ka-ra mā́l-ga rā́-ka-ra",
+      "pronunciation": "meh-ra-baa-NEE WU-ka-ra, MAAL-ga RAA-ka-ra",
+      "en": "Can you pass me the salt?",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-treekh-khwaa-ra-na-khwa-kha-wam",
+      "kind": "phrase",
+      "pashto": "زه تریخ خواړه نه خوښوم",
+      "translit": "za trīkh khwā-rá na khwa-khá-wam",
+      "pronunciation": "za treekh khwaa-RA na khwa-KHA-wam",
+      "en": "I don't like spicy food.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-nan-dey-chi-shay-paa-kha-kral",
+      "kind": "phrase",
+      "pashto": "نن دې څه شی پاخه کړل؟",
+      "translit": "nan dey chi-sháy pā́-kha kral",
+      "pronunciation": "nan dey chi-shay PAA-kha kral?",
+      "en": "What did you cook today?",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-do-day-tay-yaa-ra-da",
+      "kind": "phrase",
+      "pashto": "ډوډۍ تیاره ده",
+      "translit": "do-dáy tay-yā́-ra da",
+      "pronunciation": "do-DAY tay-YAA-ra da",
+      "en": "Dinner is ready.",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-staa-pakh-lay-me-der-khwakh-day",
+      "kind": "phrase",
+      "pashto": "ستا پخلی مې ډېر خوښ دی",
+      "translit": "stā pakh-láy me der khwakh day",
+      "pronunciation": "staa pakh-LAY me der khwakh day",
+      "en": "I love your cooking.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ډ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ghokha-na-khoram",
+      "kind": "phrase",
+      "pashto": "زه غوښه نه خورم",
+      "translit": "za ghó-kha na kho-rám",
+      "pronunciation": "za GHO-kha na kho-RAM",
+      "en": "I don't eat meat.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-hisaab",
+      "kind": "phrase",
+      "pashto": "حساب راوړئ",
+      "translit": "hi-sā́b rā-wráy",
+      "pronunciation": "hi-SAAB raa-WRAY",
+      "en": "The bill, please.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     }
   ],
   "lessons": [
@@ -410,7 +1400,8 @@
           "item": "e-ma-na",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 9
     },
     {
       "id": "l-food-learn-drinks",
@@ -441,7 +1432,8 @@
           "item": "e-na-shta",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 9
     },
     {
       "id": "l-food-phrases-want",
@@ -480,7 +1472,8 @@
           "item": "e-na-chaay-na-shta",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 9
     },
     {
       "id": "l-food-1",
@@ -533,7 +1526,8 @@
             }
           ]
         }
-      ]
+      ],
+      "categoryNumber": 9
     },
     {
       "id": "l-food-2",
@@ -610,6 +1604,415 @@
               "item": "e-ho-chaay-shta"
             }
           ]
+        }
+      ],
+      "categoryNumber": 9
+    },
+    {
+      "id": "l-c9-learn-1",
+      "title": "Food & Drinks words",
+      "kind": "learn",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-joos",
+          "role": "present"
+        },
+        {
+          "item": "e-charga",
+          "role": "present"
+        },
+        {
+          "item": "e-kab",
+          "role": "present"
+        },
+        {
+          "item": "e-hagay",
+          "role": "present"
+        },
+        {
+          "item": "e-pa-neer",
+          "role": "present"
+        },
+        {
+          "item": "e-mas-te",
+          "role": "present"
+        },
+        {
+          "item": "e-ka-chaa-loo",
+          "role": "present"
+        },
+        {
+          "item": "e-roo-mee-baan-jaan",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-learn-2",
+      "title": "Food & Drinks words",
+      "kind": "learn",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-pi-yaaz",
+          "role": "present"
+        },
+        {
+          "item": "e-ke-la",
+          "role": "present"
+        },
+        {
+          "item": "e-maal-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-boora",
+          "role": "present"
+        },
+        {
+          "item": "e-maalga",
+          "role": "present"
+        },
+        {
+          "item": "e-mirch",
+          "role": "present"
+        },
+        {
+          "item": "e-mewa",
+          "role": "present"
+        },
+        {
+          "item": "e-sabzee",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-learn-3",
+      "title": "Food & Drinks words",
+      "kind": "learn",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-kabaab",
+          "role": "present"
+        },
+        {
+          "item": "e-kaabulee-palaw",
+          "role": "present"
+        },
+        {
+          "item": "e-gaiz-ma-ray",
+          "role": "present"
+        },
+        {
+          "item": "e-da-ghar-me-do-day",
+          "role": "present"
+        },
+        {
+          "item": "e-da-maa-khaam-do-day",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-phrases-1",
+      "title": "Food & Drinks phrases",
+      "kind": "phrases",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-wugay-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-tugay-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-do-day-dey-khwa-ra-le-da",
+          "role": "present"
+        },
+        {
+          "item": "e-chi-shay-khwa-ral-ghwaa-rey",
+          "role": "present"
+        },
+        {
+          "item": "e-chaay-tsa-khey",
+          "role": "present"
+        },
+        {
+          "item": "e-khwandwar",
+          "role": "present"
+        },
+        {
+          "item": "e-do-day-de-ra-khwand-wa-ra-da",
+          "role": "present"
+        },
+        {
+          "item": "e-za-mor-yam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-phrases-2",
+      "title": "Food & Drinks phrases",
+      "kind": "phrases",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-bas-day",
+          "role": "present"
+        },
+        {
+          "item": "e-maa-laa-do-day-na-da-khwa-ra-le",
+          "role": "present"
+        },
+        {
+          "item": "e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro",
+          "role": "present"
+        },
+        {
+          "item": "e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-za-treekh-khwaa-ra-na-khwa-kha-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-nan-dey-chi-shay-paa-kha-kral",
+          "role": "present"
+        },
+        {
+          "item": "e-do-day-tay-yaa-ra-da",
+          "role": "present"
+        },
+        {
+          "item": "e-staa-pakh-lay-me-der-khwakh-day",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-phrases-3",
+      "title": "Food & Drinks phrases",
+      "kind": "phrases",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-ghokha-na-khoram",
+          "role": "present"
+        },
+        {
+          "item": "e-hisaab",
+          "role": "present"
+        },
+        {
+          "item": "e-za-chaay-na-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-za-kah-wa-ghwaa-ram",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-quiz-1",
+      "title": "Food & Drinks quiz",
+      "kind": "practice",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-joos",
+          "role": "introduce"
+        },
+        {
+          "item": "e-charga",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kab",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hagay",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pa-neer",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mas-te",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ka-chaa-loo",
+          "role": "introduce"
+        },
+        {
+          "item": "e-roo-mee-baan-jaan",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-quiz-2",
+      "title": "Food & Drinks quiz",
+      "kind": "practice",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-pi-yaaz",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ke-la",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maal-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-boora",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maalga",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mirch",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mewa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sabzee",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-quiz-3",
+      "title": "Food & Drinks quiz",
+      "kind": "practice",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-kabaab",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kaabulee-palaw",
+          "role": "introduce"
+        },
+        {
+          "item": "e-gaiz-ma-ray",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da-ghar-me-do-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da-maa-khaam-do-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wugay-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tugay-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-do-day-dey-khwa-ra-le-da",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-quiz-4",
+      "title": "Food & Drinks quiz",
+      "kind": "practice",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-chi-shay-khwa-ral-ghwaa-rey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-chaay-tsa-khey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khwandwar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-do-day-de-ra-khwand-wa-ra-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-mor-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-bas-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maa-laa-do-day-na-da-khwa-ra-le",
+          "role": "introduce"
+        },
+        {
+          "item": "e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c9-quiz-5",
+      "title": "Food & Drinks quiz",
+      "kind": "practice",
+      "categoryNumber": 9,
+      "items": [
+        {
+          "item": "e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-treekh-khwaa-ra-na-khwa-kha-wam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-nan-dey-chi-shay-paa-kha-kral",
+          "role": "introduce"
+        },
+        {
+          "item": "e-do-day-tay-yaa-ra-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-staa-pakh-lay-me-der-khwakh-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ghokha-na-khoram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hisaab",
+          "role": "introduce"
         }
       ]
     }

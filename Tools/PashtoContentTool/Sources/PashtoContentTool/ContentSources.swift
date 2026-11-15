@@ -11,6 +11,7 @@ struct ContentRoot {
     var releaseUnitsFile: URL { contentDirectory.appendingPathComponent("release-units.json") }
     var registryFile: URL { contentDirectory.appendingPathComponent("id-registry.json") }
     var bundleFile: URL { contentDirectory.appendingPathComponent("content.json") }
+    var categoriesFile: URL { contentDirectory.appendingPathComponent("categories.json") }
 
     func unitFile(named name: String) -> URL {
         unitsDirectory.appendingPathComponent("\(name).json")
@@ -51,6 +52,11 @@ struct RegistryFile: Decodable {
 
     let entries: [Entry]
     let note: String?
+}
+
+struct CategoriesFile: Decodable {
+    let categories: [CourseCategory]
+    let memberships: [CategoryMembership]
 }
 
 struct UnitFile: Decodable {

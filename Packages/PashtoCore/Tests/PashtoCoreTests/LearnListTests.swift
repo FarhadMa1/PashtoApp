@@ -16,7 +16,7 @@ struct LearnListTests {
             "e-ho", "e-na", "e-xa", "e-mehrabani-wakray", "e-manana", "e-baxana-ghwaram",
         ])
         let good = try #require(polite.rows.first { $0.itemID.rawValue == "e-xa" })
-        #expect(good.english == "good, fine")
+        #expect(good.english == "Fine, good")
         #expect(good.english.split(separator: " ", omittingEmptySubsequences: false).count == 2)
         #expect(polite.rows.allSatisfy { $0.showsPlayButton })
 
@@ -26,7 +26,7 @@ struct LearnListTests {
             finishedLessonIDs: [],
             audioItemIDs: withAudio
         ))
-        #expect(numbers.rows.allSatisfy { !$0.showsPlayButton })
+        #expect(numbers.rows.allSatisfy { $0.showsPlayButton })
 
         let onlyHello = try #require(ItemID(rawValue: "e-xa"))
         let partial = try #require(LearnList.make(
@@ -198,7 +198,7 @@ struct LearnListTests {
         let bundle = try loadCourse().bundle
         let expected = [
             "u-numbers", "u-food", "u-town", "u-conversation",
-            "u-basics", "u-introductions", "u-family", "u-travel", "u-time",
+            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
         ]
         var learnUnits: Set<String> = []
         for unit in bundle.units {
@@ -274,7 +274,7 @@ struct LearnListTests {
         for name in names {
             ids.insert(try #require(ItemID(rawValue: name)))
         }
-        #expect(ids.count == 19)
+        #expect(ids.count == 431)
         return ids
     }
 

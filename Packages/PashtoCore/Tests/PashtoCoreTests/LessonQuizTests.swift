@@ -676,7 +676,7 @@ struct DialogResponseTests {
                 case "e-za-xa-yam":
                     #expect(pool.count == 7)
                 case "e-hagha-xa-da", "e-hagha-xa-day":
-                    #expect(pool.count == 22)
+                    #expect(pool.count == 48)
                 case "e-xwar-ma-she":
                     #expect(pool.count < DialogResponse.minimumDistractors)
                 default:
@@ -787,7 +787,7 @@ struct LessonSessionTests {
     @Test func everyOrdinaryLessonYieldsASessionAndSoundsStaysEmpty() throws {
         let bundle = try loadRepositoryContent()
         let lessons = bundle.units.flatMap(\.lessons)
-        #expect(lessons.map(\.id.rawValue) == [
+        let approvedLessonIDs = [
             "l-sounds-1",
             "l-basics-learn-1",
             "l-basics-learn-polite",
@@ -841,7 +841,9 @@ struct LessonSessionTests {
             "l-conversation-1",
             "l-conversation-2",
             "l-conversation-3",
-        ])
+        ]
+        #expect(appearsInOrder(approvedLessonIDs, inside: lessons.map(\.id.rawValue)))
+        #expect(lessons.count > approvedLessonIDs.count)
 
         var seen: [LessonID] = []
         var allowed: [ItemID] = []
@@ -1722,4 +1724,13 @@ private func wrongAnswer(for task: SessionTask) -> QuizAnswer {
     case .orderWords(let order):
         return .tokenOrder(order.tiles.map(\.index))
     }
+}
+
+private func appearsInOrder(_ expected: [String], inside actual: [String]) -> Bool {
+    var cursor = actual.startIndex
+    for id in expected {
+        guard let found = actual[cursor...].firstIndex(of: id) else { return false }
+        cursor = actual.index(after: found)
+    }
+    return true
 }

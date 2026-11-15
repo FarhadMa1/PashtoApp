@@ -65,6 +65,10 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
     public var lessons: [MainMenuLesson]
     /// Pictured words under the lesson groups. Empty when the unit has no pictured learn card.
     public var wordList: [FamilyWordList.Row]
+    /// Card color family. Nil when the row is still a unit.
+    public var colorFamily: String?
+    public var level: Int?
+    public var categoryNumber: Int?
 
     public init(
         id: UnitID,
@@ -74,7 +78,10 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
         practiceCompleted: Int,
         practiceTotal: Int,
         lessons: [MainMenuLesson],
-        wordList: [FamilyWordList.Row] = []
+        wordList: [FamilyWordList.Row] = [],
+        colorFamily: String? = nil,
+        level: Int? = nil,
+        categoryNumber: Int? = nil
     ) {
         self.id = id
         self.title = title
@@ -84,6 +91,9 @@ public struct MainMenuCategory: Equatable, Sendable, Identifiable {
         self.practiceTotal = practiceTotal
         self.lessons = lessons
         self.wordList = wordList
+        self.colorFamily = colorFamily
+        self.level = level
+        self.categoryNumber = categoryNumber
     }
 
     /// Completed practice lessons over the practice lessons in the unit. Empty is 0.
@@ -163,6 +173,16 @@ public struct MainMenu: Equatable, Sendable {
         showsPronunciation: Bool = true,
         learnedItemIDs: Set<ItemID>? = nil
     ) -> MainMenu {
+        if !bundle.categories.isEmpty {
+            return categoryMenu(
+                bundle: ReleasedCatalog.showing(bundle),
+                releasedUnitIDs: releasedUnitIDs,
+                finishedLessonIDs: finishedLessonIDs,
+                listedLessons: listedLessons,
+                showsPronunciation: showsPronunciation,
+                learnedItemIDs: learnedItemIDs
+            )
+        }
         let released = Set(releasedUnitIDs)
         let units = bundle.units.filter { released.contains($0.id) }
         let categories = units.map { unit in
@@ -183,6 +203,133 @@ public struct MainMenu: Equatable, Sendable {
                 learnedItemIDs: learnedItemIDs
             )
         )
+    }
+
+    /// Home rows for categories that have a lesson in a released unit.
+    /// Order is level, then category number. The row id is `u-cat-N`.
+    private static func categoryMenu(
+        bundle: ContentBundle,
+        releasedUnitIDs: [UnitID],
+        finishedLessonIDs: Set<LessonID>,
+        listedLessons: [ReleasedLesson],
+        showsPronunciation: Bool,
+        learnedItemIDs: Set<ItemID>?
+    ) -> MainMenu {
+        let released = Set(releasedUnitIDs)
+        var pairs: [Int: [(lesson: Lesson, unitID: UnitID)]] = [:]
+        for unit in bundle.units where released.contains(unit.id) {
+            for lesson in unit.lessons {
+                guard let number = lesson.categoryNumber else { continue }
+                pairs[number, default: []].append((lesson, unit.id))
+            }
+        }
+        let ordered = bundle.categories
+            .filter { pairs[$0.number] != nil }
+            .sorted { lhs, rhs in
+                if lhs.level != rhs.level { return lhs.level < rhs.level }
+                return lhs.number < rhs.number
+            }
+        let listedByID = Dictionary(uniqueKeysWithValues: listedLessons.map { ($0.id, $0) })
+        let rows = ordered.map { category in
+            categoryRow(
+                category,
+                lessons: pairs[category.number] ?? [],
+                in: bundle,
+                finishedLessonIDs: finishedLessonIDs,
+                listedByID: listedByID,
+                showsPronunciation: showsPronunciation,
+                learnedItemIDs: learnedItemIDs
+            )
+        }
+        return MainMenu(
+            categories: rows,
+            continueTarget: categoryContinue(
+                ordered: ordered,
+                pairs: pairs,
+                finishedLessonIDs: finishedLessonIDs,
+                learnedItemIDs: learnedItemIDs
+            )
+        )
+    }
+
+    private static func categoryRow(
+        _ category: CourseCategory,
+        lessons pairs: [(lesson: Lesson, unitID: UnitID)],
+        in bundle: ContentBundle,
+        finishedLessonIDs: Set<LessonID>,
+        listedByID: [LessonID: ReleasedLesson],
+        showsPronunciation: Bool,
+        learnedItemIDs: Set<ItemID>?
+    ) -> MainMenuCategory {
+        let practice = pairs.map(\.lesson).filter { $0.kind == .practice }
+        let completed = practice.filter {
+            isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+        }.count
+        let lessons = pairs.compactMap { pair -> MainMenuLesson? in
+            guard let listed = listedByID[pair.lesson.id] else { return nil }
+            let status = studyStatus(pair.lesson, finished: finishedLessonIDs, learned: learnedItemIDs)
+            return MainMenuLesson(
+                id: listed.id,
+                title: listed.title,
+                kind: listed.kind,
+                isComplete: listed.kind == .practice && status == .done,
+                status: status
+            )
+        }
+        guard let id = UnitID(rawValue: "u-cat-\(category.number)") else {
+            preconditionFailure("u-cat-\(category.number) is not a unit id")
+        }
+        return MainMenuCategory(
+            id: id,
+            title: category.title,
+            catalogKey: "menu.category.\(category.number)",
+            label: category.title,
+            practiceCompleted: completed,
+            practiceTotal: practice.count,
+            lessons: lessons,
+            wordList: FamilyWordList.rows(
+                lessons: pairs,
+                in: bundle,
+                showsPronunciation: showsPronunciation
+            ),
+            colorFamily: category.colorFamily,
+            level: category.level,
+            categoryNumber: category.number
+        )
+    }
+
+    private static func categoryContinue(
+        ordered: [CourseCategory],
+        pairs: [Int: [(lesson: Lesson, unitID: UnitID)]],
+        finishedLessonIDs: Set<LessonID>,
+        learnedItemIDs: Set<ItemID>?
+    ) -> MainMenuContinue? {
+        for category in ordered {
+            let lessons = pairs[category.number]?.map(\.lesson) ?? []
+            let practice = lessons.filter { $0.kind == .practice }
+            guard !practice.isEmpty, practice.contains(where: {
+                !isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+            }) else { continue }
+            let completed = practice.filter {
+                isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+            }.count
+            let chosen: Lesson?
+            if completed == 0 {
+                chosen = lessons.first { $0.kind == .learn } ?? lessons.first
+            } else {
+                chosen = practice.first {
+                    !isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+                }
+            }
+            guard let chosen, let id = UnitID(rawValue: "u-cat-\(category.number)") else { return nil }
+            return MainMenuContinue(
+                lessonID: chosen.id,
+                lessonTitle: chosen.title,
+                unitID: id,
+                unitLabel: category.title
+            )
+        }
+        return nil
     }
 
     private static func practiceLessons(in unit: CourseUnit) -> [Lesson] {

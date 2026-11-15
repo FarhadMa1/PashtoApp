@@ -86,62 +86,88 @@ enum Lapis {
             hue: dynamic(light: 0x8A5A12, dark: 0xF2B85B),
             track: dynamic(light: 0xE0C080, dark: 0x5C4A28)
         )
+        static let teal = MenuCard(
+            fill: dynamic(light: 0xCDEDE7, dark: 0x12352F),
+            hue: dynamic(light: 0x0F5E55, dark: 0x5EEAD4),
+            track: dynamic(light: 0x7DB5AB, dark: 0x2A4A44)
+        )
+        static let rose = MenuCard(
+            fill: dynamic(light: 0xF6D6DC, dark: 0x3A1A24),
+            hue: dynamic(light: 0x8E2F45, dark: 0xFDA4AF),
+            track: dynamic(light: 0xD4A0A8, dark: 0x5C3340)
+        )
+        static let olive = MenuCard(
+            fill: dynamic(light: 0xDDEBCF, dark: 0x1F3315),
+            hue: dynamic(light: 0x3F5F1E, dark: 0xBEF264),
+            track: dynamic(light: 0xB3C6A2, dark: 0x3A5229)
+        )
+        static let violet = MenuCard(
+            fill: dynamic(light: 0xE6DDF7, dark: 0x2A1E42),
+            hue: dynamic(light: 0x5B2E91, dark: 0xC4B5FD),
+            track: dynamic(light: 0xC1B1DF, dark: 0x4A3A6B)
+        )
+        static let sky = MenuCard(
+            fill: dynamic(light: 0xD4ECF7, dark: 0x0F2A3A),
+            hue: dynamic(light: 0x0B5674, dark: 0x7DD3FC),
+            track: dynamic(light: 0xA2C6D6, dark: 0x2A546A)
+        )
+        static let orange = MenuCard(
+            fill: dynamic(light: 0xFADDC9, dark: 0x3A1F12),
+            hue: dynamic(light: 0x9A3A10, dark: 0xFDBA74),
+            track: dynamic(light: 0xE2B49B, dark: 0x6B462A)
+        )
+        static let slate = MenuCard(
+            fill: dynamic(light: 0xDEE4EE, dark: 0x1A2433),
+            hue: dynamic(light: 0x2E4560, dark: 0xBCCDE3),
+            track: dynamic(light: 0xB2BCCA, dark: 0x424E5F)
+        )
+        static let magenta = MenuCard(
+            fill: dynamic(light: 0xF5DAF0, dark: 0x36173A),
+            hue: dynamic(light: 0x86198F, dark: 0xF0ABFC),
+            track: dynamic(light: 0xD9AAD8, dark: 0x643C6A)
+        )
+        static let jade = MenuCard(
+            fill: dynamic(light: 0xD5EEDF, dark: 0x12301F),
+            hue: dynamic(light: 0x1C6440, dark: 0x86EFAC),
+            track: dynamic(light: 0xA3CBB3, dark: 0x2C5A3F)
+        )
+        static let cocoa = MenuCard(
+            fill: dynamic(light: 0xEDE1D6, dark: 0x2E221A),
+            hue: dynamic(light: 0x6B4A2E, dark: 0xE3C4A8),
+            track: dynamic(light: 0xCDB8A6, dark: 0x54443A)
+        )
+
+        /// Card color comes from the category family, not the unit id.
+        static func resolve(family: String) -> MenuCard {
+            switch family {
+            case "saffron": saffron
+            case "lapis": lapis
+            case "teal": teal
+            case "rose": rose
+            case "olive": olive
+            case "violet": violet
+            case "sky": sky
+            case "orange": orange
+            case "slate": slate
+            case "magenta": magenta
+            case "jade": jade
+            case "cocoa": cocoa
+            default: lapis
+            }
+        }
 
         static func resolve(_ unitID: UnitID) -> MenuCard {
             switch unitID.rawValue {
-            case "u-greetings":
-                saffron
-            case "u-introductions":
-                MenuCard(
-                    fill: dynamic(light: 0xCDEDE7, dark: 0x12352F),
-                    hue: dynamic(light: 0x0F5E55, dark: 0x5EEAD4),
-                    track: dynamic(light: 0x7DB5AB, dark: 0x2A4A44)
-                )
-            case "u-family":
-                MenuCard(
-                    fill: dynamic(light: 0xF6D6DC, dark: 0x3A1A24),
-                    hue: dynamic(light: 0x8E2F45, dark: 0xFDA4AF),
-                    track: dynamic(light: 0xD4A0A8, dark: 0x5C3340)
-                )
-            case "u-time":
-                // Light track is a quarter of the way from the fill toward the ink.
-                MenuCard(
-                    fill: dynamic(light: 0xDDEBCF, dark: 0x1F3315),
-                    hue: dynamic(light: 0x3F5F1E, dark: 0xBEF264),
-                    track: dynamic(light: 0xB3C6A2, dark: 0x3A5229)
-                )
-            case "u-travel":
-                MenuCard(
-                    fill: dynamic(light: 0xE6DDF7, dark: 0x2A1E42),
-                    hue: dynamic(light: 0x5B2E91, dark: 0xC4B5FD),
-                    track: dynamic(light: 0xC1B1DF, dark: 0x4A3A6B)
-                )
-            case "u-numbers":
-                MenuCard(
-                    fill: dynamic(light: 0xD4ECF7, dark: 0x0F2A3A),
-                    hue: dynamic(light: 0x0B5674, dark: 0x7DD3FC),
-                    track: dynamic(light: 0xA2C6D6, dark: 0x2A546A)
-                )
-            case "u-food":
-                MenuCard(
-                    fill: dynamic(light: 0xFADDC9, dark: 0x3A1F12),
-                    hue: dynamic(light: 0x9A3A10, dark: 0xFDBA74),
-                    track: dynamic(light: 0xE2B49B, dark: 0x6B462A)
-                )
-            case "u-town":
-                MenuCard(
-                    fill: dynamic(light: 0xDEE4EE, dark: 0x1A2433),
-                    hue: dynamic(light: 0x2E4560, dark: 0xBCCDE3),
-                    track: dynamic(light: 0xB2BCCA, dark: 0x424E5F)
-                )
-            case "u-conversation":
-                MenuCard(
-                    fill: dynamic(light: 0xF5DAF0, dark: 0x36173A),
-                    hue: dynamic(light: 0x86198F, dark: 0xF0ABFC),
-                    track: dynamic(light: 0xD9AAD8, dark: 0x643C6A)
-                )
-            default:
-                lapis
+            case "u-greetings": saffron
+            case "u-introductions": teal
+            case "u-family": rose
+            case "u-time": olive
+            case "u-travel": violet
+            case "u-numbers": sky
+            case "u-food": orange
+            case "u-town": slate
+            case "u-conversation": magenta
+            default: lapis
             }
         }
     }

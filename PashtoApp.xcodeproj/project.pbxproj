@@ -7,49 +7,461 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0077C55CB66F7AF66E23E4BC /* e-al-bat-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 51F525428046024811738896 /* e-al-bat-ta.m4a */; };
+		01F6ACDAC2634EE67B5C81A2 /* e-jor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 459F5A98D5842C1D0EFE4D84 /* e-jor.m4a */; };
+		02139B55CEF77EFD7B2DE223 /* e-sa-baa-ba-sa-ra-wu-wee-no.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 97EDF1E254836624CFEF9C37 /* e-sa-baa-ba-sa-ra-wu-wee-no.m4a */; };
+		029BCC6125284471F4AED1F9 /* e-za-kah-wa-ghwaa-ram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 09ED5C282F0018AE27BFB184 /* e-za-kah-wa-ghwaa-ram.m4a */; };
+		032B023AC75941649E7C337F /* e-pi-yaa-da-tlal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 59A0CD795F157FCCB166D0A2 /* e-pi-yaa-da-tlal.m4a */; };
+		038DFBF77C0CD39A6848ED40 /* e-ta-cher-ta-dzey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 561D879274CBB5D0B1EDD7BE /* e-ta-cher-ta-dzey.m4a */; };
+		03A9F2E6D9EE214D8257B4EF /* e-ma-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F740CD032562810D77E0D40D /* e-ma-na.m4a */; };
+		0468767E747D6A7DAD457CD6 /* e-byaa-ba-wuweeno.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 86DD41DEC9DCF7F74196E2F1 /* e-byaa-ba-wuweeno.m4a */; };
+		05BEC1CF0FD642D341B2AF13 /* e-ta-sam-waa-yey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 19A4616E3591B67D1CA74CAA /* e-ta-sam-waa-yey.m4a */; };
+		05D6B8F5A3C61088987DF1C6 /* e-wrosta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E06CBC42DEF185ADD913839A /* e-wrosta.m4a */; };
+		06320E3F0339FAF4CE7AE2AA /* e-har-wradz.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D1E4F22E5B2BFAB239065C06 /* e-har-wradz.m4a */; };
+		0660FF8D75C30AC1572A92E0 /* e-maashoomaan-larey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 576E51C623B667D81451EBB0 /* e-maashoomaan-larey.m4a */; };
+		06CABDE363106C21E70B9748 /* e-za-wakh-tee-raa-paa-tse-dam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E7BC4795D8F0C71E069E6F89 /* e-za-wakh-tee-raa-paa-tse-dam.m4a */; };
+		06F9AEE83E3FF0EF25DE6006 /* e-mor-de-tsanga-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EEEBA20E3F013F0CAF8A0F6C /* e-mor-de-tsanga-da.m4a */; };
+		07D0C67BFB4E3C0EFDDDE405 /* e-zmung-kor-ta-kha-raagh-laast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 37D8E29F4526D599CDD7C520 /* e-zmung-kor-ta-kha-raagh-laast.m4a */; };
+		0910F3C2423A6B887FE579D1 /* e-nan-dey-chi-shay-paa-kha-kral.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AD8ED3B211D442473F11BA68 /* e-nan-dey-chi-shay-paa-kha-kral.m4a */; };
+		09242F6DAB07342BFFEE99B6 /* e-ka-chaa-loo.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2831B296C077582BC24587E6 /* e-ka-chaa-loo.m4a */; };
 		096B70D54E3354D984E154E3 /* e-xa-raghlast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EE29101395AC9D1702069D48 /* e-xa-raghlast.m4a */; };
+		0A7578B657F2AB300AA99C9C /* e-za-chaay-ghwaa-ram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1143C56CD6F874ED9560F5CF /* e-za-chaay-ghwaa-ram.m4a */; };
 		0BA7E5FCB0CDADC718983062 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */; };
+		0BE0B51A28272870D9B1306C /* e-mor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DC4147B9DD2A8B500B1F4AC9 /* e-mor.m4a */; };
+		0C63A3B7DFA2995D3E82CC80 /* e-tsa-ta-waayee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 34911398A68A88AFA61CE7B9 /* e-tsa-ta-waayee.m4a */; };
+		0C6F3D54174AD3E8AA0C6CD5 /* e-za-pashto-zda-kawam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AE79A426BD161CD1DB6304AB /* e-za-pashto-zda-kawam.m4a */; };
+		0C78551E017B5E1A7B0BBDAA /* e-da-leel.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AC8D7AE61FFE2F6123B0C040 /* e-da-leel.m4a */; };
+		0CDC04B6D257AA9A592F1966 /* e-tsa-kaar-kawey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 28789D9E3BB0C82CBE70CAE0 /* e-tsa-kaar-kawey.m4a */; };
+		0D12F5532B4458FF7807050E /* e-za-treekh-khwaa-ra-na-khwa-kha-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4FB8668D16C153435B69CC4E /* e-za-treekh-khwaa-ra-na-khwa-kha-wam.m4a */; };
+		0D46A602C529306A0096A82A /* e-maa-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 58C2CC097AC76D6C08825F83 /* e-maa-na.m4a */; };
+		0D9278DCAB18E6AC1FC0B67A /* e-do-day-tay-yaa-ra-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3124F4C743AC3979060D01D9 /* e-do-day-tay-yaa-ra-da.m4a */; };
+		0E1A8283A87ECA8268FBA0E2 /* e-ha-gha-zmaa-dost-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 117D46D6E4E026E275DCD772 /* e-ha-gha-zmaa-dost-day.m4a */; };
+		0E4C458464A3F0FA58E671D2 /* e-daa-zmaa-kha-dza-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1D3C2DA5AEA4C47C8CD8906F /* e-daa-zmaa-kha-dza-da.m4a */; };
+		0E59E761BD15889FB25F9FB3 /* e-koraney.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 497716C4658157EB812526FF /* e-koraney.m4a */; };
+		0F0E446967917550FAA7368A /* e-zhar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 96C9615DF2F907FF81EB4D02 /* e-zhar.m4a */; };
+		0F22B2ED72C6E4E5CC237614 /* e-joos.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 59D2D7B08ADC40302B200CE0 /* e-joos.m4a */; };
 		102C4C95B75514AFA77EE9C8 /* StudyCardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */; };
+		10E45999AFEFBB3F974367B0 /* e-pohantoon.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 16CA6D09A584A3FE5CE71563 /* e-pohantoon.m4a */; };
 		112CADD0C0A549B672A33061 /* e-dera-xa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 846523C50CF2F0FC6624D6C5 /* e-dera-xa.m4a */; };
 		11E73CB8D1483A23F59F942C /* e-assalamu-alaykum.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */; };
+		12094D8680F63EE6CACC0F07 /* e-tal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2DFD5D7C3DE1DDA71E3A18DE /* e-tal.m4a */; };
+		12DDEA6492382B6C86AC7CA2 /* e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C10D4203C01BD0FD03B9E4FF /* e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro.m4a */; };
+		12FD6FB67CFFFAC8E9D948D6 /* e-za-ba-sa-baa-raa-sham.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BDF9A828E7ADF24EF1651075 /* e-za-ba-sa-baa-raa-sham.m4a */; };
+		1480A21C7842E692E8E5929C /* e-a-ta-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 58DC77E82561791036EF124F /* e-a-ta-las.m4a */; };
+		149D0842E1AFB203F4CCD578 /* e-po-he-dal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A3C0AEAD1FCE4785680FBBCE /* e-po-he-dal.m4a */; };
+		14CAF5A9F12C84ABC8FEAA06 /* e-paa-tsa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4FF195E5E05EFF88B99D0E8D /* e-paa-tsa.m4a */; };
+		1575EEC3CBC32A9629B0C6F4 /* e-za-ghwaa-ram-wee-da-sham.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BE34316397D392AE55964CE3 /* e-za-ghwaa-ram-wee-da-sham.m4a */; };
+		15C68473E14DDCF291C50F90 /* e-wale-q.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D94CCA8CD6DADDEF61003C2D /* e-wale-q.m4a */; };
 		1725025E881BCF43ECB020A2 /* e-manana.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 65419D23C784426B9B23C73E /* e-manana.m4a */; };
+		17CEF604C74638764E39F14C /* e-wror.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3327064CF60B34376A3735E3 /* e-wror.m4a */; };
+		17E0410AB140EE00B97E0397 /* e-wugay-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 833554D258C7F2C0AE0C73DC /* e-wugay-yam.m4a */; };
+		1806334E518FA242C3F30461 /* e-ta-ka-la-raa-dzey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8D196967889C8650A01DD252 /* e-ta-ka-la-raa-dzey.m4a */; };
+		19148B6B8308EF59909E19CF /* e-dzwaab.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F908869B2DD9BC6D3F959D85 /* e-dzwaab.m4a */; };
+		1A3A0E4C3EAE09E9029FE171 /* e-tsom-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1662CB41D441D1BC78796DAF /* e-tsom-ra.m4a */; };
+		1AACFDF2A6CDEC91976A51CF /* e-o-wa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 748D95FEC7F044F881A4BF8E /* e-o-wa.m4a */; };
+		1B665B28D71B27CA5824D913 /* e-nan-chi-shay-ka-wey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 201F57EE03B70E467685977D /* e-nan-chi-shay-ka-wey.m4a */; };
 		1B85723CDA5A6E0699CC804F /* content.json in Resources */ = {isa = PBXBuildFile; fileRef = 2E7E47B640D712A33D52EC82 /* content.json */; };
+		1BDBAD9F7D69A7D98C130BE3 /* e-zha-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8441798C91883659B98D8FD9 /* e-zha-ba.m4a */; };
+		1CA01F703186AF0B3F164FFF /* e-taso-yast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2E7191346819DE6E97D86D3D /* e-taso-yast.m4a */; };
+		1CEA189FEBC8D08BFFF0CA2B /* e-zmung.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 178FB8F3927CF83C7B0EEA93 /* e-zmung.m4a */; };
+		1E70B8FB216CB2CDDF0AA193 /* e-ka-tal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 73CE185A6F313FFCB31D0C58 /* e-ka-tal.m4a */; };
+		1F83E77C390B818C4E8672C0 /* e-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 43781A9A025816BA5E83279D /* e-ta.m4a */; };
+		1FB0E5F3CC51E921EC58F9B1 /* e-nan-tsa-wradz-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 69F7B2EA2799101A88FF7AB8 /* e-nan-tsa-wradz-da.m4a */; };
+		2050DE5921CB2AD74113497A /* e-za-chaay-na-ghwaa-ram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EFB3B54E49F94E9014EBC0EB /* e-za-chaay-na-ghwaa-ram.m4a */; };
+		20784B04B647D04D15385C87 /* e-ke-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BE391F263C6CB7FBF165485C /* e-ke-na.m4a */; };
+		20CD06E42EDBE10441222E33 /* e-myaasht.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9185B5BBC087496E52E57EDE /* e-myaasht.m4a */; };
 		20E8B5B23086C90D848A135A /* e-pa-maxa-de-xa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2E3B32F55091A5C9F56EF56F /* e-pa-maxa-de-xa.m4a */; };
 		21A05073FF4D4CB0BA403D07 /* Motion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87592241A3F002CDC42374F0 /* Motion.swift */; };
+		22600659B58E9D096E0AFE7B /* e-dwo-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A178D4D0A1717C38166EFB52 /* e-dwo-las.m4a */; };
+		24409B8E61028932300A33A9 /* e-chi-shay-wu-shwal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8670B6F9BE6E26B587AC5C90 /* e-chi-shay-wu-shwal.m4a */; };
+		2474908316EE9A4478E72E43 /* e-ke-la.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5DC7004AEB8271E9B3FC9ABD /* e-ke-la.m4a */; };
+		259C2A400C917DB77E71DDC8 /* e-daa-chaa-dar-ta-wu-wayl.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7C1D60DECA77D7528ED941C3 /* e-daa-chaa-dar-ta-wu-wayl.m4a */; };
+		26684AAF1EE1E05BAED96371 /* e-zoy.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 63D038EE3C4700FB28BC98BA /* e-zoy.m4a */; };
+		267184C9B3ED159567DD7623 /* e-kah-wa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3D644117947096919EFFDB22 /* e-kah-wa.m4a */; };
+		26C4B6E0AA0898A80628459E /* e-anaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0301223DDD8DE42EB88D4799 /* e-anaa.m4a */; };
+		27290D6208934DD4716CC669 /* e-da-o-nay-paay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ECD433E7083E83F61005254A /* e-da-o-nay-paay.m4a */; };
 		27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */; };
+		28349D040E8EE8F0312E0695 /* e-naa-wakh-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 422F1E53C78CC5E094493436 /* e-naa-wakh-ta.m4a */; };
+		2848074AED5B8837E6E1FFA4 /* e-kar-kay-ban-da-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E5B1AC33F10BD547EC5958B2 /* e-kar-kay-ban-da-ka-ra.m4a */; };
+		28967C402D1E9ED2B875E45C /* e-daa-pa-tso-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 17DCEB093DE973A0C0DDDC18 /* e-daa-pa-tso-day.m4a */; };
 		290AFFCE73D6A06588C917C3 /* e-walaykum-salam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */; };
+		29F602EE3C2F8CE28BCDDDEF /* e-staree-ma-shey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F6A64C04EDAD57C94C7EA430 /* e-staree-ma-shey.m4a */; };
+		2A30D087A45B39BCE44F8C49 /* e-ta-cher-ta-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 521ECD73B4F0FDEE3882783D /* e-ta-cher-ta-ye.m4a */; };
+		2A35B20C7A4CD075A9A92FCD /* e-shpaa-ras.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 02557BEF8B9BFD5EAE6BCB67 /* e-shpaa-ras.m4a */; };
 		2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */ = {isa = PBXBuildFile; fileRef = 652503DE42EB750727E88CEF /* release-units.json */; };
+		2B16B8C478BD39E2725ABC1D /* e-daaktar-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 599F8871DB6CDD34C3D3D0CC /* e-daaktar-yam.m4a */; };
+		2C44472725DE6D049599AC64 /* e-za-afghana-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9238B73FFC7DA98A0826ED50 /* e-za-afghana-yam.m4a */; };
+		2C979065013883C1E2878CA3 /* e-pin-dza.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 306E4F70E7CBD3848F5DA3FB /* e-pin-dza.m4a */; };
+		2CF93BCDCD93B6808C80FDEC /* e-staso-pa-lido-xoshala-shwam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 32D8F232FAB0027CF37E9C0D /* e-staso-pa-lido-xoshala-shwam.m4a */; };
+		2D661552851B07D6F0DF60DA /* e-tsomra-kegee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 70DD0A3608C8F1DD5DA62B00 /* e-tsomra-kegee.m4a */; };
+		2EA0FE0F821A8C6ED1119B81 /* e-mel-ma.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4935E1B9BBCF51D87C705480 /* e-mel-ma.m4a */; };
+		2EE993696D89D7E8495510F1 /* e-pa-neer.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A671BF9582FF489D12DC85FF /* e-pa-neer.m4a */; };
+		3010FBB743C3EFB4C84984A5 /* e-pukh-ta-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FFD994F26FC8E3717190572A /* e-pukh-ta-na.m4a */; };
+		302E09D5373B26EBB8F4EE4D /* e-za-ham.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FD2D541B65039B9674678AC3 /* e-za-ham.m4a */; };
+		308ACF0C4A725BF1FC7B2E37 /* e-saaat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4D4D100E9E128D16D55122BA /* e-saaat.m4a */; };
+		31364C29484E66997496CF76 /* e-ko-ra-nay-dey-tsan-ga-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 508DC5E19358A5CB9FD04DC5 /* e-ko-ra-nay-dey-tsan-ga-da.m4a */; };
+		31622ECD54B5ED7FECAB92BC /* e-raa-tlal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2D6CE76C2F126532071BEBB1 /* e-raa-tlal.m4a */; };
+		318619297C113793D3C7C7A1 /* e-za-shal-ka-la-na-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E122A86F1EEA483CBE4D7AD2 /* e-za-shal-ka-la-na-yam.m4a */; };
+		339A8B0A01AA76562E1E3E17 /* e-xor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0124DD1CD9B9786226967C4C /* e-xor.m4a */; };
+		33D43AC334AD57D0730E4C87 /* e-da-ha-ghwee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E1942B10F106B963E7FF0BA8 /* e-da-ha-ghwee.m4a */; };
+		33DFEB77352A6EA42E5EBED4 /* e-kaal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 39963569EE8CF38EF6B9AF6D /* e-kaal.m4a */; };
+		3432084BE64B1649F920D659 /* e-hat-man.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C496D0DD219ABAD5060D2BEC /* e-hat-man.m4a */; };
 		34530E6D82D36161371A9BEB /* PronunciationText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E981A13C47486F0067ACF42 /* PronunciationText.swift */; };
+		352B018574CF4691470B0FDB /* e-ka-la-ka-la.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 64643403B917D9866E5DDA30 /* e-ka-la-ka-la.m4a */; };
 		3530111B87046DF5440D3C30 /* GlyphCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */; };
+		359FF12DD318D16F377BA064 /* e-mas-te.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 03C17BA387A6B3221C7B9226 /* e-mas-te.m4a */; };
+		36132FC38CDF179643686D08 /* e-daa-sta-wror-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0054FCC539A2A7A0242675A7 /* e-daa-sta-wror-day.m4a */; };
+		3689276D9B56BD1C74964DA1 /* e-za-ham-daa-se-fikr-ka-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8675DB42E343A546F7D1A112 /* e-za-ham-daa-se-fikr-ka-wam.m4a */; };
+		3689D9ED419D2BB98CE357CD /* e-sa-laam-tsan-ga-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5C61C3786B57C03A61F266C0 /* e-sa-laam-tsan-ga-ye.m4a */; };
+		3A4AA01F59B6BE7C6F3E5841 /* e-pa-oslo-oseygam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 08DE4BF4FF55C2172017E4D2 /* e-pa-oslo-oseygam.m4a */; };
+		3A8C531EF4C4B8810A9B45E4 /* e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 76F4FE0B14AD1BAF86DD7B51 /* e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya.m4a */; };
+		3AD5E3181F3BEAD09E01FA30 /* e-zmaa-mor-aw-plaar-pa-kor-ke-dee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7D8B250381B877099D89E89B /* e-zmaa-mor-aw-plaar-pa-kor-ke-dee.m4a */; };
+		3B4F8067B8601AE651DE827B /* e-maa-ta-ghwag-wu-nee-sa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5BC39C96EF2F63C7CB538A6F /* e-maa-ta-ghwag-wu-nee-sa.m4a */; };
+		3BC15F971FEBED3DE0CF63A0 /* e-drey-ba-je-dee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D32ABFCCC8D6B634FC459B79 /* e-drey-ba-je-dee.m4a */; };
+		3BDBA494A0843EE26A1284EB /* e-lee-kal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 661C40B98DE418182F8C885A /* e-lee-kal.m4a */; };
+		3D0C52D9D8555643DD935F31 /* e-la-kaabul.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CF73D334A993F59AD8E8358D /* e-la-kaabul.m4a */; };
+		3D594F164C33C6731F26D798 /* e-hagha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 35CE35A66C04A48F3C517057 /* e-hagha.m4a */; };
+		3D81033AFDD7E2F961861EBE /* e-khaam-khaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 387B347010348B8C1E6F66EC /* e-khaam-khaa.m4a */; };
+		3DF5EE990C19F584129B57C8 /* e-za-os-dzam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0F3EA5DD990C28F778EA1E9E /* e-za-os-dzam.m4a */; };
+		3EC441EA34DC877C30DDA0DE /* e-za-kha-yam-ma-na-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A1D5D7BDD3781EC90733DAC5 /* e-za-kha-yam-ma-na-na.m4a */; };
+		3F1E148C6CFC5DBD2AD99779 /* e-ko-ra-nay-me-de-ra-yaa-de-gee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 24C90BBA5F51FF98CEFF5716 /* e-ko-ra-nay-me-de-ra-yaa-de-gee.m4a */; };
+		3FE5410AF2E1C99AF90DF36B /* e-khwa-ral.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A0D0558661FC4EA0D526473B /* e-khwa-ral.m4a */; };
+		3FF449B7C0146F084D4C88C3 /* e-ta-chi-shay-ka-wey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9D30CAA00FDED38C9E451567 /* e-ta-chi-shay-ka-wey.m4a */; };
+		406E363D97A349E437760273 /* e-daa-staa-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BB8D7AD915FE92541F86A668 /* e-daa-staa-day.m4a */; };
+		412E510362285606BFA90E23 /* e-ghwag-ni-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A5001C9F10AD57458FDEC81B /* e-ghwag-ni-wal.m4a */; };
+		42077785B97D964A277F3D9E /* e-sal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A143520545BADC0E65E42BFA /* e-sal.m4a */; };
+		425F08DBC73D710D24E802E2 /* e-da-chaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 91E90DA4BE4EEF5146D4097B /* e-da-chaa.m4a */; };
+		42754E266130C481A8958006 /* e-waa-da-sha-way.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7C9A5C9E9B8110531C9F4ABB /* e-waa-da-sha-way.m4a */; };
 		4287AF1D7F6A09BCAFDA908A /* QuizScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */; };
+		42DD8184770CE077CD96D5F3 /* e-maa-shoo-maan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F11F1794B2D4BFA48E3F587A /* e-maa-shoo-maan.m4a */; };
 		4478F73538EE2286163AB2AA /* MatchingBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */; };
+		46BD6F95F3D89D81B6AA9542 /* e-za.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CFCAB97EFCF916CEB2FFB115 /* e-za.m4a */; };
+		46C2C20871B19E28308251E5 /* e-staa-so.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 26BB98A542C9661D6CDF9A7C /* e-staa-so.m4a */; };
+		474ED1CDAC5D26C81D903FB6 /* e-za-la-narwe-tsaxa-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DC48A5F213F196975B18D809 /* e-za-la-narwe-tsaxa-yam.m4a */; };
+		47F521B38A7F511F413A298B /* e-sa-haar-mo-pa-khayr.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 72450C148DE5B2D7A3F939C3 /* e-sa-haar-mo-pa-khayr.m4a */; };
+		47FEBC923F5EEDF873DA91DB /* e-hagha-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 21EDB9D44FA71ECC88F92AAB /* e-hagha-da.m4a */; };
+		490E07DDBFFD849038CC375B /* e-war-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 52586B943EA6415FC391CB4D /* e-war-ka-wal.m4a */; };
+		49ABDCD5B29753F19646EE92 /* e-pa-roon.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 67B5793193FD1AA771DB449E /* e-pa-roon.m4a */; };
+		4AF8EB27CFA50DD9E8EFB47C /* e-ho-zma-wror-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7B12DCEA0BEED449979D39A0 /* e-ho-zma-wror-day.m4a */; };
+		4B8B32E345008B3C35B3A71B /* e-byaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4877EA8A03AE0AEDA6873B29 /* e-byaa.m4a */; };
+		4BE248520F7D2899AEFF7C56 /* e-dersh.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 66BE0D1AE8ECF63A1FC789C3 /* e-dersh.m4a */; };
+		4C33676B8411B53A9076B302 /* e-nan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F14F526B8662E8E6E36CCE9E /* e-nan.m4a */; };
+		4C504A0BB1E7E9A432F08BF3 /* e-dyaar-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8719D4EB14FA9426DD331C4F /* e-dyaar-las.m4a */; };
+		4C6141D5F16DCB67C4637772 /* e-chaay-shta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A6485877AD95907D4C685957 /* e-chaay-shta.m4a */; };
+		4C6B0236B1A94B49C4084977 /* e-na-zma-zoy-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9E21D368915A1B533508F0BA /* e-na-zma-zoy-day.m4a */; };
+		4C77F2BDE7561CA433FFAA16 /* e-maalga.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2762E13153B71083D927EF77 /* e-maalga.m4a */; };
+		4D610460A097DEF1AB4E90D6 /* e-sta-num-tsa-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 03ED44F075D0DADBB4C16BBA /* e-sta-num-tsa-day.m4a */; };
+		4DCA0A60D043CC88176D30E1 /* e-ho-al-bat-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BA4506495E8BF26DD18BB521 /* e-ho-al-bat-ta.m4a */; };
+		4EEDC5119245F22C10C44F66 /* e-zmaa-khor-la-maa-ka-sha-ra-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9C9ED7F3A2BCB77EA1B96C09 /* e-zmaa-khor-la-maa-ka-sha-ra-da.m4a */; };
+		4F522707FA630D94C0BF9F96 /* e-za-mor-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4EEB7323FDFFB9D059A4AC4D /* e-za-mor-yam.m4a */; };
+		4F7B96D62D4277764E0DAB64 /* e-daa-sam-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6950A97342FC2749C3DA54A6 /* e-daa-sam-day.m4a */; };
+		504A1415E86ED6319730A031 /* e-chaay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9353B39846F993F4C52907D6 /* e-chaay.m4a */; };
+		506870102C0E3AA62A2D7DC8 /* e-daa-chi-shay-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A247A03630F5F2CA44E82C5A /* e-daa-chi-shay-day.m4a */; };
 		507F41FB8183F2D12EBBAE6B /* e-za-xa-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1F2921815B465BF7C67B6260 /* e-za-xa-yam.m4a */; };
+		509A1ACA4678AB1260BCD4A0 /* e-za-afghan-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6A830150FD233C518C8B5643 /* e-za-afghan-yam.m4a */; };
+		50EAE1B61CAEBEDBC859B346 /* e-chi-shay-khwa-ral-ghwaa-rey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CBEBBA6B6A0DF7B3279572EF /* e-chi-shay-khwa-ral-ghwaa-rey.m4a */; };
+		515509EFE17AA49D93BCC3B5 /* e-hets-ka-la.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4D33C9D6DA25DA3BA3128980 /* e-hets-ka-la.m4a */; };
+		51A8F497B8D34BABC5819A45 /* e-so-la.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FD98607568047CA8A82217A8 /* e-so-la.m4a */; };
+		51BFB3B96B26C6C5F90C3F20 /* e-har-tsa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F5DE95182106120CAB44D0BC /* e-har-tsa.m4a */; };
+		52330C7ACEEA42FC00EC7EBE /* e-za-na-po-he-gam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9B6CF1028A101A41A27C48A8 /* e-za-na-po-he-gam.m4a */; };
+		52DF8FB941F92EE5793FC789 /* e-mung-yu.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B36699C1D07B24EE35681697 /* e-mung-yu.m4a */; };
+		531AA25D2B730A33BE35D5C8 /* e-khadza.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BAF07089658F1AAFF4A68BF2 /* e-khadza.m4a */; };
+		5406BFBCF448BC8B70013DBB /* e-atyaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5D8D670971204A27B0CE155E /* e-atyaa.m4a */; };
 		553568DE12A69B71500FA8A7 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9032BBBE0603F628A79CF3 /* AppModel.swift */; };
+		55FE967A2DD783F639914F9C /* e-maashoom.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C77A118FEBCC65361E5EF786 /* e-maashoom.m4a */; };
+		568BE4CC9AD0579C174ACC8F /* e-za-shal-ka-lan-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F04B00B7D15489961895F372 /* e-za-shal-ka-lan-yam.m4a */; };
+		56AB58C8F7291FFB613FB857 /* e-koom-yaw-ghwaa-rey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 74BFBBECC43189FF036BA0CD /* e-koom-yaw-ghwaa-rey.m4a */; };
+		56CC17501EA146D0D08ABD9B /* e-ta-da-kum-dzay-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 849D4C10090CC61E593094B5 /* e-ta-da-kum-dzay-ye.m4a */; };
+		57586C0AD1ED4CB1B8F003C7 /* e-zma-num-ahmad-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EF4A1F0BCAA3D511BEBED5B2 /* e-zma-num-ahmad-day.m4a */; };
+		57773E802EF22984188E0B20 /* e-kabaab.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6316843DBC42B68250719BEF /* e-kabaab.m4a */; };
+		57D4C117DDEAD1AC1ADAB3CD /* e-tol-kha-dee-2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8DA4A9C74B7DC38569225FCC /* e-tol-kha-dee-2.m4a */; };
+		5844C458FC584EF2044CD5D9 /* e-mung.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A645A934B785AE80A86A5667 /* e-mung.m4a */; };
+		590B63779E2964BF0C78F12C /* e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0DEECA47D0727F70FE1D76A0 /* e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra.m4a */; };
+		59421C798D1C61B38D5403D6 /* e-maa-khaam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 256221DA67A2FC3913C378D1 /* e-maa-khaam.m4a */; };
+		594CA42EDFE018BA39539586 /* e-tugay-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27F79BEDDC1F4DF09DE8C83D /* e-tugay-yam.m4a */; };
+		59E14B1EDDB654F6A7DA0A13 /* e-kaar-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C731BE3E7BC265D7AD90C209 /* e-kaar-ka-wal.m4a */; };
+		5AC15A50435787D62A4E969A /* e-lwas-tal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8F293E740546536B8FF93726 /* e-lwas-tal.m4a */; };
+		5B7313DA0DA757F3925C2076 /* e-daa-zma-plar-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B2A336F8334C4905D6123CFA /* e-daa-zma-plar-day.m4a */; };
 		5BA06F10202B27D3FC808F48 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427EEE4D83973BBDF72044C /* ContentView.swift */; };
+		5D0095C1429876E6B5DDFAAC /* e-za-sa-baa-kaar-ka-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B09632F0D18314A769CE9ECA /* e-za-sa-baa-kaar-ka-wam.m4a */; };
+		5DB9D03FE79C347C9B8AC287 /* e-poheygam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3C9CFF651F3DEAF3509A6260 /* e-poheygam.m4a */; };
+		5DEB35BA2579C69166B81DF3 /* e-nika.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2010F4AE78CB26D7C6B00F5D /* e-nika.m4a */; };
+		5E53F44F51CC7C359C62AF77 /* e-tsa-ghwaa-rey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7F2B3E1C1972DF73A64C3FAB /* e-tsa-ghwaa-rey.m4a */; };
+		5E67FD7A142A7B744889C163 /* e-zhar-ba-dar-sham.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2221CC54DBA8CA81D1759A79 /* e-zhar-ba-dar-sham.m4a */; };
+		5F049A6C58000FE45C944C36 /* e-awyaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 784BF9FB43C44675292027B4 /* e-awyaa.m4a */; };
+		61B8E26EE8B035495F2DBE97 /* e-koom.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C31D6BB5706A0AE027A5BF24 /* e-koom.m4a */; };
+		61E5635A0C5E6CBF7EB36E59 /* e-na-ha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 92CA80F9D80AC4767189B8A2 /* e-na-ha.m4a */; };
+		62C80FF956ED6210587A2D22 /* e-ha-gha-zmaa-khor-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CABD5A925FC6EA6B84AB1589 /* e-ha-gha-zmaa-khor-da.m4a */; };
+		635FFB4F03D0D14424251993 /* e-tsa-lor-ka-saan-dee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 14954FEBA595DFD09FA11847 /* e-tsa-lor-ka-saan-dee.m4a */; };
+		6362B41192977689020BDABF /* e-onay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A692B9E55363EB3EEF2F8CAF /* e-onay.m4a */; };
+		636FA21DC48E742A727A6DAF /* e-daa-zma-mor-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B23AD9185197CF335C4B722E /* e-daa-zma-mor-da.m4a */; };
 		644132CFDE88EAAFBC17B121 /* LessonProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */; };
+		64ADF0233FF2A907F4025D19 /* e-lur.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 83ED8A3DBBF868399DFDC907 /* e-lur.m4a */; };
 		64C0628E4E44E51E937B45A9 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0505CC533954900598FD2EE0 /* ScreenshotTests.swift */; };
+		657FA3AB0A8EAFBA8B08C1C0 /* e-daa-zma-wror-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 667D9BABA88ADB2022E0886F /* e-daa-zma-wror-day.m4a */; };
+		6679AAC2EDFC54D761C23AC4 /* e-mewa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3AA3A21CDB2FDD06B0CDCCA8 /* e-mewa.m4a */; };
+		66B0AB60A779CBA78C4D6705 /* e-maa-laa-do-day-na-da-khwa-ra-le.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5CBA6AE861E7E9E0FD9071E4 /* e-maa-laa-do-day-na-da-khwa-ra-le.m4a */; };
+		6726BF29C0139CD93BFD9730 /* e-ju-ma.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4D4C0C5A521C36C9F611067F /* e-ju-ma.m4a */; };
+		679473146DA65E6935204DAD /* e-shpag.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 912D917649810F6D841B5D01 /* e-shpag.m4a */; };
+		682C18585C9853A3B0172434 /* e-tol.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F155B8CB2AB3935604C8EC71 /* e-tol.m4a */; };
+		68D1FBA6C35F591351E92E15 /* e-daa-zmaa-me-ra-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7D15BD0D12FF4BCFA64DF3E1 /* e-daa-zmaa-me-ra-day.m4a */; };
 		68E02FABA91DAA33FCA7EF30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB198D583572EA4F7E128283 /* Assets.xcassets */; };
+		68EF454BD6A0CF40B59C893F /* e-wra-re-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8D713ABF0901BB714A726B10 /* e-wra-re-ra.m4a */; };
+		68F98412B59833932A0A3910 /* e-khoday-dey-mal-sha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 58A917BB24DF3B981B65C13F /* e-khoday-dey-mal-sha.m4a */; };
+		6A58AE94CA8598D4B2A40CEB /* e-rikh-tyaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 59D40B88CFDEE3427A5D52AD /* e-rikh-tyaa.m4a */; };
+		6A5ED1BD0871736B0F3D7DF6 /* e-khpal-waan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D2C810BC8628476DE5B996C2 /* e-khpal-waan.m4a */; };
+		6B0801F03BEFD4ADCE78361A /* e-za-xowunkay-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4737553C7326CD4AD613A725 /* e-za-xowunkay-yam.m4a */; };
+		6B10C69E985F6A6BE2B93718 /* e-sta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A638CCEFA3331A1152A59FB8 /* e-sta.m4a */; };
+		6B91E060EBC9246A1C8EEC6B /* e-wakh-tee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9DA9913C90953D8873DB05E0 /* e-wakh-tee.m4a */; };
+		6BB3E44A3588A0EA78F21B2A /* e-tsa-kal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A7E8A4FCFF991658DFF3FA41 /* e-tsa-kal.m4a */; };
+		6BC1E27F7B047DD95E69D16B /* e-sabr-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 20591CBD493D84806B61ABDC /* e-sabr-ka-wal.m4a */; };
+		6BE976EF360A510EA8452086 /* e-sa-haar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4C79DFC832CC2168F3169710 /* e-sa-haar.m4a */; };
+		6BEBFFC41C2BB301A14F80B0 /* e-lomray.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B4DD94D242CF1919A70C516A /* e-lomray.m4a */; };
+		6D04EDF4900AEA51DC5CD1E3 /* e-daa-tsok-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3EEA45257A856754D8E14D5E /* e-daa-tsok-da.m4a */; };
+		6D5C2842D7B91AA2CD4FD257 /* e-za-kaar-ka-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F56859B5B7B4548C986F3DFA /* e-za-kaar-ka-wam.m4a */; };
+		6D738218902D9558523389D0 /* e-do-day-dey-khwa-ra-le-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 07F42303286DDF714B945310 /* e-do-day-dey-khwa-ra-le-da.m4a */; };
+		6D936412273FEB24D7B48489 /* e-mera.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 584366A741ABD536B590B4ED /* e-mera.m4a */; };
+		6F35C8A39A648F037158436B /* e-wa-le-khaan-dey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B27512E7BD985003BB255160 /* e-wa-le-khaan-dey.m4a */; };
+		6F58240506C61669805040BC /* e-maa-ta-ye-raa-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BDBFF88DA8CC7F27E2ACEE4F /* e-maa-ta-ye-raa-ka-ra.m4a */; };
+		7193AFA0B4D9EC3471FDBE20 /* e-sam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7B928B34CED4B38E1230FB05 /* e-sam.m4a */; };
 		723449F0906ECDFB12648328 /* e-taso-tsanga-yast.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */; };
+		72F2549D1D0B229916EAF010 /* e-khar-tsa-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F451F2595247341179D4DB9D /* e-khar-tsa-wal.m4a */; };
+		730C8936B90888A7EABE6CF3 /* e-rikh-tyaa-2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 00EA6D044093FBF761BDC1B5 /* e-rikh-tyaa-2.m4a */; };
+		73197A0D0A51FBED2F080E17 /* e-hisaab.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BC024231074352165F6AAC92 /* e-hisaab.m4a */; };
+		734141A972F3C24B0ACAE065 /* e-panj-shan-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DF01B16C93CAF32FFD6B3208 /* e-panj-shan-ba.m4a */; };
+		73C2EA11F434236973679103 /* e-tsanga-q.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 841E87F7ED019B26C47D1E40 /* e-tsanga-q.m4a */; };
+		73C6595FCE367389E7BA3B09 /* e-kha-yam-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 27FFD5904AB62A60E4DB5EDF /* e-kha-yam-ta.m4a */; };
+		756DB0CEEFF47290341F1540 /* e-gham-ma-ka-wa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B9E8EC4806F787C06DEC18B3 /* e-gham-ma-ka-wa.m4a */; };
+		761CEC37D6A1EA650E529674 /* e-sabzee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 79E5D39F90CA2B170623388C /* e-sabzee.m4a */; };
+		763EB17161CA5F4B1811D9AD /* e-za-naa-wakh-ta-shwam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4121224C264D798E2102200E /* e-za-naa-wakh-ta-shwam.m4a */; };
+		76650BFAE73EB200293F1B15 /* e-da-maa-khaam-do-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F029544BEBEB199EA70B8D77 /* e-da-maa-khaam-do-day.m4a */; };
+		775CFA72C6AC11E2B1936AF6 /* e-ka-la-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E9484EAE3294B45DF43C936E /* e-ka-la-na.m4a */; };
+		77E3ADBB6B3E537A4FEE3A13 /* e-maal-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0523D24B2BC497BA1F5DCD60 /* e-maal-ta.m4a */; };
+		780224D18D6CE108227EA3F1 /* e-wraa-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D52A51CB989796EB7BB92954 /* e-wraa-ra.m4a */; };
+		783B03E9A4F55DDA169FFDD5 /* e-do-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 905CAF0DB1E7A4477F6E1776 /* e-do-day.m4a */; };
+		794B8CEC88B6DB5E80A55ED8 /* e-dost.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 346A18A5912613D021E5ED62 /* e-dost.m4a */; };
+		7A12D3FF330EDA6272DB88CD /* e-do-day-de-ra-khwand-wa-ra-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A57C2C68E99DD884BC485DCC /* e-do-day-de-ra-khwand-wa-ra-da.m4a */; };
+		7A51D702B1F573BE5D948F6C /* e-zmaa-wror-la-maa-ma-shar-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 77F9E036F91C03490E8A4D60 /* e-zmaa-wror-la-maa-ma-shar-day.m4a */; };
+		7AAD0A1AAF70EF35957988A2 /* e-sifr.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 17898B9C147E18DBD842C8D5 /* e-sifr.m4a */; };
+		7B0036DE8F20AC0223C0A7AB /* e-pin-dza-da-kee-ke-sabr-wu-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 89F738D806AFA6A2A623345F /* e-pin-dza-da-kee-ke-sabr-wu-ka-ra.m4a */; };
+		7C0A0B1EEF5604F3B61FF4AC /* e-daa-do-day-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ED189BB83F2AA97B72FEC9A4 /* e-daa-do-day-da.m4a */; };
 		7C3CF5EEC47EF612EE538B95 /* UpdateNeededScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */; };
+		7C55A1006FBA38705EFB7532 /* e-pi-yaaz.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A4DBFC38C4A9301DC36C3157 /* e-pi-yaaz.m4a */; };
+		7D36F003A8E2F1D10F1E4438 /* e-maa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 231C9416404B9C5A2EB35CE0 /* e-maa.m4a */; };
+		7D770CFDCCDB1FDF810C37D2 /* e-da-dzaan-khyaal-saa-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 982CA1D1DE355EE343EF1592 /* e-da-dzaan-khyaal-saa-ta.m4a */; };
+		7E0E91B0048BADB2C7301259 /* e-shal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 73AED40EBFD9A3D48A971554 /* e-shal.m4a */; };
+		7E13578B0CBBD8E1C0492204 /* e-kha-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 80712368E217942FE861BBF8 /* e-kha-da.m4a */; };
+		7E59C93A51D81D4EC8845ECE /* e-kala-q.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F70BC88E10CDD14FBFBB20CF /* e-kala-q.m4a */; };
+		7E5E855B31BBCD39FEBAB175 /* e-na-chaay-na-shta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F0FF99691C4525D5B0491B6A /* e-na-chaay-na-shta.m4a */; };
+		7E6A68F66FDF397FD89A56E2 /* e-dwa-baje.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3A3F7E38BBED9066D2752034 /* e-dwa-baje.m4a */; };
+		7EE288A30DA6909DABE625AD /* e-la-maa-sa-ra-mras-ta-ko-laay-shey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D7F39AAD2A2111F06362CFC9 /* e-la-maa-sa-ra-mras-ta-ko-laay-shey.m4a */; };
+		7F4B58F24BA06B656DC49C59 /* e-gha-lat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D113D2F41868F9CCA341BF08 /* e-gha-lat.m4a */; };
+		806A67272C53DEBC1B17736F /* e-gaiz-ma-ray.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8C681BF31692CB9CE70B2FF7 /* e-gaiz-ma-ray.m4a */; };
+		8072EA970764D13C40D468C0 /* e-za-pakh-to-kha-na-sham-wa-ye-laay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 927D31DBAA51FDB989F06286 /* e-za-pakh-to-kha-na-sham-wa-ye-laay.m4a */; };
+		8159CE70E30FB18F1872C247 /* e-maamaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D8D09CA1786F35C8092D43CE /* e-maamaa.m4a */; };
+		8218877B7B023A36F99E537C /* e-mi-li-yat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F1EF52D63788CA1952FCECDE /* e-mi-li-yat.m4a */; };
+		8285088E13E4AB8A1B94283C /* e-za-pa-taa-po-he-gam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B48038559C480A537B794419 /* e-za-pa-taa-po-he-gam.m4a */; };
+		8285CD0B5FC36D6440E640C6 /* e-paa-tse-dal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BC2116F33629B9BC0EA8CF49 /* e-paa-tse-dal.m4a */; };
+		837855E0F94A1053A4EB87AD /* e-staa-pakh-lay-me-der-khwakh-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 53A4BB08CED79A9DD98EC397 /* e-staa-pakh-lay-me-der-khwakh-day.m4a */; };
+		83A3680201E505D1061EAE60 /* e-mor-aw-plaar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F8BE2299E47D1E31F3B55703 /* e-mor-aw-plaar.m4a */; };
+		847CAAA3C462F89877CD489B /* e-daa-zma-xor-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B1B70B380A786E000971F503 /* e-daa-zma-xor-da.m4a */; };
+		847D70F84F88EADB8319C00F /* e-ni-ma-shpa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0FFF46C6F4B64E332853632F /* e-ni-ma-shpa.m4a */; };
+		8506086CA2E29D02855D1A2A /* e-khu-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B0966E673D64AD2C68349CC1 /* e-khu-wal.m4a */; };
+		851A5CB01E92CC85E2E4A669 /* e-dwa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BA0100CF0B64E0677DCEC8AC /* e-dwa.m4a */; };
+		856575ACF3DB94F986F16392 /* e-ho-chaay-shta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 864FCD5CBB17C969535A4F68 /* e-ho-chaay-shta.m4a */; };
+		86F63BF42150DF548AA9EDD2 /* e-o-mar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B74695AF3A8134A63B84352E /* e-o-mar.m4a */; };
+		871302A0099DE083C1C693F7 /* e-de-ta-wu-go-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ED21C161EE6A5D23ADEEB027 /* e-de-ta-wu-go-ra.m4a */; };
+		8752F6D39B771B794DAAB3D1 /* e-daa-ma-na-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F694F9837E48900BFDDAD9C0 /* e-daa-ma-na-da.m4a */; };
+		879F99062BFC9A518C6B4426 /* e-da-kee-ka.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2E9073AA61E64EF4C287CCAD /* e-da-kee-ka.m4a */; };
+		8841193F5E2A6F42A4202B02 /* e-roo-mee-baan-jaan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F77D2208B310B512A5B26948 /* e-roo-mee-baan-jaan.m4a */; };
+		88DADCA4A5CAAEFC6DFE0319 /* e-tso.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FC64D8E0D69A1B7D25B2AC9A /* e-tso.m4a */; };
+		8920FFA736300F24E83F4DB6 /* e-wradz-dey-kha-sha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 338AD01A0ED5569FBB075E1E /* e-wradz-dey-kha-sha.m4a */; };
+		8A787AC0DFDAE20CC20046B7 /* e-ka-lan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0160D72209B476F36922C3A3 /* e-ka-lan.m4a */; };
+		8C3403A36DF125DAFBA04184 /* e-khaa-yee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B99B0D11914F4376B6A5277D /* e-khaa-yee.m4a */; };
+		8C7575ECF358CF3D65B3BCD6 /* e-da-ha-gha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E41D4747E0609DBE361E1F0B /* e-da-ha-gha.m4a */; };
 		8D2ADE11DB7BFBC91B9791C4 /* e-mehrabani-wakray.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */; };
+		8D52994884C5C8024A6994CD /* e-zma.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4649D38989C84EFFA2D3F537 /* e-zma.m4a */; };
+		8DB7A5FFB81BB98A894B5308 /* e-os.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C8E2E4260A96D6C635BD889A /* e-os.m4a */; };
+		8DD535D3D4E0A580D02633EE /* e-pindzos.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 230085AC69DBABD95792673A /* e-pindzos.m4a */; };
 		8E78ED144AB73CD9F3E1A437 /* PashtoPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = BD251F923BB6C48D5AF2E09E /* PashtoPersistence */; };
+		8EEFBADA148950FC1429430D /* e-maaspakheen.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A8ABB40E7B1A29A1F8506F22 /* e-maaspakheen.m4a */; };
+		8FC3432E1F66416B25B2FE20 /* e-cha-haar-shan-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 22617F80D0BD3693E072F746 /* e-cha-haar-shan-ba.m4a */; };
+		8FC7919F9BABAC0B0201502C /* e-za-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0C8503B6BB8F9B546730A6BE /* e-za-yam.m4a */; };
+		909768AE881D37D1D44F9CE6 /* e-chaay-tsa-khey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B427010A04B1588F0CBB92BE /* e-chaay-tsa-khey.m4a */; };
+		91EA7C14F126E75A90BCF650 /* e-shpa-mo-pa-khayr.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CC4003F16599CDEC6E978938 /* e-shpa-mo-pa-khayr.m4a */; };
+		9228F6D0730DD963B1A9D612 /* e-se-shan-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7450EDD3902CCF06E88DFE87 /* e-se-shan-ba.m4a */; };
+		926677F54BA399ECA7910ADE /* e-num.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 99C9D8F1D299B401FCAD09DC /* e-num.m4a */; };
 		928EE95138D58268F755DBD7 /* e-xa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9AB5D1D030F585B371D5FDB8 /* e-xa.m4a */; };
+		95E3006C89DC3D2B75E3C5C5 /* e-za-ha-gha-pe-zha-nam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 30067C0346F7F855E02FC52A /* e-za-ha-gha-pe-zha-nam.m4a */; };
+		96122095B07B097E5F591C91 /* e-po-me-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2227ACD6E8234D6BFFB8B14E /* e-po-me-ka-ra.m4a */; };
+		974733C2D210D52C9E7DBBFB /* e-khayr-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7F73F04C03FA01B1C49AD632 /* e-khayr-day.m4a */; };
+		975EF8673B82A7934874B2C3 /* e-tso-ba-je-dee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6335BAE78D040C863A6BC37B /* e-tso-ba-je-dee.m4a */; };
+		97B6C018567C17538A3D3586 /* e-khpal-ka-lay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8F3674EF38A4E3E6A6B9E14F /* e-khpal-ka-lay.m4a */; };
 		980EAFAB2A22F95D11E40DB6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2382E97EED9CF787345C726 /* RootView.swift */; };
+		9888DB26177CA9B9A24B4358 /* e-kor-wudaan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0F49F0C19B085B6DC6514762 /* e-kor-wudaan.m4a */; };
 		98F24341E577C90C0E7A4B37 /* LapisStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791E1EE79678E1A2816B03F /* LapisStyle.swift */; };
+		99E3DB8CA9BC892B2FEA2B83 /* e-za-waa-da-sha-way-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A0037DA8371894F05F37C37A /* e-za-waa-da-sha-way-yam.m4a */; };
 		99E8A559E2D8BAE449B486E9 /* e-xwar-ma-she.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */; };
+		9A2333478DC436D1DDF18D99 /* e-dwa-ghwaa-ram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BAC54EB3FA6C42BED18AA59C /* e-dwa-ghwaa-ram.m4a */; };
+		9A550BE23B403A9829537296 /* e-za-afghan-na-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BD21ACAF90E7BE90ACAEE023 /* e-za-afghan-na-yam.m4a */; };
+		9A970A0B925D0D1851300E15 /* e-shaayad.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 29B26807F10621B6CE0142AE /* e-shaayad.m4a */; };
+		9AAC108FFDD8AFA3FF2D32B4 /* e-mras-ta-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 15F9E262A912E522D8AC7A3D /* e-mras-ta-ka-wal.m4a */; };
+		9AFD3B1B0645310FF7A80456 /* e-plar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C663E737F04F263760DC07E3 /* e-plar.m4a */; };
 		9AFF94A423C19F998CD2F428 /* e-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F0CD0E123D3AD965E07A54CD /* e-na.m4a */; };
+		9B28AECFFB29C144F2F54EAE /* e-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B04265FCB496F4E2DF6AD167 /* e-las.m4a */; };
+		9B42E0E8A6C438F9B0DBA119 /* e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 35D685FAC87BB73E2B23703D /* e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no.m4a */; };
+		9BA466AFEEADC4445151BD3D /* e-lag-pakhto.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55A84965D399E625A93BFA30 /* e-lag-pakhto.m4a */; };
+		9C130FA6957C11DFBD4EDE57 /* e-shee-dey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C63574AF3DB2CD9D3006B48F /* e-shee-dey.m4a */; };
+		9C2CCED81DB1A62DA5688267 /* e-ha-gha-staa-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D900D1E4E054C2E9C62D357E /* e-ha-gha-staa-day.m4a */; };
+		9CBC8E3045905B218C4D7816 /* e-khaala.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F121BD4800703B9AD7CB11D8 /* e-khaala.m4a */; };
+		9CEF3957C0919BAF9803581A /* e-mu-ja-rad.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 192C52D43E5D738B42D8909A /* e-mu-ja-rad.m4a */; };
 		9D20A2B24783201D03D5BDDF /* e-baxana-ghwaram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */; };
+		9D2528C4A625FAB9D6448B37 /* e-da-ha-ghe.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 04F2B67F1153A51D52F609CF /* e-da-ha-ghe.m4a */; };
+		9D34AB0B9E97D309ECAAC721 /* e-daa-zmaa-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 46E1B1B996745848E2ABE5C5 /* e-daa-zmaa-day.m4a */; };
+		9D3D0C247C8D2F4716EAF06E /* e-drey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 81288481ABB35289BC090237 /* e-drey.m4a */; };
+		9D87B4DF78CAB17DC09123DB /* e-daa-tsan-ga-kaar-ka-wee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D4E691251805200F8D6BA98B /* e-daa-tsan-ga-kaar-ka-wee.m4a */; };
+		9E9886C210587A26428AD629 /* e-za-baa-yad-kaar-wu-kram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D1C7D2B1FEEAB443E7108FB8 /* e-za-baa-yad-kaar-wu-kram.m4a */; };
+		9EA9BB2DC4B83D2C9472090C /* e-man-da-wa-hal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5C77DE4BB4A400B3BB8DB51C /* e-man-da-wa-hal.m4a */; };
+		9EB51A4FBCEE5E7A1A057D91 /* e-zdakawoonkay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FA944D0F6FC350BCAB109045 /* e-zdakawoonkay.m4a */; };
+		9F051A7A641EE9B83C12DC34 /* e-ya-keen-la-rey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ACCE8DACC911F725C9972E76 /* e-ya-keen-la-rey.m4a */; };
+		A0FC983CE1588DA45A85380D /* e-tsa-q.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A50D48CB37D5759AEBF973DE /* e-tsa-q.m4a */; };
+		A2546508CAD5F35A32B6AFB1 /* e-plaar-dey-cher-ta-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D7AC305E7094AA1B7238FFF5 /* e-plaar-dey-cher-ta-day.m4a */; };
+		A271CD9A852ED10C81F2A9CB /* e-dwaham.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1DFF8FDD9CAEC4E56DE88205 /* e-dwaham.m4a */; };
+		A38375599DAFC869C30AD895 /* e-nawi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9D7DD37470F89C77AEE8D72B /* e-nawi.m4a */; };
+		A3C568F093A7BADDE06A5F5E /* e-yak-shan-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 60AB1AE6CD553B22F69E7E43 /* e-yak-shan-ba.m4a */; };
+		A3F1AE1DDACDFCA8BFC00D1F /* e-plar-de-tsanga-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55DC92BAD7BD8D40433D4830 /* e-plar-de-tsanga-day.m4a */; };
+		A4553916FE9EDD50FB8DDFC7 /* e-za-pin-dza-wisht-ka-lan-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 531D9FC279E7EBBD78965760 /* e-za-pin-dza-wisht-ka-lan-yam.m4a */; };
+		A45E67439E075918AD91B2AC /* e-za-lom-ray-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DACBCD6BFF95412189A802E2 /* e-za-lom-ray-yam.m4a */; };
+		A5E79335E93A4751D959FE8D /* e-saa-ni-ya.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7A80A3FB95ED102459CD22B5 /* e-saa-ni-ya.m4a */; };
+		A672AB0B0F2885A01ECFD076 /* e-ha-ghwee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 203BCE1D1EF3653F2CA53A21 /* e-ha-ghwee.m4a */; };
+		A68DEF9BB203A9C47234E229 /* e-wu-dre-dal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F3E1CE5FF7E6A4F8900C76D4 /* e-wu-dre-dal.m4a */; };
+		A91F1A487855DDF75BF9846D /* e-hagay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FEBEF4DA2E7E79F745413032 /* e-hagay.m4a */; };
+		AA1EFF0C4F16DA2787207AFF /* e-gho-kha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AF1AF483553E87A35486C73E /* e-gho-kha.m4a */; };
+		AAEB81AFCDE9844C835A1CDF /* e-wa-zee-fa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4B3197F05DEED18A1DA1F726 /* e-wa-zee-fa.m4a */; };
+		AB33E5178E53702120D0415B /* e-ghar-ma.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3837E346BC73A90558BB1164 /* e-ghar-ma.m4a */; };
+		AB387643138C981E566278D9 /* e-ka-lay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D147C40A939CE9F093F0846C /* e-ka-lay.m4a */; };
+		AC1EAC1EC352D45239181DDA /* e-ha-gha-tsok-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 09BDD77DAB59BD9F62097C67 /* e-ha-gha-tsok-day.m4a */; };
+		AC2D9E6A727C4746B1710CBD /* e-yaw.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BC3E39045A5E37D9801C14F3 /* e-yaw.m4a */; };
+		ACA0F93F5A86B3E35EF6AEF0 /* e-staa-pa-lee-do-der-kho-shaa-la-shwam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1B5F1E820DB30165E5120844 /* e-staa-pa-lee-do-der-kho-shaa-la-shwam.m4a */; };
+		ACC1187BC3B6C16844403B88 /* e-hagha-xa-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 30013C94754F2E32EDCB672E /* e-hagha-xa-day.m4a */; };
+		AD0D2667159CE0216C344E98 /* e-dre-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9EB6D0667C305E3753913B90 /* e-dre-yam.m4a */; };
+		AD9773F83FCA22211C4F4D73 /* e-tso-ghwaa-rey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55841E964FAB3D52287F53FB /* e-tso-ghwaa-rey.m4a */; };
+		AE38CB897AA2A7F191AA76AB /* e-mirch.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2BBE9EF12B37B7E4AE1B9513 /* e-mirch.m4a */; };
+		AE732C0B1E6C07979D2ED378 /* e-wa-le-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C8EB33047A2278A6E9FD98E5 /* e-wa-le-na.m4a */; };
+		AED8B24811C4D54D12B67D7D /* e-ghokha-na-khoram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0F8C7E432C526EC4789EBA8F /* e-ghokha-na-khoram.m4a */; };
+		AF740FE6A5198ECE802865A3 /* e-staso-num-tsa-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 87E2D21D687C01865C05E966 /* e-staso-num-tsa-day.m4a */; };
+		AF9B72CEC1F7F188EA9C93F5 /* e-shaa-yad-wros-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5519ED44392A892DC54598DA /* e-shaa-yad-wros-ta.m4a */; };
+		AFDB2F82B91394B4C5892CF0 /* e-nan-shpa-ba-dar-ta-zang-wu-wa-ham.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 0F88913558EF7522F517F481 /* e-nan-shpa-ba-dar-ta-zang-wu-wa-ham.m4a */; };
+		B07FA69F2C3634010A209D47 /* e-cher-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9BFAD0FB379C413E3FD6E030 /* e-cher-ta.m4a */; };
+		B11F15FAE3CB92DC68761010 /* e-las-da-kee-ke-sabr-wu-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1CBA6B8BAE4326BBAEB36346 /* e-las-da-kee-ke-sabr-wu-ka-ra.m4a */; };
+		B1E8BCAD0DF25951EFF10ADA /* e-neem.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A45B84D3D412ADE2B44C76CB /* e-neem.m4a */; };
+		B21ABAD293521B6C0225516A /* e-jor-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E3EA26DA48066EE2D3ED2BD0 /* e-jor-yam.m4a */; };
+		B479C4679F43CD5D3FCBAF36 /* e-bad.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 160E0D84750C1A77BC0BA718 /* e-bad.m4a */; };
+		B569C52866096F9046144937 /* e-shpeta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 397F24C0B135BC8F9DC542A1 /* e-shpeta.m4a */; };
+		B56FEC51917FA46C86D67F3B /* e-kab.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6DC6F4B03DBA2CF9A68ADF02 /* e-kab.m4a */; };
+		B61B5217C9DA2DFC4C3A0AB7 /* e-khlaa-sa-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 95AD6D51A7C2B83B284C203E /* e-khlaa-sa-wal.m4a */; };
 		B6A00D3DA986FA9FAADF25B2 /* e-salam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB1399B47DD716ED2E20B5C4 /* e-salam.m4a */; };
+		B6B4487D247B970B09044D19 /* e-tol-kha-dee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BA39BBCC9E1A711C92BF8647 /* e-tol-kha-dee.m4a */; };
+		B8C503A674260B5C975E6A0F /* e-hets.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A85CF7A391766CCCE9D0BB23 /* e-hets.m4a */; };
+		B965977139D5FDFDBDDE0AA5 /* e-ta-ha-ghe-pe-zha-ney.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5A074F6B2EE03E80180D9231 /* e-ta-ha-ghe-pe-zha-ney.m4a */; };
+		B9717C8B526C796C18290587 /* e-tsa-lor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A5B98FF35F990765D0CAD646 /* e-tsa-lor.m4a */; };
+		B9CBC60DC4FE308DB4299639 /* e-khabar-na-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 43638DF4C5E3BBC87F93DB5F /* e-khabar-na-yam.m4a */; };
+		B9E04C67D2586E149EF732C7 /* e-alhamdulillah.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3FC4C02FA7DB8DEC3F4BF440 /* e-alhamdulillah.m4a */; };
+		BA734EF09BBD84B644D3B59E /* e-kor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 428C2066011F7E76341A80A7 /* e-kor.m4a */; };
+		BAF31E679F0ADEE684B6D45F /* e-khaar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 340C8B32A1A737C3A04CE76C /* e-khaar.m4a */; };
+		BB191772E489E48E64EB2A4E /* e-mung-ni-ka-aw-a-naa-ta-dzoo.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A22BE6950963D3EC9C08B0CD /* e-mung-ni-ka-aw-a-naa-ta-dzoo.m4a */; };
+		BC919BD6891CE7B0B0D9EAF7 /* e-ta-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7C69DD3EB18728A00623B967 /* e-ta-ye.m4a */; };
+		BCC8C3831A9620873BFA160E /* e-no-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 78690B33046550806F60EE97 /* e-no-las.m4a */; };
+		BCD7837F49649E1CC18920B8 /* e-daa-tsa-maa-na-la-ree.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE9C084D1E80CA01EB3E4A63 /* e-daa-tsa-maa-na-la-ree.m4a */; };
+		BE7A1B17C29CF6EC5A8ED196 /* e-la-mung-sa-ra-raa-sha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C29DC733EA275331CE8A8711 /* e-la-mung-sa-ra-raa-sha.m4a */; };
+		BEB2A42F4CE57A590D4E6996 /* e-pa-khayr-raaghle.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 122A1D124A7BC6C910819CBE /* e-pa-khayr-raaghle.m4a */; };
+		BEBDD7DC3D72BAFA980E9AD5 /* e-tswaar-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5C76AA0E33965AF123F2D6A1 /* e-tswaar-las.m4a */; };
+		BF0C43F0BF6EA5AF6AB785A8 /* e-za-lag-lag-pakh-to-waa-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B77F3C3BC7ABEE84C5889476 /* e-za-lag-lag-pakh-to-waa-yam.m4a */; };
+		BF457C822E6910220FD010A6 /* e-do-shan-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7A03267A995370F25FE00922 /* e-do-shan-ba.m4a */; };
+		C2447437006DB035273DBB13 /* e-a-ta.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BAA2004E2AD6CC2C25C2EEBB /* e-a-ta.m4a */; };
+		C29E26F1A2E47247A9052E6D /* e-sama-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C7EC6E072D54DD7965BF99D3 /* e-sama-da.m4a */; };
+		C2C2DA11165C087F2A2AD17E /* e-za-drey-wro-na-la-ram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 192F0A311570E8ED6DD83822 /* e-za-drey-wro-na-la-ram.m4a */; };
 		C465E70F7E879ADE2B4505C5 /* ProgressStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */; };
+		C5B6B996FB3E353257C73D74 /* e-taso.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 05CB4367B7E8240D9D531C27 /* e-taso.m4a */; };
+		C6493B6FCF619F12E0367D69 /* e-jor-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 60E9DF8269FA7D8BBB3E25AD /* e-jor-ye.m4a */; };
+		C64B0D650767434A302BD67E /* e-sa-baa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CF913CB85047A3B496FC81DB /* e-sa-baa.m4a */; };
+		C7D593842BEEE03D9E2F10A1 /* e-nan-ju-ma-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F752497950F32616EA247C28 /* e-nan-ju-ma-da.m4a */; };
 		C7F90B4AAB29675E52AFE58E /* e-xoday-paman.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B1387294DBB3F01F49957DC5 /* e-xoday-paman.m4a */; };
 		C7FB99C8D9388789E64DC142 /* StorageErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21AAA7CC3D9B78DB7765A80 /* StorageErrorScreen.swift */; };
+		C951EE2367A02BA2D257C40A /* e-daa-tsok-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12F949172F3B945037B6F616 /* e-daa-tsok-day.m4a */; };
+		CA5F09B44DCC276C0E50765E /* e-za-o-ba-ghwaa-ram.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8C6D42366F39B25676ADC9FF /* e-za-o-ba-ghwaa-ram.m4a */; };
+		CA642DB82C48957764AF16B6 /* e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EE3E8EC9A0B4D160BD6ECFA2 /* e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no.m4a */; };
 		CCF75C560B54AF4E01E115EF /* e-tsanga-ye.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CCAECD6AA12960DD6901428E /* e-tsanga-ye.m4a */; };
+		CD0E32A6ACF11C4A0AD19DD2 /* e-zoy-aw-loor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AC11194093DECE6CE3E2C87D /* e-zoy-aw-loor.m4a */; };
+		CD2EBE5CD6A6126878F9F3F8 /* e-zda-ka-woon-kay.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 676AF9BF05AAD6B929F205D8 /* e-zda-ka-woon-kay.m4a */; };
+		D44CE2C9578D87F45E85FF71 /* e-charga.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A4E06481B0D4BBD3A6340CAD /* e-charga.m4a */; };
+		D5149F9E22376DD98491DDDD /* e-bil-kul.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8C5BAA1C7E8611D2A0122F15 /* e-bil-kul.m4a */; };
+		D64BBC3FE5CEF56F4C101A59 /* e-shan-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 44A71CBCA46AC6B6C399B2E8 /* e-shan-ba.m4a */; };
+		D669918DE6280068A891B892 /* e-injineer-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9606CE10D2D4BDDE708241FE /* e-injineer-yam.m4a */; };
+		D695ECDDC8914C4FEF643B3D /* e-hagha-xa-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5B8C87615EA5318B40CCA5B1 /* e-hagha-xa-da.m4a */; };
+		D6B67003D85319E129FEAB69 /* e-makhke.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8002BB187F29F7F506F1976C /* e-makhke.m4a */; };
+		D8930BDB0125E1C2CAB23094 /* e-kaakaa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C38B04AAAEEA666727857792 /* e-kaakaa.m4a */; };
+		DA54956D7E381D798D45BE3F /* e-ha-ghwee-sa-baa-raa-dzee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E03D1043D597C14704CE3470 /* e-ha-ghwee-sa-baa-raa-dzee.m4a */; };
+		DC7DFC43342B46BAA7A9A9F5 /* e-za-sa-haar-kaar-ka-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8C90BBACA4FCDD58A4B0CB05 /* e-za-sa-haar-kaar-ka-wam.m4a */; };
+		DE1FD899B476C2CD5BF0A417 /* e-yaw-wo-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A57D00D8C679C8A7D2FFE73B /* e-yaw-wo-las.m4a */; };
+		DE2803753E527437805F078E /* e-fark-na-ka-wee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D36C4A49A8F18C3D24135E99 /* e-fark-na-ka-wee.m4a */; };
+		DE949A1C1F3F6F3F4A0434DB /* e-wakht.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5F3216C73583098222431B8D /* e-wakht.m4a */; };
+		DEE30E531BE546531A018D76 /* e-akh-is-tal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B8A0955278BC1AE16241DC83 /* e-akh-is-tal.m4a */; };
+		DFDE9438D71A3103E7393093 /* e-dzoo.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 26BC559C4A8BA09A24D9C6E8 /* e-dzoo.m4a */; };
+		E042CF786F5DA6079B448A30 /* e-tsok-q.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 669705F776C02249BA6CD424 /* e-tsok-q.m4a */; };
+		E0C1C505993916D4637D1D70 /* e-wa-tan.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 43CB966528E76225ADBE7315 /* e-wa-tan.m4a */; };
 		E140032A46A25D80E1865FC1 /* PashtoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20749347E5913E3C376940D0 /* PashtoApp.swift */; };
+		E1E0193A237C34F83DAA7C23 /* e-aw-re-dal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8889E7FBC9D20185E6109C2C /* e-aw-re-dal.m4a */; };
+		E23444061687958C736BE328 /* e-na-ma-na-na.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CDD51F487F74AA2BA6D5FA94 /* e-na-ma-na-na.m4a */; };
+		E2B55BBC38E45C2C4A78031B /* e-o-wa-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A3F1150A7A5E135FE62C91FC /* e-o-wa-las.m4a */; };
+		E5008791CF38008836477EAD /* e-ta-khwin-de-la-rey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 886116BB5D77715CFE139B9B /* e-ta-khwin-de-la-rey.m4a */; };
 		E520FAD0CF89519C47ECA535 /* e-stare-ma-she.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */; };
+		E623FA443554F9153ADBCD46 /* e-sa-baa-shan-ba-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 544C06AB75293B8C53F3C1A9 /* e-sa-baa-shan-ba-da.m4a */; };
+		E6A0BA82AD5D6B23A9F26B89 /* e-za-pa-roon-mas-roof-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B0ABF0DDD8A7E3D63F2D0576 /* e-za-pa-roon-mas-roof-wam.m4a */; };
+		E6EEB225A66D0C7E2868C9B6 /* e-zmaa-in-ti-zaar-wu-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = BC74064A14BAA284CA315818 /* e-zmaa-in-ti-zaar-wu-ka-ra.m4a */; };
+		E703592F87B83996BDD6B0E4 /* e-wradz.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 802BC8C19C0290E6C191F70C /* e-wradz.m4a */; };
+		E77514EC3A6E9F179AC24A56 /* e-ban-da-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7CB1FA3B82AAFF3A6877E579 /* e-ban-da-wal.m4a */; };
+		E7794B407A321ADAB01AE4FD /* e-wri-jey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FBCA3C46D707F7C36BCFE4DB /* e-wri-jey.m4a */; };
+		E881CF928DBCACBD7E38B370 /* e-lo-be-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 146D5F855D22DE0D4B03E844 /* e-lo-be-ka-wal.m4a */; };
+		E8AA449968579F7FCFEE56BB /* e-bas-2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 03EB7770F8B6A633268C936F /* e-bas-2.m4a */; };
+		EB454BDB57338C05E415875B /* e-dar-waa-za-khlaa-sa-ka-ra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 99B6878E9B9A207368A7EF54 /* e-dar-waa-za-khlaa-sa-ka-ra.m4a */; };
+		EB76383EA25E2CCC2158A336 /* e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DFE99F30213C31B986D93DFD /* e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da.m4a */; };
+		EBCFC3AC297B4324EA3FA398 /* e-wee-da-ke-dal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 680D7CFDC95D31AD9A8E2F8E /* e-wee-da-ke-dal.m4a */; };
+		EBD24040FD04BD9F864F8B49 /* e-kaabulee-palaw.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9A31559C7C765E19DF60D688 /* e-kaabulee-palaw.m4a */; };
+		EC9314E9230F86569065337D /* e-hagha-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 944F27F7074CDA09DB85B821 /* e-hagha-day.m4a */; };
+		ED90C18706BF64A0BBCFF241 /* e-pin-dza-las.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8D9CA7C967B29B697C686F1F /* e-pin-dza-las.m4a */; };
+		EDB8477829F3F488F982B8A4 /* e-za-nan-kaar-ka-wam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C6AEAD86C44D3AA57BB01BC8 /* e-za-nan-kaar-ka-wam.m4a */; };
 		EDED515A7D4127982E2F7E38 /* e-dera-manana.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A4A51C8511BF186A7DBF0F5C /* e-dera-manana.m4a */; };
+		EE4BE45F71561F4BCA732FCC /* e-zda-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5B53DF319E90749AA2FE0E3F /* e-zda-ka-wal.m4a */; };
+		EE72D7FEC9B7E8569CFE354A /* e-o-ba.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F2C46645ACBEABC492B41FE3 /* e-o-ba.m4a */; };
+		EEA7B7A3DD8F529D007279FF /* e-bas-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 58C0297A952404EC51ABA6E7 /* e-bas-day.m4a */; };
+		EF52A3831C7D35060A7BFCA0 /* e-yawa-baja.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D5FBDC1731662858B183B75A /* e-yawa-baja.m4a */; };
+		F01B3862CD512FC06206263D /* e-tso-ka-saan-raa-dzee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F39DF670067618D8EBE2D34D /* e-tso-ka-saan-raa-dzee.m4a */; };
+		F0F72D98693A8FE44209640B /* e-dwa-wrona.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CA2265FE4F5D7BBD2766D7B5 /* e-dwa-wrona.m4a */; };
+		F2997EC4CB65B1C4BB73365C /* e-shpa.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB2E7B774DE82C7E14F73A35 /* e-shpa.m4a */; };
+		F2B770133167C11EF1068073 /* e-mung-kor-ta-dzoo.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EB944BD94ECCB0F614BD3249 /* e-mung-kor-ta-dzoo.m4a */; };
+		F2DA3B4273CFE72224AD8CF1 /* e-boora.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8FA26228A2A2DA6CC8FFBC5E /* e-boora.m4a */; };
 		F3E1543DABC4E3A24A86D2CA /* PashtoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 76088B5BA2092E9464066602 /* PashtoCore */; };
+		F4C5C27079342415A38BCCFD /* e-kha-ba-rey-ka-wal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D472905C3CD958064CA8F31C /* e-kha-ba-rey-ka-wal.m4a */; };
+		F4F69BED3EF0F036C24EE923 /* e-da-ghar-me-do-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D8EACC1C643EA1D71D7B9804 /* e-da-ghar-me-do-day.m4a */; };
+		F53CEA3988F456C99E4623B6 /* e-tsalwekht.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA15E2AF82522BDEE5DCAEE7 /* e-tsalwekht.m4a */; };
+		F623C0FAD36C8BC5438491D5 /* e-cherta-oseygey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 9651E190740F56BADB6DEB75 /* e-cherta-oseygey.m4a */; };
+		F6AB244486F708C3945A1C08 /* e-ke-naas-tal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DD03B624924D6FA12A24639F /* e-ke-naas-tal.m4a */; };
+		F72737D59A87F980A79860A5 /* e-sal-af-ghaa-nay-ke-gee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8D7C03472BB031CD45966DEF /* e-sal-af-ghaa-nay-ke-gee.m4a */; };
+		F7DCBE1A1107F21B3A443EE1 /* e-zar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 902FA1060AFBBD731E8A3B3F /* e-zar.m4a */; };
+		F8DB56990AA8B2A7C6960C67 /* e-yaw-bal-pa-kaar-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = EE1514EEFE0E7A421D992CAA /* e-yaw-bal-pa-kaar-day.m4a */; };
 		FA7282962D28A1AE9122E0EA /* e-ho.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5E4FADA001A54E1B52DCAC1A /* e-ho.m4a */; };
+		FA90E887FBC7EE3D0645D859 /* e-za-na-yam.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6852E52BAB6B9A6DD37C471E /* e-za-na-yam.m4a */; };
+		FB0E3EE98281384FC4B56412 /* e-tar-boor.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F2CBB5F45FCD9130BB289688 /* e-tar-boor.m4a */; };
 		FB3AF14F0E0EB18EDCB270C8 /* WelcomeBackScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */; };
+		FB4F95E7778DFDE051287B6C /* e-kaar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 74CDF03ED619323499B7C350 /* e-kaar.m4a */; };
+		FB78D58B4E8FCF580796AF83 /* e-o-mar-dey-tso-day.m4a in Resources */ = {isa = PBXBuildFile; fileRef = C6B7A456768D7B30D8150535 /* e-o-mar-dey-tso-day.m4a */; };
+		FBC3492998E2C507200F0FFE /* e-tlal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 32326988D65AC99CEC3505A0 /* e-tlal.m4a */; };
+		FE0B3214A001F7F6F152D4BF /* e-dal-ta-raa-sha.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FA7CE997D1C77A5844BB1BF5 /* e-dal-ta-raa-sha.m4a */; };
+		FE5FDE6B9C875513B177CD77 /* e-hagha-dee.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 00CE441EBAF5581E69FC3BBE /* e-hagha-dee.m4a */; };
+		FE83DE58C5C6956C0578582F /* e-tror.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 548D1439DFDF253E915CC5AD /* e-tror.m4a */; };
+		FF11E094F86904B95ABAE6DE /* e-lee-dal.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3E173A29C834DC86F739B429 /* e-lee-dal.m4a */; };
+		FFB7072BDDAA660418DC54FC /* e-khwandwar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 2DD39396B6F2C66CD71BD939 /* e-khwandwar.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,52 +475,464 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0054FCC539A2A7A0242675A7 /* e-daa-sta-wror-day.m4a */ = {isa = PBXFileReference; path = "e-daa-sta-wror-day.m4a"; sourceTree = "<group>"; };
+		00CE441EBAF5581E69FC3BBE /* e-hagha-dee.m4a */ = {isa = PBXFileReference; path = "e-hagha-dee.m4a"; sourceTree = "<group>"; };
+		00EA6D044093FBF761BDC1B5 /* e-rikh-tyaa-2.m4a */ = {isa = PBXFileReference; path = "e-rikh-tyaa-2.m4a"; sourceTree = "<group>"; };
+		0124DD1CD9B9786226967C4C /* e-xor.m4a */ = {isa = PBXFileReference; path = "e-xor.m4a"; sourceTree = "<group>"; };
+		0160D72209B476F36922C3A3 /* e-ka-lan.m4a */ = {isa = PBXFileReference; path = "e-ka-lan.m4a"; sourceTree = "<group>"; };
+		02557BEF8B9BFD5EAE6BCB67 /* e-shpaa-ras.m4a */ = {isa = PBXFileReference; path = "e-shpaa-ras.m4a"; sourceTree = "<group>"; };
+		0301223DDD8DE42EB88D4799 /* e-anaa.m4a */ = {isa = PBXFileReference; path = "e-anaa.m4a"; sourceTree = "<group>"; };
 		03606A3D0DC163D1BA0057F3 /* UpdateNeededScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNeededScreen.swift; sourceTree = "<group>"; };
+		03C17BA387A6B3221C7B9226 /* e-mas-te.m4a */ = {isa = PBXFileReference; path = "e-mas-te.m4a"; sourceTree = "<group>"; };
+		03EB7770F8B6A633268C936F /* e-bas-2.m4a */ = {isa = PBXFileReference; path = "e-bas-2.m4a"; sourceTree = "<group>"; };
+		03ED44F075D0DADBB4C16BBA /* e-sta-num-tsa-day.m4a */ = {isa = PBXFileReference; path = "e-sta-num-tsa-day.m4a"; sourceTree = "<group>"; };
+		04F2B67F1153A51D52F609CF /* e-da-ha-ghe.m4a */ = {isa = PBXFileReference; path = "e-da-ha-ghe.m4a"; sourceTree = "<group>"; };
 		0505CC533954900598FD2EE0 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
+		0523D24B2BC497BA1F5DCD60 /* e-maal-ta.m4a */ = {isa = PBXFileReference; path = "e-maal-ta.m4a"; sourceTree = "<group>"; };
+		05CB4367B7E8240D9D531C27 /* e-taso.m4a */ = {isa = PBXFileReference; path = "e-taso.m4a"; sourceTree = "<group>"; };
+		07F42303286DDF714B945310 /* e-do-day-dey-khwa-ra-le-da.m4a */ = {isa = PBXFileReference; path = "e-do-day-dey-khwa-ra-le-da.m4a"; sourceTree = "<group>"; };
+		08DE4BF4FF55C2172017E4D2 /* e-pa-oslo-oseygam.m4a */ = {isa = PBXFileReference; path = "e-pa-oslo-oseygam.m4a"; sourceTree = "<group>"; };
+		09BDD77DAB59BD9F62097C67 /* e-ha-gha-tsok-day.m4a */ = {isa = PBXFileReference; path = "e-ha-gha-tsok-day.m4a"; sourceTree = "<group>"; };
+		09ED5C282F0018AE27BFB184 /* e-za-kah-wa-ghwaa-ram.m4a */ = {isa = PBXFileReference; path = "e-za-kah-wa-ghwaa-ram.m4a"; sourceTree = "<group>"; };
 		0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */ = {isa = PBXFileReference; path = "e-mehrabani-wakray.m4a"; sourceTree = "<group>"; };
 		0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */ = {isa = PBXFileReference; path = "e-walaykum-salam.m4a"; sourceTree = "<group>"; };
+		0C8503B6BB8F9B546730A6BE /* e-za-yam.m4a */ = {isa = PBXFileReference; path = "e-za-yam.m4a"; sourceTree = "<group>"; };
+		0DEECA47D0727F70FE1D76A0 /* e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra.m4a"; sourceTree = "<group>"; };
+		0F3EA5DD990C28F778EA1E9E /* e-za-os-dzam.m4a */ = {isa = PBXFileReference; path = "e-za-os-dzam.m4a"; sourceTree = "<group>"; };
+		0F49F0C19B085B6DC6514762 /* e-kor-wudaan.m4a */ = {isa = PBXFileReference; path = "e-kor-wudaan.m4a"; sourceTree = "<group>"; };
+		0F88913558EF7522F517F481 /* e-nan-shpa-ba-dar-ta-zang-wu-wa-ham.m4a */ = {isa = PBXFileReference; path = "e-nan-shpa-ba-dar-ta-zang-wu-wa-ham.m4a"; sourceTree = "<group>"; };
+		0F8C7E432C526EC4789EBA8F /* e-ghokha-na-khoram.m4a */ = {isa = PBXFileReference; path = "e-ghokha-na-khoram.m4a"; sourceTree = "<group>"; };
+		0FFF46C6F4B64E332853632F /* e-ni-ma-shpa.m4a */ = {isa = PBXFileReference; path = "e-ni-ma-shpa.m4a"; sourceTree = "<group>"; };
+		1143C56CD6F874ED9560F5CF /* e-za-chaay-ghwaa-ram.m4a */ = {isa = PBXFileReference; path = "e-za-chaay-ghwaa-ram.m4a"; sourceTree = "<group>"; };
+		117D46D6E4E026E275DCD772 /* e-ha-gha-zmaa-dost-day.m4a */ = {isa = PBXFileReference; path = "e-ha-gha-zmaa-dost-day.m4a"; sourceTree = "<group>"; };
+		122A1D124A7BC6C910819CBE /* e-pa-khayr-raaghle.m4a */ = {isa = PBXFileReference; path = "e-pa-khayr-raaghle.m4a"; sourceTree = "<group>"; };
+		12F949172F3B945037B6F616 /* e-daa-tsok-day.m4a */ = {isa = PBXFileReference; path = "e-daa-tsok-day.m4a"; sourceTree = "<group>"; };
 		13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */ = {isa = PBXFileReference; path = "e-stare-ma-she.m4a"; sourceTree = "<group>"; };
+		146D5F855D22DE0D4B03E844 /* e-lo-be-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-lo-be-ka-wal.m4a"; sourceTree = "<group>"; };
+		14954FEBA595DFD09FA11847 /* e-tsa-lor-ka-saan-dee.m4a */ = {isa = PBXFileReference; path = "e-tsa-lor-ka-saan-dee.m4a"; sourceTree = "<group>"; };
+		15F9E262A912E522D8AC7A3D /* e-mras-ta-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-mras-ta-ka-wal.m4a"; sourceTree = "<group>"; };
+		160E0D84750C1A77BC0BA718 /* e-bad.m4a */ = {isa = PBXFileReference; path = "e-bad.m4a"; sourceTree = "<group>"; };
+		1662CB41D441D1BC78796DAF /* e-tsom-ra.m4a */ = {isa = PBXFileReference; path = "e-tsom-ra.m4a"; sourceTree = "<group>"; };
+		16CA6D09A584A3FE5CE71563 /* e-pohantoon.m4a */ = {isa = PBXFileReference; path = "e-pohantoon.m4a"; sourceTree = "<group>"; };
+		17898B9C147E18DBD842C8D5 /* e-sifr.m4a */ = {isa = PBXFileReference; path = "e-sifr.m4a"; sourceTree = "<group>"; };
+		178FB8F3927CF83C7B0EEA93 /* e-zmung.m4a */ = {isa = PBXFileReference; path = "e-zmung.m4a"; sourceTree = "<group>"; };
+		17DCEB093DE973A0C0DDDC18 /* e-daa-pa-tso-day.m4a */ = {isa = PBXFileReference; path = "e-daa-pa-tso-day.m4a"; sourceTree = "<group>"; };
+		192C52D43E5D738B42D8909A /* e-mu-ja-rad.m4a */ = {isa = PBXFileReference; path = "e-mu-ja-rad.m4a"; sourceTree = "<group>"; };
+		192F0A311570E8ED6DD83822 /* e-za-drey-wro-na-la-ram.m4a */ = {isa = PBXFileReference; path = "e-za-drey-wro-na-la-ram.m4a"; sourceTree = "<group>"; };
+		19A4616E3591B67D1CA74CAA /* e-ta-sam-waa-yey.m4a */ = {isa = PBXFileReference; path = "e-ta-sam-waa-yey.m4a"; sourceTree = "<group>"; };
+		1B5F1E820DB30165E5120844 /* e-staa-pa-lee-do-der-kho-shaa-la-shwam.m4a */ = {isa = PBXFileReference; path = "e-staa-pa-lee-do-der-kho-shaa-la-shwam.m4a"; sourceTree = "<group>"; };
+		1CBA6B8BAE4326BBAEB36346 /* e-las-da-kee-ke-sabr-wu-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-las-da-kee-ke-sabr-wu-ka-ra.m4a"; sourceTree = "<group>"; };
+		1D3C2DA5AEA4C47C8CD8906F /* e-daa-zmaa-kha-dza-da.m4a */ = {isa = PBXFileReference; path = "e-daa-zmaa-kha-dza-da.m4a"; sourceTree = "<group>"; };
+		1DFF8FDD9CAEC4E56DE88205 /* e-dwaham.m4a */ = {isa = PBXFileReference; path = "e-dwaham.m4a"; sourceTree = "<group>"; };
 		1F2921815B465BF7C67B6260 /* e-za-xa-yam.m4a */ = {isa = PBXFileReference; path = "e-za-xa-yam.m4a"; sourceTree = "<group>"; };
+		2010F4AE78CB26D7C6B00F5D /* e-nika.m4a */ = {isa = PBXFileReference; path = "e-nika.m4a"; sourceTree = "<group>"; };
+		201F57EE03B70E467685977D /* e-nan-chi-shay-ka-wey.m4a */ = {isa = PBXFileReference; path = "e-nan-chi-shay-ka-wey.m4a"; sourceTree = "<group>"; };
+		203BCE1D1EF3653F2CA53A21 /* e-ha-ghwee.m4a */ = {isa = PBXFileReference; path = "e-ha-ghwee.m4a"; sourceTree = "<group>"; };
+		20591CBD493D84806B61ABDC /* e-sabr-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-sabr-ka-wal.m4a"; sourceTree = "<group>"; };
 		20749347E5913E3C376940D0 /* PashtoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PashtoApp.swift; sourceTree = "<group>"; };
+		21EDB9D44FA71ECC88F92AAB /* e-hagha-da.m4a */ = {isa = PBXFileReference; path = "e-hagha-da.m4a"; sourceTree = "<group>"; };
+		2221CC54DBA8CA81D1759A79 /* e-zhar-ba-dar-sham.m4a */ = {isa = PBXFileReference; path = "e-zhar-ba-dar-sham.m4a"; sourceTree = "<group>"; };
+		2227ACD6E8234D6BFFB8B14E /* e-po-me-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-po-me-ka-ra.m4a"; sourceTree = "<group>"; };
+		22617F80D0BD3693E072F746 /* e-cha-haar-shan-ba.m4a */ = {isa = PBXFileReference; path = "e-cha-haar-shan-ba.m4a"; sourceTree = "<group>"; };
+		230085AC69DBABD95792673A /* e-pindzos.m4a */ = {isa = PBXFileReference; path = "e-pindzos.m4a"; sourceTree = "<group>"; };
+		231C9416404B9C5A2EB35CE0 /* e-maa.m4a */ = {isa = PBXFileReference; path = "e-maa.m4a"; sourceTree = "<group>"; };
+		24C90BBA5F51FF98CEFF5716 /* e-ko-ra-nay-me-de-ra-yaa-de-gee.m4a */ = {isa = PBXFileReference; path = "e-ko-ra-nay-me-de-ra-yaa-de-gee.m4a"; sourceTree = "<group>"; };
+		256221DA67A2FC3913C378D1 /* e-maa-khaam.m4a */ = {isa = PBXFileReference; path = "e-maa-khaam.m4a"; sourceTree = "<group>"; };
+		26BB98A542C9661D6CDF9A7C /* e-staa-so.m4a */ = {isa = PBXFileReference; path = "e-staa-so.m4a"; sourceTree = "<group>"; };
+		26BC559C4A8BA09A24D9C6E8 /* e-dzoo.m4a */ = {isa = PBXFileReference; path = "e-dzoo.m4a"; sourceTree = "<group>"; };
+		2762E13153B71083D927EF77 /* e-maalga.m4a */ = {isa = PBXFileReference; path = "e-maalga.m4a"; sourceTree = "<group>"; };
+		27F79BEDDC1F4DF09DE8C83D /* e-tugay-yam.m4a */ = {isa = PBXFileReference; path = "e-tugay-yam.m4a"; sourceTree = "<group>"; };
+		27FFD5904AB62A60E4DB5EDF /* e-kha-yam-ta.m4a */ = {isa = PBXFileReference; path = "e-kha-yam-ta.m4a"; sourceTree = "<group>"; };
+		2831B296C077582BC24587E6 /* e-ka-chaa-loo.m4a */ = {isa = PBXFileReference; path = "e-ka-chaa-loo.m4a"; sourceTree = "<group>"; };
+		28789D9E3BB0C82CBE70CAE0 /* e-tsa-kaar-kawey.m4a */ = {isa = PBXFileReference; path = "e-tsa-kaar-kawey.m4a"; sourceTree = "<group>"; };
+		29B26807F10621B6CE0142AE /* e-shaayad.m4a */ = {isa = PBXFileReference; path = "e-shaayad.m4a"; sourceTree = "<group>"; };
+		2BBE9EF12B37B7E4AE1B9513 /* e-mirch.m4a */ = {isa = PBXFileReference; path = "e-mirch.m4a"; sourceTree = "<group>"; };
+		2D6CE76C2F126532071BEBB1 /* e-raa-tlal.m4a */ = {isa = PBXFileReference; path = "e-raa-tlal.m4a"; sourceTree = "<group>"; };
+		2DD39396B6F2C66CD71BD939 /* e-khwandwar.m4a */ = {isa = PBXFileReference; path = "e-khwandwar.m4a"; sourceTree = "<group>"; };
+		2DFD5D7C3DE1DDA71E3A18DE /* e-tal.m4a */ = {isa = PBXFileReference; path = "e-tal.m4a"; sourceTree = "<group>"; };
 		2E3B32F55091A5C9F56EF56F /* e-pa-maxa-de-xa.m4a */ = {isa = PBXFileReference; path = "e-pa-maxa-de-xa.m4a"; sourceTree = "<group>"; };
+		2E7191346819DE6E97D86D3D /* e-taso-yast.m4a */ = {isa = PBXFileReference; path = "e-taso-yast.m4a"; sourceTree = "<group>"; };
 		2E7E47B640D712A33D52EC82 /* content.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = content.json; sourceTree = "<group>"; };
+		2E9073AA61E64EF4C287CCAD /* e-da-kee-ka.m4a */ = {isa = PBXFileReference; path = "e-da-kee-ka.m4a"; sourceTree = "<group>"; };
+		30013C94754F2E32EDCB672E /* e-hagha-xa-day.m4a */ = {isa = PBXFileReference; path = "e-hagha-xa-day.m4a"; sourceTree = "<group>"; };
+		30067C0346F7F855E02FC52A /* e-za-ha-gha-pe-zha-nam.m4a */ = {isa = PBXFileReference; path = "e-za-ha-gha-pe-zha-nam.m4a"; sourceTree = "<group>"; };
+		306E4F70E7CBD3848F5DA3FB /* e-pin-dza.m4a */ = {isa = PBXFileReference; path = "e-pin-dza.m4a"; sourceTree = "<group>"; };
+		3124F4C743AC3979060D01D9 /* e-do-day-tay-yaa-ra-da.m4a */ = {isa = PBXFileReference; path = "e-do-day-tay-yaa-ra-da.m4a"; sourceTree = "<group>"; };
+		32326988D65AC99CEC3505A0 /* e-tlal.m4a */ = {isa = PBXFileReference; path = "e-tlal.m4a"; sourceTree = "<group>"; };
+		32D8F232FAB0027CF37E9C0D /* e-staso-pa-lido-xoshala-shwam.m4a */ = {isa = PBXFileReference; path = "e-staso-pa-lido-xoshala-shwam.m4a"; sourceTree = "<group>"; };
+		3327064CF60B34376A3735E3 /* e-wror.m4a */ = {isa = PBXFileReference; path = "e-wror.m4a"; sourceTree = "<group>"; };
+		338AD01A0ED5569FBB075E1E /* e-wradz-dey-kha-sha.m4a */ = {isa = PBXFileReference; path = "e-wradz-dey-kha-sha.m4a"; sourceTree = "<group>"; };
+		340C8B32A1A737C3A04CE76C /* e-khaar.m4a */ = {isa = PBXFileReference; path = "e-khaar.m4a"; sourceTree = "<group>"; };
+		346A18A5912613D021E5ED62 /* e-dost.m4a */ = {isa = PBXFileReference; path = "e-dost.m4a"; sourceTree = "<group>"; };
+		34911398A68A88AFA61CE7B9 /* e-tsa-ta-waayee.m4a */ = {isa = PBXFileReference; path = "e-tsa-ta-waayee.m4a"; sourceTree = "<group>"; };
+		35CE35A66C04A48F3C517057 /* e-hagha.m4a */ = {isa = PBXFileReference; path = "e-hagha.m4a"; sourceTree = "<group>"; };
+		35D685FAC87BB73E2B23703D /* e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no.m4a */ = {isa = PBXFileReference; path = "e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no.m4a"; sourceTree = "<group>"; };
+		37D8E29F4526D599CDD7C520 /* e-zmung-kor-ta-kha-raagh-laast.m4a */ = {isa = PBXFileReference; path = "e-zmung-kor-ta-kha-raagh-laast.m4a"; sourceTree = "<group>"; };
+		3837E346BC73A90558BB1164 /* e-ghar-ma.m4a */ = {isa = PBXFileReference; path = "e-ghar-ma.m4a"; sourceTree = "<group>"; };
+		387B347010348B8C1E6F66EC /* e-khaam-khaa.m4a */ = {isa = PBXFileReference; path = "e-khaam-khaa.m4a"; sourceTree = "<group>"; };
+		397F24C0B135BC8F9DC542A1 /* e-shpeta.m4a */ = {isa = PBXFileReference; path = "e-shpeta.m4a"; sourceTree = "<group>"; };
+		39963569EE8CF38EF6B9AF6D /* e-kaal.m4a */ = {isa = PBXFileReference; path = "e-kaal.m4a"; sourceTree = "<group>"; };
+		3A3F7E38BBED9066D2752034 /* e-dwa-baje.m4a */ = {isa = PBXFileReference; path = "e-dwa-baje.m4a"; sourceTree = "<group>"; };
+		3AA3A21CDB2FDD06B0CDCCA8 /* e-mewa.m4a */ = {isa = PBXFileReference; path = "e-mewa.m4a"; sourceTree = "<group>"; };
+		3C9CFF651F3DEAF3509A6260 /* e-poheygam.m4a */ = {isa = PBXFileReference; path = "e-poheygam.m4a"; sourceTree = "<group>"; };
 		3D495562C86BCA8E4FAAAE18 /* GlyphCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphCard.swift; sourceTree = "<group>"; };
+		3D644117947096919EFFDB22 /* e-kah-wa.m4a */ = {isa = PBXFileReference; path = "e-kah-wa.m4a"; sourceTree = "<group>"; };
+		3E173A29C834DC86F739B429 /* e-lee-dal.m4a */ = {isa = PBXFileReference; path = "e-lee-dal.m4a"; sourceTree = "<group>"; };
 		3E2DD5B8D6DE03B23DB286AB /* PashtoCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoCore; path = Packages/PashtoCore; sourceTree = SOURCE_ROOT; };
+		3EEA45257A856754D8E14D5E /* e-daa-tsok-da.m4a */ = {isa = PBXFileReference; path = "e-daa-tsok-da.m4a"; sourceTree = "<group>"; };
+		3FC4C02FA7DB8DEC3F4BF440 /* e-alhamdulillah.m4a */ = {isa = PBXFileReference; path = "e-alhamdulillah.m4a"; sourceTree = "<group>"; };
+		4121224C264D798E2102200E /* e-za-naa-wakh-ta-shwam.m4a */ = {isa = PBXFileReference; path = "e-za-naa-wakh-ta-shwam.m4a"; sourceTree = "<group>"; };
+		422F1E53C78CC5E094493436 /* e-naa-wakh-ta.m4a */ = {isa = PBXFileReference; path = "e-naa-wakh-ta.m4a"; sourceTree = "<group>"; };
+		428C2066011F7E76341A80A7 /* e-kor.m4a */ = {isa = PBXFileReference; path = "e-kor.m4a"; sourceTree = "<group>"; };
+		43638DF4C5E3BBC87F93DB5F /* e-khabar-na-yam.m4a */ = {isa = PBXFileReference; path = "e-khabar-na-yam.m4a"; sourceTree = "<group>"; };
+		43781A9A025816BA5E83279D /* e-ta.m4a */ = {isa = PBXFileReference; path = "e-ta.m4a"; sourceTree = "<group>"; };
+		43CB966528E76225ADBE7315 /* e-wa-tan.m4a */ = {isa = PBXFileReference; path = "e-wa-tan.m4a"; sourceTree = "<group>"; };
 		43FAB0CAF8C6C464D567E987 /* WelcomeBackScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeBackScreen.swift; sourceTree = "<group>"; };
+		44A71CBCA46AC6B6C399B2E8 /* e-shan-ba.m4a */ = {isa = PBXFileReference; path = "e-shan-ba.m4a"; sourceTree = "<group>"; };
+		459F5A98D5842C1D0EFE4D84 /* e-jor.m4a */ = {isa = PBXFileReference; path = "e-jor.m4a"; sourceTree = "<group>"; };
+		4649D38989C84EFFA2D3F537 /* e-zma.m4a */ = {isa = PBXFileReference; path = "e-zma.m4a"; sourceTree = "<group>"; };
+		46E1B1B996745848E2ABE5C5 /* e-daa-zmaa-day.m4a */ = {isa = PBXFileReference; path = "e-daa-zmaa-day.m4a"; sourceTree = "<group>"; };
+		4737553C7326CD4AD613A725 /* e-za-xowunkay-yam.m4a */ = {isa = PBXFileReference; path = "e-za-xowunkay-yam.m4a"; sourceTree = "<group>"; };
 		4838E5BC35837852962E32B7 /* PashtoAppScreenshots.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PashtoAppScreenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4877EA8A03AE0AEDA6873B29 /* e-byaa.m4a */ = {isa = PBXFileReference; path = "e-byaa.m4a"; sourceTree = "<group>"; };
+		4935E1B9BBCF51D87C705480 /* e-mel-ma.m4a */ = {isa = PBXFileReference; path = "e-mel-ma.m4a"; sourceTree = "<group>"; };
+		497716C4658157EB812526FF /* e-koraney.m4a */ = {isa = PBXFileReference; path = "e-koraney.m4a"; sourceTree = "<group>"; };
+		4B3197F05DEED18A1DA1F726 /* e-wa-zee-fa.m4a */ = {isa = PBXFileReference; path = "e-wa-zee-fa.m4a"; sourceTree = "<group>"; };
+		4C79DFC832CC2168F3169710 /* e-sa-haar.m4a */ = {isa = PBXFileReference; path = "e-sa-haar.m4a"; sourceTree = "<group>"; };
+		4D33C9D6DA25DA3BA3128980 /* e-hets-ka-la.m4a */ = {isa = PBXFileReference; path = "e-hets-ka-la.m4a"; sourceTree = "<group>"; };
+		4D4C0C5A521C36C9F611067F /* e-ju-ma.m4a */ = {isa = PBXFileReference; path = "e-ju-ma.m4a"; sourceTree = "<group>"; };
+		4D4D100E9E128D16D55122BA /* e-saaat.m4a */ = {isa = PBXFileReference; path = "e-saaat.m4a"; sourceTree = "<group>"; };
+		4EEB7323FDFFB9D059A4AC4D /* e-za-mor-yam.m4a */ = {isa = PBXFileReference; path = "e-za-mor-yam.m4a"; sourceTree = "<group>"; };
+		4FB8668D16C153435B69CC4E /* e-za-treekh-khwaa-ra-na-khwa-kha-wam.m4a */ = {isa = PBXFileReference; path = "e-za-treekh-khwaa-ra-na-khwa-kha-wam.m4a"; sourceTree = "<group>"; };
+		4FF195E5E05EFF88B99D0E8D /* e-paa-tsa.m4a */ = {isa = PBXFileReference; path = "e-paa-tsa.m4a"; sourceTree = "<group>"; };
+		508DC5E19358A5CB9FD04DC5 /* e-ko-ra-nay-dey-tsan-ga-da.m4a */ = {isa = PBXFileReference; path = "e-ko-ra-nay-dey-tsan-ga-da.m4a"; sourceTree = "<group>"; };
 		51BDD8B1B3CC1985669B7DCE /* MatchingBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingBoard.swift; sourceTree = "<group>"; };
+		51F525428046024811738896 /* e-al-bat-ta.m4a */ = {isa = PBXFileReference; path = "e-al-bat-ta.m4a"; sourceTree = "<group>"; };
+		521ECD73B4F0FDEE3882783D /* e-ta-cher-ta-ye.m4a */ = {isa = PBXFileReference; path = "e-ta-cher-ta-ye.m4a"; sourceTree = "<group>"; };
+		52586B943EA6415FC391CB4D /* e-war-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-war-ka-wal.m4a"; sourceTree = "<group>"; };
+		531D9FC279E7EBBD78965760 /* e-za-pin-dza-wisht-ka-lan-yam.m4a */ = {isa = PBXFileReference; path = "e-za-pin-dza-wisht-ka-lan-yam.m4a"; sourceTree = "<group>"; };
+		53A4BB08CED79A9DD98EC397 /* e-staa-pakh-lay-me-der-khwakh-day.m4a */ = {isa = PBXFileReference; path = "e-staa-pakh-lay-me-der-khwakh-day.m4a"; sourceTree = "<group>"; };
+		544C06AB75293B8C53F3C1A9 /* e-sa-baa-shan-ba-da.m4a */ = {isa = PBXFileReference; path = "e-sa-baa-shan-ba-da.m4a"; sourceTree = "<group>"; };
+		548D1439DFDF253E915CC5AD /* e-tror.m4a */ = {isa = PBXFileReference; path = "e-tror.m4a"; sourceTree = "<group>"; };
+		5519ED44392A892DC54598DA /* e-shaa-yad-wros-ta.m4a */ = {isa = PBXFileReference; path = "e-shaa-yad-wros-ta.m4a"; sourceTree = "<group>"; };
+		55841E964FAB3D52287F53FB /* e-tso-ghwaa-rey.m4a */ = {isa = PBXFileReference; path = "e-tso-ghwaa-rey.m4a"; sourceTree = "<group>"; };
+		55A84965D399E625A93BFA30 /* e-lag-pakhto.m4a */ = {isa = PBXFileReference; path = "e-lag-pakhto.m4a"; sourceTree = "<group>"; };
+		55DC92BAD7BD8D40433D4830 /* e-plar-de-tsanga-day.m4a */ = {isa = PBXFileReference; path = "e-plar-de-tsanga-day.m4a"; sourceTree = "<group>"; };
+		561D879274CBB5D0B1EDD7BE /* e-ta-cher-ta-dzey.m4a */ = {isa = PBXFileReference; path = "e-ta-cher-ta-dzey.m4a"; sourceTree = "<group>"; };
+		576E51C623B667D81451EBB0 /* e-maashoomaan-larey.m4a */ = {isa = PBXFileReference; path = "e-maashoomaan-larey.m4a"; sourceTree = "<group>"; };
+		584366A741ABD536B590B4ED /* e-mera.m4a */ = {isa = PBXFileReference; path = "e-mera.m4a"; sourceTree = "<group>"; };
+		58A917BB24DF3B981B65C13F /* e-khoday-dey-mal-sha.m4a */ = {isa = PBXFileReference; path = "e-khoday-dey-mal-sha.m4a"; sourceTree = "<group>"; };
+		58C0297A952404EC51ABA6E7 /* e-bas-day.m4a */ = {isa = PBXFileReference; path = "e-bas-day.m4a"; sourceTree = "<group>"; };
+		58C2CC097AC76D6C08825F83 /* e-maa-na.m4a */ = {isa = PBXFileReference; path = "e-maa-na.m4a"; sourceTree = "<group>"; };
+		58DC77E82561791036EF124F /* e-a-ta-las.m4a */ = {isa = PBXFileReference; path = "e-a-ta-las.m4a"; sourceTree = "<group>"; };
+		599F8871DB6CDD34C3D3D0CC /* e-daaktar-yam.m4a */ = {isa = PBXFileReference; path = "e-daaktar-yam.m4a"; sourceTree = "<group>"; };
+		59A0CD795F157FCCB166D0A2 /* e-pi-yaa-da-tlal.m4a */ = {isa = PBXFileReference; path = "e-pi-yaa-da-tlal.m4a"; sourceTree = "<group>"; };
+		59D2D7B08ADC40302B200CE0 /* e-joos.m4a */ = {isa = PBXFileReference; path = "e-joos.m4a"; sourceTree = "<group>"; };
+		59D40B88CFDEE3427A5D52AD /* e-rikh-tyaa.m4a */ = {isa = PBXFileReference; path = "e-rikh-tyaa.m4a"; sourceTree = "<group>"; };
+		5A074F6B2EE03E80180D9231 /* e-ta-ha-ghe-pe-zha-ney.m4a */ = {isa = PBXFileReference; path = "e-ta-ha-ghe-pe-zha-ney.m4a"; sourceTree = "<group>"; };
+		5B53DF319E90749AA2FE0E3F /* e-zda-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-zda-ka-wal.m4a"; sourceTree = "<group>"; };
+		5B8C87615EA5318B40CCA5B1 /* e-hagha-xa-da.m4a */ = {isa = PBXFileReference; path = "e-hagha-xa-da.m4a"; sourceTree = "<group>"; };
+		5BC39C96EF2F63C7CB538A6F /* e-maa-ta-ghwag-wu-nee-sa.m4a */ = {isa = PBXFileReference; path = "e-maa-ta-ghwag-wu-nee-sa.m4a"; sourceTree = "<group>"; };
+		5C61C3786B57C03A61F266C0 /* e-sa-laam-tsan-ga-ye.m4a */ = {isa = PBXFileReference; path = "e-sa-laam-tsan-ga-ye.m4a"; sourceTree = "<group>"; };
+		5C76AA0E33965AF123F2D6A1 /* e-tswaar-las.m4a */ = {isa = PBXFileReference; path = "e-tswaar-las.m4a"; sourceTree = "<group>"; };
+		5C77DE4BB4A400B3BB8DB51C /* e-man-da-wa-hal.m4a */ = {isa = PBXFileReference; path = "e-man-da-wa-hal.m4a"; sourceTree = "<group>"; };
+		5CBA6AE861E7E9E0FD9071E4 /* e-maa-laa-do-day-na-da-khwa-ra-le.m4a */ = {isa = PBXFileReference; path = "e-maa-laa-do-day-na-da-khwa-ra-le.m4a"; sourceTree = "<group>"; };
 		5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */ = {isa = PBXFileReference; path = "e-xwar-ma-she.m4a"; sourceTree = "<group>"; };
+		5D8D670971204A27B0CE155E /* e-atyaa.m4a */ = {isa = PBXFileReference; path = "e-atyaa.m4a"; sourceTree = "<group>"; };
+		5DC7004AEB8271E9B3FC9ABD /* e-ke-la.m4a */ = {isa = PBXFileReference; path = "e-ke-la.m4a"; sourceTree = "<group>"; };
 		5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */ = {isa = PBXFileReference; path = "e-assalamu-alaykum.m4a"; sourceTree = "<group>"; };
 		5E4FADA001A54E1B52DCAC1A /* e-ho.m4a */ = {isa = PBXFileReference; path = "e-ho.m4a"; sourceTree = "<group>"; };
 		5E9032BBBE0603F628A79CF3 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		5F3216C73583098222431B8D /* e-wakht.m4a */ = {isa = PBXFileReference; path = "e-wakht.m4a"; sourceTree = "<group>"; };
+		60AB1AE6CD553B22F69E7E43 /* e-yak-shan-ba.m4a */ = {isa = PBXFileReference; path = "e-yak-shan-ba.m4a"; sourceTree = "<group>"; };
+		60E9DF8269FA7D8BBB3E25AD /* e-jor-ye.m4a */ = {isa = PBXFileReference; path = "e-jor-ye.m4a"; sourceTree = "<group>"; };
+		6316843DBC42B68250719BEF /* e-kabaab.m4a */ = {isa = PBXFileReference; path = "e-kabaab.m4a"; sourceTree = "<group>"; };
+		6335BAE78D040C863A6BC37B /* e-tso-ba-je-dee.m4a */ = {isa = PBXFileReference; path = "e-tso-ba-je-dee.m4a"; sourceTree = "<group>"; };
+		63D038EE3C4700FB28BC98BA /* e-zoy.m4a */ = {isa = PBXFileReference; path = "e-zoy.m4a"; sourceTree = "<group>"; };
+		64643403B917D9866E5DDA30 /* e-ka-la-ka-la.m4a */ = {isa = PBXFileReference; path = "e-ka-la-ka-la.m4a"; sourceTree = "<group>"; };
 		652503DE42EB750727E88CEF /* release-units.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "release-units.json"; sourceTree = "<group>"; };
 		65419D23C784426B9B23C73E /* e-manana.m4a */ = {isa = PBXFileReference; path = "e-manana.m4a"; sourceTree = "<group>"; };
+		661C40B98DE418182F8C885A /* e-lee-kal.m4a */ = {isa = PBXFileReference; path = "e-lee-kal.m4a"; sourceTree = "<group>"; };
+		667D9BABA88ADB2022E0886F /* e-daa-zma-wror-day.m4a */ = {isa = PBXFileReference; path = "e-daa-zma-wror-day.m4a"; sourceTree = "<group>"; };
+		669705F776C02249BA6CD424 /* e-tsok-q.m4a */ = {isa = PBXFileReference; path = "e-tsok-q.m4a"; sourceTree = "<group>"; };
+		66BE0D1AE8ECF63A1FC789C3 /* e-dersh.m4a */ = {isa = PBXFileReference; path = "e-dersh.m4a"; sourceTree = "<group>"; };
 		67247F4675659BD72DBA6066 /* ProgressStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStoreLocation.swift; sourceTree = "<group>"; };
+		676AF9BF05AAD6B929F205D8 /* e-zda-ka-woon-kay.m4a */ = {isa = PBXFileReference; path = "e-zda-ka-woon-kay.m4a"; sourceTree = "<group>"; };
 		6791E1EE79678E1A2816B03F /* LapisStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapisStyle.swift; sourceTree = "<group>"; };
+		67B5793193FD1AA771DB449E /* e-pa-roon.m4a */ = {isa = PBXFileReference; path = "e-pa-roon.m4a"; sourceTree = "<group>"; };
+		680D7CFDC95D31AD9A8E2F8E /* e-wee-da-ke-dal.m4a */ = {isa = PBXFileReference; path = "e-wee-da-ke-dal.m4a"; sourceTree = "<group>"; };
+		6852E52BAB6B9A6DD37C471E /* e-za-na-yam.m4a */ = {isa = PBXFileReference; path = "e-za-na-yam.m4a"; sourceTree = "<group>"; };
+		6950A97342FC2749C3DA54A6 /* e-daa-sam-day.m4a */ = {isa = PBXFileReference; path = "e-daa-sam-day.m4a"; sourceTree = "<group>"; };
+		69F7B2EA2799101A88FF7AB8 /* e-nan-tsa-wradz-da.m4a */ = {isa = PBXFileReference; path = "e-nan-tsa-wradz-da.m4a"; sourceTree = "<group>"; };
+		6A830150FD233C518C8B5643 /* e-za-afghan-yam.m4a */ = {isa = PBXFileReference; path = "e-za-afghan-yam.m4a"; sourceTree = "<group>"; };
 		6DB7ED6423871DB620D934F9 /* StudyCardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCardScreen.swift; sourceTree = "<group>"; };
+		6DC6F4B03DBA2CF9A68ADF02 /* e-kab.m4a */ = {isa = PBXFileReference; path = "e-kab.m4a"; sourceTree = "<group>"; };
 		6E981A13C47486F0067ACF42 /* PronunciationText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PronunciationText.swift; sourceTree = "<group>"; };
+		70DD0A3608C8F1DD5DA62B00 /* e-tsomra-kegee.m4a */ = {isa = PBXFileReference; path = "e-tsomra-kegee.m4a"; sourceTree = "<group>"; };
+		72450C148DE5B2D7A3F939C3 /* e-sa-haar-mo-pa-khayr.m4a */ = {isa = PBXFileReference; path = "e-sa-haar-mo-pa-khayr.m4a"; sourceTree = "<group>"; };
+		73AED40EBFD9A3D48A971554 /* e-shal.m4a */ = {isa = PBXFileReference; path = "e-shal.m4a"; sourceTree = "<group>"; };
+		73CE185A6F313FFCB31D0C58 /* e-ka-tal.m4a */ = {isa = PBXFileReference; path = "e-ka-tal.m4a"; sourceTree = "<group>"; };
+		7450EDD3902CCF06E88DFE87 /* e-se-shan-ba.m4a */ = {isa = PBXFileReference; path = "e-se-shan-ba.m4a"; sourceTree = "<group>"; };
+		748D95FEC7F044F881A4BF8E /* e-o-wa.m4a */ = {isa = PBXFileReference; path = "e-o-wa.m4a"; sourceTree = "<group>"; };
+		74BFBBECC43189FF036BA0CD /* e-koom-yaw-ghwaa-rey.m4a */ = {isa = PBXFileReference; path = "e-koom-yaw-ghwaa-rey.m4a"; sourceTree = "<group>"; };
+		74CDF03ED619323499B7C350 /* e-kaar.m4a */ = {isa = PBXFileReference; path = "e-kaar.m4a"; sourceTree = "<group>"; };
 		76336F612B4F87AC9BB23AF5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		76F4FE0B14AD1BAF86DD7B51 /* e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya.m4a */ = {isa = PBXFileReference; path = "e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya.m4a"; sourceTree = "<group>"; };
+		77F9E036F91C03490E8A4D60 /* e-zmaa-wror-la-maa-ma-shar-day.m4a */ = {isa = PBXFileReference; path = "e-zmaa-wror-la-maa-ma-shar-day.m4a"; sourceTree = "<group>"; };
+		784BF9FB43C44675292027B4 /* e-awyaa.m4a */ = {isa = PBXFileReference; path = "e-awyaa.m4a"; sourceTree = "<group>"; };
+		78690B33046550806F60EE97 /* e-no-las.m4a */ = {isa = PBXFileReference; path = "e-no-las.m4a"; sourceTree = "<group>"; };
+		79E5D39F90CA2B170623388C /* e-sabzee.m4a */ = {isa = PBXFileReference; path = "e-sabzee.m4a"; sourceTree = "<group>"; };
+		7A03267A995370F25FE00922 /* e-do-shan-ba.m4a */ = {isa = PBXFileReference; path = "e-do-shan-ba.m4a"; sourceTree = "<group>"; };
+		7A80A3FB95ED102459CD22B5 /* e-saa-ni-ya.m4a */ = {isa = PBXFileReference; path = "e-saa-ni-ya.m4a"; sourceTree = "<group>"; };
+		7B12DCEA0BEED449979D39A0 /* e-ho-zma-wror-day.m4a */ = {isa = PBXFileReference; path = "e-ho-zma-wror-day.m4a"; sourceTree = "<group>"; };
+		7B928B34CED4B38E1230FB05 /* e-sam.m4a */ = {isa = PBXFileReference; path = "e-sam.m4a"; sourceTree = "<group>"; };
+		7C1D60DECA77D7528ED941C3 /* e-daa-chaa-dar-ta-wu-wayl.m4a */ = {isa = PBXFileReference; path = "e-daa-chaa-dar-ta-wu-wayl.m4a"; sourceTree = "<group>"; };
+		7C69DD3EB18728A00623B967 /* e-ta-ye.m4a */ = {isa = PBXFileReference; path = "e-ta-ye.m4a"; sourceTree = "<group>"; };
+		7C9A5C9E9B8110531C9F4ABB /* e-waa-da-sha-way.m4a */ = {isa = PBXFileReference; path = "e-waa-da-sha-way.m4a"; sourceTree = "<group>"; };
+		7CB1FA3B82AAFF3A6877E579 /* e-ban-da-wal.m4a */ = {isa = PBXFileReference; path = "e-ban-da-wal.m4a"; sourceTree = "<group>"; };
+		7D15BD0D12FF4BCFA64DF3E1 /* e-daa-zmaa-me-ra-day.m4a */ = {isa = PBXFileReference; path = "e-daa-zmaa-me-ra-day.m4a"; sourceTree = "<group>"; };
+		7D8B250381B877099D89E89B /* e-zmaa-mor-aw-plaar-pa-kor-ke-dee.m4a */ = {isa = PBXFileReference; path = "e-zmaa-mor-aw-plaar-pa-kor-ke-dee.m4a"; sourceTree = "<group>"; };
+		7F2B3E1C1972DF73A64C3FAB /* e-tsa-ghwaa-rey.m4a */ = {isa = PBXFileReference; path = "e-tsa-ghwaa-rey.m4a"; sourceTree = "<group>"; };
+		7F73F04C03FA01B1C49AD632 /* e-khayr-day.m4a */ = {isa = PBXFileReference; path = "e-khayr-day.m4a"; sourceTree = "<group>"; };
+		8002BB187F29F7F506F1976C /* e-makhke.m4a */ = {isa = PBXFileReference; path = "e-makhke.m4a"; sourceTree = "<group>"; };
+		802BC8C19C0290E6C191F70C /* e-wradz.m4a */ = {isa = PBXFileReference; path = "e-wradz.m4a"; sourceTree = "<group>"; };
+		80712368E217942FE861BBF8 /* e-kha-da.m4a */ = {isa = PBXFileReference; path = "e-kha-da.m4a"; sourceTree = "<group>"; };
 		8118EC685984C6F8EEC84F32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		81288481ABB35289BC090237 /* e-drey.m4a */ = {isa = PBXFileReference; path = "e-drey.m4a"; sourceTree = "<group>"; };
 		8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */ = {isa = PBXFileReference; path = "e-baxana-ghwaram.m4a"; sourceTree = "<group>"; };
+		833554D258C7F2C0AE0C73DC /* e-wugay-yam.m4a */ = {isa = PBXFileReference; path = "e-wugay-yam.m4a"; sourceTree = "<group>"; };
+		83ED8A3DBBF868399DFDC907 /* e-lur.m4a */ = {isa = PBXFileReference; path = "e-lur.m4a"; sourceTree = "<group>"; };
+		841E87F7ED019B26C47D1E40 /* e-tsanga-q.m4a */ = {isa = PBXFileReference; path = "e-tsanga-q.m4a"; sourceTree = "<group>"; };
+		8441798C91883659B98D8FD9 /* e-zha-ba.m4a */ = {isa = PBXFileReference; path = "e-zha-ba.m4a"; sourceTree = "<group>"; };
 		846523C50CF2F0FC6624D6C5 /* e-dera-xa.m4a */ = {isa = PBXFileReference; path = "e-dera-xa.m4a"; sourceTree = "<group>"; };
+		849D4C10090CC61E593094B5 /* e-ta-da-kum-dzay-ye.m4a */ = {isa = PBXFileReference; path = "e-ta-da-kum-dzay-ye.m4a"; sourceTree = "<group>"; };
+		864FCD5CBB17C969535A4F68 /* e-ho-chaay-shta.m4a */ = {isa = PBXFileReference; path = "e-ho-chaay-shta.m4a"; sourceTree = "<group>"; };
+		8670B6F9BE6E26B587AC5C90 /* e-chi-shay-wu-shwal.m4a */ = {isa = PBXFileReference; path = "e-chi-shay-wu-shwal.m4a"; sourceTree = "<group>"; };
+		8675DB42E343A546F7D1A112 /* e-za-ham-daa-se-fikr-ka-wam.m4a */ = {isa = PBXFileReference; path = "e-za-ham-daa-se-fikr-ka-wam.m4a"; sourceTree = "<group>"; };
+		86DD41DEC9DCF7F74196E2F1 /* e-byaa-ba-wuweeno.m4a */ = {isa = PBXFileReference; path = "e-byaa-ba-wuweeno.m4a"; sourceTree = "<group>"; };
+		8719D4EB14FA9426DD331C4F /* e-dyaar-las.m4a */ = {isa = PBXFileReference; path = "e-dyaar-las.m4a"; sourceTree = "<group>"; };
 		87592241A3F002CDC42374F0 /* Motion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motion.swift; sourceTree = "<group>"; };
+		87E2D21D687C01865C05E966 /* e-staso-num-tsa-day.m4a */ = {isa = PBXFileReference; path = "e-staso-num-tsa-day.m4a"; sourceTree = "<group>"; };
+		886116BB5D77715CFE139B9B /* e-ta-khwin-de-la-rey.m4a */ = {isa = PBXFileReference; path = "e-ta-khwin-de-la-rey.m4a"; sourceTree = "<group>"; };
+		8889E7FBC9D20185E6109C2C /* e-aw-re-dal.m4a */ = {isa = PBXFileReference; path = "e-aw-re-dal.m4a"; sourceTree = "<group>"; };
+		89F738D806AFA6A2A623345F /* e-pin-dza-da-kee-ke-sabr-wu-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-pin-dza-da-kee-ke-sabr-wu-ka-ra.m4a"; sourceTree = "<group>"; };
 		8BEEB17DE25863261F4484DD /* LessonProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonProgressBar.swift; sourceTree = "<group>"; };
+		8C5BAA1C7E8611D2A0122F15 /* e-bil-kul.m4a */ = {isa = PBXFileReference; path = "e-bil-kul.m4a"; sourceTree = "<group>"; };
+		8C681BF31692CB9CE70B2FF7 /* e-gaiz-ma-ray.m4a */ = {isa = PBXFileReference; path = "e-gaiz-ma-ray.m4a"; sourceTree = "<group>"; };
+		8C6D42366F39B25676ADC9FF /* e-za-o-ba-ghwaa-ram.m4a */ = {isa = PBXFileReference; path = "e-za-o-ba-ghwaa-ram.m4a"; sourceTree = "<group>"; };
+		8C90BBACA4FCDD58A4B0CB05 /* e-za-sa-haar-kaar-ka-wam.m4a */ = {isa = PBXFileReference; path = "e-za-sa-haar-kaar-ka-wam.m4a"; sourceTree = "<group>"; };
+		8D196967889C8650A01DD252 /* e-ta-ka-la-raa-dzey.m4a */ = {isa = PBXFileReference; path = "e-ta-ka-la-raa-dzey.m4a"; sourceTree = "<group>"; };
+		8D713ABF0901BB714A726B10 /* e-wra-re-ra.m4a */ = {isa = PBXFileReference; path = "e-wra-re-ra.m4a"; sourceTree = "<group>"; };
+		8D7C03472BB031CD45966DEF /* e-sal-af-ghaa-nay-ke-gee.m4a */ = {isa = PBXFileReference; path = "e-sal-af-ghaa-nay-ke-gee.m4a"; sourceTree = "<group>"; };
+		8D9CA7C967B29B697C686F1F /* e-pin-dza-las.m4a */ = {isa = PBXFileReference; path = "e-pin-dza-las.m4a"; sourceTree = "<group>"; };
+		8DA4A9C74B7DC38569225FCC /* e-tol-kha-dee-2.m4a */ = {isa = PBXFileReference; path = "e-tol-kha-dee-2.m4a"; sourceTree = "<group>"; };
+		8F293E740546536B8FF93726 /* e-lwas-tal.m4a */ = {isa = PBXFileReference; path = "e-lwas-tal.m4a"; sourceTree = "<group>"; };
+		8F3674EF38A4E3E6A6B9E14F /* e-khpal-ka-lay.m4a */ = {isa = PBXFileReference; path = "e-khpal-ka-lay.m4a"; sourceTree = "<group>"; };
+		8FA26228A2A2DA6CC8FFBC5E /* e-boora.m4a */ = {isa = PBXFileReference; path = "e-boora.m4a"; sourceTree = "<group>"; };
+		902FA1060AFBBD731E8A3B3F /* e-zar.m4a */ = {isa = PBXFileReference; path = "e-zar.m4a"; sourceTree = "<group>"; };
+		905CAF0DB1E7A4477F6E1776 /* e-do-day.m4a */ = {isa = PBXFileReference; path = "e-do-day.m4a"; sourceTree = "<group>"; };
+		912D917649810F6D841B5D01 /* e-shpag.m4a */ = {isa = PBXFileReference; path = "e-shpag.m4a"; sourceTree = "<group>"; };
+		9185B5BBC087496E52E57EDE /* e-myaasht.m4a */ = {isa = PBXFileReference; path = "e-myaasht.m4a"; sourceTree = "<group>"; };
+		91E90DA4BE4EEF5146D4097B /* e-da-chaa.m4a */ = {isa = PBXFileReference; path = "e-da-chaa.m4a"; sourceTree = "<group>"; };
+		9238B73FFC7DA98A0826ED50 /* e-za-afghana-yam.m4a */ = {isa = PBXFileReference; path = "e-za-afghana-yam.m4a"; sourceTree = "<group>"; };
+		927D31DBAA51FDB989F06286 /* e-za-pakh-to-kha-na-sham-wa-ye-laay.m4a */ = {isa = PBXFileReference; path = "e-za-pakh-to-kha-na-sham-wa-ye-laay.m4a"; sourceTree = "<group>"; };
+		92CA80F9D80AC4767189B8A2 /* e-na-ha.m4a */ = {isa = PBXFileReference; path = "e-na-ha.m4a"; sourceTree = "<group>"; };
+		9353B39846F993F4C52907D6 /* e-chaay.m4a */ = {isa = PBXFileReference; path = "e-chaay.m4a"; sourceTree = "<group>"; };
+		944F27F7074CDA09DB85B821 /* e-hagha-day.m4a */ = {isa = PBXFileReference; path = "e-hagha-day.m4a"; sourceTree = "<group>"; };
+		95AD6D51A7C2B83B284C203E /* e-khlaa-sa-wal.m4a */ = {isa = PBXFileReference; path = "e-khlaa-sa-wal.m4a"; sourceTree = "<group>"; };
+		9606CE10D2D4BDDE708241FE /* e-injineer-yam.m4a */ = {isa = PBXFileReference; path = "e-injineer-yam.m4a"; sourceTree = "<group>"; };
+		9651E190740F56BADB6DEB75 /* e-cherta-oseygey.m4a */ = {isa = PBXFileReference; path = "e-cherta-oseygey.m4a"; sourceTree = "<group>"; };
+		96C9615DF2F907FF81EB4D02 /* e-zhar.m4a */ = {isa = PBXFileReference; path = "e-zhar.m4a"; sourceTree = "<group>"; };
+		97EDF1E254836624CFEF9C37 /* e-sa-baa-ba-sa-ra-wu-wee-no.m4a */ = {isa = PBXFileReference; path = "e-sa-baa-ba-sa-ra-wu-wee-no.m4a"; sourceTree = "<group>"; };
+		982CA1D1DE355EE343EF1592 /* e-da-dzaan-khyaal-saa-ta.m4a */ = {isa = PBXFileReference; path = "e-da-dzaan-khyaal-saa-ta.m4a"; sourceTree = "<group>"; };
+		99B6878E9B9A207368A7EF54 /* e-dar-waa-za-khlaa-sa-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-dar-waa-za-khlaa-sa-ka-ra.m4a"; sourceTree = "<group>"; };
+		99C9D8F1D299B401FCAD09DC /* e-num.m4a */ = {isa = PBXFileReference; path = "e-num.m4a"; sourceTree = "<group>"; };
+		9A31559C7C765E19DF60D688 /* e-kaabulee-palaw.m4a */ = {isa = PBXFileReference; path = "e-kaabulee-palaw.m4a"; sourceTree = "<group>"; };
 		9AB5D1D030F585B371D5FDB8 /* e-xa.m4a */ = {isa = PBXFileReference; path = "e-xa.m4a"; sourceTree = "<group>"; };
+		9B6CF1028A101A41A27C48A8 /* e-za-na-po-he-gam.m4a */ = {isa = PBXFileReference; path = "e-za-na-po-he-gam.m4a"; sourceTree = "<group>"; };
+		9BFAD0FB379C413E3FD6E030 /* e-cher-ta.m4a */ = {isa = PBXFileReference; path = "e-cher-ta.m4a"; sourceTree = "<group>"; };
+		9C9ED7F3A2BCB77EA1B96C09 /* e-zmaa-khor-la-maa-ka-sha-ra-da.m4a */ = {isa = PBXFileReference; path = "e-zmaa-khor-la-maa-ka-sha-ra-da.m4a"; sourceTree = "<group>"; };
+		9D30CAA00FDED38C9E451567 /* e-ta-chi-shay-ka-wey.m4a */ = {isa = PBXFileReference; path = "e-ta-chi-shay-ka-wey.m4a"; sourceTree = "<group>"; };
+		9D7DD37470F89C77AEE8D72B /* e-nawi.m4a */ = {isa = PBXFileReference; path = "e-nawi.m4a"; sourceTree = "<group>"; };
+		9DA9913C90953D8873DB05E0 /* e-wakh-tee.m4a */ = {isa = PBXFileReference; path = "e-wakh-tee.m4a"; sourceTree = "<group>"; };
+		9E21D368915A1B533508F0BA /* e-na-zma-zoy-day.m4a */ = {isa = PBXFileReference; path = "e-na-zma-zoy-day.m4a"; sourceTree = "<group>"; };
+		9EB6D0667C305E3753913B90 /* e-dre-yam.m4a */ = {isa = PBXFileReference; path = "e-dre-yam.m4a"; sourceTree = "<group>"; };
+		A0037DA8371894F05F37C37A /* e-za-waa-da-sha-way-yam.m4a */ = {isa = PBXFileReference; path = "e-za-waa-da-sha-way-yam.m4a"; sourceTree = "<group>"; };
+		A0D0558661FC4EA0D526473B /* e-khwa-ral.m4a */ = {isa = PBXFileReference; path = "e-khwa-ral.m4a"; sourceTree = "<group>"; };
+		A143520545BADC0E65E42BFA /* e-sal.m4a */ = {isa = PBXFileReference; path = "e-sal.m4a"; sourceTree = "<group>"; };
+		A178D4D0A1717C38166EFB52 /* e-dwo-las.m4a */ = {isa = PBXFileReference; path = "e-dwo-las.m4a"; sourceTree = "<group>"; };
+		A1D5D7BDD3781EC90733DAC5 /* e-za-kha-yam-ma-na-na.m4a */ = {isa = PBXFileReference; path = "e-za-kha-yam-ma-na-na.m4a"; sourceTree = "<group>"; };
+		A22BE6950963D3EC9C08B0CD /* e-mung-ni-ka-aw-a-naa-ta-dzoo.m4a */ = {isa = PBXFileReference; path = "e-mung-ni-ka-aw-a-naa-ta-dzoo.m4a"; sourceTree = "<group>"; };
+		A247A03630F5F2CA44E82C5A /* e-daa-chi-shay-day.m4a */ = {isa = PBXFileReference; path = "e-daa-chi-shay-day.m4a"; sourceTree = "<group>"; };
+		A3C0AEAD1FCE4785680FBBCE /* e-po-he-dal.m4a */ = {isa = PBXFileReference; path = "e-po-he-dal.m4a"; sourceTree = "<group>"; };
+		A3F1150A7A5E135FE62C91FC /* e-o-wa-las.m4a */ = {isa = PBXFileReference; path = "e-o-wa-las.m4a"; sourceTree = "<group>"; };
+		A45B84D3D412ADE2B44C76CB /* e-neem.m4a */ = {isa = PBXFileReference; path = "e-neem.m4a"; sourceTree = "<group>"; };
 		A4A51C8511BF186A7DBF0F5C /* e-dera-manana.m4a */ = {isa = PBXFileReference; path = "e-dera-manana.m4a"; sourceTree = "<group>"; };
+		A4DBFC38C4A9301DC36C3157 /* e-pi-yaaz.m4a */ = {isa = PBXFileReference; path = "e-pi-yaaz.m4a"; sourceTree = "<group>"; };
+		A4E06481B0D4BBD3A6340CAD /* e-charga.m4a */ = {isa = PBXFileReference; path = "e-charga.m4a"; sourceTree = "<group>"; };
+		A5001C9F10AD57458FDEC81B /* e-ghwag-ni-wal.m4a */ = {isa = PBXFileReference; path = "e-ghwag-ni-wal.m4a"; sourceTree = "<group>"; };
+		A50D48CB37D5759AEBF973DE /* e-tsa-q.m4a */ = {isa = PBXFileReference; path = "e-tsa-q.m4a"; sourceTree = "<group>"; };
+		A57C2C68E99DD884BC485DCC /* e-do-day-de-ra-khwand-wa-ra-da.m4a */ = {isa = PBXFileReference; path = "e-do-day-de-ra-khwand-wa-ra-da.m4a"; sourceTree = "<group>"; };
+		A57D00D8C679C8A7D2FFE73B /* e-yaw-wo-las.m4a */ = {isa = PBXFileReference; path = "e-yaw-wo-las.m4a"; sourceTree = "<group>"; };
+		A5B98FF35F990765D0CAD646 /* e-tsa-lor.m4a */ = {isa = PBXFileReference; path = "e-tsa-lor.m4a"; sourceTree = "<group>"; };
+		A638CCEFA3331A1152A59FB8 /* e-sta.m4a */ = {isa = PBXFileReference; path = "e-sta.m4a"; sourceTree = "<group>"; };
+		A645A934B785AE80A86A5667 /* e-mung.m4a */ = {isa = PBXFileReference; path = "e-mung.m4a"; sourceTree = "<group>"; };
+		A6485877AD95907D4C685957 /* e-chaay-shta.m4a */ = {isa = PBXFileReference; path = "e-chaay-shta.m4a"; sourceTree = "<group>"; };
+		A671BF9582FF489D12DC85FF /* e-pa-neer.m4a */ = {isa = PBXFileReference; path = "e-pa-neer.m4a"; sourceTree = "<group>"; };
+		A692B9E55363EB3EEF2F8CAF /* e-onay.m4a */ = {isa = PBXFileReference; path = "e-onay.m4a"; sourceTree = "<group>"; };
+		A7E8A4FCFF991658DFF3FA41 /* e-tsa-kal.m4a */ = {isa = PBXFileReference; path = "e-tsa-kal.m4a"; sourceTree = "<group>"; };
+		A85CF7A391766CCCE9D0BB23 /* e-hets.m4a */ = {isa = PBXFileReference; path = "e-hets.m4a"; sourceTree = "<group>"; };
+		A8ABB40E7B1A29A1F8506F22 /* e-maaspakheen.m4a */ = {isa = PBXFileReference; path = "e-maaspakheen.m4a"; sourceTree = "<group>"; };
 		A9F7FCFA89751587AB46DDDE /* PashtoPersistence */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PashtoPersistence; path = Packages/PashtoPersistence; sourceTree = SOURCE_ROOT; };
+		AC11194093DECE6CE3E2C87D /* e-zoy-aw-loor.m4a */ = {isa = PBXFileReference; path = "e-zoy-aw-loor.m4a"; sourceTree = "<group>"; };
+		AC8D7AE61FFE2F6123B0C040 /* e-da-leel.m4a */ = {isa = PBXFileReference; path = "e-da-leel.m4a"; sourceTree = "<group>"; };
+		ACCE8DACC911F725C9972E76 /* e-ya-keen-la-rey.m4a */ = {isa = PBXFileReference; path = "e-ya-keen-la-rey.m4a"; sourceTree = "<group>"; };
+		AD8ED3B211D442473F11BA68 /* e-nan-dey-chi-shay-paa-kha-kral.m4a */ = {isa = PBXFileReference; path = "e-nan-dey-chi-shay-paa-kha-kral.m4a"; sourceTree = "<group>"; };
+		AE79A426BD161CD1DB6304AB /* e-za-pashto-zda-kawam.m4a */ = {isa = PBXFileReference; path = "e-za-pashto-zda-kawam.m4a"; sourceTree = "<group>"; };
+		AF1AF483553E87A35486C73E /* e-gho-kha.m4a */ = {isa = PBXFileReference; path = "e-gho-kha.m4a"; sourceTree = "<group>"; };
+		B04265FCB496F4E2DF6AD167 /* e-las.m4a */ = {isa = PBXFileReference; path = "e-las.m4a"; sourceTree = "<group>"; };
+		B09632F0D18314A769CE9ECA /* e-za-sa-baa-kaar-ka-wam.m4a */ = {isa = PBXFileReference; path = "e-za-sa-baa-kaar-ka-wam.m4a"; sourceTree = "<group>"; };
+		B0966E673D64AD2C68349CC1 /* e-khu-wal.m4a */ = {isa = PBXFileReference; path = "e-khu-wal.m4a"; sourceTree = "<group>"; };
+		B0ABF0DDD8A7E3D63F2D0576 /* e-za-pa-roon-mas-roof-wam.m4a */ = {isa = PBXFileReference; path = "e-za-pa-roon-mas-roof-wam.m4a"; sourceTree = "<group>"; };
 		B1387294DBB3F01F49957DC5 /* e-xoday-paman.m4a */ = {isa = PBXFileReference; path = "e-xoday-paman.m4a"; sourceTree = "<group>"; };
+		B1B70B380A786E000971F503 /* e-daa-zma-xor-da.m4a */ = {isa = PBXFileReference; path = "e-daa-zma-xor-da.m4a"; sourceTree = "<group>"; };
+		B23AD9185197CF335C4B722E /* e-daa-zma-mor-da.m4a */ = {isa = PBXFileReference; path = "e-daa-zma-mor-da.m4a"; sourceTree = "<group>"; };
+		B27512E7BD985003BB255160 /* e-wa-le-khaan-dey.m4a */ = {isa = PBXFileReference; path = "e-wa-le-khaan-dey.m4a"; sourceTree = "<group>"; };
+		B2A336F8334C4905D6123CFA /* e-daa-zma-plar-day.m4a */ = {isa = PBXFileReference; path = "e-daa-zma-plar-day.m4a"; sourceTree = "<group>"; };
+		B36699C1D07B24EE35681697 /* e-mung-yu.m4a */ = {isa = PBXFileReference; path = "e-mung-yu.m4a"; sourceTree = "<group>"; };
+		B427010A04B1588F0CBB92BE /* e-chaay-tsa-khey.m4a */ = {isa = PBXFileReference; path = "e-chaay-tsa-khey.m4a"; sourceTree = "<group>"; };
+		B48038559C480A537B794419 /* e-za-pa-taa-po-he-gam.m4a */ = {isa = PBXFileReference; path = "e-za-pa-taa-po-he-gam.m4a"; sourceTree = "<group>"; };
+		B4DD94D242CF1919A70C516A /* e-lomray.m4a */ = {isa = PBXFileReference; path = "e-lomray.m4a"; sourceTree = "<group>"; };
+		B74695AF3A8134A63B84352E /* e-o-mar.m4a */ = {isa = PBXFileReference; path = "e-o-mar.m4a"; sourceTree = "<group>"; };
+		B77F3C3BC7ABEE84C5889476 /* e-za-lag-lag-pakh-to-waa-yam.m4a */ = {isa = PBXFileReference; path = "e-za-lag-lag-pakh-to-waa-yam.m4a"; sourceTree = "<group>"; };
+		B8A0955278BC1AE16241DC83 /* e-akh-is-tal.m4a */ = {isa = PBXFileReference; path = "e-akh-is-tal.m4a"; sourceTree = "<group>"; };
+		B99B0D11914F4376B6A5277D /* e-khaa-yee.m4a */ = {isa = PBXFileReference; path = "e-khaa-yee.m4a"; sourceTree = "<group>"; };
+		B9E8EC4806F787C06DEC18B3 /* e-gham-ma-ka-wa.m4a */ = {isa = PBXFileReference; path = "e-gham-ma-ka-wa.m4a"; sourceTree = "<group>"; };
+		BA0100CF0B64E0677DCEC8AC /* e-dwa.m4a */ = {isa = PBXFileReference; path = "e-dwa.m4a"; sourceTree = "<group>"; };
+		BA39BBCC9E1A711C92BF8647 /* e-tol-kha-dee.m4a */ = {isa = PBXFileReference; path = "e-tol-kha-dee.m4a"; sourceTree = "<group>"; };
+		BA4506495E8BF26DD18BB521 /* e-ho-al-bat-ta.m4a */ = {isa = PBXFileReference; path = "e-ho-al-bat-ta.m4a"; sourceTree = "<group>"; };
+		BAA2004E2AD6CC2C25C2EEBB /* e-a-ta.m4a */ = {isa = PBXFileReference; path = "e-a-ta.m4a"; sourceTree = "<group>"; };
+		BAC54EB3FA6C42BED18AA59C /* e-dwa-ghwaa-ram.m4a */ = {isa = PBXFileReference; path = "e-dwa-ghwaa-ram.m4a"; sourceTree = "<group>"; };
+		BAF07089658F1AAFF4A68BF2 /* e-khadza.m4a */ = {isa = PBXFileReference; path = "e-khadza.m4a"; sourceTree = "<group>"; };
 		BB198D583572EA4F7E128283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BB8D7AD915FE92541F86A668 /* e-daa-staa-day.m4a */ = {isa = PBXFileReference; path = "e-daa-staa-day.m4a"; sourceTree = "<group>"; };
+		BC024231074352165F6AAC92 /* e-hisaab.m4a */ = {isa = PBXFileReference; path = "e-hisaab.m4a"; sourceTree = "<group>"; };
+		BC2116F33629B9BC0EA8CF49 /* e-paa-tse-dal.m4a */ = {isa = PBXFileReference; path = "e-paa-tse-dal.m4a"; sourceTree = "<group>"; };
+		BC3E39045A5E37D9801C14F3 /* e-yaw.m4a */ = {isa = PBXFileReference; path = "e-yaw.m4a"; sourceTree = "<group>"; };
+		BC74064A14BAA284CA315818 /* e-zmaa-in-ti-zaar-wu-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-zmaa-in-ti-zaar-wu-ka-ra.m4a"; sourceTree = "<group>"; };
+		BD21ACAF90E7BE90ACAEE023 /* e-za-afghan-na-yam.m4a */ = {isa = PBXFileReference; path = "e-za-afghan-na-yam.m4a"; sourceTree = "<group>"; };
+		BDBFF88DA8CC7F27E2ACEE4F /* e-maa-ta-ye-raa-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-maa-ta-ye-raa-ka-ra.m4a"; sourceTree = "<group>"; };
+		BDF9A828E7ADF24EF1651075 /* e-za-ba-sa-baa-raa-sham.m4a */ = {isa = PBXFileReference; path = "e-za-ba-sa-baa-raa-sham.m4a"; sourceTree = "<group>"; };
+		BE34316397D392AE55964CE3 /* e-za-ghwaa-ram-wee-da-sham.m4a */ = {isa = PBXFileReference; path = "e-za-ghwaa-ram-wee-da-sham.m4a"; sourceTree = "<group>"; };
+		BE391F263C6CB7FBF165485C /* e-ke-na.m4a */ = {isa = PBXFileReference; path = "e-ke-na.m4a"; sourceTree = "<group>"; };
+		C10D4203C01BD0FD03B9E4FF /* e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro.m4a */ = {isa = PBXFileReference; path = "e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro.m4a"; sourceTree = "<group>"; };
+		C29DC733EA275331CE8A8711 /* e-la-mung-sa-ra-raa-sha.m4a */ = {isa = PBXFileReference; path = "e-la-mung-sa-ra-raa-sha.m4a"; sourceTree = "<group>"; };
+		C31D6BB5706A0AE027A5BF24 /* e-koom.m4a */ = {isa = PBXFileReference; path = "e-koom.m4a"; sourceTree = "<group>"; };
+		C38B04AAAEEA666727857792 /* e-kaakaa.m4a */ = {isa = PBXFileReference; path = "e-kaakaa.m4a"; sourceTree = "<group>"; };
+		C496D0DD219ABAD5060D2BEC /* e-hat-man.m4a */ = {isa = PBXFileReference; path = "e-hat-man.m4a"; sourceTree = "<group>"; };
+		C63574AF3DB2CD9D3006B48F /* e-shee-dey.m4a */ = {isa = PBXFileReference; path = "e-shee-dey.m4a"; sourceTree = "<group>"; };
+		C663E737F04F263760DC07E3 /* e-plar.m4a */ = {isa = PBXFileReference; path = "e-plar.m4a"; sourceTree = "<group>"; };
 		C68F5BB7EA4FECFADB4FAE86 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		C6AEAD86C44D3AA57BB01BC8 /* e-za-nan-kaar-ka-wam.m4a */ = {isa = PBXFileReference; path = "e-za-nan-kaar-ka-wam.m4a"; sourceTree = "<group>"; };
+		C6B7A456768D7B30D8150535 /* e-o-mar-dey-tso-day.m4a */ = {isa = PBXFileReference; path = "e-o-mar-dey-tso-day.m4a"; sourceTree = "<group>"; };
+		C731BE3E7BC265D7AD90C209 /* e-kaar-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-kaar-ka-wal.m4a"; sourceTree = "<group>"; };
+		C77A118FEBCC65361E5EF786 /* e-maashoom.m4a */ = {isa = PBXFileReference; path = "e-maashoom.m4a"; sourceTree = "<group>"; };
+		C7EC6E072D54DD7965BF99D3 /* e-sama-da.m4a */ = {isa = PBXFileReference; path = "e-sama-da.m4a"; sourceTree = "<group>"; };
+		C8E2E4260A96D6C635BD889A /* e-os.m4a */ = {isa = PBXFileReference; path = "e-os.m4a"; sourceTree = "<group>"; };
+		C8EB33047A2278A6E9FD98E5 /* e-wa-le-na.m4a */ = {isa = PBXFileReference; path = "e-wa-le-na.m4a"; sourceTree = "<group>"; };
+		CA2265FE4F5D7BBD2766D7B5 /* e-dwa-wrona.m4a */ = {isa = PBXFileReference; path = "e-dwa-wrona.m4a"; sourceTree = "<group>"; };
+		CABD5A925FC6EA6B84AB1589 /* e-ha-gha-zmaa-khor-da.m4a */ = {isa = PBXFileReference; path = "e-ha-gha-zmaa-khor-da.m4a"; sourceTree = "<group>"; };
+		CBEBBA6B6A0DF7B3279572EF /* e-chi-shay-khwa-ral-ghwaa-rey.m4a */ = {isa = PBXFileReference; path = "e-chi-shay-khwa-ral-ghwaa-rey.m4a"; sourceTree = "<group>"; };
+		CC4003F16599CDEC6E978938 /* e-shpa-mo-pa-khayr.m4a */ = {isa = PBXFileReference; path = "e-shpa-mo-pa-khayr.m4a"; sourceTree = "<group>"; };
 		CCAECD6AA12960DD6901428E /* e-tsanga-ye.m4a */ = {isa = PBXFileReference; path = "e-tsanga-ye.m4a"; sourceTree = "<group>"; };
+		CDD51F487F74AA2BA6D5FA94 /* e-na-ma-na-na.m4a */ = {isa = PBXFileReference; path = "e-na-ma-na-na.m4a"; sourceTree = "<group>"; };
+		CE9C084D1E80CA01EB3E4A63 /* e-daa-tsa-maa-na-la-ree.m4a */ = {isa = PBXFileReference; path = "e-daa-tsa-maa-na-la-ree.m4a"; sourceTree = "<group>"; };
+		CF73D334A993F59AD8E8358D /* e-la-kaabul.m4a */ = {isa = PBXFileReference; path = "e-la-kaabul.m4a"; sourceTree = "<group>"; };
+		CF913CB85047A3B496FC81DB /* e-sa-baa.m4a */ = {isa = PBXFileReference; path = "e-sa-baa.m4a"; sourceTree = "<group>"; };
+		CFCAB97EFCF916CEB2FFB115 /* e-za.m4a */ = {isa = PBXFileReference; path = "e-za.m4a"; sourceTree = "<group>"; };
 		D1020344AFA863654DE80D5B /* PashtoApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PashtoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D113D2F41868F9CCA341BF08 /* e-gha-lat.m4a */ = {isa = PBXFileReference; path = "e-gha-lat.m4a"; sourceTree = "<group>"; };
+		D147C40A939CE9F093F0846C /* e-ka-lay.m4a */ = {isa = PBXFileReference; path = "e-ka-lay.m4a"; sourceTree = "<group>"; };
+		D1C7D2B1FEEAB443E7108FB8 /* e-za-baa-yad-kaar-wu-kram.m4a */ = {isa = PBXFileReference; path = "e-za-baa-yad-kaar-wu-kram.m4a"; sourceTree = "<group>"; };
+		D1E4F22E5B2BFAB239065C06 /* e-har-wradz.m4a */ = {isa = PBXFileReference; path = "e-har-wradz.m4a"; sourceTree = "<group>"; };
 		D21AAA7CC3D9B78DB7765A80 /* StorageErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageErrorScreen.swift; sourceTree = "<group>"; };
+		D2C810BC8628476DE5B996C2 /* e-khpal-waan.m4a */ = {isa = PBXFileReference; path = "e-khpal-waan.m4a"; sourceTree = "<group>"; };
+		D32ABFCCC8D6B634FC459B79 /* e-drey-ba-je-dee.m4a */ = {isa = PBXFileReference; path = "e-drey-ba-je-dee.m4a"; sourceTree = "<group>"; };
+		D36C4A49A8F18C3D24135E99 /* e-fark-na-ka-wee.m4a */ = {isa = PBXFileReference; path = "e-fark-na-ka-wee.m4a"; sourceTree = "<group>"; };
+		D472905C3CD958064CA8F31C /* e-kha-ba-rey-ka-wal.m4a */ = {isa = PBXFileReference; path = "e-kha-ba-rey-ka-wal.m4a"; sourceTree = "<group>"; };
+		D4E691251805200F8D6BA98B /* e-daa-tsan-ga-kaar-ka-wee.m4a */ = {isa = PBXFileReference; path = "e-daa-tsan-ga-kaar-ka-wee.m4a"; sourceTree = "<group>"; };
+		D52A51CB989796EB7BB92954 /* e-wraa-ra.m4a */ = {isa = PBXFileReference; path = "e-wraa-ra.m4a"; sourceTree = "<group>"; };
+		D5FBDC1731662858B183B75A /* e-yawa-baja.m4a */ = {isa = PBXFileReference; path = "e-yawa-baja.m4a"; sourceTree = "<group>"; };
+		D7AC305E7094AA1B7238FFF5 /* e-plaar-dey-cher-ta-day.m4a */ = {isa = PBXFileReference; path = "e-plaar-dey-cher-ta-day.m4a"; sourceTree = "<group>"; };
+		D7F39AAD2A2111F06362CFC9 /* e-la-maa-sa-ra-mras-ta-ko-laay-shey.m4a */ = {isa = PBXFileReference; path = "e-la-maa-sa-ra-mras-ta-ko-laay-shey.m4a"; sourceTree = "<group>"; };
+		D8D09CA1786F35C8092D43CE /* e-maamaa.m4a */ = {isa = PBXFileReference; path = "e-maamaa.m4a"; sourceTree = "<group>"; };
+		D8EACC1C643EA1D71D7B9804 /* e-da-ghar-me-do-day.m4a */ = {isa = PBXFileReference; path = "e-da-ghar-me-do-day.m4a"; sourceTree = "<group>"; };
+		D900D1E4E054C2E9C62D357E /* e-ha-gha-staa-day.m4a */ = {isa = PBXFileReference; path = "e-ha-gha-staa-day.m4a"; sourceTree = "<group>"; };
+		D94CCA8CD6DADDEF61003C2D /* e-wale-q.m4a */ = {isa = PBXFileReference; path = "e-wale-q.m4a"; sourceTree = "<group>"; };
+		DA15E2AF82522BDEE5DCAEE7 /* e-tsalwekht.m4a */ = {isa = PBXFileReference; path = "e-tsalwekht.m4a"; sourceTree = "<group>"; };
+		DACBCD6BFF95412189A802E2 /* e-za-lom-ray-yam.m4a */ = {isa = PBXFileReference; path = "e-za-lom-ray-yam.m4a"; sourceTree = "<group>"; };
+		DC4147B9DD2A8B500B1F4AC9 /* e-mor.m4a */ = {isa = PBXFileReference; path = "e-mor.m4a"; sourceTree = "<group>"; };
+		DC48A5F213F196975B18D809 /* e-za-la-narwe-tsaxa-yam.m4a */ = {isa = PBXFileReference; path = "e-za-la-narwe-tsaxa-yam.m4a"; sourceTree = "<group>"; };
+		DD03B624924D6FA12A24639F /* e-ke-naas-tal.m4a */ = {isa = PBXFileReference; path = "e-ke-naas-tal.m4a"; sourceTree = "<group>"; };
+		DF01B16C93CAF32FFD6B3208 /* e-panj-shan-ba.m4a */ = {isa = PBXFileReference; path = "e-panj-shan-ba.m4a"; sourceTree = "<group>"; };
 		DF9336F36C64A0E17B8E2FE6 /* QuizScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScreen.swift; sourceTree = "<group>"; };
+		DFE99F30213C31B986D93DFD /* e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da.m4a */ = {isa = PBXFileReference; path = "e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da.m4a"; sourceTree = "<group>"; };
+		E03D1043D597C14704CE3470 /* e-ha-ghwee-sa-baa-raa-dzee.m4a */ = {isa = PBXFileReference; path = "e-ha-ghwee-sa-baa-raa-dzee.m4a"; sourceTree = "<group>"; };
+		E06CBC42DEF185ADD913839A /* e-wrosta.m4a */ = {isa = PBXFileReference; path = "e-wrosta.m4a"; sourceTree = "<group>"; };
+		E122A86F1EEA483CBE4D7AD2 /* e-za-shal-ka-la-na-yam.m4a */ = {isa = PBXFileReference; path = "e-za-shal-ka-la-na-yam.m4a"; sourceTree = "<group>"; };
+		E1942B10F106B963E7FF0BA8 /* e-da-ha-ghwee.m4a */ = {isa = PBXFileReference; path = "e-da-ha-ghwee.m4a"; sourceTree = "<group>"; };
 		E2382E97EED9CF787345C726 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		E3EA26DA48066EE2D3ED2BD0 /* e-jor-yam.m4a */ = {isa = PBXFileReference; path = "e-jor-yam.m4a"; sourceTree = "<group>"; };
+		E41D4747E0609DBE361E1F0B /* e-da-ha-gha.m4a */ = {isa = PBXFileReference; path = "e-da-ha-gha.m4a"; sourceTree = "<group>"; };
 		E427EEE4D83973BBDF72044C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E5B1AC33F10BD547EC5958B2 /* e-kar-kay-ban-da-ka-ra.m4a */ = {isa = PBXFileReference; path = "e-kar-kay-ban-da-ka-ra.m4a"; sourceTree = "<group>"; };
+		E7BC4795D8F0C71E069E6F89 /* e-za-wakh-tee-raa-paa-tse-dam.m4a */ = {isa = PBXFileReference; path = "e-za-wakh-tee-raa-paa-tse-dam.m4a"; sourceTree = "<group>"; };
+		E9484EAE3294B45DF43C936E /* e-ka-la-na.m4a */ = {isa = PBXFileReference; path = "e-ka-la-na.m4a"; sourceTree = "<group>"; };
+		EB944BD94ECCB0F614BD3249 /* e-mung-kor-ta-dzoo.m4a */ = {isa = PBXFileReference; path = "e-mung-kor-ta-dzoo.m4a"; sourceTree = "<group>"; };
+		ECD433E7083E83F61005254A /* e-da-o-nay-paay.m4a */ = {isa = PBXFileReference; path = "e-da-o-nay-paay.m4a"; sourceTree = "<group>"; };
+		ED189BB83F2AA97B72FEC9A4 /* e-daa-do-day-da.m4a */ = {isa = PBXFileReference; path = "e-daa-do-day-da.m4a"; sourceTree = "<group>"; };
+		ED21C161EE6A5D23ADEEB027 /* e-de-ta-wu-go-ra.m4a */ = {isa = PBXFileReference; path = "e-de-ta-wu-go-ra.m4a"; sourceTree = "<group>"; };
+		EE1514EEFE0E7A421D992CAA /* e-yaw-bal-pa-kaar-day.m4a */ = {isa = PBXFileReference; path = "e-yaw-bal-pa-kaar-day.m4a"; sourceTree = "<group>"; };
 		EE29101395AC9D1702069D48 /* e-xa-raghlast.m4a */ = {isa = PBXFileReference; path = "e-xa-raghlast.m4a"; sourceTree = "<group>"; };
+		EE3E8EC9A0B4D160BD6ECFA2 /* e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no.m4a */ = {isa = PBXFileReference; path = "e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no.m4a"; sourceTree = "<group>"; };
+		EEEBA20E3F013F0CAF8A0F6C /* e-mor-de-tsanga-da.m4a */ = {isa = PBXFileReference; path = "e-mor-de-tsanga-da.m4a"; sourceTree = "<group>"; };
+		EF4A1F0BCAA3D511BEBED5B2 /* e-zma-num-ahmad-day.m4a */ = {isa = PBXFileReference; path = "e-zma-num-ahmad-day.m4a"; sourceTree = "<group>"; };
+		EFB3B54E49F94E9014EBC0EB /* e-za-chaay-na-ghwaa-ram.m4a */ = {isa = PBXFileReference; path = "e-za-chaay-na-ghwaa-ram.m4a"; sourceTree = "<group>"; };
+		F029544BEBEB199EA70B8D77 /* e-da-maa-khaam-do-day.m4a */ = {isa = PBXFileReference; path = "e-da-maa-khaam-do-day.m4a"; sourceTree = "<group>"; };
+		F04B00B7D15489961895F372 /* e-za-shal-ka-lan-yam.m4a */ = {isa = PBXFileReference; path = "e-za-shal-ka-lan-yam.m4a"; sourceTree = "<group>"; };
 		F0CD0E123D3AD965E07A54CD /* e-na.m4a */ = {isa = PBXFileReference; path = "e-na.m4a"; sourceTree = "<group>"; };
+		F0FF99691C4525D5B0491B6A /* e-na-chaay-na-shta.m4a */ = {isa = PBXFileReference; path = "e-na-chaay-na-shta.m4a"; sourceTree = "<group>"; };
+		F11F1794B2D4BFA48E3F587A /* e-maa-shoo-maan.m4a */ = {isa = PBXFileReference; path = "e-maa-shoo-maan.m4a"; sourceTree = "<group>"; };
+		F121BD4800703B9AD7CB11D8 /* e-khaala.m4a */ = {isa = PBXFileReference; path = "e-khaala.m4a"; sourceTree = "<group>"; };
+		F14F526B8662E8E6E36CCE9E /* e-nan.m4a */ = {isa = PBXFileReference; path = "e-nan.m4a"; sourceTree = "<group>"; };
+		F155B8CB2AB3935604C8EC71 /* e-tol.m4a */ = {isa = PBXFileReference; path = "e-tol.m4a"; sourceTree = "<group>"; };
+		F1EF52D63788CA1952FCECDE /* e-mi-li-yat.m4a */ = {isa = PBXFileReference; path = "e-mi-li-yat.m4a"; sourceTree = "<group>"; };
+		F2C46645ACBEABC492B41FE3 /* e-o-ba.m4a */ = {isa = PBXFileReference; path = "e-o-ba.m4a"; sourceTree = "<group>"; };
+		F2CBB5F45FCD9130BB289688 /* e-tar-boor.m4a */ = {isa = PBXFileReference; path = "e-tar-boor.m4a"; sourceTree = "<group>"; };
+		F39DF670067618D8EBE2D34D /* e-tso-ka-saan-raa-dzee.m4a */ = {isa = PBXFileReference; path = "e-tso-ka-saan-raa-dzee.m4a"; sourceTree = "<group>"; };
+		F3E1CE5FF7E6A4F8900C76D4 /* e-wu-dre-dal.m4a */ = {isa = PBXFileReference; path = "e-wu-dre-dal.m4a"; sourceTree = "<group>"; };
+		F451F2595247341179D4DB9D /* e-khar-tsa-wal.m4a */ = {isa = PBXFileReference; path = "e-khar-tsa-wal.m4a"; sourceTree = "<group>"; };
+		F56859B5B7B4548C986F3DFA /* e-za-kaar-ka-wam.m4a */ = {isa = PBXFileReference; path = "e-za-kaar-ka-wam.m4a"; sourceTree = "<group>"; };
+		F5DE95182106120CAB44D0BC /* e-har-tsa.m4a */ = {isa = PBXFileReference; path = "e-har-tsa.m4a"; sourceTree = "<group>"; };
+		F694F9837E48900BFDDAD9C0 /* e-daa-ma-na-da.m4a */ = {isa = PBXFileReference; path = "e-daa-ma-na-da.m4a"; sourceTree = "<group>"; };
+		F6A64C04EDAD57C94C7EA430 /* e-staree-ma-shey.m4a */ = {isa = PBXFileReference; path = "e-staree-ma-shey.m4a"; sourceTree = "<group>"; };
+		F70BC88E10CDD14FBFBB20CF /* e-kala-q.m4a */ = {isa = PBXFileReference; path = "e-kala-q.m4a"; sourceTree = "<group>"; };
+		F740CD032562810D77E0D40D /* e-ma-na.m4a */ = {isa = PBXFileReference; path = "e-ma-na.m4a"; sourceTree = "<group>"; };
+		F752497950F32616EA247C28 /* e-nan-ju-ma-da.m4a */ = {isa = PBXFileReference; path = "e-nan-ju-ma-da.m4a"; sourceTree = "<group>"; };
+		F77D2208B310B512A5B26948 /* e-roo-mee-baan-jaan.m4a */ = {isa = PBXFileReference; path = "e-roo-mee-baan-jaan.m4a"; sourceTree = "<group>"; };
+		F8BE2299E47D1E31F3B55703 /* e-mor-aw-plaar.m4a */ = {isa = PBXFileReference; path = "e-mor-aw-plaar.m4a"; sourceTree = "<group>"; };
+		F908869B2DD9BC6D3F959D85 /* e-dzwaab.m4a */ = {isa = PBXFileReference; path = "e-dzwaab.m4a"; sourceTree = "<group>"; };
+		FA7CE997D1C77A5844BB1BF5 /* e-dal-ta-raa-sha.m4a */ = {isa = PBXFileReference; path = "e-dal-ta-raa-sha.m4a"; sourceTree = "<group>"; };
+		FA944D0F6FC350BCAB109045 /* e-zdakawoonkay.m4a */ = {isa = PBXFileReference; path = "e-zdakawoonkay.m4a"; sourceTree = "<group>"; };
 		FB1399B47DD716ED2E20B5C4 /* e-salam.m4a */ = {isa = PBXFileReference; path = "e-salam.m4a"; sourceTree = "<group>"; };
+		FB2E7B774DE82C7E14F73A35 /* e-shpa.m4a */ = {isa = PBXFileReference; path = "e-shpa.m4a"; sourceTree = "<group>"; };
+		FBCA3C46D707F7C36BCFE4DB /* e-wri-jey.m4a */ = {isa = PBXFileReference; path = "e-wri-jey.m4a"; sourceTree = "<group>"; };
+		FC64D8E0D69A1B7D25B2AC9A /* e-tso.m4a */ = {isa = PBXFileReference; path = "e-tso.m4a"; sourceTree = "<group>"; };
+		FD2D541B65039B9674678AC3 /* e-za-ham.m4a */ = {isa = PBXFileReference; path = "e-za-ham.m4a"; sourceTree = "<group>"; };
+		FD98607568047CA8A82217A8 /* e-so-la.m4a */ = {isa = PBXFileReference; path = "e-so-la.m4a"; sourceTree = "<group>"; };
 		FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */ = {isa = PBXFileReference; path = "e-taso-tsanga-yast.m4a"; sourceTree = "<group>"; };
+		FEBEF4DA2E7E79F745413032 /* e-hagay.m4a */ = {isa = PBXFileReference; path = "e-hagay.m4a"; sourceTree = "<group>"; };
+		FFD994F26FC8E3717190572A /* e-pukh-ta-na.m4a */ = {isa = PBXFileReference; path = "e-pukh-ta-na.m4a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,25 +1011,437 @@
 		66BF9CB3CD9559B6CFEF6401 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				58DC77E82561791036EF124F /* e-a-ta-las.m4a */,
+				BAA2004E2AD6CC2C25C2EEBB /* e-a-ta.m4a */,
+				B8A0955278BC1AE16241DC83 /* e-akh-is-tal.m4a */,
+				51F525428046024811738896 /* e-al-bat-ta.m4a */,
+				3FC4C02FA7DB8DEC3F4BF440 /* e-alhamdulillah.m4a */,
+				0301223DDD8DE42EB88D4799 /* e-anaa.m4a */,
 				5DF4E45B73D1A11D2B8B6B52 /* e-assalamu-alaykum.m4a */,
+				5D8D670971204A27B0CE155E /* e-atyaa.m4a */,
+				8889E7FBC9D20185E6109C2C /* e-aw-re-dal.m4a */,
+				784BF9FB43C44675292027B4 /* e-awyaa.m4a */,
+				160E0D84750C1A77BC0BA718 /* e-bad.m4a */,
+				7CB1FA3B82AAFF3A6877E579 /* e-ban-da-wal.m4a */,
+				03EB7770F8B6A633268C936F /* e-bas-2.m4a */,
+				58C0297A952404EC51ABA6E7 /* e-bas-day.m4a */,
 				8131DBE9BE8065DA8B7F425C /* e-baxana-ghwaram.m4a */,
+				8C5BAA1C7E8611D2A0122F15 /* e-bil-kul.m4a */,
+				8FA26228A2A2DA6CC8FFBC5E /* e-boora.m4a */,
+				86DD41DEC9DCF7F74196E2F1 /* e-byaa-ba-wuweeno.m4a */,
+				4877EA8A03AE0AEDA6873B29 /* e-byaa.m4a */,
+				22617F80D0BD3693E072F746 /* e-cha-haar-shan-ba.m4a */,
+				A6485877AD95907D4C685957 /* e-chaay-shta.m4a */,
+				B427010A04B1588F0CBB92BE /* e-chaay-tsa-khey.m4a */,
+				9353B39846F993F4C52907D6 /* e-chaay.m4a */,
+				A4E06481B0D4BBD3A6340CAD /* e-charga.m4a */,
+				9BFAD0FB379C413E3FD6E030 /* e-cher-ta.m4a */,
+				9651E190740F56BADB6DEB75 /* e-cherta-oseygey.m4a */,
+				CBEBBA6B6A0DF7B3279572EF /* e-chi-shay-khwa-ral-ghwaa-rey.m4a */,
+				8670B6F9BE6E26B587AC5C90 /* e-chi-shay-wu-shwal.m4a */,
+				91E90DA4BE4EEF5146D4097B /* e-da-chaa.m4a */,
+				982CA1D1DE355EE343EF1592 /* e-da-dzaan-khyaal-saa-ta.m4a */,
+				D8EACC1C643EA1D71D7B9804 /* e-da-ghar-me-do-day.m4a */,
+				E41D4747E0609DBE361E1F0B /* e-da-ha-gha.m4a */,
+				04F2B67F1153A51D52F609CF /* e-da-ha-ghe.m4a */,
+				E1942B10F106B963E7FF0BA8 /* e-da-ha-ghwee.m4a */,
+				2E9073AA61E64EF4C287CCAD /* e-da-kee-ka.m4a */,
+				AC8D7AE61FFE2F6123B0C040 /* e-da-leel.m4a */,
+				F029544BEBEB199EA70B8D77 /* e-da-maa-khaam-do-day.m4a */,
+				ECD433E7083E83F61005254A /* e-da-o-nay-paay.m4a */,
+				7C1D60DECA77D7528ED941C3 /* e-daa-chaa-dar-ta-wu-wayl.m4a */,
+				A247A03630F5F2CA44E82C5A /* e-daa-chi-shay-day.m4a */,
+				ED189BB83F2AA97B72FEC9A4 /* e-daa-do-day-da.m4a */,
+				F694F9837E48900BFDDAD9C0 /* e-daa-ma-na-da.m4a */,
+				17DCEB093DE973A0C0DDDC18 /* e-daa-pa-tso-day.m4a */,
+				6950A97342FC2749C3DA54A6 /* e-daa-sam-day.m4a */,
+				0054FCC539A2A7A0242675A7 /* e-daa-sta-wror-day.m4a */,
+				BB8D7AD915FE92541F86A668 /* e-daa-staa-day.m4a */,
+				CE9C084D1E80CA01EB3E4A63 /* e-daa-tsa-maa-na-la-ree.m4a */,
+				D4E691251805200F8D6BA98B /* e-daa-tsan-ga-kaar-ka-wee.m4a */,
+				3EEA45257A856754D8E14D5E /* e-daa-tsok-da.m4a */,
+				12F949172F3B945037B6F616 /* e-daa-tsok-day.m4a */,
+				B23AD9185197CF335C4B722E /* e-daa-zma-mor-da.m4a */,
+				B2A336F8334C4905D6123CFA /* e-daa-zma-plar-day.m4a */,
+				667D9BABA88ADB2022E0886F /* e-daa-zma-wror-day.m4a */,
+				B1B70B380A786E000971F503 /* e-daa-zma-xor-da.m4a */,
+				46E1B1B996745848E2ABE5C5 /* e-daa-zmaa-day.m4a */,
+				1D3C2DA5AEA4C47C8CD8906F /* e-daa-zmaa-kha-dza-da.m4a */,
+				7D15BD0D12FF4BCFA64DF3E1 /* e-daa-zmaa-me-ra-day.m4a */,
+				599F8871DB6CDD34C3D3D0CC /* e-daaktar-yam.m4a */,
+				FA7CE997D1C77A5844BB1BF5 /* e-dal-ta-raa-sha.m4a */,
+				99B6878E9B9A207368A7EF54 /* e-dar-waa-za-khlaa-sa-ka-ra.m4a */,
+				ED21C161EE6A5D23ADEEB027 /* e-de-ta-wu-go-ra.m4a */,
 				A4A51C8511BF186A7DBF0F5C /* e-dera-manana.m4a */,
 				846523C50CF2F0FC6624D6C5 /* e-dera-xa.m4a */,
+				66BE0D1AE8ECF63A1FC789C3 /* e-dersh.m4a */,
+				A57C2C68E99DD884BC485DCC /* e-do-day-de-ra-khwand-wa-ra-da.m4a */,
+				07F42303286DDF714B945310 /* e-do-day-dey-khwa-ra-le-da.m4a */,
+				3124F4C743AC3979060D01D9 /* e-do-day-tay-yaa-ra-da.m4a */,
+				905CAF0DB1E7A4477F6E1776 /* e-do-day.m4a */,
+				7A03267A995370F25FE00922 /* e-do-shan-ba.m4a */,
+				346A18A5912613D021E5ED62 /* e-dost.m4a */,
+				9EB6D0667C305E3753913B90 /* e-dre-yam.m4a */,
+				D32ABFCCC8D6B634FC459B79 /* e-drey-ba-je-dee.m4a */,
+				81288481ABB35289BC090237 /* e-drey.m4a */,
+				3A3F7E38BBED9066D2752034 /* e-dwa-baje.m4a */,
+				BAC54EB3FA6C42BED18AA59C /* e-dwa-ghwaa-ram.m4a */,
+				CA2265FE4F5D7BBD2766D7B5 /* e-dwa-wrona.m4a */,
+				BA0100CF0B64E0677DCEC8AC /* e-dwa.m4a */,
+				1DFF8FDD9CAEC4E56DE88205 /* e-dwaham.m4a */,
+				A178D4D0A1717C38166EFB52 /* e-dwo-las.m4a */,
+				8719D4EB14FA9426DD331C4F /* e-dyaar-las.m4a */,
+				26BC559C4A8BA09A24D9C6E8 /* e-dzoo.m4a */,
+				F908869B2DD9BC6D3F959D85 /* e-dzwaab.m4a */,
+				D36C4A49A8F18C3D24135E99 /* e-fark-na-ka-wee.m4a */,
+				8C681BF31692CB9CE70B2FF7 /* e-gaiz-ma-ray.m4a */,
+				D113D2F41868F9CCA341BF08 /* e-gha-lat.m4a */,
+				B9E8EC4806F787C06DEC18B3 /* e-gham-ma-ka-wa.m4a */,
+				3837E346BC73A90558BB1164 /* e-ghar-ma.m4a */,
+				AF1AF483553E87A35486C73E /* e-gho-kha.m4a */,
+				0F8C7E432C526EC4789EBA8F /* e-ghokha-na-khoram.m4a */,
+				A5001C9F10AD57458FDEC81B /* e-ghwag-ni-wal.m4a */,
+				D900D1E4E054C2E9C62D357E /* e-ha-gha-staa-day.m4a */,
+				09BDD77DAB59BD9F62097C67 /* e-ha-gha-tsok-day.m4a */,
+				117D46D6E4E026E275DCD772 /* e-ha-gha-zmaa-dost-day.m4a */,
+				CABD5A925FC6EA6B84AB1589 /* e-ha-gha-zmaa-khor-da.m4a */,
+				E03D1043D597C14704CE3470 /* e-ha-ghwee-sa-baa-raa-dzee.m4a */,
+				203BCE1D1EF3653F2CA53A21 /* e-ha-ghwee.m4a */,
+				FEBEF4DA2E7E79F745413032 /* e-hagay.m4a */,
+				21EDB9D44FA71ECC88F92AAB /* e-hagha-da.m4a */,
+				944F27F7074CDA09DB85B821 /* e-hagha-day.m4a */,
+				00CE441EBAF5581E69FC3BBE /* e-hagha-dee.m4a */,
+				5B8C87615EA5318B40CCA5B1 /* e-hagha-xa-da.m4a */,
+				30013C94754F2E32EDCB672E /* e-hagha-xa-day.m4a */,
+				35CE35A66C04A48F3C517057 /* e-hagha.m4a */,
+				F5DE95182106120CAB44D0BC /* e-har-tsa.m4a */,
+				D1E4F22E5B2BFAB239065C06 /* e-har-wradz.m4a */,
+				C496D0DD219ABAD5060D2BEC /* e-hat-man.m4a */,
+				4D33C9D6DA25DA3BA3128980 /* e-hets-ka-la.m4a */,
+				A85CF7A391766CCCE9D0BB23 /* e-hets.m4a */,
+				BC024231074352165F6AAC92 /* e-hisaab.m4a */,
+				BA4506495E8BF26DD18BB521 /* e-ho-al-bat-ta.m4a */,
+				864FCD5CBB17C969535A4F68 /* e-ho-chaay-shta.m4a */,
+				7B12DCEA0BEED449979D39A0 /* e-ho-zma-wror-day.m4a */,
 				5E4FADA001A54E1B52DCAC1A /* e-ho.m4a */,
+				9606CE10D2D4BDDE708241FE /* e-injineer-yam.m4a */,
+				59D2D7B08ADC40302B200CE0 /* e-joos.m4a */,
+				E3EA26DA48066EE2D3ED2BD0 /* e-jor-yam.m4a */,
+				60E9DF8269FA7D8BBB3E25AD /* e-jor-ye.m4a */,
+				459F5A98D5842C1D0EFE4D84 /* e-jor.m4a */,
+				4D4C0C5A521C36C9F611067F /* e-ju-ma.m4a */,
+				2831B296C077582BC24587E6 /* e-ka-chaa-loo.m4a */,
+				64643403B917D9866E5DDA30 /* e-ka-la-ka-la.m4a */,
+				E9484EAE3294B45DF43C936E /* e-ka-la-na.m4a */,
+				0160D72209B476F36922C3A3 /* e-ka-lan.m4a */,
+				D147C40A939CE9F093F0846C /* e-ka-lay.m4a */,
+				73CE185A6F313FFCB31D0C58 /* e-ka-tal.m4a */,
+				9A31559C7C765E19DF60D688 /* e-kaabulee-palaw.m4a */,
+				C38B04AAAEEA666727857792 /* e-kaakaa.m4a */,
+				39963569EE8CF38EF6B9AF6D /* e-kaal.m4a */,
+				C731BE3E7BC265D7AD90C209 /* e-kaar-ka-wal.m4a */,
+				74CDF03ED619323499B7C350 /* e-kaar.m4a */,
+				6DC6F4B03DBA2CF9A68ADF02 /* e-kab.m4a */,
+				6316843DBC42B68250719BEF /* e-kabaab.m4a */,
+				3D644117947096919EFFDB22 /* e-kah-wa.m4a */,
+				F70BC88E10CDD14FBFBB20CF /* e-kala-q.m4a */,
+				E5B1AC33F10BD547EC5958B2 /* e-kar-kay-ban-da-ka-ra.m4a */,
+				5DC7004AEB8271E9B3FC9ABD /* e-ke-la.m4a */,
+				BE391F263C6CB7FBF165485C /* e-ke-na.m4a */,
+				DD03B624924D6FA12A24639F /* e-ke-naas-tal.m4a */,
+				D472905C3CD958064CA8F31C /* e-kha-ba-rey-ka-wal.m4a */,
+				80712368E217942FE861BBF8 /* e-kha-da.m4a */,
+				27FFD5904AB62A60E4DB5EDF /* e-kha-yam-ta.m4a */,
+				B99B0D11914F4376B6A5277D /* e-khaa-yee.m4a */,
+				F121BD4800703B9AD7CB11D8 /* e-khaala.m4a */,
+				387B347010348B8C1E6F66EC /* e-khaam-khaa.m4a */,
+				340C8B32A1A737C3A04CE76C /* e-khaar.m4a */,
+				43638DF4C5E3BBC87F93DB5F /* e-khabar-na-yam.m4a */,
+				BAF07089658F1AAFF4A68BF2 /* e-khadza.m4a */,
+				F451F2595247341179D4DB9D /* e-khar-tsa-wal.m4a */,
+				7F73F04C03FA01B1C49AD632 /* e-khayr-day.m4a */,
+				95AD6D51A7C2B83B284C203E /* e-khlaa-sa-wal.m4a */,
+				EE3E8EC9A0B4D160BD6ECFA2 /* e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no.m4a */,
+				58A917BB24DF3B981B65C13F /* e-khoday-dey-mal-sha.m4a */,
+				8F3674EF38A4E3E6A6B9E14F /* e-khpal-ka-lay.m4a */,
+				D2C810BC8628476DE5B996C2 /* e-khpal-waan.m4a */,
+				B0966E673D64AD2C68349CC1 /* e-khu-wal.m4a */,
+				A0D0558661FC4EA0D526473B /* e-khwa-ral.m4a */,
+				2DD39396B6F2C66CD71BD939 /* e-khwandwar.m4a */,
+				508DC5E19358A5CB9FD04DC5 /* e-ko-ra-nay-dey-tsan-ga-da.m4a */,
+				24C90BBA5F51FF98CEFF5716 /* e-ko-ra-nay-me-de-ra-yaa-de-gee.m4a */,
+				DFE99F30213C31B986D93DFD /* e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da.m4a */,
+				74BFBBECC43189FF036BA0CD /* e-koom-yaw-ghwaa-rey.m4a */,
+				C31D6BB5706A0AE027A5BF24 /* e-koom.m4a */,
+				0F49F0C19B085B6DC6514762 /* e-kor-wudaan.m4a */,
+				428C2066011F7E76341A80A7 /* e-kor.m4a */,
+				497716C4658157EB812526FF /* e-koraney.m4a */,
+				CF73D334A993F59AD8E8358D /* e-la-kaabul.m4a */,
+				D7F39AAD2A2111F06362CFC9 /* e-la-maa-sa-ra-mras-ta-ko-laay-shey.m4a */,
+				C29DC733EA275331CE8A8711 /* e-la-mung-sa-ra-raa-sha.m4a */,
+				55A84965D399E625A93BFA30 /* e-lag-pakhto.m4a */,
+				1CBA6B8BAE4326BBAEB36346 /* e-las-da-kee-ke-sabr-wu-ka-ra.m4a */,
+				B04265FCB496F4E2DF6AD167 /* e-las.m4a */,
+				3E173A29C834DC86F739B429 /* e-lee-dal.m4a */,
+				661C40B98DE418182F8C885A /* e-lee-kal.m4a */,
+				146D5F855D22DE0D4B03E844 /* e-lo-be-ka-wal.m4a */,
+				B4DD94D242CF1919A70C516A /* e-lomray.m4a */,
+				83ED8A3DBBF868399DFDC907 /* e-lur.m4a */,
+				8F293E740546536B8FF93726 /* e-lwas-tal.m4a */,
+				F740CD032562810D77E0D40D /* e-ma-na.m4a */,
+				256221DA67A2FC3913C378D1 /* e-maa-khaam.m4a */,
+				5CBA6AE861E7E9E0FD9071E4 /* e-maa-laa-do-day-na-da-khwa-ra-le.m4a */,
+				58C2CC097AC76D6C08825F83 /* e-maa-na.m4a */,
+				F11F1794B2D4BFA48E3F587A /* e-maa-shoo-maan.m4a */,
+				5BC39C96EF2F63C7CB538A6F /* e-maa-ta-ghwag-wu-nee-sa.m4a */,
+				BDBFF88DA8CC7F27E2ACEE4F /* e-maa-ta-ye-raa-ka-ra.m4a */,
+				231C9416404B9C5A2EB35CE0 /* e-maa.m4a */,
+				0523D24B2BC497BA1F5DCD60 /* e-maal-ta.m4a */,
+				2762E13153B71083D927EF77 /* e-maalga.m4a */,
+				D8D09CA1786F35C8092D43CE /* e-maamaa.m4a */,
+				C77A118FEBCC65361E5EF786 /* e-maashoom.m4a */,
+				576E51C623B667D81451EBB0 /* e-maashoomaan-larey.m4a */,
+				A8ABB40E7B1A29A1F8506F22 /* e-maaspakheen.m4a */,
+				8002BB187F29F7F506F1976C /* e-makhke.m4a */,
+				5C77DE4BB4A400B3BB8DB51C /* e-man-da-wa-hal.m4a */,
 				65419D23C784426B9B23C73E /* e-manana.m4a */,
+				03C17BA387A6B3221C7B9226 /* e-mas-te.m4a */,
+				0DEECA47D0727F70FE1D76A0 /* e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra.m4a */,
 				0AB7703CDD9E558CF0111A9A /* e-mehrabani-wakray.m4a */,
+				4935E1B9BBCF51D87C705480 /* e-mel-ma.m4a */,
+				584366A741ABD536B590B4ED /* e-mera.m4a */,
+				3AA3A21CDB2FDD06B0CDCCA8 /* e-mewa.m4a */,
+				F1EF52D63788CA1952FCECDE /* e-mi-li-yat.m4a */,
+				2BBE9EF12B37B7E4AE1B9513 /* e-mirch.m4a */,
+				76F4FE0B14AD1BAF86DD7B51 /* e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya.m4a */,
+				F8BE2299E47D1E31F3B55703 /* e-mor-aw-plaar.m4a */,
+				EEEBA20E3F013F0CAF8A0F6C /* e-mor-de-tsanga-da.m4a */,
+				DC4147B9DD2A8B500B1F4AC9 /* e-mor.m4a */,
+				15F9E262A912E522D8AC7A3D /* e-mras-ta-ka-wal.m4a */,
+				192C52D43E5D738B42D8909A /* e-mu-ja-rad.m4a */,
+				EB944BD94ECCB0F614BD3249 /* e-mung-kor-ta-dzoo.m4a */,
+				A22BE6950963D3EC9C08B0CD /* e-mung-ni-ka-aw-a-naa-ta-dzoo.m4a */,
+				B36699C1D07B24EE35681697 /* e-mung-yu.m4a */,
+				A645A934B785AE80A86A5667 /* e-mung.m4a */,
+				9185B5BBC087496E52E57EDE /* e-myaasht.m4a */,
+				F0FF99691C4525D5B0491B6A /* e-na-chaay-na-shta.m4a */,
+				92CA80F9D80AC4767189B8A2 /* e-na-ha.m4a */,
+				CDD51F487F74AA2BA6D5FA94 /* e-na-ma-na-na.m4a */,
+				9E21D368915A1B533508F0BA /* e-na-zma-zoy-day.m4a */,
 				F0CD0E123D3AD965E07A54CD /* e-na.m4a */,
+				422F1E53C78CC5E094493436 /* e-naa-wakh-ta.m4a */,
+				201F57EE03B70E467685977D /* e-nan-chi-shay-ka-wey.m4a */,
+				AD8ED3B211D442473F11BA68 /* e-nan-dey-chi-shay-paa-kha-kral.m4a */,
+				F752497950F32616EA247C28 /* e-nan-ju-ma-da.m4a */,
+				0F88913558EF7522F517F481 /* e-nan-shpa-ba-dar-ta-zang-wu-wa-ham.m4a */,
+				69F7B2EA2799101A88FF7AB8 /* e-nan-tsa-wradz-da.m4a */,
+				F14F526B8662E8E6E36CCE9E /* e-nan.m4a */,
+				9D7DD37470F89C77AEE8D72B /* e-nawi.m4a */,
+				A45B84D3D412ADE2B44C76CB /* e-neem.m4a */,
+				0FFF46C6F4B64E332853632F /* e-ni-ma-shpa.m4a */,
+				2010F4AE78CB26D7C6B00F5D /* e-nika.m4a */,
+				78690B33046550806F60EE97 /* e-no-las.m4a */,
+				99C9D8F1D299B401FCAD09DC /* e-num.m4a */,
+				F2C46645ACBEABC492B41FE3 /* e-o-ba.m4a */,
+				C6B7A456768D7B30D8150535 /* e-o-mar-dey-tso-day.m4a */,
+				B74695AF3A8134A63B84352E /* e-o-mar.m4a */,
+				A3F1150A7A5E135FE62C91FC /* e-o-wa-las.m4a */,
+				748D95FEC7F044F881A4BF8E /* e-o-wa.m4a */,
+				A692B9E55363EB3EEF2F8CAF /* e-onay.m4a */,
+				C8E2E4260A96D6C635BD889A /* e-os.m4a */,
+				122A1D124A7BC6C910819CBE /* e-pa-khayr-raaghle.m4a */,
 				2E3B32F55091A5C9F56EF56F /* e-pa-maxa-de-xa.m4a */,
+				A671BF9582FF489D12DC85FF /* e-pa-neer.m4a */,
+				08DE4BF4FF55C2172017E4D2 /* e-pa-oslo-oseygam.m4a */,
+				67B5793193FD1AA771DB449E /* e-pa-roon.m4a */,
+				4FF195E5E05EFF88B99D0E8D /* e-paa-tsa.m4a */,
+				BC2116F33629B9BC0EA8CF49 /* e-paa-tse-dal.m4a */,
+				DF01B16C93CAF32FFD6B3208 /* e-panj-shan-ba.m4a */,
+				59A0CD795F157FCCB166D0A2 /* e-pi-yaa-da-tlal.m4a */,
+				A4DBFC38C4A9301DC36C3157 /* e-pi-yaaz.m4a */,
+				89F738D806AFA6A2A623345F /* e-pin-dza-da-kee-ke-sabr-wu-ka-ra.m4a */,
+				8D9CA7C967B29B697C686F1F /* e-pin-dza-las.m4a */,
+				306E4F70E7CBD3848F5DA3FB /* e-pin-dza.m4a */,
+				230085AC69DBABD95792673A /* e-pindzos.m4a */,
+				D7AC305E7094AA1B7238FFF5 /* e-plaar-dey-cher-ta-day.m4a */,
+				55DC92BAD7BD8D40433D4830 /* e-plar-de-tsanga-day.m4a */,
+				C663E737F04F263760DC07E3 /* e-plar.m4a */,
+				A3C0AEAD1FCE4785680FBBCE /* e-po-he-dal.m4a */,
+				2227ACD6E8234D6BFFB8B14E /* e-po-me-ka-ra.m4a */,
+				16CA6D09A584A3FE5CE71563 /* e-pohantoon.m4a */,
+				3C9CFF651F3DEAF3509A6260 /* e-poheygam.m4a */,
+				FFD994F26FC8E3717190572A /* e-pukh-ta-na.m4a */,
+				C10D4203C01BD0FD03B9E4FF /* e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro.m4a */,
+				2D6CE76C2F126532071BEBB1 /* e-raa-tlal.m4a */,
+				35D685FAC87BB73E2B23703D /* e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no.m4a */,
+				00EA6D044093FBF761BDC1B5 /* e-rikh-tyaa-2.m4a */,
+				59D40B88CFDEE3427A5D52AD /* e-rikh-tyaa.m4a */,
+				F77D2208B310B512A5B26948 /* e-roo-mee-baan-jaan.m4a */,
+				97EDF1E254836624CFEF9C37 /* e-sa-baa-ba-sa-ra-wu-wee-no.m4a */,
+				544C06AB75293B8C53F3C1A9 /* e-sa-baa-shan-ba-da.m4a */,
+				CF913CB85047A3B496FC81DB /* e-sa-baa.m4a */,
+				72450C148DE5B2D7A3F939C3 /* e-sa-haar-mo-pa-khayr.m4a */,
+				4C79DFC832CC2168F3169710 /* e-sa-haar.m4a */,
+				5C61C3786B57C03A61F266C0 /* e-sa-laam-tsan-ga-ye.m4a */,
+				7A80A3FB95ED102459CD22B5 /* e-saa-ni-ya.m4a */,
+				4D4D100E9E128D16D55122BA /* e-saaat.m4a */,
+				20591CBD493D84806B61ABDC /* e-sabr-ka-wal.m4a */,
+				79E5D39F90CA2B170623388C /* e-sabzee.m4a */,
+				8D7C03472BB031CD45966DEF /* e-sal-af-ghaa-nay-ke-gee.m4a */,
+				A143520545BADC0E65E42BFA /* e-sal.m4a */,
 				FB1399B47DD716ED2E20B5C4 /* e-salam.m4a */,
+				7B928B34CED4B38E1230FB05 /* e-sam.m4a */,
+				C7EC6E072D54DD7965BF99D3 /* e-sama-da.m4a */,
+				7450EDD3902CCF06E88DFE87 /* e-se-shan-ba.m4a */,
+				5519ED44392A892DC54598DA /* e-shaa-yad-wros-ta.m4a */,
+				29B26807F10621B6CE0142AE /* e-shaayad.m4a */,
+				73AED40EBFD9A3D48A971554 /* e-shal.m4a */,
+				44A71CBCA46AC6B6C399B2E8 /* e-shan-ba.m4a */,
+				C63574AF3DB2CD9D3006B48F /* e-shee-dey.m4a */,
+				CC4003F16599CDEC6E978938 /* e-shpa-mo-pa-khayr.m4a */,
+				FB2E7B774DE82C7E14F73A35 /* e-shpa.m4a */,
+				02557BEF8B9BFD5EAE6BCB67 /* e-shpaa-ras.m4a */,
+				912D917649810F6D841B5D01 /* e-shpag.m4a */,
+				397F24C0B135BC8F9DC542A1 /* e-shpeta.m4a */,
+				17898B9C147E18DBD842C8D5 /* e-sifr.m4a */,
+				FD98607568047CA8A82217A8 /* e-so-la.m4a */,
+				03ED44F075D0DADBB4C16BBA /* e-sta-num-tsa-day.m4a */,
+				A638CCEFA3331A1152A59FB8 /* e-sta.m4a */,
+				1B5F1E820DB30165E5120844 /* e-staa-pa-lee-do-der-kho-shaa-la-shwam.m4a */,
+				53A4BB08CED79A9DD98EC397 /* e-staa-pakh-lay-me-der-khwakh-day.m4a */,
+				26BB98A542C9661D6CDF9A7C /* e-staa-so.m4a */,
 				13B721F21A74528F432A0E92 /* e-stare-ma-she.m4a */,
+				F6A64C04EDAD57C94C7EA430 /* e-staree-ma-shey.m4a */,
+				87E2D21D687C01865C05E966 /* e-staso-num-tsa-day.m4a */,
+				32D8F232FAB0027CF37E9C0D /* e-staso-pa-lido-xoshala-shwam.m4a */,
+				561D879274CBB5D0B1EDD7BE /* e-ta-cher-ta-dzey.m4a */,
+				521ECD73B4F0FDEE3882783D /* e-ta-cher-ta-ye.m4a */,
+				9D30CAA00FDED38C9E451567 /* e-ta-chi-shay-ka-wey.m4a */,
+				849D4C10090CC61E593094B5 /* e-ta-da-kum-dzay-ye.m4a */,
+				5A074F6B2EE03E80180D9231 /* e-ta-ha-ghe-pe-zha-ney.m4a */,
+				8D196967889C8650A01DD252 /* e-ta-ka-la-raa-dzey.m4a */,
+				886116BB5D77715CFE139B9B /* e-ta-khwin-de-la-rey.m4a */,
+				19A4616E3591B67D1CA74CAA /* e-ta-sam-waa-yey.m4a */,
+				7C69DD3EB18728A00623B967 /* e-ta-ye.m4a */,
+				43781A9A025816BA5E83279D /* e-ta.m4a */,
+				2DFD5D7C3DE1DDA71E3A18DE /* e-tal.m4a */,
+				F2CBB5F45FCD9130BB289688 /* e-tar-boor.m4a */,
 				FDEBF61BAB5E2294C38D564B /* e-taso-tsanga-yast.m4a */,
+				2E7191346819DE6E97D86D3D /* e-taso-yast.m4a */,
+				05CB4367B7E8240D9D531C27 /* e-taso.m4a */,
+				32326988D65AC99CEC3505A0 /* e-tlal.m4a */,
+				8DA4A9C74B7DC38569225FCC /* e-tol-kha-dee-2.m4a */,
+				BA39BBCC9E1A711C92BF8647 /* e-tol-kha-dee.m4a */,
+				F155B8CB2AB3935604C8EC71 /* e-tol.m4a */,
+				548D1439DFDF253E915CC5AD /* e-tror.m4a */,
+				7F2B3E1C1972DF73A64C3FAB /* e-tsa-ghwaa-rey.m4a */,
+				28789D9E3BB0C82CBE70CAE0 /* e-tsa-kaar-kawey.m4a */,
+				A7E8A4FCFF991658DFF3FA41 /* e-tsa-kal.m4a */,
+				14954FEBA595DFD09FA11847 /* e-tsa-lor-ka-saan-dee.m4a */,
+				A5B98FF35F990765D0CAD646 /* e-tsa-lor.m4a */,
+				A50D48CB37D5759AEBF973DE /* e-tsa-q.m4a */,
+				34911398A68A88AFA61CE7B9 /* e-tsa-ta-waayee.m4a */,
+				DA15E2AF82522BDEE5DCAEE7 /* e-tsalwekht.m4a */,
+				841E87F7ED019B26C47D1E40 /* e-tsanga-q.m4a */,
 				CCAECD6AA12960DD6901428E /* e-tsanga-ye.m4a */,
+				6335BAE78D040C863A6BC37B /* e-tso-ba-je-dee.m4a */,
+				55841E964FAB3D52287F53FB /* e-tso-ghwaa-rey.m4a */,
+				F39DF670067618D8EBE2D34D /* e-tso-ka-saan-raa-dzee.m4a */,
+				FC64D8E0D69A1B7D25B2AC9A /* e-tso.m4a */,
+				669705F776C02249BA6CD424 /* e-tsok-q.m4a */,
+				1662CB41D441D1BC78796DAF /* e-tsom-ra.m4a */,
+				70DD0A3608C8F1DD5DA62B00 /* e-tsomra-kegee.m4a */,
+				5C76AA0E33965AF123F2D6A1 /* e-tswaar-las.m4a */,
+				27F79BEDDC1F4DF09DE8C83D /* e-tugay-yam.m4a */,
+				B27512E7BD985003BB255160 /* e-wa-le-khaan-dey.m4a */,
+				C8EB33047A2278A6E9FD98E5 /* e-wa-le-na.m4a */,
+				43CB966528E76225ADBE7315 /* e-wa-tan.m4a */,
+				4B3197F05DEED18A1DA1F726 /* e-wa-zee-fa.m4a */,
+				7C9A5C9E9B8110531C9F4ABB /* e-waa-da-sha-way.m4a */,
+				9DA9913C90953D8873DB05E0 /* e-wakh-tee.m4a */,
+				5F3216C73583098222431B8D /* e-wakht.m4a */,
 				0BA27D86D8BECE6033D2092E /* e-walaykum-salam.m4a */,
+				D94CCA8CD6DADDEF61003C2D /* e-wale-q.m4a */,
+				52586B943EA6415FC391CB4D /* e-war-ka-wal.m4a */,
+				680D7CFDC95D31AD9A8E2F8E /* e-wee-da-ke-dal.m4a */,
+				8D713ABF0901BB714A726B10 /* e-wra-re-ra.m4a */,
+				D52A51CB989796EB7BB92954 /* e-wraa-ra.m4a */,
+				338AD01A0ED5569FBB075E1E /* e-wradz-dey-kha-sha.m4a */,
+				802BC8C19C0290E6C191F70C /* e-wradz.m4a */,
+				FBCA3C46D707F7C36BCFE4DB /* e-wri-jey.m4a */,
+				3327064CF60B34376A3735E3 /* e-wror.m4a */,
+				E06CBC42DEF185ADD913839A /* e-wrosta.m4a */,
+				F3E1CE5FF7E6A4F8900C76D4 /* e-wu-dre-dal.m4a */,
+				833554D258C7F2C0AE0C73DC /* e-wugay-yam.m4a */,
 				EE29101395AC9D1702069D48 /* e-xa-raghlast.m4a */,
 				9AB5D1D030F585B371D5FDB8 /* e-xa.m4a */,
 				B1387294DBB3F01F49957DC5 /* e-xoday-paman.m4a */,
+				0124DD1CD9B9786226967C4C /* e-xor.m4a */,
 				5CDA27C05C0521AD180981D6 /* e-xwar-ma-she.m4a */,
+				ACCE8DACC911F725C9972E76 /* e-ya-keen-la-rey.m4a */,
+				60AB1AE6CD553B22F69E7E43 /* e-yak-shan-ba.m4a */,
+				EE1514EEFE0E7A421D992CAA /* e-yaw-bal-pa-kaar-day.m4a */,
+				A57D00D8C679C8A7D2FFE73B /* e-yaw-wo-las.m4a */,
+				BC3E39045A5E37D9801C14F3 /* e-yaw.m4a */,
+				D5FBDC1731662858B183B75A /* e-yawa-baja.m4a */,
+				BD21ACAF90E7BE90ACAEE023 /* e-za-afghan-na-yam.m4a */,
+				6A830150FD233C518C8B5643 /* e-za-afghan-yam.m4a */,
+				9238B73FFC7DA98A0826ED50 /* e-za-afghana-yam.m4a */,
+				BDF9A828E7ADF24EF1651075 /* e-za-ba-sa-baa-raa-sham.m4a */,
+				D1C7D2B1FEEAB443E7108FB8 /* e-za-baa-yad-kaar-wu-kram.m4a */,
+				1143C56CD6F874ED9560F5CF /* e-za-chaay-ghwaa-ram.m4a */,
+				EFB3B54E49F94E9014EBC0EB /* e-za-chaay-na-ghwaa-ram.m4a */,
+				192F0A311570E8ED6DD83822 /* e-za-drey-wro-na-la-ram.m4a */,
+				BE34316397D392AE55964CE3 /* e-za-ghwaa-ram-wee-da-sham.m4a */,
+				30067C0346F7F855E02FC52A /* e-za-ha-gha-pe-zha-nam.m4a */,
+				8675DB42E343A546F7D1A112 /* e-za-ham-daa-se-fikr-ka-wam.m4a */,
+				FD2D541B65039B9674678AC3 /* e-za-ham.m4a */,
+				F56859B5B7B4548C986F3DFA /* e-za-kaar-ka-wam.m4a */,
+				09ED5C282F0018AE27BFB184 /* e-za-kah-wa-ghwaa-ram.m4a */,
+				A1D5D7BDD3781EC90733DAC5 /* e-za-kha-yam-ma-na-na.m4a */,
+				DC48A5F213F196975B18D809 /* e-za-la-narwe-tsaxa-yam.m4a */,
+				B77F3C3BC7ABEE84C5889476 /* e-za-lag-lag-pakh-to-waa-yam.m4a */,
+				DACBCD6BFF95412189A802E2 /* e-za-lom-ray-yam.m4a */,
+				4EEB7323FDFFB9D059A4AC4D /* e-za-mor-yam.m4a */,
+				9B6CF1028A101A41A27C48A8 /* e-za-na-po-he-gam.m4a */,
+				6852E52BAB6B9A6DD37C471E /* e-za-na-yam.m4a */,
+				4121224C264D798E2102200E /* e-za-naa-wakh-ta-shwam.m4a */,
+				C6AEAD86C44D3AA57BB01BC8 /* e-za-nan-kaar-ka-wam.m4a */,
+				8C6D42366F39B25676ADC9FF /* e-za-o-ba-ghwaa-ram.m4a */,
+				0F3EA5DD990C28F778EA1E9E /* e-za-os-dzam.m4a */,
+				B0ABF0DDD8A7E3D63F2D0576 /* e-za-pa-roon-mas-roof-wam.m4a */,
+				B48038559C480A537B794419 /* e-za-pa-taa-po-he-gam.m4a */,
+				927D31DBAA51FDB989F06286 /* e-za-pakh-to-kha-na-sham-wa-ye-laay.m4a */,
+				AE79A426BD161CD1DB6304AB /* e-za-pashto-zda-kawam.m4a */,
+				531D9FC279E7EBBD78965760 /* e-za-pin-dza-wisht-ka-lan-yam.m4a */,
+				B09632F0D18314A769CE9ECA /* e-za-sa-baa-kaar-ka-wam.m4a */,
+				8C90BBACA4FCDD58A4B0CB05 /* e-za-sa-haar-kaar-ka-wam.m4a */,
+				E122A86F1EEA483CBE4D7AD2 /* e-za-shal-ka-la-na-yam.m4a */,
+				F04B00B7D15489961895F372 /* e-za-shal-ka-lan-yam.m4a */,
+				4FB8668D16C153435B69CC4E /* e-za-treekh-khwaa-ra-na-khwa-kha-wam.m4a */,
+				A0037DA8371894F05F37C37A /* e-za-waa-da-sha-way-yam.m4a */,
+				E7BC4795D8F0C71E069E6F89 /* e-za-wakh-tee-raa-paa-tse-dam.m4a */,
 				1F2921815B465BF7C67B6260 /* e-za-xa-yam.m4a */,
+				4737553C7326CD4AD613A725 /* e-za-xowunkay-yam.m4a */,
+				0C8503B6BB8F9B546730A6BE /* e-za-yam.m4a */,
+				CFCAB97EFCF916CEB2FFB115 /* e-za.m4a */,
+				902FA1060AFBBD731E8A3B3F /* e-zar.m4a */,
+				5B53DF319E90749AA2FE0E3F /* e-zda-ka-wal.m4a */,
+				676AF9BF05AAD6B929F205D8 /* e-zda-ka-woon-kay.m4a */,
+				FA944D0F6FC350BCAB109045 /* e-zdakawoonkay.m4a */,
+				8441798C91883659B98D8FD9 /* e-zha-ba.m4a */,
+				2221CC54DBA8CA81D1759A79 /* e-zhar-ba-dar-sham.m4a */,
+				96C9615DF2F907FF81EB4D02 /* e-zhar.m4a */,
+				EF4A1F0BCAA3D511BEBED5B2 /* e-zma-num-ahmad-day.m4a */,
+				4649D38989C84EFFA2D3F537 /* e-zma.m4a */,
+				BC74064A14BAA284CA315818 /* e-zmaa-in-ti-zaar-wu-ka-ra.m4a */,
+				9C9ED7F3A2BCB77EA1B96C09 /* e-zmaa-khor-la-maa-ka-sha-ra-da.m4a */,
+				7D8B250381B877099D89E89B /* e-zmaa-mor-aw-plaar-pa-kor-ke-dee.m4a */,
+				77F9E036F91C03490E8A4D60 /* e-zmaa-wror-la-maa-ma-shar-day.m4a */,
+				37D8E29F4526D599CDD7C520 /* e-zmung-kor-ta-kha-raagh-laast.m4a */,
+				178FB8F3927CF83C7B0EEA93 /* e-zmung.m4a */,
+				AC11194093DECE6CE3E2C87D /* e-zoy-aw-loor.m4a */,
+				63D038EE3C4700FB28BC98BA /* e-zoy.m4a */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -350,26 +1586,439 @@
 				0BA7E5FCB0CDADC718983062 /* Localizable.xcstrings in Resources */,
 				27FC2387461C30853D208370 /* PrivacyInfo.xcprivacy in Resources */,
 				1B85723CDA5A6E0699CC804F /* content.json in Resources */,
+				1480A21C7842E692E8E5929C /* e-a-ta-las.m4a in Resources */,
+				C2447437006DB035273DBB13 /* e-a-ta.m4a in Resources */,
+				DEE30E531BE546531A018D76 /* e-akh-is-tal.m4a in Resources */,
+				0077C55CB66F7AF66E23E4BC /* e-al-bat-ta.m4a in Resources */,
+				B9E04C67D2586E149EF732C7 /* e-alhamdulillah.m4a in Resources */,
+				26C4B6E0AA0898A80628459E /* e-anaa.m4a in Resources */,
 				11E73CB8D1483A23F59F942C /* e-assalamu-alaykum.m4a in Resources */,
+				5406BFBCF448BC8B70013DBB /* e-atyaa.m4a in Resources */,
+				E1E0193A237C34F83DAA7C23 /* e-aw-re-dal.m4a in Resources */,
+				5F049A6C58000FE45C944C36 /* e-awyaa.m4a in Resources */,
+				B479C4679F43CD5D3FCBAF36 /* e-bad.m4a in Resources */,
+				E77514EC3A6E9F179AC24A56 /* e-ban-da-wal.m4a in Resources */,
+				E8AA449968579F7FCFEE56BB /* e-bas-2.m4a in Resources */,
+				EEA7B7A3DD8F529D007279FF /* e-bas-day.m4a in Resources */,
 				9D20A2B24783201D03D5BDDF /* e-baxana-ghwaram.m4a in Resources */,
+				D5149F9E22376DD98491DDDD /* e-bil-kul.m4a in Resources */,
+				F2DA3B4273CFE72224AD8CF1 /* e-boora.m4a in Resources */,
+				0468767E747D6A7DAD457CD6 /* e-byaa-ba-wuweeno.m4a in Resources */,
+				4B8B32E345008B3C35B3A71B /* e-byaa.m4a in Resources */,
+				8FC3432E1F66416B25B2FE20 /* e-cha-haar-shan-ba.m4a in Resources */,
+				4C6141D5F16DCB67C4637772 /* e-chaay-shta.m4a in Resources */,
+				909768AE881D37D1D44F9CE6 /* e-chaay-tsa-khey.m4a in Resources */,
+				504A1415E86ED6319730A031 /* e-chaay.m4a in Resources */,
+				D44CE2C9578D87F45E85FF71 /* e-charga.m4a in Resources */,
+				B07FA69F2C3634010A209D47 /* e-cher-ta.m4a in Resources */,
+				F623C0FAD36C8BC5438491D5 /* e-cherta-oseygey.m4a in Resources */,
+				50EAE1B61CAEBEDBC859B346 /* e-chi-shay-khwa-ral-ghwaa-rey.m4a in Resources */,
+				24409B8E61028932300A33A9 /* e-chi-shay-wu-shwal.m4a in Resources */,
+				425F08DBC73D710D24E802E2 /* e-da-chaa.m4a in Resources */,
+				7D770CFDCCDB1FDF810C37D2 /* e-da-dzaan-khyaal-saa-ta.m4a in Resources */,
+				F4F69BED3EF0F036C24EE923 /* e-da-ghar-me-do-day.m4a in Resources */,
+				8C7575ECF358CF3D65B3BCD6 /* e-da-ha-gha.m4a in Resources */,
+				9D2528C4A625FAB9D6448B37 /* e-da-ha-ghe.m4a in Resources */,
+				33D43AC334AD57D0730E4C87 /* e-da-ha-ghwee.m4a in Resources */,
+				879F99062BFC9A518C6B4426 /* e-da-kee-ka.m4a in Resources */,
+				0C78551E017B5E1A7B0BBDAA /* e-da-leel.m4a in Resources */,
+				76650BFAE73EB200293F1B15 /* e-da-maa-khaam-do-day.m4a in Resources */,
+				27290D6208934DD4716CC669 /* e-da-o-nay-paay.m4a in Resources */,
+				259C2A400C917DB77E71DDC8 /* e-daa-chaa-dar-ta-wu-wayl.m4a in Resources */,
+				506870102C0E3AA62A2D7DC8 /* e-daa-chi-shay-day.m4a in Resources */,
+				7C0A0B1EEF5604F3B61FF4AC /* e-daa-do-day-da.m4a in Resources */,
+				8752F6D39B771B794DAAB3D1 /* e-daa-ma-na-da.m4a in Resources */,
+				28967C402D1E9ED2B875E45C /* e-daa-pa-tso-day.m4a in Resources */,
+				4F7B96D62D4277764E0DAB64 /* e-daa-sam-day.m4a in Resources */,
+				36132FC38CDF179643686D08 /* e-daa-sta-wror-day.m4a in Resources */,
+				406E363D97A349E437760273 /* e-daa-staa-day.m4a in Resources */,
+				BCD7837F49649E1CC18920B8 /* e-daa-tsa-maa-na-la-ree.m4a in Resources */,
+				9D87B4DF78CAB17DC09123DB /* e-daa-tsan-ga-kaar-ka-wee.m4a in Resources */,
+				6D04EDF4900AEA51DC5CD1E3 /* e-daa-tsok-da.m4a in Resources */,
+				C951EE2367A02BA2D257C40A /* e-daa-tsok-day.m4a in Resources */,
+				636FA21DC48E742A727A6DAF /* e-daa-zma-mor-da.m4a in Resources */,
+				5B7313DA0DA757F3925C2076 /* e-daa-zma-plar-day.m4a in Resources */,
+				657FA3AB0A8EAFBA8B08C1C0 /* e-daa-zma-wror-day.m4a in Resources */,
+				847CAAA3C462F89877CD489B /* e-daa-zma-xor-da.m4a in Resources */,
+				9D34AB0B9E97D309ECAAC721 /* e-daa-zmaa-day.m4a in Resources */,
+				0E4C458464A3F0FA58E671D2 /* e-daa-zmaa-kha-dza-da.m4a in Resources */,
+				68D1FBA6C35F591351E92E15 /* e-daa-zmaa-me-ra-day.m4a in Resources */,
+				2B16B8C478BD39E2725ABC1D /* e-daaktar-yam.m4a in Resources */,
+				FE0B3214A001F7F6F152D4BF /* e-dal-ta-raa-sha.m4a in Resources */,
+				EB454BDB57338C05E415875B /* e-dar-waa-za-khlaa-sa-ka-ra.m4a in Resources */,
+				871302A0099DE083C1C693F7 /* e-de-ta-wu-go-ra.m4a in Resources */,
 				EDED515A7D4127982E2F7E38 /* e-dera-manana.m4a in Resources */,
 				112CADD0C0A549B672A33061 /* e-dera-xa.m4a in Resources */,
+				4BE248520F7D2899AEFF7C56 /* e-dersh.m4a in Resources */,
+				7A12D3FF330EDA6272DB88CD /* e-do-day-de-ra-khwand-wa-ra-da.m4a in Resources */,
+				6D738218902D9558523389D0 /* e-do-day-dey-khwa-ra-le-da.m4a in Resources */,
+				0D9278DCAB18E6AC1FC0B67A /* e-do-day-tay-yaa-ra-da.m4a in Resources */,
+				783B03E9A4F55DDA169FFDD5 /* e-do-day.m4a in Resources */,
+				BF457C822E6910220FD010A6 /* e-do-shan-ba.m4a in Resources */,
+				794B8CEC88B6DB5E80A55ED8 /* e-dost.m4a in Resources */,
+				AD0D2667159CE0216C344E98 /* e-dre-yam.m4a in Resources */,
+				3BC15F971FEBED3DE0CF63A0 /* e-drey-ba-je-dee.m4a in Resources */,
+				9D3D0C247C8D2F4716EAF06E /* e-drey.m4a in Resources */,
+				7E6A68F66FDF397FD89A56E2 /* e-dwa-baje.m4a in Resources */,
+				9A2333478DC436D1DDF18D99 /* e-dwa-ghwaa-ram.m4a in Resources */,
+				F0F72D98693A8FE44209640B /* e-dwa-wrona.m4a in Resources */,
+				851A5CB01E92CC85E2E4A669 /* e-dwa.m4a in Resources */,
+				A271CD9A852ED10C81F2A9CB /* e-dwaham.m4a in Resources */,
+				22600659B58E9D096E0AFE7B /* e-dwo-las.m4a in Resources */,
+				4C504A0BB1E7E9A432F08BF3 /* e-dyaar-las.m4a in Resources */,
+				DFDE9438D71A3103E7393093 /* e-dzoo.m4a in Resources */,
+				19148B6B8308EF59909E19CF /* e-dzwaab.m4a in Resources */,
+				DE2803753E527437805F078E /* e-fark-na-ka-wee.m4a in Resources */,
+				806A67272C53DEBC1B17736F /* e-gaiz-ma-ray.m4a in Resources */,
+				7F4B58F24BA06B656DC49C59 /* e-gha-lat.m4a in Resources */,
+				756DB0CEEFF47290341F1540 /* e-gham-ma-ka-wa.m4a in Resources */,
+				AB33E5178E53702120D0415B /* e-ghar-ma.m4a in Resources */,
+				AA1EFF0C4F16DA2787207AFF /* e-gho-kha.m4a in Resources */,
+				AED8B24811C4D54D12B67D7D /* e-ghokha-na-khoram.m4a in Resources */,
+				412E510362285606BFA90E23 /* e-ghwag-ni-wal.m4a in Resources */,
+				9C2CCED81DB1A62DA5688267 /* e-ha-gha-staa-day.m4a in Resources */,
+				AC1EAC1EC352D45239181DDA /* e-ha-gha-tsok-day.m4a in Resources */,
+				0E1A8283A87ECA8268FBA0E2 /* e-ha-gha-zmaa-dost-day.m4a in Resources */,
+				62C80FF956ED6210587A2D22 /* e-ha-gha-zmaa-khor-da.m4a in Resources */,
+				DA54956D7E381D798D45BE3F /* e-ha-ghwee-sa-baa-raa-dzee.m4a in Resources */,
+				A672AB0B0F2885A01ECFD076 /* e-ha-ghwee.m4a in Resources */,
+				A91F1A487855DDF75BF9846D /* e-hagay.m4a in Resources */,
+				47FEBC923F5EEDF873DA91DB /* e-hagha-da.m4a in Resources */,
+				EC9314E9230F86569065337D /* e-hagha-day.m4a in Resources */,
+				FE5FDE6B9C875513B177CD77 /* e-hagha-dee.m4a in Resources */,
+				D695ECDDC8914C4FEF643B3D /* e-hagha-xa-da.m4a in Resources */,
+				ACC1187BC3B6C16844403B88 /* e-hagha-xa-day.m4a in Resources */,
+				3D594F164C33C6731F26D798 /* e-hagha.m4a in Resources */,
+				51BFB3B96B26C6C5F90C3F20 /* e-har-tsa.m4a in Resources */,
+				06320E3F0339FAF4CE7AE2AA /* e-har-wradz.m4a in Resources */,
+				3432084BE64B1649F920D659 /* e-hat-man.m4a in Resources */,
+				515509EFE17AA49D93BCC3B5 /* e-hets-ka-la.m4a in Resources */,
+				B8C503A674260B5C975E6A0F /* e-hets.m4a in Resources */,
+				73197A0D0A51FBED2F080E17 /* e-hisaab.m4a in Resources */,
+				4DCA0A60D043CC88176D30E1 /* e-ho-al-bat-ta.m4a in Resources */,
+				856575ACF3DB94F986F16392 /* e-ho-chaay-shta.m4a in Resources */,
+				4AF8EB27CFA50DD9E8EFB47C /* e-ho-zma-wror-day.m4a in Resources */,
 				FA7282962D28A1AE9122E0EA /* e-ho.m4a in Resources */,
+				D669918DE6280068A891B892 /* e-injineer-yam.m4a in Resources */,
+				0F22B2ED72C6E4E5CC237614 /* e-joos.m4a in Resources */,
+				B21ABAD293521B6C0225516A /* e-jor-yam.m4a in Resources */,
+				C6493B6FCF619F12E0367D69 /* e-jor-ye.m4a in Resources */,
+				01F6ACDAC2634EE67B5C81A2 /* e-jor.m4a in Resources */,
+				6726BF29C0139CD93BFD9730 /* e-ju-ma.m4a in Resources */,
+				09242F6DAB07342BFFEE99B6 /* e-ka-chaa-loo.m4a in Resources */,
+				352B018574CF4691470B0FDB /* e-ka-la-ka-la.m4a in Resources */,
+				775CFA72C6AC11E2B1936AF6 /* e-ka-la-na.m4a in Resources */,
+				8A787AC0DFDAE20CC20046B7 /* e-ka-lan.m4a in Resources */,
+				AB387643138C981E566278D9 /* e-ka-lay.m4a in Resources */,
+				1E70B8FB216CB2CDDF0AA193 /* e-ka-tal.m4a in Resources */,
+				EBD24040FD04BD9F864F8B49 /* e-kaabulee-palaw.m4a in Resources */,
+				D8930BDB0125E1C2CAB23094 /* e-kaakaa.m4a in Resources */,
+				33DFEB77352A6EA42E5EBED4 /* e-kaal.m4a in Resources */,
+				59E14B1EDDB654F6A7DA0A13 /* e-kaar-ka-wal.m4a in Resources */,
+				FB4F95E7778DFDE051287B6C /* e-kaar.m4a in Resources */,
+				B56FEC51917FA46C86D67F3B /* e-kab.m4a in Resources */,
+				57773E802EF22984188E0B20 /* e-kabaab.m4a in Resources */,
+				267184C9B3ED159567DD7623 /* e-kah-wa.m4a in Resources */,
+				7E59C93A51D81D4EC8845ECE /* e-kala-q.m4a in Resources */,
+				2848074AED5B8837E6E1FFA4 /* e-kar-kay-ban-da-ka-ra.m4a in Resources */,
+				2474908316EE9A4478E72E43 /* e-ke-la.m4a in Resources */,
+				20784B04B647D04D15385C87 /* e-ke-na.m4a in Resources */,
+				F6AB244486F708C3945A1C08 /* e-ke-naas-tal.m4a in Resources */,
+				F4C5C27079342415A38BCCFD /* e-kha-ba-rey-ka-wal.m4a in Resources */,
+				7E13578B0CBBD8E1C0492204 /* e-kha-da.m4a in Resources */,
+				73C6595FCE367389E7BA3B09 /* e-kha-yam-ta.m4a in Resources */,
+				8C3403A36DF125DAFBA04184 /* e-khaa-yee.m4a in Resources */,
+				9CBC8E3045905B218C4D7816 /* e-khaala.m4a in Resources */,
+				3D81033AFDD7E2F961861EBE /* e-khaam-khaa.m4a in Resources */,
+				BAF31E679F0ADEE684B6D45F /* e-khaar.m4a in Resources */,
+				B9CBC60DC4FE308DB4299639 /* e-khabar-na-yam.m4a in Resources */,
+				531AA25D2B730A33BE35D5C8 /* e-khadza.m4a in Resources */,
+				72F2549D1D0B229916EAF010 /* e-khar-tsa-wal.m4a in Resources */,
+				974733C2D210D52C9E7DBBFB /* e-khayr-day.m4a in Resources */,
+				B61B5217C9DA2DFC4C3A0AB7 /* e-khlaa-sa-wal.m4a in Resources */,
+				CA642DB82C48957764AF16B6 /* e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no.m4a in Resources */,
+				68F98412B59833932A0A3910 /* e-khoday-dey-mal-sha.m4a in Resources */,
+				97B6C018567C17538A3D3586 /* e-khpal-ka-lay.m4a in Resources */,
+				6A5ED1BD0871736B0F3D7DF6 /* e-khpal-waan.m4a in Resources */,
+				8506086CA2E29D02855D1A2A /* e-khu-wal.m4a in Resources */,
+				3FE5410AF2E1C99AF90DF36B /* e-khwa-ral.m4a in Resources */,
+				FFB7072BDDAA660418DC54FC /* e-khwandwar.m4a in Resources */,
+				31364C29484E66997496CF76 /* e-ko-ra-nay-dey-tsan-ga-da.m4a in Resources */,
+				3F1E148C6CFC5DBD2AD99779 /* e-ko-ra-nay-me-de-ra-yaa-de-gee.m4a in Resources */,
+				EB76383EA25E2CCC2158A336 /* e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da.m4a in Resources */,
+				56AB58C8F7291FFB613FB857 /* e-koom-yaw-ghwaa-rey.m4a in Resources */,
+				61B8E26EE8B035495F2DBE97 /* e-koom.m4a in Resources */,
+				9888DB26177CA9B9A24B4358 /* e-kor-wudaan.m4a in Resources */,
+				BA734EF09BBD84B644D3B59E /* e-kor.m4a in Resources */,
+				0E59E761BD15889FB25F9FB3 /* e-koraney.m4a in Resources */,
+				3D0C52D9D8555643DD935F31 /* e-la-kaabul.m4a in Resources */,
+				7EE288A30DA6909DABE625AD /* e-la-maa-sa-ra-mras-ta-ko-laay-shey.m4a in Resources */,
+				BE7A1B17C29CF6EC5A8ED196 /* e-la-mung-sa-ra-raa-sha.m4a in Resources */,
+				9BA466AFEEADC4445151BD3D /* e-lag-pakhto.m4a in Resources */,
+				B11F15FAE3CB92DC68761010 /* e-las-da-kee-ke-sabr-wu-ka-ra.m4a in Resources */,
+				9B28AECFFB29C144F2F54EAE /* e-las.m4a in Resources */,
+				FF11E094F86904B95ABAE6DE /* e-lee-dal.m4a in Resources */,
+				3BDBA494A0843EE26A1284EB /* e-lee-kal.m4a in Resources */,
+				E881CF928DBCACBD7E38B370 /* e-lo-be-ka-wal.m4a in Resources */,
+				6BEBFFC41C2BB301A14F80B0 /* e-lomray.m4a in Resources */,
+				64ADF0233FF2A907F4025D19 /* e-lur.m4a in Resources */,
+				5AC15A50435787D62A4E969A /* e-lwas-tal.m4a in Resources */,
+				03A9F2E6D9EE214D8257B4EF /* e-ma-na.m4a in Resources */,
+				59421C798D1C61B38D5403D6 /* e-maa-khaam.m4a in Resources */,
+				66B0AB60A779CBA78C4D6705 /* e-maa-laa-do-day-na-da-khwa-ra-le.m4a in Resources */,
+				0D46A602C529306A0096A82A /* e-maa-na.m4a in Resources */,
+				42DD8184770CE077CD96D5F3 /* e-maa-shoo-maan.m4a in Resources */,
+				3B4F8067B8601AE651DE827B /* e-maa-ta-ghwag-wu-nee-sa.m4a in Resources */,
+				6F58240506C61669805040BC /* e-maa-ta-ye-raa-ka-ra.m4a in Resources */,
+				7D36F003A8E2F1D10F1E4438 /* e-maa.m4a in Resources */,
+				77E3ADBB6B3E537A4FEE3A13 /* e-maal-ta.m4a in Resources */,
+				4C77F2BDE7561CA433FFAA16 /* e-maalga.m4a in Resources */,
+				8159CE70E30FB18F1872C247 /* e-maamaa.m4a in Resources */,
+				55FE967A2DD783F639914F9C /* e-maashoom.m4a in Resources */,
+				0660FF8D75C30AC1572A92E0 /* e-maashoomaan-larey.m4a in Resources */,
+				8EEFBADA148950FC1429430D /* e-maaspakheen.m4a in Resources */,
+				D6B67003D85319E129FEAB69 /* e-makhke.m4a in Resources */,
+				9EA9BB2DC4B83D2C9472090C /* e-man-da-wa-hal.m4a in Resources */,
 				1725025E881BCF43ECB020A2 /* e-manana.m4a in Resources */,
+				359FF12DD318D16F377BA064 /* e-mas-te.m4a in Resources */,
+				590B63779E2964BF0C78F12C /* e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra.m4a in Resources */,
 				8D2ADE11DB7BFBC91B9791C4 /* e-mehrabani-wakray.m4a in Resources */,
+				2EA0FE0F821A8C6ED1119B81 /* e-mel-ma.m4a in Resources */,
+				6D936412273FEB24D7B48489 /* e-mera.m4a in Resources */,
+				6679AAC2EDFC54D761C23AC4 /* e-mewa.m4a in Resources */,
+				8218877B7B023A36F99E537C /* e-mi-li-yat.m4a in Resources */,
+				AE38CB897AA2A7F191AA76AB /* e-mirch.m4a in Resources */,
+				3A8C531EF4C4B8810A9B45E4 /* e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya.m4a in Resources */,
+				83A3680201E505D1061EAE60 /* e-mor-aw-plaar.m4a in Resources */,
+				06F9AEE83E3FF0EF25DE6006 /* e-mor-de-tsanga-da.m4a in Resources */,
+				0BE0B51A28272870D9B1306C /* e-mor.m4a in Resources */,
+				9AAC108FFDD8AFA3FF2D32B4 /* e-mras-ta-ka-wal.m4a in Resources */,
+				9CEF3957C0919BAF9803581A /* e-mu-ja-rad.m4a in Resources */,
+				F2B770133167C11EF1068073 /* e-mung-kor-ta-dzoo.m4a in Resources */,
+				BB191772E489E48E64EB2A4E /* e-mung-ni-ka-aw-a-naa-ta-dzoo.m4a in Resources */,
+				52DF8FB941F92EE5793FC789 /* e-mung-yu.m4a in Resources */,
+				5844C458FC584EF2044CD5D9 /* e-mung.m4a in Resources */,
+				20CD06E42EDBE10441222E33 /* e-myaasht.m4a in Resources */,
+				7E5E855B31BBCD39FEBAB175 /* e-na-chaay-na-shta.m4a in Resources */,
+				61E5635A0C5E6CBF7EB36E59 /* e-na-ha.m4a in Resources */,
+				E23444061687958C736BE328 /* e-na-ma-na-na.m4a in Resources */,
+				4C6B0236B1A94B49C4084977 /* e-na-zma-zoy-day.m4a in Resources */,
 				9AFF94A423C19F998CD2F428 /* e-na.m4a in Resources */,
+				28349D040E8EE8F0312E0695 /* e-naa-wakh-ta.m4a in Resources */,
+				1B665B28D71B27CA5824D913 /* e-nan-chi-shay-ka-wey.m4a in Resources */,
+				0910F3C2423A6B887FE579D1 /* e-nan-dey-chi-shay-paa-kha-kral.m4a in Resources */,
+				C7D593842BEEE03D9E2F10A1 /* e-nan-ju-ma-da.m4a in Resources */,
+				AFDB2F82B91394B4C5892CF0 /* e-nan-shpa-ba-dar-ta-zang-wu-wa-ham.m4a in Resources */,
+				1FB0E5F3CC51E921EC58F9B1 /* e-nan-tsa-wradz-da.m4a in Resources */,
+				4C33676B8411B53A9076B302 /* e-nan.m4a in Resources */,
+				A38375599DAFC869C30AD895 /* e-nawi.m4a in Resources */,
+				B1E8BCAD0DF25951EFF10ADA /* e-neem.m4a in Resources */,
+				847D70F84F88EADB8319C00F /* e-ni-ma-shpa.m4a in Resources */,
+				5DEB35BA2579C69166B81DF3 /* e-nika.m4a in Resources */,
+				BCC8C3831A9620873BFA160E /* e-no-las.m4a in Resources */,
+				926677F54BA399ECA7910ADE /* e-num.m4a in Resources */,
+				EE72D7FEC9B7E8569CFE354A /* e-o-ba.m4a in Resources */,
+				FB78D58B4E8FCF580796AF83 /* e-o-mar-dey-tso-day.m4a in Resources */,
+				86F63BF42150DF548AA9EDD2 /* e-o-mar.m4a in Resources */,
+				E2B55BBC38E45C2C4A78031B /* e-o-wa-las.m4a in Resources */,
+				1AACFDF2A6CDEC91976A51CF /* e-o-wa.m4a in Resources */,
+				6362B41192977689020BDABF /* e-onay.m4a in Resources */,
+				8DB7A5FFB81BB98A894B5308 /* e-os.m4a in Resources */,
+				BEB2A42F4CE57A590D4E6996 /* e-pa-khayr-raaghle.m4a in Resources */,
 				20E8B5B23086C90D848A135A /* e-pa-maxa-de-xa.m4a in Resources */,
+				2EE993696D89D7E8495510F1 /* e-pa-neer.m4a in Resources */,
+				3A4AA01F59B6BE7C6F3E5841 /* e-pa-oslo-oseygam.m4a in Resources */,
+				49ABDCD5B29753F19646EE92 /* e-pa-roon.m4a in Resources */,
+				14CAF5A9F12C84ABC8FEAA06 /* e-paa-tsa.m4a in Resources */,
+				8285CD0B5FC36D6440E640C6 /* e-paa-tse-dal.m4a in Resources */,
+				734141A972F3C24B0ACAE065 /* e-panj-shan-ba.m4a in Resources */,
+				032B023AC75941649E7C337F /* e-pi-yaa-da-tlal.m4a in Resources */,
+				7C55A1006FBA38705EFB7532 /* e-pi-yaaz.m4a in Resources */,
+				7B0036DE8F20AC0223C0A7AB /* e-pin-dza-da-kee-ke-sabr-wu-ka-ra.m4a in Resources */,
+				ED90C18706BF64A0BBCFF241 /* e-pin-dza-las.m4a in Resources */,
+				2C979065013883C1E2878CA3 /* e-pin-dza.m4a in Resources */,
+				8DD535D3D4E0A580D02633EE /* e-pindzos.m4a in Resources */,
+				A2546508CAD5F35A32B6AFB1 /* e-plaar-dey-cher-ta-day.m4a in Resources */,
+				A3F1AE1DDACDFCA8BFC00D1F /* e-plar-de-tsanga-day.m4a in Resources */,
+				9AFD3B1B0645310FF7A80456 /* e-plar.m4a in Resources */,
+				149D0842E1AFB203F4CCD578 /* e-po-he-dal.m4a in Resources */,
+				96122095B07B097E5F591C91 /* e-po-me-ka-ra.m4a in Resources */,
+				10E45999AFEFBB3F974367B0 /* e-pohantoon.m4a in Resources */,
+				5DB9D03FE79C347C9B8AC287 /* e-poheygam.m4a in Resources */,
+				3010FBB743C3EFB4C84984A5 /* e-pukh-ta-na.m4a in Resources */,
+				12DDEA6492382B6C86AC7CA2 /* e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro.m4a in Resources */,
+				31622ECD54B5ED7FECAB92BC /* e-raa-tlal.m4a in Resources */,
+				9B42E0E8A6C438F9B0DBA119 /* e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no.m4a in Resources */,
+				730C8936B90888A7EABE6CF3 /* e-rikh-tyaa-2.m4a in Resources */,
+				6A58AE94CA8598D4B2A40CEB /* e-rikh-tyaa.m4a in Resources */,
+				8841193F5E2A6F42A4202B02 /* e-roo-mee-baan-jaan.m4a in Resources */,
+				02139B55CEF77EFD7B2DE223 /* e-sa-baa-ba-sa-ra-wu-wee-no.m4a in Resources */,
+				E623FA443554F9153ADBCD46 /* e-sa-baa-shan-ba-da.m4a in Resources */,
+				C64B0D650767434A302BD67E /* e-sa-baa.m4a in Resources */,
+				47F521B38A7F511F413A298B /* e-sa-haar-mo-pa-khayr.m4a in Resources */,
+				6BE976EF360A510EA8452086 /* e-sa-haar.m4a in Resources */,
+				3689D9ED419D2BB98CE357CD /* e-sa-laam-tsan-ga-ye.m4a in Resources */,
+				A5E79335E93A4751D959FE8D /* e-saa-ni-ya.m4a in Resources */,
+				308ACF0C4A725BF1FC7B2E37 /* e-saaat.m4a in Resources */,
+				6BC1E27F7B047DD95E69D16B /* e-sabr-ka-wal.m4a in Resources */,
+				761CEC37D6A1EA650E529674 /* e-sabzee.m4a in Resources */,
+				F72737D59A87F980A79860A5 /* e-sal-af-ghaa-nay-ke-gee.m4a in Resources */,
+				42077785B97D964A277F3D9E /* e-sal.m4a in Resources */,
 				B6A00D3DA986FA9FAADF25B2 /* e-salam.m4a in Resources */,
+				7193AFA0B4D9EC3471FDBE20 /* e-sam.m4a in Resources */,
+				C29E26F1A2E47247A9052E6D /* e-sama-da.m4a in Resources */,
+				9228F6D0730DD963B1A9D612 /* e-se-shan-ba.m4a in Resources */,
+				AF9B72CEC1F7F188EA9C93F5 /* e-shaa-yad-wros-ta.m4a in Resources */,
+				9A970A0B925D0D1851300E15 /* e-shaayad.m4a in Resources */,
+				7E0E91B0048BADB2C7301259 /* e-shal.m4a in Resources */,
+				D64BBC3FE5CEF56F4C101A59 /* e-shan-ba.m4a in Resources */,
+				9C130FA6957C11DFBD4EDE57 /* e-shee-dey.m4a in Resources */,
+				91EA7C14F126E75A90BCF650 /* e-shpa-mo-pa-khayr.m4a in Resources */,
+				F2997EC4CB65B1C4BB73365C /* e-shpa.m4a in Resources */,
+				2A35B20C7A4CD075A9A92FCD /* e-shpaa-ras.m4a in Resources */,
+				679473146DA65E6935204DAD /* e-shpag.m4a in Resources */,
+				B569C52866096F9046144937 /* e-shpeta.m4a in Resources */,
+				7AAD0A1AAF70EF35957988A2 /* e-sifr.m4a in Resources */,
+				51A8F497B8D34BABC5819A45 /* e-so-la.m4a in Resources */,
+				4D610460A097DEF1AB4E90D6 /* e-sta-num-tsa-day.m4a in Resources */,
+				6B10C69E985F6A6BE2B93718 /* e-sta.m4a in Resources */,
+				ACA0F93F5A86B3E35EF6AEF0 /* e-staa-pa-lee-do-der-kho-shaa-la-shwam.m4a in Resources */,
+				837855E0F94A1053A4EB87AD /* e-staa-pakh-lay-me-der-khwakh-day.m4a in Resources */,
+				46C2C20871B19E28308251E5 /* e-staa-so.m4a in Resources */,
 				E520FAD0CF89519C47ECA535 /* e-stare-ma-she.m4a in Resources */,
+				29F602EE3C2F8CE28BCDDDEF /* e-staree-ma-shey.m4a in Resources */,
+				AF740FE6A5198ECE802865A3 /* e-staso-num-tsa-day.m4a in Resources */,
+				2CF93BCDCD93B6808C80FDEC /* e-staso-pa-lido-xoshala-shwam.m4a in Resources */,
+				038DFBF77C0CD39A6848ED40 /* e-ta-cher-ta-dzey.m4a in Resources */,
+				2A30D087A45B39BCE44F8C49 /* e-ta-cher-ta-ye.m4a in Resources */,
+				3FF449B7C0146F084D4C88C3 /* e-ta-chi-shay-ka-wey.m4a in Resources */,
+				56CC17501EA146D0D08ABD9B /* e-ta-da-kum-dzay-ye.m4a in Resources */,
+				B965977139D5FDFDBDDE0AA5 /* e-ta-ha-ghe-pe-zha-ney.m4a in Resources */,
+				1806334E518FA242C3F30461 /* e-ta-ka-la-raa-dzey.m4a in Resources */,
+				E5008791CF38008836477EAD /* e-ta-khwin-de-la-rey.m4a in Resources */,
+				05BEC1CF0FD642D341B2AF13 /* e-ta-sam-waa-yey.m4a in Resources */,
+				BC919BD6891CE7B0B0D9EAF7 /* e-ta-ye.m4a in Resources */,
+				1F83E77C390B818C4E8672C0 /* e-ta.m4a in Resources */,
+				12094D8680F63EE6CACC0F07 /* e-tal.m4a in Resources */,
+				FB0E3EE98281384FC4B56412 /* e-tar-boor.m4a in Resources */,
 				723449F0906ECDFB12648328 /* e-taso-tsanga-yast.m4a in Resources */,
+				1CA01F703186AF0B3F164FFF /* e-taso-yast.m4a in Resources */,
+				C5B6B996FB3E353257C73D74 /* e-taso.m4a in Resources */,
+				FBC3492998E2C507200F0FFE /* e-tlal.m4a in Resources */,
+				57D4C117DDEAD1AC1ADAB3CD /* e-tol-kha-dee-2.m4a in Resources */,
+				B6B4487D247B970B09044D19 /* e-tol-kha-dee.m4a in Resources */,
+				682C18585C9853A3B0172434 /* e-tol.m4a in Resources */,
+				FE83DE58C5C6956C0578582F /* e-tror.m4a in Resources */,
+				5E53F44F51CC7C359C62AF77 /* e-tsa-ghwaa-rey.m4a in Resources */,
+				0CDC04B6D257AA9A592F1966 /* e-tsa-kaar-kawey.m4a in Resources */,
+				6BB3E44A3588A0EA78F21B2A /* e-tsa-kal.m4a in Resources */,
+				635FFB4F03D0D14424251993 /* e-tsa-lor-ka-saan-dee.m4a in Resources */,
+				B9717C8B526C796C18290587 /* e-tsa-lor.m4a in Resources */,
+				A0FC983CE1588DA45A85380D /* e-tsa-q.m4a in Resources */,
+				0C63A3B7DFA2995D3E82CC80 /* e-tsa-ta-waayee.m4a in Resources */,
+				F53CEA3988F456C99E4623B6 /* e-tsalwekht.m4a in Resources */,
+				73C2EA11F434236973679103 /* e-tsanga-q.m4a in Resources */,
 				CCF75C560B54AF4E01E115EF /* e-tsanga-ye.m4a in Resources */,
+				975EF8673B82A7934874B2C3 /* e-tso-ba-je-dee.m4a in Resources */,
+				AD9773F83FCA22211C4F4D73 /* e-tso-ghwaa-rey.m4a in Resources */,
+				F01B3862CD512FC06206263D /* e-tso-ka-saan-raa-dzee.m4a in Resources */,
+				88DADCA4A5CAAEFC6DFE0319 /* e-tso.m4a in Resources */,
+				E042CF786F5DA6079B448A30 /* e-tsok-q.m4a in Resources */,
+				1A3A0E4C3EAE09E9029FE171 /* e-tsom-ra.m4a in Resources */,
+				2D661552851B07D6F0DF60DA /* e-tsomra-kegee.m4a in Resources */,
+				BEBDD7DC3D72BAFA980E9AD5 /* e-tswaar-las.m4a in Resources */,
+				594CA42EDFE018BA39539586 /* e-tugay-yam.m4a in Resources */,
+				6F35C8A39A648F037158436B /* e-wa-le-khaan-dey.m4a in Resources */,
+				AE732C0B1E6C07979D2ED378 /* e-wa-le-na.m4a in Resources */,
+				E0C1C505993916D4637D1D70 /* e-wa-tan.m4a in Resources */,
+				AAEB81AFCDE9844C835A1CDF /* e-wa-zee-fa.m4a in Resources */,
+				42754E266130C481A8958006 /* e-waa-da-sha-way.m4a in Resources */,
+				6B91E060EBC9246A1C8EEC6B /* e-wakh-tee.m4a in Resources */,
+				DE949A1C1F3F6F3F4A0434DB /* e-wakht.m4a in Resources */,
 				290AFFCE73D6A06588C917C3 /* e-walaykum-salam.m4a in Resources */,
+				15C68473E14DDCF291C50F90 /* e-wale-q.m4a in Resources */,
+				490E07DDBFFD849038CC375B /* e-war-ka-wal.m4a in Resources */,
+				EBCFC3AC297B4324EA3FA398 /* e-wee-da-ke-dal.m4a in Resources */,
+				68EF454BD6A0CF40B59C893F /* e-wra-re-ra.m4a in Resources */,
+				780224D18D6CE108227EA3F1 /* e-wraa-ra.m4a in Resources */,
+				8920FFA736300F24E83F4DB6 /* e-wradz-dey-kha-sha.m4a in Resources */,
+				E703592F87B83996BDD6B0E4 /* e-wradz.m4a in Resources */,
+				E7794B407A321ADAB01AE4FD /* e-wri-jey.m4a in Resources */,
+				17CEF604C74638764E39F14C /* e-wror.m4a in Resources */,
+				05D6B8F5A3C61088987DF1C6 /* e-wrosta.m4a in Resources */,
+				A68DEF9BB203A9C47234E229 /* e-wu-dre-dal.m4a in Resources */,
+				17E0410AB140EE00B97E0397 /* e-wugay-yam.m4a in Resources */,
 				096B70D54E3354D984E154E3 /* e-xa-raghlast.m4a in Resources */,
 				928EE95138D58268F755DBD7 /* e-xa.m4a in Resources */,
 				C7F90B4AAB29675E52AFE58E /* e-xoday-paman.m4a in Resources */,
+				339A8B0A01AA76562E1E3E17 /* e-xor.m4a in Resources */,
 				99E8A559E2D8BAE449B486E9 /* e-xwar-ma-she.m4a in Resources */,
+				9F051A7A641EE9B83C12DC34 /* e-ya-keen-la-rey.m4a in Resources */,
+				A3C568F093A7BADDE06A5F5E /* e-yak-shan-ba.m4a in Resources */,
+				F8DB56990AA8B2A7C6960C67 /* e-yaw-bal-pa-kaar-day.m4a in Resources */,
+				DE1FD899B476C2CD5BF0A417 /* e-yaw-wo-las.m4a in Resources */,
+				AC2D9E6A727C4746B1710CBD /* e-yaw.m4a in Resources */,
+				EF52A3831C7D35060A7BFCA0 /* e-yawa-baja.m4a in Resources */,
+				9A550BE23B403A9829537296 /* e-za-afghan-na-yam.m4a in Resources */,
+				509A1ACA4678AB1260BCD4A0 /* e-za-afghan-yam.m4a in Resources */,
+				2C44472725DE6D049599AC64 /* e-za-afghana-yam.m4a in Resources */,
+				12FD6FB67CFFFAC8E9D948D6 /* e-za-ba-sa-baa-raa-sham.m4a in Resources */,
+				9E9886C210587A26428AD629 /* e-za-baa-yad-kaar-wu-kram.m4a in Resources */,
+				0A7578B657F2AB300AA99C9C /* e-za-chaay-ghwaa-ram.m4a in Resources */,
+				2050DE5921CB2AD74113497A /* e-za-chaay-na-ghwaa-ram.m4a in Resources */,
+				C2C2DA11165C087F2A2AD17E /* e-za-drey-wro-na-la-ram.m4a in Resources */,
+				1575EEC3CBC32A9629B0C6F4 /* e-za-ghwaa-ram-wee-da-sham.m4a in Resources */,
+				95E3006C89DC3D2B75E3C5C5 /* e-za-ha-gha-pe-zha-nam.m4a in Resources */,
+				3689276D9B56BD1C74964DA1 /* e-za-ham-daa-se-fikr-ka-wam.m4a in Resources */,
+				302E09D5373B26EBB8F4EE4D /* e-za-ham.m4a in Resources */,
+				6D5C2842D7B91AA2CD4FD257 /* e-za-kaar-ka-wam.m4a in Resources */,
+				029BCC6125284471F4AED1F9 /* e-za-kah-wa-ghwaa-ram.m4a in Resources */,
+				3EC441EA34DC877C30DDA0DE /* e-za-kha-yam-ma-na-na.m4a in Resources */,
+				474ED1CDAC5D26C81D903FB6 /* e-za-la-narwe-tsaxa-yam.m4a in Resources */,
+				BF0C43F0BF6EA5AF6AB785A8 /* e-za-lag-lag-pakh-to-waa-yam.m4a in Resources */,
+				A45E67439E075918AD91B2AC /* e-za-lom-ray-yam.m4a in Resources */,
+				4F522707FA630D94C0BF9F96 /* e-za-mor-yam.m4a in Resources */,
+				52330C7ACEEA42FC00EC7EBE /* e-za-na-po-he-gam.m4a in Resources */,
+				FA90E887FBC7EE3D0645D859 /* e-za-na-yam.m4a in Resources */,
+				763EB17161CA5F4B1811D9AD /* e-za-naa-wakh-ta-shwam.m4a in Resources */,
+				EDB8477829F3F488F982B8A4 /* e-za-nan-kaar-ka-wam.m4a in Resources */,
+				CA5F09B44DCC276C0E50765E /* e-za-o-ba-ghwaa-ram.m4a in Resources */,
+				3DF5EE990C19F584129B57C8 /* e-za-os-dzam.m4a in Resources */,
+				E6A0BA82AD5D6B23A9F26B89 /* e-za-pa-roon-mas-roof-wam.m4a in Resources */,
+				8285088E13E4AB8A1B94283C /* e-za-pa-taa-po-he-gam.m4a in Resources */,
+				8072EA970764D13C40D468C0 /* e-za-pakh-to-kha-na-sham-wa-ye-laay.m4a in Resources */,
+				0C6F3D54174AD3E8AA0C6CD5 /* e-za-pashto-zda-kawam.m4a in Resources */,
+				A4553916FE9EDD50FB8DDFC7 /* e-za-pin-dza-wisht-ka-lan-yam.m4a in Resources */,
+				5D0095C1429876E6B5DDFAAC /* e-za-sa-baa-kaar-ka-wam.m4a in Resources */,
+				DC7DFC43342B46BAA7A9A9F5 /* e-za-sa-haar-kaar-ka-wam.m4a in Resources */,
+				318619297C113793D3C7C7A1 /* e-za-shal-ka-la-na-yam.m4a in Resources */,
+				568BE4CC9AD0579C174ACC8F /* e-za-shal-ka-lan-yam.m4a in Resources */,
+				0D12F5532B4458FF7807050E /* e-za-treekh-khwaa-ra-na-khwa-kha-wam.m4a in Resources */,
+				99E3DB8CA9BC892B2FEA2B83 /* e-za-waa-da-sha-way-yam.m4a in Resources */,
+				06CABDE363106C21E70B9748 /* e-za-wakh-tee-raa-paa-tse-dam.m4a in Resources */,
 				507F41FB8183F2D12EBBAE6B /* e-za-xa-yam.m4a in Resources */,
+				6B0801F03BEFD4ADCE78361A /* e-za-xowunkay-yam.m4a in Resources */,
+				8FC7919F9BABAC0B0201502C /* e-za-yam.m4a in Resources */,
+				46BD6F95F3D89D81B6AA9542 /* e-za.m4a in Resources */,
+				F7DCBE1A1107F21B3A443EE1 /* e-zar.m4a in Resources */,
+				EE4BE45F71561F4BCA732FCC /* e-zda-ka-wal.m4a in Resources */,
+				CD2EBE5CD6A6126878F9F3F8 /* e-zda-ka-woon-kay.m4a in Resources */,
+				9EB51A4FBCEE5E7A1A057D91 /* e-zdakawoonkay.m4a in Resources */,
+				1BDBAD9F7D69A7D98C130BE3 /* e-zha-ba.m4a in Resources */,
+				5E67FD7A142A7B744889C163 /* e-zhar-ba-dar-sham.m4a in Resources */,
+				0F0E446967917550FAA7368A /* e-zhar.m4a in Resources */,
+				57586C0AD1ED4CB1B8F003C7 /* e-zma-num-ahmad-day.m4a in Resources */,
+				8D52994884C5C8024A6994CD /* e-zma.m4a in Resources */,
+				E6EEB225A66D0C7E2868C9B6 /* e-zmaa-in-ti-zaar-wu-ka-ra.m4a in Resources */,
+				4EEDC5119245F22C10C44F66 /* e-zmaa-khor-la-maa-ka-sha-ra-da.m4a in Resources */,
+				3AD5E3181F3BEAD09E01FA30 /* e-zmaa-mor-aw-plaar-pa-kor-ke-dee.m4a in Resources */,
+				7A51D702B1F573BE5D948F6C /* e-zmaa-wror-la-maa-ma-shar-day.m4a in Resources */,
+				07D0C67BFB4E3C0EFDDDE405 /* e-zmung-kor-ta-kha-raagh-laast.m4a in Resources */,
+				1CEA189FEBC8D08BFFF0CA2B /* e-zmung.m4a in Resources */,
+				CD0E32A6ACF11C4A0AD19DD2 /* e-zoy-aw-loor.m4a in Resources */,
+				26684AAF1EE1E05BAED96371 /* e-zoy.m4a in Resources */,
 				2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */,
+			
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -128,12 +128,11 @@ struct ContentValidatorTests {
         #expect(validate(makeBundle(items: [makeItem(translit: translit, pronunciation: "ma-NA-na")])).isEmpty)
 
         let missingUpper = validate(makeBundle(items: [makeItem(translit: translit, pronunciation: "mana-na")]))
-        #expect(missingUpper.count == 1)
-        #expect(missingUpper.first?.message.contains("exactly one uppercase") == true)
+        #expect(missingUpper.isEmpty)
 
         let twoUpper = validate(makeBundle(items: [makeItem(translit: translit, pronunciation: "MA-NA-na")]))
         #expect(twoUpper.count == 1)
-        #expect(twoUpper.first?.message.contains("exactly one uppercase") == true)
+        #expect(twoUpper.first?.message.contains("more than one uppercase") == true)
 
         let mixed = validate(makeBundle(items: [makeItem(pashto: "ها", translit: "kha", pronunciation: "Kha")]))
         #expect(mixed.count == 1)

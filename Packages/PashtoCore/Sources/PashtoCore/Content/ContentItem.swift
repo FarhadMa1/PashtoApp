@@ -77,6 +77,14 @@ public struct ContentItem: Codable, Hashable, Sendable {
     /// Absent until the content generator writes it. The quiz uses the built-in
     /// hint for the eight paired letters when this is missing.
     public let contrastHint: String?
+    /// Course level. The lowest level of the categories this item belongs to.
+    public let level: Int?
+    /// Dialect stored on vocabulary. The UI label stays Kabul.
+    public let dialect: String?
+    /// Quiz shape when it differs from `kind`. The Words filter still uses `kind`.
+    public let quizKind: ContentKind?
+    /// Author flag, kept in step with `verification.status`.
+    public let verified: Bool?
 
     /// True only for a complete audio block. A partial block never decodes.
     public var hasAudio: Bool { audio != nil }
@@ -100,7 +108,11 @@ public struct ContentItem: Codable, Hashable, Sendable {
         name: String? = nil,
         forms: LetterForms? = nil,
         sound: String? = nil,
-        contrastHint: String? = nil
+        contrastHint: String? = nil,
+        level: Int? = nil,
+        dialect: String? = nil,
+        quizKind: ContentKind? = nil,
+        verified: Bool? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -121,6 +133,10 @@ public struct ContentItem: Codable, Hashable, Sendable {
         self.forms = forms
         self.sound = sound
         self.contrastHint = contrastHint
+        self.level = level
+        self.dialect = dialect
+        self.quizKind = quizKind
+        self.verified = verified
     }
 
     public init(from decoder: Decoder) throws {
@@ -144,6 +160,10 @@ public struct ContentItem: Codable, Hashable, Sendable {
         forms = try StrictJSON.decodeIfPresent(LetterForms.self, forKey: CodingKeys.forms, from: container)
         sound = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.sound, from: container)
         contrastHint = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.contrastHint, from: container)
+        level = try StrictJSON.decodeIfPresent(Int.self, forKey: CodingKeys.level, from: container)
+        dialect = try StrictJSON.decodeIfPresent(String.self, forKey: CodingKeys.dialect, from: container)
+        quizKind = try StrictJSON.decodeIfPresent(ContentKind.self, forKey: CodingKeys.quizKind, from: container)
+        verified = try StrictJSON.decodeIfPresent(Bool.self, forKey: CodingKeys.verified, from: container)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -167,6 +187,10 @@ public struct ContentItem: Codable, Hashable, Sendable {
         try container.encodeIfPresent(forms, forKey: .forms)
         try container.encodeIfPresent(sound, forKey: .sound)
         try container.encodeIfPresent(contrastHint, forKey: .contrastHint)
+        try container.encodeIfPresent(level, forKey: .level)
+        try container.encodeIfPresent(dialect, forKey: .dialect)
+        try container.encodeIfPresent(quizKind, forKey: .quizKind)
+        try container.encodeIfPresent(verified, forKey: .verified)
     }
 
     enum CodingKeys: String, CodingKey, CaseIterable {
@@ -189,5 +213,9 @@ public struct ContentItem: Codable, Hashable, Sendable {
         case forms
         case sound
         case contrastHint
+        case level
+        case dialect
+        case quizKind
+        case verified
     }
 }

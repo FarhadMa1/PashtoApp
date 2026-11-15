@@ -2,8 +2,8 @@ import Foundation
 
 /// Shape checks for the pronunciation shown in the app.
 ///
-/// Letters, hyphen, space, and punctuation are allowed. A hyphenated word needs
-/// exactly one all-uppercase syllable. A word without a hyphen is lowercase or
+/// Letters, hyphen, space, and punctuation are allowed. A hyphenated word has
+/// zero or one all-uppercase syllable. A word without a hyphen is lowercase or
 /// entirely uppercase. Entirely uppercase is a stressed one-syllable word
 /// (`KHAYR`). Mixed case is an error. An all-uppercase word whose next word
 /// starts with `kr` is a review (`ZDA kram`).
@@ -81,8 +81,9 @@ enum PronunciationRules {
                 issues.append(error(id, "Syllable \"\(syllable)\" in \"\(word)\" mixes uppercase and lowercase."))
             }
         }
-        if uppercase != 1 {
-            issues.append(error(id, "\"\(word)\" needs exactly one uppercase syllable."))
+        // Zero is the unstressed form (chi-shay). One is the stressed form.
+        if uppercase > 1 {
+            issues.append(error(id, "\"\(word)\" has more than one uppercase syllable."))
         }
         return issues
     }

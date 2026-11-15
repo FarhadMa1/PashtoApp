@@ -70,6 +70,8 @@ public struct LearnList: Equatable, Sendable {
     public let completedCount: Int
     /// The unit's first practice lesson. Nil when the unit has none.
     public let practiceLessonID: LessonID?
+    /// Card color. Comes from the lesson's category, never from the unit id.
+    public let colorFamily: String
 
     public init(
         lessonID: LessonID,
@@ -77,7 +79,8 @@ public struct LearnList: Equatable, Sendable {
         title: String,
         rows: [LearnListRow],
         completedCount: Int,
-        practiceLessonID: LessonID?
+        practiceLessonID: LessonID?,
+        colorFamily: String = "lapis"
     ) {
         self.lessonID = lessonID
         self.unitID = unitID
@@ -85,6 +88,7 @@ public struct LearnList: Equatable, Sendable {
         self.rows = rows
         self.completedCount = completedCount
         self.practiceLessonID = practiceLessonID
+        self.colorFamily = colorFamily
     }
 
     public var wordCount: Int { rows.count }
@@ -146,13 +150,15 @@ public struct LearnList: Equatable, Sendable {
                 count += 1
             }
         }
+        let family = bundle.categories.first { $0.number == found.lesson.categoryNumber }?.colorFamily ?? "lapis"
         return LearnList(
             lessonID: found.lesson.id,
             unitID: found.unit.id,
             title: found.lesson.title,
             rows: rows,
             completedCount: completed,
-            practiceLessonID: StudyCourse.firstPracticeLesson(for: found.lesson.id, in: bundle)
+            practiceLessonID: StudyCourse.firstPracticeLesson(for: found.lesson.id, in: bundle),
+            colorFamily: family
         )
     }
 

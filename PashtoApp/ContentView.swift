@@ -428,7 +428,7 @@ struct ContentView: View {
         path: Binding<[UnitID]>,
         rowsAreIdentifiable: Bool
     ) -> some View {
-        let colors = Lapis.MenuCard.resolve(category.id)
+        let colors = category.colorFamily.map { Lapis.MenuCard.resolve(family: $0) } ?? Lapis.MenuCard.resolve(category.id)
         let stacks = dynamicTypeSize >= .xxxLarge
         return Button {
             path.wrappedValue.append(category.id)
@@ -796,7 +796,9 @@ private struct FamilyWordListView: View {
 private struct FamilyWordRowView: View {
     var row: FamilyWordList.Row
 
-    @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 48
+    private static let imagePointSize: CGFloat = 40
+    private static let imageXLCap: CGFloat = 64
+    @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 40
     @ScaledMetric(relativeTo: .body) private var pronunciationSize: CGFloat = 24
     @ScaledMetric(relativeTo: .body) private var englishSize: CGFloat = 18
     @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = 16
@@ -833,11 +835,14 @@ private struct FamilyWordRowView: View {
     }
 
     private var picture: some View {
-        Image(row.assetName)
+        let side = dynamicTypeSize >= .xxxLarge ? min(tileSide, Self.imageXLCap) : Self.imagePointSize
+        return Image(row.assetName)
             .resizable()
             .scaledToFit()
-            .frame(width: tileSide, height: tileSide)
-            .clipShape(RoundedRectangle(cornerRadius: tileSide * 0.22, style: .continuous))
+            .scaleEffect(FamilyPictures.contentScale(for: row.itemID))
+            .frame(width: side, height: side)
+            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: side * 0.22, style: .continuous))
             .accessibilityLabel(Text(verbatim: row.english))
     }
 
@@ -1498,7 +1503,10 @@ struct CategoryCelebrationScreen: View {
         }
     }
 
-    private var palette: Lapis.MenuCard { Lapis.MenuCard.resolve(offer.unitID) }
+    private var palette: Lapis.MenuCard {
+        if let family = offer.colorFamily { return Lapis.MenuCard.resolve(family: family) }
+        return Lapis.MenuCard.resolve(offer.unitID)
+    }
 
     private var shownPhase: CategoryCelebrationPhase {
         if startsSettled { return .praise }

@@ -101,7 +101,7 @@ struct PlayableCourseTests {
         #expect(sorry.pashto == "بښنه غواړم")
         #expect(sorry.pronunciation == "ba-KHA-na ghwaa-RAM")
         #expect(sorry.translit == "bax̌ə́na ɣwā́ṛəm")
-        #expect(sorry.en == "sorry, excuse me")
+        #expect(sorry.en == "Sorry")
         let verb = try #require(bundle.items.first { $0.id.rawValue == "e-ghwaa-ram" })
         #expect(verb.pashto == "غواړم")
         #expect(verb.pronunciation == "ghwaa-RAM")

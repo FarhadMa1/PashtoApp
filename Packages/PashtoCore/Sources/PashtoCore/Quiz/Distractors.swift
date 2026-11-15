@@ -368,12 +368,27 @@ func sameAnswerPool(_ candidate: ContentItem, _ target: ContentItem, splitByShap
     if splitByShape
         || AnswerPool.shaped.contains(candidate.id.rawValue)
         || AnswerPool.shaped.contains(target.id.rawValue) {
-        return DialogResponse.replyShape(of: candidate) == DialogResponse.replyShape(of: target)
+        return QuizItemType.shape(of: candidate) == QuizItemType.shape(of: target)
     }
     return true
 }
 
-private func excluded(_ candidate: ContentItem, target: ContentItem, groups: [[ItemID]]) -> Bool {
+/// Filter type is the item's kind. Quiz type is `quizKind` when set, otherwise
+/// the Pashto word count. A word can stay in the Words filter and still quiz as a phrase.
+enum QuizItemType {
+    static func filterType(_ item: ContentItem) -> ContentKind { item.kind }
+
+    static func quizType(_ item: ContentItem) -> ContentKind {
+        if let quizKind = item.quizKind { return quizKind }
+        return DialogResponse.replyShape(of: item) == .phrase ? .phrase : .word
+    }
+
+    static func shape(of item: ContentItem) -> DialogReplyShape {
+        quizType(item) == .word ? .word : .phrase
+    }
+}
+
+func excluded(_ candidate: ContentItem, target: ContentItem, groups: [[ItemID]]) -> Bool {
     if sharesGroup(candidate.id, target.id, groups) {
         return true
     }

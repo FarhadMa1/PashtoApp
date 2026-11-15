@@ -59,6 +59,13 @@ enum TokenRules {
                         ))
                     }
                 }
+                if !looseMatch(spoken.joined(separator: " "), item.pronunciation) {
+                    issues.append(error(
+                        id,
+                        "tokenPronunciations",
+                        "tokenPronunciations do not match pronunciation. A hyphen and a space are the same join."
+                    ))
+                }
             }
         } else {
             issues.append(error(id, "tokenPronunciations", "tokenPronunciations is required when tokens are set."))
@@ -68,6 +75,25 @@ enum TokenRules {
             issues.append(contentsOf: orderIssues(orders, count: tokens.count, id: id))
         }
         return issues
+    }
+
+    /// Hyphens and spaces are the same join. Case and trailing punctuation are ignored.
+    static func looseMatch(_ joined: String, _ pronunciation: String) -> Bool {
+        normalize(joined) == normalize(pronunciation)
+    }
+
+    private static func normalize(_ text: String) -> String {
+        let folded = text.lowercased()
+            .replacingOccurrences(of: "-", with: " ")
+            .replacingOccurrences(of: "?", with: "")
+            .replacingOccurrences(of: "!", with: "")
+            .replacingOccurrences(of: ".", with: "")
+            .replacingOccurrences(of: ",", with: "")
+            .replacingOccurrences(of: ":", with: "")
+            .replacingOccurrences(of: ";", with: "")
+            .replacingOccurrences(of: "؟", with: "")
+            .replacingOccurrences(of: "،", with: "")
+        return folded.split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
     }
 
     private static func orderIssues(_ orders: [[Int]], count: Int, id: String) -> [ValidationIssue] {

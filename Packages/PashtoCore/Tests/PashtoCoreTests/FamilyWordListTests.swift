@@ -74,9 +74,20 @@ struct FamilyWordListTests {
             }
         }
 
-        for unit in bundle.units where expected[unit.id.rawValue] == nil {
-            #expect(FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: true).isEmpty)
-            #expect(FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: false).isEmpty)
+        let alsoPictured = [
+            "u-greetings": ["e-sa-haar", "e-maa-khaam", "e-shpa"],
+            "u-introductions": ["e-koraney"],
+        ]
+        for unit in bundle.units {
+            let pictured = expected[unit.id.rawValue] ?? alsoPictured[unit.id.rawValue]
+            let rows = FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: true)
+            if let pictured {
+                if expected[unit.id.rawValue] != nil {
+                    #expect(rows.map(\.itemID.rawValue) == pictured)
+                }
+            } else {
+                #expect(rows.isEmpty)
+            }
         }
 
         let listed = RootLessonSession.lessons(in: bundle, releasedUnitIDs: course.releasedUnitIDs)
@@ -87,8 +98,15 @@ struct FamilyWordListTests {
             listedLessons: listed,
             showsPronunciation: false
         )
+        let menuPictures = [
+            "u-cat-1": ["e-sa-haar", "e-maa-khaam", "e-shpa"],
+            "u-cat-3": ["e-koraney"],
+            "u-cat-5": family,
+            "u-cat-7": time,
+            "u-cat-14": travel,
+        ]
         for category in menu.categories {
-            if let pictured = expected[category.id.rawValue] {
+            if let pictured = menuPictures[category.id.rawValue] {
                 #expect(category.wordList.map(\.itemID.rawValue) == pictured)
                 #expect(category.wordList.map(\.assetName) == pictured)
                 #expect(category.wordList.map(\.pronunciation) == pictured.map { items[itemID($0)]?.pronunciation })

@@ -100,6 +100,7 @@ public enum ContentMerger {
             groups.append(ids)
         }
 
+        let catalog = loadCategories(paths: paths, knownItems: Set(items.map(\.id.rawValue)), issues: &issues)
         let sourceRomanization = course.romanization
         let bundle = ContentBundle(
             contentVersion: GeneratedBundle.contentVersion,
@@ -111,7 +112,9 @@ public enum ContentMerger {
             ),
             items: items,
             units: units,
-            nonDistractorGroups: groups
+            nonDistractorGroups: groups,
+            categories: catalog.categories,
+            memberships: catalog.memberships
         )
         let sounds = difficult.letters.map { SpecialSound(character: $0.char, translit: $0.translit) }
         let merged = MergedCourse(bundle: bundle, itemUnits: itemUnits, specialSounds: sounds, issues: issues)
@@ -208,6 +211,41 @@ public enum ContentMerger {
         let unknown = dictionary.keys.filter { !allowed.contains($0) }.sorted()
         if unknown.isEmpty { return [] }
         return [error("content/course.json romanization has unknown key(s): \(unknown.joined(separator: ", ")).")]
+    }
+
+    private static func loadCategories(
+        paths: ContentRoot,
+        knownItems: Set<String>,
+        issues: inout [ValidationIssue]
+    ) -> CategoriesFile {
+        let url = paths.categoriesFile
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return CategoriesFile(categories: [], memberships: [])
+        }
+        let relative = "content/categories.json"
+        guard let data = try? SourceDecode.data(at: url) else {
+            issues.append(error("\(relative) could not be read."))
+            return CategoriesFile(categories: [], memberships: [])
+        }
+        issues.append(contentsOf: unknownKeyIssues(data, allowed: ["categories", "memberships"], file: relative))
+        guard let file = try? SourceDecode.decode(CategoriesFile.self, from: data) else {
+            issues.append(error("\(relative) could not be decoded."))
+            return CategoriesFile(categories: [], memberships: [])
+        }
+        var seenNumbers = Set<Int>()
+        for category in file.categories where !seenNumbers.insert(category.number).inserted {
+            issues.append(error("\(relative) repeats category \(category.number)."))
+        }
+        let numbers = Set(file.categories.map(\.number))
+        for membership in file.memberships {
+            if !numbers.contains(membership.category) {
+                issues.append(error("\(relative) membership uses unknown category \(membership.category)."))
+            }
+            if !knownItems.contains(membership.item.rawValue) {
+                issues.append(error("\(relative) membership \(membership.item.rawValue) is not an item."))
+            }
+        }
+        return file
     }
 
     private static func unknownKeyIssues(_ data: Data, allowed: Set<String>, file: String) -> [ValidationIssue] {

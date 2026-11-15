@@ -113,6 +113,8 @@ public struct Lesson: Codable, Hashable, Sendable {
     public let dialogs: [Dialog]
     /// `practice` when the file has no `kind`. Learn and phrases are encoded.
     public let kind: LessonKind
+    /// Category this lesson is listed under. Nil for the script unit.
+    public let categoryNumber: Int?
 
     /// True only for the quiz. Learn and phrases do not count toward progress.
     public var countsForProgress: Bool { kind == .practice }
@@ -123,7 +125,8 @@ public struct Lesson: Codable, Hashable, Sendable {
         items: [LessonItemRef],
         letters: [ItemID] = [],
         dialogs: [Dialog] = [],
-        kind: LessonKind = .practice
+        kind: LessonKind = .practice,
+        categoryNumber: Int? = nil
     ) {
         self.id = id
         self.title = title
@@ -131,6 +134,7 @@ public struct Lesson: Codable, Hashable, Sendable {
         self.letters = letters
         self.dialogs = dialogs
         self.kind = kind
+        self.categoryNumber = categoryNumber
     }
 
     public init(from decoder: Decoder) throws {
@@ -141,6 +145,7 @@ public struct Lesson: Codable, Hashable, Sendable {
         letters = try StrictJSON.decodeIfPresent([ItemID].self, forKey: CodingKeys.letters, from: container) ?? []
         dialogs = try StrictJSON.decodeIfPresent([Dialog].self, forKey: CodingKeys.dialogs, from: container) ?? []
         kind = try StrictJSON.decodeIfPresent(LessonKind.self, forKey: CodingKeys.kind, from: container) ?? .practice
+        categoryNumber = try StrictJSON.decodeIfPresent(Int.self, forKey: CodingKeys.categoryNumber, from: container)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -153,6 +158,7 @@ public struct Lesson: Codable, Hashable, Sendable {
         if kind != .practice {
             try container.encode(kind, forKey: .kind)
         }
+        try container.encodeIfPresent(categoryNumber, forKey: .categoryNumber)
     }
 
     enum CodingKeys: String, CodingKey, CaseIterable {
@@ -162,5 +168,6 @@ public struct Lesson: Codable, Hashable, Sendable {
         case items
         case dialogs
         case kind
+        case categoryNumber
     }
 }

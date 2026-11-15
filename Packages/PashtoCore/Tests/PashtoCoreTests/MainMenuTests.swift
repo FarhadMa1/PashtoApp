@@ -77,27 +77,33 @@ struct MainMenuTests {
             finishedLessonIDs: [],
             listedLessons: listed
         )
-        #expect(fresh.categories.map(\.id) == course.releasedUnitIDs)
-        #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        #expect(fresh.categories.map(\.practiceTotal) == [3, 2, 2, 3, 2, 2, 3, 2, 2, 3])
+        #expect(fresh.categories.map(\.id.rawValue) == [
+            "u-cat-1", "u-cat-2", "u-cat-3", "u-cat-4", "u-cat-5", "u-cat-6",
+            "u-cat-7", "u-cat-8", "u-cat-9", "u-cat-10", "u-cat-13", "u-cat-14", "u-cat-18",
+        ])
+        #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        #expect(fresh.categories.map(\.practiceTotal) == [5, 5, 5, 5, 7, 6, 6, 5, 8, 5, 1, 3, 0])
         #expect(fresh.categories.map(\.label) == [
-            "Basics", "Greetings", "Introduction", "Family", "Travel", "Time",
-            "Numbers", "Food", "Town", "Conversation",
+            "Greetings & Goodbyes",
+            "Basic Responses & Expressions",
+            "Introducing Yourself",
+            "Pronouns & Possession",
+            "Family Members",
+            "Numbers & Counting",
+            "Time & Dates",
+            "Common Questions",
+            "Food & Drinks",
+            "Common Verbs",
+            "Shopping & Money",
+            "Transportation & Directions",
+            "Work & Education",
         ])
-        #expect(fresh.categories.map(\.title) == [
-            "The basics",
-            "Greetings and politeness",
-            "Introducing yourself",
-            "Family",
-            "Travel",
-            "Time and days",
-            "Numbers",
-            "Food and drink",
-            "Around town",
-            "Putting it together",
+        #expect(fresh.categories.map(\.colorFamily) == [
+            "saffron", "lapis", "teal", "cocoa", "rose", "sky", "olive", "magenta",
+            "orange", "jade", "slate", "violet", "lapis",
         ])
-        #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
-        #expect(fresh.continueTarget?.unitLabel == "Basics")
+        #expect(fresh.continueTarget?.lessonID == lessonID("l-c1-learn-1"))
+        #expect(fresh.continueTarget?.unitLabel == "Greetings & Goodbyes")
 
         let nonPractice = Set(listed.filter { $0.kind != .practice }.map(\.id))
         var finished = nonPractice
@@ -109,30 +115,30 @@ struct MainMenuTests {
             finishedLessonIDs: finished,
             listedLessons: listed
         )
-        #expect(menu.categories.map(\.practiceCompleted) == [0, 1, 0, 1, 0, 0, 0, 0, 0, 0])
-        #expect(menu.categories.map(\.practiceTotal) == [3, 2, 2, 3, 2, 2, 3, 2, 2, 3])
-        #expect(menu.categories[0].fraction == 0)
-        #expect(menu.categories[1].fraction == 0.5)
-        #expect(menu.categories[1].isComplete == false)
-        #expect(menu.categories[0].lessons.allSatisfy { $0.kind == .practice || $0.isComplete == false })
-        let greetingsPractice = menu.categories[1].lessons.filter { $0.kind == .practice }
-        #expect(greetingsPractice.map(\.isComplete) == [true, false])
-        #expect(menu.categories[1].lessons.filter { $0.kind != .practice }.allSatisfy { !$0.isComplete })
-        #expect(menu.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
+        #expect(menu.categories.map(\.practiceCompleted) == [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0])
+        #expect(menu.categories.map(\.practiceTotal) == [5, 5, 5, 5, 7, 6, 6, 5, 8, 5, 1, 3, 0])
+        #expect(menu.categories[0].fraction == 0.2)
+        #expect(menu.categories[0].isComplete == false)
+        #expect(menu.categories[1].fraction == 0)
+        let greetingsPractice = menu.categories[0].lessons.filter { $0.kind == .practice }
+        #expect(greetingsPractice.map(\.isComplete) == [true, false, false, false, false])
+        #expect(menu.categories[0].lessons.filter { $0.kind != .practice }.allSatisfy { !$0.isComplete })
+        #expect(menu.continueTarget?.lessonID == lessonID("l-greetings-how"))
 
-        let basicsDone = finished.union([
-            lessonID("l-basics-1"), lessonID("l-basics-verbs"), lessonID("l-basics-polite"),
+        let greetingsDone = finished.union([
+            lessonID("l-greetings-1"), lessonID("l-greetings-how"),
+            lessonID("l-c1-quiz-1"), lessonID("l-c1-quiz-2"), lessonID("l-c1-quiz-3"),
         ])
-        let afterBasics = MainMenu.make(
+        let afterGreetings = MainMenu.make(
             in: course.bundle,
             releasedUnitIDs: course.releasedUnitIDs,
-            finishedLessonIDs: basicsDone,
+            finishedLessonIDs: greetingsDone,
             listedLessons: listed
         )
-        #expect(afterBasics.categories[0].isComplete)
-        #expect(afterBasics.categories[0].fraction == 1)
-        #expect(afterBasics.continueTarget?.lessonID == lessonID("l-greetings-how"))
-        #expect(afterBasics.continueTarget?.unitLabel == "Greetings")
+        #expect(afterGreetings.categories[0].isComplete)
+        #expect(afterGreetings.categories[0].fraction == 1)
+        #expect(afterGreetings.continueTarget?.lessonID == lessonID("l-basics-learn-polite"))
+        #expect(afterGreetings.continueTarget?.unitLabel == "Basic Responses & Expressions")
 
         let allPractice = Set(listed.filter { $0.kind == .practice }.map(\.id))
         let done = MainMenu.make(
@@ -141,7 +147,8 @@ struct MainMenuTests {
             finishedLessonIDs: allPractice,
             listedLessons: listed
         )
-        #expect(done.categories.allSatisfy { $0.isComplete })
+        #expect(done.categories.filter { $0.practiceTotal > 0 }.allSatisfy { $0.isComplete })
+        #expect(done.categories.contains { $0.practiceTotal == 0 && $0.isComplete == false })
         #expect(done.continueTarget == nil)
 
         let familyOnly = MainMenu.make(
@@ -150,9 +157,9 @@ struct MainMenuTests {
             finishedLessonIDs: [lessonID("l-family-1")],
             listedLessons: listed
         )
-        #expect(familyOnly.categories.map(\.id.rawValue) == ["u-family"])
+        #expect(familyOnly.categories.map(\.id.rawValue) == ["u-cat-5"])
         #expect(familyOnly.categories[0].practiceCompleted == 1)
-        #expect(familyOnly.categories[0].practiceTotal == 3)
+        #expect(familyOnly.categories[0].practiceTotal == 7)
         #expect(familyOnly.continueTarget?.lessonID == lessonID("l-family-2"))
     }
 
@@ -172,21 +179,22 @@ struct MainMenuTests {
         }
 
         let fresh = menu([])
-        #expect(fresh.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
-        #expect(fresh.continueTarget?.unitID == unitID("u-basics"))
-        #expect(fresh.continueTarget?.unitLabel == "Basics")
+        #expect(fresh.continueTarget?.lessonID == lessonID("l-c1-learn-1"))
+        #expect(fresh.continueTarget?.unitID == unitID("u-cat-1"))
+        #expect(fresh.continueTarget?.unitLabel == "Greetings & Goodbyes")
 
-        let partial = menu([lessonID("l-basics-1"), lessonID("l-greetings-1")])
-        #expect(partial.continueTarget?.lessonID == lessonID("l-basics-verbs"))
-        #expect(partial.continueTarget?.unitID == unitID("u-basics"))
-        #expect(partial.continueTarget?.unitLabel == "Basics")
+        let partial = menu([lessonID("l-greetings-1")])
+        #expect(partial.continueTarget?.lessonID == lessonID("l-greetings-how"))
+        #expect(partial.continueTarget?.unitID == unitID("u-cat-1"))
+        #expect(partial.continueTarget?.unitLabel == "Greetings & Goodbyes")
 
-        let nextUnit = menu([
-            lessonID("l-basics-1"), lessonID("l-basics-verbs"), lessonID("l-basics-polite"),
+        let nextCategory = menu([
+            lessonID("l-greetings-1"), lessonID("l-greetings-how"),
+            lessonID("l-c1-quiz-1"), lessonID("l-c1-quiz-2"), lessonID("l-c1-quiz-3"),
         ])
-        #expect(nextUnit.continueTarget?.lessonID == lessonID("l-greetings-phrases-hello"))
-        #expect(nextUnit.continueTarget?.unitID == unitID("u-greetings"))
-        #expect(nextUnit.continueTarget?.unitLabel == "Greetings")
+        #expect(nextCategory.continueTarget?.lessonID == lessonID("l-basics-learn-polite"))
+        #expect(nextCategory.continueTarget?.unitID == unitID("u-cat-2"))
+        #expect(nextCategory.continueTarget?.unitLabel == "Basic Responses & Expressions")
 
         let allPractice = Set(listed.filter { $0.kind == .practice }.map(\.id))
         #expect(menu(allPractice).continueTarget == nil)

@@ -29,7 +29,9 @@ public enum ContentFilter {
             romanization: bundle.romanization,
             items: items,
             units: units,
-            nonDistractorGroups: groups
+            nonDistractorGroups: groups,
+            categories: bundle.categories,
+            memberships: bundle.memberships.filter { !hidden.contains($0.item) }
         )
     }
 
@@ -45,7 +47,8 @@ public enum ContentFilter {
             items: lesson.items.filter { !hidden.contains($0.item) },
             letters: lesson.letters.filter { !hidden.contains($0) },
             dialogs: dialogs,
-            kind: lesson.kind
+            kind: lesson.kind,
+            categoryNumber: lesson.categoryNumber
         )
     }
 }

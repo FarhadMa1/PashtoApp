@@ -652,7 +652,8 @@ final class AppModel {
             finishing: lessonID,
             in: course.units,
             finishedBefore: finishedLessonIDs,
-            celebratedUnits: celebratedUnitIDs
+            celebratedUnits: celebratedUnitIDs,
+            categories: course.categories
         )
     }
 
@@ -806,7 +807,8 @@ final class AppModel {
         decodedCourse = decoded
         switch decoded.load {
         case .ready(let bundled):
-            let playable = PlayableCourse.hidingScript(bundled.bundle)
+            let visible = ReleasedCatalog.showing(bundled.bundle)
+            let playable = PlayableCourse.hidingScript(visible)
             course = playable
             releasedUnitIDs = bundled.releasedUnitIDs
             home.setCourse(playable, releasedUnitIDs: bundled.releasedUnitIDs)

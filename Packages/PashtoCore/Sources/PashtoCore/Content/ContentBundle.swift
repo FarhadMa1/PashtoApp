@@ -11,6 +11,8 @@ public struct ContentBundle: Codable, Hashable, Sendable {
     public let items: [ContentItem]
     public let units: [CourseUnit]
     public let nonDistractorGroups: [[ItemID]]
+    public let categories: [CourseCategory]
+    public let memberships: [CategoryMembership]
 
     public init(
         contentVersion: String,
@@ -18,7 +20,9 @@ public struct ContentBundle: Codable, Hashable, Sendable {
         romanization: Romanization,
         items: [ContentItem],
         units: [CourseUnit],
-        nonDistractorGroups: [[ItemID]]
+        nonDistractorGroups: [[ItemID]],
+        categories: [CourseCategory] = [],
+        memberships: [CategoryMembership] = []
     ) {
         self.schemaVersion = Self.supportedSchemaVersion
         self.contentVersion = contentVersion
@@ -27,6 +31,8 @@ public struct ContentBundle: Codable, Hashable, Sendable {
         self.items = items
         self.units = units
         self.nonDistractorGroups = nonDistractorGroups
+        self.categories = categories
+        self.memberships = memberships
     }
 
     public init(from decoder: Decoder) throws {
@@ -47,6 +53,8 @@ public struct ContentBundle: Codable, Hashable, Sendable {
         items = try StrictJSON.decode([ContentItem].self, forKey: CodingKeys.items, from: container)
         units = try StrictJSON.decode([CourseUnit].self, forKey: CodingKeys.units, from: container)
         nonDistractorGroups = try StrictJSON.decode([[ItemID]].self, forKey: CodingKeys.nonDistractorGroups, from: container)
+        categories = try StrictJSON.decodeIfPresent([CourseCategory].self, forKey: CodingKeys.categories, from: container) ?? []
+        memberships = try StrictJSON.decodeIfPresent([CategoryMembership].self, forKey: CodingKeys.memberships, from: container) ?? []
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -58,6 +66,12 @@ public struct ContentBundle: Codable, Hashable, Sendable {
         try container.encode(items, forKey: .items)
         try container.encode(units, forKey: .units)
         try container.encode(nonDistractorGroups, forKey: .nonDistractorGroups)
+        if !categories.isEmpty {
+            try container.encode(categories, forKey: .categories)
+        }
+        if !memberships.isEmpty {
+            try container.encode(memberships, forKey: .memberships)
+        }
     }
 
     enum CodingKeys: String, CodingKey, CaseIterable {
@@ -68,5 +82,7 @@ public struct ContentBundle: Codable, Hashable, Sendable {
         case items
         case units
         case nonDistractorGroups
+        case categories
+        case memberships
     }
 }
