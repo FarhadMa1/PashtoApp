@@ -49,9 +49,11 @@ final class ScreenshotTests: XCTestCase {
     }
 
     /// The Food phrase note at the largest type. The card opens on that item
-    /// and stays at the top. The first image shows the title, Skip to practice,
-    /// the phrase, and the first tip before any scroll. The next image is the
-    /// top of the note. One scroll, then the lower tips.
+    /// and stays at the top. The first image is taken before any scroll and
+    /// shows the title, Skip to practice, and the phrase. The first tip may
+    /// still be below the fold. The test then scrolls until that tip is visible
+    /// and waits before asserting. Further scrolls capture the top of the note,
+    /// then the lower tips.
     /// Each tip is fully on screen in at least one of the last two shots.
     func testXLNotes() {
         executionTimeAllowance = 400
@@ -97,19 +99,25 @@ final class ScreenshotTests: XCTestCase {
                 showsOnScreen(title.frame, in: app.frame)
                     && showsOnScreen(skip.frame, in: app.frame)
                     && showsOnScreen(phrase.frame, in: scroll.frame)
-                    && showsOnScreen(pashto.frame, in: scroll.frame)
-                    && showsOnScreen(tips[0].frame, in: scroll.frame)
                     && title.frame.minY >= scroll.frame.minY - 4
                     && title.frame.minY < scroll.frame.minY + 80
                     && title.frame.minY < skip.frame.minY
                     && skip.frame.minY < phrase.frame.minY
-                    && phrase.frame.minY < pashto.frame.minY
-                    && pashto.frame.minY < tips[0].frame.minY
             },
-            "top of the notes screen is missing the title, Skip to practice, the phrase, or the first tip. \(tipDump(tips, scroll: scroll)) title \(title.frame) skip \(skip.frame) phrase \(phrase.frame) pashto \(pashto.frame)"
+            "top of the notes screen is missing the title, Skip to practice, or the phrase. \(tipDump(tips, scroll: scroll)) title \(title.frame) skip \(skip.frame) phrase \(phrase.frame) pashto \(pashto.frame)"
         )
         settle(0.4)
         shot("notes-learn-xl-top")
+
+        scrollNoteDown(scroll, probe: tips[0]) {
+            showsOnScreen(tips[0].frame, in: scroll.frame)
+        }
+        XCTAssertTrue(
+            waitUntil(timeout: 4) {
+                showsOnScreen(tips[0].frame, in: scroll.frame)
+            },
+            "first tip did not scroll into view. \(tipDump(tips, scroll: scroll)) title \(title.frame) skip \(skip.frame) phrase \(phrase.frame)"
+        )
 
         scrollNoteDown(scroll, probe: tips[0]) {
             fullyInside(tips[0].frame, scroll.frame) && tips[0].frame.minY <= scroll.frame.minY + 36

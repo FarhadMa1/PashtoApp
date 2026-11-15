@@ -494,6 +494,14 @@ struct PronunciationDisplayTests {
         #expect(top.lowerBound < firstScroll.lowerBound)
         #expect(firstScroll.lowerBound < note.lowerBound)
         #expect(note.lowerBound < lower.lowerBound)
+        let beforeTop = body[..<top.lowerBound]
+        #expect(!beforeTop.contains("showsOnScreen(tips[0].frame"))
+        let afterTop = body[top.upperBound...]
+        #expect(afterTop.contains("showsOnScreen(tips[0].frame"))
+        #expect(afterTop.contains("waitUntil(timeout: 4)"))
+        let tipWait = try #require(afterTop.range(of: "first tip did not scroll into view"))
+        let noteAfterTop = try #require(afterTop.range(of: "shot(\"notes-learn-xl\")"))
+        #expect(tipWait.lowerBound < noteAfterTop.lowerBound)
         let afterNote = body[note.upperBound...]
         #expect(afterNote.contains("scrollNoteDown("))
         #expect(afterNote.contains("shot(\"notes-learn-xl-2\")"))
@@ -505,10 +513,14 @@ struct PronunciationDisplayTests {
 
         let study = try source("PashtoApp/Quiz/StudyCardScreen.swift")
         #expect(study.contains("!UITestLaunch.noteStaysAtTop"))
-        #expect(study.contains("noteSitsBelowCard"))
-        #expect(study.contains("lineLimit(noteSitsBelowCard ? 1 : nil)"))
+        #expect(!study.contains("noteSitsBelowCard"))
+        #expect(!study.contains("fitsWithNote"))
+        let scrolling = try section("private var scrollingTitle", until: "private var standardTitle", in: study)
+        #expect(scrolling.contains("fixedSize(horizontal: false, vertical: true)"))
+        #expect(!scrolling.contains("lineLimit"))
+        #expect(!scrolling.contains("minimumScaleFactor"))
         let access = try section(
-            "VStack(alignment: .leading, spacing: noteSitsBelowCard ? 6 : 14)",
+            "VStack(alignment: .leading, spacing: 14)",
             until: "Blue strip at the usual text sizes",
             in: study
         )
