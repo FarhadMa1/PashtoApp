@@ -6,7 +6,9 @@ name: Screenshots
 # on an iPhone simulator.
 # Light, dark, and the largest accessibility text size.
 # Light also captures the Greetings list with Bold Text.
-# XL also captures the Time days list, including cha-haar-shan-BA.
+# XL is two tests. Lists include cha-haar-shan-BA. Quiz includes the other XL shots.
+# Each test's default allowance is 180 seconds. The XL tests request 400, so the
+# maximum has to be at least 400 or Xcode clamps that request.
 # The app a learner launches is unchanged.
 on:
   pull_request:
@@ -102,7 +104,8 @@ jobs:
           mkdir -p "$results" "$GITHUB_WORKSPACE/simulator-shots"
           status=0
           run_variant() {
-            local variant="$1" test="$2" appearance="$3" size="$4"
+            local variant="$1" appearance="$2" size="$3"
+            shift 3
             echo "::group::${variant}"
             if ! xcrun simctl ui "$UDID" appearance "$appearance"; then
               xcrun simctl help ui || true
@@ -129,6 +132,11 @@ jobs:
               sleep 2
             done
             sleep 2
+            local only=()
+            local test
+            for test in "$@"; do
+              only+=("-only-testing:PashtoAppScreenshots/ScreenshotTests/${test}")
+            done
             local attempt code=1
             for attempt in 1 2; do
               rm -rf "${results}/${variant}.xcresult"
@@ -139,13 +147,13 @@ jobs:
                 -destination "platform=iOS Simulator,id=${UDID}" \
                 -derivedDataPath "$derived" \
                 -resultBundlePath "${results}/${variant}.xcresult" \
-                -only-testing:"PashtoAppScreenshots/ScreenshotTests/${test}" \
+                "${only[@]}" \
                 -parallel-testing-enabled NO \
                 -testLanguage en \
                 -testRegion en_US \
                 -test-timeouts-enabled YES \
                 -default-test-execution-time-allowance 180 \
-                -maximum-test-execution-time-allowance 240 \
+                -maximum-test-execution-time-allowance 400 \
                 CODE_SIGNING_ALLOWED=NO \
                 CODE_SIGNING_REQUIRED=NO \
                 CODE_SIGN_IDENTITY=""
@@ -169,9 +177,9 @@ jobs:
             fi
             echo "::endgroup::"
           }
-          run_variant light testLight light large
-          run_variant dark testDark dark large
-          run_variant xl testXL light accessibility-extra-extra-extra-large
+          run_variant light light large testLight
+          run_variant dark dark large testDark
+          run_variant xl light accessibility-extra-extra-extra-large testXLLists testXLQuiz
           echo "RESULTS=${results}" >> "$GITHUB_ENV"
           exit "$status"
 
