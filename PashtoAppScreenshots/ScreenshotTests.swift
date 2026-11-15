@@ -13,7 +13,7 @@ final class ScreenshotTests: XCTestCase {
         continueAfterFailure = false
         // The workflow default is 180 seconds, and the allowance is fixed
         // before the test body runs. Each XL test requests 400.
-        if name.contains("testXL") {
+        if name.contains("testXL") || name.contains("testLight") {
             executionTimeAllowance = 400
         }
     }
@@ -217,7 +217,13 @@ final class ScreenshotTests: XCTestCase {
             XCTAssertTrue(tip.waitForExistence(timeout: 8), "tip \(mark) did not appear")
             XCTAssertTrue(tip.label.hasPrefix(mark), "tip label \(tip.label)")
         }
+        XCTAssertTrue(
+            storedPronunciation("chi-shay ghwaa-REY?", in: app).waitForExistence(timeout: 5),
+            "chi-shay card has no pronunciation"
+        )
+        XCTAssertTrue(labeled("څه شی غواړې؟", in: app).waitForExistence(timeout: 5))
         settle(1.0)
+        shot("chi-shay-light")
         shot("notes-learn-light")
     }
 
@@ -242,6 +248,9 @@ final class ScreenshotTests: XCTestCase {
         app.terminate()
         showHome(app, variant: variant, failure: "home did not return. buttons: \(buttonDump(app))")
         captureGreetingsAndTravel(app, variant: variant, basics: basics)
+        if variant == "light" {
+            captureFoodDrinksLearn(app, basics: basics)
+        }
         captureFamilyLearnAndQuiz(app, variant: variant)
         captureCelebration(app, variant: variant)
         captureDailyWord(app, variant: variant)
@@ -343,6 +352,30 @@ final class ScreenshotTests: XCTestCase {
         revealLabel("ho-TAL", in: app)
         settle(1.0)
         shot("learn-list-travel-\(variant)")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        popToHome(app, basics: basics)
+    }
+
+    /// The Food & Drinks learn list: juice is the first word.
+    private func captureFoodDrinksLearn(_ app: XCUIApplication, basics: XCUIElement) {
+        tap("u-cat-9", in: app)
+        XCTAssertTrue(
+            app.staticTexts["Food & Drinks"].waitForExistence(timeout: 10),
+            "Food & Drinks category did not open. buttons: \(buttonDump(app))"
+        )
+        tap("l-c9-learn-1", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Food & Drinks learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["Food & Drinks words"].waitForExistence(timeout: 5))
+        XCTAssertTrue(
+            storedPronunciation("joos", in: app).waitForExistence(timeout: 5),
+            "Food list has no juice pronunciation"
+        )
+        settle(1.0)
+        shot("food-drinks-learn-light")
         XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
         app.buttons["Pashto"].tap()
         popToHome(app, basics: basics)

@@ -2018,7 +2018,6 @@
 				CD0E32A6ACF11C4A0AD19DD2 /* e-zoy-aw-loor.m4a in Resources */,
 				26684AAF1EE1E05BAED96371 /* e-zoy.m4a in Resources */,
 				2ADD3D1FBD8C43F251B50968 /* release-units.json in Resources */,
-			
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

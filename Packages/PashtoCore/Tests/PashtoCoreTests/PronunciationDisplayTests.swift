@@ -604,6 +604,8 @@ struct PronunciationDisplayTests {
         #expect(exporter.contains("notes-learn-xl.png"))
         #expect(exporter.contains("notes-learn-xl-2.png"))
         #expect(exporter.contains("notes-learn-light.png"))
+        #expect(exporter.contains("chi-shay-light.png"))
+        #expect(exporter.contains("food-drinks-learn-light.png"))
     }
 
     @Test func pashtoLineKeepsInitializerArgumentOrder() throws {
