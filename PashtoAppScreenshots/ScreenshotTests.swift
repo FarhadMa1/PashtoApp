@@ -60,15 +60,21 @@ final class ScreenshotTests: XCTestCase {
         captureBoldText(app, variant: variant, basics: basics)
     }
 
+    /// `failure` is built only if home does not appear. The call sites include
+    /// `buttonDump(app)`, which crashes if it runs before `launch`.
     @discardableResult
-    private func showHome(_ app: XCUIApplication, variant: String, failure: String) -> XCUIElement {
+    private func showHome(
+        _ app: XCUIApplication,
+        variant: String,
+        failure: @autoclosure () -> String
+    ) -> XCUIElement {
         app.launchArguments = launchArguments(for: variant)
         app.launch()
         let basics = app.descendants(matching: .any)["u-basics"]
         if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
             app.buttons["Start review"].tap()
         }
-        XCTAssertTrue(basics.waitForExistence(timeout: 30), failure)
+        XCTAssertTrue(basics.waitForExistence(timeout: 30), failure())
         return basics
     }
 
