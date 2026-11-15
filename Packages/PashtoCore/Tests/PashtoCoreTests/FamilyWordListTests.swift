@@ -136,6 +136,8 @@ struct FamilyWordListTests {
         #expect(sectionIndex.lowerBound < listIndex.lowerBound)
         #expect(!row.contains("Button"))
         #expect(!row.contains("startLesson"))
+        #expect(row.contains("@Environment(\\.dynamicTypeSize) private var dynamicTypeSize"))
+        #expect(row.contains("dynamicTypeSize >= .xxxLarge"))
         #expect(row.contains("accessibilityElement(children: .ignore)"))
         #expect(row.contains("row.accessibilityLabel"))
         #expect(row.contains("accessibilityLabel(Text(verbatim: row.english))"))

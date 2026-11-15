@@ -796,6 +796,7 @@ private struct FamilyWordListView: View {
 private struct FamilyWordRowView: View {
     var row: FamilyWordList.Row
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private static let imagePointSize: CGFloat = 40
     private static let imageXLCap: CGFloat = 64
     @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 40

@@ -128,7 +128,8 @@ struct ContentValidatorTests {
         #expect(validate(makeBundle(items: [makeItem(translit: translit, pronunciation: "ma-NA-na")])).isEmpty)
 
         let missingUpper = validate(makeBundle(items: [makeItem(translit: translit, pronunciation: "mana-na")]))
-        #expect(missingUpper.isEmpty)
+        #expect(missingUpper.count == 1)
+        #expect(missingUpper.first?.message == "\"mana-na\" has no uppercase syllable.")
 
         let twoUpper = validate(makeBundle(items: [makeItem(translit: translit, pronunciation: "MA-NA-na")]))
         #expect(twoUpper.count == 1)
@@ -148,6 +149,37 @@ struct ContentValidatorTests {
         let count = validate(makeBundle(items: [makeItem(pronunciation: "sa-LAAM extra")]))
         #expect(count.count == 1)
         #expect(count.first?.message.contains("2 words") == true)
+    }
+
+    @Test func unstressedHyphenIsRejectedUnlessItJoinsTokenPronunciations() {
+        let closed = PronunciationRules.issues(
+            translit: "ka-ra\u{0301}",
+            pronunciation: "kar-KAY BAN-da ka-ra",
+            id: "e-kar-kay-ban-da-ka-ra",
+            syllableCount: { _ in 2 },
+            requireHyphenWhenMultiSyllable: true
+        )
+        #expect(closed.contains { $0.message == "\"ka-ra\" has no uppercase syllable." })
+        #expect(!closed.contains { $0.message.contains("kar-KAY") || $0.message.contains("BAN-da") })
+
+        let bare = PronunciationRules.issues(
+            translit: "chi-sha\u{0301}y",
+            pronunciation: "chi-shay",
+            id: "e-tsa-q",
+            syllableCount: { _ in 2 },
+            requireHyphenWhenMultiSyllable: true
+        )
+        #expect(bare.contains { $0.message == "\"chi-shay\" has no uppercase syllable." })
+
+        let joined = PronunciationRules.issues(
+            translit: "st\u{0101} n\u{016B}m chi-sha\u{0301}y day",
+            pronunciation: "staa noom chi-shay day?",
+            id: "e-sta-num-tsa-day",
+            syllableCount: { _ in 1 },
+            requireHyphenWhenMultiSyllable: true,
+            tokenPronunciations: ["staa", "noom", "chi", "shay", "day"]
+        )
+        #expect(joined.isEmpty)
     }
 
     @Test func unhyphenatedMultiSyllablePronunciationFails() {
