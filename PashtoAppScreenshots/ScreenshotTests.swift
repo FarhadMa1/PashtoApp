@@ -12,10 +12,9 @@ final class ScreenshotTests: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         // The workflow default is 180 seconds, and the allowance is fixed
-        // before the test body runs. Each XL test requests 400.
-        if name.contains("testXL") || name.contains("testLight") {
-            executionTimeAllowance = 400
-        }
+        // before the test body runs. Dark now walks the phrases card as well,
+        // so every screenshot test requests the workflow maximum.
+        executionTimeAllowance = 400
     }
 
     func testLight() {
@@ -329,7 +328,7 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Pashto"].tap()
         popToHome(app, basics: basics)
 
-        tap("u-cat-1", in: app)
+        openCategory("u-cat-1", showing: "l-greetings-phrases-hello", in: app)
         tap("l-greetings-phrases-hello", in: app)
         XCTAssertTrue(
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
@@ -799,6 +798,20 @@ final class ScreenshotTests: XCTestCase {
         app.descendants(matching: .any).matching(
             NSPredicate(format: "label == %@", stored)
         ).firstMatch
+    }
+
+    /// A large home row can report itself as tappable while the tap misses.
+    /// Try the category again until the lesson is in the hierarchy.
+    private func openCategory(_ category: String, showing lesson: String, in app: XCUIApplication) {
+        let row = app.descendants(matching: .any)[lesson]
+        for _ in 0..<3 {
+            tap(category, in: app)
+            if row.waitForExistence(timeout: 6) { return }
+        }
+        XCTAssertTrue(
+            row.waitForExistence(timeout: 2),
+            "\(lesson) did not open. buttons: \(buttonDump(app))"
+        )
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication) {
