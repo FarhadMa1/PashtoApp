@@ -124,7 +124,7 @@
       "kind" : "phrase",
       "pashto" : "موږ یو",
       "pronunciation" : "mung yoo",
-      "pronunciationNote" : "ږ is pronounced g in the selected Kabul pronunciation; موږ is said mung. یو here means ‘are’, not ‘one’.",
+      "pronunciationNote" : "ږ: in Kabul close to g in go; موږ is said mung. یو here means ‘are’, not ‘one’.",
       "tokenPronunciations" : [
         "mung",
         "yoo"
@@ -247,7 +247,7 @@
       "kind" : "phrase",
       "pashto" : "دا ښار دی",
       "pronunciation" : "daa khaar day",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "tokenPronunciations" : [
         "daa",
         "khaar",
@@ -287,7 +287,7 @@
       "kind" : "phrase",
       "pashto" : "السلام علیکم",
       "pronunciation" : "as-sa-LAAM a-lay-KOOM",
-      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto; just say as-salā́m alaykúm.",
+      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto.",
       "translit" : "as-salā́m alaykúm",
       "usage" : "formal greeting",
       "verification" : {
@@ -320,7 +320,7 @@
       "kind" : "phrase",
       "pashto" : "ستړی مه شې",
       "pronunciation" : "STA-ray ma shey",
-      "pronunciationNote" : "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "pronunciationNote" : "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "stə́ṛay ma še",
       "usage" : "lit. may you not be tired",
       "verification" : {
@@ -466,7 +466,7 @@
       "kind" : "phrase",
       "pashto" : "ډېره مننه",
       "pronunciation" : "DE-ra ma-NA-na",
-      "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back.",
       "translit" : "ḍéra manə́na",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -481,7 +481,7 @@
       "kind" : "phrase",
       "pashto" : "ډېره ښه",
       "pronunciation" : "DE-ra kha",
-      "pronunciationNote" : "ḍ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "ḍéra x̌a",
       "usage" : "praise, e.g. after a correct answer",
       "verification" : {
@@ -527,7 +527,7 @@
       "kind" : "phrase",
       "pashto" : "بښنه غواړم",
       "pronunciation" : "ba-KHA-na ghwaa-RAM",
-      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "bax̌ə́na ɣwā́ṛəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -542,7 +542,7 @@
       "kind" : "phrase",
       "pashto" : "مهرباني وکړئ",
       "pronunciation" : "meh-ra-baa-NEE WA-kray",
-      "pronunciationNote" : "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "pronunciationNote" : "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "mehrabāní wə́kṛəy",
       "usage" : "polite",
       "verification" : {
@@ -684,7 +684,7 @@
       "name" : "ټې",
       "pashto" : "ټ",
       "pronunciation" : "ta",
-      "pronunciationNote" : "ṭ: t with the tongue tip curled back.",
+      "pronunciationNote" : "ټ: t with the tongue tip curled back.",
       "sound" : "ṭ",
       "translit" : "ṭa",
       "verification" : {
@@ -1774,7 +1774,7 @@
       "name" : "ډال",
       "pashto" : "ډ",
       "pronunciation" : "da",
-      "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back.",
       "sound" : "ḍ",
       "translit" : "ḍa",
       "verification" : {
@@ -1841,7 +1841,7 @@
       "name" : "ړې",
       "pashto" : "ړ",
       "pronunciation" : "ra",
-      "pronunciationNote" : "ṛ: tongue tip curled back and flicked forward, like a quick r.",
+      "pronunciationNote" : "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "sound" : "ṛ",
       "translit" : "ṛa",
       "verification" : {
@@ -1925,7 +1925,7 @@
       "kind" : "word",
       "pashto" : "هوایي ډګر",
       "pronunciation" : "ha-waa-YEE da-GAR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back.",
       "translit" : "hawāyí ḍagár",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -1940,7 +1940,7 @@
       "kind" : "word",
       "pashto" : "هوټل",
       "pronunciation" : "ho-TAL",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "pronunciationNote" : "ټ: t with the tongue tip curled back.",
       "translit" : "hoṭál",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -1955,7 +1955,7 @@
       "kind" : "word",
       "pashto" : "ټکټ",
       "pronunciation" : "ti-KAT",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "pronunciationNote" : "ټ: t with the tongue tip curled back.",
       "translit" : "ṭikáṭ",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -1970,7 +1970,6 @@
       "kind" : "word",
       "pashto" : "تشناب",
       "pronunciation" : "tash-NAAB",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "tašnā́b",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -1985,7 +1984,6 @@
       "kind" : "word",
       "pashto" : "پیسې",
       "pronunciation" : "pay-SE",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "paysé",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2014,7 +2012,6 @@
       "kind" : "word",
       "pashto" : "ارزان",
       "pronunciation" : "ar-ZAAN",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "arzā́n",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2029,7 +2026,6 @@
       "kind" : "word",
       "pashto" : "مرسته",
       "pronunciation" : "MRAS-ta",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "mrásta",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2044,7 +2040,7 @@
       "kind" : "phrase",
       "pashto" : "هوټل چېرته دی؟",
       "pronunciation" : "ho-TAL CHER-ta day?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "pronunciationNote" : "ټ: t with the tongue tip curled back.",
       "translit" : "hoṭál čérta day?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2059,7 +2055,6 @@
       "kind" : "phrase",
       "pashto" : "تشناب چېرته دی؟",
       "pronunciation" : "tash-NAAB CHER-ta day?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "tašnā́b čérta day?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2074,7 +2069,7 @@
       "kind" : "phrase",
       "pashto" : "زه هوایي ډګر ته ځم",
       "pronunciation" : "za ha-waa-YEE da-GAR ta dzam",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back. ځ is dz, said together.",
+      "pronunciationNote" : "ځ: dz as in kids. ډ: d with the tongue tip curled back.",
       "translit" : "zə hawāyí ḍagár tə dzəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2089,7 +2084,7 @@
       "kind" : "phrase",
       "pashto" : "دلته ودرېږه",
       "pronunciation" : "DAL-ta wu-DRE-ga",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ږ is pronounced g in the selected Kabul pronunciation.",
+      "pronunciationNote" : "ږ: in Kabul close to g in go.",
       "translit" : "dálta wdréǧa",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2104,7 +2099,7 @@
       "kind" : "phrase",
       "pashto" : "زه ټکټ غواړم",
       "pronunciation" : "za ti-KAT ghwaa-RAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h. ړ is a quick r with the tongue tip curled back.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r. ټ: t with the tongue tip curled back.",
       "translit" : "zə ṭikáṭ ɣwāṛə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2134,7 +2129,7 @@
       "kind" : "phrase",
       "pashto" : "ډېر ګران دی",
       "pronunciation" : "der graan day",
-      "pronunciationNote" : "ḍ: d with the tongue tip curled back.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back.",
       "translit" : "ḍer grān day",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2149,7 +2144,7 @@
       "kind" : "phrase",
       "pashto" : "مرسته وکړئ!",
       "pronunciation" : "MRAS-ta wu-KRAY!",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "pronunciationNote" : "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "mrásta wkṛəy!",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2179,7 +2174,6 @@
       "kind" : "word",
       "pashto" : "سهار",
       "pronunciation" : "sa-HAAR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "sahā́r",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2194,7 +2188,7 @@
       "kind" : "word",
       "pashto" : "ماښام",
       "pronunciation" : "maa-KHAAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "māx̌ā́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2237,7 +2231,6 @@
       "kind" : "word",
       "pashto" : "پرون",
       "pronunciation" : "pa-ROON",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "parún",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2252,7 +2245,6 @@
       "kind" : "word",
       "pashto" : "شنبه",
       "pronunciation" : "shan-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "šanbá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2267,7 +2259,6 @@
       "kind" : "word",
       "pashto" : "یکشنبه",
       "pronunciation" : "yak-shan-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "yakšanbá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2282,7 +2273,6 @@
       "kind" : "word",
       "pashto" : "دوشنبه",
       "pronunciation" : "do-shan-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "došanbá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2297,7 +2287,6 @@
       "kind" : "word",
       "pashto" : "سه شنبه",
       "pronunciation" : "se-shan-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "sešanbá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2312,7 +2301,6 @@
       "kind" : "word",
       "pashto" : "چهارشنبه",
       "pronunciation" : "cha-haar-shan-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "čahāršanbá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2327,7 +2315,6 @@
       "kind" : "word",
       "pashto" : "پنجشنبه",
       "pronunciation" : "panj-shan-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "panjšanbá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2342,7 +2329,7 @@
       "kind" : "word",
       "pashto" : "جمعه",
       "pronunciation" : "ju-MA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto.",
       "translit" : "jumá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2372,7 +2359,7 @@
       "kind" : "phrase",
       "pashto" : "نن جمعه ده",
       "pronunciation" : "nan ju-MA da",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
+      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto.",
       "translit" : "nan jumá da",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2387,7 +2374,6 @@
       "kind" : "phrase",
       "pashto" : "سبا شنبه ده",
       "pronunciation" : "sa-BAA shan-BA da",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "sabā́ šanbá da",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2402,7 +2388,7 @@
       "kind" : "phrase",
       "pashto" : "څو بجې دي؟",
       "pronunciation" : "tso ba-JE dee?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "pronunciationNote" : "څ: ts as in cats.",
       "translit" : "tso badžé di?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2417,7 +2403,7 @@
       "kind" : "phrase",
       "pashto" : "سهار مو په خیر",
       "pronunciation" : "sa-HAAR mo pa KHAYR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "translit" : "sahā́r mo pə xayr",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2432,7 +2418,7 @@
       "kind" : "phrase",
       "pashto" : "شپه مو په خیر",
       "pronunciation" : "shpa mo pa KHAYR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "translit" : "špa mo pə xayr",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2462,7 +2448,6 @@
       "kind" : "phrase",
       "pashto" : "زه سهار کار کوم",
       "pronunciation" : "za sa-HAAR kaar ka-WAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "zə sahā́r kār kawə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2477,7 +2462,6 @@
       "kind" : "word",
       "pashto" : "یو",
       "pronunciation" : "yaw",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "yaw",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2492,7 +2476,6 @@
       "kind" : "word",
       "pashto" : "دوه",
       "pronunciation" : "dwa",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "dwa",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2507,7 +2490,6 @@
       "kind" : "word",
       "pashto" : "درې",
       "pronunciation" : "drey",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "dre",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2522,7 +2504,7 @@
       "kind" : "word",
       "pashto" : "څلور",
       "pronunciation" : "tsa-LOR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "pronunciationNote" : "څ: ts as in cats.",
       "translit" : "tsəlór",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2537,7 +2519,7 @@
       "kind" : "word",
       "pashto" : "پنځه",
       "pronunciation" : "pin-DZA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "pronunciationNote" : "ځ: dz as in kids.",
       "translit" : "pindzá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2552,7 +2534,7 @@
       "kind" : "word",
       "pashto" : "شپږ",
       "pronunciation" : "shpag",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ږ is pronounced g in the selected Kabul pronunciation.",
+      "pronunciationNote" : "ږ: in Kabul close to g in go.",
       "translit" : "špaǧ",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2567,7 +2549,6 @@
       "kind" : "word",
       "pashto" : "اووه",
       "pronunciation" : "o-WA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "owá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2582,7 +2563,6 @@
       "kind" : "word",
       "pashto" : "اته",
       "pronunciation" : "a-TA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "atá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2597,7 +2577,6 @@
       "kind" : "word",
       "pashto" : "نهه",
       "pronunciation" : "NA-ha",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "náha",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2612,7 +2591,6 @@
       "kind" : "word",
       "pashto" : "لس",
       "pronunciation" : "las",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "las",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2627,7 +2605,7 @@
       "kind" : "word",
       "pashto" : "عمر",
       "pronunciation" : "o-MAR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. In عمر, there is no separate throat sound for ع; say o-MAR.",
+      "pronunciationNote" : "ع is not pronounced as a separate sound in Pashto.",
       "translit" : "omár",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2642,7 +2620,6 @@
       "kind" : "word",
       "pashto" : "یوولس",
       "pronunciation" : "yaw-WO-las",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "yawwólas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2657,7 +2634,6 @@
       "kind" : "word",
       "pashto" : "دولس",
       "pronunciation" : "DWO-las",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "dwólas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2672,7 +2648,6 @@
       "kind" : "word",
       "pashto" : "دیارلس",
       "pronunciation" : "dyaar-LAS",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "dyārlás",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2687,7 +2662,7 @@
       "kind" : "word",
       "pashto" : "څوارلس",
       "pronunciation" : "tswaar-LAS",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together.",
+      "pronunciationNote" : "څ: ts as in cats.",
       "translit" : "tswārlás",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2702,7 +2677,7 @@
       "kind" : "word",
       "pashto" : "پنځلس",
       "pronunciation" : "pin-DZA-las",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "pronunciationNote" : "ځ: dz as in kids.",
       "translit" : "pindzálas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2717,7 +2692,7 @@
       "kind" : "word",
       "pashto" : "شپاړس",
       "pronunciation" : "SHPAA-ras",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "pronunciationNote" : "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "špā́ṛas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2732,7 +2707,6 @@
       "kind" : "word",
       "pashto" : "اوولس",
       "pronunciation" : "o-WA-las",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "owálas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2747,7 +2721,6 @@
       "kind" : "word",
       "pashto" : "اتلس",
       "pronunciation" : "a-TA-las",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "atálas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2762,7 +2735,6 @@
       "kind" : "word",
       "pashto" : "نولس",
       "pronunciation" : "NO-las",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "nólas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2777,7 +2749,6 @@
       "kind" : "word",
       "pashto" : "شل",
       "pronunciation" : "shal",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "šal",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2792,7 +2763,6 @@
       "kind" : "word",
       "pashto" : "کلن",
       "pronunciation" : "ka-LAN",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "kalán",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2807,7 +2777,6 @@
       "kind" : "word",
       "pashto" : "کلنه",
       "pronunciation" : "ka-LA-na",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "kalána",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2822,7 +2791,7 @@
       "kind" : "phrase",
       "pashto" : "عمر دې څو دی؟",
       "pronunciation" : "o-MAR dey tso day?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. څ is ts, said together. In عمر, there is no separate throat sound for ع; say o-MAR.",
+      "pronunciationNote" : "څ: ts as in cats. ع is not pronounced as a separate sound in Pashto.",
       "translit" : "omár de tso day?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2837,7 +2806,6 @@
       "kind" : "phrase",
       "pashto" : "زه شل کلن یم",
       "pronunciation" : "za shal ka-LAN yam",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "zə šal kalán yəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2852,7 +2820,6 @@
       "kind" : "phrase",
       "pashto" : "زه شل کلنه یم",
       "pronunciation" : "za shal ka-LA-na yam",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "zə šal kalána yəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2867,7 +2834,6 @@
       "kind" : "word",
       "pashto" : "اوبه",
       "pronunciation" : "o-BA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "obá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2882,7 +2848,7 @@
       "kind" : "word",
       "pashto" : "ډوډۍ",
       "pronunciation" : "do-DAY",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back.",
       "translit" : "ḍoḍə́y",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2897,7 +2863,6 @@
       "kind" : "word",
       "pashto" : "وریجې",
       "pronunciation" : "wri-JEY",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "wrijé",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2912,7 +2877,7 @@
       "kind" : "word",
       "pashto" : "غوښه",
       "pronunciation" : "GHO-kha",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "ɣóx̌a",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2927,7 +2892,7 @@
       "kind" : "word",
       "pashto" : "مڼه",
       "pronunciation" : "ma-NA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ڼ is an n with the tongue tip curled back.",
+      "pronunciationNote" : "ڼ: n with the tongue tip curled back.",
       "translit" : "maṇá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2942,7 +2907,6 @@
       "kind" : "word",
       "pashto" : "چای",
       "pronunciation" : "chaay",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "čāy",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2957,7 +2921,6 @@
       "kind" : "word",
       "pashto" : "قهوه",
       "pronunciation" : "kah-WA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. In قهوه, say k as in the approved kah-WA; do not replace it with q.",
       "translit" : "kahwá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2972,7 +2935,6 @@
       "kind" : "word",
       "pashto" : "شیدې",
       "pronunciation" : "shee-DEY",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "šidé",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -2987,7 +2949,7 @@
       "kind" : "word",
       "pashto" : "غواړم",
       "pronunciation" : "ghwaa-RAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "ɣwāṛə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3002,7 +2964,6 @@
       "kind" : "word",
       "pashto" : "شته",
       "pronunciation" : "shta",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "šta",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3017,7 +2978,6 @@
       "kind" : "word",
       "pashto" : "نشته",
       "pronunciation" : "na-SHTA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "naštá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3032,7 +2992,7 @@
       "kind" : "phrase",
       "pashto" : "څه غواړې؟",
       "pronunciation" : "tsa ghwaa-REY?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. څ is ts, said together. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "tsə ɣwāṛé?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3047,7 +3007,7 @@
       "kind" : "phrase",
       "pashto" : "زه اوبه غواړم",
       "pronunciation" : "za o-BA ghwaa-RAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "zə obá ɣwāṛə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3062,7 +3022,7 @@
       "kind" : "phrase",
       "pashto" : "زه چای غواړم",
       "pronunciation" : "za chaay ghwaa-RAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "zə čāy ɣwāṛə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3077,7 +3037,7 @@
       "kind" : "phrase",
       "pashto" : "دا مڼه ده",
       "pronunciation" : "daa ma-NA da",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ڼ is an n with the tongue tip curled back.",
+      "pronunciationNote" : "ڼ: n with the tongue tip curled back.",
       "translit" : "dā maṇá da",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3092,7 +3052,7 @@
       "kind" : "phrase",
       "pashto" : "دا ډوډۍ ده",
       "pronunciation" : "daa do-DAY da",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ډ is a d with the tongue tip curled back.",
+      "pronunciationNote" : "ډ: d with the tongue tip curled back.",
       "translit" : "dā ḍoḍə́y da",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3107,7 +3067,6 @@
       "kind" : "phrase",
       "pashto" : "چای شته؟",
       "pronunciation" : "chaay shta?",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "čāy šta?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3122,7 +3081,6 @@
       "kind" : "phrase",
       "pashto" : "هو، چای شته",
       "pronunciation" : "ho, chaay shta",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "ho, čāy šta",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3137,7 +3095,6 @@
       "kind" : "phrase",
       "pashto" : "نه، چای نشته",
       "pronunciation" : "na, chaay na-SHTA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "na, čāy naštá",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3152,7 +3109,7 @@
       "kind" : "word",
       "pashto" : "ښار",
       "pronunciation" : "khaar",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "x̌ār",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3167,7 +3124,6 @@
       "kind" : "word",
       "pashto" : "بازار",
       "pronunciation" : "baa-ZAAR",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "bāzā́r",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3182,7 +3138,6 @@
       "kind" : "word",
       "pashto" : "دوکان",
       "pronunciation" : "doo-KAAN",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "dukā́n",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3197,7 +3152,7 @@
       "kind" : "word",
       "pashto" : "روغتون",
       "pronunciation" : "rogh-TOON",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
       "translit" : "roɣtún",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3212,7 +3167,6 @@
       "kind" : "word",
       "pashto" : "چېرته",
       "pronunciation" : "CHER-ta",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "čérta",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3227,7 +3181,7 @@
       "kind" : "word",
       "pashto" : "ټکسي",
       "pronunciation" : "tak-SEE",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ټ is a t with the tongue tip curled back.",
+      "pronunciationNote" : "ټ: t with the tongue tip curled back.",
       "translit" : "ṭaksí",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3242,7 +3196,6 @@
       "kind" : "word",
       "pashto" : "بس",
       "pronunciation" : "bas",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "bas",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3257,7 +3210,7 @@
       "kind" : "word",
       "pashto" : "سړک",
       "pronunciation" : "sa-RAK",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back.",
+      "pronunciationNote" : "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "saṛák",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3272,7 +3225,6 @@
       "kind" : "word",
       "pashto" : "چپ",
       "pronunciation" : "chap",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "čap",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3287,7 +3239,7 @@
       "kind" : "word",
       "pashto" : "ښي",
       "pronunciation" : "khee",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch.",
+      "pronunciationNote" : "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "x̌i",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3302,7 +3254,6 @@
       "kind" : "word",
       "pashto" : "دلته",
       "pronunciation" : "DAL-ta",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "dálta",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3317,7 +3268,6 @@
       "kind" : "word",
       "pashto" : "هلته",
       "pronunciation" : "HAL-ta",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "hálta",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3332,7 +3282,6 @@
       "kind" : "phrase",
       "pashto" : "بازار چېرته دی؟",
       "pronunciation" : "baa-ZAAR CHER-ta day?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "bāzā́r čérta day?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3347,7 +3296,7 @@
       "kind" : "phrase",
       "pashto" : "روغتون چېرته دی؟",
       "pronunciation" : "rogh-TOON CHER-ta day?",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
       "translit" : "roɣtún čérta day?",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3362,7 +3311,6 @@
       "kind" : "phrase",
       "pashto" : "بازار دلته دی",
       "pronunciation" : "baa-ZAAR DAL-ta day",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "bāzā́r dálta day",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3377,7 +3325,7 @@
       "kind" : "phrase",
       "pashto" : "روغتون هلته دی",
       "pronunciation" : "rogh-TOON HAL-ta day",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r.",
       "translit" : "roɣtún hálta day",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3392,7 +3340,7 @@
       "kind" : "phrase",
       "pashto" : "زه بازار ته ځم",
       "pronunciation" : "za baa-ZAAR ta dzam",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "pronunciationNote" : "ځ: dz as in kids.",
       "translit" : "zə bāzā́r tə dzəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3407,7 +3355,7 @@
       "kind" : "phrase",
       "pashto" : "زه کور ته ځم",
       "pronunciation" : "za kor ta dzam",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. ځ is dz, said together.",
+      "pronunciationNote" : "ځ: dz as in kids.",
       "translit" : "zə kor tə dzəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3422,7 +3370,6 @@
       "kind" : "word",
       "pashto" : "نن",
       "pronunciation" : "nan",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "nan",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3437,7 +3384,6 @@
       "kind" : "word",
       "pashto" : "سبا",
       "pronunciation" : "sa-BAA",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "sabā́",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3452,7 +3398,6 @@
       "kind" : "word",
       "pashto" : "کار",
       "pronunciation" : "kaar",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "kār",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3467,7 +3412,7 @@
       "kind" : "word",
       "pashto" : "وخت",
       "pronunciation" : "wakht",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "translit" : "waxt",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3482,7 +3427,6 @@
       "kind" : "phrase",
       "pashto" : "زه کار کوم",
       "pronunciation" : "za kaar ka-WAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "zə kār kawə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3497,7 +3441,6 @@
       "kind" : "phrase",
       "pashto" : "زه نن کار کوم",
       "pronunciation" : "za nan kaar ka-WAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "zə nan kār kawə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3512,7 +3455,6 @@
       "kind" : "phrase",
       "pashto" : "زه سبا کار کوم",
       "pronunciation" : "za sa-BAA kaar ka-WAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "zə sabā́ kār kawə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3527,7 +3469,7 @@
       "kind" : "word",
       "pashto" : "ژبه",
       "pronunciation" : "ZHA-ba",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. zh is one sound, like s in measure.",
+      "pronunciationNote" : "ژ: zh, like s in measure.",
       "translit" : "žába",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3542,7 +3484,6 @@
       "kind" : "word",
       "pashto" : "انګلیسي",
       "pronunciation" : "ang-lee-SEE",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "anglisí",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3557,7 +3498,7 @@
       "kind" : "word",
       "pashto" : "خبرې",
       "pronunciation" : "kha-ba-REY",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "translit" : "xabaré",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3572,7 +3513,7 @@
       "kind" : "phrase",
       "pashto" : "زه په پښتو خبرې کوم",
       "pronunciation" : "za pa pakh-TO kha-ba-REY ka-WAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ښ is pronounced kh in the selected Kabul pronunciation, like ch in Scottish loch. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "translit" : "zə pə pəx̌tó xabaré kawə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3587,7 +3528,7 @@
       "kind" : "phrase",
       "pashto" : "زه په انګلیسي خبرې کوم",
       "pronunciation" : "za pa ang-lee-SEE kha-ba-REY ka-WAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch.",
       "translit" : "zə pə anglisí xabaré kawə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3602,7 +3543,7 @@
       "kind" : "phrase",
       "pashto" : "زه نه پوهېږم",
       "pronunciation" : "za na po-HE-gam",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ږ is pronounced g in the selected Kabul pronunciation.",
+      "pronunciationNote" : "ږ: in Kabul close to g in go.",
       "translit" : "zə na pohéǧəm",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3617,7 +3558,6 @@
       "kind" : "phrase",
       "pashto" : "بیا ووایاست",
       "pronunciation" : "byaa wa-WAA-yaast",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation.",
       "translit" : "byā wawā́yāst",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3632,7 +3572,6 @@
       "kind" : "phrase",
       "pashto" : "ورو ورو",
       "pronunciation" : "wro wro",
-      "pronunciationNote" : "Follow the simple pronunciation shown; do not add extra vowels.",
       "translit" : "wro wro",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3647,7 +3586,7 @@
       "kind" : "phrase",
       "pashto" : "ورو ورو خبرې وکړئ",
       "pronunciation" : "wro wro kha-ba-REY WA-kray",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. kh is one sound, like ch in Scottish loch.",
+      "pronunciationNote" : "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "wro wro xabaré wə́kṛəy",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3662,7 +3601,7 @@
       "kind" : "phrase",
       "pashto" : "زه چای نه غواړم",
       "pronunciation" : "za chaay na ghwaa-RAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "zə čāy na ɣwāṛə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3677,7 +3616,7 @@
       "kind" : "phrase",
       "pashto" : "زه قهوه غواړم",
       "pronunciation" : "za kah-WA ghwaa-RAM",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ړ is a quick r with the tongue tip curled back. gh is a voiced sound made at the back of the mouth, not g followed by h. In قهوه, say k as in the approved kah-WA; do not replace it with q.",
+      "pronunciationNote" : "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "translit" : "zə kahwá ɣwāṛə́m",
       "verification" : {
         "checkedBy" : "Farhad",
@@ -3692,7 +3631,7 @@
       "kind" : "phrase",
       "pashto" : "زه سبا بازار ته ځم",
       "pronunciation" : "za sa-BAA baa-ZAAR ta dzam",
-      "pronunciationNote" : "Stress the syllable shown in capitals in the simple pronunciation. ځ is dz, said together.",
+      "pronunciationNote" : "ځ: dz as in kids.",
       "translit" : "zə sabā́ bāzā́r tə dzəm",
       "verification" : {
         "checkedBy" : "Farhad",

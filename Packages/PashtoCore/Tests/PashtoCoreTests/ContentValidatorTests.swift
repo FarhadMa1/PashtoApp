@@ -179,6 +179,22 @@ struct ContentValidatorTests {
         #expect(validate(makeBundle(items: [empty], difficult: ["\u{0639}"])).count == 1)
     }
 
+    @Test func qAloneDoesNotRequireAPronunciationNote() {
+        let coffee = makeItem(
+            "e-kah-wa",
+            pashto: "قهوه",
+            translit: "kahwá",
+            pronunciation: "kah-WA",
+            en: "coffee"
+        )
+        let coffeeIssues = validate(makeBundle(items: [coffee], difficult: ["ق", "غ"]))
+        #expect(!coffeeIssues.contains { $0.field == "pronunciationNote" })
+
+        let ghayn = makeItem("e-ghayn", pashto: "غ", translit: "ɣ", pronunciation: "gh", en: "gh")
+        let ghaynIssues = validate(makeBundle(items: [ghayn], difficult: ["ق", "غ"]))
+        #expect(ghaynIssues.contains { $0.field == "pronunciationNote" })
+    }
+
     @Test func unknownKeysAndPartialAudioFailDecoding() {
         expectDecodeFailure(
             ContentItem.self,

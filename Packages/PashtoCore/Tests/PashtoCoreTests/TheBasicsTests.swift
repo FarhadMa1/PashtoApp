@@ -71,7 +71,7 @@ struct TheBasicsTests {
         #expect(items["e-hagha-day"]?.usage == hagha + "\n" + itLine)
         #expect(items["e-hagha-da"]?.usage == hagha + "\n" + itLine)
         #expect(items["e-za-na-yam"]?.usage == notLine)
-        let mungNote = "ږ is pronounced g in the selected Kabul pronunciation; موږ is said mung. یو here means \u{2018}are\u{2019}, not \u{2018}one\u{2019}."
+        let mungNote = "ږ: in Kabul close to g in go; موږ is said mung. یو here means \u{2018}are\u{2019}, not \u{2018}one\u{2019}."
         let haghaNote = "غ: gh, a voiced kh, close to French r."
         #expect(items["e-mung-yu"]?.pronunciationNote == mungNote)
         #expect(items["e-mung-yu"]?.translit == "muǧ yu")
