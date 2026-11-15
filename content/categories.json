@@ -1,0 +1,2338 @@
+{
+  "categories": [
+    {
+      "number": 1,
+      "level": 1,
+      "title": "Greetings & Goodbyes",
+      "colorFamily": "saffron"
+    },
+    {
+      "number": 2,
+      "level": 1,
+      "title": "Basic Responses & Expressions",
+      "colorFamily": "lapis"
+    },
+    {
+      "number": 3,
+      "level": 1,
+      "title": "Introducing Yourself",
+      "colorFamily": "teal"
+    },
+    {
+      "number": 4,
+      "level": 1,
+      "title": "Pronouns & Possession",
+      "colorFamily": "cocoa"
+    },
+    {
+      "number": 5,
+      "level": 1,
+      "title": "Family Members",
+      "colorFamily": "rose"
+    },
+    {
+      "number": 6,
+      "level": 1,
+      "title": "Numbers & Counting",
+      "colorFamily": "sky"
+    },
+    {
+      "number": 7,
+      "level": 1,
+      "title": "Time & Dates",
+      "colorFamily": "olive"
+    },
+    {
+      "number": 8,
+      "level": 1,
+      "title": "Common Questions",
+      "colorFamily": "magenta"
+    },
+    {
+      "number": 9,
+      "level": 1,
+      "title": "Food & Drinks",
+      "colorFamily": "orange"
+    },
+    {
+      "number": 10,
+      "level": 1,
+      "title": "Common Verbs",
+      "colorFamily": "jade"
+    },
+    {
+      "number": 11,
+      "level": 2,
+      "title": "Daily Routine",
+      "colorFamily": "olive"
+    },
+    {
+      "number": 12,
+      "level": 2,
+      "title": "Home & Household",
+      "colorFamily": "cocoa"
+    },
+    {
+      "number": 13,
+      "level": 2,
+      "title": "Shopping & Money",
+      "colorFamily": "slate"
+    },
+    {
+      "number": 14,
+      "level": 2,
+      "title": "Transportation & Directions",
+      "colorFamily": "violet"
+    },
+    {
+      "number": 15,
+      "level": 2,
+      "title": "Weather & Seasons",
+      "colorFamily": "sky"
+    },
+    {
+      "number": 16,
+      "level": 2,
+      "title": "Feelings & Emotions",
+      "colorFamily": "rose"
+    },
+    {
+      "number": 17,
+      "level": 2,
+      "title": "Health & Illness",
+      "colorFamily": "teal"
+    },
+    {
+      "number": 18,
+      "level": 2,
+      "title": "Work & Education",
+      "colorFamily": "lapis"
+    },
+    {
+      "number": 19,
+      "level": 2,
+      "title": "Technology & Phone Conversations",
+      "colorFamily": "magenta"
+    },
+    {
+      "number": 20,
+      "level": 3,
+      "title": "Love & Relationships",
+      "colorFamily": "rose"
+    },
+    {
+      "number": 21,
+      "level": 3,
+      "title": "Marriage & Wedding",
+      "colorFamily": "saffron"
+    },
+    {
+      "number": 22,
+      "level": 3,
+      "title": "Talking to Your Partner",
+      "colorFamily": "magenta"
+    },
+    {
+      "number": 23,
+      "level": 3,
+      "title": "Family Conversations",
+      "colorFamily": "jade"
+    },
+    {
+      "number": 24,
+      "level": 3,
+      "title": "Friendship & Socializing",
+      "colorFamily": "orange"
+    },
+    {
+      "number": 25,
+      "level": 3,
+      "title": "Visiting Someone & Hospitality",
+      "colorFamily": "cocoa"
+    },
+    {
+      "number": 26,
+      "level": 3,
+      "title": "Arguments & Disagreements",
+      "colorFamily": "slate"
+    },
+    {
+      "number": 27,
+      "level": 3,
+      "title": "Apologies & Forgiveness",
+      "colorFamily": "teal"
+    },
+    {
+      "number": 28,
+      "level": 4,
+      "title": "Religion & Faith",
+      "colorFamily": "jade"
+    },
+    {
+      "number": 29,
+      "level": 4,
+      "title": "Afghan & Pashtun Culture",
+      "colorFamily": "orange"
+    },
+    {
+      "number": 30,
+      "level": 4,
+      "title": "Humor, Jokes & Casual Speech",
+      "colorFamily": "saffron"
+    },
+    {
+      "number": 31,
+      "level": 4,
+      "title": "Emergencies & Safety",
+      "colorFamily": "rose"
+    },
+    {
+      "number": 32,
+      "level": 4,
+      "title": "Opinions & Preferences",
+      "colorFamily": "violet"
+    },
+    {
+      "number": 33,
+      "level": 4,
+      "title": "Future Plans & Dreams",
+      "colorFamily": "sky"
+    },
+    {
+      "number": 34,
+      "level": 5,
+      "title": "Colors & Shapes",
+      "colorFamily": "lapis"
+    },
+    {
+      "number": 35,
+      "level": 5,
+      "title": "Clothes & Accessories",
+      "colorFamily": "saffron"
+    },
+    {
+      "number": 36,
+      "level": 5,
+      "title": "Body Parts",
+      "colorFamily": "teal"
+    },
+    {
+      "number": 37,
+      "level": 5,
+      "title": "Animals & Nature",
+      "colorFamily": "rose"
+    },
+    {
+      "number": 38,
+      "level": 5,
+      "title": "Sports & Fitness",
+      "colorFamily": "olive"
+    },
+    {
+      "number": 39,
+      "level": 5,
+      "title": "Hobbies & Entertainment",
+      "colorFamily": "violet"
+    },
+    {
+      "number": 40,
+      "level": 5,
+      "title": "Restaurant Conversations",
+      "colorFamily": "sky"
+    },
+    {
+      "number": 41,
+      "level": 5,
+      "title": "Airport & Travel",
+      "colorFamily": "orange"
+    },
+    {
+      "number": 42,
+      "level": 5,
+      "title": "Hotel & Accommodation",
+      "colorFamily": "slate"
+    },
+    {
+      "number": 43,
+      "level": 5,
+      "title": "Children & Parenting",
+      "colorFamily": "magenta"
+    },
+    {
+      "number": 44,
+      "level": 5,
+      "title": "Pregnancy & Babies",
+      "colorFamily": "jade"
+    },
+    {
+      "number": 45,
+      "level": 5,
+      "title": "Celebrations",
+      "colorFamily": "cocoa"
+    },
+    {
+      "number": 46,
+      "level": 6,
+      "title": "Common Adjectives",
+      "colorFamily": "lapis"
+    },
+    {
+      "number": 47,
+      "level": 6,
+      "title": "Common Adverbs",
+      "colorFamily": "saffron"
+    },
+    {
+      "number": 48,
+      "level": 6,
+      "title": "Sentence Connectors",
+      "colorFamily": "teal"
+    },
+    {
+      "number": 49,
+      "level": 6,
+      "title": "Past Tense",
+      "colorFamily": "rose"
+    },
+    {
+      "number": 50,
+      "level": 6,
+      "title": "Future Tense",
+      "colorFamily": "olive"
+    },
+    {
+      "number": 51,
+      "level": 6,
+      "title": "Commands & Requests",
+      "colorFamily": "violet"
+    },
+    {
+      "number": 52,
+      "level": 6,
+      "title": "Formal & Respectful Speech",
+      "colorFamily": "sky"
+    },
+    {
+      "number": 53,
+      "level": 6,
+      "title": "Pashto Idioms",
+      "colorFamily": "orange"
+    },
+    {
+      "number": 54,
+      "level": 6,
+      "title": "Proverbs",
+      "colorFamily": "slate"
+    },
+    {
+      "number": 55,
+      "level": 6,
+      "title": "Dialect Differences",
+      "colorFamily": "magenta"
+    },
+    {
+      "number": 56,
+      "level": 6,
+      "title": "Advanced Conversations",
+      "colorFamily": "jade"
+    },
+    {
+      "number": 57,
+      "level": 6,
+      "title": "At the Doctor",
+      "colorFamily": "cocoa"
+    },
+    {
+      "number": 58,
+      "level": 7,
+      "title": "At the Bank",
+      "colorFamily": "lapis"
+    },
+    {
+      "number": 59,
+      "level": 7,
+      "title": "Renting & Housing",
+      "colorFamily": "saffron"
+    },
+    {
+      "number": 60,
+      "level": 7,
+      "title": "Everyday Problems",
+      "colorFamily": "teal"
+    }
+  ],
+  "memberships": [
+    {
+      "category": 1,
+      "item": "e-salam"
+    },
+    {
+      "category": 1,
+      "item": "e-xoday-paman"
+    },
+    {
+      "category": 1,
+      "item": "e-xa-raghlast"
+    },
+    {
+      "category": 1,
+      "item": "e-sa-haar"
+    },
+    {
+      "category": 1,
+      "item": "e-maaspakheen"
+    },
+    {
+      "category": 1,
+      "item": "e-maa-khaam"
+    },
+    {
+      "category": 1,
+      "item": "e-shpa"
+    },
+    {
+      "category": 1,
+      "item": "e-dost"
+    },
+    {
+      "category": 1,
+      "item": "e-mel-ma"
+    },
+    {
+      "category": 1,
+      "item": "e-so-la"
+    },
+    {
+      "category": 1,
+      "item": "e-manana"
+    },
+    {
+      "category": 1,
+      "item": "e-baxana-ghwaram"
+    },
+    {
+      "category": 1,
+      "item": "e-mehrabani-wakray"
+    },
+    {
+      "category": 1,
+      "item": "e-xa"
+    },
+    {
+      "category": 1,
+      "item": "e-jor"
+    },
+    {
+      "category": 1,
+      "item": "e-sa-laam-tsan-ga-ye"
+    },
+    {
+      "category": 1,
+      "item": "e-tsanga-ye"
+    },
+    {
+      "category": 1,
+      "item": "e-taso-tsanga-yast"
+    },
+    {
+      "category": 1,
+      "item": "e-za-kha-yam-ma-na-na"
+    },
+    {
+      "category": 1,
+      "item": "e-za-xa-yam"
+    },
+    {
+      "category": 1,
+      "item": "e-kha-yam-ta"
+    },
+    {
+      "category": 1,
+      "item": "e-jor-ye"
+    },
+    {
+      "category": 1,
+      "item": "e-jor-yam"
+    },
+    {
+      "category": 1,
+      "item": "e-alhamdulillah"
+    },
+    {
+      "category": 1,
+      "item": "e-assalamu-alaykum"
+    },
+    {
+      "category": 1,
+      "item": "e-walaykum-salam"
+    },
+    {
+      "category": 1,
+      "item": "e-stare-ma-she"
+    },
+    {
+      "category": 1,
+      "item": "e-staree-ma-shey"
+    },
+    {
+      "category": 1,
+      "item": "e-xwar-ma-she"
+    },
+    {
+      "category": 1,
+      "item": "e-sa-haar-mo-pa-khayr"
+    },
+    {
+      "category": 1,
+      "item": "e-shpa-mo-pa-khayr"
+    },
+    {
+      "category": 1,
+      "item": "e-staso-pa-lido-xoshala-shwam"
+    },
+    {
+      "category": 1,
+      "item": "e-sta-num-tsa-day"
+    },
+    {
+      "category": 1,
+      "item": "e-zma-num-ahmad-day"
+    },
+    {
+      "category": 1,
+      "item": "e-ta-da-kum-dzay-ye"
+    },
+    {
+      "category": 1,
+      "item": "e-zmung-kor-ta-kha-raagh-laast"
+    },
+    {
+      "category": 1,
+      "item": "e-pa-khayr-raaghle"
+    },
+    {
+      "category": 1,
+      "item": "e-kor-wudaan"
+    },
+    {
+      "category": 1,
+      "item": "e-tol-kha-dee"
+    },
+    {
+      "category": 1,
+      "item": "e-sa-baa-ba-sa-ra-wu-wee-no"
+    },
+    {
+      "category": 1,
+      "item": "e-byaa-ba-wuweeno"
+    },
+    {
+      "category": 1,
+      "item": "e-da-dzaan-khyaal-saa-ta"
+    },
+    {
+      "category": 1,
+      "item": "e-wradz-dey-kha-sha"
+    },
+    {
+      "category": 1,
+      "item": "e-staa-pa-lee-do-der-kho-shaa-la-shwam"
+    },
+    {
+      "category": 1,
+      "item": "e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no"
+    },
+    {
+      "category": 1,
+      "item": "e-khoday-dey-mal-sha"
+    },
+    {
+      "category": 1,
+      "item": "e-pa-maxa-de-xa"
+    },
+    {
+      "category": 1,
+      "item": "e-dera-manana"
+    },
+    {
+      "category": 1,
+      "item": "e-dera-xa"
+    },
+    {
+      "category": 2,
+      "item": "e-ho"
+    },
+    {
+      "category": 2,
+      "item": "e-na"
+    },
+    {
+      "category": 2,
+      "item": "e-sama-da"
+    },
+    {
+      "category": 2,
+      "item": "e-shaayad"
+    },
+    {
+      "category": 2,
+      "item": "e-hat-man"
+    },
+    {
+      "category": 2,
+      "item": "e-al-bat-ta"
+    },
+    {
+      "category": 2,
+      "item": "e-rikh-tyaa"
+    },
+    {
+      "category": 2,
+      "item": "e-bil-kul"
+    },
+    {
+      "category": 2,
+      "item": "e-sam"
+    },
+    {
+      "category": 2,
+      "item": "e-gha-lat"
+    },
+    {
+      "category": 2,
+      "item": "e-bas-2"
+    },
+    {
+      "category": 2,
+      "item": "e-byaa"
+    },
+    {
+      "category": 2,
+      "item": "e-tal"
+    },
+    {
+      "category": 2,
+      "item": "e-hets-ka-la"
+    },
+    {
+      "category": 2,
+      "item": "e-ka-la-ka-la"
+    },
+    {
+      "category": 2,
+      "item": "e-khaa-yee"
+    },
+    {
+      "category": 2,
+      "item": "e-khaam-khaa"
+    },
+    {
+      "category": 2,
+      "item": "e-hets"
+    },
+    {
+      "category": 2,
+      "item": "e-har-tsa"
+    },
+    {
+      "category": 2,
+      "item": "e-bad"
+    },
+    {
+      "category": 2,
+      "item": "e-ho-al-bat-ta"
+    },
+    {
+      "category": 2,
+      "item": "e-na-ma-na-na"
+    },
+    {
+      "category": 2,
+      "item": "e-kha-da"
+    },
+    {
+      "category": 2,
+      "item": "e-khayr-day"
+    },
+    {
+      "category": 2,
+      "item": "e-khabar-na-yam"
+    },
+    {
+      "category": 2,
+      "item": "e-poheygam"
+    },
+    {
+      "category": 2,
+      "item": "e-za-na-po-he-gam"
+    },
+    {
+      "category": 2,
+      "item": "e-rikh-tyaa-2"
+    },
+    {
+      "category": 2,
+      "item": "e-ya-keen-la-rey"
+    },
+    {
+      "category": 2,
+      "item": "e-za-ham-daa-se-fikr-ka-wam"
+    },
+    {
+      "category": 2,
+      "item": "e-shaa-yad-wros-ta"
+    },
+    {
+      "category": 2,
+      "item": "e-daa-sam-day"
+    },
+    {
+      "category": 2,
+      "item": "e-ta-sam-waa-yey"
+    },
+    {
+      "category": 2,
+      "item": "e-fark-na-ka-wee"
+    },
+    {
+      "category": 2,
+      "item": "e-gham-ma-ka-wa"
+    },
+    {
+      "category": 2,
+      "item": "e-za-ham"
+    },
+    {
+      "category": 3,
+      "item": "e-num"
+    },
+    {
+      "category": 3,
+      "item": "e-o-mar"
+    },
+    {
+      "category": 3,
+      "item": "e-wa-tan"
+    },
+    {
+      "category": 3,
+      "item": "e-khaar"
+    },
+    {
+      "category": 3,
+      "item": "e-ka-lay"
+    },
+    {
+      "category": 3,
+      "item": "e-zha-ba"
+    },
+    {
+      "category": 3,
+      "item": "e-mi-li-yat"
+    },
+    {
+      "category": 3,
+      "item": "e-kor"
+    },
+    {
+      "category": 3,
+      "item": "e-koraney"
+    },
+    {
+      "category": 3,
+      "item": "e-zda-ka-woon-kay"
+    },
+    {
+      "category": 3,
+      "item": "e-wa-zee-fa"
+    },
+    {
+      "category": 3,
+      "item": "e-pohantoon"
+    },
+    {
+      "category": 3,
+      "item": "e-waa-da-sha-way"
+    },
+    {
+      "category": 3,
+      "item": "e-mu-ja-rad"
+    },
+    {
+      "category": 3,
+      "item": "e-khpal-ka-lay"
+    },
+    {
+      "category": 3,
+      "item": "e-sta-num-tsa-day"
+    },
+    {
+      "category": 3,
+      "item": "e-staso-num-tsa-day"
+    },
+    {
+      "category": 3,
+      "item": "e-zma-num-ahmad-day"
+    },
+    {
+      "category": 3,
+      "item": "e-za-pin-dza-wisht-ka-lan-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-o-mar-dey-tso-day"
+    },
+    {
+      "category": 3,
+      "item": "e-za-la-narwe-tsaxa-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-la-kaabul"
+    },
+    {
+      "category": 3,
+      "item": "e-ta-da-kum-dzay-ye"
+    },
+    {
+      "category": 3,
+      "item": "e-pa-oslo-oseygam"
+    },
+    {
+      "category": 3,
+      "item": "e-cherta-oseygey"
+    },
+    {
+      "category": 3,
+      "item": "e-za-pashto-zda-kawam"
+    },
+    {
+      "category": 3,
+      "item": "e-za-lag-lag-pakh-to-waa-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-lag-pakhto"
+    },
+    {
+      "category": 3,
+      "item": "e-za-pakh-to-kha-na-sham-wa-ye-laay"
+    },
+    {
+      "category": 3,
+      "item": "e-zdakawoonkay"
+    },
+    {
+      "category": 3,
+      "item": "e-za-xowunkay-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-daaktar-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-injineer-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-tsa-kaar-kawey"
+    },
+    {
+      "category": 3,
+      "item": "e-za-waa-da-sha-way-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-za-afghan-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-za-afghana-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-za-afghan-na-yam"
+    },
+    {
+      "category": 3,
+      "item": "e-staso-pa-lido-xoshala-shwam"
+    },
+    {
+      "category": 4,
+      "item": "e-za"
+    },
+    {
+      "category": 4,
+      "item": "e-ta"
+    },
+    {
+      "category": 4,
+      "item": "e-taso"
+    },
+    {
+      "category": 4,
+      "item": "e-hagha"
+    },
+    {
+      "category": 4,
+      "item": "e-mung"
+    },
+    {
+      "category": 4,
+      "item": "e-ha-ghwee"
+    },
+    {
+      "category": 4,
+      "item": "e-maa"
+    },
+    {
+      "category": 4,
+      "item": "e-zma"
+    },
+    {
+      "category": 4,
+      "item": "e-sta"
+    },
+    {
+      "category": 4,
+      "item": "e-staa-so"
+    },
+    {
+      "category": 4,
+      "item": "e-da-ha-gha"
+    },
+    {
+      "category": 4,
+      "item": "e-da-ha-ghe"
+    },
+    {
+      "category": 4,
+      "item": "e-zmung"
+    },
+    {
+      "category": 4,
+      "item": "e-da-ha-ghwee"
+    },
+    {
+      "category": 4,
+      "item": "e-tol"
+    },
+    {
+      "category": 4,
+      "item": "e-za-yam"
+    },
+    {
+      "category": 4,
+      "item": "e-ta-ye"
+    },
+    {
+      "category": 4,
+      "item": "e-taso-yast"
+    },
+    {
+      "category": 4,
+      "item": "e-hagha-day"
+    },
+    {
+      "category": 4,
+      "item": "e-hagha-da"
+    },
+    {
+      "category": 4,
+      "item": "e-mung-yu"
+    },
+    {
+      "category": 4,
+      "item": "e-hagha-dee"
+    },
+    {
+      "category": 4,
+      "item": "e-za-na-yam"
+    },
+    {
+      "category": 4,
+      "item": "e-daa-zmaa-day"
+    },
+    {
+      "category": 4,
+      "item": "e-ha-gha-staa-day"
+    },
+    {
+      "category": 4,
+      "item": "e-daa-zma-wror-day"
+    },
+    {
+      "category": 4,
+      "item": "e-ha-gha-zmaa-khor-da"
+    },
+    {
+      "category": 4,
+      "item": "e-ha-gha-zmaa-dost-day"
+    },
+    {
+      "category": 4,
+      "item": "e-mung-kor-ta-dzoo"
+    },
+    {
+      "category": 4,
+      "item": "e-ha-ghwee-sa-baa-raa-dzee"
+    },
+    {
+      "category": 4,
+      "item": "e-za-ha-gha-pe-zha-nam"
+    },
+    {
+      "category": 4,
+      "item": "e-ta-ha-ghe-pe-zha-ney"
+    },
+    {
+      "category": 4,
+      "item": "e-maa-ta-ye-raa-ka-ra"
+    },
+    {
+      "category": 4,
+      "item": "e-la-mung-sa-ra-raa-sha"
+    },
+    {
+      "category": 4,
+      "item": "e-daa-staa-day"
+    },
+    {
+      "category": 5,
+      "item": "e-mor"
+    },
+    {
+      "category": 5,
+      "item": "e-plar"
+    },
+    {
+      "category": 5,
+      "item": "e-wror"
+    },
+    {
+      "category": 5,
+      "item": "e-xor"
+    },
+    {
+      "category": 5,
+      "item": "e-mera"
+    },
+    {
+      "category": 5,
+      "item": "e-khadza"
+    },
+    {
+      "category": 5,
+      "item": "e-zoy"
+    },
+    {
+      "category": 5,
+      "item": "e-lur"
+    },
+    {
+      "category": 5,
+      "item": "e-anaa"
+    },
+    {
+      "category": 5,
+      "item": "e-nika"
+    },
+    {
+      "category": 5,
+      "item": "e-kaakaa"
+    },
+    {
+      "category": 5,
+      "item": "e-maamaa"
+    },
+    {
+      "category": 5,
+      "item": "e-tror"
+    },
+    {
+      "category": 5,
+      "item": "e-khaala"
+    },
+    {
+      "category": 5,
+      "item": "e-tar-boor"
+    },
+    {
+      "category": 5,
+      "item": "e-wraa-ra"
+    },
+    {
+      "category": 5,
+      "item": "e-wra-re-ra"
+    },
+    {
+      "category": 5,
+      "item": "e-mor-aw-plaar"
+    },
+    {
+      "category": 5,
+      "item": "e-maashoom"
+    },
+    {
+      "category": 5,
+      "item": "e-maa-shoo-maan"
+    },
+    {
+      "category": 5,
+      "item": "e-koraney"
+    },
+    {
+      "category": 5,
+      "item": "e-khpal-waan"
+    },
+    {
+      "category": 5,
+      "item": "e-mor-de-tsanga-da"
+    },
+    {
+      "category": 5,
+      "item": "e-hagha-xa-da"
+    },
+    {
+      "category": 5,
+      "item": "e-plar-de-tsanga-day"
+    },
+    {
+      "category": 5,
+      "item": "e-hagha-xa-day"
+    },
+    {
+      "category": 5,
+      "item": "e-plaar-dey-cher-ta-day"
+    },
+    {
+      "category": 5,
+      "item": "e-dwa-wrona"
+    },
+    {
+      "category": 5,
+      "item": "e-ta-khwin-de-la-rey"
+    },
+    {
+      "category": 5,
+      "item": "e-maashoomaan-larey"
+    },
+    {
+      "category": 5,
+      "item": "e-zoy-aw-loor"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-zmaa-kha-dza-da"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-zmaa-me-ra-day"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-zma-plar-day"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-zma-mor-da"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-zma-xor-da"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-sta-wror-day"
+    },
+    {
+      "category": 5,
+      "item": "e-ho-zma-wror-day"
+    },
+    {
+      "category": 5,
+      "item": "e-na-zma-zoy-day"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-tsok-day"
+    },
+    {
+      "category": 5,
+      "item": "e-daa-tsok-da"
+    },
+    {
+      "category": 5,
+      "item": "e-zmaa-mor-aw-plaar-pa-kor-ke-dee"
+    },
+    {
+      "category": 5,
+      "item": "e-ko-ra-nay-dey-tsan-ga-da"
+    },
+    {
+      "category": 5,
+      "item": "e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya"
+    },
+    {
+      "category": 5,
+      "item": "e-ko-ra-nay-me-de-ra-yaa-de-gee"
+    },
+    {
+      "category": 5,
+      "item": "e-zmaa-wror-la-maa-ma-shar-day"
+    },
+    {
+      "category": 5,
+      "item": "e-zmaa-khor-la-maa-ka-sha-ra-da"
+    },
+    {
+      "category": 5,
+      "item": "e-mung-ni-ka-aw-a-naa-ta-dzoo"
+    },
+    {
+      "category": 5,
+      "item": "e-tol-kha-dee-2"
+    },
+    {
+      "category": 5,
+      "item": "e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da"
+    },
+    {
+      "category": 6,
+      "item": "e-sifr"
+    },
+    {
+      "category": 6,
+      "item": "e-yaw"
+    },
+    {
+      "category": 6,
+      "item": "e-dwa"
+    },
+    {
+      "category": 6,
+      "item": "e-drey"
+    },
+    {
+      "category": 6,
+      "item": "e-tsa-lor"
+    },
+    {
+      "category": 6,
+      "item": "e-pin-dza"
+    },
+    {
+      "category": 6,
+      "item": "e-shpag"
+    },
+    {
+      "category": 6,
+      "item": "e-o-wa"
+    },
+    {
+      "category": 6,
+      "item": "e-a-ta"
+    },
+    {
+      "category": 6,
+      "item": "e-na-ha"
+    },
+    {
+      "category": 6,
+      "item": "e-las"
+    },
+    {
+      "category": 6,
+      "item": "e-yaw-wo-las"
+    },
+    {
+      "category": 6,
+      "item": "e-dwo-las"
+    },
+    {
+      "category": 6,
+      "item": "e-dyaar-las"
+    },
+    {
+      "category": 6,
+      "item": "e-tswaar-las"
+    },
+    {
+      "category": 6,
+      "item": "e-pin-dza-las"
+    },
+    {
+      "category": 6,
+      "item": "e-shpaa-ras"
+    },
+    {
+      "category": 6,
+      "item": "e-o-wa-las"
+    },
+    {
+      "category": 6,
+      "item": "e-a-ta-las"
+    },
+    {
+      "category": 6,
+      "item": "e-no-las"
+    },
+    {
+      "category": 6,
+      "item": "e-shal"
+    },
+    {
+      "category": 6,
+      "item": "e-dersh"
+    },
+    {
+      "category": 6,
+      "item": "e-tsalwekht"
+    },
+    {
+      "category": 6,
+      "item": "e-pindzos"
+    },
+    {
+      "category": 6,
+      "item": "e-shpeta"
+    },
+    {
+      "category": 6,
+      "item": "e-awyaa"
+    },
+    {
+      "category": 6,
+      "item": "e-atyaa"
+    },
+    {
+      "category": 6,
+      "item": "e-nawi"
+    },
+    {
+      "category": 6,
+      "item": "e-sal"
+    },
+    {
+      "category": 6,
+      "item": "e-zar"
+    },
+    {
+      "category": 6,
+      "item": "e-neem"
+    },
+    {
+      "category": 6,
+      "item": "e-lomray"
+    },
+    {
+      "category": 6,
+      "item": "e-dwaham"
+    },
+    {
+      "category": 6,
+      "item": "e-dre-yam"
+    },
+    {
+      "category": 6,
+      "item": "e-ka-lan"
+    },
+    {
+      "category": 6,
+      "item": "e-ka-la-na"
+    },
+    {
+      "category": 6,
+      "item": "e-tso-ghwaa-rey"
+    },
+    {
+      "category": 6,
+      "item": "e-dwa-ghwaa-ram"
+    },
+    {
+      "category": 6,
+      "item": "e-za-drey-wro-na-la-ram"
+    },
+    {
+      "category": 6,
+      "item": "e-pin-dza-da-kee-ke-sabr-wu-ka-ra"
+    },
+    {
+      "category": 6,
+      "item": "e-sal-af-ghaa-nay-ke-gee"
+    },
+    {
+      "category": 6,
+      "item": "e-yaw-bal-pa-kaar-day"
+    },
+    {
+      "category": 6,
+      "item": "e-tsa-lor-ka-saan-dee"
+    },
+    {
+      "category": 6,
+      "item": "e-tso-ka-saan-raa-dzee"
+    },
+    {
+      "category": 6,
+      "item": "e-za-lom-ray-yam"
+    },
+    {
+      "category": 6,
+      "item": "e-las-da-kee-ke-sabr-wu-ka-ra"
+    },
+    {
+      "category": 6,
+      "item": "e-za-shal-ka-lan-yam"
+    },
+    {
+      "category": 6,
+      "item": "e-za-shal-ka-la-na-yam"
+    },
+    {
+      "category": 7,
+      "item": "e-nan"
+    },
+    {
+      "category": 7,
+      "item": "e-sa-baa"
+    },
+    {
+      "category": 7,
+      "item": "e-pa-roon"
+    },
+    {
+      "category": 7,
+      "item": "e-sa-haar"
+    },
+    {
+      "category": 7,
+      "item": "e-ghar-ma"
+    },
+    {
+      "category": 7,
+      "item": "e-maaspakheen"
+    },
+    {
+      "category": 7,
+      "item": "e-maa-khaam"
+    },
+    {
+      "category": 7,
+      "item": "e-shpa"
+    },
+    {
+      "category": 7,
+      "item": "e-ni-ma-shpa"
+    },
+    {
+      "category": 7,
+      "item": "e-os"
+    },
+    {
+      "category": 7,
+      "item": "e-wrosta"
+    },
+    {
+      "category": 7,
+      "item": "e-makhke"
+    },
+    {
+      "category": 7,
+      "item": "e-zhar"
+    },
+    {
+      "category": 7,
+      "item": "e-wakh-tee"
+    },
+    {
+      "category": 7,
+      "item": "e-naa-wakh-ta"
+    },
+    {
+      "category": 7,
+      "item": "e-saaat"
+    },
+    {
+      "category": 7,
+      "item": "e-da-kee-ka"
+    },
+    {
+      "category": 7,
+      "item": "e-saa-ni-ya"
+    },
+    {
+      "category": 7,
+      "item": "e-wradz"
+    },
+    {
+      "category": 7,
+      "item": "e-onay"
+    },
+    {
+      "category": 7,
+      "item": "e-myaasht"
+    },
+    {
+      "category": 7,
+      "item": "e-kaal"
+    },
+    {
+      "category": 7,
+      "item": "e-da-o-nay-paay"
+    },
+    {
+      "category": 7,
+      "item": "e-wakht"
+    },
+    {
+      "category": 7,
+      "item": "e-shan-ba"
+    },
+    {
+      "category": 7,
+      "item": "e-yak-shan-ba"
+    },
+    {
+      "category": 7,
+      "item": "e-do-shan-ba"
+    },
+    {
+      "category": 7,
+      "item": "e-se-shan-ba"
+    },
+    {
+      "category": 7,
+      "item": "e-cha-haar-shan-ba"
+    },
+    {
+      "category": 7,
+      "item": "e-panj-shan-ba"
+    },
+    {
+      "category": 7,
+      "item": "e-ju-ma"
+    },
+    {
+      "category": 7,
+      "item": "e-tso-ba-je-dee"
+    },
+    {
+      "category": 7,
+      "item": "e-yawa-baja"
+    },
+    {
+      "category": 7,
+      "item": "e-dwa-baje"
+    },
+    {
+      "category": 7,
+      "item": "e-drey-ba-je-dee"
+    },
+    {
+      "category": 7,
+      "item": "e-nan-tsa-wradz-da"
+    },
+    {
+      "category": 7,
+      "item": "e-nan-ju-ma-da"
+    },
+    {
+      "category": 7,
+      "item": "e-sa-baa-shan-ba-da"
+    },
+    {
+      "category": 7,
+      "item": "e-har-wradz"
+    },
+    {
+      "category": 7,
+      "item": "e-za-ba-sa-baa-raa-sham"
+    },
+    {
+      "category": 7,
+      "item": "e-nan-chi-shay-ka-wey"
+    },
+    {
+      "category": 7,
+      "item": "e-za-wakh-tee-raa-paa-tse-dam"
+    },
+    {
+      "category": 7,
+      "item": "e-za-naa-wakh-ta-shwam"
+    },
+    {
+      "category": 7,
+      "item": "e-pin-dza-da-kee-ke-sabr-wu-ka-ra"
+    },
+    {
+      "category": 7,
+      "item": "e-raa-tlun-ke-o-nay-ba-sa-ra-wu-wee-no"
+    },
+    {
+      "category": 7,
+      "item": "e-za-pa-roon-mas-roof-wam"
+    },
+    {
+      "category": 7,
+      "item": "e-nan-shpa-ba-dar-ta-zang-wu-wa-ham"
+    },
+    {
+      "category": 7,
+      "item": "e-ta-ka-la-raa-dzey"
+    },
+    {
+      "category": 7,
+      "item": "e-zhar-ba-dar-sham"
+    },
+    {
+      "category": 7,
+      "item": "e-za-os-dzam"
+    },
+    {
+      "category": 7,
+      "item": "e-za-sa-haar-kaar-ka-wam"
+    },
+    {
+      "category": 8,
+      "item": "e-tsok-q"
+    },
+    {
+      "category": 8,
+      "item": "e-tsa-q"
+    },
+    {
+      "category": 8,
+      "item": "e-cher-ta"
+    },
+    {
+      "category": 8,
+      "item": "e-kala-q"
+    },
+    {
+      "category": 8,
+      "item": "e-wale-q"
+    },
+    {
+      "category": 8,
+      "item": "e-tsanga-q"
+    },
+    {
+      "category": 8,
+      "item": "e-koom"
+    },
+    {
+      "category": 8,
+      "item": "e-da-chaa"
+    },
+    {
+      "category": 8,
+      "item": "e-tsom-ra"
+    },
+    {
+      "category": 8,
+      "item": "e-tso"
+    },
+    {
+      "category": 8,
+      "item": "e-pukh-ta-na"
+    },
+    {
+      "category": 8,
+      "item": "e-dzwaab"
+    },
+    {
+      "category": 8,
+      "item": "e-da-leel"
+    },
+    {
+      "category": 8,
+      "item": "e-maa-na"
+    },
+    {
+      "category": 8,
+      "item": "e-daa-chi-shay-day"
+    },
+    {
+      "category": 8,
+      "item": "e-ha-gha-tsok-day"
+    },
+    {
+      "category": 8,
+      "item": "e-ta-cher-ta-ye"
+    },
+    {
+      "category": 8,
+      "item": "e-ta-cher-ta-dzey"
+    },
+    {
+      "category": 8,
+      "item": "e-ta-chi-shay-ka-wey"
+    },
+    {
+      "category": 8,
+      "item": "e-wa-le-khaan-dey"
+    },
+    {
+      "category": 8,
+      "item": "e-ta-ka-la-raa-dzey"
+    },
+    {
+      "category": 8,
+      "item": "e-daa-tsan-ga-kaar-ka-wee"
+    },
+    {
+      "category": 8,
+      "item": "e-tsomra-kegee"
+    },
+    {
+      "category": 8,
+      "item": "e-daa-pa-tso-day"
+    },
+    {
+      "category": 8,
+      "item": "e-koom-yaw-ghwaa-rey"
+    },
+    {
+      "category": 8,
+      "item": "e-daa-tsa-maa-na-la-ree"
+    },
+    {
+      "category": 8,
+      "item": "e-tsa-ta-waayee"
+    },
+    {
+      "category": 8,
+      "item": "e-po-me-ka-ra"
+    },
+    {
+      "category": 8,
+      "item": "e-daa-chaa-dar-ta-wu-wayl"
+    },
+    {
+      "category": 8,
+      "item": "e-chi-shay-wu-shwal"
+    },
+    {
+      "category": 8,
+      "item": "e-wa-le-na"
+    },
+    {
+      "category": 9,
+      "item": "e-o-ba"
+    },
+    {
+      "category": 9,
+      "item": "e-chaay"
+    },
+    {
+      "category": 9,
+      "item": "e-kah-wa"
+    },
+    {
+      "category": 9,
+      "item": "e-shee-dey"
+    },
+    {
+      "category": 9,
+      "item": "e-joos"
+    },
+    {
+      "category": 9,
+      "item": "e-do-day"
+    },
+    {
+      "category": 9,
+      "item": "e-wri-jey"
+    },
+    {
+      "category": 9,
+      "item": "e-gho-kha"
+    },
+    {
+      "category": 9,
+      "item": "e-charga"
+    },
+    {
+      "category": 9,
+      "item": "e-kab"
+    },
+    {
+      "category": 9,
+      "item": "e-hagay"
+    },
+    {
+      "category": 9,
+      "item": "e-pa-neer"
+    },
+    {
+      "category": 9,
+      "item": "e-mas-te"
+    },
+    {
+      "category": 9,
+      "item": "e-ka-chaa-loo"
+    },
+    {
+      "category": 9,
+      "item": "e-roo-mee-baan-jaan"
+    },
+    {
+      "category": 9,
+      "item": "e-pi-yaaz"
+    },
+    {
+      "category": 9,
+      "item": "e-ma-na"
+    },
+    {
+      "category": 9,
+      "item": "e-ke-la"
+    },
+    {
+      "category": 9,
+      "item": "e-maal-ta"
+    },
+    {
+      "category": 9,
+      "item": "e-boora"
+    },
+    {
+      "category": 9,
+      "item": "e-maalga"
+    },
+    {
+      "category": 9,
+      "item": "e-mirch"
+    },
+    {
+      "category": 9,
+      "item": "e-mewa"
+    },
+    {
+      "category": 9,
+      "item": "e-sabzee"
+    },
+    {
+      "category": 9,
+      "item": "e-kabaab"
+    },
+    {
+      "category": 9,
+      "item": "e-kaabulee-palaw"
+    },
+    {
+      "category": 9,
+      "item": "e-gaiz-ma-ray"
+    },
+    {
+      "category": 9,
+      "item": "e-da-ghar-me-do-day"
+    },
+    {
+      "category": 9,
+      "item": "e-da-maa-khaam-do-day"
+    },
+    {
+      "category": 9,
+      "item": "e-wugay-yam"
+    },
+    {
+      "category": 9,
+      "item": "e-tugay-yam"
+    },
+    {
+      "category": 9,
+      "item": "e-do-day-dey-khwa-ra-le-da"
+    },
+    {
+      "category": 9,
+      "item": "e-chi-shay-khwa-ral-ghwaa-rey"
+    },
+    {
+      "category": 9,
+      "item": "e-tsa-ghwaa-rey"
+    },
+    {
+      "category": 9,
+      "item": "e-za-o-ba-ghwaa-ram"
+    },
+    {
+      "category": 9,
+      "item": "e-za-chaay-ghwaa-ram"
+    },
+    {
+      "category": 9,
+      "item": "e-chaay-tsa-khey"
+    },
+    {
+      "category": 9,
+      "item": "e-khwandwar"
+    },
+    {
+      "category": 9,
+      "item": "e-do-day-de-ra-khwand-wa-ra-da"
+    },
+    {
+      "category": 9,
+      "item": "e-za-mor-yam"
+    },
+    {
+      "category": 9,
+      "item": "e-bas-day"
+    },
+    {
+      "category": 9,
+      "item": "e-maa-laa-do-day-na-da-khwa-ra-le"
+    },
+    {
+      "category": 9,
+      "item": "e-raa-dzay-yaw-dzaay-do-day-wu-khu-ro"
+    },
+    {
+      "category": 9,
+      "item": "e-meh-ra-baa-nee-wu-ka-ra-maal-ga-raa-ka-ra"
+    },
+    {
+      "category": 9,
+      "item": "e-za-treekh-khwaa-ra-na-khwa-kha-wam"
+    },
+    {
+      "category": 9,
+      "item": "e-nan-dey-chi-shay-paa-kha-kral"
+    },
+    {
+      "category": 9,
+      "item": "e-do-day-tay-yaa-ra-da"
+    },
+    {
+      "category": 9,
+      "item": "e-staa-pakh-lay-me-der-khwakh-day"
+    },
+    {
+      "category": 9,
+      "item": "e-ghokha-na-khoram"
+    },
+    {
+      "category": 9,
+      "item": "e-hisaab"
+    },
+    {
+      "category": 9,
+      "item": "e-chaay-shta"
+    },
+    {
+      "category": 9,
+      "item": "e-ho-chaay-shta"
+    },
+    {
+      "category": 9,
+      "item": "e-na-chaay-na-shta"
+    },
+    {
+      "category": 9,
+      "item": "e-daa-ma-na-da"
+    },
+    {
+      "category": 9,
+      "item": "e-daa-do-day-da"
+    },
+    {
+      "category": 9,
+      "item": "e-za-chaay-na-ghwaa-ram"
+    },
+    {
+      "category": 9,
+      "item": "e-za-kah-wa-ghwaa-ram"
+    },
+    {
+      "category": 10,
+      "item": "e-khwa-ral"
+    },
+    {
+      "category": 10,
+      "item": "e-tsa-kal"
+    },
+    {
+      "category": 10,
+      "item": "e-wee-da-ke-dal"
+    },
+    {
+      "category": 10,
+      "item": "e-paa-tse-dal"
+    },
+    {
+      "category": 10,
+      "item": "e-tlal"
+    },
+    {
+      "category": 10,
+      "item": "e-raa-tlal"
+    },
+    {
+      "category": 10,
+      "item": "e-ke-naas-tal"
+    },
+    {
+      "category": 10,
+      "item": "e-wu-dre-dal"
+    },
+    {
+      "category": 10,
+      "item": "e-pi-yaa-da-tlal"
+    },
+    {
+      "category": 10,
+      "item": "e-man-da-wa-hal"
+    },
+    {
+      "category": 10,
+      "item": "e-kha-ba-rey-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-ghwag-ni-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-aw-re-dal"
+    },
+    {
+      "category": 10,
+      "item": "e-lee-dal"
+    },
+    {
+      "category": 10,
+      "item": "e-ka-tal"
+    },
+    {
+      "category": 10,
+      "item": "e-lwas-tal"
+    },
+    {
+      "category": 10,
+      "item": "e-lee-kal"
+    },
+    {
+      "category": 10,
+      "item": "e-zda-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-khu-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-kaar-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-kaar"
+    },
+    {
+      "category": 10,
+      "item": "e-lo-be-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-akh-is-tal"
+    },
+    {
+      "category": 10,
+      "item": "e-khar-tsa-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-war-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-khlaa-sa-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-ban-da-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-sabr-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-mras-ta-ka-wal"
+    },
+    {
+      "category": 10,
+      "item": "e-po-he-dal"
+    },
+    {
+      "category": 10,
+      "item": "e-dal-ta-raa-sha"
+    },
+    {
+      "category": 10,
+      "item": "e-ke-na"
+    },
+    {
+      "category": 10,
+      "item": "e-paa-tsa"
+    },
+    {
+      "category": 10,
+      "item": "e-maa-ta-ghwag-wu-nee-sa"
+    },
+    {
+      "category": 10,
+      "item": "e-de-ta-wu-go-ra"
+    },
+    {
+      "category": 10,
+      "item": "e-zmaa-in-ti-zaar-wu-ka-ra"
+    },
+    {
+      "category": 10,
+      "item": "e-dzoo"
+    },
+    {
+      "category": 10,
+      "item": "e-za-ghwaa-ram-wee-da-sham"
+    },
+    {
+      "category": 10,
+      "item": "e-za-baa-yad-kaar-wu-kram"
+    },
+    {
+      "category": 10,
+      "item": "e-la-maa-sa-ra-mras-ta-ko-laay-shey"
+    },
+    {
+      "category": 10,
+      "item": "e-za-pa-taa-po-he-gam"
+    },
+    {
+      "category": 10,
+      "item": "e-za-na-po-he-gam"
+    },
+    {
+      "category": 10,
+      "item": "e-dar-waa-za-khlaa-sa-ka-ra"
+    },
+    {
+      "category": 10,
+      "item": "e-kar-kay-ban-da-ka-ra"
+    },
+    {
+      "category": 10,
+      "item": "e-za-pashto-zda-kawam"
+    },
+    {
+      "category": 10,
+      "item": "e-za-kaar-ka-wam"
+    },
+    {
+      "category": 10,
+      "item": "e-za-nan-kaar-ka-wam"
+    },
+    {
+      "category": 10,
+      "item": "e-za-sa-baa-kaar-ka-wam"
+    },
+    {
+      "category": 18,
+      "item": "e-za-kaar-ka-wam"
+    },
+    {
+      "category": 18,
+      "item": "e-za-nan-kaar-ka-wam"
+    },
+    {
+      "category": 18,
+      "item": "e-za-sa-baa-kaar-ka-wam"
+    },
+    {
+      "category": 18,
+      "item": "e-wro-wro-kha-ba-rey-wa-kray"
+    },
+    {
+      "category": 18,
+      "item": "e-za-chaay-na-ghwaa-ram"
+    },
+    {
+      "category": 18,
+      "item": "e-za-kah-wa-ghwaa-ram"
+    },
+    {
+      "category": 18,
+      "item": "e-za-sa-baa-baa-zaar-ta-dzam"
+    },
+    {
+      "category": 14,
+      "item": "e-khaar"
+    },
+    {
+      "category": 14,
+      "item": "e-baa-zaar"
+    },
+    {
+      "category": 14,
+      "item": "e-doo-kaan"
+    },
+    {
+      "category": 14,
+      "item": "e-rogh-toon"
+    },
+    {
+      "category": 14,
+      "item": "e-cher-ta"
+    },
+    {
+      "category": 14,
+      "item": "e-tak-see"
+    },
+    {
+      "category": 14,
+      "item": "e-bas"
+    },
+    {
+      "category": 14,
+      "item": "e-sa-rak"
+    },
+    {
+      "category": 14,
+      "item": "e-chap"
+    },
+    {
+      "category": 14,
+      "item": "e-khee"
+    },
+    {
+      "category": 14,
+      "item": "e-dal-ta"
+    },
+    {
+      "category": 14,
+      "item": "e-hal-ta"
+    },
+    {
+      "category": 14,
+      "item": "e-baa-zaar-cher-ta-day"
+    },
+    {
+      "category": 14,
+      "item": "e-rogh-toon-cher-ta-day"
+    },
+    {
+      "category": 14,
+      "item": "e-baa-zaar-dal-ta-day"
+    },
+    {
+      "category": 14,
+      "item": "e-rogh-toon-hal-ta-day"
+    },
+    {
+      "category": 14,
+      "item": "e-za-baa-zaar-ta-dzam"
+    },
+    {
+      "category": 14,
+      "item": "e-za-kor-ta-dzam"
+    },
+    {
+      "category": 14,
+      "item": "e-ha-waa-yee-da-gar"
+    },
+    {
+      "category": 14,
+      "item": "e-ho-tal"
+    },
+    {
+      "category": 14,
+      "item": "e-ti-kat"
+    },
+    {
+      "category": 14,
+      "item": "e-tash-naab"
+    },
+    {
+      "category": 14,
+      "item": "e-pay-se"
+    },
+    {
+      "category": 14,
+      "item": "e-graan"
+    },
+    {
+      "category": 14,
+      "item": "e-ar-zaan"
+    },
+    {
+      "category": 14,
+      "item": "e-mras-ta"
+    },
+    {
+      "category": 14,
+      "item": "e-ho-tal-cher-ta-day"
+    },
+    {
+      "category": 14,
+      "item": "e-tash-naab-cher-ta-day"
+    },
+    {
+      "category": 14,
+      "item": "e-za-ha-waa-yee-da-gar-ta-dzam"
+    },
+    {
+      "category": 14,
+      "item": "e-dal-ta-wu-dre-ga"
+    },
+    {
+      "category": 14,
+      "item": "e-za-ti-kat-ghwaa-ram"
+    },
+    {
+      "category": 14,
+      "item": "e-daa-pa-tso-day"
+    },
+    {
+      "category": 14,
+      "item": "e-der-graan-day"
+    },
+    {
+      "category": 14,
+      "item": "e-mras-ta-wu-kray"
+    },
+    {
+      "category": 13,
+      "item": "e-pay-se"
+    },
+    {
+      "category": 13,
+      "item": "e-graan"
+    },
+    {
+      "category": 13,
+      "item": "e-ar-zaan"
+    },
+    {
+      "category": 13,
+      "item": "e-mras-ta"
+    },
+    {
+      "category": 13,
+      "item": "e-za-ti-kat-ghwaa-ram"
+    },
+    {
+      "category": 13,
+      "item": "e-daa-pa-tso-day"
+    },
+    {
+      "category": 13,
+      "item": "e-der-graan-day"
+    },
+    {
+      "category": 13,
+      "item": "e-mras-ta-wu-kray"
+    }
+  ]
+}

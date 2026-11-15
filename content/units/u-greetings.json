@@ -5,11 +5,11 @@
   "items": [
     {
       "id": "e-salam",
-      "kind": "phrase",
+      "kind": "word",
       "pashto": "سلام",
       "translit": "salā́m",
       "pronunciation": "sa-LAAM",
-      "en": "hello",
+      "en": "Hello",
       "usage": "common greeting",
       "pronunciationNote": null,
       "responseTo": null,
@@ -21,7 +21,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-assalamu-alaykum",
@@ -29,7 +32,7 @@
       "pashto": "السلام علیکم",
       "translit": "as-salā́m alaykúm",
       "pronunciation": "as-sa-LAAM a-lay-KOOM",
-      "en": "peace be upon you",
+      "en": "Peace be upon you.",
       "usage": "formal greeting",
       "pronunciationNote": "ع is not pronounced as a separate sound in Pashto.",
       "responseTo": null,
@@ -41,7 +44,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-walaykum-salam",
@@ -49,7 +55,7 @@
       "pashto": "وعلیکم السلام",
       "translit": "wa-alaykúm as-salā́m",
       "pronunciation": "wa-a-lay-KOOM as-sa-LAAM",
-      "en": "and peace be upon you",
+      "en": "And peace be upon you.",
       "usage": "reply to as-salām alaykum",
       "pronunciationNote": "ع is not pronounced as a separate sound in Pashto.",
       "responseTo": "e-assalamu-alaykum",
@@ -61,7 +67,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-stare-ma-she",
@@ -69,7 +78,7 @@
       "pashto": "ستړی مه شې",
       "translit": "stə́ṛay ma še",
       "pronunciation": "STA-ray ma shey",
-      "en": "hello",
+      "en": "Hello (may you not be tired).",
       "usage": "lit. may you not be tired",
       "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
@@ -81,7 +90,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-xwar-ma-she",
@@ -89,7 +101,7 @@
       "pashto": "خوار مه شې",
       "translit": "xwār ma še",
       "pronunciation": "khwaar ma shey",
-      "en": "reply to stəṛay ma še",
+      "en": "Reply to staray ma shey.",
       "usage": "lit. may you not be poor",
       "pronunciationNote": "خ: kh, like ch in Scottish loch.",
       "responseTo": "e-stare-ma-she",
@@ -101,15 +113,18 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-xa-raghlast",
-      "kind": "phrase",
+      "kind": "word",
       "pashto": "ښه راغلاست",
       "translit": "x̌a rāɣlā́st",
       "pronunciation": "kha raagh-LAAST",
-      "en": "welcome",
+      "en": "Welcome",
       "usage": "to one person",
       "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r.",
       "responseTo": null,
@@ -121,7 +136,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-27",
         "comment": "Bekreftet av Farhad i gruppechatten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-tsanga-ye",
@@ -129,7 +147,7 @@
       "pashto": "څنګه یې؟",
       "translit": "tsə́nga ye?",
       "pronunciation": "TSAN-ga ye?",
-      "en": "how are you?",
+      "en": "How are you?",
       "usage": "informal, to one person",
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -141,7 +159,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-taso-tsanga-yast",
@@ -149,7 +170,7 @@
       "pashto": "تاسو څنګه یاست؟",
       "translit": "tā́so tsə́nga yāst?",
       "pronunciation": "TAA-so TSAN-ga yaast?",
-      "en": "how are you?",
+      "en": "How are you? (polite)",
       "usage": "polite or plural",
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -170,7 +191,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-xa-yam",
@@ -178,7 +202,7 @@
       "pashto": "زه ښه یم",
       "translit": "zə x̌a yəm",
       "pronunciation": "za kha yam",
-      "en": "I'm fine",
+      "en": "I'm fine.",
       "usage": null,
       "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": "e-tsanga-ye",
@@ -199,7 +223,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-xa",
@@ -207,7 +234,7 @@
       "pashto": "ښه",
       "translit": "x̌a",
       "pronunciation": "kha",
-      "en": "good, fine",
+      "en": "Fine, good",
       "usage": null,
       "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -219,7 +246,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-manana",
@@ -227,7 +257,7 @@
       "pashto": "مننه",
       "translit": "manə́na",
       "pronunciation": "ma-NA-na",
-      "en": "thank you",
+      "en": "Thanks",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -239,7 +269,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-dera-manana",
@@ -247,7 +280,7 @@
       "pashto": "ډېره مننه",
       "translit": "ḍéra manə́na",
       "pronunciation": "DE-ra ma-NA-na",
-      "en": "thank you very much",
+      "en": "Thank you very much.",
       "usage": null,
       "pronunciationNote": "ډ: d with the tongue tip curled back.",
       "responseTo": null,
@@ -259,7 +292,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-dera-xa",
@@ -267,7 +303,7 @@
       "pashto": "ډېره ښه",
       "translit": "ḍéra x̌a",
       "pronunciation": "DE-ra kha",
-      "en": "very good",
+      "en": "Very good.",
       "usage": "praise, e.g. after a correct answer",
       "pronunciationNote": "ډ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -279,7 +315,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ho",
@@ -287,7 +326,7 @@
       "pashto": "هو",
       "translit": "ho",
       "pronunciation": "ho",
-      "en": "yes",
+      "en": "Yes",
       "usage": null,
       "pronunciationNote": "Kabul: ho, not ao. In everyday speech people also say یې (ye) for yes.",
       "responseTo": null,
@@ -299,7 +338,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-na",
@@ -307,7 +349,7 @@
       "pashto": "نه",
       "translit": "na",
       "pronunciation": "na",
-      "en": "no",
+      "en": "No",
       "usage": null,
       "pronunciationNote": "A short, clear a, like in cut.",
       "responseTo": null,
@@ -319,15 +361,18 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-baxana-ghwaram",
-      "kind": "phrase",
+      "kind": "word",
       "pashto": "بښنه غواړم",
       "translit": "bax̌ə́na ɣwā́ṛəm",
       "pronunciation": "ba-KHA-na ghwaa-RAM",
-      "en": "sorry, excuse me",
+      "en": "Sorry",
       "usage": null,
       "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
@@ -339,15 +384,18 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-mehrabani-wakray",
-      "kind": "phrase",
+      "kind": "word",
       "pashto": "مهرباني وکړئ",
       "translit": "mehrabāní wə́kṛəy",
       "pronunciation": "meh-ra-baa-NEE WA-kray",
-      "en": "please",
+      "en": "Please",
       "usage": "polite",
       "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
@@ -359,15 +407,18 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-27",
         "comment": "Bekreftet av Farhad i gruppechatten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-xoday-paman",
-      "kind": "phrase",
+      "kind": "word",
       "pashto": "خدای پامان",
       "translit": "xodā́y pāmā́n",
       "pronunciation": "kho-DAAY paa-MAAN",
-      "en": "goodbye",
+      "en": "Goodbye",
       "usage": null,
       "pronunciationNote": "خ: kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -379,7 +430,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-pa-maxa-de-xa",
@@ -387,7 +441,7 @@
       "pashto": "په مخه دې ښه",
       "translit": "pə mə́xa de x̌a",
       "pronunciation": "pa MA-kha dey kha",
-      "en": "have a good trip",
+      "en": "Have a good trip.",
       "usage": "said to someone leaving",
       "pronunciationNote": "خ: kh, like ch in Scottish loch. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -399,7 +453,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-10-27",
         "comment": "Bekreftet av Farhad i gruppechatten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-letter-alif",
@@ -544,6 +601,558 @@
         "checkedOn": "2026-10-28",
         "comment": "Bekreftet av Farhad via ordlisten."
       }
+    },
+    {
+      "id": "e-maaspakheen",
+      "kind": "word",
+      "pashto": "ماسپښین",
+      "translit": "mās-pa-khī́n",
+      "pronunciation": "maas-pa-KHEEN",
+      "en": "Afternoon",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dost",
+      "kind": "word",
+      "pashto": "دوست",
+      "translit": "dost",
+      "pronunciation": "dost",
+      "en": "Friend",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mel-ma",
+      "kind": "word",
+      "pashto": "مېلمه",
+      "translit": "mel-má",
+      "pronunciation": "mel-MA",
+      "en": "Guest",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-so-la",
+      "kind": "word",
+      "pashto": "سوله",
+      "translit": "só-la",
+      "pronunciation": "SO-la",
+      "en": "Peace",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-jor",
+      "kind": "word",
+      "pashto": "جوړ",
+      "translit": "jor",
+      "pronunciation": "jor",
+      "en": "Well (healthy)",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sa-laam-tsan-ga-ye",
+      "kind": "phrase",
+      "pashto": "سلام، څنګه یې؟",
+      "translit": "sa-lā́m tsán-ga ye",
+      "pronunciation": "sa-LAAM, TSAN-ga ye?",
+      "en": "Hello, how are you?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-kha-yam-ma-na-na",
+      "kind": "phrase",
+      "pashto": "زه ښه یم، مننه",
+      "translit": "za kha yam ma-ná-na",
+      "pronunciation": "za kha yam, ma-NA-na",
+      "en": "I'm good, thank you.",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kha-yam-ta",
+      "kind": "phrase",
+      "pashto": "ښه یم، ته څنګه یې؟",
+      "translit": "kha yam ta tsán-ga ye",
+      "pronunciation": "kha yam, ta TSAN-ga ye?",
+      "en": "Fine, and you?",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-jor-ye",
+      "kind": "phrase",
+      "pashto": "جوړ یې؟",
+      "translit": "jor ye",
+      "pronunciation": "jor ye?",
+      "en": "Are you well?",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-jor-yam",
+      "kind": "phrase",
+      "pashto": "جوړ یم",
+      "translit": "jor yam",
+      "pronunciation": "jor yam",
+      "en": "I'm well.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-alhamdulillah",
+      "kind": "phrase",
+      "pashto": "الحمدلله",
+      "translit": "al-ham-du-lil-lā́h",
+      "pronunciation": "al-ham-du-lil-LAAH",
+      "en": "Thank God (I'm fine).",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-staree-ma-shey",
+      "kind": "phrase",
+      "pashto": "ستړي مه شئ",
+      "translit": "stá-rī ma shay",
+      "pronunciation": "STA-ree ma shay",
+      "en": "Hello (to several people).",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zmung-kor-ta-kha-raagh-laast",
+      "kind": "phrase",
+      "pashto": "زموږ کور ته ښه راغلاست",
+      "translit": "zmung kor ta kha rāgh-lā́st",
+      "pronunciation": "zmung kor ta kha raagh-LAAST",
+      "en": "Welcome to our home.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go. ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-pa-khayr-raaghle",
+      "kind": "phrase",
+      "pashto": "په خیر راغلې",
+      "translit": "pa khayr rā-ghlé",
+      "pronunciation": "pa khayr raa-GHLE",
+      "en": "Welcome (you got here safely).",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kor-wudaan",
+      "kind": "phrase",
+      "pashto": "کور ودان",
+      "translit": "kor wu-dā́n",
+      "pronunciation": "kor wu-DAAN",
+      "en": "Thank you (to a host).",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tol-kha-dee",
+      "kind": "phrase",
+      "pashto": "ټول ښه دي؟",
+      "translit": "tol kha dī",
+      "pronunciation": "tol kha dee?",
+      "en": "Is everyone well?",
+      "usage": null,
+      "pronunciationNote": "ټ: t with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sa-baa-ba-sa-ra-wu-wee-no",
+      "kind": "phrase",
+      "pashto": "سبا به سره ووینو",
+      "translit": "sa-bā́ ba sa-rá wu-wī́-no",
+      "pronunciation": "sa-BAA ba sa-RA wu-WEE-no",
+      "en": "See you tomorrow.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-byaa-ba-wuweeno",
+      "kind": "phrase",
+      "pashto": "بیا به سره ووینو",
+      "translit": "byā ba sa-rá wu-wī́-no",
+      "pronunciation": "byaa ba sa-RA wu-WEE-no",
+      "en": "See you again.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-da-dzaan-khyaal-saa-ta",
+      "kind": "phrase",
+      "pashto": "د ځان خیال ساته",
+      "translit": "da dzān khyāl sā́-ta",
+      "pronunciation": "da dzaan khyaal SAA-ta",
+      "en": "Take care of yourself.",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-wradz-dey-kha-sha",
+      "kind": "phrase",
+      "pashto": "ورځ دې ښه شه",
+      "translit": "wradz dey kha sha",
+      "pronunciation": "wradz dey kha sha",
+      "en": "Have a nice day.",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-staa-pa-lee-do-der-kho-shaa-la-shwam",
+      "kind": "phrase",
+      "pashto": "ستا په لیدو ډېر خوشحاله شوم",
+      "translit": "stā pa lī-dó der kho-shā́-la shwam",
+      "pronunciation": "staa pa lee-DO der kho-SHAA-la shwam",
+      "en": "It was nice seeing you.",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no",
+      "kind": "phrase",
+      "pashto": "خدای پامان، ژر به سره ووینو",
+      "translit": "kho-dā́y pā-mā́n zhar ba sa-rá wu-wī́-no",
+      "pronunciation": "kho-DAAY paa-MAAN, zhar ba sa-RA wu-WEE-no",
+      "en": "Goodbye, see you soon.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ژ: zh, like s in measure.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khoday-dey-mal-sha",
+      "kind": "phrase",
+      "pashto": "خدای دې مل شه",
+      "translit": "kho-dā́y dey mal sha",
+      "pronunciation": "kho-DAAY dey mal sha",
+      "en": "God be with you (goodbye).",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     }
   ],
   "lessons": [
@@ -552,10 +1161,6 @@
       "title": "Saying hello",
       "kind": "phrases",
       "items": [
-        {
-          "item": "e-salam",
-          "role": "present"
-        },
         {
           "item": "e-assalamu-alaykum",
           "role": "present"
@@ -571,12 +1176,9 @@
         {
           "item": "e-xwar-ma-she",
           "role": "present"
-        },
-        {
-          "item": "e-xa-raghlast",
-          "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 1
     },
     {
       "id": "l-greetings-phrases-how",
@@ -604,14 +1206,11 @@
           "role": "present"
         },
         {
-          "item": "e-xoday-paman",
-          "role": "present"
-        },
-        {
           "item": "e-pa-maxa-de-xa",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 1
     },
     {
       "id": "l-greetings-1",
@@ -673,7 +1272,8 @@
             }
           ]
         }
-      ]
+      ],
+      "categoryNumber": 1
     },
     {
       "id": "l-greetings-how",
@@ -733,6 +1333,319 @@
               "item": "e-manana"
             }
           ]
+        }
+      ],
+      "categoryNumber": 1
+    },
+    {
+      "id": "l-c1-learn-1",
+      "title": "Greetings & Goodbyes words",
+      "kind": "learn",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-salam",
+          "role": "present"
+        },
+        {
+          "item": "e-xoday-paman",
+          "role": "present"
+        },
+        {
+          "item": "e-xa-raghlast",
+          "role": "present"
+        },
+        {
+          "item": "e-sa-haar",
+          "role": "present"
+        },
+        {
+          "item": "e-maaspakheen",
+          "role": "present"
+        },
+        {
+          "item": "e-maa-khaam",
+          "role": "present"
+        },
+        {
+          "item": "e-shpa",
+          "role": "present"
+        },
+        {
+          "item": "e-dost",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-learn-2",
+      "title": "Greetings & Goodbyes words",
+      "kind": "learn",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-mel-ma",
+          "role": "present"
+        },
+        {
+          "item": "e-so-la",
+          "role": "present"
+        },
+        {
+          "item": "e-manana",
+          "role": "present"
+        },
+        {
+          "item": "e-baxana-ghwaram",
+          "role": "present"
+        },
+        {
+          "item": "e-mehrabani-wakray",
+          "role": "present"
+        },
+        {
+          "item": "e-xa",
+          "role": "present"
+        },
+        {
+          "item": "e-jor",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-phrases-1",
+      "title": "Greetings & Goodbyes phrases",
+      "kind": "phrases",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-sa-laam-tsan-ga-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-za-kha-yam-ma-na-na",
+          "role": "present"
+        },
+        {
+          "item": "e-kha-yam-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-jor-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-jor-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-alhamdulillah",
+          "role": "present"
+        },
+        {
+          "item": "e-staree-ma-shey",
+          "role": "present"
+        },
+        {
+          "item": "e-sa-haar-mo-pa-khayr",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-phrases-2",
+      "title": "Greetings & Goodbyes phrases",
+      "kind": "phrases",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-shpa-mo-pa-khayr",
+          "role": "present"
+        },
+        {
+          "item": "e-staso-pa-lido-xoshala-shwam",
+          "role": "present"
+        },
+        {
+          "item": "e-sta-num-tsa-day",
+          "role": "present"
+        },
+        {
+          "item": "e-zma-num-ahmad-day",
+          "role": "present"
+        },
+        {
+          "item": "e-ta-da-kum-dzay-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-zmung-kor-ta-kha-raagh-laast",
+          "role": "present"
+        },
+        {
+          "item": "e-pa-khayr-raaghle",
+          "role": "present"
+        },
+        {
+          "item": "e-kor-wudaan",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-phrases-3",
+      "title": "Greetings & Goodbyes phrases",
+      "kind": "phrases",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-tol-kha-dee",
+          "role": "present"
+        },
+        {
+          "item": "e-sa-baa-ba-sa-ra-wu-wee-no",
+          "role": "present"
+        },
+        {
+          "item": "e-byaa-ba-wuweeno",
+          "role": "present"
+        },
+        {
+          "item": "e-da-dzaan-khyaal-saa-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-wradz-dey-kha-sha",
+          "role": "present"
+        },
+        {
+          "item": "e-staa-pa-lee-do-der-kho-shaa-la-shwam",
+          "role": "present"
+        },
+        {
+          "item": "e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no",
+          "role": "present"
+        },
+        {
+          "item": "e-khoday-dey-mal-sha",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-quiz-1",
+      "title": "Greetings & Goodbyes quiz",
+      "kind": "practice",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-maaspakheen",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dost",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mel-ma",
+          "role": "introduce"
+        },
+        {
+          "item": "e-so-la",
+          "role": "introduce"
+        },
+        {
+          "item": "e-jor",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sa-laam-tsan-ga-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-kha-yam-ma-na-na",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kha-yam-ta",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-quiz-2",
+      "title": "Greetings & Goodbyes quiz",
+      "kind": "practice",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-jor-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-jor-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-alhamdulillah",
+          "role": "introduce"
+        },
+        {
+          "item": "e-staree-ma-shey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zmung-kor-ta-kha-raagh-laast",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pa-khayr-raaghle",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kor-wudaan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tol-kha-dee",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c1-quiz-3",
+      "title": "Greetings & Goodbyes quiz",
+      "kind": "practice",
+      "categoryNumber": 1,
+      "items": [
+        {
+          "item": "e-sa-baa-ba-sa-ra-wu-wee-no",
+          "role": "introduce"
+        },
+        {
+          "item": "e-byaa-ba-wuweeno",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da-dzaan-khyaal-saa-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wradz-dey-kha-sha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-staa-pa-lee-do-der-kho-shaa-la-shwam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kho-daay-paa-maan-zhar-ba-sa-ra-wu-wee-no",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khoday-dey-mal-sha",
+          "role": "introduce"
         }
       ]
     }

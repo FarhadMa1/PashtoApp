@@ -291,7 +291,9 @@ struct StudyCardScreen: View {
                     Image(picture.assetName)
                         .resizable()
                         .scaledToFit()
+                        .scaleEffect(FamilyPictures.contentScale(for: card.itemID))
                         .frame(maxWidth: 200, maxHeight: 200)
+                        .clipped()
                         .frame(maxWidth: .infinity)
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text(verbatim: picture.accessibilityLabel))
@@ -354,11 +356,10 @@ struct StudyCardScreen: View {
         }
     }
 
-    /// Greetings learn and phrases cards only. A missing file draws nothing.
+    /// Learn and phrases cards only. A missing file draws nothing.
     /// The quiz never reaches this screen.
     private func greetingsClipURL(for card: StudyCard) -> URL? {
         guard deck.kind == .learn || deck.kind == .phrases else { return nil }
-        guard deck.unitID.rawValue == GreetingsAudio.unitID else { return nil }
         guard let directory = Bundle.main.resourceURL else { return nil }
         return GreetingsAudio.url(for: card.itemID, in: directory)
     }
@@ -984,7 +985,7 @@ struct LearnListScreen: View {
     private static let imageXLCap: CGFloat = 64
     @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 40
 
-    private var hue: Color { Lapis.MenuCard.resolve(list.unitID).hue }
+    private var hue: Color { Lapis.MenuCard.resolve(family: list.colorFamily).hue }
 
     /// XL and the accessibility sizes stack. The default size stays two columns.
     private var stacksRow: Bool { dynamicTypeSize >= .xxxLarge }
@@ -1147,7 +1148,9 @@ struct LearnListScreen: View {
             Image(picture.assetName)
                 .resizable()
                 .scaledToFit()
+                .scaleEffect(FamilyPictures.contentScale(for: ItemID(rawValue: picture.assetName) ?? row.itemID))
                 .frame(width: side, height: side)
+                .clipped()
                 .frame(width: slot, height: slot)
                 .accessibilityHidden(true)
         } else {

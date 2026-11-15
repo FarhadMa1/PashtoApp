@@ -58,7 +58,9 @@ public enum PlayableCourse {
             romanization: bundle.romanization,
             items: items,
             units: units,
-            nonDistractorGroups: groups
+            nonDistractorGroups: groups,
+            categories: bundle.categories,
+            memberships: bundle.memberships.filter { referenced.contains($0.item) }
         )
     }
 
@@ -76,7 +78,8 @@ public enum PlayableCourse {
                 items: lesson.items,
                 letters: [],
                 dialogs: lesson.dialogs,
-                kind: lesson.kind
+                kind: lesson.kind,
+                categoryNumber: lesson.categoryNumber
             )
         }
         return CourseUnit(id: unit.id, track: unit.track, title: unit.title, lessons: lessons)

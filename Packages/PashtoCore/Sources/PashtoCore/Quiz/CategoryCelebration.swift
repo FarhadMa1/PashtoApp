@@ -22,22 +22,59 @@ public enum CategoryCelebration {
         finishing lessonID: LessonID,
         in units: [CourseUnit],
         finishedBefore: Set<LessonID>,
-        celebratedUnits: Set<UnitID>
+        celebratedUnits: Set<UnitID>,
+        categories: [CourseCategory] = []
     ) -> CategoryCelebrationOffer? {
-        guard let unit = units.first(where: { $0.lessons.contains { $0.id == lessonID } }) else {
+        guard let unit = units.first(where: { $0.lessons.contains { $0.id == lessonID } }),
+              let lesson = unit.lessons.first(where: { $0.id == lessonID }) else {
             return nil
         }
+        if let number = lesson.categoryNumber,
+           let category = categories.first(where: { $0.number == number }),
+           let categoryID = UnitID(rawValue: "u-cat-\(number)") {
+            let practice = units.flatMap(\.lessons).filter { $0.kind == .practice && $0.categoryNumber == number }
+            return finish(
+                lessonID: lessonID,
+                practice: practice,
+                key: categoryID,
+                name: category.title,
+                colorFamily: category.colorFamily,
+                finishedBefore: finishedBefore,
+                celebratedUnits: celebratedUnits
+            )
+        }
         let practice = unit.lessons.filter { $0.kind == .practice }
+        return finish(
+            lessonID: lessonID,
+            practice: practice,
+            key: unit.id,
+            name: MainMenuLabels.word(for: unit.id, title: unit.title),
+            colorFamily: nil,
+            finishedBefore: finishedBefore,
+            celebratedUnits: celebratedUnits
+        )
+    }
+
+    private static func finish(
+        lessonID: LessonID,
+        practice: [Lesson],
+        key: UnitID,
+        name: String,
+        colorFamily: String?,
+        finishedBefore: Set<LessonID>,
+        celebratedUnits: Set<UnitID>
+    ) -> CategoryCelebrationOffer? {
         guard let last = practice.last, last.id == lessonID else { return nil }
         guard !finishedBefore.contains(lessonID) else { return nil }
-        guard !celebratedUnits.contains(unit.id) else { return nil }
+        guard !celebratedUnits.contains(key) else { return nil }
         let total = practice.count
         let before = practice.filter { finishedBefore.contains($0.id) }.count
         return CategoryCelebrationOffer(
-            unitID: unit.id,
-            unitName: MainMenuLabels.word(for: unit.id, title: unit.title),
-            ringFrom: Double(before) / Double(total),
-            ringTo: min(1, Double(before + 1) / Double(total))
+            unitID: key,
+            unitName: name,
+            ringFrom: Double(before) / Double(max(total, 1)),
+            ringTo: min(1, Double(before + 1) / Double(max(total, 1))),
+            colorFamily: colorFamily
         )
     }
 }
@@ -51,12 +88,14 @@ public struct CategoryCelebrationOffer: Equatable, Sendable {
     public var ringFrom: Double
     /// Progress ring after this lesson, from 0 to 1.
     public var ringTo: Double
+    public var colorFamily: String?
 
-    public init(unitID: UnitID, unitName: String, ringFrom: Double, ringTo: Double) {
+    public init(unitID: UnitID, unitName: String, ringFrom: Double, ringTo: Double, colorFamily: String? = nil) {
         self.unitID = unitID
         self.unitName = unitName
         self.ringFrom = ringFrom
         self.ringTo = ringTo
+        self.colorFamily = colorFamily
     }
 }
 

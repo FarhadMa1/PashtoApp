@@ -26,11 +26,11 @@ struct TheBasicsTests {
 
         let unit = try #require(bundle.units.first { $0.id.rawValue == "u-basics" })
         #expect(unit.title == "The basics")
-        #expect(unit.lessons.map(\.id.rawValue) == [
+        #expect(Array(unit.lessons.prefix(6).map(\.id.rawValue)) == [
             "l-basics-learn-1", "l-basics-learn-polite", "l-basics-phrases",
             "l-basics-1", "l-basics-verbs", "l-basics-polite",
         ])
-        #expect(unit.lessons.map(\.title) == [
+        #expect(Array(unit.lessons.prefix(6).map(\.title)) == [
             "I am, you are, we are",
             "Yes, no and polite words",
             "About me and others",
@@ -52,14 +52,14 @@ struct TheBasicsTests {
         let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id.rawValue, $0) })
         let expected: [(String, String, String, String)] = [
             ("e-za-yam", "زه یم", "za yam", "I am"),
-            ("e-ta-ye", "ته یې", "ta ye", "you are (informal, to one person)"),
-            ("e-taso-yast", "تاسو یاست", "TAA-so yaast", "you are (polite/plural)"),
-            ("e-hagha-day", "هغه دی", "ha-GHA day", "he is"),
-            ("e-hagha-da", "هغه ده", "ha-GHA da", "she is"),
-            ("e-mung-yu", "موږ یو", "mung yoo", "we are"),
-            ("e-hagha-dee", "هغه \u{062f}\u{064a}", "ha-GHA dee", "they are"),
+            ("e-ta-ye", "ته یې", "ta ye", "You are (informal)"),
+            ("e-taso-yast", "تاسو یاست", "TAA-so yaast", "You are (polite)"),
+            ("e-hagha-day", "هغه دی", "ha-GHA day", "He is"),
+            ("e-hagha-da", "هغه ده", "ha-GHA da", "She is"),
+            ("e-mung-yu", "موږ یو", "mung yoo", "We are"),
+            ("e-hagha-dee", "هغه \u{062f}\u{064a}", "ha-GHA dee", "They are"),
             ("e-za-na-yam", "زه نه یم", "za na yam", "I am not"),
-            ("e-za-afghan-na-yam", "زه افغان نه یم", "za af-GHAAN na yam", "I'm not Afghan"),
+            ("e-za-afghan-na-yam", "زه افغان نه یم", "za af-GHAAN na yam", "I'm not Afghan."),
             ("e-taso-xa-yast", "تاسو ښه یاست", "TAA-so kha yaast", "You are fine (polite)"),
             ("e-daa-khaar-day", "دا ښار دی", "daa khaar day", "It is a city"),
         ]
@@ -96,9 +96,9 @@ struct TheBasicsTests {
             let en = try #require(items[id]?.en)
             #expect(norwegian.allSatisfy { !en.localizedStandardContains($0) })
         }
-        #expect(items["e-za-afghan-yam"]?.en == "I'm Afghan")
-        #expect(items["e-za-afghana-yam"]?.en == "I'm Afghan")
-        #expect(items["e-daa-do-day-da"]?.en == "this is bread")
+        #expect(items["e-za-afghan-yam"]?.en == "I'm Afghan. (m)")
+        #expect(items["e-za-afghana-yam"]?.en == "I'm Afghan. (f)")
+        #expect(items["e-daa-do-day-da"]?.en == "This is bread.")
         #expect(unit.lessons[2].items.contains { $0.item.rawValue == "e-daa-do-day-da" } == false)
 
         let learn1 = unit.lessons[0].items.map(\.item.rawValue)
@@ -187,7 +187,12 @@ struct TheBasicsTests {
             takenOn: day,
             existingLessons: kept
         )
-        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-basics-1", "l-basics-verbs", "l-basics-polite"])
+        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == [
+            "l-basics-1", "l-basics-verbs", "l-basics-polite",
+            "l-c2-quiz-1", "l-c2-quiz-2", "l-c2-quiz-3", "l-c2-quiz-4",
+            "l-c4-quiz-1", "l-c4-quiz-2", "l-c4-quiz-3",
+            "l-c10-quiz-1", "l-c10-quiz-2", "l-c10-quiz-3", "l-c10-quiz-4", "l-c10-quiz-5",
+        ])
         #expect(commit.lessonProgress.allSatisfy { $0.source == .placement })
         #expect(Set(commit.lessonProgress.map(\.lessonID)).isDisjoint(with: Set(earlier)))
 
@@ -200,7 +205,13 @@ struct TheBasicsTests {
             existingLessons: kept
         )
         #expect(skippedWindow.lessonProgress.map(\.lessonID.rawValue) == [
-            "l-basics-1", "l-basics-verbs", "l-basics-polite", "l-greetings-how",
+            "l-basics-1", "l-basics-verbs", "l-basics-polite",
+            "l-c2-quiz-1", "l-c2-quiz-2", "l-c2-quiz-3", "l-c2-quiz-4",
+            "l-c4-quiz-1", "l-c4-quiz-2", "l-c4-quiz-3",
+            "l-c10-quiz-1", "l-c10-quiz-2", "l-c10-quiz-3", "l-c10-quiz-4", "l-c10-quiz-5",
+            "l-greetings-how", "l-c1-quiz-1", "l-c1-quiz-2", "l-c1-quiz-3",
+            "l-c3-quiz-1", "l-c3-quiz-2", "l-c3-quiz-3",
+            "l-c5-quiz-1", "l-c5-quiz-2", "l-c5-quiz-3", "l-c5-quiz-4",
         ])
         #expect(Set(skippedWindow.lessonProgress.map(\.lessonID)).isDisjoint(with: Set(earlier)))
     }

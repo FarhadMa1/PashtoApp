@@ -51,14 +51,25 @@ public enum FamilyWordList {
         showsPronunciation: Bool
     ) -> [Row] {
         guard let unit = bundle.units.first(where: { $0.id == unitID }) else { return [] }
+        let pairs = unit.lessons.map { (lesson: $0, unitID: unitID) }
+        return rows(lessons: pairs, in: bundle, showsPronunciation: showsPronunciation)
+    }
+
+    /// Learn-card order across the lessons of one category.
+    public static func rows(
+        lessons pairs: [(lesson: Lesson, unitID: UnitID)],
+        in bundle: ContentBundle,
+        showsPronunciation: Bool
+    ) -> [Row] {
         var itemsByID: [ItemID: ContentItem] = [:]
         for item in bundle.items where itemsByID[item.id] == nil {
             itemsByID[item.id] = item
         }
         var seen: Set<ItemID> = []
         var rows: [Row] = []
-        for lesson in unit.lessons where lesson.kind == .learn {
-            for reference in lesson.items where reference.role == .present {
+        for pair in pairs where pair.lesson.kind == .learn {
+            let unitID = pair.unitID
+            for reference in pair.lesson.items where reference.role == .present {
                 guard seen.insert(reference.item).inserted else { continue }
                 guard let item = itemsByID[reference.item] else { continue }
                 let english = item.en?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""

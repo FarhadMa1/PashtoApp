@@ -28,7 +28,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ta-ye",
@@ -36,7 +39,7 @@
       "pashto": "ته یې",
       "translit": "tə ye",
       "pronunciation": "ta ye",
-      "en": "you are (informal, to one person)",
+      "en": "You are (informal)",
       "usage": "Use ta ye with friends and family, and TAA-so yaast to be polite or to talk to more than one person.",
       "pronunciationNote": null,
       "responseTo": null,
@@ -55,7 +58,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-taso-yast",
@@ -63,7 +69,7 @@
       "pashto": "تاسو یاست",
       "translit": "tā́so yāst",
       "pronunciation": "TAA-so yaast",
-      "en": "you are (polite/plural)",
+      "en": "You are (polite)",
       "usage": "Use ta ye with friends and family, and TAA-so yaast to be polite or to talk to more than one person.",
       "pronunciationNote": null,
       "responseTo": null,
@@ -82,7 +88,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-hagha-day",
@@ -90,7 +99,7 @@
       "pashto": "هغه دی",
       "translit": "haɣá day",
       "pronunciation": "ha-GHA day",
-      "en": "he is",
+      "en": "He is",
       "usage": "Hagha means he, she and they. Only the verb shows which: day (he), da (she), dee (they).\nPashto has no word for \"it\". Say daa (this) with day or da, depending on the word.",
       "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
       "responseTo": null,
@@ -109,7 +118,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-hagha-da",
@@ -117,7 +129,7 @@
       "pashto": "هغه ده",
       "translit": "haɣá da",
       "pronunciation": "ha-GHA da",
-      "en": "she is",
+      "en": "She is",
       "usage": "Hagha means he, she and they. Only the verb shows which: day (he), da (she), dee (they).\nPashto has no word for \"it\". Say daa (this) with day or da, depending on the word.",
       "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
       "responseTo": null,
@@ -136,7 +148,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "kind": "phrase",
@@ -154,7 +169,7 @@
       "pashto": "موږ یو",
       "translit": "muǧ yu",
       "pronunciation": "mung yoo",
-      "en": "we are",
+      "en": "We are",
       "pronunciationNote": "ږ: in Kabul close to g in go; موږ is said mung. یو here means ‘are’, not ‘one’.",
       "tokens": [
         "موږ",
@@ -163,7 +178,10 @@
       "tokenPronunciations": [
         "mung",
         "yoo"
-      ]
+      ],
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "kind": "phrase",
@@ -181,7 +199,7 @@
       "pashto": "هغه دي",
       "translit": "haɣá di",
       "pronunciation": "ha-GHA dee",
-      "en": "they are",
+      "en": "They are",
       "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
       "tokens": [
         "هغه",
@@ -190,7 +208,10 @@
       "tokenPronunciations": [
         "ha-GHA",
         "dee"
-      ]
+      ],
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-na-yam",
@@ -219,7 +240,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-afghan-na-yam",
@@ -227,7 +251,7 @@
       "pashto": "زه افغان نه یم",
       "translit": "zə afɣā́n na yəm",
       "pronunciation": "za af-GHAAN na yam",
-      "en": "I'm not Afghan",
+      "en": "I'm not Afghan.",
       "usage": null,
       "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
       "responseTo": null,
@@ -250,7 +274,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-taso-xa-yast",
@@ -279,7 +306,9 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-daa-khaar-day",
@@ -308,7 +337,2289 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true
+    },
+    {
+      "id": "e-sama-da",
+      "kind": "word",
+      "pashto": "سمه ده",
+      "translit": "sá-ma da",
+      "pronunciation": "SA-ma da",
+      "en": "Okay",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-shaayad",
+      "kind": "word",
+      "pashto": "شاید",
+      "translit": "shā́-yad",
+      "pronunciation": "SHAA-yad",
+      "en": "Maybe",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-hat-man",
+      "kind": "word",
+      "pashto": "حتماً",
+      "translit": "hát-man",
+      "pronunciation": "HAT-man",
+      "en": "Sure",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-al-bat-ta",
+      "kind": "word",
+      "pashto": "البته",
+      "translit": "al-bát-ta",
+      "pronunciation": "al-BAT-ta",
+      "en": "Of course",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-rikh-tyaa",
+      "kind": "word",
+      "pashto": "رښتیا",
+      "translit": "rikh-tyā́",
+      "pronunciation": "rikh-TYAA",
+      "en": "Really",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-bil-kul",
+      "kind": "word",
+      "pashto": "بالکل",
+      "translit": "bil-kúl",
+      "pronunciation": "bil-KUL",
+      "en": "Exactly",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sam",
+      "kind": "word",
+      "pashto": "سم",
+      "translit": "sam",
+      "pronunciation": "sam",
+      "en": "Correct",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-gha-lat",
+      "kind": "word",
+      "pashto": "غلط",
+      "translit": "gha-lát",
+      "pronunciation": "gha-LAT",
+      "en": "Wrong",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-bas-2",
+      "kind": "word",
+      "pashto": "بس",
+      "translit": "bas",
+      "pronunciation": "bas",
+      "en": "Enough",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-byaa",
+      "kind": "word",
+      "pashto": "بیا",
+      "translit": "byā",
+      "pronunciation": "byaa",
+      "en": "Again",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tal",
+      "kind": "word",
+      "pashto": "تل",
+      "translit": "tal",
+      "pronunciation": "tal",
+      "en": "Always",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-hets-ka-la",
+      "kind": "word",
+      "pashto": "هېڅکله",
+      "translit": "héts-ka-la",
+      "pronunciation": "HETS-ka-la",
+      "en": "Never",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ka-la-ka-la",
+      "kind": "word",
+      "pashto": "کله کله",
+      "translit": "ká-la ká-la",
+      "pronunciation": "KA-la KA-la",
+      "en": "Sometimes",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khaa-yee",
+      "kind": "word",
+      "pashto": "ښایي",
+      "translit": "khā-yī́",
+      "pronunciation": "khaa-YEE",
+      "en": "Probably",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khaam-khaa",
+      "kind": "word",
+      "pashto": "خامخا",
+      "translit": "khām-khā́",
+      "pronunciation": "khaam-KHAA",
+      "en": "Definitely",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-hets",
+      "kind": "word",
+      "pashto": "هېڅ",
+      "translit": "hets",
+      "pronunciation": "hets",
+      "en": "Nothing",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-har-tsa",
+      "kind": "word",
+      "pashto": "هر څه",
+      "translit": "har tsa",
+      "pronunciation": "har tsa",
+      "en": "Everything",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-bad",
+      "kind": "word",
+      "pashto": "بد",
+      "translit": "bad",
+      "pronunciation": "bad",
+      "en": "Bad",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ho-al-bat-ta",
+      "kind": "phrase",
+      "pashto": "هو، البته",
+      "translit": "ho al-bát-ta",
+      "pronunciation": "ho, al-BAT-ta",
+      "en": "Yes, of course.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-na-ma-na-na",
+      "kind": "phrase",
+      "pashto": "نه، مننه",
+      "translit": "na ma-ná-na",
+      "pronunciation": "na, ma-NA-na",
+      "en": "No, thank you.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kha-da",
+      "kind": "phrase",
+      "pashto": "ښه ده",
+      "translit": "kha da",
+      "pronunciation": "kha da",
+      "en": "That's okay.",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khayr-day",
+      "kind": "phrase",
+      "pashto": "خیر دی",
+      "translit": "khayr day",
+      "pronunciation": "khayr day",
+      "en": "No problem.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khabar-na-yam",
+      "kind": "phrase",
+      "pashto": "زه خبر نه یم",
+      "translit": "za kha-bár na yam",
+      "pronunciation": "za kha-BAR na yam",
+      "en": "I don't know.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-poheygam",
+      "kind": "phrase",
+      "pashto": "زه پوهېږم",
+      "translit": "za po-hé-gam",
+      "pronunciation": "za po-HE-gam",
+      "en": "I understand.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-rikh-tyaa-2",
+      "kind": "phrase",
+      "pashto": "رښتیا؟",
+      "translit": "rikh-tyā́",
+      "pronunciation": "rikh-TYAA?",
+      "en": "Really?",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ya-keen-la-rey",
+      "kind": "phrase",
+      "pashto": "یقین لرې؟",
+      "translit": "ya-kī́n la-réy",
+      "pronunciation": "ya-KEEN la-REY?",
+      "en": "Are you sure?",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-ham-daa-se-fikr-ka-wam",
+      "kind": "phrase",
+      "pashto": "زه همداسې فکر کوم",
+      "translit": "za ham-dā́-se fikr ka-wám",
+      "pronunciation": "za ham-DAA-se fikr ka-WAM",
+      "en": "I think so.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-shaa-yad-wros-ta",
+      "kind": "phrase",
+      "pashto": "شاید وروسته",
+      "translit": "shā́-yad wrós-ta",
+      "pronunciation": "SHAA-yad WROS-ta",
+      "en": "Maybe later.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-daa-sam-day",
+      "kind": "phrase",
+      "pashto": "دا سم دی",
+      "translit": "dā sam day",
+      "pronunciation": "daa sam day",
+      "en": "That's correct.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ta-sam-waa-yey",
+      "kind": "phrase",
+      "pashto": "ته سم وایې",
+      "translit": "ta sam wā-yéy",
+      "pronunciation": "ta sam waa-YEY",
+      "en": "You're right.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-fark-na-ka-wee",
+      "kind": "phrase",
+      "pashto": "فرق نه کوي",
+      "translit": "fark na ka-wī́",
+      "pronunciation": "fark na ka-WEE",
+      "en": "It doesn't matter.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-gham-ma-ka-wa",
+      "kind": "phrase",
+      "pashto": "غم مه کوه",
+      "translit": "gham ma ka-wá",
+      "pronunciation": "gham ma ka-WA",
+      "en": "Don't worry about it.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-ham",
+      "kind": "phrase",
+      "pashto": "زه هم",
+      "translit": "za ham",
+      "pronunciation": "za ham",
+      "en": "Me too.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mung",
+      "kind": "word",
+      "pashto": "موږ",
+      "translit": "mung",
+      "pronunciation": "mung",
+      "en": "We",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ha-ghwee",
+      "kind": "word",
+      "pashto": "هغوی",
+      "translit": "ha-ghwī́",
+      "pronunciation": "ha-GHWEE",
+      "en": "They",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maa",
+      "kind": "word",
+      "pashto": "ما",
+      "translit": "mā",
+      "pronunciation": "maa",
+      "en": "Me",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-staa-so",
+      "kind": "word",
+      "pashto": "ستاسو",
+      "translit": "stā́-so",
+      "pronunciation": "STAA-so",
+      "en": "Your, yours (polite)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-da-ha-gha",
+      "kind": "word",
+      "pashto": "د هغه",
+      "translit": "da ha-ghá",
+      "pronunciation": "da ha-GHA",
+      "en": "His",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-da-ha-ghe",
+      "kind": "word",
+      "pashto": "د هغې",
+      "translit": "da ha-ghé",
+      "pronunciation": "da ha-GHE",
+      "en": "Her, hers",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zmung",
+      "kind": "word",
+      "pashto": "زموږ",
+      "translit": "zmung",
+      "pronunciation": "zmung",
+      "en": "Our",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-da-ha-ghwee",
+      "kind": "word",
+      "pashto": "د هغوی",
+      "translit": "da ha-ghwī́",
+      "pronunciation": "da ha-GHWEE",
+      "en": "Their",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tol",
+      "kind": "word",
+      "pashto": "ټول",
+      "translit": "tol",
+      "pronunciation": "tol",
+      "en": "Everyone, all",
+      "usage": null,
+      "pronunciationNote": "ټ: t with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-daa-zmaa-day",
+      "kind": "phrase",
+      "pashto": "دا زما دی",
+      "translit": "dā zmā day",
+      "pronunciation": "daa zmaa day",
+      "en": "This is mine.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ha-gha-staa-day",
+      "kind": "phrase",
+      "pashto": "هغه ستا دی",
+      "translit": "ha-ghá stā day",
+      "pronunciation": "ha-GHA staa day",
+      "en": "That is yours.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ha-gha-zmaa-khor-da",
+      "kind": "phrase",
+      "pashto": "هغه زما خور ده",
+      "translit": "ha-ghá zmā khor da",
+      "pronunciation": "ha-GHA zmaa khor da",
+      "en": "She is my sister.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ha-gha-zmaa-dost-day",
+      "kind": "phrase",
+      "pashto": "هغه زما دوست دی",
+      "translit": "ha-ghá zmā dost day",
+      "pronunciation": "ha-GHA zmaa dost day",
+      "en": "He is my friend.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mung-kor-ta-dzoo",
+      "kind": "phrase",
+      "pashto": "موږ کور ته ځو",
+      "translit": "mung kor ta dzū",
+      "pronunciation": "mung kor ta dzoo",
+      "en": "We are going home.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ha-ghwee-sa-baa-raa-dzee",
+      "kind": "phrase",
+      "pashto": "هغوی سبا راځي",
+      "translit": "ha-ghwī́ sa-bā́ rā-dzī́",
+      "pronunciation": "ha-GHWEE sa-BAA raa-DZEE",
+      "en": "They are coming tomorrow.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-ha-gha-pe-zha-nam",
+      "kind": "phrase",
+      "pashto": "زه هغه پېژنم",
+      "translit": "za ha-ghá pe-zha-nám",
+      "pronunciation": "za ha-GHA pe-zha-NAM",
+      "en": "I know him.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ژ: zh, like s in measure.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ta-ha-ghe-pe-zha-ney",
+      "kind": "phrase",
+      "pashto": "ته هغه پېژنې؟",
+      "translit": "ta ha-ghé pe-zha-néy",
+      "pronunciation": "ta ha-GHE pe-zha-NEY?",
+      "en": "Do you know her?",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ژ: zh, like s in measure.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maa-ta-ye-raa-ka-ra",
+      "kind": "phrase",
+      "pashto": "ما ته یې راکړه",
+      "translit": "mā ta ye rā́-ka-ra",
+      "pronunciation": "maa ta ye RAA-ka-ra",
+      "en": "Give it to me.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-la-mung-sa-ra-raa-sha",
+      "kind": "phrase",
+      "pashto": "له موږ سره راشه",
+      "translit": "la mung sa-rá rā́-sha",
+      "pronunciation": "la mung sa-RA RAA-sha",
+      "en": "Come with us.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-daa-staa-day",
+      "kind": "phrase",
+      "pashto": "دا ستا دی",
+      "translit": "dā stā day",
+      "pronunciation": "daa staa day",
+      "en": "This belongs to you.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khwa-ral",
+      "kind": "word",
+      "pashto": "خوړل",
+      "translit": "khwa-rál",
+      "pronunciation": "khwa-RAL",
+      "en": "Eat",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tsa-kal",
+      "kind": "word",
+      "pashto": "څښل",
+      "translit": "tsa-kál",
+      "pronunciation": "tsa-KAL",
+      "en": "Drink",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-wee-da-ke-dal",
+      "kind": "word",
+      "pashto": "ویده کېدل",
+      "translit": "wī-dá ke-dál",
+      "pronunciation": "wee-DA ke-DAL",
+      "en": "Sleep",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-paa-tse-dal",
+      "kind": "word",
+      "pashto": "پاڅېدل",
+      "translit": "pā-tse-dál",
+      "pronunciation": "paa-tse-DAL",
+      "en": "Wake up",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tlal",
+      "kind": "word",
+      "pashto": "تلل",
+      "translit": "tlal",
+      "pronunciation": "tlal",
+      "en": "Go",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-raa-tlal",
+      "kind": "word",
+      "pashto": "راتلل",
+      "translit": "rā-tlál",
+      "pronunciation": "raa-TLAL",
+      "en": "Come",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ke-naas-tal",
+      "kind": "word",
+      "pashto": "کېناستل",
+      "translit": "ke-nās-tál",
+      "pronunciation": "ke-naas-TAL",
+      "en": "Sit",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-wu-dre-dal",
+      "kind": "word",
+      "pashto": "ودرېدل",
+      "translit": "wu-dre-dál",
+      "pronunciation": "wu-dre-DAL",
+      "en": "Stand",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-pi-yaa-da-tlal",
+      "kind": "word",
+      "pashto": "پیاده تلل",
+      "translit": "pi-yā-dá tlal",
+      "pronunciation": "pi-yaa-DA tlal",
+      "en": "Walk",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-man-da-wa-hal",
+      "kind": "word",
+      "pashto": "منډه وهل",
+      "translit": "mán-da wa-hál",
+      "pronunciation": "MAN-da wa-HAL",
+      "en": "Run",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kha-ba-rey-ka-wal",
+      "kind": "word",
+      "pashto": "خبرې کول",
+      "translit": "kha-ba-réy ka-wál",
+      "pronunciation": "kha-ba-REY ka-WAL",
+      "en": "Speak",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ghwag-ni-wal",
+      "kind": "word",
+      "pashto": "غوږ نیول",
+      "translit": "ghwag ni-wál",
+      "pronunciation": "ghwag ni-WAL",
+      "en": "Listen",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-aw-re-dal",
+      "kind": "word",
+      "pashto": "اورېدل",
+      "translit": "aw-re-dál",
+      "pronunciation": "aw-re-DAL",
+      "en": "Hear",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-lee-dal",
+      "kind": "word",
+      "pashto": "لیدل",
+      "translit": "lī-dál",
+      "pronunciation": "lee-DAL",
+      "en": "See",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ka-tal",
+      "kind": "word",
+      "pashto": "کتل",
+      "translit": "ka-tál",
+      "pronunciation": "ka-TAL",
+      "en": "Look",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-lwas-tal",
+      "kind": "word",
+      "pashto": "لوستل",
+      "translit": "lwas-tál",
+      "pronunciation": "lwas-TAL",
+      "en": "Read",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-lee-kal",
+      "kind": "word",
+      "pashto": "لیکل",
+      "translit": "lī-kál",
+      "pronunciation": "lee-KAL",
+      "en": "Write",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zda-ka-wal",
+      "kind": "word",
+      "pashto": "زده کول",
+      "translit": "zda ka-wál",
+      "pronunciation": "zda ka-WAL",
+      "en": "Learn",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khu-wal",
+      "kind": "word",
+      "pashto": "ښوول",
+      "translit": "khu-wál",
+      "pronunciation": "khu-WAL",
+      "en": "Teach",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kaar-ka-wal",
+      "kind": "word",
+      "pashto": "کار کول",
+      "translit": "kār ka-wál",
+      "pronunciation": "kaar ka-WAL",
+      "en": "Work",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-lo-be-ka-wal",
+      "kind": "word",
+      "pashto": "لوبې کول",
+      "translit": "lo-bé ka-wál",
+      "pronunciation": "lo-BE ka-WAL",
+      "en": "Play",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-akh-is-tal",
+      "kind": "word",
+      "pashto": "اخیستل",
+      "translit": "akh-is-tál",
+      "pronunciation": "akh-is-TAL",
+      "en": "Buy, take",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khar-tsa-wal",
+      "kind": "word",
+      "pashto": "خرڅول",
+      "translit": "khar-tsa-wál",
+      "pronunciation": "khar-tsa-WAL",
+      "en": "Sell",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-war-ka-wal",
+      "kind": "word",
+      "pashto": "ورکول",
+      "translit": "war-ka-wál",
+      "pronunciation": "war-ka-WAL",
+      "en": "Give",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khlaa-sa-wal",
+      "kind": "word",
+      "pashto": "خلاصول",
+      "translit": "khlā-sa-wál",
+      "pronunciation": "khlaa-sa-WAL",
+      "en": "Open",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ban-da-wal",
+      "kind": "word",
+      "pashto": "بندول",
+      "translit": "ban-da-wál",
+      "pronunciation": "ban-da-WAL",
+      "en": "Close",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sabr-ka-wal",
+      "kind": "word",
+      "pashto": "صبر کول",
+      "translit": "sabr ka-wál",
+      "pronunciation": "sabr ka-WAL",
+      "en": "Wait",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mras-ta-ka-wal",
+      "kind": "word",
+      "pashto": "مرسته کول",
+      "translit": "mrás-ta ka-wál",
+      "pronunciation": "MRAS-ta ka-WAL",
+      "en": "Help",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-po-he-dal",
+      "kind": "word",
+      "pashto": "پوهېدل",
+      "translit": "po-he-dál",
+      "pronunciation": "po-he-DAL",
+      "en": "Understand",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dal-ta-raa-sha",
+      "kind": "phrase",
+      "pashto": "دلته راشه",
+      "translit": "dál-ta rā́-sha",
+      "pronunciation": "DAL-ta RAA-sha",
+      "en": "Come here.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ke-na",
+      "kind": "phrase",
+      "pashto": "کېنه",
+      "translit": "ké-na",
+      "pronunciation": "KE-na",
+      "en": "Sit down.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-paa-tsa",
+      "kind": "phrase",
+      "pashto": "پاڅه",
+      "translit": "pā́-tsa",
+      "pronunciation": "PAA-tsa",
+      "en": "Stand up.",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maa-ta-ghwag-wu-nee-sa",
+      "kind": "phrase",
+      "pashto": "ما ته غوږ ونیسه",
+      "translit": "mā ta ghwag wu-nī́-sa",
+      "pronunciation": "maa ta ghwag wu-NEE-sa",
+      "en": "Listen to me.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-de-ta-wu-go-ra",
+      "kind": "phrase",
+      "pashto": "دې ته وګوره",
+      "translit": "de ta wú-go-ra",
+      "pronunciation": "de ta WU-go-ra",
+      "en": "Look at this.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zmaa-in-ti-zaar-wu-ka-ra",
+      "kind": "phrase",
+      "pashto": "زما انتظار وکړه",
+      "translit": "zmā in-ti-zā́r wú-ka-ra",
+      "pronunciation": "zmaa in-ti-ZAAR WU-ka-ra",
+      "en": "Wait for me.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dzoo",
+      "kind": "phrase",
+      "pashto": "ځو",
+      "translit": "dzū",
+      "pronunciation": "dzoo",
+      "en": "Let's go.",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-ghwaa-ram-wee-da-sham",
+      "kind": "phrase",
+      "pashto": "زه غواړم ویده شم",
+      "translit": "za ghwā-rám wī-dá sham",
+      "pronunciation": "za ghwaa-RAM wee-DA sham",
+      "en": "I want to sleep.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-baa-yad-kaar-wu-kram",
+      "kind": "phrase",
+      "pashto": "زه باید کار وکړم",
+      "translit": "za bā-yád kār wú-kram",
+      "pronunciation": "za baa-YAD kaar WU-kram",
+      "en": "I need to work.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-la-maa-sa-ra-mras-ta-ko-laay-shey",
+      "kind": "phrase",
+      "pashto": "له ما سره مرسته کولای شې؟",
+      "translit": "la mā sa-rá mrás-ta ko-lā́y shey",
+      "pronunciation": "la maa sa-RA MRAS-ta ko-LAAY shey?",
+      "en": "Can you help me?",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-pa-taa-po-he-gam",
+      "kind": "phrase",
+      "pashto": "زه په تا پوهېږم",
+      "translit": "za pa tā po-hé-gam",
+      "pronunciation": "za pa taa po-HE-gam",
+      "en": "I understand you.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dar-waa-za-khlaa-sa-ka-ra",
+      "kind": "phrase",
+      "pashto": "دروازه خلاصه کړه",
+      "translit": "dar-wā-zá khlā-sá ka-rá",
+      "pronunciation": "dar-waa-ZA khlaa-SA ka-RA",
+      "en": "Open the door.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kar-kay-ban-da-ka-ra",
+      "kind": "phrase",
+      "pashto": "کړکۍ بنده کړه",
+      "translit": "kar-káy bán-da ka-rá",
+      "pronunciation": "kar-KAY BAN-da ka-RA",
+      "en": "Close the window.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     }
   ],
   "lessons": [
@@ -349,7 +2660,8 @@
           "item": "e-za-na-yam",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 4
     },
     {
       "id": "l-basics-learn-polite",
@@ -380,7 +2692,8 @@
           "item": "e-baxana-ghwaram",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 2
     },
     {
       "id": "l-basics-phrases",
@@ -423,7 +2736,8 @@
           "item": "e-daa-khaar-day",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 2
     },
     {
       "id": "l-basics-1",
@@ -473,7 +2787,8 @@
           "item": "e-daa-khaar-day",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 4
     },
     {
       "id": "l-basics-verbs",
@@ -499,7 +2814,8 @@
           "item": "e-yast",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 4
     },
     {
       "id": "l-basics-polite",
@@ -527,6 +2843,1067 @@
         },
         {
           "item": "e-baxana-ghwaram",
+          "role": "introduce"
+        }
+      ],
+      "categoryNumber": 2
+    },
+    {
+      "id": "l-c2-learn-1",
+      "title": "Basic Responses & Expressions words",
+      "kind": "learn",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-sama-da",
+          "role": "present"
+        },
+        {
+          "item": "e-shaayad",
+          "role": "present"
+        },
+        {
+          "item": "e-hat-man",
+          "role": "present"
+        },
+        {
+          "item": "e-al-bat-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-rikh-tyaa",
+          "role": "present"
+        },
+        {
+          "item": "e-bil-kul",
+          "role": "present"
+        },
+        {
+          "item": "e-sam",
+          "role": "present"
+        },
+        {
+          "item": "e-gha-lat",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-learn-2",
+      "title": "Basic Responses & Expressions words",
+      "kind": "learn",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-bas-2",
+          "role": "present"
+        },
+        {
+          "item": "e-byaa",
+          "role": "present"
+        },
+        {
+          "item": "e-tal",
+          "role": "present"
+        },
+        {
+          "item": "e-hets-ka-la",
+          "role": "present"
+        },
+        {
+          "item": "e-ka-la-ka-la",
+          "role": "present"
+        },
+        {
+          "item": "e-khaa-yee",
+          "role": "present"
+        },
+        {
+          "item": "e-khaam-khaa",
+          "role": "present"
+        },
+        {
+          "item": "e-hets",
+          "role": "present"
+        },
+        {
+          "item": "e-har-tsa",
+          "role": "present"
+        },
+        {
+          "item": "e-bad",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-phrases-1",
+      "title": "Basic Responses & Expressions phrases",
+      "kind": "phrases",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-ho-al-bat-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-na-ma-na-na",
+          "role": "present"
+        },
+        {
+          "item": "e-kha-da",
+          "role": "present"
+        },
+        {
+          "item": "e-khayr-day",
+          "role": "present"
+        },
+        {
+          "item": "e-khabar-na-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-poheygam",
+          "role": "present"
+        },
+        {
+          "item": "e-rikh-tyaa-2",
+          "role": "present"
+        },
+        {
+          "item": "e-ya-keen-la-rey",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-phrases-2",
+      "title": "Basic Responses & Expressions phrases",
+      "kind": "phrases",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-za-ham-daa-se-fikr-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-shaa-yad-wros-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-sam-day",
+          "role": "present"
+        },
+        {
+          "item": "e-ta-sam-waa-yey",
+          "role": "present"
+        },
+        {
+          "item": "e-fark-na-ka-wee",
+          "role": "present"
+        },
+        {
+          "item": "e-gham-ma-ka-wa",
+          "role": "present"
+        },
+        {
+          "item": "e-za-ham",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-learn-1",
+      "title": "Pronouns & Possession words",
+      "kind": "learn",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-za",
+          "role": "present"
+        },
+        {
+          "item": "e-ta",
+          "role": "present"
+        },
+        {
+          "item": "e-taso",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha",
+          "role": "present"
+        },
+        {
+          "item": "e-mung",
+          "role": "present"
+        },
+        {
+          "item": "e-ha-ghwee",
+          "role": "present"
+        },
+        {
+          "item": "e-maa",
+          "role": "present"
+        },
+        {
+          "item": "e-zma",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-learn-2",
+      "title": "Pronouns & Possession words",
+      "kind": "learn",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-sta",
+          "role": "present"
+        },
+        {
+          "item": "e-staa-so",
+          "role": "present"
+        },
+        {
+          "item": "e-da-ha-gha",
+          "role": "present"
+        },
+        {
+          "item": "e-da-ha-ghe",
+          "role": "present"
+        },
+        {
+          "item": "e-zmung",
+          "role": "present"
+        },
+        {
+          "item": "e-da-ha-ghwee",
+          "role": "present"
+        },
+        {
+          "item": "e-tol",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-phrases-1",
+      "title": "Pronouns & Possession phrases",
+      "kind": "phrases",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-za-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-ta-ye",
+          "role": "present"
+        },
+        {
+          "item": "e-taso-yast",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-day",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-da",
+          "role": "present"
+        },
+        {
+          "item": "e-mung-yu",
+          "role": "present"
+        },
+        {
+          "item": "e-hagha-dee",
+          "role": "present"
+        },
+        {
+          "item": "e-za-na-yam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-phrases-2",
+      "title": "Pronouns & Possession phrases",
+      "kind": "phrases",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-daa-zmaa-day",
+          "role": "present"
+        },
+        {
+          "item": "e-ha-gha-staa-day",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zma-wror-day",
+          "role": "present"
+        },
+        {
+          "item": "e-ha-gha-zmaa-khor-da",
+          "role": "present"
+        },
+        {
+          "item": "e-ha-gha-zmaa-dost-day",
+          "role": "present"
+        },
+        {
+          "item": "e-mung-kor-ta-dzoo",
+          "role": "present"
+        },
+        {
+          "item": "e-ha-ghwee-sa-baa-raa-dzee",
+          "role": "present"
+        },
+        {
+          "item": "e-za-ha-gha-pe-zha-nam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-phrases-3",
+      "title": "Pronouns & Possession phrases",
+      "kind": "phrases",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-ta-ha-ghe-pe-zha-ney",
+          "role": "present"
+        },
+        {
+          "item": "e-maa-ta-ye-raa-ka-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-la-mung-sa-ra-raa-sha",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-staa-day",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-learn-1",
+      "title": "Common Verbs words",
+      "kind": "learn",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-khwa-ral",
+          "role": "present"
+        },
+        {
+          "item": "e-tsa-kal",
+          "role": "present"
+        },
+        {
+          "item": "e-wee-da-ke-dal",
+          "role": "present"
+        },
+        {
+          "item": "e-paa-tse-dal",
+          "role": "present"
+        },
+        {
+          "item": "e-tlal",
+          "role": "present"
+        },
+        {
+          "item": "e-raa-tlal",
+          "role": "present"
+        },
+        {
+          "item": "e-ke-naas-tal",
+          "role": "present"
+        },
+        {
+          "item": "e-wu-dre-dal",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-learn-2",
+      "title": "Common Verbs words",
+      "kind": "learn",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-pi-yaa-da-tlal",
+          "role": "present"
+        },
+        {
+          "item": "e-man-da-wa-hal",
+          "role": "present"
+        },
+        {
+          "item": "e-kha-ba-rey-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-ghwag-ni-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-aw-re-dal",
+          "role": "present"
+        },
+        {
+          "item": "e-lee-dal",
+          "role": "present"
+        },
+        {
+          "item": "e-ka-tal",
+          "role": "present"
+        },
+        {
+          "item": "e-lwas-tal",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-learn-3",
+      "title": "Common Verbs words",
+      "kind": "learn",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-lee-kal",
+          "role": "present"
+        },
+        {
+          "item": "e-zda-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-khu-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-kaar-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-kaar",
+          "role": "present"
+        },
+        {
+          "item": "e-lo-be-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-akh-is-tal",
+          "role": "present"
+        },
+        {
+          "item": "e-khar-tsa-wal",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-learn-4",
+      "title": "Common Verbs words",
+      "kind": "learn",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-war-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-khlaa-sa-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-ban-da-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-sabr-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-mras-ta-ka-wal",
+          "role": "present"
+        },
+        {
+          "item": "e-po-he-dal",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-phrases-1",
+      "title": "Common Verbs phrases",
+      "kind": "phrases",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-dal-ta-raa-sha",
+          "role": "present"
+        },
+        {
+          "item": "e-ke-na",
+          "role": "present"
+        },
+        {
+          "item": "e-paa-tsa",
+          "role": "present"
+        },
+        {
+          "item": "e-maa-ta-ghwag-wu-nee-sa",
+          "role": "present"
+        },
+        {
+          "item": "e-de-ta-wu-go-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-zmaa-in-ti-zaar-wu-ka-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-dzoo",
+          "role": "present"
+        },
+        {
+          "item": "e-za-ghwaa-ram-wee-da-sham",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-phrases-2",
+      "title": "Common Verbs phrases",
+      "kind": "phrases",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-za-baa-yad-kaar-wu-kram",
+          "role": "present"
+        },
+        {
+          "item": "e-la-maa-sa-ra-mras-ta-ko-laay-shey",
+          "role": "present"
+        },
+        {
+          "item": "e-za-pa-taa-po-he-gam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-na-po-he-gam",
+          "role": "present"
+        },
+        {
+          "item": "e-dar-waa-za-khlaa-sa-ka-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-kar-kay-ban-da-ka-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-za-pashto-zda-kawam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-kaar-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-nan-kaar-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-za-sa-baa-kaar-ka-wam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-quiz-1",
+      "title": "Basic Responses & Expressions quiz",
+      "kind": "practice",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-sama-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shaayad",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hat-man",
+          "role": "introduce"
+        },
+        {
+          "item": "e-al-bat-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-rikh-tyaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-bil-kul",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-gha-lat",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-quiz-2",
+      "title": "Basic Responses & Expressions quiz",
+      "kind": "practice",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-bas-2",
+          "role": "introduce"
+        },
+        {
+          "item": "e-byaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hets-ka-la",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ka-la-ka-la",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khaa-yee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khaam-khaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-hets",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-quiz-3",
+      "title": "Basic Responses & Expressions quiz",
+      "kind": "practice",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-har-tsa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-bad",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ho-al-bat-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-na-ma-na-na",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kha-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khayr-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khabar-na-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-poheygam",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c2-quiz-4",
+      "title": "Basic Responses & Expressions quiz",
+      "kind": "practice",
+      "categoryNumber": 2,
+      "items": [
+        {
+          "item": "e-rikh-tyaa-2",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ya-keen-la-rey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-ham-daa-se-fikr-ka-wam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shaa-yad-wros-ta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-sam-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ta-sam-waa-yey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-fark-na-ka-wee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-gham-ma-ka-wa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-ham",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-quiz-1",
+      "title": "Pronouns & Possession quiz",
+      "kind": "practice",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-mung",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ha-ghwee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-staa-so",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da-ha-gha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da-ha-ghe",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zmung",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da-ha-ghwee",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-quiz-2",
+      "title": "Pronouns & Possession quiz",
+      "kind": "practice",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-tol",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zmaa-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ha-gha-staa-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ha-gha-zmaa-khor-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ha-gha-zmaa-dost-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mung-kor-ta-dzoo",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ha-ghwee-sa-baa-raa-dzee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-ha-gha-pe-zha-nam",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c4-quiz-3",
+      "title": "Pronouns & Possession quiz",
+      "kind": "practice",
+      "categoryNumber": 4,
+      "items": [
+        {
+          "item": "e-ta-ha-ghe-pe-zha-ney",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maa-ta-ye-raa-ka-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-la-mung-sa-ra-raa-sha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-staa-day",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-quiz-1",
+      "title": "Common Verbs quiz",
+      "kind": "practice",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-khwa-ral",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tsa-kal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wee-da-ke-dal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-paa-tse-dal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tlal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-raa-tlal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ke-naas-tal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wu-dre-dal",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-quiz-2",
+      "title": "Common Verbs quiz",
+      "kind": "practice",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-pi-yaa-da-tlal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-man-da-wa-hal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kha-ba-rey-ka-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ghwag-ni-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-aw-re-dal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-lee-dal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ka-tal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-lwas-tal",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-quiz-3",
+      "title": "Common Verbs quiz",
+      "kind": "practice",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-lee-kal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zda-ka-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khu-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kaar-ka-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-lo-be-ka-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-akh-is-tal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khar-tsa-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-war-ka-wal",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-quiz-4",
+      "title": "Common Verbs quiz",
+      "kind": "practice",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-khlaa-sa-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ban-da-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sabr-ka-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mras-ta-ka-wal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-po-he-dal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dal-ta-raa-sha",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ke-na",
+          "role": "introduce"
+        },
+        {
+          "item": "e-paa-tsa",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c10-quiz-5",
+      "title": "Common Verbs quiz",
+      "kind": "practice",
+      "categoryNumber": 10,
+      "items": [
+        {
+          "item": "e-maa-ta-ghwag-wu-nee-sa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-de-ta-wu-go-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zmaa-in-ti-zaar-wu-ka-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dzoo",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-ghwaa-ram-wee-da-sham",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-baa-yad-kaar-wu-kram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-la-maa-sa-ra-mras-ta-ko-laay-shey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-pa-taa-po-he-gam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dar-waa-za-khlaa-sa-ka-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kar-kay-ban-da-ka-ra",
           "role": "introduce"
         }
       ]

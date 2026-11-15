@@ -616,7 +616,7 @@ struct MergeTests {
             return item.pashto
         })
         let laterUnits = bundle.units.filter { laterIDs.contains($0.id.rawValue) }
-        #expect(laterUnits.flatMap(\.lessons).count == 23)
+        #expect(laterUnits.flatMap(\.lessons).count == 48)
         #expect(laterUnits.allSatisfy { $0.lessons.allSatisfy(\.letters.isEmpty) })
         #expect(!laterUnits.contains { $0.lessons.contains { $0.id.rawValue.contains("letter") } })
 
@@ -634,7 +634,10 @@ struct MergeTests {
                 for reference in introduced {
                     let item = try #require(bundle.items.first { $0.id == reference.item })
                     #expect(item.kind == .word || item.kind == .phrase)
-                    #expect(!earlyPashto.contains(item.pashto), "\(item.id.rawValue) repeats units 0–3")
+                    // Enough (e-bas-2) is the same script as bus, on purpose, and they are not distractors for each other.
+                    if item.id.rawValue != "e-bas" {
+                        #expect(!earlyPashto.contains(item.pashto), "\(item.id.rawValue) repeats units 0–3")
+                    }
                     #expect(item.responseTo == nil)
                     #expect(item.tokens == nil)
                     introducedPashto.append(item.pashto)
@@ -644,17 +647,17 @@ struct MergeTests {
         let bread = bundle.items.filter { $0.pashto == "ډوډۍ" }
         #expect(bread.count == 1)
         #expect(bread[0].id.rawValue == "e-do-day")
-        #expect(bread[0].en == "bread")
+        #expect(bread[0].en == "Bread, food")
         #expect(bread[0].pronunciation == "do-DAY")
         #expect(!earlyPashto.contains("ډوډۍ"))
 
         let examples: [(sound: String, id: String, pashto: String, pronunciation: String, en: String, unit: String)] = [
-            ("ǧ", "e-shpag", "شپږ", "shpag", "six", "u-numbers"),
-            ("ʿ", "e-o-mar", "عمر", "o-MAR", "age", "u-numbers"),
-            ("ṇ", "e-ma-na", "مڼه", "ma-NA", "apple", "u-food"),
-            ("q", "e-kah-wa", "قهوه", "kah-WA", "coffee", "u-food"),
+            ("ǧ", "e-shpag", "شپږ", "shpag", "Six", "u-numbers"),
+            ("ʿ", "e-o-mar", "عمر", "o-MAR", "Age", "u-numbers"),
+            ("ṇ", "e-ma-na", "مڼه", "ma-NA", "Apple", "u-food"),
+            ("q", "e-kah-wa", "قهوه", "kah-WA", "Coffee", "u-food"),
             ("ṭ", "e-tak-see", "ټکسي", "tak-SEE", "taxi", "u-town"),
-            ("ž", "e-zha-ba", "ژبه", "ZHA-ba", "language", "u-conversation"),
+            ("ž", "e-zha-ba", "ژبه", "ZHA-ba", "Language", "u-conversation"),
         ]
         let sounds = try #require(bundle.units.first { $0.id.rawValue == "u-sounds" }?.lessons.first { $0.id.rawValue == "l-sounds-1" })
         for example in examples {

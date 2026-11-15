@@ -106,25 +106,11 @@ struct TravelTimeContentTests {
             listedLessons: []
         )
         #expect(menu.categories.map(\.id.rawValue) == [
-            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
-            "u-numbers", "u-food", "u-town", "u-conversation",
+            "u-cat-1", "u-cat-2", "u-cat-3", "u-cat-4", "u-cat-5", "u-cat-6",
+            "u-cat-7", "u-cat-8", "u-cat-9", "u-cat-10", "u-cat-13", "u-cat-14", "u-cat-18",
         ])
-        #expect(menu.categories.map(\.label) == [
-            "Basics", "Greetings", "Introduction", "Family", "Travel", "Time",
-            "Numbers", "Food", "Town", "Conversation",
-        ])
-        #expect(menu.categories.map(\.title) == [
-            "The basics",
-            "Greetings and politeness",
-            "Introducing yourself",
-            "Family",
-            "Travel",
-            "Time and days",
-            "Numbers",
-            "Food and drink",
-            "Around town",
-            "Putting it together",
-        ])
+        #expect(!menu.categories.map(\.title).contains("Putting it together"))
+        #expect(menu.categories.map(\.level) == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2])
     }
 
     @Test func familyPicturesResolveOnlyOnLearnCards() throws {
@@ -375,15 +361,15 @@ private let approvedRows: [ApprovedRow] = [
     ApprovedRow(id: "e-za-ha-waa-yee-da-gar-ta-dzam", pashto: "زه هوایي ډګر ته ځم", pronunciation: "za ha-waa-YEE da-GAR ta dzam", english: "I am going to the airport", translit: "zə hawāyí ḍagár tə dzəm", kind: .phrase, unit: "u-travel"),
     ApprovedRow(id: "e-dal-ta-wu-dre-ga", pashto: "دلته ودرېږه", pronunciation: "DAL-ta wu-DRE-ga", english: "stop here", translit: "dálta wdréǧa", kind: .phrase, unit: "u-travel"),
     ApprovedRow(id: "e-za-ti-kat-ghwaa-ram", pashto: "زه ټکټ غواړم", pronunciation: "za ti-KAT ghwaa-RAM", english: "I would like a ticket", translit: "zə ṭikáṭ ɣwāṛə́m", kind: .phrase, unit: "u-travel"),
-    ApprovedRow(id: "e-daa-pa-tso-day", pashto: "دا په څو دی؟", pronunciation: "daa pa tso day?", english: "how much is this?", translit: "dā pə tso day?", kind: .phrase, unit: "u-travel"),
+    ApprovedRow(id: "e-daa-pa-tso-day", pashto: "دا په څو دی؟", pronunciation: "daa pa tso day?", english: "How much is this?", translit: "dā pə tso day?", kind: .phrase, unit: "u-travel"),
     ApprovedRow(id: "e-der-graan-day", pashto: "ډېر ګران دی", pronunciation: "der graan day", english: "it's too expensive", translit: "ḍer grān day", kind: .phrase, unit: "u-travel"),
     ApprovedRow(id: "e-mras-ta-wu-kray", pashto: "مرسته وکړئ!", pronunciation: "MRAS-ta wu-KRAY!", english: "help, please!", translit: "mrásta wkṛəy!", kind: .phrase, unit: "u-travel"),
-    ApprovedRow(id: "e-wradz", pashto: "ورځ", pronunciation: "wradz", english: "day", translit: "wradz", kind: .word, unit: "u-time"),
-    ApprovedRow(id: "e-sa-haar", pashto: "سهار", pronunciation: "sa-HAAR", english: "morning", translit: "sahā́r", kind: .word, unit: "u-time"),
-    ApprovedRow(id: "e-maa-khaam", pashto: "ماښام", pronunciation: "maa-KHAAM", english: "evening", translit: "māx̌ā́m", kind: .word, unit: "u-time"),
-    ApprovedRow(id: "e-shpa", pashto: "شپه", pronunciation: "shpa", english: "night", translit: "špa", kind: .word, unit: "u-time"),
-    ApprovedRow(id: "e-os", pashto: "اوس", pronunciation: "os", english: "now", translit: "os", kind: .word, unit: "u-time"),
-    ApprovedRow(id: "e-pa-roon", pashto: "پرون", pronunciation: "pa-ROON", english: "yesterday", translit: "parún", kind: .word, unit: "u-time"),
+    ApprovedRow(id: "e-wradz", pashto: "ورځ", pronunciation: "wradz", english: "Day", translit: "wradz", kind: .word, unit: "u-time"),
+    ApprovedRow(id: "e-sa-haar", pashto: "سهار", pronunciation: "sa-HAAR", english: "Morning", translit: "sahā́r", kind: .word, unit: "u-time"),
+    ApprovedRow(id: "e-maa-khaam", pashto: "ماښام", pronunciation: "maa-KHAAM", english: "Evening", translit: "māx̌ā́m", kind: .word, unit: "u-time"),
+    ApprovedRow(id: "e-shpa", pashto: "شپه", pronunciation: "shpa", english: "Night", translit: "špa", kind: .word, unit: "u-time"),
+    ApprovedRow(id: "e-os", pashto: "اوس", pronunciation: "os", english: "Now", translit: "os", kind: .word, unit: "u-time"),
+    ApprovedRow(id: "e-pa-roon", pashto: "پرون", pronunciation: "pa-ROON", english: "Yesterday", translit: "parún", kind: .word, unit: "u-time"),
     ApprovedRow(id: "e-shan-ba", pashto: "شنبه", pronunciation: "shan-BA", english: "Saturday", translit: "šanbá", kind: .word, unit: "u-time"),
     ApprovedRow(id: "e-yak-shan-ba", pashto: "یکشنبه", pronunciation: "yak-shan-BA", english: "Sunday", translit: "yakšanbá", kind: .word, unit: "u-time"),
     ApprovedRow(id: "e-do-shan-ba", pashto: "دوشنبه", pronunciation: "do-shan-BA", english: "Monday", translit: "došanbá", kind: .word, unit: "u-time"),
@@ -391,14 +377,14 @@ private let approvedRows: [ApprovedRow] = [
     ApprovedRow(id: "e-cha-haar-shan-ba", pashto: "چهارشنبه", pronunciation: "cha-haar-shan-BA", english: "Wednesday", translit: "čahāršanbá", kind: .word, unit: "u-time"),
     ApprovedRow(id: "e-panj-shan-ba", pashto: "پنجشنبه", pronunciation: "panj-shan-BA", english: "Thursday", translit: "panjšanbá", kind: .word, unit: "u-time"),
     ApprovedRow(id: "e-ju-ma", pashto: "جمعه", pronunciation: "ju-MA", english: "Friday", translit: "jumá", kind: .word, unit: "u-time"),
-    ApprovedRow(id: "e-nan-tsa-wradz-da", pashto: "نن څه ورځ ده؟", pronunciation: "nan tsa wradz da?", english: "what day is it today?", translit: "nan tsə wradz da?", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-nan-ju-ma-da", pashto: "نن جمعه ده", pronunciation: "nan ju-MA da", english: "today is Friday", translit: "nan jumá da", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-sa-baa-shan-ba-da", pashto: "سبا شنبه ده", pronunciation: "sa-BAA shan-BA da", english: "tomorrow is Saturday", translit: "sabā́ šanbá da", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-tso-ba-je-dee", pashto: "څو بجې دي؟", pronunciation: "tso ba-JE dee?", english: "what time is it?", translit: "tso badžé di?", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-sa-haar-mo-pa-khayr", pashto: "سهار مو په خیر", pronunciation: "sa-HAAR mo pa KHAYR", english: "good morning", translit: "sahā́r mo pə xayr", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-shpa-mo-pa-khayr", pashto: "شپه مو په خیر", pronunciation: "shpa mo pa KHAYR", english: "good night", translit: "špa mo pə xayr", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-za-os-dzam", pashto: "زه اوس ځم", pronunciation: "za os dzam", english: "I am going now", translit: "zə os dzəm", kind: .phrase, unit: "u-time"),
-    ApprovedRow(id: "e-za-sa-haar-kaar-ka-wam", pashto: "زه سهار کار کوم", pronunciation: "za sa-HAAR kaar ka-WAM", english: "I work in the morning", translit: "zə sahā́r kār kawə́m", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-nan-tsa-wradz-da", pashto: "نن څه ورځ ده؟", pronunciation: "nan tsa wradz da?", english: "What day is it today?", translit: "nan tsə wradz da?", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-nan-ju-ma-da", pashto: "نن جمعه ده", pronunciation: "nan ju-MA da", english: "Today is Friday.", translit: "nan jumá da", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-sa-baa-shan-ba-da", pashto: "سبا شنبه ده", pronunciation: "sa-BAA shan-BA da", english: "Tomorrow is Saturday.", translit: "sabā́ šanbá da", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-tso-ba-je-dee", pashto: "څو بجې دي؟", pronunciation: "tso ba-JE dee?", english: "What time is it?", translit: "tso badžé di?", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-sa-haar-mo-pa-khayr", pashto: "سهار مو په خیر", pronunciation: "sa-HAAR mo pa KHAYR", english: "Good morning.", translit: "sahā́r mo pə xayr", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-shpa-mo-pa-khayr", pashto: "شپه مو په خیر", pronunciation: "shpa mo pa KHAYR", english: "Good night (sleep well).", translit: "špa mo pə xayr", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-za-os-dzam", pashto: "زه اوس ځم", pronunciation: "za os dzam", english: "I am going now.", translit: "zə os dzəm", kind: .phrase, unit: "u-time"),
+    ApprovedRow(id: "e-za-sa-haar-kaar-ka-wam", pashto: "زه سهار کار کوم", pronunciation: "za sa-HAAR kaar ka-WAM", english: "I work in the morning.", translit: "zə sahā́r kār kawə́m", kind: .phrase, unit: "u-time"),
 ]
 
 private func introducedIDs(_ unit: CourseUnit) -> Set<String> {

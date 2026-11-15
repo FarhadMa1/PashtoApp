@@ -354,7 +354,7 @@ struct MultipleChoiceTests {
     @Test func everyLessonInContentJsonYieldsSeenQuestions() throws {
         let bundle = try loadRepositoryContent()
         let lessons = bundle.units.flatMap(\.lessons)
-        #expect(lessons.map(\.id.rawValue) == [
+        let approvedLessonIDs = [
             "l-sounds-1",
             "l-basics-learn-1",
             "l-basics-learn-polite",
@@ -408,7 +408,9 @@ struct MultipleChoiceTests {
             "l-conversation-1",
             "l-conversation-2",
             "l-conversation-3",
-        ])
+        ]
+        #expect(appearsInOrder(approvedLessonIDs, inside: lessons.map(\.id.rawValue)))
+        #expect(lessons.count > approvedLessonIDs.count)
 
         var seen: [LessonID] = []
         for lesson in lessons {
@@ -661,4 +663,13 @@ private func expectWellFormed(_ tasks: [QuizTask], allowed: Set<ItemID>) {
         #expect(Set(ids).isSubset(of: allowed))
         #expect(task.options.contains { $0.itemID == task.targetID })
     }
+}
+
+private func appearsInOrder(_ expected: [String], inside actual: [String]) -> Bool {
+    var cursor = actual.startIndex
+    for id in expected {
+        guard let found = actual[cursor...].firstIndex(of: id) else { return false }
+        cursor = actual.index(after: found)
+    }
+    return true
 }

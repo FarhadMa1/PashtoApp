@@ -9,7 +9,7 @@
       "pashto": "مور",
       "translit": "mor",
       "pronunciation": "mor",
-      "en": "mother",
+      "en": "Mother",
       "usage": "feminine word",
       "pronunciationNote": null,
       "responseTo": null,
@@ -21,7 +21,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-plar",
@@ -29,7 +32,7 @@
       "pashto": "پلار",
       "translit": "plār",
       "pronunciation": "plaar",
-      "en": "father",
+      "en": "Father",
       "usage": "masculine word",
       "pronunciationNote": null,
       "responseTo": null,
@@ -41,7 +44,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-wror",
@@ -49,7 +55,7 @@
       "pashto": "ورور",
       "translit": "wror",
       "pronunciation": "wror",
-      "en": "brother",
+      "en": "Brother",
       "usage": "masculine word",
       "pronunciationNote": null,
       "responseTo": null,
@@ -61,7 +67,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-xor",
@@ -69,7 +78,7 @@
       "pashto": "خور",
       "translit": "xor",
       "pronunciation": "khor",
-      "en": "sister",
+      "en": "Sister",
       "usage": "feminine word",
       "pronunciationNote": "خ: kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -81,7 +90,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-zoy",
@@ -89,7 +101,7 @@
       "pashto": "زوی",
       "translit": "zoy",
       "pronunciation": "zoy",
-      "en": "son",
+      "en": "Son",
       "usage": "masculine word",
       "pronunciationNote": null,
       "responseTo": null,
@@ -101,7 +113,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-lur",
@@ -109,7 +124,7 @@
       "pashto": "لور",
       "translit": "lur",
       "pronunciation": "loor",
-      "en": "daughter",
+      "en": "Daughter",
       "usage": "feminine word",
       "pronunciationNote": null,
       "responseTo": null,
@@ -121,7 +136,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-tsok-day",
@@ -129,7 +147,7 @@
       "pashto": "دا څوک دی؟",
       "translit": "dā tsok day?",
       "pronunciation": "daa tsok day?",
-      "en": "who is this?",
+      "en": "Who is this? (man)",
       "usage": "asking about a man or boy",
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -150,7 +168,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-tsok-da",
@@ -158,7 +179,7 @@
       "pashto": "دا څوک ده؟",
       "translit": "dā tsok da?",
       "pronunciation": "daa tsok da?",
-      "en": "who is this?",
+      "en": "Who is this? (woman)",
       "usage": "asking about a woman or girl",
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -179,7 +200,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-zma-plar-day",
@@ -187,7 +211,7 @@
       "pashto": "دا زما پلار دی",
       "translit": "dā zmā plār day",
       "pronunciation": "daa zmaa plaar day",
-      "en": "this is my father",
+      "en": "This is my father.",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": "e-daa-tsok-day",
@@ -210,7 +234,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-zma-mor-da",
@@ -218,7 +245,7 @@
       "pashto": "دا زما مور ده",
       "translit": "dā zmā mor da",
       "pronunciation": "daa zmaa mor da",
-      "en": "this is my mother",
+      "en": "This is my mother.",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": "e-daa-tsok-da",
@@ -241,7 +268,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-koraney",
@@ -249,7 +279,7 @@
       "pashto": "کورنۍ",
       "translit": "koranə́y",
       "pronunciation": "ko-ra-NAY",
-      "en": "family",
+      "en": "Family",
       "usage": "feminine word",
       "pronunciationNote": null,
       "responseTo": null,
@@ -261,7 +291,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa",
@@ -281,7 +314,9 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-zma",
@@ -289,7 +324,7 @@
       "pashto": "زما",
       "translit": "zmā",
       "pronunciation": "zmaa",
-      "en": "my",
+      "en": "My, mine",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -301,7 +336,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-zma-wror-day",
@@ -309,7 +347,7 @@
       "pashto": "دا زما ورور دی",
       "translit": "dā zmā wror day",
       "pronunciation": "daa zmaa wror day",
-      "en": "this is my brother",
+      "en": "This is my brother.",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -332,7 +370,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-zma-xor-da",
@@ -340,7 +381,7 @@
       "pashto": "دا زما خور ده",
       "translit": "dā zmā xor da",
       "pronunciation": "daa zmaa khor da",
-      "en": "this is my sister",
+      "en": "This is my sister.",
       "usage": null,
       "pronunciationNote": "خ: kh, like ch in Scottish loch.",
       "responseTo": null,
@@ -363,7 +404,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-sta",
@@ -371,7 +415,7 @@
       "pashto": "ستا",
       "translit": "stā",
       "pronunciation": "staa",
-      "en": "your",
+      "en": "Your, yours",
       "usage": "informal, to one person",
       "pronunciationNote": null,
       "responseTo": null,
@@ -383,7 +427,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-daa-sta-wror-day",
@@ -391,7 +438,7 @@
       "pashto": "دا ستا ورور دی؟",
       "translit": "dā stā wror day?",
       "pronunciation": "daa staa wror day?",
-      "en": "is this your brother?",
+      "en": "Is this your brother?",
       "usage": "informal",
       "pronunciationNote": null,
       "responseTo": null,
@@ -414,7 +461,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ho-zma-wror-day",
@@ -422,7 +472,7 @@
       "pashto": "هو، زما ورور دی",
       "translit": "ho, zmā wror day",
       "pronunciation": "ho, zmaa wror day",
-      "en": "yes, he's my brother",
+      "en": "Yes, he's my brother.",
       "usage": "answering yes",
       "pronunciationNote": "In everyday speech people also say یې (ye) for yes.",
       "responseTo": "e-daa-sta-wror-day",
@@ -434,7 +484,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-na-zma-zoy-day",
@@ -442,7 +495,7 @@
       "pashto": "نه، زما زوی دی",
       "translit": "na, zmā zoy day",
       "pronunciation": "na, zmaa zoy day",
-      "en": "no, he's my son",
+      "en": "No, he's my son.",
       "usage": "answering no",
       "pronunciationNote": null,
       "responseTo": "e-daa-sta-wror-day",
@@ -454,7 +507,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-mor-de-tsanga-da",
@@ -462,7 +518,7 @@
       "pashto": "مور دې څنګه ده؟",
       "translit": "mor de tsə́nga da?",
       "pronunciation": "mor dey TSAN-ga da?",
-      "en": "how is your mother?",
+      "en": "How is your mother?",
       "usage": "informal; دې (de) means your and comes after the noun",
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -485,7 +541,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-hagha-xa-da",
@@ -493,7 +552,7 @@
       "pashto": "هغه ښه ده",
       "translit": "haɣá x̌a da",
       "pronunciation": "ha-GHA kha da",
-      "en": "she is fine",
+      "en": "She is fine.",
       "usage": null,
       "pronunciationNote": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": "e-mor-de-tsanga-da",
@@ -514,7 +573,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-plar-de-tsanga-day",
@@ -522,7 +584,7 @@
       "pashto": "پلار دې څنګه دی؟",
       "translit": "plār de tsə́nga day?",
       "pronunciation": "plaar dey TSAN-ga day?",
-      "en": "how is your father?",
+      "en": "How is your father?",
       "usage": "informal; دې (de) means your and comes after the noun",
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -545,7 +607,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-hagha-xa-day",
@@ -553,7 +618,7 @@
       "pashto": "هغه ښه دی",
       "translit": "haɣá x̌a day",
       "pronunciation": "ha-GHA kha day",
-      "en": "he is fine",
+      "en": "He is fine.",
       "usage": null,
       "pronunciationNote": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
       "responseTo": "e-plar-de-tsanga-day",
@@ -574,7 +639,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-letter-dal",
@@ -767,6 +835,750 @@
         "checkedOn": "2026-11-01",
         "comment": "Bekreftet av Farhad via ordlisten."
       }
+    },
+    {
+      "id": "e-mera",
+      "kind": "word",
+      "pashto": "مېړه",
+      "translit": "mé-ra",
+      "pronunciation": "ME-ra",
+      "en": "Husband",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khadza",
+      "kind": "word",
+      "pashto": "ښځه",
+      "translit": "kha-dzá",
+      "pronunciation": "kha-DZA",
+      "en": "Wife, woman",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-anaa",
+      "kind": "word",
+      "pashto": "انا",
+      "translit": "a-nā́",
+      "pronunciation": "a-NAA",
+      "en": "Grandmother",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-nika",
+      "kind": "word",
+      "pashto": "نیکه",
+      "translit": "ní-ka",
+      "pronunciation": "NI-ka",
+      "en": "Grandfather",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-kaakaa",
+      "kind": "word",
+      "pashto": "کاکا",
+      "translit": "kā-kā́",
+      "pronunciation": "kaa-KAA",
+      "en": "Uncle (father's brother)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maamaa",
+      "kind": "word",
+      "pashto": "ماما",
+      "translit": "mā-mā́",
+      "pronunciation": "maa-MAA",
+      "en": "Uncle (mother's brother)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tror",
+      "kind": "word",
+      "pashto": "ترور",
+      "translit": "tror",
+      "pronunciation": "tror",
+      "en": "Aunt (father's sister)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khaala",
+      "kind": "word",
+      "pashto": "خاله",
+      "translit": "khā́-la",
+      "pronunciation": "KHAA-la",
+      "en": "Aunt (mother's sister)",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tar-boor",
+      "kind": "word",
+      "pashto": "تربور",
+      "translit": "tar-bū́r",
+      "pronunciation": "tar-BOOR",
+      "en": "Cousin (father's brother's son)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-wraa-ra",
+      "kind": "word",
+      "pashto": "وراره",
+      "translit": "wrā-rá",
+      "pronunciation": "wraa-RA",
+      "en": "Nephew (brother's son)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-wra-re-ra",
+      "kind": "word",
+      "pashto": "وررېره",
+      "translit": "wra-ré-ra",
+      "pronunciation": "wra-RE-ra",
+      "en": "Niece (brother's daughter)",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mor-aw-plaar",
+      "kind": "word",
+      "pashto": "مور او پلار",
+      "translit": "mor aw plār",
+      "pronunciation": "mor aw plaar",
+      "en": "Parents",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maashoom",
+      "kind": "word",
+      "pashto": "ماشوم",
+      "translit": "mā-shū́m",
+      "pronunciation": "maa-SHOOM",
+      "en": "Child",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maa-shoo-maan",
+      "kind": "word",
+      "pashto": "ماشومان",
+      "translit": "mā-shū-mā́n",
+      "pronunciation": "maa-shoo-MAAN",
+      "en": "Children",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-khpal-waan",
+      "kind": "word",
+      "pashto": "خپلوان",
+      "translit": "khpal-wā́n",
+      "pronunciation": "khpal-WAAN",
+      "en": "Relatives",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-plaar-dey-cher-ta-day",
+      "kind": "phrase",
+      "pashto": "پلار دې چېرته دی؟",
+      "translit": "plār dey chér-ta day",
+      "pronunciation": "plaar dey CHER-ta day?",
+      "en": "Where is your father?",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dwa-wrona",
+      "kind": "phrase",
+      "pashto": "زه دوه وروڼه لرم",
+      "translit": "za dwa wro-ná la-rám",
+      "pronunciation": "za dwa wro-NA la-RAM",
+      "en": "I have two brothers.",
+      "usage": null,
+      "pronunciationNote": "ڼ: n with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ta-khwin-de-la-rey",
+      "kind": "phrase",
+      "pashto": "ته خویندې لرې؟",
+      "translit": "ta khwin-dé la-réy",
+      "pronunciation": "ta khwin-DE la-REY?",
+      "en": "Do you have any sisters?",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-maashoomaan-larey",
+      "kind": "phrase",
+      "pashto": "ته ماشومان لرې؟",
+      "translit": "ta mā-shū-mā́n la-réy",
+      "pronunciation": "ta maa-shoo-MAAN la-REY?",
+      "en": "Do you have children?",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zoy-aw-loor",
+      "kind": "phrase",
+      "pashto": "زه یو زوی او یوه لور لرم",
+      "translit": "za yaw zoy aw ya-wá lūr la-rám",
+      "pronunciation": "za yaw zoy aw ya-WA loor la-RAM",
+      "en": "I have a son and a daughter.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-daa-zmaa-kha-dza-da",
+      "kind": "phrase",
+      "pashto": "دا زما ښځه ده",
+      "translit": "dā zmā kha-dzá da",
+      "pronunciation": "daa zmaa kha-DZA da",
+      "en": "This is my wife.",
+      "usage": null,
+      "pronunciationNote": "ښ: in Kabul close to kh, like ch in Scottish loch. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-daa-zmaa-me-ra-day",
+      "kind": "phrase",
+      "pashto": "دا زما مېړه دی",
+      "translit": "dā zmā mé-ra day",
+      "pronunciation": "daa zmaa ME-ra day",
+      "en": "This is my husband.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zmaa-mor-aw-plaar-pa-kor-ke-dee",
+      "kind": "phrase",
+      "pashto": "زما مور او پلار په کور کې دي",
+      "translit": "zmā mor aw plār pa kor ke dī",
+      "pronunciation": "zmaa mor aw plaar pa kor ke dee",
+      "en": "My parents are at home.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ko-ra-nay-dey-tsan-ga-da",
+      "kind": "phrase",
+      "pashto": "کورنۍ دې څنګه ده؟",
+      "translit": "ko-ra-náy dey tsán-ga da",
+      "pronunciation": "ko-ra-NAY dey TSAN-ga da?",
+      "en": "How is your family?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya",
+      "kind": "phrase",
+      "pashto": "مور او پلار ته دې سلام ووایه",
+      "translit": "mor aw plār ta dey sa-lā́m wu-wā́-ya",
+      "pronunciation": "mor aw plaar ta dey sa-LAAM wu-WAA-ya",
+      "en": "Give my regards to your parents.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ko-ra-nay-me-de-ra-yaa-de-gee",
+      "kind": "phrase",
+      "pashto": "کورنۍ مې ډېره یادېږي",
+      "translit": "ko-ra-náy me dé-ra yā-dé-gī",
+      "pronunciation": "ko-ra-NAY me DE-ra yaa-DE-gee",
+      "en": "I miss my family.",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back. ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zmaa-wror-la-maa-ma-shar-day",
+      "kind": "phrase",
+      "pashto": "زما ورور له ما مشر دی",
+      "translit": "zmā wror la mā má-shar day",
+      "pronunciation": "zmaa wror la maa MA-shar day",
+      "en": "My brother is older than me.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zmaa-khor-la-maa-ka-sha-ra-da",
+      "kind": "phrase",
+      "pashto": "زما خور له ما کشره ده",
+      "translit": "zmā khor la mā ká-sha-ra da",
+      "pronunciation": "zmaa khor la maa KA-sha-ra da",
+      "en": "My sister is younger than me.",
+      "usage": null,
+      "pronunciationNote": "خ: kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-mung-ni-ka-aw-a-naa-ta-dzoo",
+      "kind": "phrase",
+      "pashto": "موږ نیکه او انا ته ځو",
+      "translit": "mung ní-ka aw a-nā́ ta dzū",
+      "pronunciation": "mung NI-ka aw a-NAA ta dzoo",
+      "en": "We're visiting our grandparents.",
+      "usage": null,
+      "pronunciationNote": "ږ: in Kabul close to g in go. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tol-kha-dee-2",
+      "kind": "phrase",
+      "pashto": "ټول ښه دي",
+      "translit": "tol kha dī",
+      "pronunciation": "tol kha dee",
+      "en": "Everyone is doing well.",
+      "usage": null,
+      "pronunciationNote": "ټ: t with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da",
+      "kind": "phrase",
+      "pashto": "کورنۍ زما لپاره ډېره مهمه ده",
+      "translit": "ko-ra-náy zmā la-pā́-ra dé-ra mu-hí-ma da",
+      "pronunciation": "ko-ra-NAY zmaa la-PAA-ra DE-ra mu-HI-ma da",
+      "en": "Family is very important to me.",
+      "usage": null,
+      "pronunciationNote": "ډ: d with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     }
   ],
   "lessons": [
@@ -815,7 +1627,8 @@
           "item": "e-sta",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 5
     },
     {
       "id": "l-family-phrases-this",
@@ -858,7 +1671,8 @@
           "item": "e-na-zma-zoy-day",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 5
     },
     {
       "id": "l-family-phrases-how",
@@ -881,7 +1695,8 @@
           "item": "e-hagha-xa-day",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 5
     },
     {
       "id": "l-family-1",
@@ -960,7 +1775,8 @@
             }
           ]
         }
-      ]
+      ],
+      "categoryNumber": 5
     },
     {
       "id": "l-family-2",
@@ -991,7 +1807,8 @@
           "item": "e-daa-zma-xor-da",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 5
     },
     {
       "id": "l-family-3",
@@ -1073,6 +1890,319 @@
               "item": "e-hagha-xa-day"
             }
           ]
+        }
+      ],
+      "categoryNumber": 5
+    },
+    {
+      "id": "l-c5-learn-1",
+      "title": "Family Members words",
+      "kind": "learn",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-mera",
+          "role": "present"
+        },
+        {
+          "item": "e-khadza",
+          "role": "present"
+        },
+        {
+          "item": "e-anaa",
+          "role": "present"
+        },
+        {
+          "item": "e-nika",
+          "role": "present"
+        },
+        {
+          "item": "e-kaakaa",
+          "role": "present"
+        },
+        {
+          "item": "e-maamaa",
+          "role": "present"
+        },
+        {
+          "item": "e-tror",
+          "role": "present"
+        },
+        {
+          "item": "e-khaala",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-learn-2",
+      "title": "Family Members words",
+      "kind": "learn",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-tar-boor",
+          "role": "present"
+        },
+        {
+          "item": "e-wraa-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-wra-re-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-mor-aw-plaar",
+          "role": "present"
+        },
+        {
+          "item": "e-maashoom",
+          "role": "present"
+        },
+        {
+          "item": "e-maa-shoo-maan",
+          "role": "present"
+        },
+        {
+          "item": "e-khpal-waan",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-phrases-1",
+      "title": "Family Members phrases",
+      "kind": "phrases",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-plaar-dey-cher-ta-day",
+          "role": "present"
+        },
+        {
+          "item": "e-dwa-wrona",
+          "role": "present"
+        },
+        {
+          "item": "e-ta-khwin-de-la-rey",
+          "role": "present"
+        },
+        {
+          "item": "e-maashoomaan-larey",
+          "role": "present"
+        },
+        {
+          "item": "e-zoy-aw-loor",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zmaa-kha-dza-da",
+          "role": "present"
+        },
+        {
+          "item": "e-daa-zmaa-me-ra-day",
+          "role": "present"
+        },
+        {
+          "item": "e-zmaa-mor-aw-plaar-pa-kor-ke-dee",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-phrases-2",
+      "title": "Family Members phrases",
+      "kind": "phrases",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-ko-ra-nay-dey-tsan-ga-da",
+          "role": "present"
+        },
+        {
+          "item": "e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya",
+          "role": "present"
+        },
+        {
+          "item": "e-ko-ra-nay-me-de-ra-yaa-de-gee",
+          "role": "present"
+        },
+        {
+          "item": "e-zmaa-wror-la-maa-ma-shar-day",
+          "role": "present"
+        },
+        {
+          "item": "e-zmaa-khor-la-maa-ka-sha-ra-da",
+          "role": "present"
+        },
+        {
+          "item": "e-mung-ni-ka-aw-a-naa-ta-dzoo",
+          "role": "present"
+        },
+        {
+          "item": "e-tol-kha-dee-2",
+          "role": "present"
+        },
+        {
+          "item": "e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-quiz-1",
+      "title": "Practice: Husband, wife and relatives",
+      "kind": "practice",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-mera",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khadza",
+          "role": "introduce"
+        },
+        {
+          "item": "e-anaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-nika",
+          "role": "introduce"
+        },
+        {
+          "item": "e-kaakaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maamaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tror",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khaala",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-quiz-2",
+      "title": "Practice: Cousins, children and parents",
+      "kind": "practice",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-tar-boor",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wraa-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-wra-re-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mor-aw-plaar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maashoom",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maa-shoo-maan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-khpal-waan",
+          "role": "introduce"
+        },
+        {
+          "item": "e-plaar-dey-cher-ta-day",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-quiz-3",
+      "title": "Practice: Brothers, sisters and children",
+      "kind": "practice",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-dwa-wrona",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ta-khwin-de-la-rey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-maashoomaan-larey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zoy-aw-loor",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zmaa-kha-dza-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-daa-zmaa-me-ra-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zmaa-mor-aw-plaar-pa-kor-ke-dee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ko-ra-nay-dey-tsan-ga-da",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c5-quiz-4",
+      "title": "Practice: I miss my family",
+      "kind": "practice",
+      "categoryNumber": 5,
+      "items": [
+        {
+          "item": "e-mor-aw-plaar-ta-dey-sa-laam-wu-waa-ya",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ko-ra-nay-me-de-ra-yaa-de-gee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zmaa-wror-la-maa-ma-shar-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zmaa-khor-la-maa-ka-sha-ra-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mung-ni-ka-aw-a-naa-ta-dzoo",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tol-kha-dee-2",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ko-ra-nay-zmaa-la-paa-ra-de-ra-mu-hi-ma-da",
+          "role": "introduce"
         }
       ]
     }

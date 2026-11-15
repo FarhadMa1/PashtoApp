@@ -45,6 +45,8 @@ EXTRA = [
     "notes-learn-xl-2.png",
     "notes-learn-light.png",
     "notes-plain-xl.png",
+    "chi-shay-light.png",
+    "food-drinks-learn-light.png",
 ]
 EXPECTED = [f"{screen}-{variant}.png" for screen in SCREENS for variant in VARIANTS] + EXTRA
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"

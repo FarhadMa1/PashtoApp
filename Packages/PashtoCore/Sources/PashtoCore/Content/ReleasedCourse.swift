@@ -36,7 +36,9 @@ public enum ReleasedCourse {
             romanization: bundle.romanization,
             items: items,
             units: units,
-            nonDistractorGroups: groups
+            nonDistractorGroups: groups,
+            categories: bundle.categories,
+            memberships: bundle.memberships.filter { referenced.contains($0.item) }
         ))
     }
 }

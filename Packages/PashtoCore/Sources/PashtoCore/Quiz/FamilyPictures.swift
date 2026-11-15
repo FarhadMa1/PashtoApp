@@ -18,6 +18,19 @@ public enum FamilyPictures {
         }
     }
 
+    /// Drawn figures sit lower on the same canvas. Scale them up, then clip to the frame.
+    public static func contentScale(for itemID: ItemID) -> Double {
+        switch itemID.rawValue {
+        case "e-zoy": return 1.90
+        case "e-lur": return 1.52
+        case "e-wror": return 1.19
+        case "e-xor": return 1.13
+        case "e-plar": return 1.09
+        case "e-koraney": return 1.45
+        default: return 1
+        }
+    }
+
     public static let itemIDs: [String] = [
         "e-mor",
         "e-plar",

@@ -345,8 +345,8 @@ struct PronunciationDisplayTests {
         let bundle = try loadCourse().bundle
         let want = try #require(bundle.items.first { $0.id.rawValue == "e-tsa-ghwaa-rey" })
         let stored = try #require(want.pronunciationNote)
-        let threeTips = "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r."
-        #expect(stored == threeTips)
+        let twoTips = "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r."
+        #expect(stored == twoTips)
         #expect(PronunciationNotes.presented(stored) == stored)
         #expect(!stored.contains("\n"))
         #expect(!stored.contains(PronunciationNotes.leftToRightIsolate))
@@ -354,7 +354,6 @@ struct PronunciationDisplayTests {
 
         let lines = PronunciationNotes.lines(in: stored)
         #expect(lines == [
-            "څ: ts as in cats.",
             "غ: gh, a voiced kh, close to French r.",
             "ړ: tongue tip curled back and flicked forward, like a quick r.",
         ])
@@ -365,10 +364,10 @@ struct PronunciationDisplayTests {
         #expect(display.hasSuffix(PronunciationNotes.popDirectionalIsolate))
         #expect(display == lines.map(PronunciationNotes.displayLine).joined(separator: "\n"))
         #expect(PronunciationNotes.spoken(display) == stored)
-        #expect(want.pronunciationNote == threeTips)
+        #expect(want.pronunciationNote == twoTips)
 
         let food = try source("content/units/u-food.json")
-        #expect(food.contains("\"pronunciationNote\": \"\(threeTips)\""))
+        #expect(food.contains("\"pronunciationNote\": \"\(twoTips)\""))
         #expect(!food.contains(PronunciationNotes.leftToRightIsolate))
 
         let single = "څ: ts as in cats."
@@ -440,8 +439,9 @@ struct PronunciationDisplayTests {
         let ayn = "ع is not pronounced as a separate sound in Pashto."
         #expect(PronunciationNotes.tips(in: ayn) == [PronunciationTip(letter: nil, text: ayn)])
 
-        let storedThree = try #require(bundle.items.first { $0.id.rawValue == "e-tsa-ghwaa-rey" }?.pronunciationNote)
-        #expect(PronunciationNotes.tips(in: storedThree) == tips)
+        let storedWant = try #require(bundle.items.first { $0.id.rawValue == "e-tsa-ghwaa-rey" }?.pronunciationNote)
+        let wantTips = PronunciationNotes.tips(in: storedWant)
+        #expect(wantTips.map(\.letter) == ["غ:", "ړ:"])
         let storedPlain = try #require(bundle.items.first { $0.id.rawValue == "e-ta" }?.pronunciationNote)
         #expect(storedPlain == plain)
         #expect(PronunciationNotes.tips(in: storedPlain).allSatisfy { $0.letter == nil })
@@ -467,7 +467,7 @@ struct PronunciationDisplayTests {
             }
         }
         #expect(plainNotes == 10)
-        #expect(letters.count == 11)
+        #expect(letters.count == 12)
     }
 
     @Test func quizCelebrationListsAndTheDailyWordKeepTheStoredPronunciation() throws {
@@ -563,7 +563,7 @@ struct PronunciationDisplayTests {
         #expect(body.contains("-uiTestNoteStaysAtTop"))
         #expect(body.contains("Asking for food and drink"))
         #expect(body.contains("Skip to practice"))
-        #expect(body.contains("tsa ghwaa-REY?"))
+        #expect(body.contains("chi-shay ghwaa-REY?"))
         #expect(!body.contains("forDuration: 0.2, thenDragTo"))
 
         let study = try source("PashtoApp/Quiz/StudyCardScreen.swift")
@@ -604,6 +604,8 @@ struct PronunciationDisplayTests {
         #expect(exporter.contains("notes-learn-xl.png"))
         #expect(exporter.contains("notes-learn-xl-2.png"))
         #expect(exporter.contains("notes-learn-light.png"))
+        #expect(exporter.contains("chi-shay-light.png"))
+        #expect(exporter.contains("food-drinks-learn-light.png"))
     }
 
     @Test func pashtoLineKeepsInitializerArgumentOrder() throws {
@@ -680,7 +682,7 @@ struct PronunciationDisplayTests {
         "e-gho-kha": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
         "e-ma-na": "ڼ: n with the tongue tip curled back.",
         "e-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
-        "e-tsa-ghwaa-rey": "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-tsa-ghwaa-rey": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
         "e-za-o-ba-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
         "e-za-chaay-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
         "e-daa-ma-na-da": "ڼ: n with the tongue tip curled back.",

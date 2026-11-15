@@ -21,7 +21,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-ho-tal",
@@ -41,7 +44,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-ti-kat",
@@ -61,7 +67,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-tash-naab",
@@ -81,7 +90,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-pay-se",
@@ -101,7 +113,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-graan",
@@ -121,7 +136,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-ar-zaan",
@@ -141,7 +159,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-mras-ta",
@@ -161,7 +182,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-ho-tal-cher-ta-day",
@@ -181,7 +205,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-tash-naab-cher-ta-day",
@@ -201,7 +228,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-za-ha-waa-yee-da-gar-ta-dzam",
@@ -221,7 +251,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-dal-ta-wu-dre-ga",
@@ -241,7 +274,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-za-ti-kat-ghwaa-ram",
@@ -261,7 +297,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-daa-pa-tso-day",
@@ -269,7 +308,7 @@
       "pashto": "دا په څو دی؟",
       "translit": "dā pə tso day?",
       "pronunciation": "daa pa tso day?",
-      "en": "how much is this?",
+      "en": "How much is this?",
       "usage": null,
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -281,7 +320,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-der-graan-day",
@@ -301,7 +343,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     },
     {
       "id": "e-mras-ta-wu-kray",
@@ -321,7 +366,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-09",
         "comment": "Bekreftet av Farhad 9. november 2026."
-      }
+      },
+      "level": 2,
+      "dialect": "eastern",
+      "verified": true
     }
   ],
   "lessons": [
@@ -366,7 +414,8 @@
           "item": "e-mras-ta",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-travel-phrases-where",
@@ -409,7 +458,8 @@
           "item": "e-mras-ta-wu-kray",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-travel-1",
@@ -447,7 +497,8 @@
           "item": "e-dal-ta-wu-dre-ga",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 14
     },
     {
       "id": "l-travel-2",
@@ -485,7 +536,8 @@
           "item": "e-mras-ta-wu-kray",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 13
     }
   ]
 }

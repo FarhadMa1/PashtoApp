@@ -17,7 +17,7 @@ struct GreetingsAudioTests {
             .filter { $0.pathExtension == "m4a" }
             .map { $0.deletingPathExtension().lastPathComponent }
             .sorted()
-        #expect(names.count == 19)
+        #expect(names.count == 431)
         for name in names {
             let id = try #require(ItemID(rawValue: name))
             let found = try #require(GreetingsAudio.url(for: id, in: directory))
@@ -31,7 +31,8 @@ struct GreetingsAudioTests {
         let study = try String(contentsOf: root.appendingPathComponent("PashtoApp/Quiz/StudyCardScreen.swift"), encoding: .utf8)
         #expect(!quiz.contains("GreetingsAudio"))
         #expect(!quiz.contains("GreetingsClipPlayer"))
-        #expect(study.contains("deck.unitID.rawValue == GreetingsAudio.unitID"))
+        #expect(study.contains("deck.kind == .learn || deck.kind == .phrases"))
+        #expect(!study.contains("GreetingsAudio.unitID"))
         #expect(study.contains("GreetingsAudio.url"))
         #expect(study.components(separatedBy: "clipPlayer.play").count == 3)
         #expect(study.contains("accessibilityLabel(Text(verbatim: \"Play\"))"))

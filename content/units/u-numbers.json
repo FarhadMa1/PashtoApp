@@ -9,7 +9,7 @@
       "pashto": "یو",
       "translit": "yaw",
       "pronunciation": "yaw",
-      "en": "one",
+      "en": "One",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -21,7 +21,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-dwa",
@@ -29,7 +32,7 @@
       "pashto": "دوه",
       "translit": "dwa",
       "pronunciation": "dwa",
-      "en": "two",
+      "en": "Two",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -41,7 +44,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-drey",
@@ -49,7 +55,7 @@
       "pashto": "درې",
       "translit": "dre",
       "pronunciation": "drey",
-      "en": "three",
+      "en": "Three",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -61,7 +67,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-tsa-lor",
@@ -69,7 +78,7 @@
       "pashto": "څلور",
       "translit": "tsəlór",
       "pronunciation": "tsa-LOR",
-      "en": "four",
+      "en": "Four",
       "usage": null,
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -81,7 +90,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-pin-dza",
@@ -89,7 +101,7 @@
       "pashto": "پنځه",
       "translit": "pindzá",
       "pronunciation": "pin-DZA",
-      "en": "five",
+      "en": "Five",
       "usage": null,
       "pronunciationNote": "ځ: dz as in kids.",
       "responseTo": null,
@@ -101,7 +113,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-shpag",
@@ -109,7 +124,7 @@
       "pashto": "شپږ",
       "translit": "špaǧ",
       "pronunciation": "shpag",
-      "en": "six",
+      "en": "Six",
       "usage": null,
       "pronunciationNote": "ږ: in Kabul close to g in go.",
       "responseTo": null,
@@ -121,7 +136,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-o-wa",
@@ -129,7 +147,7 @@
       "pashto": "اووه",
       "translit": "owá",
       "pronunciation": "o-WA",
-      "en": "seven",
+      "en": "Seven",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -141,7 +159,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-a-ta",
@@ -149,7 +170,7 @@
       "pashto": "اته",
       "translit": "atá",
       "pronunciation": "a-TA",
-      "en": "eight",
+      "en": "Eight",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -161,7 +182,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-na-ha",
@@ -169,7 +193,7 @@
       "pashto": "نهه",
       "translit": "náha",
       "pronunciation": "NA-ha",
-      "en": "nine",
+      "en": "Nine",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -181,7 +205,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-las",
@@ -189,7 +216,7 @@
       "pashto": "لس",
       "translit": "las",
       "pronunciation": "las",
-      "en": "ten",
+      "en": "Ten",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -201,7 +228,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-o-mar",
@@ -209,7 +239,7 @@
       "pashto": "عمر",
       "translit": "omár",
       "pronunciation": "o-MAR",
-      "en": "age",
+      "en": "Age",
       "usage": null,
       "pronunciationNote": "ع is not pronounced as a separate sound in Pashto.",
       "responseTo": null,
@@ -221,7 +251,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-yaw-wo-las",
@@ -229,7 +262,7 @@
       "pashto": "یوولس",
       "translit": "yawwólas",
       "pronunciation": "yaw-WO-las",
-      "en": "eleven",
+      "en": "Eleven",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -241,7 +274,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-dwo-las",
@@ -249,7 +285,7 @@
       "pashto": "دولس",
       "translit": "dwólas",
       "pronunciation": "DWO-las",
-      "en": "twelve",
+      "en": "Twelve",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -261,7 +297,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-dyaar-las",
@@ -269,7 +308,7 @@
       "pashto": "دیارلس",
       "translit": "dyārlás",
       "pronunciation": "dyaar-LAS",
-      "en": "thirteen",
+      "en": "Thirteen",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -281,7 +320,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-tswaar-las",
@@ -289,7 +331,7 @@
       "pashto": "څوارلس",
       "translit": "tswārlás",
       "pronunciation": "tswaar-LAS",
-      "en": "fourteen",
+      "en": "Fourteen",
       "usage": null,
       "pronunciationNote": "څ: ts as in cats.",
       "responseTo": null,
@@ -301,7 +343,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-pin-dza-las",
@@ -309,7 +354,7 @@
       "pashto": "پنځلس",
       "translit": "pindzálas",
       "pronunciation": "pin-DZA-las",
-      "en": "fifteen",
+      "en": "Fifteen",
       "usage": null,
       "pronunciationNote": "ځ: dz as in kids.",
       "responseTo": null,
@@ -321,7 +366,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-shpaa-ras",
@@ -329,7 +377,7 @@
       "pashto": "شپاړس",
       "translit": "špā́ṛas",
       "pronunciation": "SHPAA-ras",
-      "en": "sixteen",
+      "en": "Sixteen",
       "usage": null,
       "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
       "responseTo": null,
@@ -341,7 +389,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-o-wa-las",
@@ -349,7 +400,7 @@
       "pashto": "اوولس",
       "translit": "owálas",
       "pronunciation": "o-WA-las",
-      "en": "seventeen",
+      "en": "Seventeen",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -361,7 +412,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-a-ta-las",
@@ -369,7 +423,7 @@
       "pashto": "اتلس",
       "translit": "atálas",
       "pronunciation": "a-TA-las",
-      "en": "eighteen",
+      "en": "Eighteen",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -381,7 +435,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-no-las",
@@ -389,7 +446,7 @@
       "pashto": "نولس",
       "translit": "nólas",
       "pronunciation": "NO-las",
-      "en": "nineteen",
+      "en": "Nineteen",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -401,7 +458,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-shal",
@@ -409,7 +469,7 @@
       "pashto": "شل",
       "translit": "šal",
       "pronunciation": "shal",
-      "en": "twenty",
+      "en": "Twenty",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -421,7 +481,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ka-lan",
@@ -429,7 +492,7 @@
       "pashto": "کلن",
       "translit": "kalán",
       "pronunciation": "ka-LAN",
-      "en": "years old (male)",
+      "en": "Years old (m)",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -441,7 +504,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-ka-la-na",
@@ -449,7 +515,7 @@
       "pashto": "کلنه",
       "translit": "kalána",
       "pronunciation": "ka-LA-na",
-      "en": "years old (female)",
+      "en": "Years old (f)",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -461,7 +527,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-o-mar-dey-tso-day",
@@ -469,7 +538,7 @@
       "pashto": "عمر دې څو دی؟",
       "translit": "omár de tso day?",
       "pronunciation": "o-MAR dey tso day?",
-      "en": "how old are you?",
+      "en": "How old are you?",
       "usage": null,
       "pronunciationNote": "څ: ts as in cats. ع is not pronounced as a separate sound in Pashto.",
       "responseTo": null,
@@ -481,7 +550,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-shal-ka-lan-yam",
@@ -489,7 +561,7 @@
       "pashto": "زه شل کلن یم",
       "translit": "zə šal kalán yəm",
       "pronunciation": "za shal ka-LAN yam",
-      "en": "I am twenty years old (male)",
+      "en": "I am twenty years old. (m)",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -501,7 +573,10 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     },
     {
       "id": "e-za-shal-ka-la-na-yam",
@@ -509,7 +584,7 @@
       "pashto": "زه شل کلنه یم",
       "translit": "zə šal kalána yəm",
       "pronunciation": "za shal ka-LA-na yam",
-      "en": "I am twenty years old (female)",
+      "en": "I am twenty years old. (f)",
       "usage": null,
       "pronunciationNote": null,
       "responseTo": null,
@@ -521,7 +596,586 @@
         "checkedBy": "Farhad",
         "checkedOn": "2026-11-08",
         "comment": "Bekreftet av Farhad via ordlisten."
-      }
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sifr",
+      "kind": "word",
+      "pashto": "صفر",
+      "translit": "sifr",
+      "pronunciation": "sifr",
+      "en": "Zero",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dersh",
+      "kind": "word",
+      "pashto": "دېرش",
+      "translit": "dersh",
+      "pronunciation": "dersh",
+      "en": "Thirty",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tsalwekht",
+      "kind": "word",
+      "pashto": "څلوېښت",
+      "translit": "tsal-wékht",
+      "pronunciation": "tsal-WEKHT",
+      "en": "Forty",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. ښ: in Kabul close to kh, like ch in Scottish loch.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-pindzos",
+      "kind": "word",
+      "pashto": "پنځوس",
+      "translit": "pin-dzós",
+      "pronunciation": "pin-DZOS",
+      "en": "Fifty",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-shpeta",
+      "kind": "word",
+      "pashto": "شپېته",
+      "translit": "shpe-tá",
+      "pronunciation": "shpe-TA",
+      "en": "Sixty",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-awyaa",
+      "kind": "word",
+      "pashto": "اویا",
+      "translit": "a-wí-yā",
+      "pronunciation": "a-WI-yaa",
+      "en": "Seventy",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-atyaa",
+      "kind": "word",
+      "pashto": "اتیا",
+      "translit": "a-tí-yā",
+      "pronunciation": "a-TI-yaa",
+      "en": "Eighty",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-nawi",
+      "kind": "word",
+      "pashto": "نوي",
+      "translit": "na-wí",
+      "pronunciation": "na-WI",
+      "en": "Ninety",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sal",
+      "kind": "word",
+      "pashto": "سل",
+      "translit": "sal",
+      "pronunciation": "sal",
+      "en": "Hundred",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-zar",
+      "kind": "word",
+      "pashto": "زر",
+      "translit": "zar",
+      "pronunciation": "zar",
+      "en": "Thousand",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-neem",
+      "kind": "word",
+      "pashto": "نیم",
+      "translit": "nīm",
+      "pronunciation": "neem",
+      "en": "Half",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-lomray",
+      "kind": "word",
+      "pashto": "لومړی",
+      "translit": "lóm-ray",
+      "pronunciation": "LOM-ray",
+      "en": "First",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dwaham",
+      "kind": "word",
+      "pashto": "دوهم",
+      "translit": "dwa-hám",
+      "pronunciation": "dwa-HAM",
+      "en": "Second",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dre-yam",
+      "kind": "word",
+      "pashto": "درېیم",
+      "translit": "dre-yám",
+      "pronunciation": "dre-YAM",
+      "en": "Third",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tso-ghwaa-rey",
+      "kind": "phrase",
+      "pashto": "څو غواړې؟",
+      "translit": "tso ghwā-réy",
+      "pronunciation": "tso ghwaa-REY?",
+      "en": "How many do you want?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-dwa-ghwaa-ram",
+      "kind": "phrase",
+      "pashto": "دوه غواړم",
+      "translit": "dwa ghwā-rám",
+      "pronunciation": "dwa ghwaa-RAM",
+      "en": "I want two.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-drey-wro-na-la-ram",
+      "kind": "phrase",
+      "pashto": "زه درې وروڼه لرم",
+      "translit": "za drey wro-ná la-rám",
+      "pronunciation": "za drey wro-NA la-RAM",
+      "en": "I have three brothers.",
+      "usage": null,
+      "pronunciationNote": "ڼ: n with the tongue tip curled back.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-pin-dza-da-kee-ke-sabr-wu-ka-ra",
+      "kind": "phrase",
+      "pashto": "پنځه دقیقې صبر وکړه",
+      "translit": "pin-dzá da-kī-ké sabr wú-ka-ra",
+      "pronunciation": "pin-DZA da-kee-KE sabr WU-ka-ra",
+      "en": "Give me five minutes.",
+      "usage": null,
+      "pronunciationNote": "ځ: dz as in kids. ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-sal-af-ghaa-nay-ke-gee",
+      "kind": "phrase",
+      "pashto": "سل افغانۍ کېږي",
+      "translit": "sal af-ghā-náy ke-gī́",
+      "pronunciation": "sal af-ghaa-NAY ke-GEE",
+      "en": "It costs one hundred.",
+      "usage": null,
+      "pronunciationNote": "غ: gh, a voiced kh, close to French r. ږ: in Kabul close to g in go.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-yaw-bal-pa-kaar-day",
+      "kind": "phrase",
+      "pashto": "یو بل پکار دی",
+      "translit": "yaw bal pa-kā́r day",
+      "pronunciation": "yaw bal pa-KAAR day",
+      "en": "I need one more.",
+      "usage": null,
+      "pronunciationNote": null,
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tsa-lor-ka-saan-dee",
+      "kind": "phrase",
+      "pashto": "څلور کسان دي",
+      "translit": "tsa-lór ka-sā́n dī",
+      "pronunciation": "tsa-LOR ka-SAAN dee",
+      "en": "There are four people.",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-tso-ka-saan-raa-dzee",
+      "kind": "phrase",
+      "pashto": "څو کسان راځي؟",
+      "translit": "tso ka-sā́n rā-dzī́",
+      "pronunciation": "tso ka-SAAN raa-DZEE?",
+      "en": "How many people are coming?",
+      "usage": null,
+      "pronunciationNote": "څ: ts as in cats. ځ: dz as in kids.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-za-lom-ray-yam",
+      "kind": "phrase",
+      "pashto": "زه لومړی یم",
+      "translit": "za lóm-ray yam",
+      "pronunciation": "za LOM-ray yam",
+      "en": "I'm number one.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
+    },
+    {
+      "id": "e-las-da-kee-ke-sabr-wu-ka-ra",
+      "kind": "phrase",
+      "pashto": "لس دقیقې صبر وکړه",
+      "translit": "las da-kī-ké sabr wú-ka-ra",
+      "pronunciation": "las da-kee-KE sabr WU-ka-ra",
+      "en": "Wait ten minutes.",
+      "usage": null,
+      "pronunciationNote": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+      "responseTo": null,
+      "tokens": null,
+      "tokenPronunciations": null,
+      "acceptedOrders": null,
+      "audio": null,
+      "verification": {
+        "status": "verified",
+        "checkedBy": "Farhad",
+        "checkedOn": "2026-11-15",
+        "comment": "Approved by Farhad on 2026-11-15."
+      },
+      "dialect": "eastern",
+      "verified": true,
+      "level": 1
     }
   ],
   "lessons": [
@@ -550,7 +1204,8 @@
           "item": "e-pin-dza",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 6
     },
     {
       "id": "l-numbers-learn-six-to-ten",
@@ -589,7 +1244,8 @@
           "item": "e-ka-la-na",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 6
     },
     {
       "id": "l-numbers-learn-eleven-to-fifteen",
@@ -636,7 +1292,8 @@
           "item": "e-shal",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 6
     },
     {
       "id": "l-numbers-phrases-how-old",
@@ -655,7 +1312,8 @@
           "item": "e-za-shal-ka-la-na-yam",
           "role": "present"
         }
-      ]
+      ],
+      "categoryNumber": 6
     },
     {
       "id": "l-numbers-1",
@@ -705,7 +1363,8 @@
           "item": "e-o-mar",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 6
     },
     {
       "id": "l-numbers-2",
@@ -751,7 +1410,8 @@
           "item": "e-shal",
           "role": "introduce"
         }
-      ]
+      ],
+      "categoryNumber": 6
     },
     {
       "id": "l-numbers-3",
@@ -804,6 +1464,247 @@
               "item": "e-za-shal-ka-la-na-yam"
             }
           ]
+        }
+      ],
+      "categoryNumber": 6
+    },
+    {
+      "id": "l-c6-learn-1",
+      "title": "Numbers & Counting words",
+      "kind": "learn",
+      "categoryNumber": 6,
+      "items": [
+        {
+          "item": "e-sifr",
+          "role": "present"
+        },
+        {
+          "item": "e-dersh",
+          "role": "present"
+        },
+        {
+          "item": "e-tsalwekht",
+          "role": "present"
+        },
+        {
+          "item": "e-pindzos",
+          "role": "present"
+        },
+        {
+          "item": "e-shpeta",
+          "role": "present"
+        },
+        {
+          "item": "e-awyaa",
+          "role": "present"
+        },
+        {
+          "item": "e-atyaa",
+          "role": "present"
+        },
+        {
+          "item": "e-nawi",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c6-learn-2",
+      "title": "Numbers & Counting words",
+      "kind": "learn",
+      "categoryNumber": 6,
+      "items": [
+        {
+          "item": "e-sal",
+          "role": "present"
+        },
+        {
+          "item": "e-zar",
+          "role": "present"
+        },
+        {
+          "item": "e-neem",
+          "role": "present"
+        },
+        {
+          "item": "e-lomray",
+          "role": "present"
+        },
+        {
+          "item": "e-dwaham",
+          "role": "present"
+        },
+        {
+          "item": "e-dre-yam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c6-phrases-1",
+      "title": "Numbers & Counting phrases",
+      "kind": "phrases",
+      "categoryNumber": 6,
+      "items": [
+        {
+          "item": "e-tso-ghwaa-rey",
+          "role": "present"
+        },
+        {
+          "item": "e-dwa-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-za-drey-wro-na-la-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-pin-dza-da-kee-ke-sabr-wu-ka-ra",
+          "role": "present"
+        },
+        {
+          "item": "e-sal-af-ghaa-nay-ke-gee",
+          "role": "present"
+        },
+        {
+          "item": "e-yaw-bal-pa-kaar-day",
+          "role": "present"
+        },
+        {
+          "item": "e-tsa-lor-ka-saan-dee",
+          "role": "present"
+        },
+        {
+          "item": "e-tso-ka-saan-raa-dzee",
+          "role": "present"
+        },
+        {
+          "item": "e-za-lom-ray-yam",
+          "role": "present"
+        },
+        {
+          "item": "e-las-da-kee-ke-sabr-wu-ka-ra",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-c6-quiz-1",
+      "title": "Numbers & Counting quiz",
+      "kind": "practice",
+      "categoryNumber": 6,
+      "items": [
+        {
+          "item": "e-sifr",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dersh",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tsalwekht",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pindzos",
+          "role": "introduce"
+        },
+        {
+          "item": "e-shpeta",
+          "role": "introduce"
+        },
+        {
+          "item": "e-awyaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-atyaa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-nawi",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c6-quiz-2",
+      "title": "Numbers & Counting quiz",
+      "kind": "practice",
+      "categoryNumber": 6,
+      "items": [
+        {
+          "item": "e-sal",
+          "role": "introduce"
+        },
+        {
+          "item": "e-zar",
+          "role": "introduce"
+        },
+        {
+          "item": "e-neem",
+          "role": "introduce"
+        },
+        {
+          "item": "e-lomray",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dwaham",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dre-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tso-ghwaa-rey",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dwa-ghwaa-ram",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-c6-quiz-3",
+      "title": "Numbers & Counting quiz",
+      "kind": "practice",
+      "categoryNumber": 6,
+      "items": [
+        {
+          "item": "e-za-drey-wro-na-la-ram",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pin-dza-da-kee-ke-sabr-wu-ka-ra",
+          "role": "introduce"
+        },
+        {
+          "item": "e-sal-af-ghaa-nay-ke-gee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-yaw-bal-pa-kaar-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tsa-lor-ka-saan-dee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-tso-ka-saan-raa-dzee",
+          "role": "introduce"
+        },
+        {
+          "item": "e-za-lom-ray-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-las-da-kee-ke-sabr-wu-ka-ra",
+          "role": "introduce"
         }
       ]
     }

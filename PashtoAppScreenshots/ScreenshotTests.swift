@@ -12,10 +12,9 @@ final class ScreenshotTests: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         // The workflow default is 180 seconds, and the allowance is fixed
-        // before the test body runs. Each XL test requests 400.
-        if name.contains("testXL") {
-            executionTimeAllowance = 400
-        }
+        // before the test body runs. Dark now walks the phrases card as well,
+        // so every screenshot test requests the workflow maximum.
+        executionTimeAllowance = 400
     }
 
     func testLight() {
@@ -80,7 +79,7 @@ final class ScreenshotTests: XCTestCase {
                 "tip \(index) did not appear. buttons: \(buttonDump(app))"
             )
         }
-        let marks = ["څ:", "غ:", "ړ:"]
+        let marks = ["غ:", "ړ:"]
         for (tip, mark) in zip(tips, marks) {
             XCTAssertTrue(tip.label.hasPrefix(mark), "tip label \(tip.label)")
             XCTAssertFalse(
@@ -89,8 +88,8 @@ final class ScreenshotTests: XCTestCase {
             )
         }
         let title = labeled("Asking for food and drink", in: app)
-        let phrase = storedPronunciation("tsa ghwaa-REY?", in: app)
-        let pashto = labeled("څه غواړې؟", in: app)
+        let phrase = storedPronunciation("chi-shay ghwaa-REY?", in: app)
+        let pashto = labeled("څه شی غواړې؟", in: app)
         XCTAssertTrue(title.waitForExistence(timeout: 5), "note title is missing")
         XCTAssertTrue(phrase.waitForExistence(timeout: 5), "phrase pronunciation is missing")
         XCTAssertTrue(pashto.waitForExistence(timeout: 5), "phrase Pashto is missing")
@@ -123,12 +122,12 @@ final class ScreenshotTests: XCTestCase {
             let window = scroll.frame
             return fullyInside(tips[0].frame, window)
                 && tips[0].frame.minY <= window.minY + 220
-                && tips[2].frame.maxY > window.maxY + 8
+                && tips[1].frame.maxY > window.maxY + 8
         }
-        if fullyInside(tips[2].frame, scroll.frame) {
+        if fullyInside(tips[1].frame, scroll.frame) {
             for _ in 0..<8 {
                 let window = scroll.frame
-                if fullyInside(tips[0].frame, window), tips[2].frame.maxY > window.maxY + 8 {
+                if fullyInside(tips[0].frame, window), tips[1].frame.maxY > window.maxY + 8 {
                     break
                 }
                 nudgeScroll(scroll, revealingLower: false, portion: 0.08)
@@ -136,7 +135,7 @@ final class ScreenshotTests: XCTestCase {
             }
         }
         XCTAssertTrue(
-            fullyInside(tips[0].frame, scroll.frame) && tips[2].frame.maxY > scroll.frame.maxY + 8,
+            fullyInside(tips[0].frame, scroll.frame) && tips[1].frame.maxY > scroll.frame.maxY + 8,
             "middle notes shot has no room left to scroll. \(tipDump(tips, scroll: scroll))"
         )
         settle(0.4)
@@ -144,21 +143,21 @@ final class ScreenshotTests: XCTestCase {
         let windowBefore = scroll.frame
         shot("notes-learn-xl")
 
-        let lowerStart = tips[2].frame.minY
-        scrollNoteDown(scroll, probe: tips[2], movement: tips[0]) {
-            fullyInside(tips[2].frame, scroll.frame)
+        let lowerStart = tips[1].frame.minY
+        scrollNoteDown(scroll, probe: tips[1], movement: tips[0]) {
+            fullyInside(tips[1].frame, scroll.frame)
         }
         settle(0.4)
         let after = tips.map(\.frame)
         let windowAfter = scroll.frame
         shot("notes-learn-xl-2")
         XCTAssertLessThan(
-            after[2].minY,
+            after[1].minY,
             lowerStart - 24,
             "the list did not scroll. \(tipDump(tips, scroll: scroll))"
         )
         XCTAssertTrue(
-            fullyInside(after[2], windowAfter),
+            fullyInside(after[1], windowAfter),
             "lower tip is not fully on screen. \(tipDump(tips, scroll: scroll))"
         )
 
@@ -212,12 +211,18 @@ final class ScreenshotTests: XCTestCase {
             "Food phrase card did not open. buttons: \(buttonDump(app))"
         )
         let tips = noteTips(in: app)
-        let marks = ["څ:", "غ:", "ړ:"]
+        let marks = ["غ:", "ړ:"]
         for (tip, mark) in zip(tips, marks) {
             XCTAssertTrue(tip.waitForExistence(timeout: 8), "tip \(mark) did not appear")
             XCTAssertTrue(tip.label.hasPrefix(mark), "tip label \(tip.label)")
         }
+        XCTAssertTrue(
+            storedPronunciation("chi-shay ghwaa-REY?", in: app).waitForExistence(timeout: 5),
+            "chi-shay card has no pronunciation"
+        )
+        XCTAssertTrue(labeled("څه شی غواړې؟", in: app).waitForExistence(timeout: 5))
         settle(1.0)
+        shot("chi-shay-light")
         shot("notes-learn-light")
     }
 
@@ -242,6 +247,9 @@ final class ScreenshotTests: XCTestCase {
         app.terminate()
         showHome(app, variant: variant, failure: "home did not return. buttons: \(buttonDump(app))")
         captureGreetingsAndTravel(app, variant: variant, basics: basics)
+        if variant == "light" {
+            captureFoodDrinksLearn(app, basics: basics)
+        }
         captureFamilyLearnAndQuiz(app, variant: variant)
         captureCelebration(app, variant: variant)
         captureDailyWord(app, variant: variant)
@@ -258,7 +266,7 @@ final class ScreenshotTests: XCTestCase {
     ) -> XCUIElement {
         app.launchArguments = launchArguments(for: variant)
         app.launch()
-        let basics = app.descendants(matching: .any)["u-basics"]
+        let basics = app.descendants(matching: .any)["u-cat-1"]
         if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
             app.buttons["Start review"].tap()
         }
@@ -274,7 +282,7 @@ final class ScreenshotTests: XCTestCase {
         settle()
         shot("home-new-categories-\(variant)")
 
-        tap("u-numbers", in: app)
+        tap("u-cat-6", in: app)
         tap("l-numbers-learn-one-to-five", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
@@ -282,7 +290,7 @@ final class ScreenshotTests: XCTestCase {
         )
         XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers list has no pronunciation")
         XCTAssertTrue(app.staticTexts["0 of 5 words"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["Play"].exists, "Numbers has no bundled clip")
+        XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Numbers list has no Play button")
         settle(1.0)
         shot("learn-list-numbers-\(variant)")
         let numbersCards = app.buttons["Flashcards"]
@@ -299,7 +307,7 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func captureGreetingsAndTravel(_ app: XCUIApplication, variant: String, basics: XCUIElement) {
-        tap("u-basics", in: app)
+        tap("u-cat-2", in: app)
         tap("l-basics-learn-polite", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
@@ -320,7 +328,19 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["Pashto"].tap()
         popToHome(app, basics: basics)
 
-        tap("u-travel", in: app)
+        openCategory("u-cat-1", showing: "l-greetings-phrases-hello", in: app)
+        tap("l-greetings-phrases-hello", in: app)
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 15),
+            "Phrases card did not open. buttons: \(buttonDump(app))"
+        )
+        settle(1.0)
+        shot("phrases-tab-\(variant)")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        popToHome(app, basics: basics)
+
+        tap("u-cat-14", in: app)
         tap("l-travel-learn-around", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
@@ -338,8 +358,32 @@ final class ScreenshotTests: XCTestCase {
         popToHome(app, basics: basics)
     }
 
+    /// The Food & Drinks learn list: juice is the first word.
+    private func captureFoodDrinksLearn(_ app: XCUIApplication, basics: XCUIElement) {
+        tap("u-cat-9", in: app)
+        XCTAssertTrue(
+            app.staticTexts["Food & Drinks"].waitForExistence(timeout: 10),
+            "Food & Drinks category did not open. buttons: \(buttonDump(app))"
+        )
+        tap("l-c9-learn-1", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Food & Drinks learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(app.staticTexts["Food & Drinks words"].waitForExistence(timeout: 5))
+        XCTAssertTrue(
+            storedPronunciation("joos", in: app).waitForExistence(timeout: 5),
+            "Food list has no juice pronunciation"
+        )
+        settle(1.0)
+        shot("food-drinks-learn-light")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        popToHome(app, basics: basics)
+    }
+
     private func captureFamilyLearnAndQuiz(_ app: XCUIApplication, variant: String) {
-        tap("u-family", in: app)
+        tap("u-cat-5", in: app)
         let mother = app.descendants(matching: .any)["e-mor"]
         XCTAssertTrue(mother.waitForExistence(timeout: 15), "Family word list did not load. buttons: \(buttonDump(app))")
         reveal(mother, in: app)
@@ -419,7 +463,7 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func noteTips(in app: XCUIApplication) -> [XCUIElement] {
-        (0..<3).map { index in
+        (0..<2).map { index in
             app.descendants(matching: .any)["pronunciation-tip-\(index)"]
         }
     }
@@ -541,7 +585,7 @@ final class ScreenshotTests: XCTestCase {
             basics.waitForExistence(timeout: 30),
             "home did not load for the Time list. buttons: \(buttonDump(app))"
         )
-        tap("u-time", in: app)
+        tap("u-cat-7", in: app)
         tap("l-time-learn-days", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
@@ -642,7 +686,7 @@ final class ScreenshotTests: XCTestCase {
             basics.waitForExistence(timeout: 30),
             "home did not load for Bold Text. buttons: \(buttonDump(app))"
         )
-        tap("u-basics", in: app)
+        tap("u-cat-2", in: app)
         tap("l-basics-learn-polite", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
@@ -676,7 +720,7 @@ final class ScreenshotTests: XCTestCase {
     /// text size the four cards do not fit, so the scroll stops with Numbers
     /// still tappable and as many of the next rows as the list can show.
     private func revealNewCategories(in app: XCUIApplication) {
-        let rows = ["u-numbers", "u-food", "u-town", "u-conversation"].map {
+        let rows = ["u-cat-6", "u-cat-9", "u-cat-13", "u-cat-14"].map {
             app.descendants(matching: .any)[$0]
         }
         for row in rows {
@@ -754,6 +798,20 @@ final class ScreenshotTests: XCTestCase {
         app.descendants(matching: .any).matching(
             NSPredicate(format: "label == %@", stored)
         ).firstMatch
+    }
+
+    /// A large home row can report itself as tappable while the tap misses.
+    /// Try the category again until the lesson is in the hierarchy.
+    private func openCategory(_ category: String, showing lesson: String, in app: XCUIApplication) {
+        let row = app.descendants(matching: .any)[lesson]
+        for _ in 0..<3 {
+            tap(category, in: app)
+            if row.waitForExistence(timeout: 6) { return }
+        }
+        XCTAssertTrue(
+            row.waitForExistence(timeout: 2),
+            "\(lesson) did not open. buttons: \(buttonDump(app))"
+        )
     }
 
     private func tap(_ identifier: String, in app: XCUIApplication) {

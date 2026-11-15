@@ -2,8 +2,10 @@ import Foundation
 
 /// Shape checks for the pronunciation shown in the app.
 ///
-/// Letters, hyphen, space, and punctuation are allowed. A hyphenated word needs
-/// exactly one all-uppercase syllable. A word without a hyphen is lowercase or
+/// Letters, hyphen, space, and punctuation are allowed. A hyphenated word has
+/// one all-uppercase syllable. Zero is allowed when that word is two
+/// `tokenPronunciations` joined with `-`, or when the word is `chi-shay` and
+/// the Pashto contains `څه شی`. A word without a hyphen is lowercase or
 /// entirely uppercase. Entirely uppercase is a stressed one-syllable word
 /// (`KHAYR`). Mixed case is an error. An all-uppercase word whose next word
 /// starts with `kr` is a review (`ZDA kram`).
@@ -17,7 +19,9 @@ enum PronunciationRules {
         pronunciation: String,
         id: String?,
         syllableCount: (String) -> Int,
-        requireHyphenWhenMultiSyllable: Bool
+        requireHyphenWhenMultiSyllable: Bool,
+        tokenPronunciations: [String]? = nil,
+        pashto: String = ""
     ) -> [ValidationIssue] {
         var issues: [ValidationIssue] = []
         var reported: Set<Unicode.Scalar> = []
@@ -53,7 +57,12 @@ enum PronunciationRules {
         for index in pronunciationWords.indices {
             let word = pronunciationWords[index]
             if word.contains("-") {
-                issues.append(contentsOf: hyphenatedIssues(word, id: id))
+                issues.append(contentsOf: hyphenatedIssues(
+                    word,
+                    id: id,
+                    tokenPronunciations: tokenPronunciations,
+                    pashto: pashto
+                ))
             } else {
                 issues.append(contentsOf: plainIssues(
                     word,
@@ -65,7 +74,12 @@ enum PronunciationRules {
         return issues
     }
 
-    private static func hyphenatedIssues(_ word: String, id: String?) -> [ValidationIssue] {
+    private static func hyphenatedIssues(
+        _ word: String,
+        id: String?,
+        tokenPronunciations: [String]?,
+        pashto: String
+    ) -> [ValidationIssue] {
         let syllables = word.split(separator: "-", omittingEmptySubsequences: false).map(String.init)
         var uppercase = 0
         var issues: [ValidationIssue] = []
@@ -81,10 +95,43 @@ enum PronunciationRules {
                 issues.append(error(id, "Syllable \"\(syllable)\" in \"\(word)\" mixes uppercase and lowercase."))
             }
         }
-        if uppercase != 1 {
-            issues.append(error(id, "\"\(word)\" needs exactly one uppercase syllable."))
+        if uppercase == 0, !allowsUnstressedHyphen(spokenSegment(word), pashto: pashto, tokenPronunciations: tokenPronunciations) {
+            issues.append(error(id, "\"\(word)\" has no uppercase syllable."))
+        } else if uppercase > 1 {
+            issues.append(error(id, "\"\(word)\" has more than one uppercase syllable."))
         }
         return issues
+    }
+
+    /// A token join, or `chi-shay` written for `څه شی`. Any other unstressed hyphen is an error.
+    private static func allowsUnstressedHyphen(
+        _ word: String,
+        pashto: String,
+        tokenPronunciations: [String]?
+    ) -> Bool {
+        if joinsTokenPronunciations(word, tokenPronunciations) { return true }
+        return word == "chi-shay" && pashto.contains("څه شی")
+    }
+
+    /// `chi-shay` is `chi` and `shay` joined by the hyphen.
+    private static func joinsTokenPronunciations(_ word: String, _ tokens: [String]?) -> Bool {
+        guard let tokens, tokens.count >= 2 else { return false }
+        for index in 0..<(tokens.count - 1) {
+            if tokens[index] + "-" + tokens[index + 1] == word {
+                return true
+            }
+        }
+        return false
+    }
+
+    /// The spoken piece. A trailing question mark is not part of the token join.
+    private static func spokenSegment(_ word: String) -> String {
+        var segment = word
+        let trailing: Set<Character> = ["?", "!", ".", ",", ":", ";", "؟", "،"]
+        while let last = segment.last, trailing.contains(last) {
+            segment.removeLast()
+        }
+        return segment
     }
 
     private static func plainIssues(_ word: String, next: String?, id: String?) -> [ValidationIssue] {
