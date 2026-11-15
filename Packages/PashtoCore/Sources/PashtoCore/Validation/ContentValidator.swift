@@ -319,7 +319,8 @@ public enum ContentValidator {
                 id: id,
                 syllableCount: { stress.syllableCount(in: $0) },
                 requireHyphenWhenMultiSyllable: item.kind != .letter,
-                tokenPronunciations: item.tokenPronunciations
+                tokenPronunciations: item.tokenPronunciations,
+                pashto: item.pashto
             ))
         }
         if Text.isBlank(item.en) {

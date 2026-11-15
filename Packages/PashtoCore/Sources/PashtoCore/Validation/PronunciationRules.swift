@@ -3,11 +3,12 @@ import Foundation
 /// Shape checks for the pronunciation shown in the app.
 ///
 /// Letters, hyphen, space, and punctuation are allowed. A hyphenated word has
-/// one all-uppercase syllable. Zero is allowed only when that word is two
-/// `tokenPronunciations` joined with `-` (`chi` and `shay` make `chi-shay`).
-/// A word without a hyphen is lowercase or entirely uppercase. Entirely
-/// uppercase is a stressed one-syllable word (`KHAYR`). Mixed case is an error.
-/// An all-uppercase word whose next word starts with `kr` is a review (`ZDA kram`).
+/// one all-uppercase syllable. Zero is allowed when that word is two
+/// `tokenPronunciations` joined with `-`, or when the word is `chi-shay` and
+/// the Pashto contains `څه شی`. A word without a hyphen is lowercase or
+/// entirely uppercase. Entirely uppercase is a stressed one-syllable word
+/// (`KHAYR`). Mixed case is an error. An all-uppercase word whose next word
+/// starts with `kr` is a review (`ZDA kram`).
 ///
 /// When `requireHyphenWhenMultiSyllable` is set, a transliteration word with more
 /// than one syllable (from the active `StressRule`) must be spelled with a hyphen.
@@ -19,7 +20,8 @@ enum PronunciationRules {
         id: String?,
         syllableCount: (String) -> Int,
         requireHyphenWhenMultiSyllable: Bool,
-        tokenPronunciations: [String]? = nil
+        tokenPronunciations: [String]? = nil,
+        pashto: String = ""
     ) -> [ValidationIssue] {
         var issues: [ValidationIssue] = []
         var reported: Set<Unicode.Scalar> = []
@@ -55,7 +57,12 @@ enum PronunciationRules {
         for index in pronunciationWords.indices {
             let word = pronunciationWords[index]
             if word.contains("-") {
-                issues.append(contentsOf: hyphenatedIssues(word, id: id, tokenPronunciations: tokenPronunciations))
+                issues.append(contentsOf: hyphenatedIssues(
+                    word,
+                    id: id,
+                    tokenPronunciations: tokenPronunciations,
+                    pashto: pashto
+                ))
             } else {
                 issues.append(contentsOf: plainIssues(
                     word,
@@ -70,7 +77,8 @@ enum PronunciationRules {
     private static func hyphenatedIssues(
         _ word: String,
         id: String?,
-        tokenPronunciations: [String]?
+        tokenPronunciations: [String]?,
+        pashto: String
     ) -> [ValidationIssue] {
         let syllables = word.split(separator: "-", omittingEmptySubsequences: false).map(String.init)
         var uppercase = 0
@@ -87,7 +95,7 @@ enum PronunciationRules {
                 issues.append(error(id, "Syllable \"\(syllable)\" in \"\(word)\" mixes uppercase and lowercase."))
             }
         }
-        if uppercase == 0, !joinsTokenPronunciations(spokenSegment(word), tokenPronunciations) {
+        if uppercase == 0, !allowsUnstressedHyphen(spokenSegment(word), pashto: pashto, tokenPronunciations: tokenPronunciations) {
             issues.append(error(id, "\"\(word)\" has no uppercase syllable."))
         } else if uppercase > 1 {
             issues.append(error(id, "\"\(word)\" has more than one uppercase syllable."))
@@ -95,7 +103,17 @@ enum PronunciationRules {
         return issues
     }
 
-    /// `chi-shay` is `chi` and `shay` joined by the hyphen. Any other unstressed hyphen is an error.
+    /// A token join, or `chi-shay` written for `څه شی`. Any other unstressed hyphen is an error.
+    private static func allowsUnstressedHyphen(
+        _ word: String,
+        pashto: String,
+        tokenPronunciations: [String]?
+    ) -> Bool {
+        if joinsTokenPronunciations(word, tokenPronunciations) { return true }
+        return word == "chi-shay" && pashto.contains("څه شی")
+    }
+
+    /// `chi-shay` is `chi` and `shay` joined by the hyphen.
     private static func joinsTokenPronunciations(_ word: String, _ tokens: [String]?) -> Bool {
         guard let tokens, tokens.count >= 2 else { return false }
         for index in 0..<(tokens.count - 1) {
