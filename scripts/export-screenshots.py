@@ -32,10 +32,12 @@ SCREENS = (
 )
 VARIANTS = ("light", "dark", "xl")
 # Bold Text is the light Greetings list. The long Time word is XL only.
-# The Food note is XL (two shots) and light. The plain note has no letter.
+# The Food note is XL (top, the note, and the lower tips) and light.
+# The plain note has no letter.
 EXTRA = [
     "learn-list-bold-light.png",
     "learn-list-time-xl.png",
+    "notes-learn-xl-top.png",
     "notes-learn-xl.png",
     "notes-learn-xl-2.png",
     "notes-learn-light.png",

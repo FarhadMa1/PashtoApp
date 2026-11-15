@@ -48,16 +48,23 @@ final class ScreenshotTests: XCTestCase {
         captureDailyWord(app, variant: "xl")
     }
 
-    /// The Food phrase note at the largest type. The card opens on that item.
-    /// The first shot is the top of the note. One scroll, then the second shot.
-    /// Each tip is fully on screen in at least one of the two shots.
+    /// The Food phrase note at the largest type. The card opens on that item
+    /// and stays at the top. The first image is taken before any scroll and
+    /// shows the title, Skip to practice, and the phrase. The first tip may
+    /// still be below the fold. The test then scrolls until that tip is visible
+    /// and waits before asserting. The next scroll stops while the last tip
+    /// still hangs below the fold. One more scroll brings that tip on screen.
+    /// Each tip is fully on screen in at least one of the last two shots.
     func testXLNotes() {
         executionTimeAllowance = 400
         let app = XCUIApplication()
-        app.launchArguments = launchArguments(for: "xl") + ["-uiTestOpenItem", "e-tsa-ghwaa-rey"]
+        app.launchArguments = launchArguments(for: "xl") + [
+            "-uiTestOpenItem", "e-tsa-ghwaa-rey", "-uiTestNoteStaysAtTop",
+        ]
         app.launch()
+        let skip = app.buttons["Skip to practice"]
         XCTAssertTrue(
-            app.buttons["Skip to practice"].waitForExistence(timeout: 20),
+            skip.waitForExistence(timeout: 20),
             "Food phrase card did not open. buttons: \(buttonDump(app))"
         )
         XCTAssertFalse(
@@ -81,20 +88,79 @@ final class ScreenshotTests: XCTestCase {
                 "VoiceOver reads the direction marks: \(tip.label)"
             )
         }
+        let title = labeled("Saying what you want", in: app)
+        let phrase = storedPronunciation("tsa ghwaa-REY?", in: app)
+        let pashto = labeled("څه غواړې؟", in: app)
+        XCTAssertTrue(title.waitForExistence(timeout: 5), "note title is missing")
+        XCTAssertTrue(phrase.waitForExistence(timeout: 5), "phrase pronunciation is missing")
+        XCTAssertTrue(pashto.waitForExistence(timeout: 5), "phrase Pashto is missing")
         XCTAssertTrue(
-            waitUntil(timeout: 4) { fullyInside(tips[0].frame, scroll.frame) },
-            "first tip is not on screen. \(tipDump(tips, scroll: scroll))"
+            waitUntil(timeout: 4) {
+                showsOnScreen(title.frame, in: app.frame)
+                    && showsOnScreen(skip.frame, in: app.frame)
+                    && showsOnScreen(phrase.frame, in: scroll.frame)
+                    && title.frame.minY >= scroll.frame.minY - 4
+                    && title.frame.minY < scroll.frame.minY + 80
+                    && title.frame.minY < skip.frame.minY
+                    && skip.frame.minY < phrase.frame.minY
+            },
+            "top of the notes screen is missing the title, Skip to practice, or the phrase. \(tipDump(tips, scroll: scroll)) title \(title.frame) skip \(skip.frame) phrase \(phrase.frame) pashto \(pashto.frame)"
+        )
+        settle(0.4)
+        shot("notes-learn-xl-top")
+
+        scrollNoteDown(scroll, probe: tips[0]) {
+            showsOnScreen(tips[0].frame, in: scroll.frame)
+        }
+        XCTAssertTrue(
+            waitUntil(timeout: 4) {
+                showsOnScreen(tips[0].frame, in: scroll.frame)
+            },
+            "first tip did not scroll into view. \(tipDump(tips, scroll: scroll)) title \(title.frame) skip \(skip.frame) phrase \(phrase.frame)"
+        )
+
+        scrollNoteDown(scroll, probe: tips[0], portionCap: 0.1) {
+            let window = scroll.frame
+            return fullyInside(tips[0].frame, window)
+                && tips[0].frame.minY <= window.minY + 220
+                && tips[2].frame.maxY > window.maxY + 8
+        }
+        if fullyInside(tips[2].frame, scroll.frame) {
+            for _ in 0..<8 {
+                let window = scroll.frame
+                if fullyInside(tips[0].frame, window), tips[2].frame.maxY > window.maxY + 8 {
+                    break
+                }
+                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
+                settle(0.22)
+            }
+        }
+        XCTAssertTrue(
+            fullyInside(tips[0].frame, scroll.frame) && tips[2].frame.maxY > scroll.frame.maxY + 8,
+            "middle notes shot has no room left to scroll. \(tipDump(tips, scroll: scroll))"
         )
         settle(0.4)
         let before = tips.map(\.frame)
         let windowBefore = scroll.frame
         shot("notes-learn-xl")
 
-        scrollOnce(scroll)
-        settle(0.6)
+        let lowerStart = tips[2].frame.minY
+        scrollNoteDown(scroll, probe: tips[2], movement: tips[0]) {
+            fullyInside(tips[2].frame, scroll.frame)
+        }
+        settle(0.4)
         let after = tips.map(\.frame)
         let windowAfter = scroll.frame
         shot("notes-learn-xl-2")
+        XCTAssertLessThan(
+            after[2].minY,
+            lowerStart - 24,
+            "the list did not scroll. \(tipDump(tips, scroll: scroll))"
+        )
+        XCTAssertTrue(
+            fullyInside(after[2], windowAfter),
+            "lower tip is not fully on screen. \(tipDump(tips, scroll: scroll))"
+        )
 
         for index in tips.indices {
             let onFirst = fullyInside(before[index], windowBefore)
@@ -352,11 +418,72 @@ final class ScreenshotTests: XCTestCase {
         }
     }
 
-    /// The card list, once. A slow drag does not fling past the last tip.
-    private func scrollOnce(_ scroll: XCUIElement) {
-        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80))
-        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25))
-        start.press(forDuration: 0.2, thenDragTo: end, withVelocity: 200, thenHoldForDuration: 0.4)
+    /// Moves the note list until `condition` is true.
+    ///
+    /// A long press with a slow velocity did not move this list, so the drag
+    /// is the short one the home list uses. When that stays put, a second
+    /// drag starts further up the same list. Scrolling back corrects an overshoot.
+    private func scrollNoteDown(
+        _ scroll: XCUIElement,
+        probe: XCUIElement,
+        movement: XCUIElement? = nil,
+        portionCap: CGFloat = 0.2,
+        until condition: () -> Bool
+    ) {
+        let tracker = movement ?? probe
+        var stuck = 0
+        for _ in 0..<18 {
+            if condition() { return }
+            let window = scroll.frame
+            let frame = probe.frame
+            if frame.height > 1, frame.minY < window.minY - 4 {
+                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
+                settle(0.22)
+                if condition() { return }
+                continue
+            }
+            let before = tracker.frame.minY
+            let overflow = frame.height > 1 ? frame.maxY - window.maxY : window.height * 0.3
+            let topGap = frame.height > 1 ? frame.minY - window.minY : window.height * 0.3
+            let needed = max(topGap - 28, overflow)
+            let portion = min(portionCap, max(CGFloat(0.08), needed / max(window.height, 1)))
+            nudgeScroll(scroll, revealingLower: true, portion: portion)
+            settle(0.22)
+            if tracker.frame.minY < before - 6 {
+                stuck = 0
+                continue
+            }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.66))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: max(0.2, 0.66 - portion)))
+            start.press(forDuration: 0.01, thenDragTo: end)
+            settle(0.28)
+            if tracker.frame.minY < before - 6 {
+                stuck = 0
+                continue
+            }
+            if scroll.isHittable {
+                scroll.swipeUp(velocity: .slow)
+                settle(0.35)
+                if condition() { return }
+                if tracker.frame.minY < before - 6 {
+                    stuck = 0
+                    continue
+                }
+            }
+            stuck += 1
+            if stuck >= 2 { return }
+        }
+    }
+
+    private func showsOnScreen(_ frame: CGRect, in window: CGRect) -> Bool {
+        let overlap = window.intersection(frame)
+        return overlap.width > 8 && overlap.height >= 20
+    }
+
+    private func labeled(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any).matching(
+            NSPredicate(format: "label == %@", label)
+        ).firstMatch
     }
 
     private func fullyInside(_ frame: CGRect, _ window: CGRect) -> Bool {

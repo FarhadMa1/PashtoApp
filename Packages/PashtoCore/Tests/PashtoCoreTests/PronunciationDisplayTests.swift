@@ -153,6 +153,8 @@ struct PronunciationDisplayTests {
         let daily = try section("private struct DailyWordCard", until: "private struct DailyWordSpin", in: home)
         #expect(daily.contains("PashtoLine("))
         #expect(daily.contains("pronunciation: word.pronunciation"))
+        #expect(daily.contains("pronunciationLeads: pronunciationLeads"))
+        #expect(daily.contains("Lapis.wordListPashto"))
         #expect(daily.contains("DailyWordSpeech.active"))
         let celebration = try section("struct CategoryCelebrationScreen", until: "\n#Preview", in: home)
         #expect(celebration.contains("PronunciationText("))
@@ -480,6 +482,68 @@ struct PronunciationDisplayTests {
         #expect(word.pronunciation == "ma-NA-na")
         #expect(DailyWordSpeech.front(pashto: word.pashto, pronunciation: word.pronunciation) == "\(word.pashto), ma-NA-na")
         #expect(!DailyWordSpeech.front(pashto: word.pashto, pronunciation: word.pronunciation).contains("bold"))
+    }
+
+    @Test func xlNoteShotsStartAtTheTopBeforeScrolling() throws {
+        let tests = try source("PashtoAppScreenshots/ScreenshotTests.swift")
+        let body = try section("func testXLNotes()", until: "func testXLPlainNote()", in: tests)
+        let top = try #require(body.range(of: "shot(\"notes-learn-xl-top\")"))
+        let note = try #require(body.range(of: "shot(\"notes-learn-xl\")"))
+        let lower = try #require(body.range(of: "shot(\"notes-learn-xl-2\")"))
+        let firstScroll = try #require(body.range(of: "scrollNoteDown("))
+        #expect(top.lowerBound < firstScroll.lowerBound)
+        #expect(firstScroll.lowerBound < note.lowerBound)
+        #expect(note.lowerBound < lower.lowerBound)
+        let beforeTop = body[..<top.lowerBound]
+        #expect(!beforeTop.contains("showsOnScreen(tips[0].frame"))
+        let afterTop = body[top.upperBound...]
+        #expect(afterTop.contains("showsOnScreen(tips[0].frame"))
+        #expect(afterTop.contains("waitUntil(timeout: 4)"))
+        let tipWait = try #require(afterTop.range(of: "first tip did not scroll into view"))
+        let noteAfterTop = try #require(afterTop.range(of: "shot(\"notes-learn-xl\")"))
+        #expect(tipWait.lowerBound < noteAfterTop.lowerBound)
+        let afterNote = body[note.upperBound...]
+        #expect(afterNote.contains("scrollNoteDown("))
+        #expect(afterNote.contains("shot(\"notes-learn-xl-2\")"))
+        #expect(body.contains("-uiTestNoteStaysAtTop"))
+        #expect(body.contains("Saying what you want"))
+        #expect(body.contains("Skip to practice"))
+        #expect(body.contains("tsa ghwaa-REY?"))
+        #expect(!body.contains("forDuration: 0.2, thenDragTo"))
+
+        let study = try source("PashtoApp/Quiz/StudyCardScreen.swift")
+        #expect(study.contains("!UITestLaunch.noteStaysAtTop"))
+        #expect(!study.contains("noteSitsBelowCard"))
+        #expect(!study.contains("fitsWithNote"))
+        let scrolling = try section("private var scrollingTitle", until: "private var standardTitle", in: study)
+        #expect(scrolling.contains("fixedSize(horizontal: false, vertical: true)"))
+        #expect(!scrolling.contains("lineLimit"))
+        #expect(!scrolling.contains("minimumScaleFactor"))
+        let access = try section(
+            "VStack(alignment: .leading, spacing: 14)",
+            until: "Blue strip at the usual text sizes",
+            in: study
+        )
+        #expect(access.contains("scrollingTitle"))
+        #expect(access.contains("PronunciationNoteText(note: note)"))
+        let title = try #require(access.range(of: "scrollingTitle"))
+        let outsideNote = try #require(access.range(of: "PronunciationNoteText(note: note)"))
+        #expect(title.lowerBound < outsideNote.lowerBound)
+        let regular = try section("private var regularLines", until: "private var largeTypeLines", in: study)
+        #expect(regular.contains("PronunciationNoteText(note: note)"))
+        let lightNotes = try section("func testLightNotes()", until: "func testLightShell()", in: tests)
+        #expect(!lightNotes.contains("-uiTestNoteStaysAtTop"))
+        let plain = try section("func testXLPlainNote()", until: "func testLightNotes()", in: tests)
+        #expect(!plain.contains("-uiTestNoteStaysAtTop"))
+
+        let app = try source("PashtoApp/PashtoApp.swift")
+        #expect(app.contains("-uiTestNoteStaysAtTop"))
+
+        let exporter = try source("scripts/export-screenshots.py")
+        #expect(exporter.contains("notes-learn-xl-top.png"))
+        #expect(exporter.contains("notes-learn-xl.png"))
+        #expect(exporter.contains("notes-learn-xl-2.png"))
+        #expect(exporter.contains("notes-learn-light.png"))
     }
 
     @Test func pashtoLineKeepsInitializerArgumentOrder() throws {

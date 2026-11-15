@@ -94,13 +94,20 @@ public enum DailyWordLayout {
     /// Pronunciation uses the body text colour. The muted track is not text.
     public static let pronunciationUsesBodyText = true
     public static let pronunciationUsesMuted = false
+    /// When the word has a pronunciation, that line is the large one.
+    public static let pronunciationLeads = true
+    /// Large-title size at the default text size. The shared pronunciation
+    /// view draws stressed syllables at 700 and the rest at 400.
+    public static let pronunciationPointSize: Double = 34
+    /// Secondary Pashto size, the same 16 pt as a learn-list row.
+    public static let pashtoPointSize: Double = 16
 }
 
 /// One side of the daily-word card.
 ///
-/// The front is the Pashto word. Pronunciation sits under it only when the
-/// preference already shows pronunciation. The back is the English meaning.
-/// Pashto is not repeated there, so the back has no pronunciation line.
+/// The front carries the Pashto word and the stored pronunciation.
+/// The back is the English meaning. Pashto is not repeated there, so the
+/// back has no pronunciation line.
 public struct DailyWordSide: Equatable, Sendable {
     public var pashto: String?
     public var pronunciation: String?
