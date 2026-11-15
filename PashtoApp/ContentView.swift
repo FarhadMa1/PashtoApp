@@ -850,7 +850,8 @@ private struct FamilyWordRowView: View {
                 weight: .regular,
                 color: Lapis.text,
                 alignment: .leading,
-                direction: .leftToRight
+                direction: .leftToRight,
+                joinLatinWords: true
             )
             pashto
         }
@@ -866,7 +867,8 @@ private struct FamilyWordRowView: View {
             alignment: .leading,
             direction: .rightToLeft,
             lineSpacing: pashtoLineSpacing,
-            verticalPadding: pashtoPadding
+            verticalPadding: pashtoPadding,
+            joinLatinWords: false
         )
         .accessibilityHidden(true)
     }
