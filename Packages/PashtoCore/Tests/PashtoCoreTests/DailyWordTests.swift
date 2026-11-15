@@ -335,6 +335,10 @@ struct DailyWordTests {
         #expect(DailyWordLayout.borderWidth == 1)
         #expect(DailyWordLayout.pronunciationUsesBodyText)
         #expect(!DailyWordLayout.pronunciationUsesMuted)
+        #expect(DailyWordLayout.pronunciationLeads)
+        #expect(DailyWordLayout.pronunciationPointSize == 34)
+        #expect(DailyWordLayout.pashtoPointSize == 16)
+        #expect(DailyWordLayout.pronunciationPointSize > DailyWordLayout.pashtoPointSize)
         #expect(DailyWordCopy.title == "Word of the day")
         #expect(DailyWordCopy.showMeaning == "Show meaning")
         let mutedOnPage = QuizResultPalette.contrastRatio(
@@ -389,6 +393,20 @@ struct DailyWordTests {
         #expect(card.contains("allowsHitTesting(presentation.showsBack)"))
         #expect(card.contains("DailyWordSpeech.active"))
         #expect(!card.contains(".disabled("))
+        #expect(card.contains("DailyWordLayout.pronunciationLeads"))
+        #expect(card.contains("DailyWordLayout.pronunciationPointSize"))
+        #expect(card.contains("DailyWordLayout.pashtoPointSize"))
+        #expect(card.contains("pronunciationLeads: pronunciationLeads"))
+        #expect(card.contains("Lapis.wordListPashto"))
+        #expect(card.contains("weight: .regular"))
+        #expect(card.contains("text: word.pashto"))
+        #expect(card.contains("pronunciation: word.pronunciation"))
+        #expect(!card.contains("textCase"))
+        #expect(!card.contains(".lowercased()"))
+        let norwegian = ["æ", "ø", "å", "Æ", "Ø", "Å", "Bekreftet", "uttale", "betydning", "Innstillinger", "dagens"]
+        for marker in norwegian where card.contains(marker) {
+            Issue.record("daily word card contains \(marker)")
+        }
 
         let spin = try section("private struct DailyWordSpin", until: "/// Catalog strings for the celebration", in: screen)
         #expect(spin.contains("rotation3DEffect"))

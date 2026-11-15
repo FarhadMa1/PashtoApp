@@ -153,6 +153,8 @@ struct PronunciationDisplayTests {
         let daily = try section("private struct DailyWordCard", until: "private struct DailyWordSpin", in: home)
         #expect(daily.contains("PashtoLine("))
         #expect(daily.contains("pronunciation: word.pronunciation"))
+        #expect(daily.contains("pronunciationLeads: pronunciationLeads"))
+        #expect(daily.contains("Lapis.wordListPashto"))
         #expect(daily.contains("DailyWordSpeech.active"))
         let celebration = try section("struct CategoryCelebrationScreen", until: "\n#Preview", in: home)
         #expect(celebration.contains("PronunciationText("))
@@ -480,6 +482,42 @@ struct PronunciationDisplayTests {
         #expect(word.pronunciation == "ma-NA-na")
         #expect(DailyWordSpeech.front(pashto: word.pashto, pronunciation: word.pronunciation) == "\(word.pashto), ma-NA-na")
         #expect(!DailyWordSpeech.front(pashto: word.pashto, pronunciation: word.pronunciation).contains("bold"))
+    }
+
+    @Test func xlNoteShotsStartAtTheTopBeforeScrolling() throws {
+        let tests = try source("PashtoAppScreenshots/ScreenshotTests.swift")
+        let body = try section("func testXLNotes()", until: "func testXLPlainNote()", in: tests)
+        let top = try #require(body.range(of: "shot(\"notes-learn-xl-top\")"))
+        let note = try #require(body.range(of: "shot(\"notes-learn-xl\")"))
+        let lower = try #require(body.range(of: "shot(\"notes-learn-xl-2\")"))
+        let firstScroll = try #require(body.range(of: "scrollNoteDown("))
+        #expect(top.lowerBound < firstScroll.lowerBound)
+        #expect(firstScroll.lowerBound < note.lowerBound)
+        #expect(note.lowerBound < lower.lowerBound)
+        let afterNote = body[note.upperBound...]
+        #expect(afterNote.contains("scrollNoteDown("))
+        #expect(afterNote.contains("shot(\"notes-learn-xl-2\")"))
+        #expect(body.contains("-uiTestNoteStaysAtTop"))
+        #expect(body.contains("Saying what you want"))
+        #expect(body.contains("Skip to practice"))
+        #expect(body.contains("tsa ghwaa-REY?"))
+        #expect(!body.contains("forDuration: 0.2, thenDragTo"))
+
+        let study = try source("PashtoApp/Quiz/StudyCardScreen.swift")
+        #expect(study.contains("!UITestLaunch.noteStaysAtTop"))
+        let lightNotes = try section("func testLightNotes()", until: "func testLightShell()", in: tests)
+        #expect(!lightNotes.contains("-uiTestNoteStaysAtTop"))
+        let plain = try section("func testXLPlainNote()", until: "func testLightNotes()", in: tests)
+        #expect(!plain.contains("-uiTestNoteStaysAtTop"))
+
+        let app = try source("PashtoApp/PashtoApp.swift")
+        #expect(app.contains("-uiTestNoteStaysAtTop"))
+
+        let exporter = try source("scripts/export-screenshots.py")
+        #expect(exporter.contains("notes-learn-xl-top.png"))
+        #expect(exporter.contains("notes-learn-xl.png"))
+        #expect(exporter.contains("notes-learn-xl-2.png"))
+        #expect(exporter.contains("notes-learn-light.png"))
     }
 
     @Test func pashtoLineKeepsInitializerArgumentOrder() throws {

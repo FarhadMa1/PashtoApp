@@ -78,9 +78,11 @@ struct StudyCardScreen: View {
     }
 
     /// UI tests only. The note is taller than the list at the largest type,
-    /// so the opened card starts at the first tip. A normal card stays put.
+    /// so the opened card starts at the first tip. `-uiTestNoteStaysAtTop`
+    /// leaves the list at the top so a shot can show the phrase first.
+    /// A normal card stays put.
     private var noteScrollTarget: String? {
-        guard UITestLaunch.openItemID != nil, deck.meaningVisible else { return nil }
+        guard UITestLaunch.openItemID != nil, !UITestLaunch.noteStaysAtTop, deck.meaningVisible else { return nil }
         guard let note = deck.card?.pronunciationNote, !PronunciationNotes.tips(in: note).isEmpty else {
             return nil
         }

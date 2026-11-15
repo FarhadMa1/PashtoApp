@@ -1242,21 +1242,33 @@ private struct StreakStarPulse: ViewModifier {
     }
 }
 
-/// Today's learned word. The front is the Pashto word. The back is the English meaning.
+/// Today's learned word. Pronunciation is the large line. Pashto is the
+/// smaller line under it, the same secondary size as a learn-list row.
+/// The back is the English meaning.
 ///
 /// The border is the same 1 pt lapis outline as the lesson bar, on the Today surface.
-/// Pronunciation uses the body text colour and sits under the word. Reduce Motion
-/// crossfades. A turn counter-rotates the meaning so it is not mirrored. Only the
-/// face that is showing is accessible. The back is the meaning itself: no second
-/// label was approved for turning back to the word.
+/// Pronunciation uses the body text colour. Reduce Motion crossfades. A turn
+/// counter-rotates the meaning so it is not mirrored. Only the face that is
+/// showing is accessible. The back is the meaning itself: no second label
+/// was approved for turning back to the word. VoiceOver reads the stored
+/// Pashto and the stored pronunciation.
 private struct DailyWordCard: View {
     var word: DailyWord
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var face: DailyWordFace = .front
+    @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = CGFloat(DailyWordLayout.pronunciationPointSize)
+    @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = CGFloat(DailyWordLayout.pashtoPointSize)
 
     private var presentation: DailyWordPresentation {
         DailyWordPresentation(face: face, reduceMotion: reduceMotion)
+    }
+
+    /// A blank pronunciation leaves Pashto as the only line, at the large size.
+    private var pronunciationLeads: Bool {
+        guard DailyWordLayout.pronunciationLeads else { return false }
+        guard let pronunciation = word.pronunciation else { return false }
+        return !pronunciation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -1335,10 +1347,14 @@ private struct DailyWordCard: View {
             pronunciation: word.pronunciation,
             arabic: QuizPresentation.containsArabicScript(word.pashto),
             pronunciationColor: Lapis.text,
+            scriptColor: pronunciationLeads ? Lapis.wordListPashto : nil,
+            scriptFont: pronunciationLeads ? .system(size: pashtoSize, weight: .regular) : nil,
             fitsWidth: true,
-            centers: true
+            centers: true,
+            pronunciationSize: pronunciationLeads ? pronunciationSize : nil,
+            pronunciationLeads: pronunciationLeads
         )
-        .font(.largeTitle.weight(.medium))
+        .font(pronunciationLeads ? .body : .largeTitle.weight(.medium))
         .foregroundStyle(Lapis.text)
         .fixedSize(horizontal: false, vertical: true)
     }

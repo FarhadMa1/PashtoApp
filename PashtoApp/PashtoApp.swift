@@ -22,7 +22,9 @@ struct PashtoApp: App {
     /// and `-PashtoScreenshotXL`. `-PashtoScreenshotCelebration` opens the
     /// settled celebration. `-PashtoScreenshotDailyWord` opens the daily word.
     /// `-PashtoScreenshotBoldText` turns on the Bold Text weight.
-    /// `-uiTestOpenItem` opens that study card. A normal launch has none of them.
+    /// `-uiTestOpenItem` opens that study card. `-uiTestNoteStaysAtTop` keeps
+    /// that card at the top instead of jumping to the first tip.
+    /// A normal launch has none of them.
     @ViewBuilder
     private var screenshotConfiguredRoot: some View {
         configured(screenshotRoot)
@@ -175,7 +177,8 @@ extension TextSizeStep {
     }
 }
 
-/// `-uiTestOpenItem <id>`. Absent on a normal launch, and on the other screenshot launches.
+/// `-uiTestOpenItem <id>`. `-uiTestNoteStaysAtTop` skips the jump to the first tip.
+/// Both are absent on a normal launch, and on the other screenshot launches.
 enum UITestLaunch {
     static var openItemID: String? {
         let arguments = ProcessInfo.processInfo.arguments
@@ -185,6 +188,10 @@ enum UITestLaunch {
         let value = arguments[next]
         guard !value.isEmpty, !value.hasPrefix("-") else { return nil }
         return value
+    }
+
+    static var noteStaysAtTop: Bool {
+        ProcessInfo.processInfo.arguments.contains("-uiTestNoteStaysAtTop")
     }
 }
 
