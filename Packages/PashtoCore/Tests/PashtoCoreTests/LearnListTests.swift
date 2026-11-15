@@ -15,6 +15,9 @@ struct LearnListTests {
         #expect(polite.rows.map(\.itemID.rawValue) == [
             "e-ho", "e-na", "e-xa", "e-mehrabani-wakray", "e-manana", "e-baxana-ghwaram",
         ])
+        let good = try #require(polite.rows.first { $0.itemID.rawValue == "e-xa" })
+        #expect(good.english == "good, fine")
+        #expect(good.english.split(separator: " ", omittingEmptySubsequences: false).count == 2)
         #expect(polite.rows.allSatisfy { $0.showsPlayButton })
 
         let numbers = try #require(LearnList.make(
@@ -239,6 +242,8 @@ struct LearnListTests {
         #expect(body.contains("imagePointSize: CGFloat = 40"))
         #expect(body.contains("imageXLCap: CGFloat = 64"))
         #expect(body.contains("alignment: .trailing"))
+        #expect(body.contains("pashtoLine(row, alignment: .leading)"))
+        #expect(body.contains("breaksAtHyphens: stacksRow"))
         #expect(!body.contains("minimumScaleFactor"))
         #expect(!body.contains("width: 0.5"))
         #expect(!body.contains(".translit"))

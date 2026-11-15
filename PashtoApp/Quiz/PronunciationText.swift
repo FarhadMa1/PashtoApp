@@ -16,6 +16,8 @@ struct PronunciationText: View {
     var unstressedWeight: Int
     /// The learn row stays at its point size. Other callers still fit a long line.
     var shrinksToFit: Bool
+    /// XL learn rows wrap a word at a hyphen when it does not fit. Nothing shrinks.
+    var breaksAtHyphens: Bool
 
     @Environment(\.legibilityWeight) private var legibilityWeight
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -26,7 +28,8 @@ struct PronunciationText: View {
         color: Color,
         alignment: TextAlignment = .leading,
         unstressedWeight: Int = PronunciationDisplay.unstressedWeight,
-        shrinksToFit: Bool = true
+        shrinksToFit: Bool = true,
+        breaksAtHyphens: Bool = false
     ) {
         self.stored = stored
         self.sizing = .points(points)
@@ -34,6 +37,7 @@ struct PronunciationText: View {
         self.alignment = alignment
         self.unstressedWeight = unstressedWeight
         self.shrinksToFit = shrinksToFit
+        self.breaksAtHyphens = breaksAtHyphens
     }
 
     init(
@@ -42,7 +46,8 @@ struct PronunciationText: View {
         color: Color,
         alignment: TextAlignment = .leading,
         unstressedWeight: Int = PronunciationDisplay.unstressedWeight,
-        shrinksToFit: Bool = true
+        shrinksToFit: Bool = true,
+        breaksAtHyphens: Bool = false
     ) {
         self.stored = stored
         self.sizing = .textStyle(textStyle)
@@ -50,6 +55,7 @@ struct PronunciationText: View {
         self.alignment = alignment
         self.unstressedWeight = unstressedWeight
         self.shrinksToFit = shrinksToFit
+        self.breaksAtHyphens = breaksAtHyphens
     }
 
     private var boldText: Bool { legibilityWeight == .bold }
@@ -63,7 +69,84 @@ struct PronunciationText: View {
 
     /// Dynamic Type is an argument, not a discarded value in `body`.
     /// `body` is a ViewBuilder, and a discarded assignment there is not a view.
+    @ViewBuilder
     private func pronunciationLine(typeSize: DynamicTypeSize) -> some View {
+        if breaksAtHyphens {
+            hyphenBreakingLine(typeSize: typeSize)
+        } else {
+            fittingLine(typeSize: typeSize)
+        }
+    }
+
+    /// Spaces first. A hyphen breaks only when that word is wider than the line.
+    /// The stressed syllable keeps its weight. The line is not scaled or limited.
+    private func hyphenBreakingLine(typeSize: DynamicTypeSize) -> some View {
+        let pointSize = resolvedPointSize(typeSize)
+        let space = spaceWidth(pointSize)
+        let pieces = PronunciationPieces.pieces(in: stored)
+        PronunciationFlow(alignment: alignment, spacing: space, breaksInsideWords: true) {
+            ForEach(Array(pieces.enumerated()), id: \.offset) { _, piece in
+                pieceLabel(piece, pointSize: pointSize)
+                    .layoutValue(key: StartsWordKey.self, value: piece.startsWord)
+            }
+        }
+        .environment(\.legibilityWeight, .regular)
+        .environment(\.layoutDirection, .leftToRight)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: PronunciationDisplay.spoken(stored)))
+    }
+
+    private func pieceLabel(_ piece: PronunciationPiece, pointSize: CGFloat) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 0) {
+            ForEach(Array(piece.runs.enumerated()), id: \.offset) { _, run in
+                breakingSyllable(run, pointSize: pointSize)
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func breakingSyllable(_ run: PronunciationRun, pointSize: CGFloat) -> some View {
+        let weight = breakingWeight(run)
+        return Text(verbatim: run.text)
+            .font(breakingFont(weight: PronunciationFonts.fontWeight(weight), pointSize: pointSize))
+            .foregroundStyle(color)
+            .overlay(alignment: .bottom) {
+                if run.underlined(boldText: boldText) {
+                    breakingUnderline(weight: weight, pointSize: pointSize)
+                }
+            }
+            .accessibilityHidden(true)
+    }
+
+    private func breakingWeight(_ run: PronunciationRun) -> Int {
+        if boldText || run.stressed {
+            return run.weight(boldText: boldText)
+        }
+        return unstressedWeight
+    }
+
+    private func breakingFont(weight: Font.Weight, pointSize: CGFloat) -> Font {
+        switch sizing {
+        case .points:
+            return .system(size: pointSize, weight: weight)
+        case .textStyle(let style):
+            return .system(style, weight: weight)
+        }
+    }
+
+    private func breakingUnderline(weight: Int, pointSize: CGFloat) -> some View {
+        let font = UIFont.systemFont(ofSize: pointSize, weight: PronunciationFonts.uiWeight(weight, boldText: true))
+        let descent = abs(font.descender)
+        let thickness = CGFloat(PronunciationDisplay.boldTextUnderlineThickness)
+        let offset = CGFloat(PronunciationDisplay.boldTextUnderlineOffset)
+        return Rectangle()
+            .fill(color)
+            .frame(height: thickness)
+            .offset(y: offset + thickness - descent)
+            .accessibilityHidden(true)
+    }
+
+    private func fittingLine(typeSize: DynamicTypeSize) -> some View {
         let pointSize = resolvedPointSize(typeSize)
         let space = spaceWidth(pointSize)
         let tokens = PronunciationDisplay.tokens(in: stored)
@@ -326,14 +409,17 @@ private struct TokenSizeKey: PreferenceKey {
     }
 }
 
-/// Wraps pronunciation tokens at spaces. A token keeps its hyphens on one line.
+/// Wraps pronunciation at spaces. With `breaksInsideWords`, a word that is
+/// wider than the line also breaks after a hyphen.
 private struct PronunciationFlow: Layout {
     var alignment: TextAlignment
     var spacing: CGFloat
+    var breaksInsideWords: Bool = false
 
     private struct Line {
         var indexes: [Int] = []
         var sizes: [CGSize] = []
+        var gaps: [CGFloat] = []
         var width: CGFloat = 0
         var height: CGFloat = 0
     }
@@ -364,7 +450,7 @@ private struct PronunciationFlow: Layout {
             }
             var x = originX
             for (offset, index) in line.indexes.enumerated() {
-                if offset > 0 { x += spacing }
+                x += line.gaps[offset]
                 let size = line.sizes[offset]
                 subviews[index].place(
                     at: CGPoint(x: x, y: y),
@@ -379,6 +465,9 @@ private struct PronunciationFlow: Layout {
 
     private nonisolated func wrap(proposal: ProposedViewSize, subviews: Subviews) -> [Line] {
         let limit = proposal.width ?? .infinity
+        if breaksInsideWords {
+            return wrapAtHyphens(limit: limit, subviews: subviews)
+        }
         var lines: [Line] = []
         var current = Line()
         for index in subviews.indices {
@@ -387,10 +476,11 @@ private struct PronunciationFlow: Layout {
             let next = current.width + gap + size.width
             if !current.indexes.isEmpty, next > limit {
                 lines.append(current)
-                current = Line(indexes: [index], sizes: [size], width: size.width, height: size.height)
+                current = Line(indexes: [index], sizes: [size], gaps: [0], width: size.width, height: size.height)
             } else {
                 current.indexes.append(index)
                 current.sizes.append(size)
+                current.gaps.append(gap)
                 current.width = current.indexes.count == 1 ? size.width : next
                 current.height = max(current.height, size.height)
             }
@@ -400,4 +490,41 @@ private struct PronunciationFlow: Layout {
         }
         return lines
     }
+
+    /// Spaces first. Hyphen pieces break only when the whole word is too wide.
+    private nonisolated func wrapAtHyphens(limit: CGFloat, subviews: Subviews) -> [Line] {
+        var widths: [Double] = []
+        var starts: [Bool] = []
+        var sizes: [CGSize] = []
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.unspecified)
+            sizes.append(size)
+            widths.append(Double(size.width))
+            starts.append(subviews[index][StartsWordKey.self])
+        }
+        let groups = PronunciationWrap.lines(
+            pieceWidths: widths,
+            startsWord: starts,
+            limit: Double(limit),
+            spacing: Double(spacing)
+        )
+        return groups.map { indexes in
+            var line = Line()
+            for (offset, index) in indexes.enumerated() {
+                let size = sizes[index]
+                let gap: CGFloat = offset > 0 && starts[index] ? spacing : 0
+                line.indexes.append(index)
+                line.sizes.append(size)
+                line.gaps.append(gap)
+                line.width += gap + size.width
+                line.height = max(line.height, size.height)
+            }
+            return line
+        }
+    }
+}
+
+/// The first piece of a word. Later pieces are hyphen continuations.
+private struct StartsWordKey: LayoutValueKey {
+    static let defaultValue = true
 }

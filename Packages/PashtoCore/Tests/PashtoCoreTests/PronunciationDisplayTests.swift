@@ -82,6 +82,61 @@ struct PronunciationDisplayTests {
         #expect(asked.map { $0.underlined(boldText: true) } == [true])
     }
 
+    @Test func xlPronunciationBreaksALongWordAtHyphensAndNotBeforeAWordThatFits() {
+        let please = PronunciationPieces.pieces(in: "meh-ra-baa-NEE")
+        #expect(please.map(\.text) == ["meh\(hyphen)", "ra\(hyphen)", "baa\(hyphen)", "nee"])
+        #expect(please.map(\.stressed) == [false, false, false, true])
+        #expect(please.map(\.startsWord) == [true, false, false, false])
+        let widths = [40.0, 30.0, 50.0, 36.0]
+        let broken = PronunciationWrap.lines(
+            pieceWidths: widths,
+            startsWord: please.map(\.startsWord),
+            limit: 130,
+            spacing: 8
+        )
+        #expect(broken == [[0, 1, 2], [3]])
+
+        let both = PronunciationPieces.pieces(in: "meh-ra-baa-NEE wa-KRAY")
+        #expect(both.map(\.startsWord) == [true, false, false, false, true, false])
+        #expect(both[5].stressed)
+        let moved = PronunciationWrap.lines(
+            pieceWidths: [40, 30, 50, 36, 30, 40],
+            startsWord: both.map(\.startsWord),
+            limit: 160,
+            spacing: 8
+        )
+        #expect(moved == [[0, 1, 2, 3], [4, 5]])
+
+        let together = PronunciationWrap.lines(
+            pieceWidths: [40, 30],
+            startsWord: [true, true],
+            limit: 100,
+            spacing: 8
+        )
+        #expect(together == [[0, 1]])
+        #expect(PronunciationWrap.lines(
+            pieceWidths: widths,
+            startsWord: please.map(\.startsWord),
+            limit: 0,
+            spacing: 8
+        ) == [[0, 1, 2, 3]])
+    }
+
+    @Test func xlPronunciationIsNotLimitedToOneLine() throws {
+        let renderer = try source("PashtoApp/Quiz/PronunciationText.swift")
+        let breaking = try section("private func hyphenBreakingLine", until: "private func fittingLine", in: renderer)
+        #expect(breaking.contains("breaksInsideWords: true"))
+        #expect(breaking.contains("PronunciationPieces.pieces"))
+        #expect(!breaking.contains("lineLimit"))
+        #expect(!breaking.contains("fixedSize"))
+        #expect(!breaking.contains("minimumScaleFactor"))
+        #expect(!breaking.contains(".clipped"))
+        let learn = try section("struct LearnListScreen", until: nil, in: try source("PashtoApp/Quiz/StudyCardScreen.swift"))
+        #expect(learn.contains("breaksAtHyphens: stacksRow"))
+        #expect(learn.contains("pashtoLine(row, alignment: .leading)"))
+        #expect(renderer.contains("PronunciationWrap.lines"))
+    }
+
     @Test func hyphensStayInsideTheToken() {
         let tokens = PronunciationDisplay.tokens(in: "ho-TAL CHER-ta day?")
         #expect(tokens.count == 3)

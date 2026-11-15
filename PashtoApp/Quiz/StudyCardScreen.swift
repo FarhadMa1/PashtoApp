@@ -956,7 +956,8 @@ private struct LearnTextColumns: Layout {
 /// English is on the left. Pronunciation is the main text on the right, with
 /// grey Pashto right-aligned under it. A lesson with no clip has no Play column.
 /// A picture uses that same leading slot. XL stacks English, pronunciation,
-/// then right-aligned Pashto, and caps the picture.
+/// then left-aligned Pashto, and caps the picture. A long XL pronunciation
+/// wraps at spaces, and at a hyphen when that word does not fit.
 /// A speaker plays only after a tap. Practice opens the quiz.
 /// Flashcards open the card view. Looking at the list does not finish the lesson.
 /// At the largest text sizes the word count and Practice lesson scroll with the list.
@@ -1131,7 +1132,7 @@ struct LearnListScreen: View {
         VStack(alignment: .leading, spacing: 4) {
             englishColumn(row, alignment: .leading)
             pronunciationLine(row, alignment: .leading)
-            pashtoLine(row, alignment: .trailing)
+            pashtoLine(row, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -1180,7 +1181,7 @@ struct LearnListScreen: View {
     }
 
     private func pronunciationLine(_ row: LearnListRow, alignment: TextAlignment) -> some View {
-        PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: alignment, unstressedWeight: 500, shrinksToFit: false)
+        PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: alignment, unstressedWeight: 500, shrinksToFit: false, breaksAtHyphens: stacksRow)
             .multilineTextAlignment(alignment)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: alignment == .trailing ? .trailing : .leading)
