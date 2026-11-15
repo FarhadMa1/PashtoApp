@@ -197,6 +197,25 @@ struct Level1CatalogTests {
         #expect(without == nil)
     }
 
+    @Test func familyQuizzesKeepTheirIdsAndUseDistinctTitles() throws {
+        let bundle = try loadCourse()
+        let familyQuizzes = bundle.units.flatMap(\.lessons).filter { lesson in
+            lesson.id.rawValue.hasPrefix("l-c5-quiz-")
+        }
+        #expect(familyQuizzes.map(\.id.rawValue) == [
+            "l-c5-quiz-1", "l-c5-quiz-2", "l-c5-quiz-3", "l-c5-quiz-4",
+        ])
+        let familyQuizTitles = familyQuizzes.map(\.title)
+        #expect(Set(familyQuizTitles).count == familyQuizTitles.count)
+        #expect(!familyQuizTitles.contains("Family Members quiz"))
+        #expect(familyQuizTitles == [
+            "Practice: Husband, wife and relatives",
+            "Practice: Cousins, children and parents",
+            "Practice: Brothers, sisters and children",
+            "Practice: I miss my family",
+        ])
+    }
+
     @Test func townTravelAndConversationKeepTheirLessonsAndLearnedItems() throws {
         let bundle = try loadCourse()
         let town = bundle.units.flatMap(\.lessons).filter { $0.categoryNumber == 14 }
