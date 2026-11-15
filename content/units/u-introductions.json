@@ -672,35 +672,8 @@
       ]
     },
     {
-      "id": "l-introductions-learn-be",
-      "title": "To be",
-      "kind": "learn",
-      "items": [
-        {
-          "item": "e-yam",
-          "role": "present"
-        },
-        {
-          "item": "e-ye",
-          "role": "present"
-        },
-        {
-          "item": "e-day",
-          "role": "present"
-        },
-        {
-          "item": "e-da",
-          "role": "present"
-        },
-        {
-          "item": "e-yast",
-          "role": "present"
-        }
-      ]
-    },
-    {
       "id": "l-introductions-phrases-name",
-      "title": "What's your name?",
+      "title": "Your name and where you're from",
       "kind": "phrases",
       "items": [
         {
@@ -714,14 +687,7 @@
         {
           "item": "e-staso-num-tsa-day",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-introductions-phrases-from",
-      "title": "Where are you from?",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-ta-da-kum-dzay-ye",
           "role": "present"
@@ -859,36 +825,6 @@
               "item": "e-za-la-narwe-tsaxa-yam"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "l-introductions-3",
-      "title": "Practice: To be",
-      "letters": [
-        "e-letter-tse",
-        "e-letter-dze"
-      ],
-      "items": [
-        {
-          "item": "e-yam",
-          "role": "introduce"
-        },
-        {
-          "item": "e-ye",
-          "role": "introduce"
-        },
-        {
-          "item": "e-day",
-          "role": "introduce"
-        },
-        {
-          "item": "e-da",
-          "role": "introduce"
-        },
-        {
-          "item": "e-yast",
-          "role": "introduce"
         }
       ]
     }

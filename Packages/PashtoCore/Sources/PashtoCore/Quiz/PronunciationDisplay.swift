@@ -158,6 +158,127 @@ public enum PronunciationFit {
     }
 }
 
+/// One syllable, with the hyphen that follows it when the word continues.
+///
+/// The hyphen stays on this piece so a wrap leaves it at the end of the line.
+/// `startsWord` is true for the first piece of a whitespace-separated word.
+public struct PronunciationPiece: Equatable, Sendable {
+    public var runs: [PronunciationRun]
+    public var startsWord: Bool
+
+    public init(runs: [PronunciationRun], startsWord: Bool) {
+        self.runs = runs
+        self.startsWord = startsWord
+    }
+
+    public var text: String { runs.map(\.text).joined() }
+
+    /// The syllable. The hyphen after it is not stressed.
+    public var stressed: Bool { runs.contains { $0.stressed } }
+}
+
+/// Pieces a pronunciation can wrap. A hyphen stays with the syllable before it.
+public enum PronunciationPieces {
+    public static func pieces(in stored: String) -> [PronunciationPiece] {
+        let hyphen = String(PronunciationDisplay.nonBreakingHyphen)
+        var pieces: [PronunciationPiece] = []
+        for token in PronunciationDisplay.tokens(in: stored) {
+            var index = 0
+            var startsWord = true
+            let runs = token.runs
+            while index < runs.count {
+                var group = [runs[index]]
+                index += 1
+                if index < runs.count, runs[index].text == hyphen {
+                    group.append(runs[index])
+                    index += 1
+                }
+                pieces.append(PronunciationPiece(runs: group, startsWord: startsWord))
+                startsWord = false
+            }
+        }
+        return pieces
+    }
+}
+
+/// Where a pronunciation breaks across lines.
+///
+/// Words move down at spaces. A hyphen breaks only when that one word is
+/// wider than the line. A non-positive limit has not been measured, so the
+/// pronunciation stays on one line at full size.
+public enum PronunciationWrap {
+    public static func lines(
+        pieceWidths: [Double],
+        startsWord: [Bool],
+        limit: Double,
+        spacing: Double
+    ) -> [[Int]] {
+        guard !pieceWidths.isEmpty else { return [[]] }
+        guard limit.isFinite, limit > 0 else {
+            return [Array(pieceWidths.indices)]
+        }
+        let words = wordGroups(count: pieceWidths.count, startsWord: startsWord)
+        var lines: [[Int]] = []
+        var line: [Int] = []
+        var lineWidth = 0.0
+        for word in words {
+            let width = word.reduce(0.0) { $0 + pieceWidths[$1] }
+            let gap = line.isEmpty ? 0.0 : spacing
+            if lineWidth + gap + width <= limit {
+                line.append(contentsOf: word)
+                lineWidth += gap + width
+                continue
+            }
+            if !line.isEmpty {
+                lines.append(line)
+                line = []
+                lineWidth = 0
+                if width <= limit {
+                    line = word
+                    lineWidth = width
+                    continue
+                }
+            }
+            var chunk: [Int] = []
+            var chunkWidth = 0.0
+            for index in word {
+                let piece = pieceWidths[index]
+                if !chunk.isEmpty, chunkWidth + piece > limit {
+                    lines.append(chunk)
+                    chunk = []
+                    chunkWidth = 0
+                }
+                chunk.append(index)
+                chunkWidth += piece
+            }
+            line = chunk
+            lineWidth = chunkWidth
+        }
+        if !line.isEmpty || lines.isEmpty {
+            lines.append(line)
+        }
+        return lines
+    }
+
+    private static func wordGroups(count: Int, startsWord: [Bool]) -> [[Int]] {
+        var words: [[Int]] = []
+        var current: [Int] = []
+        for index in 0..<count {
+            let starts = index < startsWord.count ? startsWord[index] : true
+            if starts, !current.isEmpty {
+                words.append(current)
+                current = [index]
+            } else {
+                current.append(index)
+            }
+        }
+        if !current.isEmpty {
+            words.append(current)
+        }
+        return words
+    }
+}
+
 /// One pronunciation tip, split for display only.
 ///
 /// A letter tip keeps the letter and its colon in `letter` and the words in

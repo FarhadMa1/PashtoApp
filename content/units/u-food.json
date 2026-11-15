@@ -445,7 +445,7 @@
     },
     {
       "id": "l-food-phrases-want",
-      "title": "Saying what you want",
+      "title": "Asking for food and drink",
       "kind": "phrases",
       "items": [
         {
@@ -463,14 +463,7 @@
         {
           "item": "e-daa-ma-na-da",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-food-phrases-available",
-      "title": "Asking what is available",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-daa-do-day-da",
           "role": "present"

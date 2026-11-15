@@ -387,7 +387,7 @@
   "lessons": [
     {
       "id": "l-conversation-learn-today",
-      "title": "Today and work",
+      "title": "Today, work and languages",
       "kind": "learn",
       "items": [
         {
@@ -405,14 +405,7 @@
         {
           "item": "e-wakht",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-conversation-learn-languages",
-      "title": "Languages",
-      "kind": "learn",
-      "items": [
+        },
         {
           "item": "e-zha-ba",
           "role": "present"
@@ -429,7 +422,7 @@
     },
     {
       "id": "l-conversation-phrases-work",
-      "title": "I work",
+      "title": "Work and full sentences",
       "kind": "phrases",
       "items": [
         {
@@ -442,6 +435,22 @@
         },
         {
           "item": "e-za-sa-baa-kaar-ka-wam",
+          "role": "present"
+        },
+        {
+          "item": "e-wro-wro-kha-ba-rey-wa-kray",
+          "role": "present"
+        },
+        {
+          "item": "e-za-chaay-na-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-za-kah-wa-ghwaa-ram",
+          "role": "present"
+        },
+        {
+          "item": "e-za-sa-baa-baa-zaar-ta-dzam",
           "role": "present"
         }
       ]
@@ -469,29 +478,6 @@
         },
         {
           "item": "e-wro-wro",
-          "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-conversation-phrases-sentences",
-      "title": "Putting sentences together",
-      "kind": "phrases",
-      "items": [
-        {
-          "item": "e-wro-wro-kha-ba-rey-wa-kray",
-          "role": "present"
-        },
-        {
-          "item": "e-za-chaay-na-ghwaa-ram",
-          "role": "present"
-        },
-        {
-          "item": "e-za-kah-wa-ghwaa-ram",
-          "role": "present"
-        },
-        {
-          "item": "e-za-sa-baa-baa-zaar-ta-dzam",
           "role": "present"
         }
       ]

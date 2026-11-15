@@ -6,14 +6,19 @@ struct LearnListTests {
     @Test func playButtonFollowsBundledAudioAndNotTheUnitName() throws {
         let bundle = try loadCourse().bundle
         let withAudio = try audioItemIDs()
-        let greetings = try #require(LearnList.make(
-            for: lessonID("l-greetings-learn"),
+        let polite = try #require(LearnList.make(
+            for: lessonID("l-basics-learn-polite"),
             in: bundle,
             finishedLessonIDs: [],
             audioItemIDs: withAudio
         ))
-        #expect(greetings.rows.map(\.itemID.rawValue) == ["e-xa", "e-manana", "e-ho", "e-na"])
-        #expect(greetings.rows.allSatisfy { $0.showsPlayButton })
+        #expect(polite.rows.map(\.itemID.rawValue) == [
+            "e-ho", "e-na", "e-xa", "e-mehrabani-wakray", "e-manana", "e-baxana-ghwaram",
+        ])
+        let good = try #require(polite.rows.first { $0.itemID.rawValue == "e-xa" })
+        #expect(good.english == "good, fine")
+        #expect(good.english.split(separator: " ", omittingEmptySubsequences: false).count == 2)
+        #expect(polite.rows.allSatisfy { $0.showsPlayButton })
 
         let numbers = try #require(LearnList.make(
             for: lessonID("l-numbers-learn-one-to-five"),
@@ -25,12 +30,12 @@ struct LearnListTests {
 
         let onlyHello = try #require(ItemID(rawValue: "e-xa"))
         let partial = try #require(LearnList.make(
-            for: lessonID("l-greetings-learn"),
+            for: lessonID("l-basics-learn-polite"),
             in: bundle,
             finishedLessonIDs: [],
             audioItemIDs: [onlyHello]
         ))
-        #expect(partial.rows.map(\.showsPlayButton) == [true, false, false, false])
+        #expect(partial.rows.map(\.showsPlayButton) == [false, false, true, false, false, false])
         #expect(LearnList.make(
             for: lessonID("l-greetings-phrases-hello"),
             in: bundle,
@@ -49,9 +54,9 @@ struct LearnListTests {
             finishedLessonIDs: finished,
             audioItemIDs: []
         ))
-        #expect(fresh.wordCount == 7)
+        #expect(fresh.wordCount == 10)
         #expect(fresh.completedCount == 0)
-        #expect(fresh.countLabel == "0 of 7 words")
+        #expect(fresh.countLabel == "0 of 10 words")
         #expect(fresh.viewed() == fresh)
         #expect(finished.isEmpty)
 
@@ -62,7 +67,7 @@ struct LearnListTests {
             audioItemIDs: []
         ))
         #expect(viewedAsFinished.completedCount == 0)
-        #expect(viewedAsFinished.countLabel == "0 of 7 words")
+        #expect(viewedAsFinished.countLabel == "0 of 10 words")
 
         finished = [lessonID("l-family-1")]
         let onePractice = try #require(LearnList.make(
@@ -72,7 +77,7 @@ struct LearnListTests {
             audioItemIDs: []
         ))
         #expect(onePractice.completedCount == 6)
-        #expect(onePractice.countLabel == "6 of 7 words")
+        #expect(onePractice.countLabel == "6 of 10 words")
         #expect(onePractice.viewed().completedCount == 6)
         #expect(finished == [lessonID("l-family-1")])
 
@@ -83,8 +88,8 @@ struct LearnListTests {
             finishedLessonIDs: finished,
             audioItemIDs: []
         ))
-        #expect(both.completedCount == 7)
-        #expect(both.countLabel == "7 of 7 words")
+        #expect(both.completedCount == 9)
+        #expect(both.countLabel == "9 of 10 words")
         #expect(both.practiceLessonID == lessonID("l-family-1"))
 
         let numbers = try #require(LearnList.make(
@@ -193,7 +198,7 @@ struct LearnListTests {
         let bundle = try loadCourse().bundle
         let expected = [
             "u-numbers", "u-food", "u-town", "u-conversation",
-            "u-basics", "u-greetings", "u-introductions", "u-family", "u-travel", "u-time",
+            "u-basics", "u-introductions", "u-family", "u-travel", "u-time",
         ]
         var learnUnits: Set<String> = []
         for unit in bundle.units {
@@ -231,6 +236,16 @@ struct LearnListTests {
         #expect(body.contains("row.pronunciation"))
         #expect(!body.contains("row.displayedPronunciation"))
         #expect(body.contains("row.picture"))
+        #expect(body.contains("pashtoSize: CGFloat = 13"))
+        #expect(body.contains("pronunciationSize: CGFloat = 19"))
+        #expect(body.contains("shrinksToFit: false"))
+        #expect(body.contains("imagePointSize: CGFloat = 40"))
+        #expect(body.contains("imageXLCap: CGFloat = 64"))
+        #expect(body.contains("alignment: .trailing"))
+        #expect(body.contains("pashtoLine(row, alignment: .leading)"))
+        #expect(body.contains("breaksAtHyphens: stacksRow"))
+        #expect(!body.contains("minimumScaleFactor"))
+        #expect(!body.contains("width: 0.5"))
         #expect(!body.contains(".translit"))
         #expect(!body.contains("textCase"))
         #expect(!body.contains("Tap to view examples"))

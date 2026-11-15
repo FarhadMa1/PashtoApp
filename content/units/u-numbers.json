@@ -580,12 +580,20 @@
         {
           "item": "e-o-mar",
           "role": "present"
+        },
+        {
+          "item": "e-ka-lan",
+          "role": "present"
+        },
+        {
+          "item": "e-ka-la-na",
+          "role": "present"
         }
       ]
     },
     {
       "id": "l-numbers-learn-eleven-to-fifteen",
-      "title": "Eleven to fifteen",
+      "title": "Eleven to twenty",
       "kind": "learn",
       "items": [
         {
@@ -607,14 +615,7 @@
         {
           "item": "e-pin-dza-las",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-numbers-learn-sixteen-to-twenty",
-      "title": "Sixteen to twenty",
-      "kind": "learn",
-      "items": [
+        },
         {
           "item": "e-shpaa-ras",
           "role": "present"
@@ -633,21 +634,6 @@
         },
         {
           "item": "e-shal",
-          "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-numbers-learn-years-old",
-      "title": "Years old",
-      "kind": "learn",
-      "items": [
-        {
-          "item": "e-ka-lan",
-          "role": "present"
-        },
-        {
-          "item": "e-ka-la-na",
           "role": "present"
         }
       ]

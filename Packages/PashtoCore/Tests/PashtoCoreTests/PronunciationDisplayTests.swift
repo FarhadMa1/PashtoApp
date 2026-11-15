@@ -82,6 +82,61 @@ struct PronunciationDisplayTests {
         #expect(asked.map { $0.underlined(boldText: true) } == [true])
     }
 
+    @Test func xlPronunciationBreaksALongWordAtHyphensAndNotBeforeAWordThatFits() {
+        let please = PronunciationPieces.pieces(in: "meh-ra-baa-NEE")
+        #expect(please.map(\.text) == ["meh\(hyphen)", "ra\(hyphen)", "baa\(hyphen)", "nee"])
+        #expect(please.map(\.stressed) == [false, false, false, true])
+        #expect(please.map(\.startsWord) == [true, false, false, false])
+        let widths = [40.0, 30.0, 50.0, 36.0]
+        let broken = PronunciationWrap.lines(
+            pieceWidths: widths,
+            startsWord: please.map(\.startsWord),
+            limit: 130,
+            spacing: 8
+        )
+        #expect(broken == [[0, 1, 2], [3]])
+
+        let both = PronunciationPieces.pieces(in: "meh-ra-baa-NEE wa-KRAY")
+        #expect(both.map(\.startsWord) == [true, false, false, false, true, false])
+        #expect(both[5].stressed)
+        let moved = PronunciationWrap.lines(
+            pieceWidths: [40, 30, 50, 36, 30, 40],
+            startsWord: both.map(\.startsWord),
+            limit: 160,
+            spacing: 8
+        )
+        #expect(moved == [[0, 1, 2, 3], [4, 5]])
+
+        let together = PronunciationWrap.lines(
+            pieceWidths: [40, 30],
+            startsWord: [true, true],
+            limit: 100,
+            spacing: 8
+        )
+        #expect(together == [[0, 1]])
+        #expect(PronunciationWrap.lines(
+            pieceWidths: widths,
+            startsWord: please.map(\.startsWord),
+            limit: 0,
+            spacing: 8
+        ) == [[0, 1, 2, 3]])
+    }
+
+    @Test func xlPronunciationIsNotLimitedToOneLine() throws {
+        let renderer = try source("PashtoApp/Quiz/PronunciationText.swift")
+        let breaking = try section("private func hyphenBreakingLine", until: "private func fittingLine", in: renderer)
+        #expect(breaking.contains("breaksInsideWords: true"))
+        #expect(breaking.contains("PronunciationPieces.pieces"))
+        #expect(!breaking.contains("lineLimit"))
+        #expect(!breaking.contains("fixedSize"))
+        #expect(!breaking.contains("minimumScaleFactor"))
+        #expect(!breaking.contains(".clipped"))
+        let learn = try section("struct LearnListScreen", until: nil, in: try source("PashtoApp/Quiz/StudyCardScreen.swift"))
+        #expect(learn.contains("breaksAtHyphens: stacksRow"))
+        #expect(learn.contains("pashtoLine(row, alignment: .leading)"))
+        #expect(renderer.contains("PronunciationWrap.lines"))
+    }
+
     @Test func hyphensStayInsideTheToken() {
         let tokens = PronunciationDisplay.tokens(in: "ho-TAL CHER-ta day?")
         #expect(tokens.count == 3)
@@ -444,7 +499,7 @@ struct PronunciationDisplayTests {
         #expect(praise.first?.underlined(boldText: true) == true)
 
         let members = try #require(LearnList.make(
-            for: lessonID("l-greetings-learn"),
+            for: lessonID("l-basics-learn-polite"),
             in: bundle,
             finishedLessonIDs: [],
             audioItemIDs: []
@@ -506,7 +561,7 @@ struct PronunciationDisplayTests {
         #expect(afterNote.contains("scrollNoteDown("))
         #expect(afterNote.contains("shot(\"notes-learn-xl-2\")"))
         #expect(body.contains("-uiTestNoteStaysAtTop"))
-        #expect(body.contains("Saying what you want"))
+        #expect(body.contains("Asking for food and drink"))
         #expect(body.contains("Skip to practice"))
         #expect(body.contains("tsa ghwaa-REY?"))
         #expect(!body.contains("forDuration: 0.2, thenDragTo"))
@@ -531,6 +586,11 @@ struct PronunciationDisplayTests {
         #expect(title.lowerBound < outsideNote.lowerBound)
         let regular = try section("private var regularLines", until: "private var largeTypeLines", in: study)
         #expect(regular.contains("PronunciationNoteText(note: note)"))
+        let meaning = try #require(regular.range(of: "meaningLine"))
+        let pashto = try #require(regular.range(of: "pashtoLine"))
+        let tips = try #require(regular.range(of: "PronunciationNoteText(note: note)"))
+        #expect(meaning.lowerBound < pashto.lowerBound)
+        #expect(pashto.lowerBound < tips.lowerBound)
         let lightNotes = try section("func testLightNotes()", until: "func testLightShell()", in: tests)
         #expect(!lightNotes.contains("-uiTestNoteStaysAtTop"))
         let plain = try section("func testXLPlainNote()", until: "func testLightNotes()", in: tests)

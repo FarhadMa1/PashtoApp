@@ -102,11 +102,16 @@ public struct LearnList: Equatable, Sendable {
     /// `audioItemIDs` are the items that have a bundled clip. A finished
     /// learn lesson id does not raise `completedCount`. Only a finished
     /// practice lesson that introduces the word does.
+    ///
+    /// `learnedItemIDs` counts the row when that item is learned, including
+    /// an item that moved from another lesson. When it is nil, a finished
+    /// practice lesson id is what counts the word.
     public static func make(
         for lessonID: LessonID,
         in bundle: ContentBundle,
         finishedLessonIDs: Set<LessonID>,
-        audioItemIDs: Set<ItemID>
+        audioItemIDs: Set<ItemID>,
+        learnedItemIDs: Set<ItemID>? = nil
     ) -> LearnList? {
         guard let found = StudyCourse.lesson(lessonID, in: bundle) else { return nil }
         guard found.lesson.kind == .learn else { return nil }
@@ -135,7 +140,11 @@ public struct LearnList: Equatable, Sendable {
         }
         guard !rows.isEmpty else { return nil }
         let completed = rows.reduce(into: 0) { count, row in
-            if introduced.contains(row.itemID) { count += 1 }
+            if let learnedItemIDs {
+                if learnedItemIDs.contains(row.itemID) { count += 1 }
+            } else if introduced.contains(row.itemID) {
+                count += 1
+            }
         }
         return LearnList(
             lessonID: found.lesson.id,

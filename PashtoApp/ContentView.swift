@@ -616,6 +616,11 @@ struct ContentView: View {
                     .foregroundStyle(Lapis.text)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                if lesson.status == .started {
+                    Text(verbatim: ModuleCopy.started)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Lapis.secondaryText)
+                }
                 if lesson.kind == .practice, lesson.isComplete {
                     Image(systemName: "checkmark")
                         .font(.body.weight(.bold))
@@ -657,12 +662,16 @@ struct ContentView: View {
     }
 
     private func lessonAccessibility(_ lesson: MainMenuLesson, mark: CoursePathCopy.Mark) -> String {
-        CoursePathCopy.accessibilityLabel(
+        var label = CoursePathCopy.accessibilityLabel(
             title: lesson.title,
             mark: mark,
             now: ApprovedCopy.now,
             locked: ApprovedCopy.locked
         )
+        if lesson.status == .started {
+            label += ", \(ModuleCopy.started)"
+        }
+        return label
     }
 
     private func sectionTitle(_ kind: LessonKind) -> String {

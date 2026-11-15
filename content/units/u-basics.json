@@ -314,7 +314,7 @@
   "lessons": [
     {
       "id": "l-basics-learn-1",
-      "title": "I am, you are, he/she is",
+      "title": "I am, you are, we are",
       "kind": "learn",
       "items": [
         {
@@ -336,14 +336,7 @@
         {
           "item": "e-hagha-da",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-basics-learn-2",
-      "title": "We are, they are, I am not",
-      "kind": "learn",
-      "items": [
+        },
         {
           "item": "e-mung-yu",
           "role": "present"
@@ -354,6 +347,37 @@
         },
         {
           "item": "e-za-na-yam",
+          "role": "present"
+        }
+      ]
+    },
+    {
+      "id": "l-basics-learn-polite",
+      "title": "Yes, no and polite words",
+      "kind": "learn",
+      "items": [
+        {
+          "item": "e-ho",
+          "role": "present"
+        },
+        {
+          "item": "e-na",
+          "role": "present"
+        },
+        {
+          "item": "e-xa",
+          "role": "present"
+        },
+        {
+          "item": "e-mehrabani-wakray",
+          "role": "present"
+        },
+        {
+          "item": "e-manana",
+          "role": "present"
+        },
+        {
+          "item": "e-baxana-ghwaram",
           "role": "present"
         }
       ]
@@ -447,6 +471,62 @@
         },
         {
           "item": "e-daa-khaar-day",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-basics-verbs",
+      "title": "Practice: Am, are and is",
+      "items": [
+        {
+          "item": "e-yam",
+          "role": "introduce"
+        },
+        {
+          "item": "e-ye",
+          "role": "introduce"
+        },
+        {
+          "item": "e-day",
+          "role": "introduce"
+        },
+        {
+          "item": "e-da",
+          "role": "introduce"
+        },
+        {
+          "item": "e-yast",
+          "role": "introduce"
+        }
+      ]
+    },
+    {
+      "id": "l-basics-polite",
+      "title": "Practice: Yes, no and polite words",
+      "items": [
+        {
+          "item": "e-ho",
+          "role": "introduce"
+        },
+        {
+          "item": "e-na",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-mehrabani-wakray",
+          "role": "introduce"
+        },
+        {
+          "item": "e-manana",
+          "role": "introduce"
+        },
+        {
+          "item": "e-baxana-ghwaram",
           "role": "introduce"
         }
       ]

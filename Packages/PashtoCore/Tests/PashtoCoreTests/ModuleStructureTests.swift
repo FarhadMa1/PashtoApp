@@ -22,32 +22,24 @@ struct ModuleStructureTests {
         let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id, $0) })
         let groups: [(unit: String, cards: [(id: String, title: String, kind: LessonKind, pronunciations: [String])], practice: [String])] = [
             ("u-greetings", [
-                ("l-greetings-learn", "Key words", .learn, ["kha", "ma-NA-na", "ho", "na"]),
                 ("l-greetings-phrases-hello", "Saying hello", .phrases, ["sa-LAAM", "as-sa-LAAM a-lay-KOOM", "wa-a-lay-KOOM as-sa-LAAM", "STA-ray ma shey", "khwaar ma shey", "kha raagh-LAAST"]),
-                ("l-greetings-phrases-how", "How are you?", .phrases, ["TSAN-ga ye?", "TAA-so TSAN-ga yaast?", "za kha yam", "DE-ra ma-NA-na"]),
-                ("l-greetings-phrases-goodbye", "Polite words and goodbye", .phrases, ["DE-ra kha", "ba-KHA-na ghwaa-RAM", "meh-ra-baa-NEE WA-kray", "kho-DAAY paa-MAAN", "pa MA-kha dey kha"]),
-            ], ["l-greetings-1", "l-greetings-2", "l-greetings-3"]),
+                ("l-greetings-phrases-how", "How are you? and goodbye", .phrases, ["TSAN-ga ye?", "TAA-so TSAN-ga yaast?", "za kha yam", "DE-ra ma-NA-na", "DE-ra kha", "kho-DAAY paa-MAAN", "pa MA-kha dey kha"]),
+            ], ["l-greetings-1", "l-greetings-how"]),
             ("u-introductions", [
                 ("l-introductions-learn-names", "I, you and names", .learn, ["za", "ta", "TAA-so", "ha-GHA", "noom"]),
-                ("l-introductions-learn-be", "To be", .learn, ["yam", "ye", "day", "da", "yaast"]),
-                ("l-introductions-phrases-name", "What's your name?", .phrases, ["zmaa noom AH-mad day", "staa noom tsa day?", "STAA-so noom tsa day?"]),
-                ("l-introductions-phrases-from", "Where are you from?", .phrases, ["ta da koom dzaay ye?", "za la naar-WEY TSA-kha yam", "za af-GHAAN yam", "za af-GHAA-na yam", "za kho-WOON-kay yam", "za pakh-TO zda ka-WAM", "STAA-so pa lee-DO kho-SHAA-la shwam"]),
-            ], ["l-introductions-1", "l-introductions-2", "l-introductions-3"]),
+                ("l-introductions-phrases-name", "Your name and where you're from", .phrases, ["zmaa noom AH-mad day", "staa noom tsa day?", "STAA-so noom tsa day?", "ta da koom dzaay ye?", "za la naar-WEY TSA-kha yam", "za af-GHAAN yam", "za af-GHAA-na yam", "za kho-WOON-kay yam", "za pakh-TO zda ka-WAM", "STAA-so pa lee-DO kho-SHAA-la shwam"]),
+            ], ["l-introductions-1", "l-introductions-2"]),
             ("u-family", [
-                ("l-family-learn-members", "Family members", .learn, ["mor", "plaar", "wror", "khor", "zoy", "loor", "ko-ra-NAY"]),
-                ("l-family-learn-this", "This, my and your", .learn, ["daa", "zmaa", "staa"]),
-                ("l-family-phrases-this", "This is my \u{2026}", .phrases, ["daa tsok day?", "daa tsok da?", "daa zmaa plaar day", "daa zmaa mor da", "daa zmaa wror day", "daa zmaa khor da"]),
-                ("l-family-phrases-yours", "Is this your \u{2026}?", .phrases, ["daa staa wror day?", "ho, zmaa wror day", "na, zmaa zoy day"]),
+                ("l-family-learn-members", "Family, this, my and your", .learn, ["mor", "plaar", "wror", "khor", "zoy", "loor", "ko-ra-NAY", "daa", "zmaa", "staa"]),
+                ("l-family-phrases-this", "This is my \u{2026} / Is this your \u{2026}?", .phrases, ["daa tsok day?", "daa tsok da?", "daa zmaa plaar day", "daa zmaa mor da", "daa zmaa wror day", "daa zmaa khor da", "daa staa wror day?", "ho, zmaa wror day", "na, zmaa zoy day"]),
                 ("l-family-phrases-how", "How is your family?", .phrases, ["mor dey TSAN-ga da?", "ha-GHA kha da", "plaar dey TSAN-ga day?", "ha-GHA kha day"]),
             ], ["l-family-1", "l-family-2", "l-family-3"]),
         ]
         let practiceContent: [String: (title: String, items: [String], letters: [String], dialogs: [String])] = [
             "l-greetings-1": ("Practice: Saying hello", ["e-salam", "e-assalamu-alaykum", "e-walaykum-salam", "e-stare-ma-she", "e-xwar-ma-she", "e-xa-raghlast"], ["e-letter-alif", "e-letter-be"], ["d-greetings-1", "d-greetings-2"]),
-            "l-greetings-2": ("Practice: How are you?", ["e-tsanga-ye", "e-taso-tsanga-yast", "e-za-xa-yam", "e-xa", "e-manana", "e-dera-manana"], ["e-letter-pe", "e-letter-te"], ["d-greetings-3"]),
-            "l-greetings-3": ("Practice: Polite words and goodbye", ["e-dera-xa", "e-ho", "e-na", "e-baxana-ghwaram", "e-mehrabani-wakray", "e-xoday-paman", "e-pa-maxa-de-xa"], ["e-letter-tte", "e-letter-se"], []),
+            "l-greetings-how": ("Practice: How are you? and goodbye", ["e-tsanga-ye", "e-taso-tsanga-yast", "e-za-xa-yam", "e-dera-manana", "e-dera-xa", "e-xoday-paman", "e-pa-maxa-de-xa"], ["e-letter-pe", "e-letter-te", "e-letter-tte", "e-letter-se", "e-letter-tse", "e-letter-dze"], ["d-greetings-3"]),
             "l-introductions-1": ("Practice: I, you and names", ["e-za", "e-ta", "e-taso", "e-hagha", "e-num", "e-zma-num-ahmad-day", "e-sta-num-tsa-day", "e-staso-num-tsa-day"], ["e-letter-jim", "e-letter-che"], ["d-introductions-1"]),
             "l-introductions-2": ("Practice: Where are you from?", ["e-ta-da-kum-dzay-ye", "e-za-la-narwe-tsaxa-yam", "e-za-afghan-yam", "e-za-afghana-yam", "e-za-xowunkay-yam", "e-za-pashto-zda-kawam", "e-staso-pa-lido-xoshala-shwam"], ["e-letter-he", "e-letter-xe"], ["d-introductions-2"]),
-            "l-introductions-3": ("Practice: To be", ["e-yam", "e-ye", "e-day", "e-da", "e-yast"], ["e-letter-tse", "e-letter-dze"], []),
             "l-family-1": ("Practice: Family members", ["e-mor", "e-plar", "e-wror", "e-xor", "e-zoy", "e-lur", "e-daa-tsok-day", "e-daa-tsok-da", "e-daa-zma-plar-day", "e-daa-zma-mor-da"], ["e-letter-dal", "e-letter-ddal", "e-letter-zal"], ["d-family-1", "d-family-2"]),
             "l-family-2": ("Practice: This is my \u{2026}", ["e-koraney", "e-daa", "e-zma", "e-daa-zma-wror-day", "e-daa-zma-xor-da"], ["e-letter-re", "e-letter-rre", "e-letter-ze"], []),
             "l-family-3": ("Practice: Is this your \u{2026}?", ["e-sta", "e-daa-sta-wror-day", "e-ho-zma-wror-day", "e-na-zma-zoy-day", "e-mor-de-tsanga-da", "e-hagha-xa-da", "e-plar-de-tsanga-day", "e-hagha-xa-day"], ["e-letter-zhe", "e-letter-gye"], ["d-family-3", "d-family-4", "d-family-5"]),
@@ -93,8 +85,6 @@ struct ModuleStructureTests {
                 ("l-numbers-learn-one-to-five", .learn),
                 ("l-numbers-learn-six-to-ten", .learn),
                 ("l-numbers-learn-eleven-to-fifteen", .learn),
-                ("l-numbers-learn-sixteen-to-twenty", .learn),
-                ("l-numbers-learn-years-old", .learn),
                 ("l-numbers-phrases-how-old", .phrases),
                 ("l-numbers-1", .practice),
                 ("l-numbers-2", .practice),
@@ -104,7 +94,6 @@ struct ModuleStructureTests {
                 ("l-food-learn-food-and-water", .learn),
                 ("l-food-learn-drinks", .learn),
                 ("l-food-phrases-want", .phrases),
-                ("l-food-phrases-available", .phrases),
                 ("l-food-1", .practice),
                 ("l-food-2", .practice),
             ],
@@ -112,16 +101,13 @@ struct ModuleStructureTests {
                 ("l-town-learn-places", .learn),
                 ("l-town-learn-transport", .learn),
                 ("l-town-phrases-where", .phrases),
-                ("l-town-phrases-going", .phrases),
                 ("l-town-1", .practice),
                 ("l-town-2", .practice),
             ],
             "u-conversation": [
                 ("l-conversation-learn-today", .learn),
-                ("l-conversation-learn-languages", .learn),
                 ("l-conversation-phrases-work", .phrases),
                 ("l-conversation-phrases-understanding", .phrases),
-                ("l-conversation-phrases-sentences", .phrases),
                 ("l-conversation-1", .practice),
                 ("l-conversation-2", .practice),
                 ("l-conversation-3", .practice),
@@ -140,8 +126,8 @@ struct ModuleStructureTests {
     @Test @MainActor func onlyPracticeCountsAndAnOpenQuizSurvivesLearnCards() throws {
         let course = try loadCourse()
         let bundle = course.bundle
-        let practiceIDs = ["l-greetings-1", "l-greetings-2", "l-greetings-3",
-                           "l-introductions-1", "l-introductions-2", "l-introductions-3",
+        let practiceIDs = ["l-greetings-1", "l-greetings-how",
+                           "l-introductions-1", "l-introductions-2",
                            "l-family-1", "l-family-2", "l-family-3",
                            "l-travel-1", "l-travel-2", "l-time-1", "l-time-2"].map(lessonID)
         var cards: [ReviewCard] = []
@@ -191,7 +177,7 @@ struct ModuleStructureTests {
         #expect(newItemsShown(on: day, in: reconciled.snapshot.cards) == 0)
         #expect(ProgressReconciler.sessionAction(for: active, in: stored, content: bundle, on: day) == .resume)
 
-        let learn = try practiceLesson(lessonID("l-greetings-learn"), in: bundle)
+        let learn = try practiceLesson(lessonID("l-basics-learn-polite"), in: bundle)
         #expect(reviewCards(introducedIn: learn, on: day).isEmpty)
         #expect(sessionCommit(
             for: active,
@@ -263,7 +249,7 @@ struct ModuleStructureTests {
         let quiz = try #require(opener.session)
         #expect(!quiz.tasks.isEmpty)
         opener.startLesson(
-            lessonID: lessonID("l-greetings-learn"),
+            lessonID: lessonID("l-basics-learn-polite"),
             in: bundle,
             progress: stored,
             releasedUnitIDs: course.releasedUnitIDs,
@@ -277,10 +263,12 @@ struct ModuleStructureTests {
 
     @Test func cardButtonsMoveOneStepAndASecondTapDoesNothing() throws {
         let bundle = try loadCourse().bundle
-        let learn = try #require(StudyCourse.deck(for: lessonID("l-greetings-learn"), in: bundle))
+        let learn = try #require(StudyCourse.deck(for: lessonID("l-basics-learn-polite"), in: bundle))
         #expect(learn.kind == .learn)
         #expect(learn.meaningVisible)
-        #expect(learn.cards.map(\.itemID.rawValue) == ["e-xa", "e-manana", "e-ho", "e-na"])
+        #expect(learn.cards.map(\.itemID.rawValue) == [
+            "e-ho", "e-na", "e-xa", "e-mehrabani-wakray", "e-manana", "e-baxana-ghwaram",
+        ])
         var deck = learn
         #expect(deck.next() == .advanced)
         #expect(deck.index == 1)
@@ -295,11 +283,11 @@ struct ModuleStructureTests {
         }
         learnLast.settle()
         let phrasesID = StudyCourse.nextLesson(after: learnLast.lessonID, in: bundle)
-        #expect(phrasesID == lessonID("l-greetings-phrases-hello"))
+        #expect(phrasesID == lessonID("l-basics-phrases"))
         #expect(learnLast.offersStartPractice == false)
-        #expect(learnLast.startPractice(opening: lessonID("l-greetings-1")) == .ignored)
+        #expect(learnLast.startPractice(opening: lessonID("l-basics-1")) == .ignored)
         #expect(learnLast.index == learnLast.count - 1)
-        #expect(learnLast.openNextLesson(phrasesID) == .open(lessonID("l-greetings-phrases-hello")))
+        #expect(learnLast.openNextLesson(phrasesID) == .open(lessonID("l-basics-phrases")))
         #expect(learnLast.openNextLesson(phrasesID) == .ignored)
 
         var phrases = try #require(StudyCourse.deck(for: lessonID("l-greetings-phrases-hello"), in: bundle))
@@ -331,7 +319,7 @@ struct ModuleStructureTests {
         #expect(last.openNextLesson(how) == .open(lessonID("l-greetings-phrases-how")))
         #expect(last.openNextLesson(how) == .ignored)
 
-        var goodbye = try #require(StudyCourse.deck(for: lessonID("l-greetings-phrases-goodbye"), in: bundle))
+        var goodbye = try #require(StudyCourse.deck(for: lessonID("l-greetings-phrases-how"), in: bundle))
         while !goodbye.isLast {
             goodbye.settle()
             #expect(goodbye.next() == .advanced)

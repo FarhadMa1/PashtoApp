@@ -79,7 +79,7 @@ struct MainMenuTests {
         )
         #expect(fresh.categories.map(\.id) == course.releasedUnitIDs)
         #expect(fresh.categories.map(\.practiceCompleted) == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        #expect(fresh.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2, 3, 2, 2, 3])
+        #expect(fresh.categories.map(\.practiceTotal) == [3, 2, 2, 3, 2, 2, 3, 2, 2, 3])
         #expect(fresh.categories.map(\.label) == [
             "Basics", "Greetings", "Introduction", "Family", "Travel", "Time",
             "Numbers", "Food", "Town", "Conversation",
@@ -102,7 +102,6 @@ struct MainMenuTests {
         let nonPractice = Set(listed.filter { $0.kind != .practice }.map(\.id))
         var finished = nonPractice
         finished.insert(lessonID("l-greetings-1"))
-        finished.insert(lessonID("l-greetings-2"))
         finished.insert(lessonID("l-family-1"))
         let menu = MainMenu.make(
             in: course.bundle,
@@ -110,18 +109,20 @@ struct MainMenuTests {
             finishedLessonIDs: finished,
             listedLessons: listed
         )
-        #expect(menu.categories.map(\.practiceCompleted) == [0, 2, 0, 1, 0, 0, 0, 0, 0, 0])
-        #expect(menu.categories.map(\.practiceTotal) == [1, 3, 3, 3, 2, 2, 3, 2, 2, 3])
+        #expect(menu.categories.map(\.practiceCompleted) == [0, 1, 0, 1, 0, 0, 0, 0, 0, 0])
+        #expect(menu.categories.map(\.practiceTotal) == [3, 2, 2, 3, 2, 2, 3, 2, 2, 3])
         #expect(menu.categories[0].fraction == 0)
-        #expect(menu.categories[1].fraction == 2.0 / 3.0)
+        #expect(menu.categories[1].fraction == 0.5)
         #expect(menu.categories[1].isComplete == false)
         #expect(menu.categories[0].lessons.allSatisfy { $0.kind == .practice || $0.isComplete == false })
         let greetingsPractice = menu.categories[1].lessons.filter { $0.kind == .practice }
-        #expect(greetingsPractice.map(\.isComplete) == [true, true, false])
+        #expect(greetingsPractice.map(\.isComplete) == [true, false])
         #expect(menu.categories[1].lessons.filter { $0.kind != .practice }.allSatisfy { !$0.isComplete })
         #expect(menu.continueTarget?.lessonID == lessonID("l-basics-learn-1"))
 
-        let basicsDone = finished.union([lessonID("l-basics-1")])
+        let basicsDone = finished.union([
+            lessonID("l-basics-1"), lessonID("l-basics-verbs"), lessonID("l-basics-polite"),
+        ])
         let afterBasics = MainMenu.make(
             in: course.bundle,
             releasedUnitIDs: course.releasedUnitIDs,
@@ -130,7 +131,7 @@ struct MainMenuTests {
         )
         #expect(afterBasics.categories[0].isComplete)
         #expect(afterBasics.categories[0].fraction == 1)
-        #expect(afterBasics.continueTarget?.lessonID == lessonID("l-greetings-3"))
+        #expect(afterBasics.continueTarget?.lessonID == lessonID("l-greetings-how"))
         #expect(afterBasics.continueTarget?.unitLabel == "Greetings")
 
         let allPractice = Set(listed.filter { $0.kind == .practice }.map(\.id))
@@ -176,12 +177,14 @@ struct MainMenuTests {
         #expect(fresh.continueTarget?.unitLabel == "Basics")
 
         let partial = menu([lessonID("l-basics-1"), lessonID("l-greetings-1")])
-        #expect(partial.continueTarget?.lessonID == lessonID("l-greetings-2"))
-        #expect(partial.continueTarget?.unitID == unitID("u-greetings"))
-        #expect(partial.continueTarget?.unitLabel == "Greetings")
+        #expect(partial.continueTarget?.lessonID == lessonID("l-basics-verbs"))
+        #expect(partial.continueTarget?.unitID == unitID("u-basics"))
+        #expect(partial.continueTarget?.unitLabel == "Basics")
 
-        let nextUnit = menu([lessonID("l-basics-1")])
-        #expect(nextUnit.continueTarget?.lessonID == lessonID("l-greetings-learn"))
+        let nextUnit = menu([
+            lessonID("l-basics-1"), lessonID("l-basics-verbs"), lessonID("l-basics-polite"),
+        ])
+        #expect(nextUnit.continueTarget?.lessonID == lessonID("l-greetings-phrases-hello"))
         #expect(nextUnit.continueTarget?.unitID == unitID("u-greetings"))
         #expect(nextUnit.continueTarget?.unitLabel == "Greetings")
 

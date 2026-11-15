@@ -318,7 +318,7 @@ struct QuizFindingsTests {
 
         var hiddenRNG = SplitMix64(seed: 1)
         let hidden = LessonSessionBuilder.build(
-            for: lessonID("l-greetings-2"),
+            for: lessonID("l-greetings-how"),
             in: bundle,
             seenLessonIDs: lessons.map(\.id),
             maxQuestions: nil,

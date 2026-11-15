@@ -590,7 +590,7 @@ struct DialogResponseTests {
         #expect(expected.count == 9)
         #expect(seenTargets.sorted() == expected.sorted())
         #expect(counts["l-greetings-1"] == 0)
-        #expect(counts["l-greetings-2"] == 1)
+        #expect(counts["l-greetings-how"] == 1)
         #expect(counts["l-introductions-1"] == 1)
         #expect(counts["l-introductions-2"] == 1)
         #expect(counts["l-family-1"] == 2)
@@ -674,9 +674,9 @@ struct DialogResponseTests {
                 #expect(!pool.contains { $0.id == thanks.id })
                 switch item.id.rawValue {
                 case "e-za-xa-yam":
-                    #expect(pool.count == 5)
+                    #expect(pool.count == 7)
                 case "e-hagha-xa-da", "e-hagha-xa-day":
-                    #expect(pool.count == 24)
+                    #expect(pool.count == 22)
                 case "e-xwar-ma-she":
                     #expect(pool.count < DialogResponse.minimumDistractors)
                 default:
@@ -790,48 +790,37 @@ struct LessonSessionTests {
         #expect(lessons.map(\.id.rawValue) == [
             "l-sounds-1",
             "l-basics-learn-1",
-            "l-basics-learn-2",
+            "l-basics-learn-polite",
             "l-basics-phrases",
             "l-basics-1",
-            "l-greetings-learn",
+            "l-basics-verbs",
+            "l-basics-polite",
             "l-greetings-phrases-hello",
             "l-greetings-phrases-how",
-            "l-greetings-phrases-goodbye",
             "l-greetings-1",
-            "l-greetings-2",
-            "l-greetings-3",
+            "l-greetings-how",
             "l-introductions-learn-names",
-            "l-introductions-learn-be",
             "l-introductions-phrases-name",
-            "l-introductions-phrases-from",
             "l-introductions-1",
             "l-introductions-2",
-            "l-introductions-3",
             "l-family-learn-members",
-            "l-family-learn-this",
             "l-family-phrases-this",
-            "l-family-phrases-yours",
             "l-family-phrases-how",
             "l-family-1",
             "l-family-2",
             "l-family-3",
             "l-travel-learn-around",
-            "l-travel-learn-money",
             "l-travel-phrases-where",
-            "l-travel-phrases-buying",
             "l-travel-1",
             "l-travel-2",
             "l-time-learn-times",
             "l-time-learn-days",
             "l-time-phrases-day",
-            "l-time-phrases-morning",
             "l-time-1",
             "l-time-2",
             "l-numbers-learn-one-to-five",
             "l-numbers-learn-six-to-ten",
             "l-numbers-learn-eleven-to-fifteen",
-            "l-numbers-learn-sixteen-to-twenty",
-            "l-numbers-learn-years-old",
             "l-numbers-phrases-how-old",
             "l-numbers-1",
             "l-numbers-2",
@@ -839,20 +828,16 @@ struct LessonSessionTests {
             "l-food-learn-food-and-water",
             "l-food-learn-drinks",
             "l-food-phrases-want",
-            "l-food-phrases-available",
             "l-food-1",
             "l-food-2",
             "l-town-learn-places",
             "l-town-learn-transport",
             "l-town-phrases-where",
-            "l-town-phrases-going",
             "l-town-1",
             "l-town-2",
             "l-conversation-learn-today",
-            "l-conversation-learn-languages",
             "l-conversation-phrases-work",
             "l-conversation-phrases-understanding",
-            "l-conversation-phrases-sentences",
             "l-conversation-1",
             "l-conversation-2",
             "l-conversation-3",
@@ -907,7 +892,7 @@ struct LessonSessionTests {
             return match.mode == .pashtoEnglish
         })
 
-        let howAreYou = try #require(sessions.first { $0.lessonID.rawValue == "l-greetings-2" })
+        let howAreYou = try #require(sessions.first { $0.lessonID.rawValue == "l-greetings-how" })
         #expect(OrderWords.includedInSessions)
         #expect(!howAreYou.tasks.filter { $0.kind == .orderWords }.isEmpty)
 

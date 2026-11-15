@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import sys
 
@@ -37,6 +38,8 @@ VARIANTS = ("light", "dark", "xl")
 EXTRA = [
     "learn-list-bold-light.png",
     "learn-list-time-xl.png",
+    "learn-list-family-light.png",
+    "learn-list-family-xl.png",
     "notes-learn-xl-top.png",
     "notes-learn-xl.png",
     "notes-learn-xl-2.png",
@@ -55,7 +58,11 @@ def canonical(name: str) -> str | None:
     root, ext = os.path.splitext(base)
     if ext.lower() != ".png":
         root = base
-    if root not in {item[:-4] for item in EXPECTED}:
+    expected = {item[:-4] for item in EXPECTED}
+    if root not in expected:
+        # xcresulttool appends "_0_<uuid>" to the attachment name.
+        root = re.sub(r"_\d+_[0-9A-Fa-f-]{36}$", "", root)
+    if root not in expected:
         return None
     return root + ".png"
 
