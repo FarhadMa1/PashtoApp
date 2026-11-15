@@ -561,12 +561,17 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertGreaterThan(shortHeight, 1, "shan-BA was not measured")
         XCTAssertGreaterThan(longFrame.width, 1)
         XCTAssertGreaterThan(longFrame.height, 1)
-        XCTAssertLessThan(
+        XCTAssertGreaterThanOrEqual(
             longFrame.height,
             shortHeight * 1.75,
-            "cha-haar-shan-BA wrapped. frame \(longFrame) short \(shortHeight)"
+            "cha-haar-shan-BA stayed on one line. frame \(longFrame) short \(shortHeight)"
         )
         XCTAssertGreaterThanOrEqual(longFrame.minX, app.frame.minX - 1)
+        XCTAssertLessThanOrEqual(
+            longFrame.maxX,
+            app.frame.maxX + 1,
+            "cha-haar-shan-BA is clipped on the right. frame \(longFrame) screen \(app.frame)"
+        )
         XCTAssertGreaterThanOrEqual(longFrame.minY, -1)
         settle(1.0)
         shot("learn-list-time-xl")
