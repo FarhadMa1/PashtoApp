@@ -1,14 +1,20 @@
 import XCTest
 
 /// Opens the home, the lower Home rows, a Numbers learn list and its cards,
-/// the Greetings learn list, the Family screens, a quiz, and the celebration.
-/// The workflow runs this once per variant: light, dark, and the largest
-/// accessibility text size.
+/// the Greetings and Travel learn lists, the Family screens, a quiz, the
+/// celebration, and the word of the day. Light also opens the Greetings list
+/// with Bold Text. XL is two tests, lists and then the quiz, so each stays
+/// under the runner's per-test limit. The Time days list is part of XL lists.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
+        // The workflow default is 180 seconds, and the allowance is fixed
+        // before the test body runs. The two XL tests request 400.
+        if name.contains("testXL") {
+            executionTimeAllowance = 400
+        }
     }
 
     func testLight() {
@@ -19,23 +25,60 @@ final class ScreenshotTests: XCTestCase {
         capture(variant: "dark")
     }
 
-    func testXL() {
-        capture(variant: "xl")
+    /// Home, Numbers, Greetings, Travel, and the Time days list.
+    func testXLLists() {
+        executionTimeAllowance = 400
+        let app = XCUIApplication()
+        let basics = showHome(app, variant: "xl", failure: "home did not load. buttons: \(buttonDump(app))")
+        captureHomeAndNumbers(app, variant: "xl")
+        app.terminate()
+        showHome(app, variant: "xl", failure: "home did not return. buttons: \(buttonDump(app))")
+        captureGreetingsAndTravel(app, variant: "xl", basics: basics)
+        captureTimeDays(app, basics: basics)
+    }
+
+    /// Family, the learn card, the quiz, the celebration, and the word of the day.
+    func testXLQuiz() {
+        executionTimeAllowance = 400
+        let app = XCUIApplication()
+        showHome(app, variant: "xl", failure: "home did not load. buttons: \(buttonDump(app))")
+        captureFamilyLearnAndQuiz(app, variant: "xl")
+        captureCelebration(app, variant: "xl")
+        captureDailyWord(app, variant: "xl")
     }
 
     private func capture(variant: String) {
         let app = XCUIApplication()
+        let basics = showHome(app, variant: variant, failure: "home did not load. buttons: \(buttonDump(app))")
+        captureHomeAndNumbers(app, variant: variant)
+        app.terminate()
+        showHome(app, variant: variant, failure: "home did not return. buttons: \(buttonDump(app))")
+        captureGreetingsAndTravel(app, variant: variant, basics: basics)
+        captureFamilyLearnAndQuiz(app, variant: variant)
+        captureCelebration(app, variant: variant)
+        captureDailyWord(app, variant: variant)
+        captureBoldText(app, variant: variant, basics: basics)
+    }
+
+    /// `failure` is built only if home does not appear. The call sites include
+    /// `buttonDump(app)`, which crashes if it runs before `launch`.
+    @discardableResult
+    private func showHome(
+        _ app: XCUIApplication,
+        variant: String,
+        failure: @autoclosure () -> String
+    ) -> XCUIElement {
         app.launchArguments = launchArguments(for: variant)
         app.launch()
-
         let basics = app.descendants(matching: .any)["u-basics"]
         if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
             app.buttons["Start review"].tap()
         }
-        XCTAssertTrue(
-            basics.waitForExistence(timeout: 30),
-            "home did not load. buttons: \(buttonDump(app))"
-        )
+        XCTAssertTrue(basics.waitForExistence(timeout: 30), failure())
+        return basics
+    }
+
+    private func captureHomeAndNumbers(_ app: XCUIApplication, variant: String) {
         settle()
         shot("home-\(variant)")
 
@@ -64,18 +107,9 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["yaw"].waitForExistence(timeout: 5), "Numbers card has no pronunciation")
         settle(1.0)
         shot("numbers-learn-\(variant)")
+    }
 
-        app.terminate()
-        app.launchArguments = launchArguments(for: variant)
-        app.launch()
-        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
-            app.buttons["Start review"].tap()
-        }
-        XCTAssertTrue(
-            basics.waitForExistence(timeout: 30),
-            "home did not return. buttons: \(buttonDump(app))"
-        )
-
+    private func captureGreetingsAndTravel(_ app: XCUIApplication, variant: String, basics: XCUIElement) {
         tap("u-greetings", in: app)
         tap("l-greetings-learn", in: app)
         XCTAssertTrue(
@@ -84,13 +118,37 @@ final class ScreenshotTests: XCTestCase {
         )
         XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Greetings list has no Play button")
         XCTAssertTrue(app.staticTexts["kha"].waitForExistence(timeout: 5), "Greetings list has no pronunciation")
+        XCTAssertTrue(
+            storedPronunciation("ma-NA-na", in: app).waitForExistence(timeout: 5),
+            "Greetings list has no stressed pronunciation"
+        )
         XCTAssertTrue(app.staticTexts["0 of 4 words"].waitForExistence(timeout: 5))
+        revealLabel("ma-NA-na", in: app)
         settle(1.0)
         shot("learn-list-\(variant)")
         XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
         app.buttons["Pashto"].tap()
         popToHome(app, basics: basics)
 
+        tap("u-travel", in: app)
+        tap("l-travel-learn-around", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Travel learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(
+            storedPronunciation("ho-TAL", in: app).waitForExistence(timeout: 5),
+            "Travel list has no stressed pronunciation"
+        )
+        revealLabel("ho-TAL", in: app)
+        settle(1.0)
+        shot("learn-list-travel-\(variant)")
+        XCTAssertTrue(app.buttons["Pashto"].waitForExistence(timeout: 5))
+        app.buttons["Pashto"].tap()
+        popToHome(app, basics: basics)
+    }
+
+    private func captureFamilyLearnAndQuiz(_ app: XCUIApplication, variant: String) {
         tap("u-family", in: app)
         let mother = app.descendants(matching: .any)["e-mor"]
         XCTAssertTrue(mother.waitForExistence(timeout: 15), "Family word list did not load. buttons: \(buttonDump(app))")
@@ -109,7 +167,10 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Skip to practice"].waitForExistence(timeout: 15),
             "Learn card did not open. buttons: \(buttonDump(app))"
         )
-        XCTAssertTrue(app.staticTexts["mor"].waitForExistence(timeout: 5), "Learn card has no pronunciation")
+        XCTAssertTrue(
+            storedPronunciation("mor", in: app).waitForExistence(timeout: 5),
+            "Learn card has no pronunciation"
+        )
         settle(1.0)
         shot("learn-\(variant)")
 
@@ -128,11 +189,13 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(waitForQuiz(app), "quiz did not appear. buttons: \(buttonDump(app))")
         settle(1.2)
         shot("quiz-\(variant)")
+    }
 
+    private func captureCelebration(_ app: XCUIApplication, variant: String) {
         app.terminate()
         app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotCelebration"]
         app.launch()
-        let praise = app.staticTexts["DE-ra kha"]
+        let praise = storedPronunciation("DE-ra kha", in: app)
         XCTAssertTrue(
             praise.waitForExistence(timeout: 20),
             "celebration did not appear. buttons: \(buttonDump(app))"
@@ -140,6 +203,75 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.buttons["Continue"].waitForExistence(timeout: 5))
         settle(0.6)
         shot("celebration-\(variant)")
+    }
+
+    private func captureDailyWord(_ app: XCUIApplication, variant: String) {
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotDailyWord"]
+        app.launch()
+        XCTAssertTrue(
+            app.staticTexts["Word of the day"].waitForExistence(timeout: 20),
+            "word of the day did not appear. buttons: \(buttonDump(app))"
+        )
+        let dailyPronunciation = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label CONTAINS %@", "ma-NA-na")
+        ).firstMatch
+        XCTAssertTrue(dailyPronunciation.waitForExistence(timeout: 5), "word of the day has no pronunciation")
+        settle(0.6)
+        shot("word-of-the-day-\(variant)")
+    }
+
+    private func captureTimeDays(_ app: XCUIApplication, basics: XCUIElement) {
+        app.terminate()
+        app.launchArguments = launchArguments(for: "xl")
+        app.launch()
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not load for the Time list. buttons: \(buttonDump(app))"
+        )
+        tap("u-time", in: app)
+        tap("l-time-learn-days", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Time days list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(
+            storedPronunciation("cha-haar-shan-BA", in: app).waitForExistence(timeout: 5),
+            "Time days list has no long pronunciation"
+        )
+        revealLabel("cha-haar-shan-BA", in: app)
+        settle(1.0)
+        shot("learn-list-time-xl")
+    }
+
+    private func captureBoldText(_ app: XCUIApplication, variant: String, basics: XCUIElement) {
+        guard variant == "light" else { return }
+        app.terminate()
+        app.launchArguments = launchArguments(for: variant) + ["-PashtoScreenshotBoldText"]
+        app.launch()
+        if !basics.waitForExistence(timeout: 20), app.buttons["Start review"].exists {
+            app.buttons["Start review"].tap()
+        }
+        XCTAssertTrue(
+            basics.waitForExistence(timeout: 30),
+            "home did not load for Bold Text. buttons: \(buttonDump(app))"
+        )
+        tap("u-greetings", in: app)
+        tap("l-greetings-learn", in: app)
+        XCTAssertTrue(
+            app.buttons["Practice lesson"].waitForExistence(timeout: 15),
+            "Bold Text learn list did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertTrue(
+            storedPronunciation("ma-NA-na", in: app).waitForExistence(timeout: 5),
+            "Bold Text list has no stressed pronunciation"
+        )
+        revealLabel("ma-NA-na", in: app)
+        settle(1.0)
+        shot("learn-list-bold-light")
     }
 
     private func launchArguments(for variant: String) -> [String] {
@@ -229,10 +361,40 @@ final class ScreenshotTests: XCTestCase {
         )
     }
 
+    /// The stored pronunciation. Syllables are drawn separately in lowercase,
+    /// so they are not one static text. VoiceOver's label is the stored field,
+    /// on whatever element type SwiftUI gives that line.
+    private func storedPronunciation(_ stored: String, in app: XCUIApplication) -> XCUIElement {
+        app.descendants(matching: .any).matching(
+            NSPredicate(format: "label == %@", stored)
+        ).firstMatch
+    }
+
     private func tap(_ identifier: String, in app: XCUIApplication) {
         let element = app.descendants(matching: .any)[identifier]
         reveal(element, in: app)
         element.tap()
+    }
+
+    /// Scrolls a pronunciation label into the window. The label is the stored
+    /// field, including capitals, because that is what VoiceOver reads.
+    private func revealLabel(_ label: String, in app: XCUIApplication) {
+        let element = storedPronunciation(label, in: app)
+        XCTAssertTrue(element.waitForExistence(timeout: 5), "missing \(label)")
+        let scroll = app.scrollViews.firstMatch
+        for _ in 0..<8 {
+            let frame = element.frame
+            if frame.width > 1, frame.minY > 64, frame.maxY < app.frame.maxY - 16 {
+                return
+            }
+            if scroll.exists {
+                nudgeScroll(scroll, revealingLower: frame == .zero || frame.midY >= app.frame.midY)
+            } else if frame == .zero || frame.midY >= app.frame.midY {
+                app.swipeUp(velocity: .slow)
+            } else {
+                app.swipeDown(velocity: .slow)
+            }
+        }
     }
 
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {

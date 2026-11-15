@@ -73,6 +73,7 @@ struct GlyphCard: View {
                 scriptFont: .system(size: pashtoSize, weight: .regular),
                 fitsWidth: prominent,
                 centers: true,
+                pronunciationSize: side.pronunciation == nil ? nil : pronunciationSize,
                 pronunciationLeads: side.pronunciation != nil
             )
             .font(.system(size: pronunciationSize, weight: .bold))

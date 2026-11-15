@@ -20,7 +20,9 @@ struct PashtoApp: App {
 
     /// Screenshot CI passes `-PashtoScreenshotLight`, `-PashtoScreenshotDark`,
     /// and `-PashtoScreenshotXL`. `-PashtoScreenshotCelebration` opens the
-    /// settled celebration. A normal launch has none of them.
+    /// settled celebration. `-PashtoScreenshotDailyWord` opens the daily word.
+    /// `-PashtoScreenshotBoldText` turns on the Bold Text weight. A normal
+    /// launch has none of them.
     @ViewBuilder
     private var screenshotConfiguredRoot: some View {
         configured(screenshotRoot)
@@ -28,9 +30,12 @@ struct PashtoApp: App {
 
     @ViewBuilder
     private var screenshotRoot: some View {
-        if ProcessInfo.processInfo.arguments.contains("-PashtoScreenshotCelebration"),
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-PashtoScreenshotCelebration"),
            let offer = celebrationPreview {
             CategoryCelebrationScreen(offer: offer, startsSettled: true, onContinue: {})
+        } else if arguments.contains("-PashtoScreenshotDailyWord") {
+            DailyWordScreenshotScreen()
         } else {
             RootView(model: model)
         }
@@ -53,6 +58,22 @@ struct PashtoApp: App {
         let dark = arguments.contains("-PashtoScreenshotDark")
         let light = arguments.contains("-PashtoScreenshotLight")
         let extraLarge = arguments.contains("-PashtoScreenshotXL")
+        let bold = arguments.contains("-PashtoScreenshotBoldText")
+        if bold {
+            screenshotTheme(content, dark: dark, light: light, extraLarge: extraLarge)
+                .environment(\.legibilityWeight, .bold)
+        } else {
+            screenshotTheme(content, dark: dark, light: light, extraLarge: extraLarge)
+        }
+    }
+
+    @ViewBuilder
+    private func screenshotTheme<Content: View>(
+        _ content: Content,
+        dark: Bool,
+        light: Bool,
+        extraLarge: Bool
+    ) -> some View {
         if dark && extraLarge {
             content
                 .preferredColorScheme(.dark)

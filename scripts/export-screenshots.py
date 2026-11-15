@@ -13,9 +13,23 @@ import os
 import shutil
 import sys
 
-SCREENS = ("home", "home-new-categories", "numbers-learn", "family", "learn", "learn-list", "learn-list-numbers", "quiz", "celebration")
+SCREENS = (
+    "home",
+    "home-new-categories",
+    "numbers-learn",
+    "family",
+    "learn",
+    "learn-list",
+    "learn-list-numbers",
+    "learn-list-travel",
+    "quiz",
+    "celebration",
+    "word-of-the-day",
+)
 VARIANTS = ("light", "dark", "xl")
-EXPECTED = [f"{screen}-{variant}.png" for screen in SCREENS for variant in VARIANTS]
+# Bold Text is the light Greetings list. The long Time word is XL only.
+EXTRA = ["learn-list-bold-light.png", "learn-list-time-xl.png"]
+EXPECTED = [f"{screen}-{variant}.png" for screen in SCREENS for variant in VARIANTS] + EXTRA
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 MIN_BYTES = 20_000
 

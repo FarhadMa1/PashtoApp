@@ -3,9 +3,10 @@ import Foundation
 /// One row on a learn lesson's word list.
 ///
 /// `pronunciation` is the stored field, capitals included. The screen draws
-/// `displayedPronunciation`, which swaps an ASCII hyphen for U+2011 so the
-/// line wraps at spaces only. `picture` is nil when this unit does not show
-/// one. The taxi picture is Town only, so Travel's taxi row has none.
+/// that field with `PronunciationText`. `displayedPronunciation` is the same
+/// lowercase line, with U+2011 in place of an ASCII hyphen so a check can
+/// read the letters without the weight. `picture` is nil when this unit does
+/// not show one. The taxi picture is Town only, so Travel's taxi row has none.
 public struct LearnListRow: Equatable, Sendable {
     public let itemID: ItemID
     public let english: String
@@ -31,7 +32,7 @@ public struct LearnListRow: Equatable, Sendable {
         self.picture = picture
     }
 
-    /// The pronunciation the row draws. Letters and capitals match `pronunciation`.
+    /// Lowercase display line. Capitals stay on `pronunciation`.
     public var displayedPronunciation: String {
         LearnListPronunciation.display(pronunciation)
     }
@@ -39,18 +40,16 @@ public struct LearnListRow: Equatable, Sendable {
 
 /// Display form of a stored pronunciation.
 ///
-/// An ASCII hyphen becomes U+2011. Nothing else changes, so capitals that
-/// mark stress stay as they are stored.
+/// Letters are lowercase. An ASCII hyphen becomes U+2011. Stress is a weight
+/// on the screen, not a capital in this string.
 public enum LearnListPronunciation {
-    public static let nonBreakingHyphen: Character = "\u{2011}"
+    public static let nonBreakingHyphen: Character = PronunciationDisplay.nonBreakingHyphen
 
     public static func display(_ stored: String) -> String {
-        String(stored.map { character in
-            character == "-" ? nonBreakingHyphen : character
-        })
+        PronunciationDisplay.displayText(stored: stored)
     }
 
-    /// The stored pronunciation. Display hyphens map back to ASCII hyphens.
+    /// ASCII hyphens in place of display hyphens. Capitals are not restored.
     public static func stored(fromDisplayed displayed: String) -> String {
         String(displayed.map { character in
             character == nonBreakingHyphen ? "-" : character
