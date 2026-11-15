@@ -77,6 +77,15 @@ struct StudyCardScreen: View {
         }
     }
 
+    /// At the largest type the note is outside the card. The title and Skip
+    /// stay on one line, and the card padding tightens, so the phrase and the
+    /// first tip share the opening screen. Light keeps the note inside the card.
+    private var noteSitsBelowCard: Bool {
+        dynamicTypeSize.isAccessibilitySize
+            && deck.meaningVisible
+            && deck.card?.pronunciationNote?.isEmpty == false
+    }
+
     /// UI tests only. The note is taller than the list at the largest type,
     /// so the opened card starts at the first tip. `-uiTestNoteStaysAtTop`
     /// leaves the list at the top so a shot can show the phrase first.
@@ -96,7 +105,7 @@ struct StudyCardScreen: View {
     @ViewBuilder
     private var scrollContent: some View {
         if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: noteSitsBelowCard ? 6 : 14) {
                 scrollingTitle
                 card
                 if deck.meaningVisible, let note = deck.card?.pronunciationNote {
@@ -207,13 +216,17 @@ struct StudyCardScreen: View {
     }
 
     /// Large title and Skip to practice. They scroll with the phrase and the tips.
+    /// When the note sits under the card, both stay on one line so the first tip
+    /// is on the opening screen. The full title still scales down rather than clipping.
     private var scrollingTitle: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: noteSitsBelowCard ? 4 : 8) {
             Text(verbatim: deck.title)
                 .font(.headline.weight(.bold))
                 .foregroundStyle(Lapis.text)
                 .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(noteSitsBelowCard ? 1 : nil)
+                .minimumScaleFactor(noteSitsBelowCard ? 0.35 : 1)
+                .fixedSize(horizontal: false, vertical: !noteSitsBelowCard)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.isHeader)
                 .accessibilitySortPriority(65)
@@ -228,13 +241,16 @@ struct StudyCardScreen: View {
             Button(action: onSkip) {
                 HStack(spacing: 4) {
                     Text(verbatim: StudyCopy.skipToPractice)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(noteSitsBelowCard ? 1 : nil)
+                        .minimumScaleFactor(noteSitsBelowCard ? 0.35 : 1)
+                        .fixedSize(horizontal: false, vertical: !noteSitsBelowCard)
                         .multilineTextAlignment(.leading)
                     Image(systemName: "chevron.right")
                         .accessibilityHidden(true)
                 }
                 .font(.body.weight(.semibold))
                 .foregroundStyle(StudyPalette.pronunciation)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .buttonStyle(.plain)
             .frame(minHeight: 44, alignment: .leading)
@@ -279,7 +295,7 @@ struct StudyCardScreen: View {
     }
 
     private var card: some View {
-        VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .center, spacing: 18) {
+        VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .center, spacing: noteSitsBelowCard ? 6 : 18) {
             if let card = deck.card {
                 if let picture = FamilyPictures.picture(
                     for: card.itemID,
@@ -299,7 +315,8 @@ struct StudyCardScreen: View {
                 StudyCardLines(
                     card: card,
                     showsMeaning: deck.meaningVisible,
-                    pronunciationFocused: $pronunciationFocused
+                    pronunciationFocused: $pronunciationFocused,
+                    fitsWithNote: noteSitsBelowCard
                 )
                 .id(deck.index)
                 .transition(.opacity)
@@ -322,7 +339,7 @@ struct StudyCardScreen: View {
             pageDots
                 .frame(maxWidth: .infinity)
         }
-        .padding(24)
+        .padding(noteSitsBelowCard ? 8 : 24)
         .frame(maxWidth: .infinity)
         .background(StudyPalette.card)
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
@@ -400,6 +417,8 @@ struct StudyCardLines: View {
     var card: StudyCard
     var showsMeaning: Bool
     var pronunciationFocused: AccessibilityFocusState<Bool>.Binding
+    /// Tighter gaps when the pronunciation note is drawn under the card.
+    var fitsWithNote = false
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = 39
@@ -436,7 +455,7 @@ struct StudyCardLines: View {
     /// Pronunciation first, then English, then small Pashto. The note is drawn
     /// under the card so a plain note can use the full width.
     private var largeTypeLines: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: fitsWithNote ? 4 : 10) {
             pronunciation(alignment: .leading, frame: .leading)
             if showsMeaning {
                 meaningLine(alignment: .leading, priority: 40)

@@ -505,6 +505,20 @@ struct PronunciationDisplayTests {
 
         let study = try source("PashtoApp/Quiz/StudyCardScreen.swift")
         #expect(study.contains("!UITestLaunch.noteStaysAtTop"))
+        #expect(study.contains("noteSitsBelowCard"))
+        #expect(study.contains("lineLimit(noteSitsBelowCard ? 1 : nil)"))
+        let access = try section(
+            "VStack(alignment: .leading, spacing: noteSitsBelowCard ? 6 : 14)",
+            until: "Blue strip at the usual text sizes",
+            in: study
+        )
+        #expect(access.contains("scrollingTitle"))
+        #expect(access.contains("PronunciationNoteText(note: note)"))
+        let title = try #require(access.range(of: "scrollingTitle"))
+        let outsideNote = try #require(access.range(of: "PronunciationNoteText(note: note)"))
+        #expect(title.lowerBound < outsideNote.lowerBound)
+        let regular = try section("private var regularLines", until: "private var largeTypeLines", in: study)
+        #expect(regular.contains("PronunciationNoteText(note: note)"))
         let lightNotes = try section("func testLightNotes()", until: "func testLightShell()", in: tests)
         #expect(!lightNotes.contains("-uiTestNoteStaysAtTop"))
         let plain = try section("func testXLPlainNote()", until: "func testLightNotes()", in: tests)
