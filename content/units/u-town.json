@@ -429,7 +429,7 @@
     },
     {
       "id": "l-town-phrases-where",
-      "title": "Asking where",
+      "title": "Where is it? Going places",
       "kind": "phrases",
       "items": [
         {
@@ -439,14 +439,7 @@
         {
           "item": "e-rogh-toon-cher-ta-day",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-town-phrases-going",
-      "title": "Saying where and going places",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-baa-zaar-dal-ta-day",
           "role": "present"

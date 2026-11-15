@@ -12,22 +12,44 @@ struct PronunciationText: View {
     private var sizing: Sizing
     var color: Color
     var alignment: TextAlignment
+    /// Weight of a syllable that is not stressed. Format B uses 400. The learn row uses 500.
+    var unstressedWeight: Int
+    /// The learn row stays at its point size. Other callers still fit a long line.
+    var shrinksToFit: Bool
 
     @Environment(\.legibilityWeight) private var legibilityWeight
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    init(stored: String, points: CGFloat, color: Color, alignment: TextAlignment = .leading) {
+    init(
+        stored: String,
+        points: CGFloat,
+        color: Color,
+        alignment: TextAlignment = .leading,
+        unstressedWeight: Int = PronunciationDisplay.unstressedWeight,
+        shrinksToFit: Bool = true
+    ) {
         self.stored = stored
         self.sizing = .points(points)
         self.color = color
         self.alignment = alignment
+        self.unstressedWeight = unstressedWeight
+        self.shrinksToFit = shrinksToFit
     }
 
-    init(stored: String, textStyle: Font.TextStyle, color: Color, alignment: TextAlignment = .leading) {
+    init(
+        stored: String,
+        textStyle: Font.TextStyle,
+        color: Color,
+        alignment: TextAlignment = .leading,
+        unstressedWeight: Int = PronunciationDisplay.unstressedWeight,
+        shrinksToFit: Bool = true
+    ) {
         self.stored = stored
         self.sizing = .textStyle(textStyle)
         self.color = color
         self.alignment = alignment
+        self.unstressedWeight = unstressedWeight
+        self.shrinksToFit = shrinksToFit
     }
 
     private var boldText: Bool { legibilityWeight == .bold }
@@ -46,14 +68,20 @@ struct PronunciationText: View {
         let space = spaceWidth(pointSize)
         let tokens = PronunciationDisplay.tokens(in: stored)
         var widths = tokens.map {
-            Double(PronunciationMeasure.size(token: $0, pointSize: pointSize, boldText: boldText).width)
+            Double(PronunciationMeasure.size(
+                token: $0,
+                pointSize: pointSize,
+                boldText: boldText,
+                unstressedWeight: unstressedWeight
+            ).width)
         }
         if measuredWidest > 0 {
             widths.append(Double(measuredWidest))
         }
-        let scale = CGFloat(
+        let fitted = CGFloat(
             PronunciationFit.lineScale(tokenWidths: widths, availableWidth: Double(availableWidth))
         )
+        let scale: CGFloat = shrinksToFit ? fitted : 1
         return PronunciationFlow(alignment: alignment, spacing: space * scale) {
             ForEach(Array(tokens.enumerated()), id: \.offset) { _, token in
                 PronunciationTokenView(
@@ -62,7 +90,8 @@ struct PronunciationText: View {
                     scale: scale,
                     color: color,
                     boldText: boldText,
-                    sizing: sizing
+                    sizing: sizing,
+                    unstressedWeight: unstressedWeight
                 )
             }
         }
@@ -98,7 +127,7 @@ struct PronunciationText: View {
     }
 
     private func spaceWidth(_ pointSize: CGFloat) -> CGFloat {
-        let weight = PronunciationFonts.uiWeight(PronunciationDisplay.unstressedWeight, boldText: boldText)
+        let weight = PronunciationFonts.uiWeight(unstressedWeight, boldText: boldText)
         let font = UIFont.systemFont(ofSize: pointSize, weight: weight)
         return (" " as NSString).size(withAttributes: [.font: font]).width
     }
@@ -136,13 +165,19 @@ private struct PronunciationTokenView: View {
     var color: Color
     var boldText: Bool
     var sizing: PronunciationText.Sizing
+    var unstressedWeight: Int
 
     @State private var measured: CGSize = .zero
 
     /// The unscaled word. A later measurement can only grow this, so a scaled
     /// frame cannot feed back in and shrink the word again.
     private var ideal: CGSize {
-        let estimate = PronunciationMeasure.size(token: token, pointSize: pointSize, boldText: boldText)
+        let estimate = PronunciationMeasure.size(
+            token: token,
+            pointSize: pointSize,
+            boldText: boldText,
+            unstressedWeight: unstressedWeight
+        )
         return CGSize(
             width: max(estimate.width, measured.width),
             height: max(estimate.height, measured.height)
@@ -177,7 +212,7 @@ private struct PronunciationTokenView: View {
     }
 
     private func syllable(_ run: PronunciationRun) -> some View {
-        let weight = run.weight(boldText: boldText)
+        let weight = drawnWeight(run)
         return Text(verbatim: run.text)
             .font(font(weight: PronunciationFonts.fontWeight(weight)))
             .foregroundStyle(color)
@@ -188,6 +223,14 @@ private struct PronunciationTokenView: View {
                 }
             }
             .accessibilityHidden(true)
+    }
+
+    /// Stressed syllables stay at 700, or 800 with Bold Text. A plain syllable uses the caller's weight.
+    private func drawnWeight(_ run: PronunciationRun) -> Int {
+        if boldText || run.stressed {
+            return run.weight(boldText: boldText)
+        }
+        return unstressedWeight
     }
 
     private func font(weight: Font.Weight) -> Font {
@@ -213,13 +256,24 @@ private struct PronunciationTokenView: View {
 }
 
 private enum PronunciationMeasure {
-    static func size(token: PronunciationToken, pointSize: CGFloat, boldText: Bool) -> CGSize {
+    static func size(
+        token: PronunciationToken,
+        pointSize: CGFloat,
+        boldText: Bool,
+        unstressedWeight: Int = PronunciationDisplay.unstressedWeight
+    ) -> CGSize {
         var width: CGFloat = 0
         var height: CGFloat = 1
         for run in token.runs {
+            let drawn: Int
+            if boldText || run.stressed {
+                drawn = run.weight(boldText: boldText)
+            } else {
+                drawn = unstressedWeight
+            }
             let font = UIFont.systemFont(
                 ofSize: pointSize,
-                weight: PronunciationFonts.uiWeight(run.weight(boldText: boldText), boldText: boldText)
+                weight: PronunciationFonts.uiWeight(drawn, boldText: boldText)
             )
             width += (run.text as NSString).size(withAttributes: [.font: font]).width
             height = max(height, font.lineHeight)
@@ -234,6 +288,7 @@ private enum PronunciationFonts {
         case PronunciationDisplay.boldTextStressedWeight: .heavy
         case PronunciationDisplay.stressedWeight: .bold
         case PronunciationDisplay.boldTextUnstressedWeight: .semibold
+        case 500: .medium
         default: boldText ? .semibold : .regular
         }
     }
@@ -243,6 +298,7 @@ private enum PronunciationFonts {
         case PronunciationDisplay.boldTextStressedWeight: .heavy
         case PronunciationDisplay.stressedWeight: .bold
         case PronunciationDisplay.boldTextUnstressedWeight: .semibold
+        case 500: .medium
         default: .regular
         }
     }

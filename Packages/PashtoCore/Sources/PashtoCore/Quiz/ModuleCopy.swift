@@ -17,6 +17,8 @@ public enum ModuleCopy {
     public static let flashcards = "Flashcards"
     /// Speaker on a row that has a clip. Spoken only.
     public static let play = "Play"
+    /// A lesson some of whose items are learned. Spoken and drawn.
+    public static let started = "Started"
 
     /// `3 of 7 words`. The noun stays `words` for every count.
     public static func wordsCount(completed: Int, total: Int) -> String {

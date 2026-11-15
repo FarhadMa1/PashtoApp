@@ -37,6 +37,8 @@ VARIANTS = ("light", "dark", "xl")
 EXTRA = [
     "learn-list-bold-light.png",
     "learn-list-time-xl.png",
+    "learn-list-family-light.png",
+    "learn-list-family-xl.png",
     "notes-learn-xl-top.png",
     "notes-learn-xl.png",
     "notes-learn-xl-2.png",

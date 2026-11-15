@@ -13,12 +13,12 @@ struct PhraseDistractorTests {
     /// These are the counts on main `1ad227c`.
     private static let questionCounts: [String: Int] = [
         "l-basics-1": 20,
+        "l-basics-verbs": 11,
+        "l-basics-polite": 13,
         "l-greetings-1": 11,
-        "l-greetings-2": 17,
-        "l-greetings-3": 15,
+        "l-greetings-how": 19,
         "l-introductions-1": 20,
         "l-introductions-2": 20,
-        "l-introductions-3": 11,
         "l-family-1": 20,
         "l-family-2": 13,
         "l-family-3": 20,

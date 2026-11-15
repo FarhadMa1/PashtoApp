@@ -104,12 +104,21 @@ public struct MainMenuLesson: Equatable, Sendable, Identifiable {
     public var kind: LessonKind
     /// Finished practice only. Learn and phrases stay false.
     public var isComplete: Bool
+    /// Derived from the lesson's items. Fresh menus are not started.
+    public var status: LessonStudyStatus
 
-    public init(id: LessonID, title: String, kind: LessonKind, isComplete: Bool) {
+    public init(
+        id: LessonID,
+        title: String,
+        kind: LessonKind,
+        isComplete: Bool,
+        status: LessonStudyStatus = .notStarted
+    ) {
         self.id = id
         self.title = title
         self.kind = kind
         self.isComplete = isComplete
+        self.status = status
     }
 }
 
@@ -151,7 +160,8 @@ public struct MainMenu: Equatable, Sendable {
         releasedUnitIDs: [UnitID],
         finishedLessonIDs: Set<LessonID>,
         listedLessons: [ReleasedLesson],
-        showsPronunciation: Bool = true
+        showsPronunciation: Bool = true,
+        learnedItemIDs: Set<ItemID>? = nil
     ) -> MainMenu {
         let released = Set(releasedUnitIDs)
         let units = bundle.units.filter { released.contains($0.id) }
@@ -161,12 +171,17 @@ public struct MainMenu: Equatable, Sendable {
                 in: bundle,
                 finishedLessonIDs: finishedLessonIDs,
                 listedLessons: listedLessons,
-                showsPronunciation: showsPronunciation
+                showsPronunciation: showsPronunciation,
+                learnedItemIDs: learnedItemIDs
             )
         }
         return MainMenu(
             categories: categories,
-            continueTarget: continueTarget(units: units, finishedLessonIDs: finishedLessonIDs)
+            continueTarget: continueTarget(
+                units: units,
+                finishedLessonIDs: finishedLessonIDs,
+                learnedItemIDs: learnedItemIDs
+            )
         )
     }
 
@@ -179,17 +194,23 @@ public struct MainMenu: Equatable, Sendable {
         in bundle: ContentBundle,
         finishedLessonIDs: Set<LessonID>,
         listedLessons: [ReleasedLesson],
-        showsPronunciation: Bool
+        showsPronunciation: Bool,
+        learnedItemIDs: Set<ItemID>?
     ) -> MainMenuCategory {
         let practice = practiceLessons(in: unit)
-        let completed = practice.filter { finishedLessonIDs.contains($0.id) }.count
+        let completed = practice.filter {
+            isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+        }.count
         let entry = MainMenuLabels.entry(for: unit.id)
-        let lessons = listedLessons.filter { $0.unitID == unit.id }.map { lesson in
-            MainMenuLesson(
-                id: lesson.id,
-                title: lesson.title,
-                kind: lesson.kind,
-                isComplete: lesson.kind == .practice && finishedLessonIDs.contains(lesson.id)
+        let lessons = listedLessons.filter { $0.unitID == unit.id }.map { listed in
+            let source = unit.lessons.first { $0.id == listed.id }
+            let status = studyStatus(source, finished: finishedLessonIDs, learned: learnedItemIDs)
+            return MainMenuLesson(
+                id: listed.id,
+                title: listed.title,
+                kind: listed.kind,
+                isComplete: listed.kind == .practice && status == .done,
+                status: status
             )
         }
         return MainMenuCategory(
@@ -211,21 +232,28 @@ public struct MainMenu: Equatable, Sendable {
     /// The first released unit that still has Practice left, then the lesson Continue opens.
     private static func continueTarget(
         units: [CourseUnit],
-        finishedLessonIDs: Set<LessonID>
+        finishedLessonIDs: Set<LessonID>,
+        learnedItemIDs: Set<ItemID>?
     ) -> MainMenuContinue? {
         guard let unit = units.first(where: {
             let practice = practiceLessons(in: $0)
-            return !practice.isEmpty && practice.contains { !finishedLessonIDs.contains($0.id) }
+            return !practice.isEmpty && practice.contains {
+                !isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+            }
         }) else {
             return nil
         }
         let practice = practiceLessons(in: unit)
-        let completed = practice.filter { finishedLessonIDs.contains($0.id) }.count
+        let completed = practice.filter {
+            isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+        }.count
         let chosen: Lesson?
         if completed == 0 {
             chosen = unit.lessons.first { $0.kind == .learn } ?? unit.lessons.first
         } else {
-            chosen = practice.first { !finishedLessonIDs.contains($0.id) }
+            chosen = practice.first {
+                !isPracticeDone($0, finished: finishedLessonIDs, learned: learnedItemIDs)
+            }
         }
         guard let chosen else { return nil }
         return MainMenuContinue(
@@ -234,5 +262,34 @@ public struct MainMenu: Equatable, Sendable {
             unitID: unit.id,
             unitLabel: MainMenuLabels.word(for: unit.id, title: unit.title)
         )
+    }
+
+    /// A practice lesson is done when every item it introduces is learned.
+    /// Without a learned set, a stored finished id means the same thing.
+    private static func isPracticeDone(
+        _ lesson: Lesson,
+        finished: Set<LessonID>,
+        learned: Set<ItemID>?
+    ) -> Bool {
+        guard lesson.kind == .practice else { return false }
+        if let learned {
+            return LessonStudyStatus.resolve(itemIDs: lesson.items.map(\.item), learned: learned) == .done
+        }
+        return finished.contains(lesson.id)
+    }
+
+    private static func studyStatus(
+        _ lesson: Lesson?,
+        finished: Set<LessonID>,
+        learned: Set<ItemID>?
+    ) -> LessonStudyStatus {
+        guard let lesson else { return .notStarted }
+        if let learned {
+            return LessonStudyStatus.resolve(itemIDs: lesson.items.map(\.item), learned: learned)
+        }
+        if lesson.kind == .practice, finished.contains(lesson.id) {
+            return .done
+        }
+        return .notStarted
     }
 }

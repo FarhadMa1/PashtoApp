@@ -444,7 +444,7 @@ struct PronunciationDisplayTests {
         #expect(praise.first?.underlined(boldText: true) == true)
 
         let members = try #require(LearnList.make(
-            for: lessonID("l-greetings-learn"),
+            for: lessonID("l-basics-learn-polite"),
             in: bundle,
             finishedLessonIDs: [],
             audioItemIDs: []

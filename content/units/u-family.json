@@ -772,7 +772,7 @@
   "lessons": [
     {
       "id": "l-family-learn-members",
-      "title": "Family members",
+      "title": "Family, this, my and your",
       "kind": "learn",
       "items": [
         {
@@ -802,14 +802,7 @@
         {
           "item": "e-koraney",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-family-learn-this",
-      "title": "This, my and your",
-      "kind": "learn",
-      "items": [
+        },
         {
           "item": "e-daa",
           "role": "present"
@@ -826,7 +819,7 @@
     },
     {
       "id": "l-family-phrases-this",
-      "title": "This is my …",
+      "title": "This is my … / Is this your …?",
       "kind": "phrases",
       "items": [
         {
@@ -852,14 +845,7 @@
         {
           "item": "e-daa-zma-xor-da",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-family-phrases-yours",
-      "title": "Is this your …?",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-daa-sta-wror-day",
           "role": "present"

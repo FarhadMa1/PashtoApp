@@ -51,23 +51,13 @@ struct TravelTimeContentTests {
         #expect(market.pronunciation == "baa-ZAAR CHER-ta day?")
 
         expectLesson(
-            "l-travel-learn-around", "Getting around", .learn,
-            ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab", "e-tak-see"],
+            "l-travel-learn-around", "Getting around and money", .learn,
+            ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab", "e-tak-see", "e-pay-se", "e-graan", "e-ar-zaan", "e-mras-ta"],
             .present, in: travel
         )
         expectLesson(
-            "l-travel-learn-money", "Money and help", .learn,
-            ["e-pay-se", "e-graan", "e-ar-zaan", "e-mras-ta"],
-            .present, in: travel
-        )
-        expectLesson(
-            "l-travel-phrases-where", "Where is …?", .phrases,
-            ["e-ho-tal-cher-ta-day", "e-tash-naab-cher-ta-day", "e-za-ha-waa-yee-da-gar-ta-dzam", "e-dal-ta-wu-dre-ga", "e-baa-zaar-cher-ta-day"],
-            .present, in: travel
-        )
-        expectLesson(
-            "l-travel-phrases-buying", "Buying and help", .phrases,
-            ["e-za-ti-kat-ghwaa-ram", "e-daa-pa-tso-day", "e-der-graan-day", "e-mras-ta-wu-kray"],
+            "l-travel-phrases-where", "Where is …? Buying and help", .phrases,
+            ["e-ho-tal-cher-ta-day", "e-tash-naab-cher-ta-day", "e-za-ha-waa-yee-da-gar-ta-dzam", "e-dal-ta-wu-dre-ga", "e-baa-zaar-cher-ta-day", "e-za-ti-kat-ghwaa-ram", "e-daa-pa-tso-day", "e-der-graan-day", "e-mras-ta-wu-kray"],
             .present, in: travel
         )
         expectLesson(
@@ -91,13 +81,8 @@ struct TravelTimeContentTests {
             .present, in: time
         )
         expectLesson(
-            "l-time-phrases-day", "What day is it?", .phrases,
-            ["e-nan-tsa-wradz-da", "e-nan-ju-ma-da", "e-sa-baa-shan-ba-da", "e-tso-ba-je-dee"],
-            .present, in: time
-        )
-        expectLesson(
-            "l-time-phrases-morning", "Morning and night", .phrases,
-            ["e-sa-haar-mo-pa-khayr", "e-shpa-mo-pa-khayr", "e-za-os-dzam", "e-za-sa-haar-kaar-ka-wam"],
+            "l-time-phrases-day", "Days, mornings and nights", .phrases,
+            ["e-nan-tsa-wradz-da", "e-nan-ju-ma-da", "e-sa-baa-shan-ba-da", "e-tso-ba-je-dee", "e-sa-haar-mo-pa-khayr", "e-shpa-mo-pa-khayr", "e-za-os-dzam", "e-za-sa-haar-kaar-ka-wam"],
             .present, in: time
         )
         expectLesson(
@@ -222,8 +207,7 @@ struct TravelTimeContentTests {
     @Test func travelAndTimePicturesResolveOnlyOnLearnCards() throws {
         let bundle = try loadCourse().bundle
         let pictured = [
-            "l-travel-learn-around": ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab"],
-            "l-travel-learn-money": ["e-pay-se"],
+            "l-travel-learn-around": ["e-ha-waa-yee-da-gar", "e-ho-tal", "e-ti-kat", "e-tash-naab", "e-pay-se"],
             "l-time-learn-times": ["e-wradz", "e-sa-haar", "e-maa-khaam", "e-shpa"],
             "l-time-learn-days": [String](),
         ]
@@ -280,7 +264,7 @@ struct TravelTimeContentTests {
         #expect(FileManager.default.fileExists(atPath: repositoryRoot()
             .appendingPathComponent("PashtoApp/Assets.xcassets/e-tak-see.imageset/e-tak-see.png").path))
 
-        for lesson in ["l-travel-phrases-where", "l-travel-phrases-buying", "l-time-phrases-day", "l-time-phrases-morning"] {
+        for lesson in ["l-travel-phrases-where", "l-time-phrases-day"] {
             let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))
             #expect(deck.cards.allSatisfy {
                 FamilyPictures.picture(for: $0.itemID, english: $0.meaning, lessonKind: deck.kind) == nil

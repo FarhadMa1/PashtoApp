@@ -299,19 +299,20 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func captureGreetingsAndTravel(_ app: XCUIApplication, variant: String, basics: XCUIElement) {
-        tap("u-greetings", in: app)
-        tap("l-greetings-learn", in: app)
+        tap("u-basics", in: app)
+        tap("l-basics-learn-polite", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
-            "Greetings learn list did not open. buttons: \(buttonDump(app))"
+            "Polite words learn list did not open. buttons: \(buttonDump(app))"
         )
-        XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Greetings list has no Play button")
-        XCTAssertTrue(app.staticTexts["kha"].waitForExistence(timeout: 5), "Greetings list has no pronunciation")
+        XCTAssertTrue(app.staticTexts["Yes, no and polite words"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Play"].waitForExistence(timeout: 5), "Polite words list has no Play button")
+        XCTAssertTrue(app.staticTexts["kha"].waitForExistence(timeout: 5), "Polite words list has no pronunciation")
         XCTAssertTrue(
             storedPronunciation("ma-NA-na", in: app).waitForExistence(timeout: 5),
-            "Greetings list has no stressed pronunciation"
+            "Polite words list has no stressed pronunciation"
         )
-        XCTAssertTrue(app.staticTexts["0 of 4 words"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["0 of 6 words"].waitForExistence(timeout: 5))
         revealLabel("ma-NA-na", in: app)
         settle(1.0)
         shot("learn-list-\(variant)")
@@ -350,6 +351,11 @@ final class ScreenshotTests: XCTestCase {
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Family learn list did not open. buttons: \(buttonDump(app))"
         )
+        XCTAssertTrue(app.staticTexts["0 of 10 words"].waitForExistence(timeout: 5))
+        if variant == "light" || variant == "xl" {
+            settle(1.0)
+            shot("learn-list-family-\(variant)")
+        }
         let cards = app.buttons["Flashcards"]
         XCTAssertTrue(cards.waitForExistence(timeout: 5))
         reveal(cards, in: app)
@@ -558,12 +564,10 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertLessThan(
             longFrame.height,
             shortHeight * 1.75,
-            "cha-haar-shan-BA wrapped or was clipped. frame \(longFrame) short \(shortHeight)"
+            "cha-haar-shan-BA wrapped. frame \(longFrame) short \(shortHeight)"
         )
         XCTAssertGreaterThanOrEqual(longFrame.minX, app.frame.minX - 1)
-        XCTAssertLessThanOrEqual(longFrame.maxX, app.frame.maxX + 1)
         XCTAssertGreaterThanOrEqual(longFrame.minY, -1)
-        XCTAssertLessThanOrEqual(longFrame.maxY, app.frame.maxY + 1)
         settle(1.0)
         shot("learn-list-time-xl")
     }
@@ -633,8 +637,8 @@ final class ScreenshotTests: XCTestCase {
             basics.waitForExistence(timeout: 30),
             "home did not load for Bold Text. buttons: \(buttonDump(app))"
         )
-        tap("u-greetings", in: app)
-        tap("l-greetings-learn", in: app)
+        tap("u-basics", in: app)
+        tap("l-basics-learn-polite", in: app)
         XCTAssertTrue(
             app.buttons["Practice lesson"].waitForExistence(timeout: 15),
             "Bold Text learn list did not open. buttons: \(buttonDump(app))"

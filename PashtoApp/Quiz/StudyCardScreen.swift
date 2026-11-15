@@ -404,8 +404,9 @@ struct StudyCardLines: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = 39
-    @ScaledMetric(relativeTo: .title2) private var pashtoSize: CGFloat = 32
-    @ScaledMetric(relativeTo: .subheadline) private var smallPashtoSize: CGFloat = 16
+    /// Pashto is the smallest line on the card, in light and at large sizes.
+    @ScaledMetric(relativeTo: .footnote) private var pashtoSize: CGFloat = 13
+    @ScaledMetric(relativeTo: .footnote) private var smallPashtoSize: CGFloat = 13
     @ScaledMetric(relativeTo: .title3) private var meaningSize: CGFloat = 22
 
     var body: some View {
@@ -416,13 +417,13 @@ struct StudyCardLines: View {
         }
     }
 
-    /// Pronunciation, then Pashto, then English. The note stays in the card.
+    /// Pronunciation, then English, then Pashto. Pashto is last and the smallest.
+    /// The note stays in the card, above the Pashto.
     private var regularLines: some View {
         VStack(spacing: 10) {
             pronunciation(alignment: .center, frame: .center)
-            pashtoLine(size: pashtoSize, alignment: .center, direction: .rightToLeft, priority: 40)
             if showsMeaning {
-                meaningLine(alignment: .center, priority: 30)
+                meaningLine(alignment: .center, priority: 40)
                 if let explanation = card.explanation {
                     explanationLine(explanation, alignment: .center)
                 }
@@ -431,6 +432,7 @@ struct StudyCardLines: View {
                         .accessibilitySortPriority(22)
                 }
             }
+            pashtoLine(size: pashtoSize, alignment: .center, direction: .rightToLeft, priority: 30)
         }
     }
 
@@ -721,6 +723,8 @@ struct FittingWords: View {
     var verticalPadding: CGFloat = 0
     /// Word joiners for Latin text. Pashto passes `false`.
     var joinLatinWords: Bool = false
+    /// The learn row keeps its point size. Other callers still fit a long word.
+    var shrinksToFit: Bool = true
 
     @State private var availableWidth: CGFloat = 0
 
@@ -729,6 +733,7 @@ struct FittingWords: View {
     }
 
     private var scale: CGFloat {
+        guard shrinksToFit else { return 1 }
         let widest = words.map { FittingWordMeasure.width($0, size: size, weight: weight) }.max() ?? 0
         guard widest > 0, availableWidth > 0 else { return 1 }
         return min(1, availableWidth / widest)
@@ -894,11 +899,50 @@ private struct FittingWordFlow: Layout {
     }
 }
 
+/// English on the left, pronunciation and Pashto on the right, about 42/58.
+/// A hairline sits between the columns. Text is not scaled to fit.
+private struct LearnTextColumns: Layout {
+    var leadingFraction: CGFloat
+
+    nonisolated func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) -> CGSize {
+        let width = proposal.width ?? 0
+        let parts = widths(for: width)
+        let left = subviews[0].sizeThatFits(ProposedViewSize(width: parts.leading, height: nil))
+        let right = subviews[1].sizeThatFits(ProposedViewSize(width: parts.trailing, height: nil))
+        return CGSize(width: width, height: max(left.height, right.height))
+    }
+
+    nonisolated func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) {
+        let parts = widths(for: bounds.width)
+        let leftSize = subviews[0].sizeThatFits(ProposedViewSize(width: parts.leading, height: nil))
+        let rightSize = subviews[1].sizeThatFits(ProposedViewSize(width: parts.trailing, height: nil))
+        let height = max(leftSize.height, rightSize.height)
+        subviews[0].place(
+            at: CGPoint(x: bounds.minX, y: bounds.midY),
+            anchor: .leading,
+            proposal: ProposedViewSize(width: parts.leading, height: height)
+        )
+        subviews[1].place(
+            at: CGPoint(x: bounds.maxX, y: bounds.midY),
+            anchor: .trailing,
+            proposal: ProposedViewSize(width: parts.trailing, height: height)
+        )
+    }
+
+    private nonisolated func widths(for width: CGFloat) -> (leading: CGFloat, trailing: CGFloat) {
+        let gap: CGFloat = 9
+        let usable = max(0, width - gap)
+        let leading = (usable * leadingFraction).rounded(.down)
+        return (leading, max(0, usable - leading))
+    }
+}
+
 /// Scrollable words for one learn lesson.
 ///
-/// Pronunciation is on top, then English, then Pashto in small grey.
-/// Pashto keeps room for the dots and the tail. A speaker is drawn only when
-/// a clip exists, and it plays only after a tap. Practice opens the quiz.
+/// English is on the left. Pronunciation is the main text on the right, with
+/// Pashto in small grey under it. A lesson with no clip has no Play column.
+/// XL and accessibility sizes stack English, pronunciation, then Pashto.
+/// A speaker plays only after a tap. Practice opens the quiz.
 /// Flashcards open the card view. Looking at the list does not finish the lesson.
 /// At the largest text sizes the word count and Practice lesson scroll with the list.
 struct LearnListScreen: View {
@@ -910,10 +954,10 @@ struct LearnListScreen: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var clipPlayer = GreetingsClipPlayer()
     @AppStorage(ProfileSettingsStore.audioSpeedKey) private var audioSpeedRaw = AudioSpeed.normal.rawValue
-    @ScaledMetric(relativeTo: .body) private var englishSize: CGFloat = 18
-    /// Variant B at 24 pt, inside the 22–26 pt size. Dynamic Type still scales it.
-    @ScaledMetric(relativeTo: .body) private var pronunciationSize: CGFloat = 24
-    @ScaledMetric(relativeTo: .body) private var pashtoSize: CGFloat = 16
+    /// Dynamic Type still scales these. The default is a step under the old row.
+    @ScaledMetric(relativeTo: .body) private var englishSize: CGFloat = 16
+    @ScaledMetric(relativeTo: .body) private var pronunciationSize: CGFloat = 19
+    @ScaledMetric(relativeTo: .footnote) private var pashtoSize: CGFloat = 13
 
     private var greetingsRate: Float { GreetingsPlaybackRate.rate(for: audioSpeedRaw) }
     @ScaledMetric(relativeTo: .body) private var pashtoLineSpacing: CGFloat = 8
@@ -921,6 +965,12 @@ struct LearnListScreen: View {
     @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 48
 
     private var hue: Color { Lapis.MenuCard.resolve(list.unitID).hue }
+
+    /// XL and the accessibility sizes stack. The default size stays two columns.
+    private var stacksRow: Bool { dynamicTypeSize >= .xxxLarge }
+
+    /// The Play column is a lesson choice. One clip keeps it, including on rows with none.
+    private var showsPlayColumn: Bool { list.rows.contains { $0.showsPlayButton } }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -1027,16 +1077,49 @@ struct LearnListScreen: View {
                 wordRow(row)
             }
         }
-        .background(QuizChrome.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Lapis.muted.opacity(0.45), lineWidth: 0.5)
-        }
     }
 
     private func wordRow(_ row: LearnListRow) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        HStack(alignment: stacksRow ? .top : .center, spacing: 8) {
+            if showsPlayColumn {
+                playSlot(row)
+            }
+            if stacksRow {
+                stackedWords(row)
+            } else {
+                LearnTextColumns(leadingFraction: 0.42) {
+                    englishColumn(row, alignment: .leading)
+                    pronunciationColumn(row, alignment: .trailing, pashtoDirection: .rightToLeft)
+                }
+                .overlay {
+                    GeometryReader { geo in
+                        let gap: CGFloat = 9
+                        let leading = max(0, geo.size.width - gap) * 0.42
+                        Rectangle()
+                            .fill(Lapis.muted.opacity(0.45))
+                            .frame(width: 0.5, height: geo.size.height)
+                            .position(x: leading + gap / 2, y: geo.size.height / 2)
+                    }
+                    .accessibilityHidden(true)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 10)
+        .accessibilityIdentifier(row.itemID.rawValue)
+    }
+
+    private func stackedWords(_ row: LearnListRow) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            englishColumn(row, alignment: .leading)
+            pronunciationColumn(row, alignment: .leading, pashtoDirection: .leftToRight)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func englishColumn(_ row: LearnListRow, alignment: TextAlignment) -> some View {
+        VStack(alignment: alignment == .trailing ? .trailing : .leading, spacing: 6) {
             if let picture = row.picture {
                 Image(picture.assetName)
                     .resizable()
@@ -1044,37 +1127,56 @@ struct LearnListScreen: View {
                     .frame(width: tileSide, height: tileSide)
                     .accessibilityHidden(true)
             }
-            PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: .leading)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
             FittingWords(
                 text: row.english,
                 size: englishSize,
                 weight: .medium,
                 color: Lapis.text,
-                alignment: .leading,
+                alignment: alignment,
                 direction: .leftToRight,
-                joinLatinWords: true
+                joinLatinWords: true,
+                shrinksToFit: false
             )
+        }
+        .frame(maxWidth: .infinity, alignment: alignment == .trailing ? .trailing : .leading)
+    }
+
+    private func pronunciationColumn(
+        _ row: LearnListRow,
+        alignment: TextAlignment,
+        pashtoDirection: LayoutDirection
+    ) -> some View {
+        VStack(alignment: alignment == .trailing ? .trailing : .leading, spacing: 2) {
+            PronunciationText(stored: row.pronunciation, points: pronunciationSize, color: hue, alignment: alignment, unstressedWeight: 500, shrinksToFit: false)
+            .multilineTextAlignment(alignment)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: alignment == .trailing ? .trailing : .leading)
             FittingWords(
                 text: row.pashto,
                 size: pashtoSize,
                 weight: .regular,
                 color: Lapis.wordListPashto,
-                alignment: .leading,
-                direction: .rightToLeft,
+                alignment: alignment,
+                direction: pashtoDirection,
                 lineSpacing: pashtoLineSpacing,
                 verticalPadding: pashtoPadding,
-                joinLatinWords: false
+                joinLatinWords: false,
+                shrinksToFit: false
             )
-            if row.showsPlayButton, let url = clipURL(for: row.itemID) {
-                playButton(url)
-            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .accessibilityIdentifier(row.itemID.rawValue)
+        .frame(maxWidth: .infinity, alignment: alignment == .trailing ? .trailing : .leading)
+    }
+
+    /// 30 pt speaker inside a 44 pt hit area. A row without a clip keeps the empty spot.
+    @ViewBuilder
+    private func playSlot(_ row: LearnListRow) -> some View {
+        if row.showsPlayButton, let url = clipURL(for: row.itemID) {
+            playButton(url)
+        } else {
+            Color.clear
+                .frame(width: 44, height: 44)
+                .accessibilityHidden(true)
+        }
     }
 
     /// Outline speaker. Nothing plays until this button is tapped.
@@ -1083,10 +1185,11 @@ struct LearnListScreen: View {
             clipPlayer.play(url, rate: greetingsRate)
         } label: {
             Image(systemName: "speaker.wave.2")
-                .font(.body.weight(.semibold))
+                .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(hue)
-                .frame(minWidth: 44, minHeight: 44)
+                .frame(width: 30, height: 30)
                 .background(hue.opacity(0.16), in: Circle())
+                .frame(width: 44, height: 44)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)

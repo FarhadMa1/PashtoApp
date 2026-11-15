@@ -493,7 +493,7 @@
     },
     {
       "id": "l-time-phrases-day",
-      "title": "What day is it?",
+      "title": "Days, mornings and nights",
       "kind": "phrases",
       "items": [
         {
@@ -511,14 +511,7 @@
         {
           "item": "e-tso-ba-je-dee",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-time-phrases-morning",
-      "title": "Morning and night",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-sa-haar-mo-pa-khayr",
           "role": "present"

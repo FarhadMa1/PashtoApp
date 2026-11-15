@@ -31,10 +31,8 @@ struct UnitsFourToEightTests {
         #expect(conversation.title == "Putting it together")
 
         expectLesson("l-numbers-learn-one-to-five", "One to five", .learn, ["e-yaw", "e-dwa", "e-drey", "e-tsa-lor", "e-pin-dza"], .present, in: numbers)
-        expectLesson("l-numbers-learn-six-to-ten", "Six to ten and age", .learn, ["e-shpag", "e-o-wa", "e-a-ta", "e-na-ha", "e-las", "e-o-mar"], .present, in: numbers)
-        expectLesson("l-numbers-learn-eleven-to-fifteen", "Eleven to fifteen", .learn, ["e-yaw-wo-las", "e-dwo-las", "e-dyaar-las", "e-tswaar-las", "e-pin-dza-las"], .present, in: numbers)
-        expectLesson("l-numbers-learn-sixteen-to-twenty", "Sixteen to twenty", .learn, ["e-shpaa-ras", "e-o-wa-las", "e-a-ta-las", "e-no-las", "e-shal"], .present, in: numbers)
-        expectLesson("l-numbers-learn-years-old", "Years old", .learn, ["e-ka-lan", "e-ka-la-na"], .present, in: numbers)
+        expectLesson("l-numbers-learn-six-to-ten", "Six to ten and age", .learn, ["e-shpag", "e-o-wa", "e-a-ta", "e-na-ha", "e-las", "e-o-mar", "e-ka-lan", "e-ka-la-na"], .present, in: numbers)
+        expectLesson("l-numbers-learn-eleven-to-fifteen", "Eleven to twenty", .learn, ["e-yaw-wo-las", "e-dwo-las", "e-dyaar-las", "e-tswaar-las", "e-pin-dza-las", "e-shpaa-ras", "e-o-wa-las", "e-a-ta-las", "e-no-las", "e-shal"], .present, in: numbers)
         expectLesson("l-numbers-phrases-how-old", "How old are you?", .phrases, ["e-o-mar-dey-tso-day", "e-za-shal-ka-lan-yam", "e-za-shal-ka-la-na-yam"], .present, in: numbers)
         expectLesson("l-numbers-1", "Practice: One to ten", .practice, ["e-yaw", "e-dwa", "e-drey", "e-tsa-lor", "e-pin-dza", "e-shpag", "e-o-wa", "e-a-ta", "e-na-ha", "e-las", "e-o-mar"], .introduce, in: numbers)
         expectLesson("l-numbers-2", "Practice: Eleven to twenty", .practice, ["e-yaw-wo-las", "e-dwo-las", "e-dyaar-las", "e-tswaar-las", "e-pin-dza-las", "e-shpaa-ras", "e-o-wa-las", "e-a-ta-las", "e-no-las", "e-shal"], .introduce, in: numbers)
@@ -42,23 +40,19 @@ struct UnitsFourToEightTests {
 
         expectLesson("l-food-learn-food-and-water", "Food and water", .learn, ["e-o-ba", "e-do-day", "e-wri-jey", "e-gho-kha", "e-ma-na"], .present, in: food)
         expectLesson("l-food-learn-drinks", "Drinks and asking for things", .learn, ["e-chaay", "e-kah-wa", "e-shee-dey", "e-ghwaa-ram", "e-shta", "e-na-shta"], .present, in: food)
-        expectLesson("l-food-phrases-want", "Saying what you want", .phrases, ["e-tsa-ghwaa-rey", "e-za-o-ba-ghwaa-ram", "e-za-chaay-ghwaa-ram", "e-daa-ma-na-da"], .present, in: food)
-        expectLesson("l-food-phrases-available", "Asking what is available", .phrases, ["e-daa-do-day-da", "e-chaay-shta", "e-ho-chaay-shta", "e-na-chaay-na-shta"], .present, in: food)
+        expectLesson("l-food-phrases-want", "Asking for food and drink", .phrases, ["e-tsa-ghwaa-rey", "e-za-o-ba-ghwaa-ram", "e-za-chaay-ghwaa-ram", "e-daa-ma-na-da", "e-daa-do-day-da", "e-chaay-shta", "e-ho-chaay-shta", "e-na-chaay-na-shta"], .present, in: food)
         expectLesson("l-food-1", "Practice: Food and water", .practice, ["e-o-ba", "e-do-day", "e-wri-jey", "e-gho-kha", "e-ma-na", "e-daa-ma-na-da", "e-daa-do-day-da", "e-za-o-ba-ghwaa-ram"], .introduce, in: food)
         expectLesson("l-food-2", "Practice: Drinks and asking", .practice, ["e-chaay", "e-kah-wa", "e-shee-dey", "e-ghwaa-ram", "e-shta", "e-na-shta", "e-tsa-ghwaa-rey", "e-za-chaay-ghwaa-ram", "e-chaay-shta", "e-ho-chaay-shta", "e-na-chaay-na-shta"], .introduce, in: food)
 
         expectLesson("l-town-learn-places", "Places in town", .learn, ["e-khaar", "e-baa-zaar", "e-doo-kaan", "e-rogh-toon", "e-cher-ta"], .present, in: town)
         expectLesson("l-town-learn-transport", "Transport and directions", .learn, ["e-tak-see", "e-bas", "e-sa-rak", "e-chap", "e-khee", "e-dal-ta", "e-hal-ta"], .present, in: town)
-        expectLesson("l-town-phrases-where", "Asking where", .phrases, ["e-baa-zaar-cher-ta-day", "e-rogh-toon-cher-ta-day"], .present, in: town)
-        expectLesson("l-town-phrases-going", "Saying where and going places", .phrases, ["e-baa-zaar-dal-ta-day", "e-rogh-toon-hal-ta-day", "e-za-baa-zaar-ta-dzam", "e-za-kor-ta-dzam"], .present, in: town)
+        expectLesson("l-town-phrases-where", "Where is it? Going places", .phrases, ["e-baa-zaar-cher-ta-day", "e-rogh-toon-cher-ta-day", "e-baa-zaar-dal-ta-day", "e-rogh-toon-hal-ta-day", "e-za-baa-zaar-ta-dzam", "e-za-kor-ta-dzam"], .present, in: town)
         expectLesson("l-town-1", "Practice: Places in town", .practice, ["e-khaar", "e-baa-zaar", "e-doo-kaan", "e-rogh-toon", "e-cher-ta", "e-baa-zaar-cher-ta-day", "e-rogh-toon-cher-ta-day", "e-baa-zaar-dal-ta-day", "e-rogh-toon-hal-ta-day"], .introduce, in: town)
         expectLesson("l-town-2", "Practice: Transport and directions", .practice, ["e-tak-see", "e-bas", "e-sa-rak", "e-chap", "e-khee", "e-dal-ta", "e-hal-ta", "e-za-baa-zaar-ta-dzam", "e-za-kor-ta-dzam"], .introduce, in: town)
 
-        expectLesson("l-conversation-learn-today", "Today and work", .learn, ["e-nan", "e-sa-baa", "e-kaar", "e-wakht"], .present, in: conversation)
-        expectLesson("l-conversation-learn-languages", "Languages", .learn, ["e-zha-ba", "e-ang-lee-see", "e-kha-ba-rey"], .present, in: conversation)
-        expectLesson("l-conversation-phrases-work", "I work", .phrases, ["e-za-kaar-ka-wam", "e-za-nan-kaar-ka-wam", "e-za-sa-baa-kaar-ka-wam"], .present, in: conversation)
+        expectLesson("l-conversation-learn-today", "Today, work and languages", .learn, ["e-nan", "e-sa-baa", "e-kaar", "e-wakht", "e-zha-ba", "e-ang-lee-see", "e-kha-ba-rey"], .present, in: conversation)
+        expectLesson("l-conversation-phrases-work", "Work and full sentences", .phrases, ["e-za-kaar-ka-wam", "e-za-nan-kaar-ka-wam", "e-za-sa-baa-kaar-ka-wam", "e-wro-wro-kha-ba-rey-wa-kray", "e-za-chaay-na-ghwaa-ram", "e-za-kah-wa-ghwaa-ram", "e-za-sa-baa-baa-zaar-ta-dzam"], .present, in: conversation)
         expectLesson("l-conversation-phrases-understanding", "Understanding each other", .phrases, ["e-za-pa-pakh-to-kha-ba-rey-ka-wam", "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam", "e-za-na-po-he-gam", "e-byaa-wa-waa-yaast", "e-wro-wro"], .present, in: conversation)
-        expectLesson("l-conversation-phrases-sentences", "Putting sentences together", .phrases, ["e-wro-wro-kha-ba-rey-wa-kray", "e-za-chaay-na-ghwaa-ram", "e-za-kah-wa-ghwaa-ram", "e-za-sa-baa-baa-zaar-ta-dzam"], .present, in: conversation)
         expectLesson("l-conversation-1", "Practice: Today and work", .practice, ["e-nan", "e-sa-baa", "e-kaar", "e-wakht", "e-za-kaar-ka-wam", "e-za-nan-kaar-ka-wam", "e-za-sa-baa-kaar-ka-wam"], .introduce, in: conversation)
         expectLesson("l-conversation-2", "Practice: Understanding each other", .practice, ["e-zha-ba", "e-ang-lee-see", "e-kha-ba-rey", "e-za-pa-pakh-to-kha-ba-rey-ka-wam", "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam", "e-za-na-po-he-gam", "e-byaa-wa-waa-yaast", "e-wro-wro"], .introduce, in: conversation)
         expectLesson("l-conversation-3", "Practice: Putting sentences together", .practice, ["e-wro-wro-kha-ba-rey-wa-kray", "e-za-chaay-na-ghwaa-ram", "e-za-kah-wa-ghwaa-ram", "e-za-sa-baa-baa-zaar-ta-dzam"], .introduce, in: conversation)
@@ -77,7 +71,7 @@ struct UnitsFourToEightTests {
             #expect(Set(presentations) == ["u-travel", "u-town"])
         }
         let around = try #require(StudyCourse.deck(for: lessonID("l-travel-learn-around"), in: bundle))
-        #expect(around.title == "Getting around")
+        #expect(around.title == "Getting around and money")
         let travelTaxi = try #require(around.cards.first { $0.itemID.rawValue == "e-tak-see" })
         #expect(FamilyPictures.picture(
             for: travelTaxi.itemID,
@@ -159,7 +153,7 @@ struct UnitsFourToEightTests {
         let town = try #require(StudyCourse.deck(for: lessonID("l-town-learn-transport"), in: bundle))
         #expect(town.cards.first { $0.itemID.rawValue == "e-tak-see" }?.pronunciationNote == taxiNote)
 
-        for lesson in ["l-basics-learn-2", "l-time-learn-times"] {
+        for lesson in ["l-basics-learn-1", "l-time-learn-times"] {
             let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))
             #expect(deck.cards.contains { card in
                 let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines)

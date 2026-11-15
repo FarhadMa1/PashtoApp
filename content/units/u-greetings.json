@@ -548,29 +548,6 @@
   ],
   "lessons": [
     {
-      "id": "l-greetings-learn",
-      "title": "Key words",
-      "kind": "learn",
-      "items": [
-        {
-          "item": "e-xa",
-          "role": "present"
-        },
-        {
-          "item": "e-manana",
-          "role": "present"
-        },
-        {
-          "item": "e-ho",
-          "role": "present"
-        },
-        {
-          "item": "e-na",
-          "role": "present"
-        }
-      ]
-    },
-    {
       "id": "l-greetings-phrases-hello",
       "title": "Saying hello",
       "kind": "phrases",
@@ -603,7 +580,7 @@
     },
     {
       "id": "l-greetings-phrases-how",
-      "title": "How are you?",
+      "title": "How are you? and goodbye",
       "kind": "phrases",
       "items": [
         {
@@ -621,24 +598,9 @@
         {
           "item": "e-dera-manana",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-greetings-phrases-goodbye",
-      "title": "Polite words and goodbye",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-dera-xa",
-          "role": "present"
-        },
-        {
-          "item": "e-baxana-ghwaram",
-          "role": "present"
-        },
-        {
-          "item": "e-mehrabani-wakray",
           "role": "present"
         },
         {
@@ -714,11 +676,15 @@
       ]
     },
     {
-      "id": "l-greetings-2",
-      "title": "Practice: How are you?",
+      "id": "l-greetings-how",
+      "title": "Practice: How are you? and goodbye",
       "letters": [
         "e-letter-pe",
-        "e-letter-te"
+        "e-letter-te",
+        "e-letter-tte",
+        "e-letter-se",
+        "e-letter-tse",
+        "e-letter-dze"
       ],
       "items": [
         {
@@ -734,15 +700,19 @@
           "role": "introduce"
         },
         {
-          "item": "e-xa",
-          "role": "introduce"
-        },
-        {
-          "item": "e-manana",
-          "role": "introduce"
-        },
-        {
           "item": "e-dera-manana",
+          "role": "introduce"
+        },
+        {
+          "item": "e-dera-xa",
+          "role": "introduce"
+        },
+        {
+          "item": "e-xoday-paman",
+          "role": "introduce"
+        },
+        {
+          "item": "e-pa-maxa-de-xa",
           "role": "introduce"
         }
       ],
@@ -763,44 +733,6 @@
               "item": "e-manana"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "l-greetings-3",
-      "title": "Practice: Polite words and goodbye",
-      "letters": [
-        "e-letter-tte",
-        "e-letter-se"
-      ],
-      "items": [
-        {
-          "item": "e-dera-xa",
-          "role": "introduce"
-        },
-        {
-          "item": "e-ho",
-          "role": "introduce"
-        },
-        {
-          "item": "e-na",
-          "role": "introduce"
-        },
-        {
-          "item": "e-baxana-ghwaram",
-          "role": "introduce"
-        },
-        {
-          "item": "e-mehrabani-wakray",
-          "role": "introduce"
-        },
-        {
-          "item": "e-xoday-paman",
-          "role": "introduce"
-        },
-        {
-          "item": "e-pa-maxa-de-xa",
-          "role": "introduce"
         }
       ]
     }

@@ -327,7 +327,7 @@
   "lessons": [
     {
       "id": "l-travel-learn-around",
-      "title": "Getting around",
+      "title": "Getting around and money",
       "kind": "learn",
       "items": [
         {
@@ -349,14 +349,7 @@
         {
           "item": "e-tak-see",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-travel-learn-money",
-      "title": "Money and help",
-      "kind": "learn",
-      "items": [
+        },
         {
           "item": "e-pay-se",
           "role": "present"
@@ -377,7 +370,7 @@
     },
     {
       "id": "l-travel-phrases-where",
-      "title": "Where is …?",
+      "title": "Where is …? Buying and help",
       "kind": "phrases",
       "items": [
         {
@@ -399,14 +392,7 @@
         {
           "item": "e-baa-zaar-cher-ta-day",
           "role": "present"
-        }
-      ]
-    },
-    {
-      "id": "l-travel-phrases-buying",
-      "title": "Buying and help",
-      "kind": "phrases",
-      "items": [
+        },
         {
           "item": "e-za-ti-kat-ghwaa-ram",
           "role": "present"

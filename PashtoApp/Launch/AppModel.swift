@@ -122,7 +122,8 @@ final class AppModel {
             releasedUnitIDs: releasedUnitIDs,
             finishedLessonIDs: finishedLessonIDs,
             listedLessons: releasedLessons,
-            showsPronunciation: snapshot?.settings.showTransliteration ?? UserSettings.initial.showTransliteration
+            showsPronunciation: snapshot?.settings.showTransliteration ?? UserSettings.initial.showTransliteration,
+            learnedItemIDs: learnedItemIDs
         )
     }
 
@@ -168,9 +169,16 @@ final class AppModel {
         )
     }
 
-    /// Lessons already finished or skipped by placement. The path draws these.
+    /// Items learned from cards and from finished practice lessons, including a removed lesson.
+    var learnedItemIDs: Set<ItemID> {
+        guard let snapshot, let course else { return [] }
+        return LessonMergeMigration.learnedItemIDs(in: snapshot, content: course)
+    }
+
+    /// Practice lessons whose items are all learned. A stored row for a removed lesson does not finish the new one.
     var finishedLessonIDs: Set<LessonID> {
-        Set(snapshot?.lessonProgress.map(\.lessonID) ?? [])
+        guard let course else { return [] }
+        return LessonMergeMigration.finishedLessonIDs(learned: learnedItemIDs, in: course)
     }
 
     /// The lesson quiz on screen. Nil when the learner is on the home.
@@ -492,7 +500,8 @@ final class AppModel {
             for: lessonID,
             in: course,
             finishedLessonIDs: finishedLessonIDs,
-            audioItemIDs: bundledAudioItemIDs()
+            audioItemIDs: bundledAudioItemIDs(),
+            learnedItemIDs: learnedItemIDs
         ) else { return false }
         learnList = list
         replaceStudy(nil)

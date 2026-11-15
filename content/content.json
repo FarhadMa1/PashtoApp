@@ -4339,20 +4339,7 @@
             {
               "item" : "e-hagha-da",
               "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "I am, you are, he/she is"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-basics-learn-2",
-          "items" : [
+            },
             {
               "item" : "e-mung-yu",
               "role" : "present"
@@ -4370,7 +4357,44 @@
           "letters" : [
 
           ],
-          "title" : "We are, they are, I am not"
+          "title" : "I am, you are, we are"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-learn-polite",
+          "items" : [
+            {
+              "item" : "e-ho",
+              "role" : "present"
+            },
+            {
+              "item" : "e-na",
+              "role" : "present"
+            },
+            {
+              "item" : "e-xa",
+              "role" : "present"
+            },
+            {
+              "item" : "e-mehrabani-wakray",
+              "role" : "present"
+            },
+            {
+              "item" : "e-manana",
+              "role" : "present"
+            },
+            {
+              "item" : "e-baxana-ghwaram",
+              "role" : "present"
+            }
+          ],
+          "kind" : "learn",
+          "letters" : [
+
+          ],
+          "title" : "Yes, no and polite words"
         },
         {
           "dialogs" : [
@@ -4476,6 +4500,74 @@
 
           ],
           "title" : "Practice: The basics"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-verbs",
+          "items" : [
+            {
+              "item" : "e-yam",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-ye",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-day",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-da",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-yast",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: Am, are and is"
+        },
+        {
+          "dialogs" : [
+
+          ],
+          "id" : "l-basics-polite",
+          "items" : [
+            {
+              "item" : "e-ho",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-na",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-xa",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-mehrabani-wakray",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-manana",
+              "role" : "introduce"
+            },
+            {
+              "item" : "e-baxana-ghwaram",
+              "role" : "introduce"
+            }
+          ],
+          "letters" : [
+
+          ],
+          "title" : "Practice: Yes, no and polite words"
         }
       ],
       "title" : "The basics",
@@ -4484,35 +4576,6 @@
     {
       "id" : "u-greetings",
       "lessons" : [
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-greetings-learn",
-          "items" : [
-            {
-              "item" : "e-xa",
-              "role" : "present"
-            },
-            {
-              "item" : "e-manana",
-              "role" : "present"
-            },
-            {
-              "item" : "e-ho",
-              "role" : "present"
-            },
-            {
-              "item" : "e-na",
-              "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "Key words"
-        },
         {
           "dialogs" : [
 
@@ -4571,30 +4634,9 @@
             {
               "item" : "e-dera-manana",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "How are you?"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-greetings-phrases-goodbye",
-          "items" : [
+            },
             {
               "item" : "e-dera-xa",
-              "role" : "present"
-            },
-            {
-              "item" : "e-baxana-ghwaram",
-              "role" : "present"
-            },
-            {
-              "item" : "e-mehrabani-wakray",
               "role" : "present"
             },
             {
@@ -4610,7 +4652,7 @@
           "letters" : [
 
           ],
-          "title" : "Polite words and goodbye"
+          "title" : "How are you? and goodbye"
         },
         {
           "dialogs" : [
@@ -4694,7 +4736,7 @@
               ]
             }
           ],
-          "id" : "l-greetings-2",
+          "id" : "l-greetings-how",
           "items" : [
             {
               "item" : "e-tsanga-ye",
@@ -4709,48 +4751,11 @@
               "role" : "introduce"
             },
             {
-              "item" : "e-xa",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-manana",
-              "role" : "introduce"
-            },
-            {
               "item" : "e-dera-manana",
               "role" : "introduce"
-            }
-          ],
-          "letters" : [
-            "e-letter-pe",
-            "e-letter-te"
-          ],
-          "title" : "Practice: How are you?"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-greetings-3",
-          "items" : [
+            },
             {
               "item" : "e-dera-xa",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-ho",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-na",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-baxana-ghwaram",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-mehrabani-wakray",
               "role" : "introduce"
             },
             {
@@ -4763,10 +4768,14 @@
             }
           ],
           "letters" : [
+            "e-letter-pe",
+            "e-letter-te",
             "e-letter-tte",
-            "e-letter-se"
+            "e-letter-se",
+            "e-letter-tse",
+            "e-letter-dze"
           ],
-          "title" : "Practice: Polite words and goodbye"
+          "title" : "Practice: How are you? and goodbye"
         }
       ],
       "title" : "Greetings and politeness",
@@ -4812,39 +4821,6 @@
           "dialogs" : [
 
           ],
-          "id" : "l-introductions-learn-be",
-          "items" : [
-            {
-              "item" : "e-yam",
-              "role" : "present"
-            },
-            {
-              "item" : "e-ye",
-              "role" : "present"
-            },
-            {
-              "item" : "e-day",
-              "role" : "present"
-            },
-            {
-              "item" : "e-da",
-              "role" : "present"
-            },
-            {
-              "item" : "e-yast",
-              "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "To be"
-        },
-        {
-          "dialogs" : [
-
-          ],
           "id" : "l-introductions-phrases-name",
           "items" : [
             {
@@ -4858,20 +4834,7 @@
             {
               "item" : "e-staso-num-tsa-day",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "What's your name?"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-introductions-phrases-from",
-          "items" : [
+            },
             {
               "item" : "e-ta-da-kum-dzay-ye",
               "role" : "present"
@@ -4905,7 +4868,7 @@
           "letters" : [
 
           ],
-          "title" : "Where are you from?"
+          "title" : "Your name and where you're from"
         },
         {
           "dialogs" : [
@@ -5016,39 +4979,6 @@
             "e-letter-xe"
           ],
           "title" : "Practice: Where are you from?"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-introductions-3",
-          "items" : [
-            {
-              "item" : "e-yam",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-ye",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-day",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-da",
-              "role" : "introduce"
-            },
-            {
-              "item" : "e-yast",
-              "role" : "introduce"
-            }
-          ],
-          "letters" : [
-            "e-letter-tse",
-            "e-letter-dze"
-          ],
-          "title" : "Practice: To be"
         }
       ],
       "title" : "Introducing yourself",
@@ -5090,20 +5020,7 @@
             {
               "item" : "e-koraney",
               "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "Family members"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-family-learn-this",
-          "items" : [
+            },
             {
               "item" : "e-daa",
               "role" : "present"
@@ -5121,7 +5038,7 @@
           "letters" : [
 
           ],
-          "title" : "This, my and your"
+          "title" : "Family, this, my and your"
         },
         {
           "dialogs" : [
@@ -5152,20 +5069,7 @@
             {
               "item" : "e-daa-zma-xor-da",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "This is my …"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-family-phrases-yours",
-          "items" : [
+            },
             {
               "item" : "e-daa-sta-wror-day",
               "role" : "present"
@@ -5183,7 +5087,7 @@
           "letters" : [
 
           ],
-          "title" : "Is this your …?"
+          "title" : "This is my … / Is this your …?"
         },
         {
           "dialogs" : [
@@ -5442,20 +5346,7 @@
             {
               "item" : "e-tak-see",
               "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "Getting around"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-travel-learn-money",
-          "items" : [
+            },
             {
               "item" : "e-pay-se",
               "role" : "present"
@@ -5477,7 +5368,7 @@
           "letters" : [
 
           ],
-          "title" : "Money and help"
+          "title" : "Getting around and money"
         },
         {
           "dialogs" : [
@@ -5504,20 +5395,7 @@
             {
               "item" : "e-baa-zaar-cher-ta-day",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "Where is …?"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-travel-phrases-buying",
-          "items" : [
+            },
             {
               "item" : "e-za-ti-kat-ghwaa-ram",
               "role" : "present"
@@ -5539,7 +5417,7 @@
           "letters" : [
 
           ],
-          "title" : "Buying and help"
+          "title" : "Where is …? Buying and help"
         },
         {
           "dialogs" : [
@@ -5735,20 +5613,7 @@
             {
               "item" : "e-tso-ba-je-dee",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "What day is it?"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-time-phrases-morning",
-          "items" : [
+            },
             {
               "item" : "e-sa-haar-mo-pa-khayr",
               "role" : "present"
@@ -5770,7 +5635,7 @@
           "letters" : [
 
           ],
-          "title" : "Morning and night"
+          "title" : "Days, mornings and nights"
         },
         {
           "dialogs" : [
@@ -5949,6 +5814,14 @@
             {
               "item" : "e-o-mar",
               "role" : "present"
+            },
+            {
+              "item" : "e-ka-lan",
+              "role" : "present"
+            },
+            {
+              "item" : "e-ka-la-na",
+              "role" : "present"
             }
           ],
           "kind" : "learn",
@@ -5982,20 +5855,7 @@
             {
               "item" : "e-pin-dza-las",
               "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "Eleven to fifteen"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-numbers-learn-sixteen-to-twenty",
-          "items" : [
+            },
             {
               "item" : "e-shpaa-ras",
               "role" : "present"
@@ -6021,28 +5881,7 @@
           "letters" : [
 
           ],
-          "title" : "Sixteen to twenty"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-numbers-learn-years-old",
-          "items" : [
-            {
-              "item" : "e-ka-lan",
-              "role" : "present"
-            },
-            {
-              "item" : "e-ka-la-na",
-              "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "Years old"
+          "title" : "Eleven to twenty"
         },
         {
           "dialogs" : [
@@ -6332,20 +6171,7 @@
             {
               "item" : "e-daa-ma-na-da",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "Saying what you want"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-food-phrases-available",
-          "items" : [
+            },
             {
               "item" : "e-daa-do-day-da",
               "role" : "present"
@@ -6367,7 +6193,7 @@
           "letters" : [
 
           ],
-          "title" : "Asking what is available"
+          "title" : "Asking for food and drink"
         },
         {
           "dialogs" : [
@@ -6600,20 +6426,7 @@
             {
               "item" : "e-rogh-toon-cher-ta-day",
               "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "Asking where"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-town-phrases-going",
-          "items" : [
+            },
             {
               "item" : "e-baa-zaar-dal-ta-day",
               "role" : "present"
@@ -6635,7 +6448,7 @@
           "letters" : [
 
           ],
-          "title" : "Saying where and going places"
+          "title" : "Where is it? Going places"
         },
         {
           "dialogs" : [
@@ -6786,20 +6599,7 @@
             {
               "item" : "e-wakht",
               "role" : "present"
-            }
-          ],
-          "kind" : "learn",
-          "letters" : [
-
-          ],
-          "title" : "Today and work"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-conversation-learn-languages",
-          "items" : [
+            },
             {
               "item" : "e-zha-ba",
               "role" : "present"
@@ -6817,7 +6617,7 @@
           "letters" : [
 
           ],
-          "title" : "Languages"
+          "title" : "Today, work and languages"
         },
         {
           "dialogs" : [
@@ -6836,13 +6636,29 @@
             {
               "item" : "e-za-sa-baa-kaar-ka-wam",
               "role" : "present"
+            },
+            {
+              "item" : "e-wro-wro-kha-ba-rey-wa-kray",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-chaay-na-ghwaa-ram",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-kah-wa-ghwaa-ram",
+              "role" : "present"
+            },
+            {
+              "item" : "e-za-sa-baa-baa-zaar-ta-dzam",
+              "role" : "present"
             }
           ],
           "kind" : "phrases",
           "letters" : [
 
           ],
-          "title" : "I work"
+          "title" : "Work and full sentences"
         },
         {
           "dialogs" : [
@@ -6876,35 +6692,6 @@
 
           ],
           "title" : "Understanding each other"
-        },
-        {
-          "dialogs" : [
-
-          ],
-          "id" : "l-conversation-phrases-sentences",
-          "items" : [
-            {
-              "item" : "e-wro-wro-kha-ba-rey-wa-kray",
-              "role" : "present"
-            },
-            {
-              "item" : "e-za-chaay-na-ghwaa-ram",
-              "role" : "present"
-            },
-            {
-              "item" : "e-za-kah-wa-ghwaa-ram",
-              "role" : "present"
-            },
-            {
-              "item" : "e-za-sa-baa-baa-zaar-ta-dzam",
-              "role" : "present"
-            }
-          ],
-          "kind" : "phrases",
-          "letters" : [
-
-          ],
-          "title" : "Putting sentences together"
         },
         {
           "dialogs" : [

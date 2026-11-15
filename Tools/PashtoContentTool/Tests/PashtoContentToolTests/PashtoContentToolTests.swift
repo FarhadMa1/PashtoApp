@@ -616,7 +616,7 @@ struct MergeTests {
             return item.pashto
         })
         let laterUnits = bundle.units.filter { laterIDs.contains($0.id.rawValue) }
-        #expect(laterUnits.flatMap(\.lessons).count == 29)
+        #expect(laterUnits.flatMap(\.lessons).count == 23)
         #expect(laterUnits.allSatisfy { $0.lessons.allSatisfy(\.letters.isEmpty) })
         #expect(!laterUnits.contains { $0.lessons.contains { $0.id.rawValue.contains("letter") } })
 

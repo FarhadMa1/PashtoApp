@@ -10,8 +10,8 @@ struct TheBasicsTests {
     private let notLine = "Put na right before the verb: za na yam."
     private let wordOrder = "In Pashto, the verb comes last."
     private let earlierPractice = [
-        "l-greetings-1", "l-greetings-2", "l-greetings-3",
-        "l-introductions-1", "l-introductions-2", "l-introductions-3",
+        "l-greetings-1",
+        "l-introductions-1", "l-introductions-2",
         "l-family-1", "l-family-2", "l-family-3",
     ]
 
@@ -27,13 +27,16 @@ struct TheBasicsTests {
         let unit = try #require(bundle.units.first { $0.id.rawValue == "u-basics" })
         #expect(unit.title == "The basics")
         #expect(unit.lessons.map(\.id.rawValue) == [
-            "l-basics-learn-1", "l-basics-learn-2", "l-basics-phrases", "l-basics-1",
+            "l-basics-learn-1", "l-basics-learn-polite", "l-basics-phrases",
+            "l-basics-1", "l-basics-verbs", "l-basics-polite",
         ])
         #expect(unit.lessons.map(\.title) == [
-            "I am, you are, he/she is",
-            "We are, they are, I am not",
+            "I am, you are, we are",
+            "Yes, no and polite words",
             "About me and others",
             "Practice: The basics",
+            "Practice: Am, are and is",
+            "Practice: Yes, no and polite words",
         ])
         #expect(unit.lessons[0].kind == .learn)
         #expect(unit.lessons[1].kind == .learn)
@@ -41,7 +44,10 @@ struct TheBasicsTests {
         #expect(unit.lessons[3].kind == .practice)
         #expect(unit.lessons[3].countsForProgress)
         #expect(!unit.lessons[0].countsForProgress)
-        #expect(unit.lessons.allSatisfy { $0.letters.isEmpty && $0.dialogs.isEmpty })
+        #expect(unit.lessons.filter { $0.kind != .practice }.allSatisfy { $0.letters.isEmpty && $0.dialogs.isEmpty })
+        #expect(unit.lessons[3].letters.isEmpty && unit.lessons[3].dialogs.isEmpty)
+        #expect(unit.lessons[4].letters.isEmpty && unit.lessons[4].dialogs.isEmpty)
+        #expect(unit.lessons[5].letters.isEmpty && unit.lessons[5].dialogs.isEmpty)
 
         let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id.rawValue, $0) })
         let expected: [(String, String, String, String)] = [
@@ -96,17 +102,26 @@ struct TheBasicsTests {
         #expect(unit.lessons[2].items.contains { $0.item.rawValue == "e-daa-do-day-da" } == false)
 
         let learn1 = unit.lessons[0].items.map(\.item.rawValue)
-        let learn2 = unit.lessons[1].items.map(\.item.rawValue)
+        let polite = unit.lessons[1].items.map(\.item.rawValue)
         let phrases = unit.lessons[2].items.map(\.item.rawValue)
         let practice = unit.lessons[3].items.map(\.item.rawValue)
-        #expect(learn1 == ["e-za-yam", "e-ta-ye", "e-taso-yast", "e-hagha-day", "e-hagha-da"])
-        #expect(learn2 == ["e-mung-yu", "e-hagha-dee", "e-za-na-yam"])
+        #expect(learn1 == [
+            "e-za-yam", "e-ta-ye", "e-taso-yast", "e-hagha-day", "e-hagha-da",
+            "e-mung-yu", "e-hagha-dee", "e-za-na-yam",
+        ])
+        #expect(polite == ["e-ho", "e-na", "e-xa", "e-mehrabani-wakray", "e-manana", "e-baxana-ghwaram"])
         #expect(phrases == [
             "e-za-xa-yam", "e-za-afghan-yam", "e-za-afghana-yam", "e-za-afghan-na-yam",
             "e-taso-xa-yast", "e-hagha-xa-day", "e-hagha-xa-da", "e-daa-zma-wror-day",
             "e-daa-khaar-day",
         ])
-        #expect(practice == learn1 + ["e-mung-yu", "e-hagha-dee", "e-za-na-yam", "e-za-afghan-na-yam", "e-taso-xa-yast", "e-daa-khaar-day"])
+        #expect(practice == [
+            "e-za-yam", "e-ta-ye", "e-taso-yast", "e-hagha-day", "e-hagha-da",
+            "e-mung-yu", "e-hagha-dee", "e-za-na-yam",
+            "e-za-afghan-na-yam", "e-taso-xa-yast", "e-daa-khaar-day",
+        ])
+        #expect(unit.lessons[4].items.map(\.item.rawValue) == ["e-yam", "e-ye", "e-day", "e-da", "e-yast"])
+        #expect(unit.lessons[5].items.map(\.item.rawValue) == polite)
         #expect(unit.lessons[0].items.allSatisfy { $0.role == .present })
         #expect(unit.lessons[2].items.allSatisfy { $0.role == .present })
         #expect(unit.lessons[3].items.allSatisfy { $0.role == .introduce })
@@ -115,18 +130,19 @@ struct TheBasicsTests {
         #expect(items["e-hagha-dee"]?.pronunciation == "ha-GHA dee")
 
         let deck = try #require(StudyCourse.deck(for: lessonID("l-basics-learn-1"), in: bundle))
-        #expect(deck.cards.map(\.explanation) == [wordOrder, youAre, youAre, hagha + "\n" + itLine, hagha + "\n" + itLine])
-        let second = try #require(StudyCourse.deck(for: lessonID("l-basics-learn-2"), in: bundle))
-        #expect(second.cards.map(\.itemID.rawValue) == ["e-mung-yu", "e-hagha-dee", "e-za-na-yam"])
-        #expect(second.cards.map(\.pronunciation) == ["mung yoo", "ha-GHA dee", "za na yam"])
-        #expect(second.cards.map(\.explanation) == [nil, nil, notLine])
-        #expect(second.cards.map(\.pronunciationNote) == [mungNote, haghaNote, nil])
+        #expect(deck.cards.map(\.explanation) == [
+            wordOrder, youAre, youAre, hagha + "\n" + itLine, hagha + "\n" + itLine,
+            nil, nil, notLine,
+        ])
+        #expect(deck.cards.map(\.itemID.rawValue).suffix(3) == ["e-mung-yu", "e-hagha-dee", "e-za-na-yam"])
+        #expect(deck.cards.map(\.pronunciation).suffix(3) == ["mung yoo", "ha-GHA dee", "za na yam"])
+        #expect(deck.cards.map(\.pronunciationNote).suffix(3) == [mungNote, haghaNote, nil])
 
         let rows = RootLessonSession.lessons(in: bundle, releasedUnitIDs: course.releasedUnitIDs)
-        #expect(rows.first { $0.id.rawValue == "l-basics-learn-1" }?.title == "I am, you are, he/she is")
-        #expect(rows.first { $0.id.rawValue == "l-basics-learn-2" }?.title == "We are, they are, I am not")
+        #expect(rows.first { $0.id.rawValue == "l-basics-learn-1" }?.title == "I am, you are, we are")
+        #expect(rows.first { $0.id.rawValue == "l-basics-learn-polite" }?.title == "Yes, no and polite words")
         #expect(rows.first { $0.id.rawValue == "l-basics-phrases" }?.title == "About me and others")
-        #expect(rows.first { $0.id.rawValue == "l-greetings-learn" }?.title == "Key words")
+        #expect(rows.first { $0.id.rawValue == "l-greetings-phrases-how" }?.title == "How are you? and goodbye")
     }
 
     @Test func practiceAsksTheNewItemsAndPlacementCanSkipTheUnit() throws {
@@ -171,7 +187,7 @@ struct TheBasicsTests {
             takenOn: day,
             existingLessons: kept
         )
-        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-basics-1"])
+        #expect(commit.lessonProgress.map(\.lessonID.rawValue) == ["l-basics-1", "l-basics-verbs", "l-basics-polite"])
         #expect(commit.lessonProgress.allSatisfy { $0.source == .placement })
         #expect(Set(commit.lessonProgress.map(\.lessonID)).isDisjoint(with: Set(earlier)))
 
@@ -183,7 +199,9 @@ struct TheBasicsTests {
             takenOn: day,
             existingLessons: kept
         )
-        #expect(skippedWindow.lessonProgress.map(\.lessonID.rawValue) == ["l-basics-1"])
+        #expect(skippedWindow.lessonProgress.map(\.lessonID.rawValue) == [
+            "l-basics-1", "l-basics-verbs", "l-basics-polite", "l-greetings-how",
+        ])
         #expect(Set(skippedWindow.lessonProgress.map(\.lessonID)).isDisjoint(with: Set(earlier)))
     }
 
@@ -210,16 +228,16 @@ struct TheBasicsTests {
         }
     }
 
-    @Test func existingPracticeLessonsKeepTheQuestionSetsFromBeforeTheBasics() throws {
+    @Test func survivingPracticeLessonsKeepTheItemsTheyIntroduced() throws {
         let current = try loadCourse().bundle
         let previous = try loadSnapshot("content-c0fb227.json")
-        let ids = earlierPractice
-        for id in ids {
-            for seed in [UInt64(1), 2, 7] {
-                let now = session(id, in: current, seed: seed)
-                let then = session(id, in: previous, seed: seed)
-                #expect(now.tasks == then.tasks)
-            }
+        for id in earlierPractice {
+            let now = try #require(current.units.flatMap(\.lessons).first { $0.id.rawValue == id })
+            let then = try #require(previous.units.flatMap(\.lessons).first { $0.id.rawValue == id })
+            #expect(now.items.map(\.item) == then.items.map(\.item))
+            #expect(now.letters == then.letters)
+            let built = session(id, in: current, seed: 1)
+            #expect(!built.tasks.isEmpty)
         }
     }
 
@@ -266,7 +284,7 @@ struct TheBasicsTests {
             #expect(CoursePathCopy.mark(id: id, order: order, finished: finished, locked: [], skipping: skipping) == .plain)
         }
         #expect(CoursePathCopy.mark(id: lessonID("l-basics-1"), order: order, finished: finished, locked: [], skipping: skipping) == .now)
-        #expect(CoursePathCopy.mark(id: lessonID("l-greetings-learn"), order: order, finished: finished, locked: [], skipping: skipping) == .plain)
+        #expect(CoursePathCopy.mark(id: lessonID("l-greetings-phrases-hello"), order: order, finished: finished, locked: [], skipping: skipping) == .plain)
 
         let released = ReleasedCourse.limiting(bundle, to: course.releasedUnitIDs)
         let quiet = PathProgress(cards: [], finishedLessonIDs: finished, newItemsShownToday: 0)
