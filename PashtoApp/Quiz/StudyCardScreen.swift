@@ -490,8 +490,10 @@ enum GreetingsPlaybackRate {
 
 /// English or Pashto that wraps at spaces and shrinks a long word onto one line.
 ///
-/// Word joiners stop a break at a hyphen or inside a letter. The spoken label
-/// is the original string. Vertical padding leaves room for Pashto dots and tails.
+/// `joinLatinWords` is for English and pronunciation. It keeps a hyphen inside
+/// the word. Pashto call sites leave it off, so Arabic letters stay joined
+/// and in order. The spoken label is the original string. Vertical padding
+/// leaves room for Pashto dots and tails.
 struct FittingWords: View {
     var text: String
     var size: CGFloat
@@ -501,6 +503,8 @@ struct FittingWords: View {
     var direction: LayoutDirection
     var lineSpacing: CGFloat = 0
     var verticalPadding: CGFloat = 0
+    /// Word joiners for Latin text. Pashto passes `false`.
+    var joinLatinWords: Bool = false
 
     @State private var availableWidth: CGFloat = 0
 
@@ -523,7 +527,7 @@ struct FittingWords: View {
             rightToLeft: direction == .rightToLeft
         ) {
             ForEach(Array(words.enumerated()), id: \.offset) { _, word in
-                Text(verbatim: WordBreakPolicy.display(word))
+                Text(verbatim: displayed(word))
                     .font(.system(size: size * shown, weight: weight))
                     .foregroundStyle(color)
                     .lineLimit(1)
@@ -546,6 +550,12 @@ struct FittingWords: View {
         .environment(\.layoutDirection, direction)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: text))
+    }
+
+    /// Latin words stay unbreakable. Pashto is the same characters it arrived with.
+    private func displayed(_ word: String) -> String {
+        guard joinLatinWords else { return word }
+        return WordBreakPolicy.display(word)
     }
 
     private var frameAlignment: Alignment {
@@ -827,7 +837,8 @@ struct LearnListScreen: View {
                 weight: .medium,
                 color: Lapis.text,
                 alignment: .leading,
-                direction: .leftToRight
+                direction: .leftToRight,
+                joinLatinWords: true
             )
             FittingWords(
                 text: row.pashto,
@@ -837,7 +848,8 @@ struct LearnListScreen: View {
                 alignment: .leading,
                 direction: .rightToLeft,
                 lineSpacing: pashtoLineSpacing,
-                verticalPadding: pashtoPadding
+                verticalPadding: pashtoPadding,
+                joinLatinWords: false
             )
             if row.showsPlayButton, let url = clipURL(for: row.itemID) {
                 playButton(url)
