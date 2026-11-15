@@ -230,6 +230,7 @@ struct MainMenuTests {
             "learn.list.flashcards": "Flashcards",
             "learn.list.words": "%lld of %lld words",
             "learn.list.play": "Play",
+            "module.section.quiz": "Quiz",
         ]
         for (key, english) in added {
             #expect(try catalogValue(key, in: strings) == english)
