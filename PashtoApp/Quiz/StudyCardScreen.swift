@@ -5,9 +5,13 @@ import UIKit
 
 /// Learn and phrases cards in direction B.
 ///
-/// Pronunciation is the large line. Pashto is smaller and stays right to left.
-/// English sits under them. Learn shows the meaning. Phrases hide it until
-/// Show meaning. The footer button stays outside the scrolling card.
+/// Pronunciation is the large line. At the usual sizes Pashto sits under it,
+/// then English. Learn shows the meaning. Phrases hide it until Show meaning.
+/// The footer button stays outside the scrolling card.
+///
+/// At accessibility sizes the blue strip is a 30 pt bar plus a 4 pt progress
+/// line. The title, Skip to practice, and the phrase scroll away. Once the
+/// title has left, it sits on one line in the bar.
 struct StudyCardScreen: View {
     var deck: StudyDeck
     var onNext: () -> StudyStep
@@ -21,6 +25,8 @@ struct StudyCardScreen: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AccessibilityFocusState private var pronunciationFocused: Bool
+    /// True once the large title has scrolled out of the accessibility bar.
+    @State private var titleCollapsed = false
     /// Plays only from the speaker button. A card change stops the previous clip.
     @State private var clipPlayer = GreetingsClipPlayer()
     @AppStorage(ProfileSettingsStore.audioSpeedKey) private var audioSpeedRaw = AudioSpeed.normal.rawValue
@@ -29,12 +35,17 @@ struct StudyCardScreen: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            header
-            LapisScreen(scrollIdentifier: "study-card", scrollToID: noteScrollTarget) {
-                card
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 12)
+            if dynamicTypeSize.isAccessibilitySize {
+                slimHeader
+            } else {
+                header
+            }
+            LapisScreen(
+                scrollIdentifier: "study-card",
+                scrollToID: noteScrollTarget,
+                scrollCoordinateSpace: StudyCardScroll.space
+            ) {
+                scrollContent
             } footer: {
                 Button(action: primaryTap) {
                     Text(verbatim: deck.offersStartPractice ? StudyCopy.startPractice : StudyCopy.next)
@@ -44,7 +55,16 @@ struct StudyCardScreen: View {
                 .accessibilitySortPriority(0)
             }
         }
-        .background(StudyPalette.page.ignoresSafeArea())
+        .background(pageBackground.ignoresSafeArea())
+        .onPreferenceChange(StudyTitleMaxYKey.self) { maxY in
+            guard dynamicTypeSize.isAccessibilitySize, maxY.isFinite, maxY < 10_000 else { return }
+            // A zero frame is the title before it is measured. Negative means it
+            // has left the top of the list.
+            let collapsed = maxY < 0
+            if collapsed != titleCollapsed {
+                titleCollapsed = collapsed
+            }
+        }
         .onChange(of: deck.index) { _, _ in
             clipPlayer.stop()
             pronunciationFocused = true
@@ -61,19 +81,42 @@ struct StudyCardScreen: View {
     /// so the opened card starts at the first tip. A normal card stays put.
     private var noteScrollTarget: String? {
         guard UITestLaunch.openItemID != nil, deck.meaningVisible else { return nil }
-        guard let note = deck.card?.pronunciationNote, PronunciationNotes.lines(in: note).count >= 1 else {
+        guard let note = deck.card?.pronunciationNote, !PronunciationNotes.tips(in: note).isEmpty else {
             return nil
         }
         return "pronunciation-tip-0"
     }
 
+    private var pageBackground: Color {
+        dynamicTypeSize.isAccessibilitySize ? Lapis.background : StudyPalette.page
+    }
+
+    @ViewBuilder
+    private var scrollContent: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 14) {
+                scrollingTitle
+                card
+                if deck.meaningVisible, let note = deck.card?.pronunciationNote {
+                    PronunciationNoteText(note: note)
+                        .accessibilitySortPriority(15)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            .padding(.bottom, 12)
+        } else {
+            card
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 12)
+        }
+    }
+
+    /// Blue strip at the usual text sizes. Back, title, progress, and Skip stay put.
     private var header: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if dynamicTypeSize.isAccessibilitySize {
-                accessibilityTitle
-            } else {
-                standardTitle
-            }
+            standardTitle
             LessonProgressBar(bar: LessonBar(answered: deck.index, total: max(deck.count, 1)))
                 .accessibilitySortPriority(60)
             HStack {
@@ -97,6 +140,106 @@ struct StudyCardScreen: View {
         .background(StudyPalette.header)
     }
 
+    /// Compact bar and a 4 pt progress line. The back control keeps its glyph
+    /// size and uses a 44 pt hit area. The title and Skip are not in this bar
+    /// until the large title has scrolled away. The bar does not grow with text size.
+    private var slimHeader: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                slimBackButton
+                if titleCollapsed {
+                    Text(verbatim: deck.title)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Lapis.text)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .accessibilityHidden(true)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 16)
+            slimProgress
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Lapis.background.ignoresSafeArea(edges: .top))
+    }
+
+    private var slimBackButton: some View {
+        Button(action: onBack) {
+            HStack(spacing: 4) {
+                Image(systemName: "chevron.backward")
+                    .accessibilityHidden(true)
+                if !titleCollapsed {
+                    Text("Pashto")
+                        .lineLimit(1)
+                }
+            }
+            .font(.system(size: 17, weight: .semibold))
+            .foregroundStyle(StudyPalette.pronunciation)
+        }
+        .buttonStyle(.plain)
+        .frame(minWidth: 44, minHeight: 44)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Pashto"))
+        .accessibilityAddTraits(.isButton)
+        .accessibilitySortPriority(70)
+    }
+
+    private var slimProgress: some View {
+        let fraction = LessonBar(answered: deck.index, total: max(deck.count, 1)).fraction
+        return GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(StudyPalette.barTrack)
+                Rectangle()
+                    .fill(StudyPalette.pronunciation)
+                    .frame(width: max(0, geo.size.width * fraction))
+            }
+        }
+        .frame(height: 4)
+        .accessibilityRepresentation {
+            ProgressView(value: fraction)
+        }
+        .accessibilitySortPriority(60)
+    }
+
+    /// Large title and Skip to practice. They scroll with the phrase and the tips.
+    private var scrollingTitle: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(verbatim: deck.title)
+                .font(.headline.weight(.bold))
+                .foregroundStyle(Lapis.text)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityAddTraits(.isHeader)
+                .accessibilitySortPriority(65)
+                .background {
+                    GeometryReader { geo in
+                        Color.clear.preference(
+                            key: StudyTitleMaxYKey.self,
+                            value: geo.frame(in: .named(StudyCardScroll.space)).maxY
+                        )
+                    }
+                }
+            Button(action: onSkip) {
+                HStack(spacing: 4) {
+                    Text(verbatim: StudyCopy.skipToPractice)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .multilineTextAlignment(.leading)
+                    Image(systemName: "chevron.right")
+                        .accessibilityHidden(true)
+                }
+                .font(.body.weight(.semibold))
+                .foregroundStyle(StudyPalette.pronunciation)
+            }
+            .buttonStyle(.plain)
+            .frame(minHeight: 44, alignment: .leading)
+            .accessibilitySortPriority(55)
+        }
+    }
+
     /// Back and the lesson title on one row. Regular sizes keep this row.
     private var standardTitle: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -106,24 +249,6 @@ struct StudyCardScreen: View {
                 .font(.headline.weight(.bold))
                 .foregroundStyle(StudyPalette.headerInk)
                 .accessibilityHidden(true)
-        }
-    }
-
-    /// Back on its own row, then the lesson title at full width.
-    ///
-    /// The title wraps between words. Nothing is drawn over the back button.
-    /// VoiceOver reads the visible title.
-    private var accessibilityTitle: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            studyBackButton(oneLine: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text(verbatim: deck.title)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(StudyPalette.headerInk)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilitySortPriority(65)
         }
     }
 
@@ -152,7 +277,7 @@ struct StudyCardScreen: View {
     }
 
     private var card: some View {
-        VStack(spacing: 18) {
+        VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .center, spacing: 18) {
             if let card = deck.card {
                 if let picture = FamilyPictures.picture(
                     for: card.itemID,
@@ -164,6 +289,7 @@ struct StudyCardScreen: View {
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: 200, maxHeight: 200)
+                        .frame(maxWidth: .infinity)
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text(verbatim: picture.accessibilityLabel))
                         .accessibilitySortPriority(55)
@@ -192,6 +318,7 @@ struct StudyCardScreen: View {
                 .accessibilitySortPriority(20)
             }
             pageDots
+                .frame(maxWidth: .infinity)
         }
         .padding(24)
         .frame(maxWidth: .infinity)
@@ -272,44 +399,29 @@ struct StudyCardLines: View {
     var showsMeaning: Bool
     var pronunciationFocused: AccessibilityFocusState<Bool>.Binding
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .largeTitle) private var pronunciationSize: CGFloat = 39
     @ScaledMetric(relativeTo: .title2) private var pashtoSize: CGFloat = 32
+    @ScaledMetric(relativeTo: .subheadline) private var smallPashtoSize: CGFloat = 16
     @ScaledMetric(relativeTo: .title3) private var meaningSize: CGFloat = 22
 
     var body: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            largeTypeLines
+        } else {
+            regularLines
+        }
+    }
+
+    /// Pronunciation, then Pashto, then English. The note stays in the card.
+    private var regularLines: some View {
         VStack(spacing: 10) {
-            PronunciationText(stored: card.pronunciation, points: pronunciationSize, color: StudyPalette.pronunciation, alignment: .center)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
-                .accessibilityFocused(pronunciationFocused)
-                .accessibilitySortPriority(50)
-            Text(verbatim: card.pashto)
-                .font(.system(size: pashtoSize, weight: .regular))
-                .foregroundStyle(StudyPalette.pashto)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
-                .environment(\.layoutDirection, .rightToLeft)
-                .accessibilitySortPriority(40)
+            pronunciation(alignment: .center, frame: .center)
+            pashtoLine(size: pashtoSize, alignment: .center, direction: .rightToLeft, priority: 40)
             if showsMeaning {
-                Text(verbatim: card.meaning)
-                    .font(.system(size: meaningSize, weight: .regular))
-                    .foregroundStyle(StudyPalette.meaning)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity)
-                    .environment(\.layoutDirection, .leftToRight)
-                    .accessibilitySortPriority(30)
+                meaningLine(alignment: .center, priority: 30)
                 if let explanation = card.explanation {
-                    Text(verbatim: explanation)
-                        .font(.body)
-                        .foregroundStyle(StudyPalette.meaning)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity)
-                        .environment(\.layoutDirection, .leftToRight)
-                        .accessibilitySortPriority(25)
+                    explanationLine(explanation, alignment: .center)
                 }
                 if let note = card.pronunciationNote {
                     PronunciationNoteText(note: note)
@@ -318,28 +430,95 @@ struct StudyCardLines: View {
             }
         }
     }
+
+    /// Pronunciation first, then English, then small Pashto. The note is drawn
+    /// under the card so a plain note can use the full width.
+    private var largeTypeLines: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            pronunciation(alignment: .leading, frame: .leading)
+            if showsMeaning {
+                meaningLine(alignment: .leading, priority: 40)
+                if let explanation = card.explanation {
+                    explanationLine(explanation, alignment: .leading)
+                }
+            }
+            pashtoLine(size: smallPashtoSize, alignment: .leading, direction: .leftToRight, priority: 30)
+        }
+    }
+
+    private func pronunciation(alignment: TextAlignment, frame: Alignment) -> some View {
+        PronunciationText(stored: card.pronunciation, points: pronunciationSize, color: StudyPalette.pronunciation, alignment: alignment)
+        .multilineTextAlignment(alignment)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity, alignment: frame)
+        .accessibilityFocused(pronunciationFocused)
+        .accessibilitySortPriority(50)
+    }
+
+    private func pashtoLine(
+        size: CGFloat,
+        alignment: TextAlignment,
+        direction: LayoutDirection,
+        priority: Double
+    ) -> some View {
+        Text(verbatim: card.pashto)
+            .font(.system(size: size, weight: .regular))
+            .foregroundStyle(StudyPalette.pashto)
+            .multilineTextAlignment(alignment)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: alignment == .leading ? .leading : .center)
+            .environment(\.layoutDirection, direction)
+            .accessibilitySortPriority(priority)
+    }
+
+    private func meaningLine(alignment: TextAlignment, priority: Double) -> some View {
+        Text(verbatim: card.meaning)
+            .font(.system(size: meaningSize, weight: .regular))
+            .foregroundStyle(StudyPalette.meaning)
+            .multilineTextAlignment(alignment)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: alignment == .leading ? .leading : .center)
+            .environment(\.layoutDirection, .leftToRight)
+            .accessibilitySortPriority(priority)
+    }
+
+    private func explanationLine(_ explanation: String, alignment: TextAlignment) -> some View {
+        Text(verbatim: explanation)
+            .font(.body)
+            .foregroundStyle(StudyPalette.meaning)
+            .multilineTextAlignment(alignment)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: alignment == .leading ? .leading : .center)
+            .environment(\.layoutDirection, .leftToRight)
+            .accessibilitySortPriority(25)
+    }
 }
 
-/// One pronunciation tip per line. The stored note is unchanged.
+/// Pronunciation tips as left-aligned rows. The stored note is unchanged.
 ///
-/// A line that starts with a Pashto letter would otherwise become a
-/// right-to-left paragraph. Each line is an LTR isolate, and the card
-/// direction is left to right. A little horizontal room keeps the Pashto
-/// glyph, and its dots, inside the line. VoiceOver stops once on the whole
-/// note and reads the stored text, without the direction marks.
+/// A letter tip puts the letter and its colon in a narrow column, slightly
+/// larger than the words. Wrapped words start under the first word. A tip
+/// with no letter is ordinary text across the full width, with no empty
+/// column. Each piece is an LTR isolate so a Pashto letter does not flip the
+/// row. VoiceOver stops once on the whole note and reads the stored text.
 /// A UI-test launch keeps each tip as its own element so a shot can see it.
 struct PronunciationNoteText: View {
     var note: String
 
+    /// Wide enough for one letter and its colon. It scales with the letter.
+    @ScaledMetric(relativeTo: .body) private var letterColumn: CGFloat = 34
+    @ScaledMetric(relativeTo: .body) private var columnGap: CGFloat = 6
+    @ScaledMetric(relativeTo: .subheadline) private var rowSpacing: CGFloat = 8
+
     private var exposesTips: Bool { UITestLaunch.openItemID != nil }
 
     var body: some View {
-        let stack = VStack(alignment: .center, spacing: 4) {
-            ForEach(Array(PronunciationNotes.lines(in: note).enumerated()), id: \.offset) { index, line in
-                tipLine(index: index, line: line)
+        let stack = VStack(alignment: .leading, spacing: rowSpacing) {
+            ForEach(Array(PronunciationNotes.tips(in: note).enumerated()), id: \.offset) { index, tip in
+                tipRow(index: index, tip: tip)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .center)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .environment(\.layoutDirection, .leftToRight)
 
         if exposesTips {
@@ -352,27 +531,59 @@ struct PronunciationNoteText: View {
     }
 
     @ViewBuilder
-    private func tipLine(index: Int, line: String) -> some View {
-        let text = tipText(line)
+    private func tipRow(index: Int, tip: PronunciationTip) -> some View {
+        let row = rowContent(tip)
             .id("pronunciation-tip-\(index)")
         if exposesTips {
-            text
+            row
+                .accessibilityElement(children: .combine)
                 .accessibilityIdentifier("pronunciation-tip-\(index)")
-                .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(line)))
+                .accessibilityLabel(Text(verbatim: PronunciationNotes.spoken(tip.stored)))
         } else {
-            text
+            row
         }
     }
 
-    private func tipText(_ line: String) -> some View {
-        Text(verbatim: PronunciationNotes.displayLine(line))
+    @ViewBuilder
+    private func rowContent(_ tip: PronunciationTip) -> some View {
+        if let letter = tip.letter {
+            HStack(alignment: .firstTextBaseline, spacing: columnGap) {
+                Text(verbatim: PronunciationNotes.displayLine(letter))
+                    .font(.body)
+                    .foregroundStyle(Lapis.text)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(width: letterColumn, alignment: .leading)
+                tipWords(tip.text)
+            }
+            .environment(\.layoutDirection, .leftToRight)
+        } else {
+            tipWords(tip.text)
+        }
+    }
+
+    private func tipWords(_ text: String) -> some View {
+        Text(verbatim: PronunciationNotes.displayLine(text))
             .font(.subheadline)
             .foregroundStyle(Lapis.secondaryText)
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 2)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .environment(\.layoutDirection, .leftToRight)
+    }
+}
+
+/// Scroll space shared by the card list and the large-title measurement.
+private enum StudyCardScroll {
+    static let space = "study-card-scroll"
+}
+
+/// Bottom of the large title in the scroll view. A non-positive value means
+/// the title has scrolled away and the bar can show it on one line.
+private struct StudyTitleMaxYKey: PreferenceKey {
+    static let defaultValue: CGFloat = .greatestFiniteMagnitude
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
@@ -386,6 +597,8 @@ enum StudyPalette {
     static let pashto = dynamic(light: 0x475569, dark: 0xCBD5E1)
     static let meaning = dynamic(light: 0x1E293B, dark: 0xF1F5F9)
     static let dot = dynamic(light: 0xCBD5E1, dark: 0x475569)
+    /// 4 pt track under the accessibility bar.
+    static let barTrack = dynamic(light: 0xE6EAE6, dark: 0x334155)
     static let button = dynamic(light: 0x1E3A8A, dark: 0x4666D2)
     static let buttonInk = dynamic(light: 0xFAF7F0, dark: 0xFAF7F0)
 

@@ -32,12 +32,14 @@ SCREENS = (
 )
 VARIANTS = ("light", "dark", "xl")
 # Bold Text is the light Greetings list. The long Time word is XL only.
-# The long Food note is XL only. The second file is the end of that note.
+# The Food note is XL (two shots) and light. The plain note has no letter.
 EXTRA = [
     "learn-list-bold-light.png",
     "learn-list-time-xl.png",
     "notes-learn-xl.png",
     "notes-learn-xl-2.png",
+    "notes-learn-light.png",
+    "notes-plain-xl.png",
 ]
 EXPECTED = [f"{screen}-{variant}.png" for screen in SCREENS for variant in VARIANTS] + EXTRA
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"

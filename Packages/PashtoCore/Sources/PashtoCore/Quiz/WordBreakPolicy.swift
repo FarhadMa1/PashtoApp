@@ -3,18 +3,21 @@ import Foundation
 /// Keeps a Latin line from breaking inside a word.
 ///
 /// English and pronunciation get a word joiner between the characters of
-/// each word, including across a hyphen. Spaces stay ordinary break points.
-/// Pashto, and any other Arabic-script text, is returned unchanged: a joiner
-/// between those letters splits the shapes and can reverse their order.
-/// The stored string is not changed. Callers pass the result to the text
-/// view and keep the original string for VoiceOver.
+/// each word, including across a hyphen. `joinLatinWords` defaults to true,
+/// so a new English call site joins words without passing the flag. Pass
+/// false to leave Latin text unchanged. Spaces stay ordinary break points.
+/// Pashto, and any other Arabic-script text, is returned unchanged either
+/// way: a joiner between those letters splits the shapes and can reverse
+/// their order. The stored string is not changed. Callers pass the result
+/// to the text view and keep the original string for VoiceOver.
 public enum WordBreakPolicy {
     public static let wordJoiner: Character = "\u{2060}"
 
-    public static func display(_ text: String) -> String {
+    public static func display(_ text: String, joinLatinWords: Bool = true) -> String {
         if QuizPresentation.containsArabicScript(text) {
             return text
         }
+        guard joinLatinWords else { return text }
         var result = ""
         var previousWasSpace = true
         for character in text {

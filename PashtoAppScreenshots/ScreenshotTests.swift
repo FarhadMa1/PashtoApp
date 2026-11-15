@@ -3,9 +3,9 @@ import XCTest
 /// Opens the home, the lower Home rows, a Numbers learn list and its cards,
 /// the Greetings and Travel learn lists, the Family screens, a quiz, the
 /// celebration, and the word of the day. Light also opens the Greetings list
-/// with Bold Text. XL is four tests, so each stays under the runner's limit.
+/// with Bold Text. XL is five tests, so each stays under the runner's limit.
 /// The Time days list is part of XL lists. The shell is tabs, Speak, Profile, and reset.
-/// The pronunciation note is its own XL test.
+/// The pronunciation note is its own XL test, plus one note with no letter.
 @MainActor
 final class ScreenshotTests: XCTestCase {
     override func setUp() {
@@ -104,6 +104,55 @@ final class ScreenshotTests: XCTestCase {
                 "tip \(marks[index]) is not fully inside the window. before \(before[index]) window \(windowBefore) after \(after[index]) window \(windowAfter)"
             )
         }
+    }
+
+    /// A note with no letter tip, at the largest type. It is ordinary text.
+    func testXLPlainNote() {
+        executionTimeAllowance = 400
+        let app = XCUIApplication()
+        app.launchArguments = launchArguments(for: "xl") + ["-uiTestOpenItem", "e-ta"]
+        app.launch()
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 20),
+            "plain note card did not open. buttons: \(buttonDump(app))"
+        )
+        XCTAssertFalse(
+            app.descendants(matching: .any)["study-item-missing"].exists,
+            "plain note item did not resolve"
+        )
+        let tip = app.descendants(matching: .any)["pronunciation-tip-0"]
+        XCTAssertTrue(tip.waitForExistence(timeout: 8), "plain note did not appear. buttons: \(buttonDump(app))")
+        XCTAssertTrue(
+            tip.label.hasPrefix("The t is soft and dental:"),
+            "plain note label \(tip.label)"
+        )
+        XCTAssertFalse(
+            tip.label.contains("\u{2066}") || tip.label.contains("\u{2069}") || tip.label.contains("\u{200E}"),
+            "VoiceOver reads the direction marks: \(tip.label)"
+        )
+        XCTAssertFalse(app.descendants(matching: .any)["pronunciation-tip-1"].exists)
+        settle(1.2)
+        shot("notes-plain-xl")
+    }
+
+    /// The Food phrase note at the usual text size, so the columns are visible
+    /// under the blue header.
+    func testLightNotes() {
+        let app = XCUIApplication()
+        app.launchArguments = launchArguments(for: "light") + ["-uiTestOpenItem", "e-tsa-ghwaa-rey"]
+        app.launch()
+        XCTAssertTrue(
+            app.buttons["Skip to practice"].waitForExistence(timeout: 20),
+            "Food phrase card did not open. buttons: \(buttonDump(app))"
+        )
+        let tips = noteTips(in: app)
+        let marks = ["څ:", "غ:", "ړ:"]
+        for (tip, mark) in zip(tips, marks) {
+            XCTAssertTrue(tip.waitForExistence(timeout: 8), "tip \(mark) did not appear")
+            XCTAssertTrue(tip.label.hasPrefix(mark), "tip label \(tip.label)")
+        }
+        settle(1.0)
+        shot("notes-learn-light")
     }
 
     func testLightShell() {

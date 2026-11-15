@@ -183,6 +183,8 @@ struct LapisScreen<Content: View, Footer: View>: View {
     var scrollIdentifier: String? = nil
     /// When set, the list opens with this id at the top. Nil leaves the list alone.
     var scrollToID: String? = nil
+    /// Named space for content that needs the visible scroll offset.
+    var scrollCoordinateSpace: String? = nil
     @ViewBuilder var content: () -> Content
     @ViewBuilder var footer: () -> Footer
 
@@ -195,6 +197,7 @@ struct LapisScreen<Content: View, Footer: View>: View {
                 }
                 .scrollBounceBehavior(.basedOnSize)
                 .modifier(OptionalAccessibilityIdentifier(identifier: scrollIdentifier))
+                .coordinateSpace(name: scrollCoordinateSpace ?? "lapis-scroll")
                 .task(id: scrollToID) {
                     await reveal(scrollToID, with: proxy)
                 }

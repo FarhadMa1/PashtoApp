@@ -158,13 +158,35 @@ public enum PronunciationFit {
     }
 }
 
+/// One pronunciation tip, split for display only.
+///
+/// A letter tip keeps the letter and its colon in `letter` and the words in
+/// `text`. A tip with no letter has `letter == nil` and the stored words in
+/// `text`. Joining `stored` puts the note back together. The stored field is
+/// not rewritten.
+public struct PronunciationTip: Equatable, Sendable {
+    public var letter: String?
+    public var text: String
+
+    public init(letter: String?, text: String) {
+        self.letter = letter
+        self.text = text
+    }
+
+    /// The tip as it is stored. A letter tip keeps the space after the colon.
+    public var stored: String {
+        guard let letter else { return text }
+        return letter + " " + text
+    }
+}
+
 /// The pronunciation note copied onto a learn or phrases card.
 ///
 /// A blank note stays off the card. Every other note is shown, including
 /// Numbers, Food, Town, Conversation, Travel, and Time. The stored text is
-/// not rewritten. `lines(in:)` and `displayText` are only for drawing: one
-/// tip on each line, and each line forced left to right so a Pashto letter
-/// at the start does not flip the line.
+/// not rewritten. `lines(in:)`, `tips(in:)`, and `displayText` are only for
+/// drawing: one tip on each row, and each row forced left to right so a
+/// Pashto letter at the start does not flip the line.
 public enum PronunciationNotes {
     /// U+2066 LEFT-TO-RIGHT ISOLATE. A leading Pashto letter is RTL, and this
     /// keeps the line's base direction left to right.
@@ -177,6 +199,14 @@ public enum PronunciationNotes {
             return nil
         }
         return trimmed
+    }
+
+    /// One tip per row. A letter tip is the letter plus ":" in `letter` and
+    /// the words after ": " in `text`. A note with no letter tip is one plain
+    /// tip, so the card can draw it across the full width. The stored note is
+    /// not rewritten.
+    public static func tips(in note: String) -> [PronunciationTip] {
+        lines(in: note).map(tip(on:))
     }
 
     /// One tip per line. A tip begins at a Pashto letter, or a run of them,
@@ -201,6 +231,20 @@ public enum PronunciationNotes {
             }
         }
         return pieces.isEmpty ? [note] : pieces
+    }
+
+    /// A line that starts with a letter marker becomes a letter column plus words.
+    /// Anything else, including a Pashto letter that is not followed by ": ",
+    /// stays one plain tip.
+    private static func tip(on line: String) -> PronunciationTip {
+        guard let markerEnd = tipMarkerEnd(in: line, at: line.startIndex) else {
+            return PronunciationTip(letter: nil, text: line)
+        }
+        let colon = line.index(markerEnd, offsetBy: -2)
+        return PronunciationTip(
+            letter: String(line[line.startIndex...colon]),
+            text: String(line[markerEnd...])
+        )
     }
 
     /// What the card draws. Each line is an LTR isolate, and tips are separated
