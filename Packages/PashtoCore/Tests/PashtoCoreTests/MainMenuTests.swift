@@ -274,6 +274,9 @@ struct MainMenuTests {
         let next = try #require(source.range(of: "\n    private func ", range: label.upperBound..<source.endIndex))
         let row = String(source[label.lowerBound..<next.lowerBound])
         #expect(row.contains("menuWord(category)"))
+        #expect(row.contains(".lineLimit(nil)"))
+        #expect(row.contains(".fixedSize(horizontal: false, vertical: true)"))
+        #expect(!row.contains("minimumScaleFactor"))
         #expect(!row.contains("textCase"))
         #expect(!row.contains(".uppercased()"))
     }

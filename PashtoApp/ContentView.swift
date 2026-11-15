@@ -459,9 +459,9 @@ struct ContentView: View {
         Text(verbatim: menuWord(category))
             .font(.title3.weight(.semibold))
             .foregroundStyle(hue)
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
-            .allowsTightening(true)
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.leading)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
