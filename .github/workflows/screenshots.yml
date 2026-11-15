@@ -6,7 +6,8 @@ name: Screenshots
 # on an iPhone simulator.
 # Light, dark, and the largest accessibility text size.
 # Light also captures the Greetings list with Bold Text.
-# XL is two tests. Lists include cha-haar-shan-BA. Quiz includes the other XL shots.
+# XL is three tests. Lists include cha-haar-shan-BA. Quiz is the family
+# lesson, the celebration, and the daily word. The note test opens one card.
 # Each test's default allowance is 180 seconds. The XL tests request 400, so the
 # maximum has to be at least 400 or Xcode clamps that request.
 # The app a learner launches is unchanged.
@@ -179,7 +180,7 @@ jobs:
           }
           run_variant light light large testLight
           run_variant dark dark large testDark
-          run_variant xl light accessibility-extra-extra-extra-large testXLLists testXLQuiz
+          run_variant xl light accessibility-extra-extra-extra-large testXLLists testXLQuiz testXLNotes
           echo "RESULTS=${results}" >> "$GITHUB_ENV"
           exit "$status"
 

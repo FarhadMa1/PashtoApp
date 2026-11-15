@@ -284,6 +284,81 @@ struct PronunciationDisplayTests {
         #expect(!home.contains("pronunciationNote"))
     }
 
+    @Test func pronunciationNoteDisplayStaysLeftToRightWithOneTipPerLine() throws {
+        let bundle = try loadCourse().bundle
+        let want = try #require(bundle.items.first { $0.id.rawValue == "e-tsa-ghwaa-rey" })
+        let stored = try #require(want.pronunciationNote)
+        let threeTips = "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r."
+        #expect(stored == threeTips)
+        #expect(PronunciationNotes.presented(stored) == stored)
+        #expect(!stored.contains("\n"))
+        #expect(!stored.contains(PronunciationNotes.leftToRightIsolate))
+        #expect(!stored.contains(PronunciationNotes.popDirectionalIsolate))
+
+        let lines = PronunciationNotes.lines(in: stored)
+        #expect(lines == [
+            "څ: ts as in cats.",
+            "غ: gh, a voiced kh, close to French r.",
+            "ړ: tongue tip curled back and flicked forward, like a quick r.",
+        ])
+        #expect(lines.joined(separator: " ") == stored)
+
+        let display = PronunciationNotes.displayText(stored)
+        #expect(display.hasPrefix(PronunciationNotes.leftToRightIsolate))
+        #expect(display.hasSuffix(PronunciationNotes.popDirectionalIsolate))
+        #expect(display == lines.map(PronunciationNotes.displayLine).joined(separator: "\n"))
+        #expect(PronunciationNotes.spoken(display) == stored)
+        #expect(want.pronunciationNote == threeTips)
+
+        let food = try source("content/units/u-food.json")
+        #expect(food.contains("\"pronunciationNote\": \"\(threeTips)\""))
+        #expect(!food.contains(PronunciationNotes.leftToRightIsolate))
+
+        let single = "څ: ts as in cats."
+        #expect(PronunciationNotes.lines(in: single) == [single])
+        #expect(PronunciationNotes.displayText(single) == PronunciationNotes.displayLine(single))
+        #expect(!PronunciationNotes.displayText(single).contains("\n"))
+        #expect(PronunciationNotes.spoken(PronunciationNotes.displayText(single)) == single)
+
+        let voiced = "غ: gh, a voiced kh, close to French r."
+        #expect(PronunciationNotes.lines(in: voiced) == [voiced])
+        let english = "The vowel in za is short and weak, like the a in about."
+        #expect(PronunciationNotes.lines(in: english) == [english])
+        let dental = "The t is soft and dental: the tongue touches the back of the upper front teeth."
+        #expect(PronunciationNotes.lines(in: dental) == [dental])
+        let kabul = "Kabul: ho, not ao. In everyday speech people also say یې (ye) for yes."
+        #expect(PronunciationNotes.lines(in: kabul) == [kabul])
+        let mung = "ږ: in Kabul close to g in go; موږ is said mung. یو here means ‘are’, not ‘one’."
+        #expect(PronunciationNotes.lines(in: mung) == [mung])
+        #expect(PronunciationNotes.lines(in: "څغ: together.") == ["څغ: together."])
+        #expect(PronunciationNotes.lines(in: "څ: one. څغ: two.") == ["څ: one.", "څغ: two."])
+
+        for item in bundle.items {
+            guard let note = item.pronunciationNote else { continue }
+            #expect(!note.contains("\n"), "\(item.id.rawValue)")
+            #expect(!note.contains(PronunciationNotes.leftToRightIsolate), "\(item.id.rawValue)")
+            let drawn = PronunciationNotes.lines(in: note)
+            #expect(drawn.joined(separator: " ") == note, "\(item.id.rawValue)")
+            let shown = PronunciationNotes.displayText(note)
+            #expect(shown.hasPrefix(PronunciationNotes.leftToRightIsolate), "\(item.id.rawValue)")
+            #expect(PronunciationNotes.spoken(shown) == note, "\(item.id.rawValue)")
+            if drawn.count == 1 {
+                #expect(drawn == [note], "\(item.id.rawValue)")
+                #expect(!shown.contains("\n"), "\(item.id.rawValue)")
+            }
+            #expect(PronunciationNotes.presented(note) == note)
+        }
+
+        let screen = try source("PashtoApp/Quiz/StudyCardScreen.swift")
+        #expect(screen.contains("if let note = card.pronunciationNote"))
+        #expect(screen.contains("PronunciationNotes.lines(in: note)"))
+        #expect(screen.contains("PronunciationNotes.displayLine"))
+        #expect(screen.contains("PronunciationNotes.spoken(note)"))
+        #expect(screen.contains(".accessibilityElement(children: .combine)"))
+        #expect(screen.contains(".environment(\\.layoutDirection, .leftToRight)"))
+        #expect(!screen.contains("Text(verbatim: note)"))
+    }
+
     @Test func quizCelebrationListsAndTheDailyWordKeepTheStoredPronunciation() throws {
         let bundle = try loadCourse().bundle
         let items = bundle.items
