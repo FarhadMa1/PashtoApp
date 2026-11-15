@@ -170,7 +170,7 @@ public enum StudyCourse {
             guard let item = itemsByID[reference.item] else { continue }
             let meaning = item.en?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             let explanation = item.usage?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let note = PronunciationNotes.presented(item.pronunciationNote, in: found.unit.id)
+            let note = PronunciationNotes.presented(item.pronunciationNote)
             cards.append(StudyCard(
                 itemID: item.id,
                 pronunciation: item.pronunciation,

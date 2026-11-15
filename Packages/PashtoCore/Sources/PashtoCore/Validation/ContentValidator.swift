@@ -328,7 +328,11 @@ public enum ContentValidator {
         let hits = bundle.romanization.difficultCharacters.filter { character in
             !Text.isBlank(character) && PashtoScript.containsSequence(character, in: item.pashto)
         }
-        if !hits.isEmpty, Text.isBlank(item.pronunciationNote) {
+        // ق stays on the difficult-character list. The approved learner notes
+        // have no ق sentence, so a word whose only difficult character is ق
+        // does not need a pronunciation note. Any other difficult character does.
+        let needsNote = hits.contains { $0 != "ق" }
+        if needsNote, Text.isBlank(item.pronunciationNote) {
             report.add(
                 .error,
                 id: id,

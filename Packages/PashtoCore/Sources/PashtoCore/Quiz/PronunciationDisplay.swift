@@ -158,27 +158,15 @@ public enum PronunciationFit {
     }
 }
 
-/// Which pronunciation notes reach the screen and VoiceOver.
+/// The pronunciation note copied onto a learn or phrases card.
 ///
-/// Numbers, Food, Town, and Conversation hide every note. A note that mentions
-/// capitals is hidden as well, because stress is no longer shown as capitals.
-/// The stored note is not rewritten.
+/// A blank note stays off the card. Every other note is shown, including
+/// Numbers, Food, Town, Conversation, Travel, and Time.
 public enum PronunciationNotes {
-    public static let unitsThatHideEveryNote: Set<String> = [
-        "u-numbers", "u-food", "u-town", "u-conversation",
-    ]
-
-    public static func mentionsCapitals(_ note: String) -> Bool {
-        note.range(of: "capitals", options: [.caseInsensitive]) != nil
-    }
-
-    /// The note to show, or nil when this unit or this wording stays off the screen.
-    public static func presented(_ note: String?, in unitID: UnitID) -> String? {
-        guard !unitsThatHideEveryNote.contains(unitID.rawValue) else { return nil }
+    public static func presented(_ note: String?) -> String? {
         guard let trimmed = note?.trimmingCharacters(in: .whitespacesAndNewlines), !trimmed.isEmpty else {
             return nil
         }
-        guard !mentionsCapitals(trimmed) else { return nil }
         return trimmed
     }
 }

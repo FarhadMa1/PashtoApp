@@ -109,12 +109,13 @@ struct UnitsFourToEightTests {
         ) == nil)
     }
 
-    @Test func newUnitsDoNotRenderPronunciationNotes() throws {
+    @Test func newUnitsRenderPronunciationNotes() throws {
         let bundle = try loadCourse().bundle
         let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id, $0) })
         let newUnits = bundle.units.filter { newUnitIDs.contains($0.id.rawValue) }
         var presented = Set<ItemID>()
         var rendered = Set<ItemID>()
+        var showedNote: Set<String> = []
         for unit in newUnits {
             for lesson in unit.lessons {
                 for reference in lesson.items where reference.role == .present {
@@ -125,15 +126,20 @@ struct UnitsFourToEightTests {
                 #expect(deck.unitID == unit.id)
                 for card in deck.cards {
                     rendered.insert(card.itemID)
-                    #expect(card.pronunciationNote == nil)
                     let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                    #expect(!stored.isEmpty)
+                    if stored.isEmpty {
+                        #expect(card.pronunciationNote == nil)
+                    } else {
+                        #expect(card.pronunciationNote == stored)
+                        showedNote.insert(unit.id.rawValue)
+                    }
                 }
             }
             for showsPronunciation in [true, false] {
                 let rows = FamilyWordList.rows(for: unit.id, in: bundle, showsPronunciation: showsPronunciation)
                 for row in rows {
-                    let stored = try #require(items[row.itemID]?.pronunciationNote)
+                    let stored = items[row.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    if stored.isEmpty { continue }
                     #expect(!row.accessibilityLabel.contains(stored))
                     #expect(row.english != stored)
                     #expect(row.pronunciation != stored)
@@ -141,16 +147,17 @@ struct UnitsFourToEightTests {
                 }
             }
         }
+        #expect(showedNote == Set(newUnitIDs))
         #expect(presented.count == 82)
         #expect(rendered == presented)
 
         let around = try #require(StudyCourse.deck(for: lessonID("l-travel-learn-around"), in: bundle))
         let travelTaxi = try #require(around.cards.first { $0.itemID.rawValue == "e-tak-see" })
         let taxiNote = try #require(items[travelTaxi.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines))
-        #expect(PronunciationNotes.mentionsCapitals(taxiNote))
-        #expect(travelTaxi.pronunciationNote == nil)
+        #expect(taxiNote == "ټ: t with the tongue tip curled back.")
+        #expect(travelTaxi.pronunciationNote == taxiNote)
         let town = try #require(StudyCourse.deck(for: lessonID("l-town-learn-transport"), in: bundle))
-        #expect(town.cards.first { $0.itemID.rawValue == "e-tak-see" }?.pronunciationNote == nil)
+        #expect(town.cards.first { $0.itemID.rawValue == "e-tak-see" }?.pronunciationNote == taxiNote)
 
         for lesson in ["l-basics-learn-2", "l-time-learn-times"] {
             let deck = try #require(StudyCourse.deck(for: lessonID(lesson), in: bundle))

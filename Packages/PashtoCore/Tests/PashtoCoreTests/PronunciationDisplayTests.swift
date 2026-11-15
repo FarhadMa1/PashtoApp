@@ -211,92 +211,69 @@ struct PronunciationDisplayTests {
         }
     }
 
-    @Test func capitalNotesStayInTheDataAndOffTheScreen() throws {
+    @Test func rewrittenPronunciationNotesMatchTheApprovedText() throws {
         let bundle = try loadCourse().bundle
-        let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id, $0) })
-        let travel = try noteIDs(in: "content/units/u-travel.json", mentioningCapitals: true)
-        let time = try noteIDs(in: "content/units/u-time.json", mentioningCapitals: true)
-        let travelKept = try noteIDs(in: "content/units/u-travel.json", mentioningCapitals: false)
-        let timeKept = try noteIDs(in: "content/units/u-time.json", mentioningCapitals: false)
-        #expect(travel.count == 13)
-        #expect(time.count == 16)
-        #expect(!travelKept.isEmpty)
-        #expect(!timeKept.isEmpty)
+        let items = Dictionary(uniqueKeysWithValues: bundle.items.map { ($0.id.rawValue, $0) })
+        #expect(rewrittenNotes.count == 62)
+        #expect(clearedNotes.count == 61)
+        #expect(Set(rewrittenNotes.keys).isDisjoint(with: Set(clearedNotes)))
 
-        let travelText = try source("content/units/u-travel.json")
-        let timeText = try source("content/units/u-time.json")
-        #expect(travelText.contains("Stress the syllable shown in capitals in the simple pronunciation."))
-        #expect(timeText.contains("Stress the syllable shown in capitals in the simple pronunciation."))
-        #expect(!travelText.contains("shown in bold"))
-        #expect(!timeText.contains("shown in bold"))
-
-        for id in travel + time {
-            let item = try #require(items[itemID(id)])
-            let stored = try #require(item.pronunciationNote)
-            #expect(PronunciationNotes.mentionsCapitals(stored))
-            #expect(stored.contains("capitals"))
+        for (id, note) in rewrittenNotes {
+            let item = try #require(items[id])
+            #expect(item.pronunciationNote == note, "\(id)")
+        }
+        for id in clearedNotes {
+            let item = try #require(items[id])
+            #expect(item.pronunciationNote == nil, "\(id)")
         }
 
-        var sawKeptTravel = false
-        var sawKeptTime = false
-        for unit in bundle.units where ["u-travel", "u-time"].contains(unit.id.rawValue) {
+        let banned = ["capital", "Stress the syllable", "selected Kabul", "ḍ", "ṛ", "ṭ", "salā́m"]
+        for item in bundle.items {
+            guard let note = item.pronunciationNote else { continue }
+            for word in banned where note.contains(word) {
+                Issue.record("\(item.id.rawValue) note contains \(word)")
+            }
+        }
+
+        let visibleUnits = ["u-numbers", "u-food", "u-town", "u-conversation", "u-travel", "u-time"]
+        var showedNote: Set<String> = []
+        for unit in bundle.units where visibleUnits.contains(unit.id.rawValue) {
             for lesson in unit.lessons where lesson.kind == .learn || lesson.kind == .phrases {
                 let deck = try #require(StudyCourse.deck(for: lesson.id, in: bundle))
                 for card in deck.cards {
-                    let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                    if PronunciationNotes.mentionsCapitals(stored) {
+                    let stored = items[card.itemID.rawValue]?.pronunciationNote?
+                        .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    if stored.isEmpty {
                         #expect(card.pronunciationNote == nil)
-                        #expect(!card.pronunciation.contains(stored))
-                        #expect(!card.meaning.contains(stored))
-                        #expect(!card.pashto.contains(stored))
-                    } else if !stored.isEmpty {
+                    } else {
                         #expect(card.pronunciationNote == stored)
-                        if unit.id.rawValue == "u-travel" { sawKeptTravel = true }
-                        if unit.id.rawValue == "u-time" { sawKeptTime = true }
+                        showedNote.insert(unit.id.rawValue)
                     }
                 }
             }
         }
-        #expect(sawKeptTravel)
-        #expect(sawKeptTime)
-
-        let family = try #require(StudyCourse.deck(for: lessonID("l-family-learn-members"), in: bundle))
-        let sister = try #require(family.cards.first { $0.itemID.rawValue == "e-xor" })
-        let sisterNote = try #require(items[sister.itemID]?.pronunciationNote)
-        #expect(!PronunciationNotes.mentionsCapitals(sisterNote))
-        #expect(sister.pronunciationNote == sisterNote)
-
-        let hiddenUnits = ["u-numbers", "u-food", "u-town", "u-conversation"]
-        var sawPlainHiddenNote = false
-        for unit in bundle.units where hiddenUnits.contains(unit.id.rawValue) {
-            for lesson in unit.lessons where lesson.kind == .learn || lesson.kind == .phrases {
-                let deck = try #require(StudyCourse.deck(for: lesson.id, in: bundle))
-                for card in deck.cards {
-                    #expect(card.pronunciationNote == nil)
-                    let stored = items[card.itemID]?.pronunciationNote?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                    if !stored.isEmpty, !PronunciationNotes.mentionsCapitals(stored) {
-                        sawPlainHiddenNote = true
-                    }
-                }
-            }
-        }
-        #expect(sawPlainHiddenNote)
+        #expect(showedNote == Set(visibleUnits))
 
         for rawUnitID in ["u-family", "u-travel", "u-time"] {
             for shows in [true, false] {
                 let rows = FamilyWordList.rows(for: unitID(rawUnitID), in: bundle, showsPronunciation: shows)
                 for row in rows {
-                    let stored = items[row.itemID]?.pronunciationNote ?? ""
-                    if PronunciationNotes.mentionsCapitals(stored) {
+                    let stored = items[row.itemID.rawValue]?.pronunciationNote ?? ""
+                    if !stored.isEmpty {
                         #expect(!row.accessibilityLabel.contains(stored))
                     }
                     if let pronunciation = row.pronunciation {
-                        #expect(pronunciation == items[row.itemID]?.pronunciation)
+                        #expect(pronunciation == items[row.itemID.rawValue]?.pronunciation)
                         #expect(PronunciationDisplay.spoken(pronunciation) == pronunciation)
                     }
                 }
             }
         }
+
+        let family = try #require(StudyCourse.deck(for: lessonID("l-family-learn-members"), in: bundle))
+        let sister = try #require(family.cards.first { $0.itemID.rawValue == "e-xor" })
+        let sisterNote = try #require(items[sister.itemID.rawValue]?.pronunciationNote)
+        #expect(sister.pronunciationNote == sisterNote)
 
         let screen = try source("PashtoApp/Quiz/StudyCardScreen.swift")
         #expect(screen.contains("if let note = card.pronunciationNote"))
@@ -431,6 +408,90 @@ struct PronunciationDisplayTests {
         return calls
     }
 
+    private let rewrittenNotes: [String: String] = [
+        "e-mung-yu": "ږ: in Kabul close to g in go; موږ is said mung. یو here means ‘are’, not ‘one’.",
+        "e-daa-khaar-day": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-wakht": "خ: kh, like ch in Scottish loch.",
+        "e-zha-ba": "ژ: zh, like s in measure.",
+        "e-kha-ba-rey": "خ: kh, like ch in Scottish loch.",
+        "e-za-pa-pakh-to-kha-ba-rey-ka-wam": "خ: kh, like ch in Scottish loch. ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-za-pa-ang-lee-see-kha-ba-rey-ka-wam": "خ: kh, like ch in Scottish loch.",
+        "e-za-na-po-he-gam": "ږ: in Kabul close to g in go.",
+        "e-wro-wro-kha-ba-rey-wa-kray": "خ: kh, like ch in Scottish loch. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-za-chaay-na-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-za-kah-wa-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-za-sa-baa-baa-zaar-ta-dzam": "ځ: dz as in kids.",
+        "e-letter-ddal": "ډ: d with the tongue tip curled back.",
+        "e-letter-rre": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-do-day": "ډ: d with the tongue tip curled back.",
+        "e-gho-kha": "غ: gh, a voiced kh, close to French r. ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-ma-na": "ڼ: n with the tongue tip curled back.",
+        "e-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-tsa-ghwaa-rey": "څ: ts as in cats. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-za-o-ba-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-za-chaay-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-daa-ma-na-da": "ڼ: n with the tongue tip curled back.",
+        "e-daa-do-day-da": "ډ: d with the tongue tip curled back.",
+        "e-assalamu-alaykum": "ع is not pronounced as a separate sound in Pashto.",
+        "e-stare-ma-she": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-dera-manana": "ډ: d with the tongue tip curled back.",
+        "e-dera-xa": "ډ: d with the tongue tip curled back. ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-baxana-ghwaram": "ښ: in Kabul close to kh, like ch in Scottish loch. غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-mehrabani-wakray": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-letter-tte": "ټ: t with the tongue tip curled back.",
+        "e-tsa-lor": "څ: ts as in cats.",
+        "e-pin-dza": "ځ: dz as in kids.",
+        "e-shpag": "ږ: in Kabul close to g in go.",
+        "e-o-mar": "ع is not pronounced as a separate sound in Pashto.",
+        "e-tswaar-las": "څ: ts as in cats.",
+        "e-pin-dza-las": "ځ: dz as in kids.",
+        "e-shpaa-ras": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-o-mar-dey-tso-day": "څ: ts as in cats. ع is not pronounced as a separate sound in Pashto.",
+        "e-maa-khaam": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-ju-ma": "ع is not pronounced as a separate sound in Pashto.",
+        "e-nan-ju-ma-da": "ع is not pronounced as a separate sound in Pashto.",
+        "e-tso-ba-je-dee": "څ: ts as in cats.",
+        "e-sa-haar-mo-pa-khayr": "خ: kh, like ch in Scottish loch.",
+        "e-shpa-mo-pa-khayr": "خ: kh, like ch in Scottish loch.",
+        "e-khaar": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-rogh-toon": "غ: gh, a voiced kh, close to French r.",
+        "e-tak-see": "ټ: t with the tongue tip curled back.",
+        "e-sa-rak": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+        "e-khee": "ښ: in Kabul close to kh, like ch in Scottish loch.",
+        "e-rogh-toon-cher-ta-day": "غ: gh, a voiced kh, close to French r.",
+        "e-rogh-toon-hal-ta-day": "غ: gh, a voiced kh, close to French r.",
+        "e-za-baa-zaar-ta-dzam": "ځ: dz as in kids.",
+        "e-za-kor-ta-dzam": "ځ: dz as in kids.",
+        "e-ha-waa-yee-da-gar": "ډ: d with the tongue tip curled back.",
+        "e-ho-tal": "ټ: t with the tongue tip curled back.",
+        "e-ti-kat": "ټ: t with the tongue tip curled back.",
+        "e-ho-tal-cher-ta-day": "ټ: t with the tongue tip curled back.",
+        "e-za-ha-waa-yee-da-gar-ta-dzam": "ځ: dz as in kids. ډ: d with the tongue tip curled back.",
+        "e-dal-ta-wu-dre-ga": "ږ: in Kabul close to g in go.",
+        "e-za-ti-kat-ghwaa-ram": "غ: gh, a voiced kh, close to French r. ړ: tongue tip curled back and flicked forward, like a quick r. ټ: t with the tongue tip curled back.",
+        "e-der-graan-day": "ډ: d with the tongue tip curled back.",
+        "e-mras-ta-wu-kray": "ړ: tongue tip curled back and flicked forward, like a quick r.",
+    ]
+
+    private let clearedNotes: [String] = [
+        "e-nan", "e-sa-baa", "e-kaar", "e-za-kaar-ka-wam",
+        "e-za-nan-kaar-ka-wam", "e-za-sa-baa-kaar-ka-wam", "e-ang-lee-see", "e-byaa-wa-waa-yaast",
+        "e-wro-wro", "e-o-ba", "e-wri-jey", "e-chaay",
+        "e-kah-wa", "e-shee-dey", "e-shta", "e-na-shta",
+        "e-chaay-shta", "e-ho-chaay-shta", "e-na-chaay-na-shta", "e-yaw",
+        "e-dwa", "e-drey", "e-o-wa", "e-a-ta",
+        "e-na-ha", "e-las", "e-yaw-wo-las", "e-dwo-las",
+        "e-dyaar-las", "e-o-wa-las", "e-a-ta-las", "e-no-las",
+        "e-shal", "e-ka-lan", "e-ka-la-na", "e-za-shal-ka-lan-yam",
+        "e-za-shal-ka-la-na-yam", "e-sa-haar", "e-pa-roon", "e-shan-ba",
+        "e-yak-shan-ba", "e-do-shan-ba", "e-se-shan-ba", "e-cha-haar-shan-ba",
+        "e-panj-shan-ba", "e-sa-baa-shan-ba-da", "e-za-sa-haar-kaar-ka-wam", "e-baa-zaar",
+        "e-doo-kaan", "e-cher-ta", "e-bas", "e-chap",
+        "e-dal-ta", "e-hal-ta", "e-baa-zaar-cher-ta-day", "e-baa-zaar-dal-ta-day",
+        "e-tash-naab", "e-pay-se", "e-ar-zaan", "e-mras-ta",
+        "e-tash-naab-cher-ta-day",
+    ]
+
     private var hyphen: String { String(PronunciationDisplay.nonBreakingHyphen) }
 
     private func expect(_ stored: String, text: [String], stressed: [Bool]) {
@@ -443,20 +504,6 @@ struct PronunciationDisplayTests {
         #expect(runs.map { $0.underlined(boldText: true) } == stressed)
         #expect(PronunciationDisplay.spoken(stored) == stored)
         #expect(PronunciationDisplay.displayText(stored: stored) == text.joined())
-    }
-
-    private func noteIDs(in relative: String, mentioningCapitals: Bool) throws -> [String] {
-        let data = try Data(contentsOf: repositoryRoot().appendingPathComponent(relative))
-        let object = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        let items = try #require(object?["items"] as? [[String: Any]])
-        return items.compactMap { item in
-            guard let id = item["id"] as? String else { return nil }
-            let note = (item["pronunciationNote"] as? String)?
-                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            guard !note.isEmpty else { return nil }
-            guard PronunciationNotes.mentionsCapitals(note) == mentioningCapitals else { return nil }
-            return id
-        }
     }
 
     private func source(_ relative: String) throws -> String {
