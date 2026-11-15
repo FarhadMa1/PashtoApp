@@ -52,8 +52,8 @@ final class ScreenshotTests: XCTestCase {
     /// and stays at the top. The first image is taken before any scroll and
     /// shows the title, Skip to practice, and the phrase. The first tip may
     /// still be below the fold. The test then scrolls until that tip is visible
-    /// and waits before asserting. Further scrolls capture the top of the note,
-    /// then the lower tips.
+    /// and waits before asserting. The next scroll stops while the last tip
+    /// still hangs below the fold. One more scroll brings that tip on screen.
     /// Each tip is fully on screen in at least one of the last two shots.
     func testXLNotes() {
         executionTimeAllowance = 400
@@ -119,12 +119,25 @@ final class ScreenshotTests: XCTestCase {
             "first tip did not scroll into view. \(tipDump(tips, scroll: scroll)) title \(title.frame) skip \(skip.frame) phrase \(phrase.frame)"
         )
 
-        scrollNoteDown(scroll, probe: tips[0]) {
-            fullyInside(tips[0].frame, scroll.frame) && tips[0].frame.minY <= scroll.frame.minY + 36
+        scrollNoteDown(scroll, probe: tips[0], portionCap: 0.1) {
+            let window = scroll.frame
+            return fullyInside(tips[0].frame, window)
+                && tips[0].frame.minY <= window.minY + 220
+                && tips[2].frame.maxY > window.maxY + 8
+        }
+        if fullyInside(tips[2].frame, scroll.frame) {
+            for _ in 0..<8 {
+                let window = scroll.frame
+                if fullyInside(tips[0].frame, window), tips[2].frame.maxY > window.maxY + 8 {
+                    break
+                }
+                nudgeScroll(scroll, revealingLower: false, portion: 0.08)
+                settle(0.22)
+            }
         }
         XCTAssertTrue(
-            fullyInside(tips[0].frame, scroll.frame),
-            "first tip is not at the top of the note. \(tipDump(tips, scroll: scroll))"
+            fullyInside(tips[0].frame, scroll.frame) && tips[2].frame.maxY > scroll.frame.maxY + 8,
+            "middle notes shot has no room left to scroll. \(tipDump(tips, scroll: scroll))"
         )
         settle(0.4)
         let before = tips.map(\.frame)
@@ -414,6 +427,7 @@ final class ScreenshotTests: XCTestCase {
         _ scroll: XCUIElement,
         probe: XCUIElement,
         movement: XCUIElement? = nil,
+        portionCap: CGFloat = 0.2,
         until condition: () -> Bool
     ) {
         let tracker = movement ?? probe
@@ -432,7 +446,7 @@ final class ScreenshotTests: XCTestCase {
             let overflow = frame.height > 1 ? frame.maxY - window.maxY : window.height * 0.3
             let topGap = frame.height > 1 ? frame.minY - window.minY : window.height * 0.3
             let needed = max(topGap - 28, overflow)
-            let portion = min(CGFloat(0.2), max(CGFloat(0.08), needed / max(window.height, 1)))
+            let portion = min(portionCap, max(CGFloat(0.08), needed / max(window.height, 1)))
             nudgeScroll(scroll, revealingLower: true, portion: portion)
             settle(0.22)
             if tracker.frame.minY < before - 6 {
